@@ -6,23 +6,77 @@ const crypto = require('crypto');
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-async function getUserDataByToken(token) {
+function getUserDataByToken(token, whatGuild = undefined) {
   const database = getDatabase();
   const user = database.users.find(user => user.token === token);
+  const selectedGuild = String(whatGuild).toLowerCase().replace(/-/g, ' ');
+
+  const urlGuild = database.guilds.find(guild => guild.name.toLowerCase() === selectedGuild)
+
+  if (!user && urlGuild) { // Если пользователь не авторизован но перешёл по правильной ссылке возвращам название гильдии
+    return {
+      nameOfGuild: urlGuild.name,
+      idOfGuild: urlGuild.id,
+      avatarOfGuild: urlGuild.avatar
+    };
+  }
 
   if (!user) {
     return false;
   }
 
-  return {
-    id: user.id,
-    avatar: user.avatar,
-    visibleName: user.global_name || user.username + '#' + user.discriminator,
-    guilds: user.guilds
-  };
+  const userGuild = user.guilds ? user.guilds.find(guildObj => guildObj.nameOfGuild.toLowerCase() === selectedGuild) : false;
+
+  if (whatGuild === undefined) { // Если заходим на ссылку без гильды
+    return {
+      id: user.id,
+      avatar: user.avatar,
+      guilds: user.guilds,
+      visibleName: user.global_name || user.username + '#' + user.discriminator,
+      banner_color: user.banner_color,
+      isCreator: user.isCreator
+    };
+  }
+
+  if (userGuild) {
+    const visibleName = userGuild.guildName || user.global_name || user.username + '#' + user.discriminator;
+
+    return {
+      id: user.id,
+      avatar: user.avatar,
+      globalName: user.global_name,
+      visibleName: visibleName,
+      isGuildMember: userGuild.isGuildMember,
+      isAdmin: userGuild.isAdmin,
+      isAllianceMember: userGuild.isAllianceMember,
+      isModerator: userGuild.isModerator,
+      isRaidLeader: userGuild.isRaidLeader,
+      balance: userGuild.balance,
+      nameOfGuild: userGuild.nameOfGuild,
+      idOfGuild: userGuild.idOfGuild,
+      avatarOfGuild: urlGuild.avatar
+    };
+  }
+
+  if (urlGuild) {
+    return {
+      id: user.id,
+      avatar: user.avatar,
+      visibleName: user.global_name || user.username + '#' + user.discriminator,
+      isGuildMember: user.isGuildMember,
+      isAdmin: user.isAdmin,
+      isAllianceMember: user.isAllianceMember,
+      isModerator: user.isModerator,
+      isRaidLeader: user.isRaidLeader,
+      balance: 0,
+      nameOfGuild: urlGuild ? urlGuild.name : '',
+      idOfGuild: urlGuild ? urlGuild.id : '',
+      avatarOfGuild: urlGuild.avatar
+    };
+  }
+  log("ПРОИЗОШЛА ХУЙНЯ, ПОЛЬЗОВАТЕЛЬ НАЕБАЛ СИСТЕМУ!", 'r');
+  return false;
 }
-
-
 
 function getLanguagePack(languagePack = "en") {
   let lang;

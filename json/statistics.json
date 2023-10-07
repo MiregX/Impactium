@@ -1053,8 +1053,8 @@
   {
     "day": "07.10.2023",
     "stats": {
-      "mainWebJoins": 70,
-      "guildsWebJoins": 0,
+      "mainWebJoins": 159,
+      "guildsWebJoins": 1,
       "ctaWebJoins": 0,
       "regearWebJoins": 0,
       "ctaTickets": 0,
@@ -1063,7 +1063,7 @@
       "logins": 3,
       "logouts": 0,
       "langen": 0,
-      "langit": 0,
+      "langit": 1,
       "langis": 0,
       "langru": 0,
       "languk": 3,

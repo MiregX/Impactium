@@ -18,6 +18,9 @@
   --backdrop-background: rgba(255, 255, 255, 0.074);
   --backdrop-border: rgba(255, 255, 255, 0.222);
 }
+.invert {
+  filter: invert(100%);
+}
 .block-p-shadow {
   box-shadow: 0 1px 3px var(--p);
 }
@@ -518,13 +521,13 @@ main {
   <div class="search-block flex-dir-row">
     <input type="text" id="name" name="name" class="link text-w-shadow" placeholder="Введите название гильдии или альянса">
     <button type="submit" id="search" name="sendLink" class="onhover-information text-w-shadow center submit button-styles" onclick="sendLink()">
-      <img src="https://impactium.fun/static/img/svg/search.svg">
+      <img class="invert" src="https://api.impactium.fun/ux/search.svg">
     </button>
     <button type="submit" id="clearResult" name="clearResult" class="onhover-information text-w-shadow center clear button-styles" onclick="returnBack()">
-      <img src="https://impactium.fun/static/img/svg/refresh.svg">
+      <img class="invert" src="https://api.impactium.fun/ux/refresh.svg">
     </button>
     <button class="settings center onhover-information button-styles">
-      <img src="https://impactium.fun/static/img/svg/gear.svg" width="20" height="20" onclick="toggleSettingsPanel()">
+      <img class="invert" src="https://api.impactium.fun/ux/gear.svg" width="20" height="20" onclick="toggleSettingsPanel()">
       <div class="panel">
         <div class="option">
           <p class="comment">Min. players:</p>
@@ -553,7 +556,7 @@ main {
     </div>
     <div class="flex-dir-row center multilog-redirect" onclick="redirectToMultilog()">
       <p class="center">View multilog</p>
-      <img src="https://impactium.fun/static/img/svg/sparkle-whiter.svg">
+      <img class="invert" src="https://api.impactium.fun/ux/sparkle-whiter.svg">
     </div>
   </div>
 </div>
@@ -564,9 +567,9 @@ main {
 <div class="battle-block flex-dir-row center-v title">
   <div class="time">Время</div>
   <div class="alliances">Стороны битвы (гильдии, альянсы)</div>
-  <div class="playersNum"><img src="https://impactium.fun/static/img/albion/players.png"></div>
-  <div class="totalKills"><img src="https://impactium.fun/static/img/albion/kills.png"></div>
-  <div class="totalFame"><img src="https://impactium.fun/static/img/albion/fame.png"></div>
+  <div class="playersNum"><img src="https://api.impactium.fun/albion/players.png"></div>
+  <div class="totalKills"><img src="https://api.impactium.fun/albion/kills.png"></div>
+  <div class="totalFame"><img src="https://api.impactium.fun/albion/fame.png"></div>
   <div class="id" style="text-decoration: none;">ID</div>
 </div>
 <div class="battles-wrapper flex-dir-column">

@@ -13,5 +13,6 @@
     "c": "\u001b[36m",
     "o": "\u001b[0m"
   },
-  "mongoLogin": "mongodb+srv://mireg:E6X4aw0ph9GPolLB@impactium.qitrjvq.mongodb.net/main?retryWrites=true&w=majority"
+  "mongoLogin": "mongodb+srv://mireg:E6X4aw0ph9GPolLB@impactium.qitrjvq.mongodb.net/main?retryWrites=true&w=majority",
+  "isDevelopmentMode": false
 }

@@ -1,0 +1,95 @@
+
+<header class="flex flex-dir-row center-v">
+    <h1>Impactium</h1>
+    <% if (isFull) { %>
+      <div class="buttons flex">
+        <button class="flex-dir-row center" id="partners">
+          <%= lang.partners %>
+          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+          <navBar>
+            <% guildParams.forEach(guild => { %>
+            <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectGuild('<%= guild.name %>')">
+              <div class="guild-avatar flex center">
+                <img src="<%= guild.logo %>">
+              </div>
+              <div class="partners-unique-guild-text flex-dir-column">
+                <h3><%= guild.name %></h3>
+                <div class="p-wrapper">
+                  <p><%= guild.desc %></p>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+          </navBar>
+        </button>
+        <line></line>
+        <button class="flex-dir-row center" id="products">
+          <%= lang.products %>
+          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+          <navBar>
+            <% partners.forEach((partner) => { %>
+              <div class="partners-unique-guild flex-dir-row center-v" onclick="<%= partner.action %>">
+                <div class="guild-avatar flex center">
+                  <img src="<%= partner.logo %>">
+                </div>
+                <div class="partners-unique-guild-text flex-dir-column">
+                  <h3><%= partner.name %></h3>
+                  <div class="p-wrapper">
+                    <p><%= partner.description %></p>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </navBar>
+        </button>    
+        <line></line>
+        <button class="flex-dir-row center" id="support">
+          <%= lang.support %>
+          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+          <navBar>
+            
+          </navBar>
+        </button>
+      </div>
+    <% } %>
+    <% if (user.id) { %>
+      <div class="user-onlogin gap center-h center-v">
+        <button id="user" class="flex center-v center-h">
+          <% if (user.avatar) { %>
+            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="avatar">
+          <% } %>
+          <p class="button-text"><%= user.visibleName %></p>
+        </button>
+        <button id="logout" onclick="logout()" class="temp-button">
+          <div class="circle">
+            <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+              <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="button-text"><%= lang.logout %></div>
+        </button>
+      </div>
+    <% } else { %>
+      <div class="flex-dir-row gap">
+        <button id="auth" onclick="login()" class="temp-button">
+          <div class="circle">
+            <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+              <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="button-text txt-sh"><%= lang.login %></span>
+        </button>
+      </div>
+    <% } %>
+  </header>
+  <header-background></header-background>
+
+<script>
+  const header = document.querySelector('header-background');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
+    header.style.top = `${newTopValue}px`;
+  });
+</script>

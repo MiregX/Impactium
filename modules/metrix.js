@@ -117,7 +117,11 @@ function saveBattleBoard(data, isFromAPI = false) {
   let battleboard = getBattleBoard();
 
   if (isFromAPI) {
-    data = data.filter(item => !battleboard.some(boardItem => boardItem.id === item.id));
+    data = data.filter(item => {
+      return Object.keys(item.players).length >= 10 && 
+             !battleboard.some(boardItem => boardItem.id === item.id);
+    });
+        
     battleboard.unshift(...data);
     if (data.length > 0) {
       deadPlayersListCreation(data);

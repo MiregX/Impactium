@@ -71,7 +71,6 @@ app.get('/', (request, response) => {
   } else {
     try {
       const user = getUserDataByToken(request.cookies.token);
-      log(user, 'y');
       const lang = getLanguagePack(request.cookies.lang);
       setStatistics('mainWebJoins');
 

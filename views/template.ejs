@@ -315,46 +315,7 @@
       <div></div>
     </div>
   </div>
-  <header class="flex flex-dir-row center-v">
-    <h1 onclick="index()">Impactium</h1>
-      <% if (user.id) { %>
-        <div class="user-onlogin gap center-h center-v">
-          <button id="user" onclick="userinfo('<%= user.id %>')" class="flex center-v center-h">
-            <% if (user.avatar) { %>
-              <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" onerror="this.src='https://api.impactium.fun/static/img/albion/asset.png'">
-            <% } %>
-            <p class="button-text"><%= user.visibleName %></p>
-          </button>
-          <button id="logout" onclick="logout()" class="temp-button">
-            <div class="circle">
-              <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="button-text"><%= lang.logout %></div>
-          </button>
-          <button id="menu" class="menu-mobile"><img src="https://api.impactium.fun/static/img/menu-button.png"></button>
-        </div>
-      <% } else { %>
-        <div class="flex-dir-row gap">
-          <button id="auth" onclick="auth()" class="temp-button">
-            <div class="circle">
-              <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <span class="button-text txt-sh"><%= lang.login %></span>
-          </button>
-          <button id="menu" class="menu-mobile"><img src="https://api.impactium.fun/static/img/menu-button.png"></button>
-        </div>
-      <% } %>
-      <% if (user.isCreator) { %>
-        <div class="terminal-button flex-dir-row" onclick="terminal()">
-          <img src="https://api.impactium.fun/static/img/svg/terminal.svg">
-        </div>
-      <% } %>
-  </header>
-  <header-background></header-background>
+  <%- include('modules/header.ejs', { user, lang, isFull: false }) %>
   <temp-background class="absolute flex">
     <div class="rocks main-bg absolute">
       <img class="w-ful" src="https://api.impactium.fun/static/img/svg/bg-learn-mobile.svg">

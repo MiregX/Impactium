@@ -18,13 +18,24 @@
 :root {
   --g: #1F2937;
   --gh: #374151;
+  --gho: #37415180;
   --b: #111827;
+  --bo: #11182790;
   --w: #e8e8e8;
+  --black-one: #161616;
+  --black-two: #212121;
   --p: #3E3979;
   --lp: #8F80F4;
+  --lpo: #8F80F480;
+  --player-gradient: linear-gradient(90deg, #29afe0 0%, #29cee0 100%);
+  --kills-gradient: linear-gradient(90deg, #E0294E 0%, #E02983 100%);
+  --fame-gradient: linear-gradient(90deg, #29E09D 0%, #29E082 100%);
+  --player-text: #29cee0;
+  --kills-text: #E02983;
+  --fame-text: #29E082;
+  --backdrop-background: rgba(255, 255, 255, 0.074);
+  --backdrop-border: rgba(255, 255, 255, 0.222);
   --trans: cubic-bezier(.21,.29,0,.94);
-  --violet: #8861ff;
-  --remove-accent: #ff4b4b;
 }
 .noanim {
   transition: all 0s linear;
@@ -45,22 +56,20 @@
   width: 100vw;
   z-index: -1;
   pointer-events: none;
+  overflow: hidden;
   transform: translateY(0);
 }
-.rocks5 img {
+.rocks-bottom img {
   position: absolute;
   top: 80vh;
   width: 100vw;
 }
 .starsX {
+  max-height: 100vh;
   width: 100vw;
   overflow: hidden;
   display: flex;
   justify-content: center;
-}
-
-.starsX img {
-  max-width: 100vw;
 }
 
 * {
@@ -168,8 +177,10 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: linear-gradient(0deg, rgba(15,22,30,1) 0%, rgba(29,42,58,1) 100%);
+  background: linear-gradient(0deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
+  backdrop-filter: blur(15px);
 }
+
 footer h3 {
   color: #5b6b81;
 }
@@ -255,59 +266,6 @@ header .logo {
   justify-content: space-between;
   align-items: center;
 }
-.panel.second {
-  justify-content: space-evenly;
-  align-items: flex-start;
-}
-.card {
-  margin-top: 12.5vw;
-  background: linear-gradient(125deg, rgba(15,22,30,0.8) 0%, rgba(29,42,58,0.5) 100%);
-  border-radius: 25px;
-  backdrop-filter: blur(15px);
-  padding: 10px;
-  width: calc(70vw / 4 - 20px);
-  gap: 5px;
-}
-.card h4 {
-  height: 50px;
-  width: calc(100% - 20px);
-  padding: 10px;
-  font-size: 24px;
-  text-shadow: 0 0 0 transparent;
-  border-radius: 15px 15px 0 0;
-  border: 1px solid #34485fcc;
-}
-.card span {
-  text-shadow: 0 0 0 transparent;
-  border: 1px solid #34485fcc;
-  width: calc(100% - 20px);
-  padding: 10px;
-}
-.card .text-wrapper {
-  width: calc(100% - 20px);
-  padding: 10px;
-  border: 1px solid #34485fcc;
-  height: 50%;
-  overflow: hidden;
-}
-.card .text-wrapper.last {
-  border-radius: 0 0 15px 15px;
-}
-.card p {
-  line-height: 20px;
-}
-
-.card .img-wrapper {
-  padding: 10px;
-  border: 1px solid #34485fcc;
-  border-radius: 0 0 15px 15px;
-}
-.card .img-wrapper img {
-  height: 100%;  
-  width: 100%;
-  border-radius: 0 0 5px 5px;
-  pointer-events: none;
-}
 .about-us {
   height: 250px;
   padding: 40px;
@@ -315,10 +273,9 @@ header .logo {
   word-break: normal;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: column;
 }
-
 
 .guilds-list {
   width: 600px;
@@ -327,7 +284,6 @@ header .logo {
   backdrop-filter: blur(15px);
   border-right: 0px;
   padding: 10px;
-  /*   АНИМАЦИЯ ПРИ ЗАГРУЗКЕ   */
   transition: all 0.8s cubic-bezier(.21,.29,0,.94) !important;
   opacity: 0;
   transform: translateX(50%);
@@ -564,78 +520,12 @@ header .buttons button navBar p {
 .partners-unique-guild:hover {
   background: var(--gh);
 }
-langpanel {
-  top: 20px;
-  left: 20px;
-}
-langpanel {
-  position: absolute;
-  color: #e8e8e8;
-  background: var(--b);
-  border-radius: 0 0 20px 0;
-  height: 40px;
-  width: 90px;
-  font-weight: 700;
-  font-family: 'Manrope', sans-serif;
-  top: 0px;
-  left: 0px;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-langpanel img {
-  border-radius: 5px;
-  width: 20px;
-  height: 20px;
-}
-langpanel p {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 10px;
-  align-items: center;
-}
-langpanel div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  overflow: hidden;
-  height: 0px;
-  transition: all 0.2s ease-in-out;
-  right: 11px;
-  position: absolute;
-  margin-top: 20px;
-}    
-langpanel:hover div {
-  height: 135px;
-  width: 20px;
-  margin-top: 161px;
-}
-.main-lang {
-  border-radius: 5px;
-  width: 20px;
-  height: 20px;
-}
-.main-bg {
-  flex: 1;
-  overflow: hidden;
-}
-.main-bg img {
-  overflow: hidden;
-}
 </style>
 <style>
-  @media (max-width: 1080px) {
+@media (max-width: 1080px) {
   header {
     padding: 0 2.5%;
     width: calc(100vw - 5%);
-  }
-  .language-pack {
-    top: unset;
-    position: fixed;
-    bottom: 50px;
   }
 }
 @media (max-width: 767px) {
@@ -645,30 +535,6 @@ langpanel:hover div {
 .unique-guild .logoDesktop {
   display: none;
 }
-.preloader {
-  display: flex;
-}
-langpanel {
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 0px 0px 12px 12px;
-  height: 20px;
-  width: 60px;
-}
-langpanel p {
-  font-size: 10px;
-}
-langpanel img {
-  height: 10px !important;
-  width: 10px !important;
-}
-langpanel:hover div {
-  right: 10px;
-}
-langpanel:hover div {
-  margin-top: 150px;
-}
-
 header {
   padding: 0 2.5%;
   width: calc(100vw - 5%);
@@ -708,12 +574,6 @@ main {
   font-weight: 700;
   border-radius: 20px;
   background: #3886C6;
-}
-.language-pack {
-  display: none;
-}
-.language-pack.flex {
-  display: unset;
 }
 .user-onlogin {
   margin-right: 10px;
@@ -758,7 +618,7 @@ main {
 .unique-guild:hover {
   width: unset;
 }
-.rocks5 img {
+.rocks-bottom img {
   top: 22vh;
 }
 body {
@@ -772,19 +632,6 @@ footer {
   align-items: flex-start;
   padding: 3vw 5vw;
   width: calc(100vw - 10vw);
-}
-.panel.second {
-  margin: 150px 0 150px 0;
-  flex-direction: column;
-  gap: 50px;
-  height: unset;
-}
-.card {
-  backdrop-filter: none;
-  width: 75vw;
-}
-.panel.second {
-  align-items: center;
 }
 .temp-button {
   height: 7vw;
@@ -810,7 +657,45 @@ header .buttons button navBar {
   backdrop-filter: blur(0px);
 }
 }
-
+language {
+  z-index: 3;
+  position: fixed;
+  top: 40px;
+  transform: translateY(-50%);
+  left: -130px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s var(--trans);
+  background: var(--b);
+  box-shadow: 0 1px 3px var(--p);
+  border-radius: 0 20px 20px 0;
+}
+language.active {
+  left: 0px;
+}
+language .list {
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 120px;
+}
+language .list img {
+  height: 20px;
+}
+language .toggler {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  transition: all 0.3s var(--trans);
+  border: 1px solid transparent;
+}
+language .toggler img {
+  height: 30px;
+  width: 30px;
+}
 </style>
 </head>
 <% const guildParams = [
@@ -819,8 +704,28 @@ header .buttons button navBar {
     desc: "#1 S21 | More: @faxnocap"
   }
 ]; %>
+<% const partners = [
+  {
+    name: 'Impactium Bot',
+    logo: 'https://api.impactium.fun/logo/impactium-wb.png',
+    description: 'Автороли для альянса.',
+    action: 'redirectDiscordBotJoin()',
+  },
+  {
+    name: 'Eclipse Metrix',
+    logo: 'https://api.impactium.fun/logo/eclipsemetrix.png',
+    description: 'Statistics for Albion Online.',
+    action: 'redirectMetrix()',
+  },
+  {
+    name: 'PHP Compiler',
+    logo: 'https://api.impactium.fun/logo/php-compiler.jpeg',
+    description: 'School assistant project.',
+    action: 'redirectPhp()',
+  }
+] %>
 <body>
-<div class="preloader none center">
+<div class="preloader center">
   <div class="honeycomb">
     <div></div>
     <div></div>
@@ -831,8 +736,8 @@ header .buttons button navBar {
     <div></div>
   </div>
 </div>
-<background class="background-global absolute flex">
-  <div class="rocks rocks2 absolute">
+<background class="absolute flex">
+  <div class="rocks absolute">
     <img class="w-ful" src="https://api.impactium.fun/svg/1-01.svg">
   </div>
   <div class="rocks absolute">
@@ -841,132 +746,26 @@ header .buttons button navBar {
   <div class="rocks starsX absolute">
     <img src="https://api.impactium.fun/ui/diamond-full-pattern.svg">
   </div>
-  <div class="rocks rocks5 absolute">
+  <div class="rocks rocks-bottom absolute">
     <img src="https://api.impactium.fun/svg/rocks5.svg">
   </div>
   <div class="rocks absolute">
     <img class="w-ful" src="https://api.impactium.fun/svg/7-03.svg">
   </div>
 </background>
-<langpanel>
-    <p>Lang: <img class="main-lang" src="https://api.impactium.fun/langs/<%= lang.mainLang %>.png"></p>
-    <div>
-      <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
-      <% for (const langCode of availableLanguages) { %>
-        <% if (langCode !== lang.mainLang) { %>
-          <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
-        <% } %>
-      <% } %>
-    </div>
-</langpanel>
-<header class="flex flex-dir-row center-v">
-  <h1>Impactium</h1>
-  <div class="buttons flex">
-    <button class="flex-dir-row center" id="partners">
-      <%= lang.partners %>
-      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-      <navBar>
-        <% guildParams.forEach(guild => { %>
-        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirect('<%= guild.name %>')">
-          <div class="guild-avatar flex center">
-            <img src="<%= guild.logo %>">
-          </div>
-          <div class="partners-unique-guild-text flex-dir-column">
-            <h3><%= guild.name %></h3>
-            <div class="p-wrapper">
-              <p><%= guild.desc %></p>
-            </div>
-          </div>
-        </div>
-        <% }); %>
-      </navBar>
-    </button>
-    <line></line>
-    <button class="flex-dir-row center" id="products">
-      <%= lang.products %>
-      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-      <navBar>
-        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectDiscordBotJoin()">
-          <div class="guild-avatar flex center">
-            <img src="https://api.impactium.fun/logo/impactium-wb.png">
-          </div>
-          <div class="partners-unique-guild-text flex-dir-column">
-            <h3>Impactium Bot</h3>
-            <div class="p-wrapper">
-              <p>Автороли для альянса.</p>
-            </div>
-          </div>
-        </div>
-        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectMetrix()">
-          <div class="guild-avatar flex center">
-            <img src="https://api.impactium.fun/logo/eclipsemetrix.png">
-          </div>
-          <div class="partners-unique-guild-text flex-dir-column">
-            <h3>Eclipse Metrix</h3>
-            <div class="p-wrapper">
-              <p>Statistics for Albion Online.</p>
-            </div>
-          </div>
-        </div>
-        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectPhp()">
-          <div class="guild-avatar flex center">
-            <img src="https://api.impactium.fun/logo/php-compiler.jpeg">
-          </div>
-          <div class="partners-unique-guild-text flex-dir-column">
-            <h3>PHP Compiler</h3>
-            <div class="p-wrapper">
-              <p>School assistant project.</p>
-            </div>
-          </div>
-        </div>
-      </navBar>
-    </button>
-    <line></line>
-    <button class="flex-dir-row center" id="support">
-      <%= lang.support %>
-      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-      <navBar>
-        
-      </navBar>
-    </button>
+<language>
+  <div class="list">
+    <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
+    <% for (const langCode of availableLanguages) { %>
+      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
+    <% } %>
   </div>
-  <% if (user.id) { %>
-    <div class="user-onlogin gap center-h center-v">
-      <button id="user" onclick="userinfo('<%= user.id %>')" class="flex center-v center-h">
-        <% if (user.avatar) { %>
-          <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="avatar">
-        <% } %>
-        <p class="button-text"><%= user.visibleName %></p>
-      </button>
-      <button id="logout" onclick="logout()" class="temp-button">
-        <div class="circle">
-          <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-            <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="button-text"><%= lang.logout %></div>
-      </button>
-    </div>
-  <% } else { %>
-    <div class="flex-dir-row gap">
-      <button id="auth" onclick="login()" class="temp-button">
-        <div class="circle">
-          <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-            <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <span class="button-text txt-sh"><%= lang.login %></span>
-      </button>
-    </div>
-  <% } %>
-</header>
+  <button class="toggler center" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
+    <img src="https://api.impactium.fun/svg/earth-globe.svg">
+  </button>
+</language>
 
-<header-background></header-background>
-
-
-
-
-
+<%- include('modules/header.ejs', { user, lang, partners, guildParams, isFull: true }) %>
 
 <main>
   <panel class="panel main">
@@ -975,7 +774,6 @@ header .buttons button navBar {
         <p class="main-text anim-onload"><%= lang.joinToUs %></p>
         <p class="support-text anim-onload"><%= lang.joinToUsDesc %></p>
       </div>
-      <button class="become-partner flex-dir-row center"><img src="https://api.impactium.fun/ux/amogus.svg"><%= lang.becomePartner %></button>
     </div>
     <div class="guilds-list anim-onload">
       <div class="background"><img src="https://api.impactium.fun/ui/diamond-semi-pattern.svg"></div>
@@ -983,7 +781,7 @@ header .buttons button navBar {
         <h5><%= lang.ourPartners %></h5>
 
           <% guildParams.forEach(guild => { %>
-            <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.name %>')">
+            <div class="unique-guild flex-dir-row predis" onclick="redirectGuild('<%= guild.name %>')">
               <div class="wrapper center-v flex gap">
                 <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
                 <% if (guild.logoMobile) { %>
@@ -1005,45 +803,6 @@ header .buttons button navBar {
       </div>
     </div>
   </panel>
-  <panel class="panel second flex-dir-row center">
-    <div class="card one flex-dir-column">
-      <h4 class="flex center">Minecraft Servers</h4>
-      <span>16.11.2021 -> 07.02.2023</span>
-      <div class="text-wrapper">
-        <p><%= lang.card1 %></p>
-      </div>
-      <div class="img-wrapper">
-        <img src="https://api.impactium.fun/hub-cards/minecraft-temp.jpg">
-      </div>
-    </div>
-    <div class="card two flex-dir-column">
-      <h4 class="flex center">Blockchain</h4>
-      <span>11.02.2023 -> 20.04.2023</span>
-      <div class="text-wrapper">
-        <p><%= lang.card2 %></p>
-      </div>
-      <div class="img-wrapper">
-        <img src="https://api.impactium.fun/hub-cards/eth.jpg">
-      </div>
-    </div>
-    <div class="card three flex-dir-column">
-      <h4 class="flex center">Vulnerabilities</h4>
-      <span>24.04.2023 -> 30.05.2023</span>
-      <div class="text-wrapper">
-        <p><%= lang.card3 %></p>
-      </div>
-      <div class="img-wrapper">
-        <img src="https://api.impactium.fun/hub-cards/virus.jpg">
-      </div>
-    </div>
-    <div class="card four flex-dir-column">
-      <h4 class="flex center">Impactium Automation</h4>
-      <span>13.06.2023 -> Today</span>
-      <div class="text-wrapper last">
-        <p><%= lang.card4 %></p>
-      </div>
-    </div>
-  </panel>
 </main>
 <footer>
   <h3><%= lang.disclaimer %></h3>
@@ -1056,15 +815,9 @@ header .buttons button navBar {
 </body>
 </html>
 <script>
-if (window.innerWidth <= 767) {
-  $(window).on('load', function() {
-    $('.preloader').remove();
-  });
-} else {
-  $('.preloader').remove();
-}
-
 $(window).on('load', function() {
+  $('.preloader').remove();
+
   const header = document.querySelector('header');
   header.style.transform = ('translateX(0px)');
   header.style.opacity = ('1');
@@ -1073,32 +826,17 @@ $(window).on('load', function() {
   gl.style.transform = ('translateX(0px)');
   gl.style.opacity = ('1');
 
-  const aumtext = document.querySelector('.main-text');
-  aumtext.style.transform = ('translateX(0px)');
-  aumtext.style.opacity = ('1');
+  const aboutUsMainText = document.querySelector('.main-text');
+  aboutUsMainText.style.transform = ('translateX(0px)');
+  aboutUsMainText.style.opacity = ('1');
 
-  const austext = document.querySelector('.support-text');
-  austext.style.transform = ('translateX(0px)');
-  austext.style.opacity = ('1');
+  const aboutUsDescriptionText = document.querySelector('.support-text');
+  aboutUsDescriptionText.style.transform = ('translateX(0px)');
+  aboutUsDescriptionText.style.opacity = ('1');
 
-  const bp = document.querySelector('.become-partner');
-  bp.style.transform = ('translateX(0px)');
-  bp.style.opacity = ('1');
 });
-</script>
 
 
-
-<script>
-const blocks = document.querySelectorAll('.rocks');
-
-const header = document.querySelector('header-background');
-
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
-  header.style.top = `${newTopValue}px`;
-});
 
 
 const arrowIcon = document.querySelector('.temp-button');
@@ -1119,17 +857,12 @@ function redirectPhp() {
   window.location.href = "/php";
 }
 
-function redirect(name) {
+function redirectGuild(name) {
   const guild = name.toLowerCase().replace(/\s/g, '-');
   window.location.href = `https://${guild}.impactium.fun/`;
 }
 function redirectMetrix() {
   window.location.href = `/metrix`;
-}
-
-function userinfo(id) {
-  document.getElementById("user").classList.add('active');
-  window.location.href = '/user/' + id;
 }
 
 function login() {
@@ -1140,9 +873,14 @@ function logout() {
   window.location.href = "/logout";
 }
 
-
-function navReveal() {
-  const userBtn = document.getElementById('user');
-  const navMenu = document.getElementById('navMenu');
+const toggleLanguageChooseButton = document.getElementById('toggleLanguageChooseButton')
+function toggleLanguageChoosePanel() {
+  const languagePack = document.querySelector('language');
+  if (languagePack.classList.contains('active')) {
+    languagePack.classList.remove('active');
+  } else {
+    languagePack.classList.add('active');
+  }
 }
+
 </script>
