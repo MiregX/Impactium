@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://impactium.fun/static/img/impa.svg" type="image/x-icon">
+  <title>Impactium</title>
+  <link rel="stylesheet" href="https://impactium.fun/static/style/reset.css">
+  <link rel="stylesheet" href="https://impactium.fun/static/style/style_global.css?v=7">
+  <script src="https://impactium.fun/static/script/jquery.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800');
+:root {
+  --g: #1F2937;
+  --gh: #374151;
+  --b: #111827;
+  --w: #e8e8e8;
+  --p: #3E3979;
+  --lp: #8F80F4;
+}
+    * {
+      font-family: 'Manrope', sans-serif;  
+      color: white;
+    }
+    body {
+      min-height: calc(100vh);
+      height: 0;
+      width: 100vw;
+      overflow-x: hidden;
+      background: #1d2a3a;
+      overflow-y: hidden;
+    }
+    main {
+      min-height: 100%;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header {
+      position: fixed;
+      height: 80px;
+      padding: 0 15vw;
+      width: 70vw; /* Длинна с падингом */
+      justify-content: space-between;
+      z-index: 4;
+    }
+    header-background {
+      position: fixed;
+      top: -80px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      width: 100vw;
+      background: linear-gradient(180deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
+      backdrop-filter: blur(15px);
+    }
+    temp-background {
+      height: 100%;
+      width: 100vw;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    button {
+      cursor: pointer;
+      background-color: #00000000;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+    }
+    h1 {
+      font-family: 'Monoton', cursive;
+      text-transform: uppercase;
+      white-space: nowrap;
+      font-size: 40px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #auth {
+     display: <% if (user.id) { %>none<% } else { %>flex<% } %>; 
+    }
+    .user-onlogin {
+      display: <% if (user.id) { %>flex<% } else { %>none<% } %>;
+    }
+    #user {
+      color: #fff;
+      font-weight: 700;
+      min-width: 120px;
+      height: 40px;
+      border-radius: 20px;
+      background: var(--b);
+      justify-content: center;
+      overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+      box-shadow: 0 1px 3px var(--p);
+    }
+    #user * {
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    }
+    menu {
+      display: none;
+    }
+    #user img {
+      border-radius: 100%;
+      height: 38px;
+      width: 38px;
+      pointer-events: none;
+      margin-left: 1px;
+    }
+    #user p {
+      margin-right: 1px;
+      width: 100%;
+      text-align: center;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #user:hover p {
+      width: 0px;
+      overflow: hidden;
+      opacity: 0;
+    }
+    #user:hover {
+      background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } else { %>#3886C6<% } %>;
+    }
+    #user.active {
+      background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } else { %>#3886C6<% } %>;
+    }
+    #user.active p {
+      width: 0px;
+      overflow: hidden;
+      opacity: 0;
+    }
+    .menu-mobile {
+      display: none;
+    }
+    .rocks {
+      z-index: -1;
+      width: 100vw;
+      position: absolute;
+    }
+    .rocks1 {
+      bottom: -3px;
+    }
+    #arrow-icon path.default-path {
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    }
+
+    #arrow-icon.hovered path {
+      d: path("M2 12H18M18 12L13 7M18 12L13 17");
+    }
+
+
+    .temp-button svg {
+      transform: translateX(-3px);
+    }
+    .temp-button:hover svg {
+      transform: translateX(10px);
+    }
+    .temp-button * {
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    }
+    .temp-button {
+      display: flex;
+      cursor: pointer;
+      color: var(--w);
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      width: 120px;
+      height: 40px;
+    }
+    .temp-button .button-text {
+      position: absolute;
+      width: calc(100% - 40px);
+      right: 0px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .temp-button .circle {
+      position: absolute;
+      margin: 0;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      background: var(--b);
+      border-radius: 20px;
+      box-shadow: 0 1px 3px var(--p);
+    }
+
+    .temp-button:hover .circle {
+      width: 100%;
+    }
+
+    .temp-button:hover .button-text {
+     color: #fff;
+    }
+    @media (max-width: 767px) {
+      .preloader {
+        display: flex;
+      }
+      header {
+        padding: 0 2.5%;
+        width: calc(100vw - 5%);
+      }
+      h1 {
+        font-size: 7vw;
+        margin-bottom: -2px;
+      }
+      #user {
+        height: 7vw;
+        min-width: 22vw;
+        border-radius: 3.5vw;
+      }
+      #user img {
+        height: calc(7vw - 2px);
+        width: calc(7vw - 2px);
+        border-radius: calc(3.5vw - 1px);
+      }
+      .temp-button {
+        height: 7vw;
+        width: 22vw;
+        display: none;
+      }
+      .temp-button .circle {
+        height: 7vw;
+        width: 7vw;
+      }
+      .temp-button .button-text {
+        width: calc(100% - 7vw);
+      }
+      .temp-button svg {
+        transform: translateX(-3px);
+        width: 7vw;
+        height: 7vw;
+      }
+      .temp-button:hover svg {
+        transform: translateX(1vw);
+      }
+      menu {
+        display: flex;
+        height: 100vh;
+        width: 70vw;
+        position: fixed;
+        z-index: 4;
+        right: 0px;
+        backdrop-filter: none;
+        transform: translateX(101%);
+        transition: transform 0.5s ease, backdrop-filter 0s linear 0.5s;
+      }
+
+      menu.active {
+        transform: translateX(0%);
+        backdrop-filter: blur(15px);
+        transition: transform 0.5s ease, backdrop-filter 0s;
+      }
+
+      .menu-mobile {
+        display: flex;
+        height: 7vw;
+        width: 7vw;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3.5vw;
+        background: var(--b);
+        box-shadow: 0 1px 3px var(--p);
+      }
+      .menu-mobile img {
+        height: 4vw;
+        pointer-events: none;
+        width: 4vw;
+      }
+      .user-onlogin {
+        margin-right: 10px;
+        gap: 15px;
+      }
+    }
+    .terminal-button {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 30px;
+      border-radius: 500px;
+      padding: 5px;
+      justify-content: center;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 500;
+      align-items: center;
+      cursor: pointer;
+    }
+    .terminal-button img {
+      margin: 0 5px;
+      width: 30px;
+      opacity: 0.2;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="preloader none center">
+    <div class="honeycomb">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <header class="flex flex-dir-row center-v">
+    <h1 onclick="index()">Impactium</h1>
+      <% if (user.id) { %>
+        <div class="user-onlogin gap center-h center-v">
+          <button id="user" onclick="userinfo('<%= user.id %>')" class="flex center-v center-h">
+            <% if (user.avatar) { %>
+              <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" onerror="this.src='https://api.impactium.fun/static/img/albion/asset.png'">
+            <% } %>
+            <p class="button-text"><%= user.visibleName %></p>
+          </button>
+          <button id="logout" onclick="logout()" class="temp-button">
+            <div class="circle">
+              <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="button-text"><%= lang.logout %></div>
+          </button>
+          <button id="menu" class="menu-mobile"><img src="https://api.impactium.fun/static/img/menu-button.png"></button>
+        </div>
+      <% } else { %>
+        <div class="flex-dir-row gap">
+          <button id="auth" onclick="auth()" class="temp-button">
+            <div class="circle">
+              <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="button-text txt-sh"><%= lang.login %></span>
+          </button>
+          <button id="menu" class="menu-mobile"><img src="https://api.impactium.fun/static/img/menu-button.png"></button>
+        </div>
+      <% } %>
+      <% if (user.isCreator) { %>
+        <div class="terminal-button flex-dir-row" onclick="terminal()">
+          <img src="https://api.impactium.fun/static/img/svg/terminal.svg">
+        </div>
+      <% } %>
+  </header>
+  <header-background></header-background>
+  <temp-background class="absolute flex">
+    <div class="rocks main-bg absolute">
+      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/bg-learn-mobile.svg">
+    </div>
+    <div class="rocks absolute">
+      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/1-01.svg">
+    </div>
+    <div class="rocks absolute">
+      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/2-01.svg">
+    </div>
+    <div class="rocks rocks1 absolute">
+      <img src="https://api.impactium.fun/static/img/svg/7-01.svg">
+    </div>
+<!--   <div class="rocks stars1 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/stars-back.svg">
+  </div> -->
+<!--   <div class="rocks rocks1 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/rocks1.svg">
+  </div>
+  <div class="rocks rocks2 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/rocks2.svg">
+  </div>
+  <div class="rocks rocks3 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/rocks3.svg">
+  </div>
+  <div class="rocks starsX absolute">
+    <img src="https://impactium.fun/static/img/diamont-pattern-gray.svg">
+  </div>
+  <div class="rocks rocks4 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/rocks4.svg">
+  </div>
+  <div class="rocks rocks5 absolute">
+    <img src="https://api.impactium.fun/static/img/svg/rocks5.svg">
+  </div>
+  <div class="rocks absolute">
+    <img class="w-ful" src="https://api.impactium.fun/static/img/svg/1-01.svg">
+  </div>
+  <div class="rocks absolute">
+    <img class="w-ful" src="https://api.impactium.fun/static/img/svg/2-01.svg">
+  </div> -->
+  </temp-background>
+  <main>
+    <%- body %>
+  </main>
+</body>
+</html>
+
+<script type="text/javascript">
+function index() {
+  window.location.href = "/";
+}
+
+const header = document.querySelector('header-background');
+let previousScrollPosition = 0;
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
+  header.style.top = `${newTopValue}px`;
+  previousScrollPosition = scrollY;
+});
+
+function auth() {
+  window.location.href = "https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2F&response_type=code&scope=identify";
+}
+function logout() {
+  window.location.href = "/logout";
+}
+function terminal() {
+  window.location.href = "/terminal";
+}
+function userinfo(userId) {
+  document.getElementById("user").classList.add('active');
+  window.location.href = '/user/' + userId;
+}
+
+const arrowIcon = document.querySelector('.temp-button');
+
+arrowIcon.addEventListener('mouseenter', () => {
+  document.getElementById('arrow-icon').classList.add('hovered');
+});
+
+arrowIcon.addEventListener('mouseleave', () => {
+  document.getElementById('arrow-icon').classList.remove('hovered');
+});
+</script>
+<script>
+if (window.innerWidth <= 767) {
+  $(window).on('load', function() {
+    $('.preloader').remove();
+  });
+} else {
+  $('.preloader').remove();
+}
+</script>

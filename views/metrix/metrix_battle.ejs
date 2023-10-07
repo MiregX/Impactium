@@ -1,0 +1,311 @@
+<style>
+:root {
+  --g: #1F2937;
+  --gh: #374151;
+  --gho: #37415180;
+  --b: #111827;
+  --bo: #11182790;
+  --w: #e8e8e8;
+  --p: #3E3979;
+  --lp: #8F80F4;
+  --player-gradient: linear-gradient(90deg, #29afe0 0%, #29cee0 100%);
+  --kills-gradient: linear-gradient(90deg, #E0294E 0%, #E02983 100%);
+  --fame-gradient: linear-gradient(90deg, #29E09D 0%, #29E082 100%);
+  --player-text: #29cee0;
+  --kills-text: #E02983;
+  --fame-text: #29E082;
+}
+.block-p-shadow {
+  box-shadow: 0 1px 3px var(--p);
+}
+.text-w-shadow {
+  text-shadow: 0 1px 1px var(--g);
+}
+body {
+  overflow-y: visible !important;
+  background: #151E29;
+}
+.bg-mobile {
+  display: none;
+}
+header-background {
+  z-index: 4;
+}
+header {
+  z-index: 5;
+}
+@media (max-width: 767px) {
+.bg-mobile {
+  display: block;
+}
+}
+main {
+  align-items: unset;
+  justify-content: unset;
+  padding: 0 15vw;
+  padding-top: 80px;
+  width: calc(100vw - 30vw);
+  flex-direction: column;
+}
+.maininfo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+  height: calc(100vh - 80px - 40px);
+}
+.report-on-battles {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  background: var(--bo);
+  backdrop-filter: blur(15px);
+  padding: 10px;
+  border-radius: 15px;
+  border-left: 2px solid var(--w);
+  overflow: hidden;
+  box-shadow: 0 1px 3px var(--p);
+}
+.report-on-battles .header p {
+  font-size: 14px;
+}
+.report-on-battles .header span {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--lp);
+  white-space: nowrap;
+  text-decoration: underline;
+}
+.report-on-battles .information .report-block {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.report-on-battles .information img {
+  height: 18px;
+}
+.report-on-battles .information .report-block p {
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+.report-on-battles .information .report-block span {
+  font-weight: 600;
+}
+.report-on-battles span.players {
+  color: var(--player-text);
+}
+.report-on-battles span.kills {
+  color: var(--kills-text);
+}
+.report-on-battles span.fame {
+  color: var(--fame-text);
+}
+.report {
+  background: var(--bo);
+  backdrop-filter: blur(15px);
+  padding: 15px 10px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px;
+  box-shadow: 0 1px 3px var(--p);
+}
+.report .wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.report .wrapper .guild-object {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.report .wrapper .guild-object .guild {
+  white-space: nowrap;
+  margin-left: 5px;
+  max-width: 40%;
+  font-size: 12px;
+  color: var(--w);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-shadow: 0px 1px 2px var(--gh);
+}
+.report .wrapper .guild-object .stripe {
+  border-radius: 5px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.report .wrapper .guild-object .count {
+  color: var(--g);
+  font-weight: 800;
+}
+.report .header-text {
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.report .header-text img {
+  height: 18px;
+}
+.players-report .wrapper .guild-object .stripe {
+  background: var(--player-gradient);
+}
+.kills-report .wrapper .guild-object .stripe {
+  min-width: 10% !important;
+  background: var(--kills-gradient);
+}
+.fame-report .wrapper .guild-object .stripe {
+  min-width: 20% !important;
+  background: var(--fame-gradient);
+}
+.winner.undefined {
+  display: none;
+}
+.winner.defined {
+  grid-row: 2;
+  grid-column: 1;
+  background: var(--bo);
+  backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 3px var(--p);
+  border-radius: 15px;
+  overflow: hidden;
+}
+.winner p {
+  height: 60%;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+}
+.winner div {
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.winner div p {
+  white-space: nowrap;
+  color: gold;
+}
+.nav {
+  width: 100%;
+  height: 40px;
+  background: var(--bo);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  box-shadow: 0 1px 3px var(--p);
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+}
+</style>
+<div class="nav">
+  <p onclick="backToMetrix()">Back to index</p>
+</div>
+<div class="maininfo">
+  <div class="report-on-battles">
+    <div class="header">
+      <p class="title">Combined report for battles:</p>
+      <span class="ids"><%= battleboard.map(item => item.id).join(', ') %></span>
+    </div>
+    <div class="information">
+      <div class="report-block">
+        <p class="players">
+            <img src="https://impactium.fun/static/img/albion/players.png">
+            Players:
+        </p>
+        <span class="players">
+            <%= battleboard.reduce((total, item) => total + Object.keys(item.players).length, 0) %>
+        </span>
+      </div>
+      <div class="report-block">
+          <p class="kills">
+              <img src="https://impactium.fun/static/img/albion/kills.png">
+              Kills:
+          </p>
+          <span class="kills">
+              <%= battleboard.reduce((total, item) => total + item.totalKills, 0) %>
+          </span>
+      </div>
+      <div class="report-block">
+          <p class="fame">
+              <img src="https://impactium.fun/static/img/albion/fame.png">
+              Fame:
+          </p>
+          <span class="fame">
+              <%= cutFame(battleboard.reduce((total, item) => total + item.totalFame, 0)) %>
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="players-report report">
+    <p class="header-text"><img src="https://impactium.fun/static/img/albion/players.png"> Most Players:</p>
+    <div class="wrapper">
+      <% reportCount.players.forEach(guild => { %>
+        <div class="guild-object">
+          <div class="stripe" style="width: <%= guild.width %>;">
+            <span class="count"><%= guild.players %></span>
+          </div>
+          <span class="guild"><%= guild.name %></span>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="kills-report report">
+    <p class="header-text"><img src="https://impactium.fun/static/img/albion/kills.png"> Most Kills:</p>
+    <div class="wrapper">
+      <% reportCount.killsCount.forEach(guild => { %>
+        <div class="guild-object">
+          <div class="stripe" style="width: <%= guild.width %>;">
+            <span class="count"><%= guild.kills %></span>
+          </div>
+          <span class="guild"><%= guild.name %></span>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="fame-report report">
+    <p class="header-text"><img src="https://impactium.fun/static/img/albion/fame.png"> Most Fame:</p>
+    <div class="wrapper">
+      <% reportCount.killFame.forEach(guild => { %>
+        <div class="guild-object">
+          <div class="stripe" style="width: <%= guild.width %>;">
+            <span class="count"><%= cutFame(guild.fame) %></span>
+          </div>
+          <span class="guild"><%= guild.name %></span>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="winner <%= reportCount.winnerGuild ? 'defined' : 'undefined' %>">
+    <div>Winner is <p><%= reportCount.winnerGuild %></p></div>
+  </div>
+
+</div>
+
+<script>
+function backToMetrix() {
+  window.window.location.href = 'https://impactium.fun/metrix'
+}
+</script>

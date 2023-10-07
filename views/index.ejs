@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://api.impactium.fun/logo/impactium-tw.png" type="image/x-icon">
+  <title>Impactium</title>
+  <link rel="stylesheet" href="static/style/reset.css">
+  <link rel="stylesheet" href="static/style/style_global.css?v=1">
+  <link rel="stylesheet" href="static/style/style_main.css">
+  <link rel="stylesheet" href="static/style/style_main_mobile.css?v=2">
+  <script src="static/script/jquery.js"></script>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Meera+Inimai&display=swap');
+:root {
+  --g: #1F2937;
+  --gh: #374151;
+  --b: #111827;
+  --w: #e8e8e8;
+  --p: #3E3979;
+  --lp: #8F80F4;
+  --trans: cubic-bezier(.21,.29,0,.94);
+  --violet: #8861ff;
+  --remove-accent: #ff4b4b;
+}
+.noanim {
+  transition: all 0s linear;
+}
+
+.stars-svg {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform: translate(-50%, 40%) scale(0.6);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.absolute {
+  position: absolute;
+}
+.rocks {
+  width: 100vw;
+  z-index: -1;
+  pointer-events: none;
+  transform: translateY(0);
+}
+.rocks5 img {
+  position: absolute;
+  top: 80vh;
+  width: 100vw;
+}
+.starsX {
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.starsX img {
+  max-width: 100vw;
+}
+
+* {
+  font-family: 'Manrope', sans-serif;  
+  color: white;
+  text-shadow: 0px 3px 8px #212121;
+  color-scheme: dark;
+}
+#auth {
+ display: <% if (user.id) { %>none<% } else { %>flex<% } %>; 
+}
+.user-onlogin {
+  display: <% if (user.id) { %>flex<% } else { %>none<% } %>;
+}
+body {
+  background: #131D27;    
+  background-image: url(https://api.impactium.fun/svg/bg-learn-mobile.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+button {
+  cursor: pointer;
+  background-color: #00000000;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+main {
+  display: flex;
+  flex-direction: column;
+}
+header {
+  height: 80px;
+  z-index: 2;
+  position: sticky;
+  top: 0px;
+  justify-content: space-between;
+  padding: 0 15%;
+  width: calc(100vw - 30%);
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.5s !important;
+  opacity: 0;
+  transform: translateY(-100%);
+}
+header-background {
+  z-index: 1;
+  top: -80px;
+  height: 80px;
+  width: 100vw;
+  left: 0%;
+  position: fixed;
+  display: flex;
+  background: linear-gradient(180deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
+  backdrop-filter: blur(15px);
+}
+header .buttons {
+  gap: 10px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+header .buttons button {
+  height: 100%;
+  position: relative;
+  font-weight: 600;
+  width: 120px;
+  text-align: center;
+  text-transform: uppercase;
+}
+header .buttons button img {
+  filter: invert(100%);
+  height: 15px;
+  width: 15px;
+  margin-left: 10px;
+  transition: all 0.2s var(--trans);
+}
+header .buttons button:hover img.aNb {
+  transform: rotateZ(90deg);
+}
+line {
+  width: 1px;
+  background: white;
+  height: 15px;
+}
+
+h1 {
+  font-family: 'Monoton', cursive;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 40px;
+  text-align: center; /* Добавлено */
+}
+
+footer {
+  height: calc(17.5vh - 50px);
+  max-height: 500px;
+  width: calc(100vw - 30%);
+  padding: 25px 15%;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(0deg, rgba(15,22,30,1) 0%, rgba(29,42,58,1) 100%);
+}
+footer h3 {
+  color: #5b6b81;
+}
+footer .on-close {
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #5b6b81;
+  text-shadow: 0 0 0 transparent;
+}
+footer span {
+  margin-top: 5px;
+  font-size: 0.75rem;
+  color: #5b6b81;
+  max-width: 50vw;
+  max-width: 45rem;
+  font-weight: normal;
+  text-shadow: 0 0 0 transparent;
+}
+#user {
+  color: #fff;
+  font-weight: 700;
+  width: 120px;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--b);
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: relative;
+  box-shadow: 0 1px 3px var(--p);
+}
+#user * {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+#user .avatar {
+  border-radius: 100%;
+  height: 38px;
+  width: 38px;
+  pointer-events: none;
+  margin-left: 1px;
+}
+#user p {
+  margin-right: 1px;
+  width: 81px;
+  text-align: center;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#user:hover p {
+  width: 0px;
+  overflow: hidden;
+  opacity: 0;
+}
+#user:hover {
+  background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } %>;
+}
+#user.active {
+  background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } %>;
+}
+#user.active p {
+  width: 0px;
+  overflow: hidden;
+  opacity: 0;
+}
+header .logo {
+  height: 60px;
+}
+.logout-mobile {
+  display: none;
+}
+.vertigo {
+  font-family: 'Monoton', cursive;
+  font-weight: normal;
+}
+.panel {
+  height: calc(100vh - 80px);
+}
+.panel.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.panel.second {
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+.card {
+  margin-top: 12.5vw;
+  background: linear-gradient(125deg, rgba(15,22,30,0.8) 0%, rgba(29,42,58,0.5) 100%);
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  padding: 10px;
+  width: calc(70vw / 4 - 20px);
+  gap: 5px;
+}
+.card h4 {
+  height: 50px;
+  width: calc(100% - 20px);
+  padding: 10px;
+  font-size: 24px;
+  text-shadow: 0 0 0 transparent;
+  border-radius: 15px 15px 0 0;
+  border: 1px solid #34485fcc;
+}
+.card span {
+  text-shadow: 0 0 0 transparent;
+  border: 1px solid #34485fcc;
+  width: calc(100% - 20px);
+  padding: 10px;
+}
+.card .text-wrapper {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #34485fcc;
+  height: 50%;
+  overflow: hidden;
+}
+.card .text-wrapper.last {
+  border-radius: 0 0 15px 15px;
+}
+.card p {
+  line-height: 20px;
+}
+
+.card .img-wrapper {
+  padding: 10px;
+  border: 1px solid #34485fcc;
+  border-radius: 0 0 15px 15px;
+}
+.card .img-wrapper img {
+  height: 100%;  
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  pointer-events: none;
+}
+.about-us {
+  height: 250px;
+  padding: 40px;
+  width: 50vw;
+  word-break: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+
+.guilds-list {
+  width: 600px;
+  background: var(--b);
+  border-radius: 12px 0 0 12px;
+  backdrop-filter: blur(15px);
+  border-right: 0px;
+  padding: 10px;
+  /*   АНИМАЦИЯ ПРИ ЗАГРУЗКЕ   */
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) !important;
+  opacity: 0;
+  transform: translateX(50%);
+}
+
+.guild-list-wrapper {
+  gap: 12px;
+}
+.guild-list-wrapper h5 {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--w);
+}
+.unique-guild {
+  border-radius: 6px;
+  border: 1px solid var(--p);
+  height: 40px;
+  padding: 10px;
+  align-items: center;
+  width: 300px;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.unique-guild h2 {
+  font-weight: 600;
+}
+.unique-guild img {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+}
+.unique-guild .logoMobile {
+  display: none;
+}
+.unique-guild img.arrow {
+  height: 20px;
+  width: 20px;
+  filter: invert(100%);
+  margin-right: 10px;
+}
+.unique-guild:hover {
+  width: 320px;
+  backdrop-filter: blur(5px);
+}
+.disallowed {
+  cursor: not-allowed;
+  background: #ff00004f;
+}
+.unique-guild.disallowed:hover {
+  width: 70%;
+}
+
+#arrow-icon path.default-path {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+#arrow-icon.hovered path {
+  d: path("M2 12H18M18 12L13 7M18 12L13 17");
+}
+.temp-button svg {
+  transform: translateX(-3px);
+}
+.temp-button:hover svg {
+  transform: translateX(10px);
+}
+.temp-button * {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+.temp-button {
+  display: flex;
+  cursor: pointer;
+  color: var(--b);
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 120px;
+  height: 40px;
+}
+.temp-button .button-text {
+  position: absolute;
+  width: calc(100% - 40px);
+  right: 0px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.temp-button .circle {
+  position: absolute;
+  margin: 0;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: var(--b);
+  border-radius: 20px;
+  box-shadow: 0 1px 3px var(--p);
+}
+
+.temp-button:hover .circle {
+  width: 100%;
+}
+
+.temp-button:hover .button-text {
+ color: #fff;
+}
+
+.about-us .main-text {
+  font-size: 42px;
+  font-weight: 700;
+  /*   АНИМАЦИЯ ПРИ ЗАГРУЗКЕ   */
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.1s !important;
+  opacity: 0;
+  transform: translateY(-150%);
+}
+.about-us .support-text {
+  margin: 12px 0;
+  color: #9ca3af;
+  font-size: 21px;
+  text-align: center;
+  width: 65%;
+  font-weight: 400;
+  transition-delay: 0.25s;
+  /*   АНИМАЦИЯ ПРИ ЗАГРУЗКЕ   */
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.35s !important;
+  opacity: 0;
+  transform: translateY(-150%);
+}
+.about-us .become-partner {
+  border-radius: 12px;
+  height: 66px;
+  width: calc(66px * 3);
+  background: var(--b);
+  font-size: 16px;
+  font-weight: 600;
+  gap: 12px;
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.2s !important;
+  opacity: 0;
+  transform: translateY(100%);
+  box-shadow: 0 1px 3px var(--p);
+}
+.about-us .become-partner img {
+  filter: invert(100%);
+  height: 23px;
+  transition: all 0.5s ease;
+}
+.become-partner:hover img {
+  transform: rotateY(180deg);
+}
+.guilds-list .background {
+  pointer-events: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.guilds-list .background img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -50px;
+  z-index: -1;
+}
+header .buttons button navBar {
+  position: absolute;
+  min-height: 80px;
+  background: rgba(18, 24, 39, 0.65);
+  backdrop-filter: blur(15px);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  flex-direction: column;
+  top: 80px;
+  width: 240px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+  transform: translateY(-16px);
+  overflow: hidden;
+  box-shadow: 0 1px 3px var(--p);
+}
+header .buttons button:hover navBar {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0px);
+}
+header .buttons button navBar img {
+  filter: unset;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin-left: 0;
+}
+header .buttons button navBar h3 {
+  text-align: left;
+  font-weight: 700;
+  color: var(--lp);
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+header .buttons button navBar p {
+  text-align: left;
+  font-weight: 500;
+  color: var(--p);
+  height: 100%;
+}
+.partners-unique-guild .p-wrapper {
+  height: 36px;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+.partners-unique-guild:hover .p-wrapper {
+  height: 0px;
+}
+.partners-unique-guild:hover h3 {
+  font-size: 16px;
+}
+.partners-unique-guild {
+  transition: all 0.2s ease;
+  padding: 12px;
+  gap: 12px;
+}
+.partners-unique-guild-text {
+  align-items: flex-start;
+}
+.guild-avatar {
+  height: 66px;
+  width: 66px;
+  min-width: 66px;
+  border-radius: 12px;
+  background: var(--g);
+}
+.partners-unique-guild:hover {
+  background: var(--gh);
+}
+langpanel {
+  top: 20px;
+  left: 20px;
+}
+langpanel {
+  position: absolute;
+  color: #e8e8e8;
+  background: var(--b);
+  border-radius: 0 0 20px 0;
+  height: 40px;
+  width: 90px;
+  font-weight: 700;
+  font-family: 'Manrope', sans-serif;
+  top: 0px;
+  left: 0px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+langpanel img {
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+langpanel p {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+}
+langpanel div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow: hidden;
+  height: 0px;
+  transition: all 0.2s ease-in-out;
+  right: 11px;
+  position: absolute;
+  margin-top: 20px;
+}    
+langpanel:hover div {
+  height: 135px;
+  width: 20px;
+  margin-top: 161px;
+}
+.main-lang {
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+.main-bg {
+  flex: 1;
+  overflow: hidden;
+}
+.main-bg img {
+  overflow: hidden;
+}
+</style>
+<style>
+  @media (max-width: 1080px) {
+  header {
+    padding: 0 2.5%;
+    width: calc(100vw - 5%);
+  }
+  .language-pack {
+    top: unset;
+    position: fixed;
+    bottom: 50px;
+  }
+}
+@media (max-width: 767px) {
+.unique-guild .logoMobile {
+  display: block;
+}
+.unique-guild .logoDesktop {
+  display: none;
+}
+.preloader {
+  display: flex;
+}
+langpanel {
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0px 0px 12px 12px;
+  height: 20px;
+  width: 60px;
+}
+langpanel p {
+  font-size: 10px;
+}
+langpanel img {
+  height: 10px !important;
+  width: 10px !important;
+}
+langpanel:hover div {
+  right: 10px;
+}
+langpanel:hover div {
+  margin-top: 150px;
+}
+
+header {
+  padding: 0 2.5%;
+  width: calc(100vw - 5%);
+}
+h1 {
+  font-size: 7vw;
+  margin-bottom: -2px;
+}
+.buttons {
+  display: none;
+}
+#user {
+  height: 7vw;
+  width: 22vw;
+  border-radius: 3.5vw;
+}
+#user .avatar {
+  height: calc(7vw - 2px);
+  width: calc(7vw - 2px);
+  border-radius: calc(3.5vw - 1px);
+}
+
+main {
+  position: relative; 
+  overflow: hidden;
+}
+.about-us {
+  padding: 0;
+  padding-top: 40px;
+}
+.logout-mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 7vw;
+  width: 22vw;
+  font-weight: 700;
+  border-radius: 20px;
+  background: #3886C6;
+}
+.language-pack {
+  display: none;
+}
+.language-pack.flex {
+  display: unset;
+}
+.user-onlogin {
+  margin-right: 10px;
+  gap: 15px;
+}
+.about-us .main-text {
+  font-size: 5vw;
+}
+.about-us .support-text {
+  font-size: 3vw;
+}
+.panel.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.about-us {
+  width: unset;
+  height: unset;
+}
+.guilds-list {
+  backdrop-filter: none;
+  width: calc(95vw - 5vw);
+  padding: 10px;
+  border-radius: 15px;
+  margin: 0 2.5vw;
+  border: 0px solid #23688aa6;
+  position: relative;
+}
+.guild-list-wrapper h5 {
+  margin-top: 0px;
+}
+.guild-list-wrapper {
+  gap: 10px;
+}
+.unique-guild {
+  width: unset;
+  min-width: unset;
+  background: linear-gradient(90deg, #111828 0%, #192031 100%);
+}
+.unique-guild:hover {
+  width: unset;
+}
+.rocks5 img {
+  top: 22vh;
+}
+body {
+  min-height: 120vh;
+}
+footer .on-close {
+  font-size: 0.9rem;
+}
+footer {
+  height: unset;
+  align-items: flex-start;
+  padding: 3vw 5vw;
+  width: calc(100vw - 10vw);
+}
+.panel.second {
+  margin: 150px 0 150px 0;
+  flex-direction: column;
+  gap: 50px;
+  height: unset;
+}
+.card {
+  backdrop-filter: none;
+  width: 75vw;
+}
+.panel.second {
+  align-items: center;
+}
+.temp-button {
+  height: 7vw;
+  width: 22vw;
+  display: none;
+}
+.temp-button .circle {
+  height: 7vw;
+  width: 7vw;
+}
+.temp-button .button-text {
+  width: calc(100% - 7vw);
+}
+.temp-button svg {
+  transform: translateX(-3px);
+  width: 7vw;
+  height: 7vw;
+}
+.temp-button:hover svg {
+  transform: translateX(1vw);
+}
+header .buttons button navBar {
+  backdrop-filter: blur(0px);
+}
+}
+
+</style>
+</head>
+<% const guildParams = [
+  { name: "Fax", 
+    logo: "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=240",
+    desc: "#1 S21 | More: @faxnocap"
+  }
+]; %>
+<body>
+<div class="preloader none center">
+  <div class="honeycomb">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<background class="background-global absolute flex">
+  <div class="rocks rocks2 absolute">
+    <img class="w-ful" src="https://api.impactium.fun/svg/1-01.svg">
+  </div>
+  <div class="rocks absolute">
+    <img class="w-ful" src="https://api.impactium.fun/svg/2-01.svg">
+  </div>
+  <div class="rocks starsX absolute">
+    <img src="https://api.impactium.fun/ui/diamond-full-pattern.svg">
+  </div>
+  <div class="rocks rocks5 absolute">
+    <img src="https://api.impactium.fun/svg/rocks5.svg">
+  </div>
+  <div class="rocks absolute">
+    <img class="w-ful" src="https://api.impactium.fun/svg/7-03.svg">
+  </div>
+</background>
+<langpanel>
+    <p>Lang: <img class="main-lang" src="https://api.impactium.fun/langs/<%= lang.mainLang %>.png"></p>
+    <div>
+      <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
+      <% for (const langCode of availableLanguages) { %>
+        <% if (langCode !== lang.mainLang) { %>
+          <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
+        <% } %>
+      <% } %>
+    </div>
+</langpanel>
+<header class="flex flex-dir-row center-v">
+  <h1>Impactium</h1>
+  <div class="buttons flex">
+    <button class="flex-dir-row center" id="partners">
+      <%= lang.partners %>
+      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+      <navBar>
+        <% guildParams.forEach(guild => { %>
+        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirect('<%= guild.name %>')">
+          <div class="guild-avatar flex center">
+            <img src="<%= guild.logo %>">
+          </div>
+          <div class="partners-unique-guild-text flex-dir-column">
+            <h3><%= guild.name %></h3>
+            <div class="p-wrapper">
+              <p><%= guild.desc %></p>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </navBar>
+    </button>
+    <line></line>
+    <button class="flex-dir-row center" id="products">
+      <%= lang.products %>
+      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+      <navBar>
+        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectDiscordBotJoin()">
+          <div class="guild-avatar flex center">
+            <img src="https://api.impactium.fun/logo/impactium-wb.png">
+          </div>
+          <div class="partners-unique-guild-text flex-dir-column">
+            <h3>Impactium Bot</h3>
+            <div class="p-wrapper">
+              <p>Автороли для альянса.</p>
+            </div>
+          </div>
+        </div>
+        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectMetrix()">
+          <div class="guild-avatar flex center">
+            <img src="https://api.impactium.fun/logo/eclipsemetrix.png">
+          </div>
+          <div class="partners-unique-guild-text flex-dir-column">
+            <h3>Eclipse Metrix</h3>
+            <div class="p-wrapper">
+              <p>Statistics for Albion Online.</p>
+            </div>
+          </div>
+        </div>
+        <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectPhp()">
+          <div class="guild-avatar flex center">
+            <img src="https://api.impactium.fun/logo/php-compiler.jpeg">
+          </div>
+          <div class="partners-unique-guild-text flex-dir-column">
+            <h3>PHP Compiler</h3>
+            <div class="p-wrapper">
+              <p>School assistant project.</p>
+            </div>
+          </div>
+        </div>
+      </navBar>
+    </button>
+    <line></line>
+    <button class="flex-dir-row center" id="support">
+      <%= lang.support %>
+      <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
+      <navBar>
+        
+      </navBar>
+    </button>
+  </div>
+  <% if (user.id) { %>
+    <div class="user-onlogin gap center-h center-v">
+      <button id="user" onclick="userinfo('<%= user.id %>')" class="flex center-v center-h">
+        <% if (user.avatar) { %>
+          <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="avatar">
+        <% } %>
+        <p class="button-text"><%= user.visibleName %></p>
+      </button>
+      <button id="logout" onclick="logout()" class="temp-button">
+        <div class="circle">
+          <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+            <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="button-text"><%= lang.logout %></div>
+      </button>
+    </div>
+  <% } else { %>
+    <div class="flex-dir-row gap">
+      <button id="auth" onclick="login()" class="temp-button">
+        <div class="circle">
+          <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+            <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="button-text txt-sh"><%= lang.login %></span>
+      </button>
+    </div>
+  <% } %>
+</header>
+
+<header-background></header-background>
+
+
+
+
+
+
+<main>
+  <panel class="panel main">
+    <div class="about-us">
+      <div class="center flex-dir-column">
+        <p class="main-text anim-onload"><%= lang.joinToUs %></p>
+        <p class="support-text anim-onload"><%= lang.joinToUsDesc %></p>
+      </div>
+      <button class="become-partner flex-dir-row center"><img src="https://api.impactium.fun/ux/amogus.svg"><%= lang.becomePartner %></button>
+    </div>
+    <div class="guilds-list anim-onload">
+      <div class="background"><img src="https://api.impactium.fun/ui/diamond-semi-pattern.svg"></div>
+      <div class="guild-list-wrapper flex-dir-column">
+        <h5><%= lang.ourPartners %></h5>
+
+          <% guildParams.forEach(guild => { %>
+            <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.name %>')">
+              <div class="wrapper center-v flex gap">
+                <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
+                <% if (guild.logoMobile) { %>
+                  <img class="logoMobile" src="<%= guild.logoMobile %>">
+                <% } %>
+                <h2><%= guild.name %></h2>
+              </div>
+              <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
+            </div>
+          <% }); %>
+        <div class="unique-guild flex-dir-row">
+          <div class="wrapper center-v flex gap">
+            <img src="https://api.impactium.fun/ux/gamepad.png">
+            <h2><%= lang.becomePartner %></h2>
+          </div>
+          <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
+        </div>
+
+      </div>
+    </div>
+  </panel>
+  <panel class="panel second flex-dir-row center">
+    <div class="card one flex-dir-column">
+      <h4 class="flex center">Minecraft Servers</h4>
+      <span>16.11.2021 -> 07.02.2023</span>
+      <div class="text-wrapper">
+        <p><%= lang.card1 %></p>
+      </div>
+      <div class="img-wrapper">
+        <img src="https://api.impactium.fun/hub-cards/minecraft-temp.jpg">
+      </div>
+    </div>
+    <div class="card two flex-dir-column">
+      <h4 class="flex center">Blockchain</h4>
+      <span>11.02.2023 -> 20.04.2023</span>
+      <div class="text-wrapper">
+        <p><%= lang.card2 %></p>
+      </div>
+      <div class="img-wrapper">
+        <img src="https://api.impactium.fun/hub-cards/eth.jpg">
+      </div>
+    </div>
+    <div class="card three flex-dir-column">
+      <h4 class="flex center">Vulnerabilities</h4>
+      <span>24.04.2023 -> 30.05.2023</span>
+      <div class="text-wrapper">
+        <p><%= lang.card3 %></p>
+      </div>
+      <div class="img-wrapper">
+        <img src="https://api.impactium.fun/hub-cards/virus.jpg">
+      </div>
+    </div>
+    <div class="card four flex-dir-column">
+      <h4 class="flex center">Impactium Automation</h4>
+      <span>13.06.2023 -> Today</span>
+      <div class="text-wrapper last">
+        <p><%= lang.card4 %></p>
+      </div>
+    </div>
+  </panel>
+</main>
+<footer>
+  <h3><%= lang.disclaimer %></h3>
+  <span class="flex"><%= lang.termsAndRules %></span>
+  <div class="info">
+    
+  </div>
+  <p class="on-close"><%= lang.onClose %></p>
+</footer>
+</body>
+</html>
+<script>
+if (window.innerWidth <= 767) {
+  $(window).on('load', function() {
+    $('.preloader').remove();
+  });
+} else {
+  $('.preloader').remove();
+}
+
+$(window).on('load', function() {
+  const header = document.querySelector('header');
+  header.style.transform = ('translateX(0px)');
+  header.style.opacity = ('1');
+
+  const gl = document.querySelector('.guilds-list');
+  gl.style.transform = ('translateX(0px)');
+  gl.style.opacity = ('1');
+
+  const aumtext = document.querySelector('.main-text');
+  aumtext.style.transform = ('translateX(0px)');
+  aumtext.style.opacity = ('1');
+
+  const austext = document.querySelector('.support-text');
+  austext.style.transform = ('translateX(0px)');
+  austext.style.opacity = ('1');
+
+  const bp = document.querySelector('.become-partner');
+  bp.style.transform = ('translateX(0px)');
+  bp.style.opacity = ('1');
+});
+</script>
+
+
+
+<script>
+const blocks = document.querySelectorAll('.rocks');
+
+const header = document.querySelector('header-background');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
+  header.style.top = `${newTopValue}px`;
+});
+
+
+const arrowIcon = document.querySelector('.temp-button');
+
+arrowIcon.addEventListener('mouseenter', () => {
+  document.getElementById('arrow-icon').classList.add('hovered');
+});
+
+arrowIcon.addEventListener('mouseleave', () => {
+  document.getElementById('arrow-icon').classList.remove('hovered');
+});
+
+function auth() {
+  window.location.href = "/login";
+}
+
+function redirectPhp() {
+  window.location.href = "/php";
+}
+
+function redirect(name) {
+  const guild = name.toLowerCase().replace(/\s/g, '-');
+  window.location.href = `https://${guild}.impactium.fun/`;
+}
+function redirectMetrix() {
+  window.location.href = `/metrix`;
+}
+
+function userinfo(id) {
+  document.getElementById("user").classList.add('active');
+  window.location.href = '/user/' + id;
+}
+
+function login() {
+  window.location.href = "/login";
+}
+
+function logout() {
+  window.location.href = "/logout";
+}
+
+
+function navReveal() {
+  const userBtn = document.getElementById('user');
+  const navMenu = document.getElementById('navMenu');
+}
+</script>

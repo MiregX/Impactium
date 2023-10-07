@@ -1,0 +1,165 @@
+<style>
+.deadliests-players {
+  color: var(--w);
+  margin-top: 15px;
+}
+.deadliests-players h3 {
+  font-weight: 700;
+  display: flex;
+  margin: 10px 0;
+  gap: 10px;
+  font-size: 18px;
+}
+.deadliests-players h3 span {
+  color: #888888;
+  font-size: 14px;
+  font-weight: 400;
+  border-left: 1px solid var(--w);
+  padding-left: 10px;
+}
+.deadliests-players .players {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: space-between;
+}
+.deadliests-players .player span,
+.deadliests-players .player p {
+  padding: 3px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.deadliests-players .player p {
+  background: var(--black-one);
+  color: var(--w);
+  border: 1px solid var(--black-two);
+}
+.deadliests-players .player span {
+  background: var(--w);
+  color: var(--black-one);
+  font-weight: 600;
+}
+.deadliests-players .player h6 {
+  color: var(--w);
+  font-weight: 700;
+  flex: 1;
+}
+.chart-container {
+  display: inline-block;
+  width: 33%;
+}
+div.graphs {
+  gap: 10px;
+}
+h2.graphs {
+  margin: 25px 0 10px 0;
+  color: var(--w);
+  font-weight: 700;
+  font-size: 18px;
+}
+p.graphs {
+  width: 100%;
+  text-align: right;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 5px 0;
+  color: var(--backdrop-border);
+}
+.chart-container {
+  width: 33%;
+}
+@media (max-width: 767px) {
+  .chart-container {
+    width: 100%;
+  }
+  .graphs {
+    flex-direction: column;
+  }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<div class="deadliests-players">
+  <h3 class="center-v"><%= lang.topkillers %> <span><%= lang.by25lastBattles%></span></h3>
+  <div class="players ">
+    <% deadliests.slice(0, 5).forEach((item, index) => { %>
+      <div class="player center-v" style="gap: 10px;">
+        <span><%= index + 1 %></span>
+        <h6><%= item.name %></h6>
+        <p><%= item.kills %></p>
+      </div>
+    <% }); %>
+  </div>
+</div>
+<h2 class="graphs"><%= lang.someStatistics %></h2>
+<div class="graphs flex">
+  <div class="chart-container">
+    <canvas id="playersKillsChart" width="400" height="400"></canvas>
+  </div>
+  <div class="chart-container">
+    <canvas id="fameChart" width="400" height="400"></canvas>
+  </div>
+  <div class="chart-container">
+    <canvas id="winrateWinsBattlesChart" width="400" height="400"></canvas>
+  </div>
+</div>
+<p class="graphs"><%= lang.fameDisplayedInKK %></p>
+
+<script>
+const data = JSON.parse(`<%- JSON.stringify(battleboardStats) %>`);
+
+const dates = data.map(day => day.date);
+dates.reverse();
+
+// Определите цвета для каждого набора данных
+const colors = {
+  "Players": "#29cee0",
+  "Kills": "#E02983",
+  "Fame": "#29E082",
+  "Wins": "#ffca61",
+  "Battles": "#8861ff",
+  "Winrate": "#ebdb34",
+};
+
+createChart("playersKillsChart", "Players & Kills", dates, "Players", "Kills");
+createChart("fameChart", "Fame, Wins & Battles", dates, "Fame", "Wins", "Battles");
+createChart("winrateWinsBattlesChart", "Winrate", dates, "Winrate");
+
+function createChart(chartId, label, labels, ...metricNames) {
+  const datasets = metricNames.map((metricName) => {
+    let dataPoints = dates.map((date) => data.find(entry => entry.date === date)[metricName.toLowerCase()]);
+
+    if (metricName === "Fame") {
+      dataPoints = dataPoints.map((value) => (value / 1000000).toFixed(1));
+    }
+
+    return {
+      label: metricName,
+      data: dataPoints,
+      fill: false,
+      borderColor: colors[metricName], // Используйте цвет из объекта colors
+      tension: 0.4,
+    };
+  });
+
+  const ctx = document.getElementById(chartId).getContext("2d");
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: datasets,
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+
+
+</script>

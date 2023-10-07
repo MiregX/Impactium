@@ -1,0 +1,152 @@
+[
+   {
+      "name":"join-main-bot",
+      "description":"Бот зайдёт в голосовой канал, в котором вы находитесь"
+   },
+   {
+      "name":"join-second-bot",
+      "description":"Бот зайдёт в голосовой канал, в котором вы находитесь"
+   },
+   {
+      "name":"add-money",
+      "description":"Добавить указанную сумму денег игроку",
+      "options":[
+         {
+            "name":"player",
+            "description":"Имя игрока",
+            "type":3,
+            "required":true
+         },
+         {
+            "name":"amount",
+            "description":"Сумма для начисления",
+            "type":4,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"remove-money",
+      "description":"Убрать указанную сумму денег у игрока",
+      "options":[
+         {
+            "name":"player",
+            "description":"Имя игрока",
+            "type":3,
+            "required":true
+         },
+         {
+            "name":"amount",
+            "description":"Сумма для снятия",
+            "type":4,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"all-balance",
+      "description":"Узнать состояние экономики"
+   },
+   {
+      "name":"perms-control",
+      "description":"Выводит список гильдий с которыми иммется привязка"
+   },
+   {
+      "name":"perms-spare-guild",
+      "description":"Создаёт новую привязку с гильдией",
+      "options":[
+         {
+            "name":"guild",
+            "description":"Айди гильдии",
+            "type": 3,
+            "required":true
+         },
+         {
+            "name":"role",
+            "description":"Роль этой гильдии на вашем сервере",
+            "type":3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"perms-despare-guild",
+      "description":"Выводит список гильдий с которыми иммется привязка",
+      "options":[
+         {
+            "name":"guild",
+            "description":"Айди гильдии для удаления привязки",
+            "type": 3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"perms-get",
+      "description":"Получить права на этом сервере"
+   },
+   {
+      "name":"perms-auto",
+      "description":"Включает/Отключает автоматические права для альянсовцев"
+   },
+   {
+      "name":"perms-check",
+      "description":"Проверяет, присутствует ли бот в запрашиваемой гильдии, и есть ли у него права",
+      "options":[
+         {
+            "name":"guild",
+            "description":"Айди гильдии для проверки прав",
+            "type": 3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"perms-set-main-alliance-role",
+      "description":"Укажите общую роль альянса",
+      "options":[
+         {
+            "name":"role",
+            "description":"ID роли альянса",
+            "type":3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"perms-set-member-role",
+      "description":"Укажите роль участника в вашей гильдии",
+      "options":[
+         {
+            "name":"role",
+            "description":"ID роли",
+            "type":3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"change-lang",
+      "description":"Choose new language",
+      "options":[
+         {
+            "name":"lang",
+            "description":"en, uk, it, is (es), ru",
+            "type":3,
+            "required":true
+         }
+      ]
+   },
+   {
+      "name":"regear",
+      "description":"Send me battleboard from albionbattles.com",
+      "options":[
+         {
+            "name":"event",
+            "description":"Link to multiboard or singleboard.",
+            "type":3,
+            "required":true
+         }
+      ]
+   }
+]

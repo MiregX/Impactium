@@ -1,0 +1,937 @@
+<style>
+:root {
+  --g: #1F2937;
+  --gh: #374151;
+  --gho: #37415180;
+  --b: #111827;
+  --bo: #11182790;
+  --w: #e8e8e8;
+  --p: #3E3979;
+  --lp: #8F80F4;
+  --lpo: #8F80F480;
+  --player-gradient: linear-gradient(90deg, #29afe0 0%, #29cee0 100%);
+  --kills-gradient: linear-gradient(90deg, #E0294E 0%, #E02983 100%);
+  --fame-gradient: linear-gradient(90deg, #29E09D 0%, #29E082 100%);
+  --player-text: #29cee0;
+  --kills-text: #E02983;
+  --fame-text: #29E082;
+  --backdrop-background: rgba(255, 255, 255, 0.074);
+  --backdrop-border: rgba(255, 255, 255, 0.222);
+}
+.block-p-shadow {
+  box-shadow: 0 1px 3px var(--p);
+}
+.text-w-shadow {
+  text-shadow: 0 1px 1px var(--g);
+}
+body {
+  overflow-y: visible !important;
+  background: #151E29;
+}
+.bg-mobile {
+  display: none;
+}
+header-background {
+  z-index: 4;
+}
+header {
+  z-index: 5;
+}
+@media (max-width: 767px) {
+.bg-mobile {
+  display: block;
+}
+}
+main {
+  align-items: unset;
+  justify-content: unset;
+  padding: 0 15vw;
+  padding-top: 80px;
+  width: calc(100vw - 30vw);
+  flex-direction: column;
+}
+.search-wrapper {
+  width: 100vw;
+  height: 80px;
+  bottom: 0px;
+  position: fixed;
+  z-index: 3;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.search-background {
+  width: 100vw;
+  height: 80px;
+  bottom: 0px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(0deg, #151E29 0%, #ffffff00 100%);
+  backdrop-filter: blur(15px);
+  box-shadow: 1px 0px 3px var(--p);
+  z-index: 2;
+}
+.search-block {
+  width: 60%;
+  height: 40px;
+}
+.search-block .link {
+  width: 100%;
+  border: none;
+  padding: 0 15px;
+  outline: none;
+  background: none;
+  font-weight: 600;
+  color: var(--w);
+  font-size: 16px;
+  cursor: text;
+  background: var(--b);
+  border-radius: 15px 0 0 15px;
+  box-shadow: 0 1px 3px var(--p);
+
+}
+.search-block .button-styles {
+  border-left: 1px solid var(--p);
+  font-weight: 600;
+  font-size: 16px;
+  height: 100%;
+  width: 50px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: all 0.1s cubic-bezier(.21,.29,0,.94);
+  box-shadow: 0 1px 3px var(--p);
+  background: var(--b);
+}
+.search-block .submit:hover,
+.search-block .clear:hover {
+  background-size: 30px;
+}
+
+.search-block .multilog-checkbox {
+  padding: 0 12px 0 10px;
+}
+.search-block .multilog-checkbox input{
+  z-index: 5;
+}
+.search-block button img {
+  height: 20px;
+}
+.warning-about-links {
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--lp);
+  margin-bottom: 25px;
+}
+.battles-wrapper {
+  width: 100%;
+  height: auto;
+  position: relative;
+  margin-bottom: 100px;
+}
+.battle-block {
+  border-bottom: 1px solid var(--gh);
+  background: var(--b);
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94);
+}
+.battles-wrapper .battle-block {
+  padding: 5px 10px 5px 0px;
+}
+.battles-wrapper .battle-block.selected {
+  background: var(--bo);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0px 3px 2px var(--lp);
+  z-index: 3;
+}
+.battles-wrapper .battle-block:hover {
+  box-shadow: 0 0px 3px var(--p);
+  background: var(--g);
+  padding: 5px 20px;
+  transform: scale(1.03);
+}
+.battles-wrapper .battle-block.selected:hover {
+  background: var(--bo);
+  box-shadow: 0 0px 3px 2px var(--fame-text);
+}
+.battles-wrapper .battle-block:hover .alliances:after {
+  background: none;
+}
+.battles-wrapper .battle-block:last-child {
+  border-bottom: none;
+  border-radius: 0px 0px 5px 5px;
+}
+.battle-block .time {
+  color: var(--gh);
+  width: 70px;
+  white-space: nowrap;
+}
+.battle-block .alliances {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  flex: 1;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.battle-block .alliances span {
+  color: var(--gh);
+  font-weight: 800;
+}
+.battle-block .playersNum {
+  text-align: center;
+  width: 50px;
+}
+
+.battle-block .totalKills {
+  text-align: center;
+  width: 50px;
+}
+
+.battle-block .totalFame {
+  text-align: center;
+  width: 50px;
+  white-space: nowrap;
+}
+.battle-block .id {
+  color: var(--p);
+  width: 80px;
+  text-align: right;
+  text-decoration: underline;
+}
+.battle-block.title * {
+  font-size: 15px;
+}
+.battles-wrapper .battle-block * {
+  cursor: pointer;
+}
+.battle-block.title {
+  border-radius: 5px 5px 0 0;
+  border-bottom: 3px solid var(--p);
+  margin-top: 20px;
+}
+.totalFame.mills {
+  color: #36d936;
+  text-shadow: 0px 1px 2px #36d93640;
+  font-weight: 800;
+}
+.battle-block.title div img {
+  height: 25px;
+}
+.battle-block .totalKills.killing-spree {
+  color: #ff4e4e;
+  text-shadow: 0px 1px 2px #ff4e4e88;
+  font-weight: 800;
+}
+.battle-block .playersNum.massive {
+  color: #ffee00;
+  text-shadow: 0px 1px 2px #ffee0088;
+  font-weight: 800;
+}
+.waiting-wrapper {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  position: absolute;
+  z-index: 0;
+  overflow: hidden;
+}
+.waiting-wrapper .waiting-block:last-child {
+  border-radius: 0px 0px 5px 5px;
+  border-bottom: none;
+}
+.waiting-block {
+  background: var(--b);
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--gh);
+}
+.waiting-block:after {
+  content: "";
+  display: flex;
+  height: 20px;
+  background: linear-gradient(90deg, rgba(227, 227, 227, 0) 0%, rgba(227, 227, 227, 0) 40%, rgba(227, 227, 227, 0.5) 50%, rgba(227, 227, 227, 0) 60%, rgba(227, 227, 227, 0) 100%);
+  animation: gradient-animation 3.2s linear infinite;
+  overflow: hidden;
+  width: 80%;
+}
+@keyframes gradient-animation {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+.multilog-checkbox {
+  cursor: pointer;
+  border-left: 1px solid var(--p);
+  font-weight: 600;
+  font-size: 16px;
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.1s cubic-bezier(.21,.29,0,.94);
+  box-shadow: 0 1px 3px var(--p);
+  border-radius: 0 15px 15px 0;
+  background: var(--b);
+  position: relative;
+}
+.multilog-checkbox input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  z-index: -1;
+  margin: 0px;
+}
+.multilog-checkbox svg {
+  overflow: visible;
+  transition: all 0.2s ease 0s;
+}
+.multilog-checkbox input:checked ~ svg {
+  transform: translateX(-2px);
+  transition: all 0.2s ease 0.3s;
+}
+.multilog-checkbox .path {
+  fill: none;
+  stroke: white;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+  stroke-dasharray: 241 9999999;
+  stroke-dashoffset: 0;
+}
+.multilog-checkbox input:checked ~ svg .path {
+  stroke-dasharray: 70.5096664428711 9999999;
+  stroke-dashoffset: -262.2723388671875;
+}
+.battle-block .multilog-checkbox {
+  background: none;
+  box-shadow: none;
+  border: none;
+  width: 0px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(.21,.29,0,.94);
+}
+.battle-block .multilog-checkbox.active {
+  width: 20px;
+  margin-left: 10px;
+}
+.battle-block .multilog-checkbox:after {
+  display: none;
+}
+.multilog-redirect {
+  border-radius: 15px;
+  margin-left: 10px;
+  transition: all 0.3s cubic-bezier(.21,.29,0,.94);
+  gap: 10px;
+  background: var(--g);
+  box-shadow: 0 1px 3px var(--gh);
+  padding: 15px 10px;
+  cursor: not-allowed;
+}
+.multilog-redirect.active {
+  background: var(--lp);
+  cursor: pointer;
+  box-shadow: 0 1px 3px var(--p);
+  opacity: 1 !important;
+}
+.multilog-redirect p {
+  height: 100%;
+  white-space: nowrap;
+  width: 100%;
+  text-shadow: 0px 1px 3px var(--p);
+  transition: all 0.3s ease;
+}
+.multilog-redirect img {
+  height: 20px;
+}
+.multilog-redirect.active:hover {
+  box-shadow: 0 0 8px 3px var(--p);
+}
+.onhover-information {
+  position: relative;
+}
+.onhover-information:after {
+  content: "";
+  filter: blur(2px);
+  position: absolute;
+  top: 0px;
+  height: 18px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 5px;
+  background: var(--lp);
+  box-shadow: 0 1px 3px var(--p);
+  text-shadow: 0 1px 3px var(--p);
+  transition: all 0.3s cubic-bezier(.21,.29,0,.94);
+  transform: translateY(-50%);
+  opacity: 0;
+}
+.onhover-information:hover::after {
+  filter: blur(0px);
+  transform: translateY(calc(-100% - 10px));
+  opacity: 1;
+}
+.search-block .submit:after {
+  content: "Search";
+}
+.search-block .clear:after {
+  content: "Clear";
+}
+.search-block .settings:after {
+  content: "Settings";
+}
+.search-block .settings {
+  padding: 0px;
+  width: unset;
+}
+.search-block .settings img {
+  transition: all 0.3s cubic-bezier(.21,.29,0,.94);
+  padding: 10px;
+}
+.search-block .settings.active img {
+  transform: rotateZ(180deg);
+}
+.multilog-checkbox:after {
+  content: "Multilog";
+}
+.search-wrapper .settings .panel {
+  transform: translateY(calc(-50% - 10px));
+  position: absolute;
+  top: 0;
+  z-index: 4;
+  backdrop-filter: blur(15px);
+  display: flex;
+  gap: 5px;
+  background: var(--bo);
+  border: 1px solid var(--p);
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(.21,.29,0,.94);
+  filter: blur(2px);
+}
+.search-wrapper .settings .panel.active {
+  transform: translateY(calc(-100% - 10px));
+  visibility: visible;
+  pointer-events: all;
+  opacity: 1;
+  filter: none;
+  cursor: default;
+}
+.search-wrapper .settings .panel .option {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.search-wrapper .settings .panel .option .comment {
+  font-size: 12px;
+  text-shadow: 0 1px 3px var(--p);
+  width: 100px;
+  cursor: default;
+  text-align: left;
+}
+.search-wrapper .settings .panel input {
+  background: var(--p);
+  border: none;
+  outline: none;
+  border: 1px solid var(--p);
+  width: 50px;
+  border-radius: 50px;
+  box-shadow: 0 1px 3px var(--p);
+  padding: 5px;
+  width: 60px;
+  text-align: center;
+}
+#applySettings {
+  width: 100%;
+}
+.preloader {
+  display: flex !important;
+  z-index: 6;
+}
+@media (max-width: 767px) {
+main {
+  padding: 80px 3vw 0 3vw;
+  width: calc(100vw - 6vw);
+}
+.battle-block .totalKills {
+  display: none;
+}
+.battle-block .id {
+  display: none;
+}
+.search-block {
+  padding: 0px 3vw;
+  width: calc(100% - 6vw);
+}
+.search-block .multilog-redirect {
+  position: fixed;
+  left: 50%;
+  bottom: calc(0vh + 90px);
+  height: 10px;
+  opacity: 0;
+  z-index: 4;
+  transform: translateX(-50%) translateY(40px);
+  filter: blur(5px);
+}
+.search-block .multilog-redirect.active {
+  transform: translateX(-50%);
+  filter: none;
+}
+.battles-wrapper .battle-block.selected {
+  backdrop-filter: none !important;
+  z-index: 2;
+}
+.battles-wrapper .battle-block:hover {
+  padding: 5px 0;
+  transform: none;
+}
+.search-wrapper .settings .panel {
+  filter: none;
+  right: -41px;
+}
+}
+</style>
+<div class="search-background">
+  
+</div>
+<div class="search-wrapper center">
+  <div class="search-block flex-dir-row">
+    <input type="text" id="name" name="name" class="link text-w-shadow" placeholder="Введите название гильдии или альянса">
+    <button type="submit" id="search" name="sendLink" class="onhover-information text-w-shadow center submit button-styles" onclick="sendLink()">
+      <img src="https://impactium.fun/static/img/svg/search.svg">
+    </button>
+    <button type="submit" id="clearResult" name="clearResult" class="onhover-information text-w-shadow center clear button-styles" onclick="returnBack()">
+      <img src="https://impactium.fun/static/img/svg/refresh.svg">
+    </button>
+    <button class="settings center onhover-information button-styles">
+      <img src="https://impactium.fun/static/img/svg/gear.svg" width="20" height="20" onclick="toggleSettingsPanel()">
+      <div class="panel">
+        <div class="option">
+          <p class="comment">Min. players:</p>
+          <input type="text" id="minPlayers" placeholder="1-99">
+        </div>
+        <div class="option">
+          <p class="comment">Min. kills</p>
+          <input type="text" id="minFame" placeholder="1-99">
+        </div>
+        <div class="option">
+          <p class="comment">Min. fame</p>
+          <input type="text" id="minKills" placeholder="1-99 (kk)">
+        </div>
+        <div class="option">
+          <p class="comment">Day:</p>
+          <input type="text" id="onDate" placeholder="Date">
+        </div>
+        <div id="applySettings" class="apply" onclick="applySettings()">Apply</div>
+      </div>
+    </button>
+    <div class="onhover-information center multilog-checkbox">
+      <input type="checkbox" id="multilogModeCheckbox" autocomplete="off">
+      <svg viewBox="0 0 64 64" height="18px" width="18px">
+        <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+      </svg>
+    </div>
+    <div class="flex-dir-row center multilog-redirect" onclick="redirectToMultilog()">
+      <p class="center">View multilog</p>
+      <img src="https://impactium.fun/static/img/svg/sparkle-whiter.svg">
+    </div>
+  </div>
+</div>
+<div class="test"></div>
+
+
+
+<div class="battle-block flex-dir-row center-v title">
+  <div class="time">Время</div>
+  <div class="alliances">Стороны битвы (гильдии, альянсы)</div>
+  <div class="playersNum"><img src="https://impactium.fun/static/img/albion/players.png"></div>
+  <div class="totalKills"><img src="https://impactium.fun/static/img/albion/kills.png"></div>
+  <div class="totalFame"><img src="https://impactium.fun/static/img/albion/fame.png"></div>
+  <div class="id" style="text-decoration: none;">ID</div>
+</div>
+<div class="battles-wrapper flex-dir-column">
+  <div class="waiting-wrapper" id="waitingWrapper">
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+    <div class="waiting-block"></div>
+  </div>
+  <% let displayedCount = 0; %>
+  <% battleboard.forEach(function(item) { %>
+    <% if (Object.keys(item.players).length >= 10 && displayedCount < 30) { %>
+      <div class="battle-block flex-dir-row center-v" onclick="redirectBattle(<%= item.id %>, this)">
+        <div class="multilog-checkbox center">
+          <input type="checkbox" id="multilogCheckbox" autocomplete="off">
+          <svg viewBox="0 0 64 64" height="16px" width="16px">
+            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+          </svg>
+        </div>
+        <div class="time"><%= formatDate(item.startTime).shortDate %></div>
+        <div class="alliances">
+          <% const alliances = []; %>
+          <% for (const allianceId in item.alliances) { %>
+            <% alliances.push(item.alliances[allianceId].name); %>
+          <% } %>
+          <% for (const guildId in item.guilds) { %>
+            <% const guild = item.guilds[guildId]; %>
+            <% if (!guild.alliance) { %>
+              <% alliances.push(guild.name); %>
+            <% } %>
+          <% } %>
+          <%= alliances.join(', ') %>
+        </div>
+        <div class="playersNum <%= Object.keys(item.players).length >= 25 ? 'massive' : '' %>"><%= Object.keys(item.players).length %></div>
+        <div class="totalKills <%= item.totalKills >= 20 ? 'killing-spree' : '' %>"><%= item.totalKills %></div>
+        <div class="totalFame <%= item.totalFame >= 1000000 ? 'mills' : '' %>"><%= cutFame(item.totalFame) %></div>
+        <div class="id"><%= item.id %><%= item.players.length %></div>
+      </div>
+      <% displayedCount++; %>
+    <% } %>
+  <% }); %>
+</div>
+
+<script>
+$(window).on('load', function() {
+  $('.preloader').remove();
+});
+
+let ids = [];
+let pinnedBlocks = [];
+let isMultilog = false;
+
+const searchBlock = document.querySelector('.search-wrapper');
+const multilogModeCheckbox = document.getElementById("multilogModeCheckbox");
+const multilogViewButton = searchBlock.querySelector('.multilog-redirect');
+
+multilogModeCheckbox.addEventListener("change", function() {
+  const checkboxes = document.querySelectorAll('.battle-block input#multilogCheckbox');
+
+  if (this.checked) {
+    isMultilog = true
+    toggleMultilogMode(true);
+  } else {
+    isMultilog = false
+    toggleMultilogMode(false);
+    ids = [];
+    pinnedBlocks = [];
+    multilogViewButton.classList.remove('active');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = false
+    });
+  }
+});
+
+
+
+function toggleMultilogMode(isEnable) {
+  const battlesWrapper = document.querySelector('.battles-wrapper');
+  const battles = battlesWrapper.querySelectorAll('.battle-block');
+
+  battles.forEach(battle => {
+    const checkbox = battle.querySelector('.multilog-checkbox');
+    if (isEnable) {
+      checkbox.classList.add('active');
+    } else {
+      checkbox.classList.remove('active');
+    }
+    battle.classList.remove('selected');
+  });
+}
+
+function multilogBattleSelection(id, block) {
+  const checkbox = block.querySelector('input[type="checkbox"]');
+  const index = ids.indexOf(id);
+
+  if (checkbox.checked) {
+    ids.push(id);
+  } else {
+    ids.splice(index, 1);
+  }
+
+  if (ids.length > 0) {
+    multilogViewButton.classList.add('active')
+  } else {
+    multilogViewButton.classList.remove('active')
+  }
+}
+
+function redirectBattle(id, block) {
+  if (!isMultilog) {
+    window.location.href = '/metrix/battle/' + id;
+  } else {
+    const checkbox = block.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked
+
+    if (block.classList.contains('selected')) {
+      block.classList.remove('selected');
+    } else {
+      block.classList.add('selected');
+    }
+
+    const blockIndex = pinnedBlocks.indexOf(block)
+    if (blockIndex !== -1 && !checkbox.checked) {
+      const index = ids.indexOf(id);
+
+      ids.splice(index, 1);
+      pinnedBlocks.splice(blockIndex, 1);
+      block.remove()
+      return;
+    }
+
+    multilogBattleSelection(id, block);
+  }
+}
+
+
+
+
+
+function redirectToMultilog() {
+  if (ids.length > 0) {
+    window.location.href = '/metrix/battle/' + ids;
+  }
+}
+
+function sendLink() {
+  const name = document.getElementById("name").value;
+  if (name === "" || name === null) { return };
+  history.pushState(null, null, `/metrix/search/${name}`);
+  clearBattleBoard();
+  waitingScreen(true);
+
+  fetch(`/metrix/search/${name}`, {
+    headers: {
+      'Accept': 'application/json',
+      'datatype': 'json'
+    },
+    cache: 'no-store'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data) {
+        fillBattleBoard(data, name);
+      } else {
+        showEmptyList();
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+
+function returnBack() {
+  window.location.href = '/metrix';
+}
+
+function clearBattleBoard() {
+  const elementsWrapper = document.querySelector('.battles-wrapper');
+  const elements = elementsWrapper.querySelectorAll('.battle-block');
+
+  elements.forEach(element => {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    if (!checkbox.checked) {
+      element.remove();
+    } else if (checkbox.checked && pinnedBlocks.indexOf(element) === -1) {
+      pinnedBlocks.push(element);
+    }
+  });
+}
+
+
+function fillBattleBoard(data, name) {
+  const battlesWrapper = document.querySelector('.battles-wrapper');
+  waitingScreen(true);
+  let displayedCount = 0;
+  const multiMode = multilogModeCheckbox.checked;
+
+  function createBattleBlock(item) {
+    if (ids.includes(item.id)) { return }
+
+    if (item.totalFame >= 500000 && displayedCount < 30) {
+      const battleBlock = document.createElement('div');
+      battleBlock.classList.add('battle-block', 'flex-dir-row', 'center-v', 'battleboard-element');
+      battleBlock.onclick = function () {
+        redirectBattle(item.id, this);
+      };
+
+      const checkboxDiv = document.createElement('div');
+      checkboxDiv.classList.add('multilog-checkbox', 'center');
+      if (multiMode) {
+        checkboxDiv.classList.add('active');
+      }
+      checkboxDiv.innerHTML = `
+        <input type="checkbox" id="multilogCheckbox" autocomplete="off">
+        <svg viewBox="0 0 64 64" height="16px" width="16px">
+          <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+        </svg>
+      `;
+
+      battleBlock.appendChild(checkboxDiv);
+
+      const timeDiv = document.createElement('div');
+      timeDiv.classList.add('time');
+      timeDiv.textContent = formatDateFromStarttime(item.startTime);
+      battleBlock.appendChild(timeDiv);
+
+      const alliancesDiv = document.createElement('div');
+      alliancesDiv.classList.add('alliances');
+      const alliances = [];
+
+      for (const allianceId in item.alliances) {
+        const allianceName = item.alliances[allianceId].name.toLowerCase();
+        if (allianceName === name.toLowerCase()) {
+          alliances.push(`<span>${item.alliances[allianceId].name}</span>`);
+        } else {
+          alliances.push(item.alliances[allianceId].name);
+        }
+      }
+
+      for (const guildId in item.guilds) {
+        const guild = item.guilds[guildId];
+        const guildName = guild.name.toLowerCase();
+        if (!guild.alliance) {
+          if (guildName === name.toLowerCase()) {
+            alliances.push(`<span> ${guild.name}</span>`);
+          } else {
+            alliances.push(guild.name);
+          }
+        }
+      }
+
+      alliancesDiv.innerHTML = `<p>${alliances.join(', ')}</p>`;
+      battleBlock.appendChild(alliancesDiv);
+
+      const playersNumDiv = document.createElement('div');
+      playersNumDiv.classList.add('playersNum');
+      if (Object.keys(item.players).length >= 20) {
+        playersNumDiv.classList.add('massive');
+      }
+      playersNumDiv.textContent = Object.keys(item.players).length;
+      battleBlock.appendChild(playersNumDiv);
+
+      const totalKillsDiv = document.createElement('div');
+      totalKillsDiv.classList.add('totalKills');
+      if (item.totalKills >= 20) {
+        totalKillsDiv.classList.add('killing-spree');
+      }
+      totalKillsDiv.textContent = item.totalKills;
+      battleBlock.appendChild(totalKillsDiv);
+
+      const totalFameDiv = document.createElement('div');
+      totalFameDiv.classList.add('totalFame');
+      if (item.totalFame >= 1000000) {
+        totalFameDiv.classList.add('mills');
+      }
+      totalFameDiv.textContent = cutFame(item.totalFame);
+      battleBlock.appendChild(totalFameDiv);
+
+      const idDiv = document.createElement('div');
+      idDiv.classList.add('id');
+      idDiv.textContent = item.id;
+      battleBlock.appendChild(idDiv);
+
+      battlesWrapper.appendChild(battleBlock);
+      displayedCount++;
+    }
+  }
+
+  waitingScreen(false);
+  data.forEach(function (item, index) {
+    setTimeout(() => {
+      createBattleBlock(item);
+      if (index === data.length - 1) {
+      }
+    }, index * 50); // Устанавливаем задержку 150 миллисекунд для каждого элемента
+  });
+}
+
+
+function formatDateFromStarttime(dateTimeString) {
+  const date = new Date(dateTimeString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes} ${day}.${month}`;
+}
+
+function cutFame(fame) {
+  return fame >= 1000000 ? (fame / 1000000).toFixed(1) + 'm' : fame >= 1000
+    ? (fame / 1000).toFixed(1) + 'k' : fame.toString();
+}
+
+function waitingScreen(isVisible, displayedCount = 0) {
+  const waitingWrapper = document.querySelector('.waiting-wrapper');
+  waitingWrapper.style.display = isVisible ? 'flex' : 'none';
+  let elementsOnTable = pinnedBlocks.length + displayedCount;
+  const waitingBlocks = waitingWrapper.querySelectorAll('.waiting-block');
+
+  if (isVisible) {
+    waitingBlocks.forEach(element => {
+      if (elementsOnTable > 0) {
+        element.style.opacity = '0';
+        elementsOnTable--;
+      } else {
+        return false;
+      }
+    });
+  } else {
+    waitingBlocks.forEach(element => {
+      element.style.opacity = '1';
+    });
+  }
+}
+
+// Добавляем слушатель события нажатия клавиши Enter
+document.getElementById("name").addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    sendLink();
+  }
+});
+
+function toggleSettingsPanel() {
+  const panel = document.querySelector('.search-wrapper .settings .panel');
+  const button = document.querySelector('.search-wrapper .settings');
+
+  if (panel.classList.contains('active')) {
+    panel.classList.remove('active')
+    button.classList.remove('active')
+  } else {
+    panel.classList.add('active')
+    button.classList.add('active')
+  }
+}
+
+</script>
