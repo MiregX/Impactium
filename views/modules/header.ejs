@@ -316,21 +316,21 @@ header h1 {
 </style>
 <header>
     <h1 onclick="toHub()">Impactium</h1>
-    <% if (isFull) { %>
+    <% if (typeof nav !== 'undefined') { %>
       <div class="nav flex">
         <button class="flex-dir-row center">
           <%= lang.partners %>
           <img src="https://api.impactium.fun/ux/to-left.svg">
           <bar>
-            <% guildParams.forEach(guild => { %>
-            <div class="plate flex-dir-row center-v" onclick="redirectGuild('<%= guild.name %>')">
+            <% Object.values(nav.guilds).forEach(obj => { %>
+            <div class="plate flex-dir-row center-v" onclick="redirectGuild('<%= obj.name %>')">
               <div class="guild-avatar flex center">
-                <img src="<%= guild.logo %>">
+                <img src="<%= obj.logo %>">
               </div>
               <div class="text flex-dir-column">
-                <h3><%= guild.name %></h3>
+                <h3><%= obj.name %></h3>
                 <div class="p-wrapper">
-                  <p><%= guild.desc %></p>
+                  <p><%= obj.desc %></p>
                 </div>
               </div>
             </div>
@@ -342,15 +342,15 @@ header h1 {
           <%= lang.products %>
           <img src="https://api.impactium.fun/ux/to-left.svg">
           <bar>
-            <% partners.forEach((partner) => { %>
-              <div class="plate flex-dir-row center-v" onclick="<%= partner.action %>">
+            <% Object.values(nav.products).forEach((obj) => { %>
+              <div class="plate flex-dir-row center-v" onclick="<%= obj.action %>">
                 <div class="guild-avatar flex center">
-                  <img src="<%= partner.logo %>">
+                  <img src="<%= obj.logo %>">
                 </div>
                 <div class="plate-text flex-dir-column">
-                  <h3><%= partner.name %></h3>
+                  <h3><%= obj.name %></h3>
                   <div class="p-wrapper">
-                    <p><%= partner.description %></p>
+                    <p><%= obj.description %></p>
                   </div>
                 </div>
               </div>
@@ -362,7 +362,19 @@ header h1 {
           <%= lang.support %>
           <img src="https://api.impactium.fun/ux/to-left.svg">
           <bar>
-            
+            <% Object.values(nav.contact).forEach((obj) => { %>
+              <div class="plate flex-dir-row center-v" onclick="<%= obj.action %>">
+                <div class="guild-avatar flex center">
+                  <img src="<%= obj.logo %>">
+                </div>
+                <div class="plate-text flex-dir-column">
+                  <h3><%= obj.name %></h3>
+                  <div class="p-wrapper">
+                    <p><%= obj.description %></p>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
           </bar>
         </button>
       </div>
@@ -420,6 +432,9 @@ arrowIcon.addEventListener('mouseleave', () => {
 
 function logout() {
   window.location.href = "/logout";
+}
+function login() {
+  window.location.href = "/login";
 }
 
 function terminal() {

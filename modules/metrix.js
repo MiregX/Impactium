@@ -1,17 +1,20 @@
 const { getUserDataByToken, getDatabase, getLanguagePack, log, formatDate, getBattleBoard, reportCounter, saveBattleBoard } = require('../utils');
+const { deadPlayersListCreation } = require('./autoregear');
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const path = require('path');
 const ejs = require('ejs');
 const fs = require('fs');
-const { deadPlayersListCreation } = require('./autoregear');
+
+const { nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 router.get('/', async (request, response) => {
   const user = getUserDataByToken(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
   const database = getDatabase();
   const battleboard = await getBattleBoard();
+  const pagetype = nav.products['metrix'];
   
   try {
     const metrixData = {
@@ -25,6 +28,7 @@ router.get('/', async (request, response) => {
 
     response.render('template.ejs', {
       body: renderedMetrixTemplate,
+      pagetype,
       user,
       lang
     });
@@ -40,6 +44,7 @@ router.get('/search/:name', (request, response) => {
   if (request.accepts('html')) {
     const user = getUserDataByToken(request.cookies.token);
     const lang = getLanguagePack(request.cookies.lang);
+    const pagetype = nav.products['metrix'];
 
     try {
       const metrixData = {
@@ -55,7 +60,8 @@ router.get('/search/:name', (request, response) => {
       response.render('template.ejs', {
         body: renderedMetrixTemplate,
         user,
-        lang
+        lang,
+        pagetype
       });
     } catch (err) {
       console.error(err);
@@ -66,11 +72,12 @@ router.get('/search/:name', (request, response) => {
   }
 });
 
-router.get('/battle/:ids', (request, response) => {
+router.get('/battle/:ids', async (request, response) => {
   const ids = request.params.ids.split(',');
-  const battleboard = getBattleBoard(ids);
+  const battleboard = await getBattleBoard(ids);
   const user = getUserDataByToken(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
+  const pagetype = nav.products['metrix'];
 
   try {
     const reportCount = reportCounter(battleboard);
@@ -88,7 +95,8 @@ router.get('/battle/:ids', (request, response) => {
     response.render('template.ejs', {
       body: renderedMetrixTemplate,
       user,
-      lang
+      lang,
+      pagetype
     });
   } catch (err) {
     console.error(err);

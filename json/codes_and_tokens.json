@@ -14,5 +14,36 @@
     "o": "\u001b[0m"
   },
   "mongoLogin": "mongodb+srv://mireg:E6X4aw0ph9GPolLB@impactium.qitrjvq.mongodb.net/main?retryWrites=true&w=majority",
-  "isDevelopmentMode": false
+  "isDevelopmentMode": false,
+  "nav": {
+    "guilds": {
+      "fax": {
+        "name": "Fax",
+        "logo": "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=240",
+        "desc": "#1 S21 | More: @faxnocap"
+      }
+    },
+    "products": {
+      "discord": {
+        "name": "Impactium Bot",
+        "logo": "https://api.impactium.fun/logo/impactium-wb.png",
+        "description": "Автороли для альянса.",
+        "action": "redirectDiscordBotJoin()"
+      },
+      "metrix": {
+        "name": "Eclipse Metrix",
+        "logo": "https://api.impactium.fun/logo/eclipsemetrix.png",
+        "description": "Statistics for Albion Online.",
+        "action": "redirectMetrix()"
+      },
+      "php": {
+        "name": "PHP Compiler",
+        "logo": "https://api.impactium.fun/logo/php-compiler.jpeg",
+        "description": "School assistant project.",
+        "action": "redirectPhp()"
+      }
+    },
+    "contact": {
+    }
+  }  
 }

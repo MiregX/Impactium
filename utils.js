@@ -272,21 +272,22 @@ function createNewStatisticsDay() {
   saveStatistics(statistics);
 }
 
-function getMultiBoard(ids, battleboard) {
-  const results = ids.map(id => {
-    const numericId = parseInt(id);
-    if (typeof numericId === 'number' && !isNaN(numericId)) {
-      const battle = battleboard.find(item => item.id === numericId);
-      return battle ? battle : false;
-    }
+async function getMultiBoard(ids) {
+  const Battleboard = mongo.db().collection("battleboard");
+
+  const numericIds = ids.map(id => parseInt(id)).filter(numericId => !isNaN(numericId));
+
+  if (numericIds.length === 0) {
     return false;
-  }).filter(battle => battle !== false);
+  }
+
+  const filter = { "id": { $in: numericIds } };
+  const results = await Battleboard.sort({ id: -1 }).find(filter).toArray();
 
   return results.length > 0 ? results : false;
 }
 
 function reportCounter(battleboard) {
-  // Этап 1: Собрать информацию о гильдиях и игроках
   const playersMap = new Map();
   const killsCountMap = new Map();
   const killFameMap = new Map();
@@ -429,13 +430,11 @@ async function getBattleBoard(params = false) {
   try {
     if (params) {
       if (Array.isArray(params.base)) { // Массборд
-        log("1", 'g');
-        return getMultiBoard(params.base);
+        return await getMultiBoard(params.base);
       }
 
       const id = parseInt(params.base);
       if (typeof id === "number" && !isNaN(id)) { // Поиск по id
-        log("2", 'y');
         const battle = await Battleboard.findOne({ id });
         return battle || false;
       }      

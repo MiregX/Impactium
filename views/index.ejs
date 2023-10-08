@@ -387,32 +387,6 @@ language .toggler img {
 }
 </style>
 </head>
-<% const guildParams = [
-  { name: "Fax", 
-    logo: "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=240",
-    desc: "#1 S21 | More: @faxnocap"
-  }
-]; %>
-<% const partners = [
-  {
-    name: 'Impactium Bot',
-    logo: 'https://api.impactium.fun/logo/impactium-wb.png',
-    description: 'Автороли для альянса.',
-    action: 'redirectDiscordBotJoin()',
-  },
-  {
-    name: 'Eclipse Metrix',
-    logo: 'https://api.impactium.fun/logo/eclipsemetrix.png',
-    description: 'Statistics for Albion Online.',
-    action: 'redirectMetrix()',
-  },
-  {
-    name: 'PHP Compiler',
-    logo: 'https://api.impactium.fun/logo/php-compiler.jpeg',
-    description: 'School assistant project.',
-    action: 'redirectPhp()',
-  }
-] %>
 <body>
 <div class="preloader center">
   <div class="honeycomb">
@@ -454,7 +428,7 @@ language .toggler img {
   </button>
 </language>
 
-<%- include('modules/header.ejs', { user, lang, partners, guildParams, isFull: true }) %>
+<%- include('modules/header.ejs', { user, lang, nav }) %>
 
 <main>
   <panel class="panel main">
@@ -469,7 +443,7 @@ language .toggler img {
       <div class="guild-list-wrapper flex-dir-column">
         <h5><%= lang.ourPartners %></h5>
 
-          <% guildParams.forEach(guild => { %>
+          <% Object.values(nav.guilds).forEach(guild => { %>
             <div class="unique-guild flex-dir-row predis" onclick="redirectGuild('<%= guild.name %>')">
               <div class="wrapper center-v flex gap">
                 <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
@@ -524,15 +498,6 @@ $(window).on('load', function() {
   aboutUsDescriptionText.style.opacity = ('1');
 
 });
-
-
-
-
-
-
-function auth() {
-  window.location.href = "/login";
-}
 
 function redirectPhp() {
   window.location.href = "/php";

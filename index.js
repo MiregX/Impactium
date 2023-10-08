@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { updateUserDisplayName } = require('./discord');
 const { databaseConnect, getUserDataByToken, getLanguagePack, getDatabase, userAuthentication, saveDatabase, log, setStatistics } = require('./utils');
-const { clientID, redirect_uri, clientSecret, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
+const { clientID, redirect_uri, clientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
 
@@ -74,7 +74,7 @@ app.get('/', (request, response) => {
       const lang = getLanguagePack(request.cookies.lang);
       setStatistics('mainWebJoins');
 
-      const renderData = { user, lang };
+      const renderData = { user, lang, nav };
 
       response.render('index.ejs', renderData);
 
