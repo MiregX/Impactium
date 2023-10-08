@@ -131,3 +131,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 *.json
+*.json
+json/codes_and_tokens.json
+*.json
+json/statistics.json
