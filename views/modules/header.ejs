@@ -325,7 +325,7 @@ header h1 {
             <img src="https://api.impactium.fun/ux/to-left.svg">
             <bar>
               <% Object.values(nav[category]).forEach(obj => { %>
-                <div class="plate flex-dir-row center-v" onclick="<%= obj.action %>">
+                <div class="plate flex-dir-row center-v" onclick="redirect(`<%= obj.action %>`)">
                   <div class="guild-avatar flex center">
                     <img src="<%= obj.logo %>">
                   </div>
@@ -400,9 +400,11 @@ function logout() {
 function login() {
   window.location.href = "/login";
 }
-
 function terminal() {
   window.location.href = "/terminal";
+}
+function redirect(link) {
+  window.location.href = link;
 }
 
 const currentURL = window.location.href;
