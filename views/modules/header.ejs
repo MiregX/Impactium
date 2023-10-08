@@ -38,12 +38,15 @@ header-background {
   text-align: center;
   text-transform: uppercase;
 }
-.nav button img {
+.nav button > img {
   filter: invert(100%);
   height: 15px;
   width: 15px;
   margin-left: 10px;
   transition: all 0.2s var(--trans);
+}
+.nav button:hover > img {
+  transform: rotateZ(90deg);
 }
 .nav button bar {
   position: absolute;
@@ -68,11 +71,9 @@ header-background {
   transform: translateY(0px);
 }
 .nav button bar img {
-  filter: unset;
   height: 40px;
   width: 40px;
   border-radius: 20px;
-  margin-left: 0;
 }
 .nav button bar h3 {
   text-align: left;

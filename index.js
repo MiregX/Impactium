@@ -49,7 +49,7 @@ app.get('/', (request, response) => {
           .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
           .then((data) => {
             const authResult = userAuthentication(data);
-            updateUserDisplayName();
+            // updateUserDisplayName();
 
             response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
             response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
