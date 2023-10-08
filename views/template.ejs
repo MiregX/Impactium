@@ -40,24 +40,6 @@
       align-items: center;
       justify-content: center;
     }
-    header {
-      position: fixed;
-      height: 80px;
-      padding: 0 15vw;
-      width: 70vw; /* Длинна с падингом */
-      justify-content: space-between;
-      z-index: 4;
-    }
-    header-background {
-      position: fixed;
-      top: -80px;
-      left: 0;
-      right: 0;
-      height: 80px;
-      width: 100vw;
-      background: linear-gradient(180deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
-      backdrop-filter: blur(15px);
-    }
     temp-background {
       height: 100%;
       width: 100vw;
@@ -70,228 +52,10 @@
       border-radius: 0;
       padding: 0;
     }
-    h1 {
-      font-family: 'Monoton', cursive;
-      text-transform: uppercase;
-      white-space: nowrap;
-      font-size: 40px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    #auth {
-     display: <% if (user.id) { %>none<% } else { %>flex<% } %>; 
-    }
-    .user-onlogin {
-      display: <% if (user.id) { %>flex<% } else { %>none<% } %>;
-    }
-    #user {
-      color: #fff;
-      font-weight: 700;
-      min-width: 120px;
-      height: 40px;
-      border-radius: 20px;
-      background: var(--b);
-      justify-content: center;
-      overflow: hidden;
-      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-      box-shadow: 0 1px 3px var(--p);
-    }
-    #user * {
-      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-    }
-    menu {
-      display: none;
-    }
-    #user img {
-      border-radius: 100%;
-      height: 38px;
-      width: 38px;
-      pointer-events: none;
-      margin-left: 1px;
-    }
-    #user p {
-      margin-right: 1px;
-      width: 100%;
-      text-align: center;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #user:hover p {
-      width: 0px;
-      overflow: hidden;
-      opacity: 0;
-    }
-    #user:hover {
-      background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } else { %>#3886C6<% } %>;
-    }
-    #user.active {
-      background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } else { %>#3886C6<% } %>;
-    }
-    #user.active p {
-      width: 0px;
-      overflow: hidden;
-      opacity: 0;
-    }
-    .menu-mobile {
-      display: none;
-    }
     .rocks {
       z-index: -1;
       width: 100vw;
       position: absolute;
-    }
-    #arrow-icon path.default-path {
-      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-    }
-
-    #arrow-icon.hovered path {
-      d: path("M2 12H18M18 12L13 7M18 12L13 17");
-    }
-
-
-    .temp-button svg {
-      transform: translateX(-3px);
-    }
-    .temp-button:hover svg {
-      transform: translateX(10px);
-    }
-    .temp-button * {
-      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-    }
-    .temp-button {
-      display: flex;
-      cursor: pointer;
-      color: var(--w);
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      width: 120px;
-      height: 40px;
-    }
-    .temp-button .button-text {
-      position: absolute;
-      width: calc(100% - 40px);
-      right: 0px;
-      text-transform: uppercase;
-      font-weight: 800;
-    }
-    .temp-button .circle {
-      position: absolute;
-      margin: 0;
-      width: 40px;
-      display: flex;
-      align-items: center;
-      height: 40px;
-      background: var(--b);
-      border-radius: 20px;
-      box-shadow: 0 1px 3px var(--p);
-    }
-
-    .temp-button:hover .circle {
-      width: 100%;
-    }
-
-    .temp-button:hover .button-text {
-     color: #fff;
-    }
-    @media (max-width: 767px) {
-      header {
-        padding: 0 2.5%;
-        width: calc(100vw - 5%);
-      }
-      h1 {
-        font-size: 7vw;
-        margin-bottom: -2px;
-      }
-      #user {
-        height: 7vw;
-        min-width: 22vw;
-        border-radius: 3.5vw;
-      }
-      #user img {
-        height: calc(7vw - 2px);
-        width: calc(7vw - 2px);
-        border-radius: calc(3.5vw - 1px);
-      }
-      .temp-button {
-        height: 7vw;
-        width: 22vw;
-        display: none;
-      }
-      .temp-button .circle {
-        height: 7vw;
-        width: 7vw;
-      }
-      .temp-button .button-text {
-        width: calc(100% - 7vw);
-      }
-      .temp-button svg {
-        transform: translateX(-3px);
-        width: 7vw;
-        height: 7vw;
-      }
-      .temp-button:hover svg {
-        transform: translateX(1vw);
-      }
-      menu {
-        display: flex;
-        height: 100vh;
-        width: 70vw;
-        position: fixed;
-        z-index: 4;
-        right: 0px;
-        backdrop-filter: none;
-        transform: translateX(101%);
-        transition: transform 0.5s ease, backdrop-filter 0s linear 0.5s;
-      }
-
-      menu.active {
-        transform: translateX(0%);
-        backdrop-filter: blur(15px);
-        transition: transform 0.5s ease, backdrop-filter 0s;
-      }
-
-      .menu-mobile {
-        display: flex;
-        height: 7vw;
-        width: 7vw;
-        align-items: center;
-        justify-content: center;
-        border-radius: 3.5vw;
-        background: var(--b);
-        box-shadow: 0 1px 3px var(--p);
-      }
-      .menu-mobile img {
-        height: 4vw;
-        pointer-events: none;
-        width: 4vw;
-      }
-      .user-onlogin {
-        margin-right: 10px;
-        gap: 15px;
-      }
-    }
-    .terminal-button {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 30px;
-      border-radius: 500px;
-      padding: 5px;
-      justify-content: center;
-      font-family: 'Manrope', sans-serif;
-      font-weight: 500;
-      align-items: center;
-      cursor: pointer;
-    }
-    .terminal-button img {
-      margin: 0 5px;
-      width: 30px;
-      opacity: 0.2;
     }
     .last-rock::after {
       content: "";
@@ -330,33 +94,6 @@
     <div class="rocks absolute last-rock">
       <img src="https://api.impactium.fun/svg/7-01.svg">
     </div>
-<!--   <div class="rocks stars1 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/stars-back.svg">
-  </div> -->
-<!--   <div class="rocks rocks1 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/rocks1.svg">
-  </div>
-  <div class="rocks rocks2 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/rocks2.svg">
-  </div>
-  <div class="rocks rocks3 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/rocks3.svg">
-  </div>
-  <div class="rocks starsX absolute">
-    <img src="https://impactium.fun/static/img/diamont-pattern-gray.svg">
-  </div>
-  <div class="rocks rocks4 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/rocks4.svg">
-  </div>
-  <div class="rocks rocks5 absolute">
-    <img src="https://api.impactium.fun/static/img/svg/rocks5.svg">
-  </div>
-  <div class="rocks absolute">
-    <img class="w-ful" src="https://api.impactium.fun/static/img/svg/1-01.svg">
-  </div>
-  <div class="rocks absolute">
-    <img class="w-ful" src="https://api.impactium.fun/static/img/svg/2-01.svg">
-  </div> -->
   </temp-background>
   <main>
     <%- body %>
@@ -369,33 +106,9 @@ function index() {
   window.location.href = "/";
 }
 
-const header = document.querySelector('header-background');
-
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
-  header.style.top = `${newTopValue}px`;
-});
-
 function auth() {
   window.location.href = "https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2F&response_type=code&scope=identify";
 }
-function logout() {
-  window.location.href = "/logout";
-}
-function terminal() {
-  window.location.href = "/terminal";
-}
-
-const arrowIcon = document.querySelector('.temp-button');
-
-arrowIcon.addEventListener('mouseenter', () => {
-  document.getElementById('arrow-icon').classList.add('hovered');
-});
-
-arrowIcon.addEventListener('mouseleave', () => {
-  document.getElementById('arrow-icon').classList.remove('hovered');
-});
 
 $(window).on('load', function() {
   $('.preloader').remove();

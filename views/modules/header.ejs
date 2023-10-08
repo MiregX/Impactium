@@ -2,14 +2,12 @@
 header {
   height: 80px;
   z-index: 2;
-  position: sticky;
+  position: fixed;
   top: 0px;
   justify-content: space-between;
   padding: 0 15%;
   width: calc(100vw - 30%);
   transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.5s !important;
-  opacity: 0;
-  transform: translateY(-100%);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
@@ -100,6 +98,20 @@ header h1 {
   white-space: nowrap;
   font-size: 40px;
   text-align: left;
+  width: fit-content;
+  pointer-events: none;
+  cursor: default;
+}
+header h1.active {
+  pointer-events: all;
+  cursor: pointer;
+}
+.user-onlogin {
+  justify-content: flex-end;
+  grid-column: 3 / 4;
+}
+.login-wrapper {
+  grid-column: 3 / 4;
 }
 .user {
   color: #fff;
@@ -288,7 +300,7 @@ header h1 {
   padding: 12px;
   gap: 12px;
 }
-.plate-text {
+.plate .text {
   align-items: flex-start;
 }
 .guild-avatar {
@@ -301,15 +313,9 @@ header h1 {
 .plate:hover {
   background: var(--gh);
 }
-.auth {
- display: <% if (user.id) { %>none<% } else { %>flex<% } %>; 
-}
-.user-onlogin {
-  display: <% if (user.id) { %>flex<% } else { %>none<% } %>;
-}
 </style>
 <header>
-    <h1>Impactium</h1>
+    <h1 onclick="toHub()">Impactium</h1>
     <% if (isFull) { %>
       <div class="nav flex">
         <button class="flex-dir-row center">
@@ -321,7 +327,7 @@ header h1 {
               <div class="guild-avatar flex center">
                 <img src="<%= guild.logo %>">
               </div>
-              <div class="plate-text flex-dir-column">
+              <div class="text flex-dir-column">
                 <h3><%= guild.name %></h3>
                 <div class="p-wrapper">
                   <p><%= guild.desc %></p>
@@ -379,7 +385,7 @@ header h1 {
         </button>
       </div>
     <% } else { %>
-      <div class="flex-dir-row gap" style="justify-content: flex-end;">
+      <div class="flex-dir-row gap login-wrapper" style="justify-content: flex-end;">
         <button onclick="login()" class="login temp-button">
           <div class="circle">
             <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
@@ -394,21 +400,44 @@ header h1 {
   <header-background></header-background>
 
 <script>
-  const header = document.querySelector('header-background');
+const headerBackground = document.querySelector('header-background');
 
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
-    header.style.top = `${newTopValue}px`;
-  });
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
+  headerBackground.style.top = `${newTopValue}px`;
+});
 
-  const arrowIcon = document.querySelector('.temp-button');
+const arrowIcon = document.querySelector('.temp-button');
 
-  arrowIcon.addEventListener('mouseenter', () => {
-    document.getElementById('arrow-icon').classList.add('hovered');
-  });
+arrowIcon.addEventListener('mouseenter', () => {
+  document.getElementById('arrow-icon').classList.add('hovered');
+});
 
-  arrowIcon.addEventListener('mouseleave', () => {
-    document.getElementById('arrow-icon').classList.remove('hovered');
-  });
+arrowIcon.addEventListener('mouseleave', () => {
+  document.getElementById('arrow-icon').classList.remove('hovered');
+});
+
+function logout() {
+  window.location.href = "/logout";
+}
+
+function terminal() {
+  window.location.href = "/terminal";
+}
+
+const currentURL = window.location.href;
+const parts = currentURL.split("impactium.fun/")[1];
+
+if (parts) {
+  const impactium = document.querySelector('header h1');
+  impactium.classList.add('active');
+}
+
+function toHub() {
+  if (parts) {
+    window.location.href = "https://impactium.fun";
+  }
+}
+
 </script>
