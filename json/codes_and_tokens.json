@@ -20,7 +20,8 @@
       "fax": {
         "name": "Fax",
         "logo": "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=240",
-        "desc": "#1 S21 | More: @faxnocap"
+        "description": "#1 S21 | More: @faxnocap",
+        "action": "https://fax.impactium.fun"
       }
     },
     "products": {
@@ -28,22 +29,34 @@
         "name": "Impactium Bot",
         "logo": "https://api.impactium.fun/logo/impactium-wb.png",
         "description": "Автороли для альянса.",
-        "action": "redirectDiscordBotJoin()"
+        "action": "https://discord.com/oauth2/authorize?client_id=1123714909356687360&scope=bot&permissions=8"
       },
       "metrix": {
         "name": "Eclipse Metrix",
         "logo": "https://api.impactium.fun/logo/eclipsemetrix.png",
         "description": "Statistics for Albion Online.",
-        "action": "redirectMetrix()"
+        "action": "/metrix"
       },
       "php": {
         "name": "PHP Compiler",
         "logo": "https://api.impactium.fun/logo/php-compiler.jpeg",
         "description": "School assistant project.",
-        "action": "redirectPhp()"
+        "action": "/php"
       }
     },
     "contact": {
+      "telegram": {
+        "name": "Our Telegram",
+        "logo": "https://api.impactium.fun/logo/impactium-bw.png",
+        "description": "Impactium | Кошмаринг",
+        "action": "https://t.me/impactium"
+      },
+      "discord": {
+        "name": "Our Discord",
+        "logo": "https://cdn.discordapp.com/icons/673965541987319818/3aed0d0f7cab0d8ba11d0f1ace308684.webp?size=96",
+        "description": "Impactium | Сообщество",
+        "action": "https://discord.com/invite/W7yNDPJ"
+      }
     }
   }  
 }
