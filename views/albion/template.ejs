@@ -49,6 +49,9 @@
 .preloader {
   background: var(--black-one);
 }
+.invert {
+  filter: invert(100%);
+}
 * {
   font-family: 'Manrope', sans-serif;
   padding: 0px;
@@ -404,11 +407,11 @@ language .toggler img {
   <div class="list">
     <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
     <% for (const langCode of availableLanguages) { %>
-      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/static/img/<%= langCode %>.png"></a>
+      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
     <% } %>
   </div>
-  <button class="toggler center" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
-    <img src="static/img/svg/earth-globe.svg">
+  <button class="toggler center invert" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
+    <img src="https://api.impactium.fun/ux/earth-globe.svg">
   </button>
 </language>
 
@@ -422,26 +425,26 @@ language .toggler img {
       <div class="gold-button user-info" onclick="userinfo('<%= user.id %>')">
         <div class="avatar">
           <% if (user.avatar) { %>
-            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar" width="100" height="100" onerror="this.src='https://api.impactium.fun/static/img/albion/asset.png'">
+            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar" width="100" height="100" onerror="this.src='https://api.impactium.fun/logo/asset.png'">
           <% } %>
         </div>
         <div class="user-info-text-wrapper"><p><%= user.visibleName %></p></div>
         <div class="dropdown-list center">
           <% if (user.isRaidLeader) { %>
             <button class="permission">
-              <img src="https://api.impactium.fun/static/img/svg/rl-icon.svg">
+              <img src="https://api.impactium.fun/svg/rl-icon.svg">
               <a href="/raidleader"><%= lang.rlpanel %></a>
             </button>
           <% } %>
           <% if (user.isModerator) { %>
             <button class="permission">
-              <img src="https://api.impactium.fun/static/img/svg/moder-icon.svg">
+              <img src="https://api.impactium.fun/svg/moder-icon.svg">
               <a href="/moder"><%= lang.mdpanel %></a>
             </button>
           <% } %>
           <% if (user.isAdmin) { %>
             <button class="permission">
-              <img src="https://api.impactium.fun/static/img/svg/admin-icon.svg">
+              <img src="https://api.impactium.fun/svg/admin-icon.svg">
               <a href="/management"><%= lang.adpanel %></a>
             </button>
           <% } %>

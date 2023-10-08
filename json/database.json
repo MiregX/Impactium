@@ -16,7 +16,7 @@
       "locale": "uk",
       "premium_type": 0,
       "isCreator": true,
-      "token": "9bcce1f600e204dfd479cd788ce425d516b80d893f7347f8f1a64b6010f7a661",
+      "token": "a6691a41cf38297e0f2ef06bfcc1647833b7340e8ee993a216084d15592683b4",
       "guilds": [],
       "mainToken": "3d4d47eb699271bb705a09cc7f5b3fec634485db51862b926e38c0e1ba37ac57a88f29b26f25eefb6bc7a8ea627e74c1f2316c2a3806c53570c13078e94cb105",
       "phpRenderLastFile": 1695928926000,
@@ -764,11 +764,11 @@
       },
       "stats": {
         "deadliest": {
-          "timestamp": 1696703934866,
+          "timestamp": 1696728238715,
           "list": []
         },
         "battleboard": {
-          "timestamp": 1696703934863,
+          "timestamp": 1696728899177,
           "list": []
         }
       },

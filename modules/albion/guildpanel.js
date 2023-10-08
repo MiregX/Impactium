@@ -6,14 +6,14 @@ const ejs = require('ejs');
 const { getUserDataByToken, getDatabase, getLanguagePack, setStatistics, log, getBattleBoard, saveDatabase, formatDate } = require('../../utils');
 const utils = require('../../utils');
 
-router.get('/', (request, response) => {
+router.get('/', async (request, response) => {
   try {
     const user = getUserDataByToken(request.cookies.token, request.subdomains);
     const lang = getLanguagePack(request.cookies.lang);
 
     const indexData = {
-      battleboardStats: getBattleBoardStats(user.nameOfGuild),
-      deadliests: getDeadliests(user.nameOfGuild),
+      battleboardStats: await getBattleBoardStats(user.nameOfGuild),
+      deadliests: await getDeadliests(user.nameOfGuild),
       lang
     }
 
@@ -34,7 +34,7 @@ router.get('/', (request, response) => {
   }
 });
 
-function getDeadliests(guild) {
+async function getDeadliests(guild) {
   const database = getDatabase();
   const foundGuild = database.guilds.find(guildObj => guildObj.name.toLowerCase() === guild.toLowerCase());
   const sixHoursAgo = new Date(Date.now() - 60 * 60 * 1000 * 6);
@@ -44,7 +44,7 @@ function getDeadliests(guild) {
   }
 
   let deadliests = [];
-  const battleboard = getBattleBoard(guild, 500, 10);
+  const battleboard = await getBattleBoard({base: guild, filters: { battlesLimit: 100, minimumGuildPlayers: 10}});
 
   battleboard.forEach(battle => {
     Object.values(battle.players).forEach(player => {
@@ -69,7 +69,7 @@ function getDeadliests(guild) {
   return deadliests;
 }
 
-function getBattleBoardStats(guild) {
+async function getBattleBoardStats(guild) {
   let battleStats = {};
 
   const database = getDatabase();
@@ -79,7 +79,7 @@ function getBattleBoardStats(guild) {
   if (foundGuild?.stats?.battleboard?.timestamp > sixHoursAgo && false) {
     return foundGuild.stats.battleboard.list;
   } else {
-    const battleboard = getBattleBoard(guild, 500, 20, 10);
+    const battleboard = await getBattleBoard({base: guild, filters: { battlesLimit: 100, minimumPlayers: 20, minimumGuildPlayers: 10}});
 
     battleboard.forEach(battle => {
       const startTime = new Date(battle.startTime);

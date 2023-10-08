@@ -285,48 +285,6 @@ function getMultiBoard(ids, battleboard) {
   return results.length > 0 ? results : false;
 }
 
-
-function getBattleBoard(someValue = false, battlesLimit = 50, playersLimit = 10, guildPlayersLimit = false) {
-  const battleboard = JSON.parse(fs.readFileSync('json/battleboard.json', 'utf8'));
-
-  if (someValue) {
-    if (Array.isArray(someValue)) {
-      return getMultiBoard(someValue, battleboard);
-    }
-    const id = parseInt(someValue);
-    if (typeof id === "number" && !isNaN(id)) {
-      return battleboard.find(item => item.id === id) || false;
-    }
-
-    if (typeof someValue === "string") {
-      const normalizedName = someValue.toLowerCase();
-      const filteredResults = [];
-      let eventLimiter = 0;
-
-      for (const item of battleboard) {
-        if (eventLimiter >= battlesLimit) break;
-
-        if ((Object.values(item.guilds).some(guild => guild.name.toLowerCase() === normalizedName) ||
-          Object.values(item.alliances).some(alliance => alliance.name.toLowerCase() === normalizedName)) &&
-          Object.keys(item.players).length >= playersLimit) {
-          if (!guildPlayersLimit) {
-            filteredResults.push(item);
-            eventLimiter++;
-          } else if (Object.values(item.players).filter(player => player.guildName.toLowerCase() === normalizedName).length > guildPlayersLimit ||
-          Object.values(item.players).filter(player => player.allianceName.toLowerCase() === normalizedName).length  > guildPlayersLimit) {
-            filteredResults.push(item);
-            eventLimiter++;
-          }
-        }
-      }
-
-      return filteredResults;
-    }
-  }
-
-  return battleboard;
-}
-
 function reportCounter(battleboard) {
   // Этап 1: Собрать информацию о гильдиях и игроках
   const playersMap = new Map();
@@ -449,12 +407,97 @@ function ftpUpload(filePathOnHost) {
   });
 }
 
+const mongo = new MongoClient(mongoLogin, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function databaseConnect() {
+  if (!mongo.isConnected) {
+    await mongo.connect();
+  }
+}
+
+async function getBattleBoard(params = false) {
+  const { battlesLimit = 50, minimumPlayers = 10, minimumGuildPlayers = 1 } = params.filters || {}
+  await databaseConnect();
+  const Battleboard = mongo.db().collection("battleboard");
+
+  try {
+    if (params) {
+      if (Array.isArray(params.base)) { // Массборд
+        log("1", 'g');
+        return getMultiBoard(params.base);
+      }
+
+      const id = parseInt(params.base);
+      if (typeof id === "number" && !isNaN(id)) { // Поиск по id
+        log("2", 'y');
+        const battle = await Battleboard.findOne({ id });
+        return battle || false;
+      }      
+  
+      if (typeof params.base === "string") {
+        const normalizedName = params.base.toLowerCase();
+
+        // Создаем объект запроса для поиска
+        const filter = {
+          $or: []
+        };
+        
+        const cursor = Battleboard.find({}).sort({ id: -1 });
+        
+        while (await cursor.hasNext()) {
+          const battle = await cursor.next();
+          const players = Object.values(battle.players);
+        
+          const isBattleValid = players.length >= minimumPlayers &&
+                                players.filter(player => (
+                                  player.guildName.toLowerCase() === normalizedName || 
+                                  player.allianceName.toLowerCase() === normalizedName
+                                )).length >= minimumGuildPlayers;
+          
+          if (isBattleValid) {
+            filter.$or.push({ "_id": battle._id });
+          }
+          
+          if (filter.$or.length >= battlesLimit) {
+            break;
+          }
+        }
+        
+        const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).toArray() : [];
+        return result;
+      }
+    }
+    const battleboard = await Battleboard.find({}).sort({ id: -1 }).limit(50).toArray();
+    return battleboard;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function saveBattleBoard(data) {
+  const existBattles = await mongo.db().collection("battleboard").find({ id: { $in: data.map(item => item.id) } }).toArray();
+
+  data = data.filter(battle => !existBattles.some(existingBattle => existingBattle.id === battle.id)); // Фильтрация по несуществующим ID
+
+  data = data.filter(battle => Object.keys(battle.players).length > 2); // Фильтрация по кол-ву игроков > 9
+
+  if (data.length > 0) {
+    await mongo.db().collection("battleboard").insertMany(data);
+  }
+}
 
 module.exports = {
   getDiscordLanguagePack,
   saveNewGuildLanguage,
   getUserDataByToken,
   userAuthentication,
+  saveBattleBoard,
   getLanguagePack,
   getBattleBoard,
   setStatistics,
@@ -468,3 +511,24 @@ module.exports = {
   ftpUpload,
   log,
 };
+
+// const normalizedName = params.base.toLowerCase();
+// const filteredResults = [];
+// let eventLimiter = 0;
+
+// for (const item of battleboard) {
+//   if (eventLimiter >= battlesLimit) break;
+
+//   if ((Object.values(item.guilds).some(guild => guild.name.toLowerCase() === normalizedName) ||
+//     Object.values(item.alliances).some(alliance => alliance.name.toLowerCase() === normalizedName)) &&
+//     Object.keys(item.players).length >= playersLimit) {
+//     if (!guildPlayersLimit) {
+//       filteredResults.push(item);
+//       eventLimiter++;
+//     } else if (Object.values(item.players).filter(player => player.guildName.toLowerCase() === normalizedName).length > guildPlayersLimit ||
+//     Object.values(item.players).filter(player => player.allianceName.toLowerCase() === normalizedName).length  > guildPlayersLimit) {
+//       filteredResults.push(item);
+//       eventLimiter++;
+//     }
+//   }
+// }

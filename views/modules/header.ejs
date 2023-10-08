@@ -1,18 +1,327 @@
+<style>
+header {
+  height: 80px;
+  z-index: 2;
+  position: sticky;
+  top: 0px;
+  justify-content: space-between;
+  padding: 0 15%;
+  width: calc(100vw - 30%);
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.5s !important;
+  opacity: 0;
+  transform: translateY(-100%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
+header-background {
+  z-index: 1;
+  top: -80px;
+  height: 80px;
+  width: 100vw;
+  left: 0%;
+  position: fixed;
+  display: flex;
+  background: linear-gradient(180deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
+  backdrop-filter: blur(15px);
+}
+.nav {
+  gap: 10px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
 
-<header class="flex flex-dir-row center-v">
+.nav button {
+  height: 100%;
+  position: relative;
+  font-weight: 600;
+  width: 120px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.nav button img {
+  filter: invert(100%);
+  height: 15px;
+  width: 15px;
+  margin-left: 10px;
+  transition: all 0.2s var(--trans);
+}
+.nav button bar {
+  position: absolute;
+  min-height: 80px;
+  background: rgba(18, 24, 39, 0.65);
+  backdrop-filter: blur(15px);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  flex-direction: column;
+  top: 80px;
+  width: 240px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+  transform: translateY(-16px);
+  overflow: hidden;
+  box-shadow: 0 1px 3px var(--p);
+}
+.nav button:hover bar {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0px);
+}
+.nav button bar img {
+  filter: unset;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin-left: 0;
+}
+.nav button bar h3 {
+  text-align: left;
+  font-weight: 700;
+  color: var(--lp);
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+.nav button bar p {
+  text-align: left;
+  font-weight: 500;
+  color: var(--p);
+  height: 100%;
+}
+header line {
+  width: 1px;
+  background: white;
+  height: 15px;
+}
+
+header h1 {
+  font-family: 'Monoton', cursive;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 40px;
+  text-align: left;
+}
+.user {
+  color: #fff;
+  font-weight: 700;
+  width: 120px;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--b);
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: relative;
+  box-shadow: 0 1px 3px var(--p);
+}
+.user * {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+.user .avatar {
+  border-radius: 100%;
+  height: 38px;
+  width: 38px;
+  pointer-events: none;
+  margin-left: 1px;
+}
+.user p {
+  margin-right: 1px;
+  width: 81px;
+  text-align: center;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user:hover p {
+  width: 0px;
+  overflow: hidden;
+  opacity: 0;
+}
+.user:hover,
+.user.active {
+  background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } %>;
+}
+.user.active p {
+  width: 0px;
+  overflow: hidden;
+  opacity: 0;
+}
+header .logo {
+  height: 60px;
+}
+.logout-mobile {
+  display: none;
+}
+
+#arrow-icon path.default-path {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+#arrow-icon.hovered path {
+  d: path("M2 12H18M18 12L13 7M18 12L13 17");
+}
+.temp-button svg {
+  transform: translateX(-3px);
+}
+.temp-button:hover svg {
+  transform: translateX(10px);
+}
+.temp-button * {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+.temp-button {
+  display: flex;
+  cursor: pointer;
+  color: var(--b);
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 120px;
+  height: 40px;
+}
+.temp-button .button-text {
+  position: absolute;
+  width: calc(100% - 40px);
+  right: 0px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.temp-button .circle {
+  position: absolute;
+  margin: 0;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: var(--b);
+  border-radius: 20px;
+  box-shadow: 0 1px 3px var(--p);
+}
+
+.temp-button:hover .circle {
+  width: 100%;
+}
+
+.temp-button:hover .button-text {
+ color: #fff;
+}
+@media (max-width: 1080px) {
+  header {
+    padding: 0 2.5%;
+    width: calc(100vw - 5%);
+  }
+}
+@media (max-width: 767px) {
+header {
+  padding: 0 2.5%;
+  width: calc(100vw - 5%);
+}
+header h1 {
+  font-size: 7vw;
+  margin-bottom: -2px;
+}
+.nav {
+  display: none;
+}
+.user {
+  height: 7vw;
+  width: 22vw;
+  border-radius: 3.5vw;
+}
+.user .avatar {
+  height: calc(7vw - 2px);
+  width: calc(7vw - 2px);
+  border-radius: calc(3.5vw - 1px);
+}
+
+.logout-mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 7vw;
+  width: 22vw;
+  font-weight: 700;
+  border-radius: 20px;
+  background: #3886C6;
+}
+.user-onlogin {
+  margin-right: 10px;
+  gap: 15px;
+}
+.temp-button {
+  height: 7vw;
+  width: 22vw;
+  display: none;
+}
+.temp-button .circle {
+  height: 7vw;
+  width: 7vw;
+}
+.temp-button .button-text {
+  width: calc(100% - 7vw);
+}
+.temp-button svg {
+  transform: translateX(-3px);
+  width: 7vw;
+  height: 7vw;
+}
+.temp-button:hover svg {
+  transform: translateX(1vw);
+}
+.nav button bar {
+  backdrop-filter: blur(0px);
+}
+}
+.plate .p-wrapper {
+  height: 36px;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+.plate:hover .p-wrapper {
+  height: 0px;
+}
+.plate:hover h3 {
+  font-size: 16px;
+}
+.plate {
+  transition: all 0.2s ease;
+  padding: 12px;
+  gap: 12px;
+}
+.plate-text {
+  align-items: flex-start;
+}
+.guild-avatar {
+  height: 66px;
+  width: 66px;
+  min-width: 66px;
+  border-radius: 12px;
+  background: var(--g);
+}
+.plate:hover {
+  background: var(--gh);
+}
+.auth {
+ display: <% if (user.id) { %>none<% } else { %>flex<% } %>; 
+}
+.user-onlogin {
+  display: <% if (user.id) { %>flex<% } else { %>none<% } %>;
+}
+</style>
+<header>
     <h1>Impactium</h1>
     <% if (isFull) { %>
-      <div class="buttons flex">
-        <button class="flex-dir-row center" id="partners">
+      <div class="nav flex">
+        <button class="flex-dir-row center">
           <%= lang.partners %>
-          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-          <navBar>
+          <img src="https://api.impactium.fun/ux/to-left.svg">
+          <bar>
             <% guildParams.forEach(guild => { %>
-            <div class="partners-unique-guild flex-dir-row center-v" onclick="redirectGuild('<%= guild.name %>')">
+            <div class="plate flex-dir-row center-v" onclick="redirectGuild('<%= guild.name %>')">
               <div class="guild-avatar flex center">
                 <img src="<%= guild.logo %>">
               </div>
-              <div class="partners-unique-guild-text flex-dir-column">
+              <div class="plate-text flex-dir-column">
                 <h3><%= guild.name %></h3>
                 <div class="p-wrapper">
                   <p><%= guild.desc %></p>
@@ -20,19 +329,19 @@
               </div>
             </div>
             <% }); %>
-          </navBar>
+          </bar>
         </button>
         <line></line>
-        <button class="flex-dir-row center" id="products">
+        <button class="flex-dir-row center">
           <%= lang.products %>
-          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-          <navBar>
+          <img src="https://api.impactium.fun/ux/to-left.svg">
+          <bar>
             <% partners.forEach((partner) => { %>
-              <div class="partners-unique-guild flex-dir-row center-v" onclick="<%= partner.action %>">
+              <div class="plate flex-dir-row center-v" onclick="<%= partner.action %>">
                 <div class="guild-avatar flex center">
                   <img src="<%= partner.logo %>">
                 </div>
-                <div class="partners-unique-guild-text flex-dir-column">
+                <div class="plate-text flex-dir-column">
                   <h3><%= partner.name %></h3>
                   <div class="p-wrapper">
                     <p><%= partner.description %></p>
@@ -40,21 +349,21 @@
                 </div>
               </div>
             <% }); %>
-          </navBar>
+          </bar>
         </button>    
         <line></line>
-        <button class="flex-dir-row center" id="support">
+        <button class="flex-dir-row center">
           <%= lang.support %>
-          <img class="aNb" src="https://api.impactium.fun/ux/to-left.svg">
-          <navBar>
+          <img src="https://api.impactium.fun/ux/to-left.svg">
+          <bar>
             
-          </navBar>
+          </bar>
         </button>
       </div>
     <% } %>
     <% if (user.id) { %>
-      <div class="user-onlogin gap center-h center-v">
-        <button id="user" class="flex center-v center-h">
+      <div class="user-onlogin gap center-h center-v" style="justify-content: flex-end;">
+        <button class="user flex center-v center-h">
           <% if (user.avatar) { %>
             <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="avatar">
           <% } %>
@@ -70,8 +379,8 @@
         </button>
       </div>
     <% } else { %>
-      <div class="flex-dir-row gap">
-        <button id="auth" onclick="login()" class="temp-button">
+      <div class="flex-dir-row gap" style="justify-content: flex-end;">
+        <button onclick="login()" class="login temp-button">
           <div class="circle">
             <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
               <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,5 +400,15 @@
     const scrollY = window.scrollY;
     const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
     header.style.top = `${newTopValue}px`;
+  });
+
+  const arrowIcon = document.querySelector('.temp-button');
+
+  arrowIcon.addEventListener('mouseenter', () => {
+    document.getElementById('arrow-icon').classList.add('hovered');
+  });
+
+  arrowIcon.addEventListener('mouseleave', () => {
+    document.getElementById('arrow-icon').classList.remove('hovered');
   });
 </script>

@@ -1,4 +1,4 @@
-const { getUserDataByToken, getDatabase, getLanguagePack, log, formatDate, getBattleBoard, reportCounter } = require('../utils');
+const { getUserDataByToken, getDatabase, getLanguagePack, log, formatDate, getBattleBoard, reportCounter, saveBattleBoard } = require('../utils');
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
@@ -7,11 +7,11 @@ const ejs = require('ejs');
 const fs = require('fs');
 const { deadPlayersListCreation } = require('./autoregear');
 
-router.get('/', (request, response) => {
+router.get('/', async (request, response) => {
   const user = getUserDataByToken(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
   const database = getDatabase();
-  const battleboard = getBattleBoard();
+  const battleboard = await getBattleBoard();
   
   try {
     const metrixData = {
@@ -107,31 +107,12 @@ async function cyclicUpdateBattleBoard() {
   try {
     const response = await axios.get(`https://gameinfo.albiononline.com/api/gameinfo/battles?sort=recent`);
     saveBattleBoard(response.data, true);
-    setTimeout(cyclicUpdateBattleBoard, 30000);
-  } catch (error) {
     setTimeout(cyclicUpdateBattleBoard, 5000);
+  } catch (error) {
+    setTimeout(cyclicUpdateBattleBoard, 1000);
   }
 }
 
-function saveBattleBoard(data, isFromAPI = false) {
-  let battleboard = getBattleBoard();
-
-  if (isFromAPI) {
-    data = data.filter(item => {
-      return Object.keys(item.players).length >= 10 && 
-             !battleboard.some(boardItem => boardItem.id === item.id);
-    });
-        
-    battleboard.unshift(...data);
-    if (data.length > 0) {
-      deadPlayersListCreation(data);
-    }
-  } else {
-    battleboard = data;
-  }
-
-  fs.writeFileSync('json/battleboard.json', JSON.stringify(battleboard, null, 2), 'utf8');
-}
 
 cyclicUpdateBattleBoard();
 

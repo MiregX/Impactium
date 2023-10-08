@@ -26,11 +26,12 @@
     }
     body {
       min-height: calc(100vh);
-      height: 0;
+      background: url(https://api.impactium.fun/svg/bg-learn-mobile.svg);
+      background-position: top;
+      background-size: cover;
+      background-repeat: no-repeat;
       width: 100vw;
       overflow-x: hidden;
-      background: #1d2a3a;
-      overflow-y: hidden;
     }
     main {
       min-height: 100%;
@@ -60,7 +61,6 @@
     temp-background {
       height: 100%;
       width: 100vw;
-      overflow: hidden;
       pointer-events: none;
     }
     button {
@@ -143,9 +143,6 @@
       width: 100vw;
       position: absolute;
     }
-    .rocks1 {
-      bottom: -3px;
-    }
     #arrow-icon path.default-path {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
     }
@@ -201,9 +198,6 @@
      color: #fff;
     }
     @media (max-width: 767px) {
-      .preloader {
-        display: flex;
-      }
       header {
         padding: 0 2.5%;
         width: calc(100vw - 5%);
@@ -299,12 +293,22 @@
       width: 30px;
       opacity: 0.2;
     }
+    .last-rock::after {
+      content: "";
+      position: absolute;
+      bottom: 0px;
+      transform: translateY(99%);
+      width: 100vw;
+      left: 0;
+      background: linear-gradient(0deg, #151E2900, #151E29);
+      height: 30vh;
+    }
   </style>
 </head>
 
 
 <body>
-  <div class="preloader none center">
+  <div class="preloader center">
     <div class="honeycomb">
       <div></div>
       <div></div>
@@ -317,17 +321,14 @@
   </div>
   <%- include('modules/header.ejs', { user, lang, isFull: false }) %>
   <temp-background class="absolute flex">
-    <div class="rocks main-bg absolute">
-      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/bg-learn-mobile.svg">
+    <div class="rocks absolute">
+      <img class="w-ful" src="https://api.impactium.fun/svg/1-01.svg">
     </div>
     <div class="rocks absolute">
-      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/1-01.svg">
+      <img class="w-ful" src="https://api.impactium.fun/svg/2-01.svg">
     </div>
-    <div class="rocks absolute">
-      <img class="w-ful" src="https://api.impactium.fun/static/img/svg/2-01.svg">
-    </div>
-    <div class="rocks rocks1 absolute">
-      <img src="https://api.impactium.fun/static/img/svg/7-01.svg">
+    <div class="rocks absolute last-rock">
+      <img src="https://api.impactium.fun/svg/7-01.svg">
     </div>
 <!--   <div class="rocks stars1 absolute">
     <img src="https://api.impactium.fun/static/img/svg/stars-back.svg">
@@ -369,12 +370,11 @@ function index() {
 }
 
 const header = document.querySelector('header-background');
-let previousScrollPosition = 0;
+
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
   header.style.top = `${newTopValue}px`;
-  previousScrollPosition = scrollY;
 });
 
 function auth() {
@@ -386,10 +386,6 @@ function logout() {
 function terminal() {
   window.location.href = "/terminal";
 }
-function userinfo(userId) {
-  document.getElementById("user").classList.add('active');
-  window.location.href = '/user/' + userId;
-}
 
 const arrowIcon = document.querySelector('.temp-button');
 
@@ -400,13 +396,8 @@ arrowIcon.addEventListener('mouseenter', () => {
 arrowIcon.addEventListener('mouseleave', () => {
   document.getElementById('arrow-icon').classList.remove('hovered');
 });
-</script>
-<script>
-if (window.innerWidth <= 767) {
-  $(window).on('load', function() {
-    $('.preloader').remove();
-  });
-} else {
+
+$(window).on('load', function() {
   $('.preloader').remove();
-}
+});
 </script>

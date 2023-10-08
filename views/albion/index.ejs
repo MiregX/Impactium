@@ -80,10 +80,11 @@ p.graphs {
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<% if (deadliests.length > 0) { %>
 <div class="deadliests-players">
   <h3 class="center-v"><%= lang.topkillers %> <span><%= lang.by25lastBattles%></span></h3>
-  <div class="players ">
-    <% deadliests.slice(0, 5).forEach((item, index) => { %>
+  <div class="players">
+    <% deadliests.splice(0, 5).forEach((item, index) => { %>
       <div class="player center-v" style="gap: 10px;">
         <span><%= index + 1 %></span>
         <h6><%= item.name %></h6>
@@ -92,6 +93,7 @@ p.graphs {
     <% }); %>
   </div>
 </div>
+<% } %>
 <h2 class="graphs"><%= lang.someStatistics %></h2>
 <div class="graphs flex">
   <div class="chart-container">

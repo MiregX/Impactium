@@ -29,7 +29,6 @@
 }
 body {
   overflow-y: visible !important;
-  background: #151E29;
 }
 .bg-mobile {
   display: none;
@@ -69,7 +68,7 @@ main {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(0deg, #151E29 0%, #ffffff00 100%);
+  background: none;
   backdrop-filter: blur(15px);
   box-shadow: 1px 0px 3px var(--p);
   z-index: 2;
@@ -567,9 +566,9 @@ main {
 <div class="battle-block flex-dir-row center-v title">
   <div class="time">Время</div>
   <div class="alliances">Стороны битвы (гильдии, альянсы)</div>
-  <div class="playersNum"><img src="https://api.impactium.fun/albion/players.png"></div>
-  <div class="totalKills"><img src="https://api.impactium.fun/albion/kills.png"></div>
-  <div class="totalFame"><img src="https://api.impactium.fun/albion/fame.png"></div>
+  <div class="playersNum"><img src="https://api.impactium.fun/albion/icons/players.png"></div>
+  <div class="totalKills"><img src="https://api.impactium.fun/albion/icons/kills.png"></div>
+  <div class="totalFame"><img src="https://api.impactium.fun/albion/icons/fame.png"></div>
   <div class="id" style="text-decoration: none;">ID</div>
 </div>
 <div class="battles-wrapper flex-dir-column">
@@ -584,9 +583,7 @@ main {
     <div class="waiting-block"></div>
     <div class="waiting-block"></div>
   </div>
-  <% let displayedCount = 0; %>
   <% battleboard.forEach(function(item) { %>
-    <% if (Object.keys(item.players).length >= 10 && displayedCount < 30) { %>
       <div class="battle-block flex-dir-row center-v" onclick="redirectBattle(<%= item.id %>, this)">
         <div class="multilog-checkbox center">
           <input type="checkbox" id="multilogCheckbox" autocomplete="off">
@@ -613,8 +610,6 @@ main {
         <div class="totalFame <%= item.totalFame >= 1000000 ? 'mills' : '' %>"><%= cutFame(item.totalFame) %></div>
         <div class="id"><%= item.id %><%= item.players.length %></div>
       </div>
-      <% displayedCount++; %>
-    <% } %>
   <% }); %>
 </div>
 

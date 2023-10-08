@@ -1053,7 +1053,7 @@
   {
     "day": "07.10.2023",
     "stats": {
-      "mainWebJoins": 159,
+      "mainWebJoins": 182,
       "guildsWebJoins": 1,
       "ctaWebJoins": 0,
       "regearWebJoins": 0,
@@ -1067,6 +1067,30 @@
       "langis": 0,
       "langru": 0,
       "languk": 3,
+      "discordBotAllComs": 0,
+      "discordBotSumbalComs": 0,
+      "discordBotAddbalComs": 0,
+      "discordBotRembalComs": 0,
+      "documentationJoins": 0
+    }
+  },
+  {
+    "day": "08.10.2023",
+    "stats": {
+      "mainWebJoins": 35,
+      "guildsWebJoins": 7,
+      "ctaWebJoins": 0,
+      "regearWebJoins": 0,
+      "ctaTickets": 0,
+      "regearTickets": 0,
+      "userInfoJoins": 0,
+      "logins": 1,
+      "logouts": 1,
+      "langen": 0,
+      "langit": 0,
+      "langis": 0,
+      "langru": 0,
+      "languk": 2,
       "discordBotAllComs": 0,
       "discordBotSumbalComs": 0,
       "discordBotAddbalComs": 0,
