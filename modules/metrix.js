@@ -38,9 +38,18 @@ router.get('/', async (request, response) => {
   }
 });
 
-router.get('/search/:name', (request, response) => {
+router.get('/search/:name', async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
-  const battleboard = getBattleBoard(request.params.name);
+  const { isEnabled, battlesLimit, minimumPlayers, minimumGuildPlayers } = request.cookies.filters || {};
+  const filters = isEnabled ? { battlesLimit, minimumPlayers, minimumGuildPlayers } : {}
+
+  const requestPayload = {
+    base: request.params.name,
+    filters
+  };
+
+  const battleboard = await getBattleBoard(requestPayload);
+
   if (request.accepts('html')) {
     const user = getUserDataByToken(request.cookies.token);
     const lang = getLanguagePack(request.cookies.lang);

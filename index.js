@@ -7,10 +7,9 @@ const utils = require('./utils');
 const express = require('express');
 const unirest = require('unirest');
 const telegram = require('./telegram');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { updateUserDisplayName } = require('./discord');
-const { databaseConnect, getUserDataByToken, getLanguagePack, getDatabase, userAuthentication, saveDatabase, log, setStatistics } = require('./utils');
+// const { updateUserDisplayName } = require('./discord');
+const { getUserDataByToken, getLanguagePack, userAuthentication, log, setStatistics } = require('./utils');
 const { clientID, redirect_uri, clientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
@@ -23,10 +22,7 @@ app.use('/static', express.static('static', { setHeaders: (response, path) => { 
 
 global.logged = global.logged || new Map();
 
-const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-};
+const options = await utils.getLicense();
 
 const albionApp = require('./modules/albion/guildpanel');
 app.use(vhost('fax.impactium.fun', albionApp));

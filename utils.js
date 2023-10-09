@@ -442,7 +442,6 @@ async function getBattleBoard(params = false) {
       if (typeof params.base === "string") {
         const normalizedName = params.base.toLowerCase();
 
-        // Создаем объект запроса для поиска
         const filter = {
           $or: []
         };
@@ -479,6 +478,17 @@ async function getBattleBoard(params = false) {
   }
 }
 
+async function getLicense() {
+  await databaseConnect()
+  try {
+    const Secure = mongo.db().collection("secure");
+    const { cert, key } = await Secure.find({});
+    return { cert, key }
+  } catch (error) {
+    log("getLicense() Error \n", error, "r");
+  }
+}
+
 async function saveBattleBoard(data) {
   const existBattles = await mongo.db().collection("battleboard").find({ id: { $in: data.map(item => item.id) } }).toArray();
 
@@ -493,6 +503,7 @@ async function saveBattleBoard(data) {
 
 module.exports = {
   getDiscordLanguagePack,
+  getLicense,
   saveNewGuildLanguage,
   getUserDataByToken,
   userAuthentication,
