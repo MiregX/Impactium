@@ -481,11 +481,10 @@ async function getBattleBoard(params = false) {
 async function getLicense() {
   await databaseConnect()
   try {
-    const Secure = mongo.db().collection("secure");
-    const { cert, key } = await Secure.find({});
+    const { cert, key } = await mongo.db().collection("secure").findOne({});
     return { cert, key }
   } catch (error) {
-    log("getLicense() Error \n", error, "r");
+    throw new Error(error);
   }
 }
 
@@ -522,23 +521,4 @@ module.exports = {
   log,
 };
 
-// const normalizedName = params.base.toLowerCase();
-// const filteredResults = [];
-// let eventLimiter = 0;
-
-// for (const item of battleboard) {
-//   if (eventLimiter >= battlesLimit) break;
-
-//   if ((Object.values(item.guilds).some(guild => guild.name.toLowerCase() === normalizedName) ||
-//     Object.values(item.alliances).some(alliance => alliance.name.toLowerCase() === normalizedName)) &&
-//     Object.keys(item.players).length >= playersLimit) {
-//     if (!guildPlayersLimit) {
-//       filteredResults.push(item);
-//       eventLimiter++;
-//     } else if (Object.values(item.players).filter(player => player.guildName.toLowerCase() === normalizedName).length > guildPlayersLimit ||
-//     Object.values(item.players).filter(player => player.allianceName.toLowerCase() === normalizedName).length  > guildPlayersLimit) {
-//       filteredResults.push(item);
-//       eventLimiter++;
-//     }
-//   }
-// }
+// v3o5gYNnGxHri3Vh
