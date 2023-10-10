@@ -478,16 +478,19 @@ async function getBattleBoard(params = false) {
   }
 }
 
-async function getLicense() {
-  await databaseConnect()
+
+function getLicense() {
   try {
-    const { cert, key } = await mongo.db().collection("secure").findOne({});
-    return { cert, key }
+    const path = 'C:\\Users\\Mark\\';
+
+    const cert = fs.readFileSync(path + 'cert.pem', 'utf8');
+    const key = fs.readFileSync(path + 'key.pem', 'utf8');
+
+    return { isSuccess: true, cert, key };
   } catch (error) {
-    throw new Error(error);
+    return { isSuccess: false };
   }
 }
-
 async function saveBattleBoard(data) {
   const existBattles = await mongo.db().collection("battleboard").find({ id: { $in: data.map(item => item.id) } }).toArray();
 

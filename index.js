@@ -22,7 +22,7 @@ app.use('/static', express.static('static', { setHeaders: (response, path) => { 
 
 global.logged = global.logged || new Map();
 
-const options = await utils.getLicense();
+const options = utils.getLicense();
 
 const albionApp = require('./modules/albion/guildpanel');
 app.use(vhost('fax.impactium.fun', albionApp));
@@ -111,8 +111,14 @@ app.use('/metrix', metrixRouter);
 const phpApp = require('./modules/php/index');
 app.use('/php', phpApp);
 
-const server = https.createServer(options, app);
+const server = https.createServer(options, app)
 
+options.isSuccess
+? // Если ключ правильный и сертификат найден
 server.listen(80, () => {
-  log('Сервер запущен', 'g');
-});
+  log(`Основной сервер запущен`, 'g');
+})
+: // Если ключ неправильный или не найден
+app.listen(3000, () => { 
+    log(`Тестовый сервер запущен`, 'y'); 
+})
