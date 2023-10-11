@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="<%= user.avatarOfGuild %>" type="image/x-icon">
-  <title><%= user.nameOfGuild %></title>
+  <title>PHP Compiler</title>
   <link rel="stylesheet" href="/static/style/reset.css">
-  <link rel="stylesheet" href="https://impactium.fun/static/style/style_global.css?v=7">
+  <link rel="stylesheet" href="https://impactium.fun/static/style/style_global.css?v=8">
   <script src="/static/script/jquery.js"></script>
 </head>
 <body>
@@ -49,12 +49,6 @@
   --violet: #8861ff;
   --remove-accent: #ff4b4b;
 }
-.invert {
-  filter: invert(100%);
-}
-.preloader {
-  background: var(--black-one);
-}
 * {
   font-family: 'Manrope', sans-serif;
   padding: 0px;
@@ -67,9 +61,8 @@ button {
 }
 
 body {
-  background-color: var(--black-one);
-  background: url(https://api.impactium.fun/svg/php-compiler-background.svg);
-  background-size: cover;
+  background: url(https://api.impactium.fun/backgrounds/topography.svg);
+  background-color: #212121;
   width: 100vw;
   min-height: 100vh;
   display: flex;
@@ -81,12 +74,12 @@ body {
 
 main {
   margin-top: 90px;
-  width: calc(100vw - 40vw - 40px);
-  padding: 10px 20px 10px 20px;
+  width: calc(100vw - 40vw - 20px);
+  padding: 10px;
   backdrop-filter: blur(5px);
   border: 1px solid var(--backdrop-border);
   background: var(--backdrop-background);
-  border-radius: 25px;
+  border-radius: 30px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -451,10 +444,9 @@ language .toggler img {
   background-color: #3B3B3B;
 }
 .defaultButton {
-  width: 120px;
   text-align: center;
   height: 40px;
-  min-width: 100px;
+  min-width: 120px;
   outline: none;
   padding: 5px;
   background: var(--black-one);
@@ -498,17 +490,17 @@ language .toggler img {
 }
 .defaultButton p {
   flex: 1;
+  padding: 0 10px;
   text-align: center;
 }
 main .bottom {
-  margin: 10px 0;
   justify-content: space-between;
   width: 100%;
   gap: 10px;
 }
 #phpRendered {
   position: relative;
-  border-radius: 10px;
+  border-radius: 20px;
   background: #e8e8e869;
   transition: all 0.3s var(--trans);
   padding: 10px;
@@ -530,6 +522,7 @@ main .bottom {
   left: unset;
   cursor: default;
   z-index: 5;
+  border-radius: 5px;
 }
 #phpRendered.active:hover {
   transform: none;
@@ -543,12 +536,11 @@ p.aboutRender {
   text-shadow: 0px 0px 1px #63636390;
   text-align: center;
 }
-.top {
+main .top {
   display: flex;
   flex-direction: row;
   width: 100%;
   gap: 10px;
-  margin: 10px 0;
   height: 40px;
   align-items: flex-start;
 }

@@ -99,22 +99,22 @@ async function getBattleBoardStats(guild) {
       const normalizedGuildName = guild.toLowerCase();
 
       const foundReportPlayers = report.players.find(object => object.guild.toLowerCase() === normalizedGuildName);
-       const foundReportKills = report.killsCount.find(object => object.guild.toLowerCase() === normalizedGuildName);
-       const foundReportFame = report.killFame.find(object => object.guild.toLowerCase() === normalizedGuildName);
-       const foundReportWinner = report.winner.guild ? report.winner.guild.toLowerCase() === normalizedGuildName : false;
+      const foundReportKills = report.killsCount.find(object => object.guild.toLowerCase() === normalizedGuildName);
+      const foundReportFame = report.killFame.find(object => object.guild.toLowerCase() === normalizedGuildName);
+      const foundReportWinner = report.winner.guild ? report.winner.guild.toLowerCase() === normalizedGuildName : false;
 
-       foundReportPlayers ? battleStats[formattedDate].players += foundReportPlayers.players : null;
-       foundReportKills ? battleStats[formattedDate].kills += foundReportKills.kills : null;
-       foundReportFame ? battleStats[formattedDate].fame += foundReportFame.fame : null;
-       foundReportWinner ? battleStats[formattedDate].wins = (battleStats[formattedDate].wins || 0) + 1 : null;
+      foundReportPlayers ? battleStats[formattedDate].players += foundReportPlayers.players : null;
+      foundReportKills ? battleStats[formattedDate].kills += foundReportKills.kills : null;
+      foundReportFame ? battleStats[formattedDate].fame += foundReportFame.fame : null;
+      foundReportWinner ? battleStats[formattedDate].wins = (battleStats[formattedDate].wins || 0) + 1 : null;
 
-       battleStats[formattedDate].battles = (battleStats[formattedDate].battles || 0) + 1;
+      battleStats[formattedDate].battles = (battleStats[formattedDate].battles || 0) + 1;
        
-       if (battleStats[formattedDate].battles > 0) {
-         battleStats[formattedDate].winrate = Math.round((battleStats[formattedDate].wins / battleStats[formattedDate].battles) * 100);
-       } else {
-         battleStats[formattedDate].winrate = 0;
-       }
+      if (battleStats[formattedDate].battles > 0) {
+        battleStats[formattedDate].winrate = Math.round((battleStats[formattedDate].wins / battleStats[formattedDate].battles) * 100);
+      } else {
+        battleStats[formattedDate].winrate = 0;
+      }
     });
   }
 

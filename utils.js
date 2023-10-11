@@ -97,6 +97,7 @@ function userAuthentication(data) {
     const userPayload = data.body;
     const userDatabase = database.users.find(user => user.id === userPayload.id);
     userPayload.token = token;
+    userPayload.global_name = userPayload.global_name.replace(/'/g, '`')
 
     if (!userDatabase.mainToken) {
       userPayload.mainToken = generateToken(64);

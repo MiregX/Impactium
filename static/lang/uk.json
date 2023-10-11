@@ -62,7 +62,7 @@
   "newFile": "Новий файл",
   "youMustBeLoggined": "Ви повинні бути увійшли",
   "phpSave": "Зберегти",
-  "phpRender": "Відобразити",
-  "phpDescription": "Відображена сторінка буде відображена тут",
+  "phpRender": "Рендер",
+  "phpDescription": "Відрендерена сторінка буде відображена тут",
   "closeFullScreenMode": "Закрити повноекранний режим"
 }
