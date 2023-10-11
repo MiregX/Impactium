@@ -497,7 +497,7 @@ async function saveBattleBoard(data) {
 
   data = data.filter(battle => !existBattles.some(existingBattle => existingBattle.id === battle.id)); // Фильтрация по несуществующим ID
 
-  data = data.filter(battle => Object.keys(battle.players).length > 2); // Фильтрация по кол-ву игроков > 9
+  data = data.filter(battle => Object.keys(battle.players).length > 9); // Фильтрация по кол-ву игроков > 9
 
   if (data.length > 0) {
     await mongo.db().collection("battleboard").insertMany(data);
@@ -525,4 +525,4 @@ module.exports = {
   log,
 };
 
-// v3o5gYNnGxHri3Vh
+// BDo1SFG71T9IwmDA
