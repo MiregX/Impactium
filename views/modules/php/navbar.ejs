@@ -1,0 +1,47 @@
+<style>
+nav {
+  width: 250px;
+  flex: 1;
+  background: var(--c-24);
+  position: relative;
+  min-width: 250px;
+  max-width: 350px;
+}
+nav .resizer {
+  width: 4px;
+  transform: translateX(2px);
+  height: 100%;
+  position: absolute;
+  right: 0;
+  cursor: col-resize;
+}
+</style>
+<nav class="flex flex-dir-column">
+  <%- include('nav/top.ejs') %>
+  <%- include('nav/middle.ejs') %>
+  <%- include('nav/bottom.ejs') %>
+  <div class="resizer"></div>
+</nav>
+<script>
+const resizeBox = document.querySelector('nav');
+const resizeHandle = document.querySelector('.resizer');
+let isResizing = false;
+
+resizeHandle.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    const startX = e.clientX;
+    const startWidth = parseInt(getComputedStyle(resizeBox, null).getPropertyValue('width'));
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+
+        const newWidth = startWidth + e.clientX - startX;
+        resizeBox.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        isResizing = false;
+    });
+});
+
+</script>

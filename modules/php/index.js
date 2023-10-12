@@ -21,7 +21,7 @@ router.get('/', (request, response) => {
     files
   };
 
-  response.render('php/template.ejs', renderData);
+  response.render('php/app.ejs', renderData);
 });
 
 router.get('/f/:folder/:filename?', async (request, response) => {
@@ -49,7 +49,7 @@ router.get('/f/:folder/:filename?', async (request, response) => {
     files
   };
 
-  response.render('php/template.ejs', renderData);
+  response.render('php/app.ejs', renderData);
 });
 
 

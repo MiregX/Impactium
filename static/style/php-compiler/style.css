@@ -1,0 +1,29 @@
+:root {
+  --black: #000000;
+  --c-16: #161616;
+  --c-24: #242424;
+  --c-36: #363636;
+  --c-48: #484848;
+  --c-64: #646464;
+  --c-82: #828282;
+  --c-96: #929292;
+  --w-1: #aaaaaa;
+  --w-2: #cccccc;
+  --w-3: #e8e8e8;
+}
+* {
+  color: var(--w-3);
+  font-family: 'Lato', sans-serif;;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: url(https://api.impactium.fun/backgrounds/topography-21.svg);
+  background-color: var(--c-36);
+}
+.preloader {
+  background: var(--c-24);
+}

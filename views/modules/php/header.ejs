@@ -1,0 +1,54 @@
+<style>
+header {
+  height: calc(50px - 16px);
+  width: calc(100vw - 32px);
+  background: var(--c-16);
+  padding: 8px 16px;
+}
+header .logined {
+  height: 100%;
+  gap: 6px;
+  background: var(--c-36);
+  padding: 4px;
+  border-radius: 6px;
+  min-width: 120px;
+}
+header .logined > p {
+  flex: 1;
+  text-align: center;
+}
+header .logined > img {
+  height: 26px;
+  border-radius: 3px;
+}
+header .title h1 {
+  font-size: 200%;
+  font-family: 'Monoton';
+  font-weight: 100;
+  text-transform: uppercase;
+}
+</style>
+<header class="header grid rows-1 columns-3 align-center">
+  <div class="title flex center-v">
+    <h1>Impactium</h1>
+  </div>
+
+  <div>
+
+  </div>
+
+  <div class="auth flex justify-end">
+    <% if (user.id !== undefined) { %>
+      <button class="flex flex-dir-row logined align-center">
+      <% if (user.avatar) { %>
+        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png">
+      <% } %>
+        <p><%= user.visibleName %></p>
+      </button>
+    <% } else { %>
+      <button>
+
+      </button>
+    <% } %>
+  </div>
+</header>

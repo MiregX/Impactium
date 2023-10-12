@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(cookieParser());
 app.set('view engine', 'ejs');
-app.use('/static', express.static('static', { setHeaders: (response, path) => { response.setHeader('Cache-Control', 'public, max-age=31536000'); }}));
+app.use('/static', express.static('static', { setHeaders: (response, path) => { response.setHeader('Cache-Control', 'public, max-age=1'); }}));
 
 global.logged = global.logged || new Map();
 
