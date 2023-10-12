@@ -447,7 +447,9 @@ async function getBattleBoard(params = false) {
           $or: []
         };
         
-        const cursor = Battleboard.find({}).sort({ id: -1 });
+        const totalRecords = await Battleboard.countDocuments();
+
+        const cursor = Battleboard.find({}).skip(totalRecords - 500);
         
         while (await cursor.hasNext()) {
           const battle = await cursor.next();
@@ -468,7 +470,9 @@ async function getBattleBoard(params = false) {
           }
         }
         
-        const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).toArray() : [];
+
+        const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).skip(totalRecords - 500).toArray() : [];
+        log(result);
         return result;
       }
     }
