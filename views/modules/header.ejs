@@ -1,26 +1,4 @@
 <style>
-:root {
-  --g: #1F2937;
-  --gh: #374151;
-  --gho: #37415180;
-  --b: #111827;
-  --bo: #11182790;
-  --w: #e8e8e8;
-  --black-one: #161616;
-  --black-two: #212121;
-  --p: #3E3979;
-  --lp: #8F80F4;
-  --lpo: #8F80F480;
-  --player-gradient: linear-gradient(90deg, #29afe0 0%, #29cee0 100%);
-  --kills-gradient: linear-gradient(90deg, #E0294E 0%, #E02983 100%);
-  --fame-gradient: linear-gradient(90deg, #29E09D 0%, #29E082 100%);
-  --player-text: #29cee0;
-  --kills-text: #E02983;
-  --fame-text: #29E082;
-  --backdrop-background: rgba(255, 255, 255, 0.074);
-  --backdrop-border: rgba(255, 255, 255, 0.222);
-  --trans: cubic-bezier(.21,.29,0,.94);
-}
 header {
   height: 80px;
   z-index: 2;
@@ -52,10 +30,10 @@ header-background {
   align-items: center;
 }
 
-.nav button {
+.nav > button {
   height: 100%;
   position: relative;
-  font-weight: 600;
+  font-weight: 500;
   width: 120px;
   text-align: center;
   text-transform: uppercase;
@@ -73,7 +51,7 @@ header-background {
 .nav button bar {
   position: absolute;
   min-height: 80px;
-  background: rgba(18, 24, 39, 0.65);
+  background: var(--c-24);
   backdrop-filter: blur(15px);
   display: flex;
   opacity: 0;
@@ -85,7 +63,8 @@ header-background {
   transition: all 0.2s ease;
   transform: translateY(-16px);
   overflow: hidden;
-  box-shadow: 0 1px 3px var(--p);
+  box-shadow: 0 1px 3px var(--c-48);
+  text-transform: initial;
 }
 .nav button:hover bar {
   opacity: 1;
@@ -99,14 +78,14 @@ header-background {
 }
 .nav button bar h3 {
   text-align: left;
-  font-weight: 700;
-  color: var(--lp);
+  font-weight: 600;
+  color: var(--w);
   transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
 }
 .nav button bar p {
   text-align: left;
-  font-weight: 500;
-  color: var(--p);
+  font-weight: 400;
+  color: var(--c-64);
   height: 100%;
 }
 header line {
@@ -114,20 +93,14 @@ header line {
   background: white;
   height: 15px;
 }
-
-header h1 {
-  font-family: 'Monoton', cursive;
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-size: 40px;
-  text-align: left;
-  width: fit-content;
-  pointer-events: none;
-  cursor: default;
+header line:last-child {
+  display: none;
 }
-header h1.active {
-  pointer-events: all;
-  cursor: pointer;
+header > img {
+  filter: brightness(1);
+  height: 40px;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 .user-onlogin {
   justify-content: flex-end;
@@ -138,14 +111,14 @@ header h1.active {
 }
 .user {
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   width: 120px;
   height: 40px;
   border-radius: 20px;
-  background: var(--b);
+  background: var(--c-24);
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: relative;
-  box-shadow: 0 1px 3px var(--p);
+  box-shadow: 0 1px 3px var(--c-48);
 }
 .user * {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -184,9 +157,6 @@ header h1.active {
 header .logo {
   height: 60px;
 }
-.logout-mobile {
-  display: none;
-}
 
 #arrow-icon path.default-path {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -218,8 +188,7 @@ header .logo {
   position: absolute;
   width: calc(100% - 40px);
   right: 0px;
-  text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 500;
 }
 .temp-button .circle {
   position: absolute;
@@ -228,9 +197,9 @@ header .logo {
   display: flex;
   align-items: center;
   height: 40px;
-  background: var(--b);
+  background: var(--c-24);
   border-radius: 20px;
-  box-shadow: 0 1px 3px var(--p);
+  box-shadow: 0 1px 3px var(--c-48);
 }
 
 .temp-button:hover .circle {
@@ -251,13 +220,6 @@ header {
   padding: 0 2.5%;
   width: calc(100vw - 5%);
 }
-header h1 {
-  font-size: 7vw;
-  margin-bottom: -2px;
-}
-.nav {
-  display: none;
-}
 .user {
   height: 7vw;
   width: 22vw;
@@ -269,16 +231,6 @@ header h1 {
   border-radius: calc(3.5vw - 1px);
 }
 
-.logout-mobile {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  height: 7vw;
-  width: 22vw;
-  font-weight: 700;
-  border-radius: 20px;
-  background: #3886C6;
-}
 .user-onlogin {
   margin-right: 10px;
   gap: 15px;
@@ -308,7 +260,7 @@ header h1 {
 }
 }
 .plate .p-wrapper {
-  height: 36px;
+  height: 42px;
   overflow: hidden;
   transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
 }
@@ -325,20 +277,21 @@ header h1 {
 }
 .plate .text {
   align-items: flex-start;
+  justify-content: center;
 }
 .guild-avatar {
   height: 66px;
   width: 66px;
   min-width: 66px;
   border-radius: 12px;
-  background: var(--g);
+  background: var(--c-48);
 }
 .plate:hover {
-  background: var(--gh);
+  background: var(--c-36);
 }
 </style>
 <header>
-    <h1 onclick="toHub()">Impactium</h1>
+    <img src="https://api.impactium.fun/logo/texted-logo.svg" onclick="toHub()">
     <% if (typeof nav !== 'undefined') { %>
       <div class="nav flex">
         <% Object.keys(nav).forEach(category => { %>

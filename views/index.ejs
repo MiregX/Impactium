@@ -1,116 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="https://api.impactium.fun/logo/impactium-tw.png" type="image/x-icon">
-  <title>Impactium</title>
-  <link rel="stylesheet" href="static/style/reset.css">
-  <link rel="stylesheet" href="static/style/style_global.css?v=1">
-  <link rel="stylesheet" href="static/style/style_main.css">
-  <link rel="stylesheet" href="static/style/style_main_mobile.css?v=2">
-  <script src="static/script/jquery.js"></script>
-  <style>
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Meera+Inimai&display=swap');
-.noanim {
-  transition: all 0s linear !important;
-}
-
-.stars-svg {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  transform: translate(-50%, 40%) scale(0.6);
-  opacity: 0.5;
-  pointer-events: none;
-}
-.absolute {
-  position: absolute;
-}
-.rocks {
-  width: 100vw;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-  transform: translateY(0);
-}
-.rocks-bottom img {
-  position: absolute;
-  top: 80vh;
-  width: 100vw;
-}
-.starsX {
-  max-height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-}
-
-* {
-  font-family: 'Manrope', sans-serif;  
-  color: white;
-  text-shadow: 0px 3px 8px #212121;
-  color-scheme: dark;
-}
-body {
-  background: #131D27;    
-  background-image: url(https://api.impactium.fun/svg/bg-learn-mobile.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-button {
-  cursor: pointer;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-}
+<style>
 main {
   display: flex;
   flex-direction: column;
   padding-top: 80px;
-}
-
-footer {
-  height: calc(17.5vh - 50px);
-  max-height: 500px;
-  width: calc(100vw - 30%);
-  padding: 25px 15%;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background: linear-gradient(0deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
-  backdrop-filter: blur(15px);
-}
-
-footer h3 {
-  color: #5b6b81;
-}
-footer .on-close {
-  margin-top: 15px;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #5b6b81;
-  text-shadow: 0 0 0 transparent;
-}
-footer span {
-  margin-top: 5px;
-  font-size: 0.75rem;
-  color: #5b6b81;
-  max-width: 50vw;
-  max-width: 45rem;
-  font-weight: normal;
-  text-shadow: 0 0 0 transparent;
 }
 
 .panel {
@@ -135,15 +27,15 @@ footer span {
 
 .guilds-list {
   width: 600px;
-  background: #11182759;
+  background: #ffffff03;
   border-radius: 12px 0 0 12px;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(3px);
   border-right: 0px;
   padding: 10px;
   transition: all 0.8s cubic-bezier(.21,.29,0,.94) !important;
   opacity: 0;
   transform: translateX(50%);
-  box-shadow: 0 1px 3px var(--p);
+  box-shadow: 0 1px 3px var(--c-36);
 }
 
 .guild-list-wrapper {
@@ -157,7 +49,7 @@ footer span {
 }
 .unique-guild {
   border-radius: 6px;
-  border: 1px solid var(--p);
+  border: 1px solid var(--c-36);
   height: 40px;
   padding: 10px;
   align-items: center;
@@ -239,8 +131,8 @@ footer span {
 .guilds-list .background img {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  right: -50px;
+  transform: translate(40%, -40%);
+  right: 0;
   z-index: -1;
 }
 @media (max-width: 767px) {
@@ -280,7 +172,6 @@ main {
   padding: 10px;
   border-radius: 15px;
   margin: 0 2.5vw;
-  border: 0px solid #23688aa6;
   position: relative;
 }
 .guild-list-wrapper h5 {
@@ -297,106 +188,11 @@ main {
 .unique-guild:hover {
   width: unset;
 }
-.rocks-bottom img {
-  top: 22vh;
-}
 body {
   min-height: 120vh;
 }
-footer .on-close {
-  font-size: 0.9rem;
-}
-footer {
-  height: unset;
-  align-items: flex-start;
-  padding: 3vw 5vw;
-  width: calc(100vw - 10vw);
-}
-}
-language {
-  z-index: 3;
-  position: fixed;
-  top: 40px;
-  transform: translateY(-50%);
-  left: -130px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.3s var(--trans);
-  background: var(--b);
-  box-shadow: 0 1px 3px var(--p);
-  border-radius: 0 20px 20px 0;
-}
-language.active {
-  left: 0px;
-}
-language .list {
-  padding-left: 5px;
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  width: 120px;
-}
-language .list img {
-  height: 20px;
-}
-language .toggler {
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  transition: all 0.3s var(--trans);
-  border: 1px solid transparent;
-}
-language .toggler img {
-  height: 30px;
-  width: 30px;
 }
 </style>
-</head>
-<body>
-<div class="preloader center">
-  <div class="honeycomb">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-</div>
-<background class="absolute flex">
-  <div class="rocks absolute">
-    <img class="w-ful" src="https://api.impactium.fun/svg/1-01.svg">
-  </div>
-  <div class="rocks absolute">
-    <img class="w-ful" src="https://api.impactium.fun/svg/2-01.svg">
-  </div>
-  <div class="rocks starsX absolute">
-    <img src="https://api.impactium.fun/ui/diamond-full-pattern.svg">
-  </div>
-  <div class="rocks rocks-bottom absolute">
-    <img src="https://api.impactium.fun/svg/rocks5.svg">
-  </div>
-  <div class="rocks absolute">
-    <img class="w-ful" src="https://api.impactium.fun/svg/7-03.svg">
-  </div>
-</background>
-<language>
-  <div class="list">
-    <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
-    <% for (const langCode of availableLanguages) { %>
-      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
-    <% } %>
-  </div>
-  <button class="toggler center" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
-    <img src="https://api.impactium.fun/svg/earth-globe.svg">
-  </button>
-</language>
-
-<%- include('modules/header.ejs', { user, lang, nav }) %>
-
 <main>
   <panel class="panel main">
     <div class="about-us">
@@ -406,7 +202,7 @@ language .toggler img {
       </div>
     </div>
     <div class="guilds-list anim-onload">
-      <div class="background"><img src="https://api.impactium.fun/ui/diamond-semi-pattern.svg"></div>
+      <div class="background"><img src="https://api.impactium.fun/ui/diamond-full-pattern.svg"></div>
       <div class="guild-list-wrapper flex-dir-column">
         <h5><%= lang.ourPartners %></h5>
 
@@ -422,32 +218,12 @@ language .toggler img {
               <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
             </div>
           <% }); %>
-        <div class="unique-guild flex-dir-row">
-          <div class="wrapper center-v flex gap">
-            <img src="https://api.impactium.fun/ux/gamepad.png">
-            <h2><%= lang.becomePartner %></h2>
-          </div>
-          <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
-        </div>
-
       </div>
     </div>
   </panel>
 </main>
-<footer>
-  <h3><%= lang.disclaimer %></h3>
-  <span class="flex"><%= lang.termsAndRules %></span>
-  <div class="info">
-    
-  </div>
-  <p class="on-close"><%= lang.onClose %></p>
-</footer>
-</body>
-</html>
 <script>
 $(window).on('load', function() {
-  $('.preloader').remove();
-
   const header = document.querySelector('header');
   header.style.transform = ('translateX(0px)');
   header.style.opacity = ('1');
@@ -463,7 +239,6 @@ $(window).on('load', function() {
   const aboutUsDescriptionText = document.querySelector('.support-text');
   aboutUsDescriptionText.style.transform = ('translateX(0px)');
   aboutUsDescriptionText.style.opacity = ('1');
-
 });
 
 function redirectPhp() {

@@ -70,10 +70,22 @@ app.get('/', (request, response) => {
       const lang = getLanguagePack(request.cookies.lang);
       setStatistics('mainWebJoins');
 
-      const renderData = { user, lang, nav };
-
-      response.render('index.ejs', renderData);
-
+      const indexData = {
+        user,
+        lang,
+        nav
+      }
+  
+      const indexTemplate = fs.readFileSync('views/index.ejs', 'utf8');
+      const body = ejs.render(indexTemplate, indexData);
+  
+      response.render('template.ejs', {
+        body,
+        user,
+        lang,
+        nav
+      });
+      
     } catch (err) {
       console.error(err);
       return response.status(500).send('Internal Server Error');

@@ -5,40 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="<%- typeof pagetype !== 'undefined' ? pagetype.logo : 'https://api.impactium.fun/logo/impactium-tw.png' %>" type="image/x-icon">
   <title>Impactium</title>
-  <link rel="stylesheet" href="https://impactium.fun/static/style/reset.css">
-  <link rel="stylesheet" href="https://impactium.fun/static/style/style_global.css?v=7">
+  <link rel="stylesheet" href="https://impactium.fun/static/style/reset.css?v=9">
+  <link rel="stylesheet" href="https://impactium.fun/static/style/style_global.css?v=9">
   <script src="https://impactium.fun/static/script/jquery.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800');
-:root {
-  --g: #1F2937;
-  --gh: #374151;
-  --b: #111827;
-  --w: #e8e8e8;
-  --p: #3E3979;
-  --lp: #8F80F4;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap');
     * {
-      font-family: 'Manrope', sans-serif;  
-      color: white;
+      font-family: 'Nunito', sans-serif;
+      color: var(--w);
     }
     body {
-      min-height: calc(100vh);
-      background: url(https://api.impactium.fun/svg/bg-learn-mobile.svg);
+      min-height: 100vh;
+      background: url(https://api.impactium.fun/backgrounds/topography-21.svg);
+      background-color: var(--c-16);
       background-position: top;
       background-size: cover;
       background-repeat: no-repeat;
       width: 100vw;
       overflow-x: hidden;
-    }
-    main {
-      min-height: 100%;
-      width: 100vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     temp-background {
       height: 100%;
@@ -52,52 +37,67 @@
       border-radius: 0;
       padding: 0;
     }
-    .rocks {
-      z-index: -1;
-      width: 100vw;
-      position: absolute;
+    .preloader {
+      background: var(--c24);
     }
-    .last-rock::after {
-      content: "";
-      position: absolute;
-      bottom: 0px;
-      transform: translateY(99%);
-      width: 100vw;
-      left: 0;
-      background: linear-gradient(0deg, #151E2900, #151E29);
-      height: 30vh;
+    language {
+      z-index: 3;
+      position: fixed;
+      top: 40px;
+      transform: translateY(-50%);
+      left: -130px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s var(--trans);
+      background: var(--c-24);
+      box-shadow: 0 1px 3px var(--c-48);
+      border-radius: 0 20px 20px 0;
+    }
+    language.active {
+      left: 0px;
+    }
+    language .list {
+      padding-left: 5px;
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      width: 120px;
+    }
+    language .list img {
+      height: 20px;
+    }
+    language .toggler {
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+      transition: all 0.3s var(--trans);
+      border: 1px solid transparent;
+    }
+    language .toggler img {
+      height: 30px;
+      width: 30px;
     }
   </style>
 </head>
 
 
 <body>
-  <div class="preloader center">
-    <div class="honeycomb">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+  <language>
+    <div class="list">
+      <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
+      <% for (const langCode of availableLanguages) { %>
+        <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
+      <% } %>
     </div>
-  </div>
-  <%- include('modules/header.ejs', { user, lang, isFull: false }) %>
-  <temp-background class="absolute flex">
-    <div class="rocks absolute">
-      <img class="w-ful" src="https://api.impactium.fun/svg/1-01.svg">
-    </div>
-    <div class="rocks absolute">
-      <img class="w-ful" src="https://api.impactium.fun/svg/2-01.svg">
-    </div>
-    <div class="rocks absolute last-rock">
-      <img src="https://api.impactium.fun/svg/7-01.svg">
-    </div>
-  </temp-background>
-  <main>
-    <%- body %>
-  </main>
+    <button class="toggler center" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
+      <img src="https://api.impactium.fun/svg/earth-globe.svg">
+    </button>
+  </language>
+  <%- include('modules/preloader.ejs') %>
+  <%- include('modules/header.ejs', { user, lang }) %>
+  <%- body %>
 </body>
 </html>
 
@@ -105,12 +105,7 @@
 function index() {
   window.location.href = "/";
 }
-
 function auth() {
   window.location.href = "https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2F&response_type=code&scope=identify";
 }
-
-$(window).on('load', function() {
-  $('.preloader').remove();
-});
 </script>
