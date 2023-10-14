@@ -28,7 +28,7 @@ main {
 .guilds-list {
   width: 600px;
   background: #ffffff03;
-  border-radius: 12px 0 0 12px;
+  border-radius: 12px 0 0 32px;
   backdrop-filter: blur(3px);
   border-right: 0px;
   padding: 10px;
@@ -36,6 +36,8 @@ main {
   opacity: 0;
   transform: translateX(50%);
   box-shadow: 0 1px 3px var(--c-36);
+  border: 1px solid #36363680;
+  border-right: none;
 }
 
 .guild-list-wrapper {
@@ -48,24 +50,26 @@ main {
   color: var(--w);
 }
 .unique-guild {
-  border-radius: 6px;
-  border: 1px solid var(--c-36);
+  border-radius: 22px;
+  border: 1px solid var(--c-24);
   height: 40px;
   padding: 10px;
   align-items: center;
   width: 300px;
   justify-content: space-between;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s var(--trans);
 }
-
+.unique-guild:hover {
+  width: 320px;
+}
 .unique-guild h2 {
   font-weight: 600;
 }
 .unique-guild img {
   height: 40px;
   width: 40px;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 .unique-guild .logoMobile {
   display: none;
@@ -207,7 +211,7 @@ body {
         <h5><%= lang.ourPartners %></h5>
 
           <% Object.values(nav.guilds).forEach(guild => { %>
-            <div class="unique-guild flex-dir-row predis" onclick="redirectGuild('<%= guild.name %>')">
+            <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.action %>')">
               <div class="wrapper center-v flex gap">
                 <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
                 <% if (guild.logoMobile) { %>
@@ -245,9 +249,8 @@ function redirectPhp() {
   window.location.href = "/php";
 }
 
-function redirectGuild(name) {
-  const guild = name.toLowerCase().replace(/\s/g, '-');
-  window.location.href = `https://${guild}.impactium.fun/`;
+function redirect(link) {
+  window.location.href = link;
 }
 function redirectMetrix() {
   window.location.href = `/metrix`;

@@ -1,0 +1,52 @@
+<style>
+  language {
+    z-index: 3;
+    position: fixed;
+    top: 40px;
+    transform: translateY(-50%);
+    left: -130px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s var(--trans);
+    background: var(--c-24);
+    box-shadow: 0 1px 3px var(--c-48);
+    border-radius: 0 20px 20px 0;
+  }
+  language.active {
+    left: 0px;
+  }
+  language .list {
+    padding-left: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 120px;
+  }
+  language .list img {
+    height: 20px;
+  }
+  language .toggler {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    transition: all 0.3s var(--trans);
+    border: 1px solid transparent;
+  }
+  language .toggler img {
+    height: 30px;
+    width: 30px;
+  }
+</style>
+<language>
+  <div class="list">
+    <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
+    <% for (const langCode of availableLanguages) { %>
+      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
+    <% } %>
+  </div>
+  <button class="toggler center" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
+    <img src="https://api.impactium.fun/svg/earth-globe.svg">
+  </button>
+</language>
