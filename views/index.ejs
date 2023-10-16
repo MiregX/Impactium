@@ -187,7 +187,6 @@ main {
 .unique-guild {
   width: unset;
   min-width: unset;
-  background: linear-gradient(90deg, #111828 0%, #192031 100%);
 }
 .unique-guild:hover {
   width: unset;
@@ -195,6 +194,10 @@ main {
 body {
   min-height: 120vh;
 }
+}
+header {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 </style>
 <main>
@@ -227,9 +230,9 @@ body {
   </panel>
 </main>
 <script>
-$(window).on('load', function() {
+  $(window).on('load', function() {
   const header = document.querySelector('header');
-  header.style.transform = ('translateX(0px)');
+  header.style.transform = ('translateY(0px)');
   header.style.opacity = ('1');
 
   const gl = document.querySelector('.guilds-list');

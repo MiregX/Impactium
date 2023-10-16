@@ -424,7 +424,7 @@ module.exports = {
 
 (async () => {
   try {
-    await rest.put(Routes.applicationCommands(secrets.clientID), { body: commands });
+    await rest.put(Routes.applicationCommands(secrets.discordClientID), { body: commands });
   } catch (error) {
     console.error(error);
   }

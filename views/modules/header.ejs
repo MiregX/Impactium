@@ -5,9 +5,8 @@ header {
   position: fixed;
   top: 0px;
   justify-content: space-between;
-  padding: 0 15%;
-  width: calc(100vw - 30%);
-  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.5s !important;
+  padding: 0 2vw;
+  width: 96vw;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
@@ -322,7 +321,7 @@ header {
       <div class="user-onlogin gap center-h center-v" style="justify-content: flex-end;">
         <button class="user flex center-v center-h">
           <% if (user.avatar) { %>
-            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="avatar">
+            <img src="<%= user.avatar %>" class="avatar">
           <% } %>
           <p class="button-text"><%= user.visibleName %></p>
         </button>
@@ -381,19 +380,8 @@ function terminal() {
 function redirect(link) {
   window.location.href = link;
 }
-
-const currentURL = window.location.href;
-const parts = currentURL.split("impactium.fun/")[1];
-
-if (parts) {
-  const impactium = document.querySelector('header h1');
-  impactium.classList.add('active');
-}
-
 function toHub() {
-  if (parts) {
-    window.location.href = "https://impactium.fun";
-  }
+  window.location.href = "https://impactium.fun";
 }
 
 </script>

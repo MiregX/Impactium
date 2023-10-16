@@ -32,14 +32,14 @@ function getUserDataByToken(token, whatGuild = undefined) {
       id: user.id,
       avatar: user.avatar,
       guilds: user.guilds,
-      visibleName: user.global_name || user.username + '#' + user.discriminator,
+      visibleName: user.displayName,
       banner_color: user.banner_color,
       isCreator: user.isCreator
     };
   }
 
   if (userGuild) {
-    const visibleName = userGuild.guildName || user.global_name || user.username + '#' + user.discriminator;
+    const visibleName = userGuild.guildName || user.displayName;
 
     return {
       id: user.id,
@@ -88,35 +88,51 @@ function getLanguagePack(languagePack = "en") {
   return lang;
 }
 
-function userAuthentication(data) {
+function userAuthentication(params) {
   try {
-    if (data.body.error) return;
+    if (params.data.error || params.data.message) return;
 
     const token = generateToken(32);
     const database = getDatabase();
-    const userPayload = data.body;
-    const userDatabase = database.users.find(user => user.id === userPayload.id);
-    userPayload.token = token;
-    userPayload.global_name = userPayload.global_name.replace(/'/g, '`')
+    const userPayload = params.data;
+    const userDatabase = database.users.find(user => user.email === userPayload.email);
 
-    if (!userDatabase.mainToken) {
+    let avatar = false;
+
+    if (params.from === "google") {
+      avatar = userPayload.picture
+    } else if (params.from === "discord") {
+      avatar = "https://cdn.discordapp.com/avatars/" + userPayload.id + "/" + userPayload.avatar + ".png"
+    }
+    
+    const userToSave = {
+      id: { [params.from]: userPayload.sub || userPayload.id },
+      email: userPayload.email || userDatabase.email,
+      avatar: avatar || userDatabase.avatar,
+      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
+      locale: userPayload.locale || false,
+      token: token,
+      lastLogin: params.from
+    }
+
+    if (!userDatabase?.mainToken) {
       userPayload.mainToken = generateToken(64);
     }
 
     if (userDatabase) {
-      Object.assign(userDatabase, userPayload);
+      Object.assign(userDatabase, userToSave);
     } else {
-      database.users.push(userPayload);
+      database.users.push(userToSave);
     }
-
     saveDatabase(database);
-    setStatistics(`lang${userPayload.locale}`);
+    setStatistics(`lang${userToSave.locale}`);
 
-    return { lang: userPayload.locale, token };
+    return { lang: userToSave.locale, token };
   } catch (error) {
-    log(error, 'r');
+    console.log(error);
   }
 }
+
 
 function generateToken(sumbolsLong) {
   return crypto.randomBytes(sumbolsLong).toString('hex');
@@ -530,3 +546,9 @@ module.exports = {
 };
 
 // BDo1SFG71T9IwmDA
+
+// avatar: userPayload.picture || userPayload.avatar || userDatabase.avatar,
+// displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
+// locale: userPayload.locale || false,
+// token: token,
+// lastLogin: params.from
