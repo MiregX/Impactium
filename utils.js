@@ -57,7 +57,7 @@ function userAuthentication(p) {
     }
 
     const userToSave = {
-      lastLogin: lastLogin,
+      lastLogin: loginSource,
       token: token,
     }
 

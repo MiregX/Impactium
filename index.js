@@ -5,9 +5,7 @@ const https = require('https');
 const vhost = require('vhost');
 const utils = require('./utils');
 const express = require('express');
-const passport = require('passport');
 const telegram = require('./telegram');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
 const { getUserDataByToken, getLanguagePack, log, setStatistics } = require('./utils');
@@ -15,15 +13,8 @@ const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_
 
 const app = express();
 
-app.use(session({
-  secret: discordClientSecret,
-  resave: false,
-  saveUninitialized: false,
-}));
 
 app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(cookieParser());
 app.use('/static', express.static('static', { setHeaders: (response, path) => { response.setHeader('Cache-Control', 'public, max-age=1'); }}));
 

@@ -323,7 +323,7 @@ header {
           <% if (user.avatar) { %>
             <img src="<%= user.avatar %>" class="avatar">
           <% } %>
-          <p class="button-text"><%= user.visibleName %></p>
+          <p class="button-text"><%= user.displayName %></p>
         </button>
         <button id="logout" onclick="logout()" class="temp-button">
           <div class="circle">
