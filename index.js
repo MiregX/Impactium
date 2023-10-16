@@ -120,7 +120,7 @@ passport.use(new GoogleStrategy({
   clientSecret: googleClientSecret,
   callbackURL: `https://impactium.fun/oauth2/callback/google`,
   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-}, async (accessToken, refreshToken, profile) => {
+}, async (accessToken, refreshToken, profile, done) => {
   done(null, profile);
 }));
 
