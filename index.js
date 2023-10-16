@@ -5,14 +5,13 @@ const https = require('https');
 const vhost = require('vhost');
 const utils = require('./utils');
 const express = require('express');
-const unirest = require('unirest');
+const passport = require('passport');
 const telegram = require('./telegram');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const { OAuth2Client } = require('google-auth-library');
 // const { updateUserDisplayName } = require('./discord');
-const { getUserDataByToken, getLanguagePack, userAuthentication, log, setStatistics } = require('./utils');
-const { discordClientID, discordRedirectUri, discordClientSecret, nav, googleClientID, googleRedirectUri, googleClientSecret } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
+const { getUserDataByToken, getLanguagePack, log, setStatistics } = require('./utils');
+const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
 
@@ -23,10 +22,12 @@ app.use(session({
 }));
 
 app.use(express.json());
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cookieParser());
-app.set('view engine', 'ejs');
 app.use('/static', express.static('static', { setHeaders: (response, path) => { response.setHeader('Cache-Control', 'public, max-age=1'); }}));
+
+app.set('view engine', 'ejs');
 
 global.logged = global.logged || new Map();
 
@@ -98,6 +99,9 @@ app.use('/metrix', metrixRouter);
 const phpApp = require('./modules/php/index');
 app.use('/php', phpApp);
 
+const oauth2 = require('./modules/oauth2');
+app.use('/oauth2', oauth2);
+
 const server = https.createServer(options, app)
 
 options.isSuccess
@@ -109,75 +113,3 @@ server.listen(80, () => {
 app.listen(3000, () => { 
     log(`Тестовый сервер запущен`, 'y'); 
 })
-
-const passport = require('passport');
-app.use(passport.initialize());
-app.use(passport.session());
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
-
-passport.use(new GoogleStrategy({
-  clientID: googleClientID,
-  clientSecret: googleClientSecret,
-  callbackURL: `https://impactium.fun/oauth2/callback/google`,
-  scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-}, async (accessToken, refreshToken, profile, done) => {
-  done(null, profile);
-}));
-
-app.get('/oauth2/login/google', passport.authenticate('google'));
-
-app.get('/oauth2/callback/google', passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-}), (request, response) => {
-  const authResult = userAuthentication({data: request.user._json, from: "google"});
-  log(authResult)
-  response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-  response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
-
-  const previousPage = request.cookies.previousPage || '/';
-  response.clearCookie('previousPage', { domain: '.impactium.fun' });
-  response.redirect(previousPage);
-});
-
-app.get('/oauth2/login/discord', (request, response) => {
-  if (request.query.code) {
-    let requestPayload = {
-      redirect_uri: discordRedirectUri,
-      client_id: discordClientID,
-      grant_type: "authorization_code",
-      client_secret: discordClientSecret,
-      code: request.query.code
-    };
-
-    unirest.post("https://discordapp.com/api/oauth2/token")
-      .send(requestPayload)
-      .headers({ "Content-Type": 'application/x-www-form-urlencoded', "User-Agent": 'DiscordBot' })
-      .then((data) => {
-        unirest.get("https://discordapp.com/api/users/@me")
-          .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
-          .then((data) => {
-            const authResult = userAuthentication({data: data.body, from: "discord"});
-            // updateUserDisplayName();
-
-            response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-            response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
-
-            const previousPage = request.cookies.previousPage || '/';
-            response.clearCookie('previousPage', { domain: '.impactium.fun' });
-            response.redirect(previousPage);
-            setStatistics('logins');
-          })
-          .catch((error) => {
-            response.redirect('/logout');
-            log(error);
-          });
-      })
-      .catch((error) => {
-        response.redirect('/logout');
-        log(error);
-      });
-  } else {
-    response.redirect('https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2Foauth2%2Flogin%2Fdiscord&response_type=code&scope=identify%20email');
-  }
-});

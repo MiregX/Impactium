@@ -6,76 +6,21 @@ const crypto = require('crypto');
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-function getUserDataByToken(token, whatGuild = undefined) {
+function getUserDataByToken(token) {
   const database = getDatabase();
   const user = database.users.find(user => user.token === token);
-  const selectedGuild = String(whatGuild).toLowerCase().replace(/-/g, ' ');
-
-  const urlGuild = database.guilds.find(guild => guild.name.toLowerCase() === selectedGuild)
-
-  if (!user && urlGuild) { // Если пользователь не авторизован но перешёл по правильной ссылке возвращам название гильдии
-    return {
-      nameOfGuild: urlGuild.name,
-      idOfGuild: urlGuild.id,
-      avatarOfGuild: urlGuild.avatar
-    };
-  }
 
   if (!user) {
     return false;
   }
 
-  const userGuild = user.guilds ? user.guilds.find(guildObj => guildObj.nameOfGuild.toLowerCase() === selectedGuild) : false;
-
-  if (whatGuild === undefined) { // Если заходим на ссылку без гильды
-    return {
-      id: user.id,
-      avatar: user.avatar,
-      guilds: user.guilds,
-      visibleName: user.displayName,
-      banner_color: user.banner_color,
-      isCreator: user.isCreator
-    };
+  if (user) {
+    Object.assign(user, user[user.lastLogin]);
+    const { token, secure, ...rest } = user;
+    return rest;
   }
 
-  if (userGuild) {
-    const visibleName = userGuild.guildName || user.displayName;
-
-    return {
-      id: user.id,
-      avatar: user.avatar,
-      globalName: user.global_name,
-      visibleName: visibleName,
-      isGuildMember: userGuild.isGuildMember,
-      isAdmin: userGuild.isAdmin,
-      isAllianceMember: userGuild.isAllianceMember,
-      isModerator: userGuild.isModerator,
-      isRaidLeader: userGuild.isRaidLeader,
-      balance: userGuild.balance,
-      nameOfGuild: userGuild.nameOfGuild,
-      idOfGuild: userGuild.idOfGuild,
-      avatarOfGuild: urlGuild.avatar
-    };
-  }
-
-  if (urlGuild) {
-    return {
-      id: user.id,
-      avatar: user.avatar,
-      visibleName: user.global_name || user.username + '#' + user.discriminator,
-      isGuildMember: user.isGuildMember,
-      isAdmin: user.isAdmin,
-      isAllianceMember: user.isAllianceMember,
-      isModerator: user.isModerator,
-      isRaidLeader: user.isRaidLeader,
-      balance: 0,
-      nameOfGuild: urlGuild ? urlGuild.name : '',
-      idOfGuild: urlGuild ? urlGuild.id : '',
-      avatarOfGuild: urlGuild.avatar
-    };
-  }
   log("ПРОИЗОШЛА ХУЙНЯ, ПОЛЬЗОВАТЕЛЬ НАЕБАЛ СИСТЕМУ!", 'r');
-  return false;
 }
 
 function getLanguagePack(languagePack = "en") {
@@ -88,35 +33,41 @@ function getLanguagePack(languagePack = "en") {
   return lang;
 }
 
-function userAuthentication(params) {
+function userAuthentication(p) {
+  const loginSource = p.from;
+  const userPayload = p.data;
   try {
-    if (params.data.error || params.data.message) return;
+    if (userPayload.error || userPayload.message) return { error: "Error during authorization" };
 
-    const token = generateToken(32);
+    const token = generateToken(64);
     const database = getDatabase();
-    const userPayload = params.data;
-    const userDatabase = database.users.find(user => user.email === userPayload.email);
+    let userDatabase;
+    if (userPayload.email) {
+      userDatabase = database.users.find(user => user[loginSource].email === userPayload.email);
+    } else {
+      userDatabase = database.users.find(user => user[loginSource].id === (userPayload.sub || userPayload.id))
+    }
 
-    let avatar = false;
+    let avatar = undefined;
 
-    if (params.from === "google") {
+    if (loginSource === "google" && userPayload.picture) {
       avatar = userPayload.picture
-    } else if (params.from === "discord") {
-      avatar = "https://cdn.discordapp.com/avatars/" + userPayload.id + "/" + userPayload.avatar + ".png"
-    }
-    
-    const userToSave = {
-      id: { [params.from]: userPayload.sub || userPayload.id },
-      email: userPayload.email || userDatabase.email,
-      avatar: avatar || userDatabase.avatar,
-      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
-      locale: userPayload.locale || false,
-      token: token,
-      lastLogin: params.from
+    } else if (loginSource === "discord" && userPayload.avatar) {
+      avatar = `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`
     }
 
-    if (!userDatabase?.mainToken) {
-      userPayload.mainToken = generateToken(64);
+    const userToSave = {
+      lastLogin: lastLogin,
+      token: token,
+    }
+
+    userToSave[loginSource] = {
+      id: userPayload.sub || userPayload.id,
+      email: userPayload.email || undefined,
+      avatar: avatar,
+      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
+      locale: userPayload.locale || "en",
+      token: token
     }
 
     if (userDatabase) {
@@ -124,32 +75,21 @@ function userAuthentication(params) {
     } else {
       database.users.push(userToSave);
     }
-    saveDatabase(database);
-    setStatistics(`lang${userToSave.locale}`);
 
-    return { lang: userToSave.locale, token };
+    saveDatabase(database);
+    return { lang: userToSave[loginSource].locale, token };
   } catch (error) {
     console.log(error);
   }
 }
 
+// users.find(user => {
+//   (user[user.lastLogin].id === id) ||
+//   (user[user.lastLogin].email === email)
+// });
 
 function generateToken(sumbolsLong) {
   return crypto.randomBytes(sumbolsLong).toString('hex');
-}
-
-function getDiscordLanguagePack(guildId) {
-  const database = getDatabase();
-  const languagePack = database.guilds.find(guildObj => guildObj.guildId === guildId);
-  let lang;
-
-  try {
-    lang = require(`./static/lang/${languagePack.guildMainLanguage}.json`);
-  } catch (err) {
-    lang = require(`./static/lang/en.json`);
-  }
-
-  return lang;
 }
 
 function saveNewGuildLanguage(lang, guildId) {
@@ -525,8 +465,6 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
-  getDiscordLanguagePack,
-  getLicense,
   saveNewGuildLanguage,
   getUserDataByToken,
   userAuthentication,
@@ -541,6 +479,7 @@ module.exports = {
   saveDatabase,
   getDatabase,
   formatDate,
+  getLicense,
   ftpUpload,
   log,
 };

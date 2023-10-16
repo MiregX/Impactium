@@ -1,8 +1,13 @@
 # Logs
 logs
 node_modules
+static/images/*
 *.log
 *.json
+*.png
+*.webp
+*.jpg
+*.jpeg
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
