@@ -2,20 +2,22 @@ const fs = require('fs');
 const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
-const session = require('express-session');
-// const session = require('express-session');
-// const cookieParser = require('cookie-parser');
 const { userAuthentication, log } = require('../utils');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const router = express.Router();
 
-router.use(session({
-  secret: discordClientSecret,
-  resave: false,
-  saveUninitialized: false,
-}));
+router.use(passport.initialize());
+router.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 passport.use(new GoogleStrategy({
   clientID: googleClientID,
@@ -26,21 +28,24 @@ passport.use(new GoogleStrategy({
   done(null, profile);
 }));
 
-router.use(passport.initialize());
-router.use(passport.session());
-
 router.get('/login/google', passport.authenticate('google'));
 
-router.get('/callback/google', passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-}), (request, response) => {
-  const authResult = userAuthentication({data: request.user._json, from: "google"});
-  response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-  response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+router.get('/callback/google', passport.authenticate('google'), (request, response) => {
+  try {
+    const authResult = userAuthentication({data: request.user._json, from: "google"});
+    response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
+    response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
 
-  const previousPage = request.cookies.previousPage || '/';
-  response.redirect(previousPage);
+    const previousPage = request.cookies.previousPage || '/';
+    response.redirect(previousPage);
+  } catch (error) {
+    request.session.error_message = error.name;
+    response.redirect('https://impactium.fun/error');
+  }
+});
+
+router.get('/login/discord', (request, response) => {
+  response.redirect('https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2Foauth2%2Fcallback%2Fdiscord&response_type=code&scope=identify%20email');
 });
 
 router.get('/callback/discord', (request, response) => {
@@ -60,27 +65,25 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
+          log(data.body, 'y');
           const authResult = userAuthentication({data: data.body, from: "discord"});
           response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
           response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
 
           const previousPage = request.cookies.previousPage || '/';
           return response.redirect(previousPage);
-          setStatistics('logins');
         })
         .catch((error) => {
-          response.redirect('/logout');
           console.log(error);
+          request.session.error_message = error.name;
+          response.redirect('https://impactium.fun/error');
         });
     })
     .catch((error) => {
-      response.redirect('/logout');
       console.log(error);
+      request.session.error_message = error.name;
+      response.redirect('https://impactium.fun/error');
     });
-});
-
-router.get('/login/discord', (request, response) => {
-  response.redirect('https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2Foauth2%2Fcallback%2Fdiscord&response_type=code&scope=identify%20email');
 });
 
 module.exports = router;

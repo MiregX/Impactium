@@ -64,5 +64,6 @@
   "phpSave": "Guardar",
   "phpRender": "Renderizar",
   "phpDescription": "La página renderizada se mostrará aquí",
-  "closeFullScreenMode": "Cerrar modo de pantalla completa"
+  "closeFullScreenMode": "Cerrar modo de pantalla completa",
+  "backToMain": "Volver a la página principal"
 }

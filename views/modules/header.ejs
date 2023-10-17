@@ -19,7 +19,7 @@ header-background {
   left: 0%;
   position: fixed;
   display: flex;
-  background: linear-gradient(180deg, rgba(15,22,30,0.3) 0%, rgba(29,42,58,0.3) 100%);
+  background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
   backdrop-filter: blur(15px);
 }
 .nav {
@@ -111,7 +111,7 @@ header > img {
 .user {
   color: #fff;
   font-weight: 500;
-  width: 120px;
+  min-width: 120px;
   height: 40px;
   border-radius: 20px;
   background: var(--c-24);
@@ -128,30 +128,16 @@ header > img {
   height: 38px;
   width: 38px;
   pointer-events: none;
-  margin-left: 1px;
 }
 .user p {
-  margin-right: 1px;
-  width: 81px;
+  min-width: 50px;
+  padding: 0 15px;
   text-align: center;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.user:hover p {
-  width: 0px;
-  overflow: hidden;
-  opacity: 0;
-}
-.user:hover,
-.user.active {
-  background: <% if (user.banner_color !== null) { %><%= user.banner_color %><% } %>;
-}
-.user.active p {
-  width: 0px;
-  overflow: hidden;
-  opacity: 0;
+  white-space: no-wrap;
 }
 header .logo {
   height: 60px;

@@ -65,5 +65,6 @@
   "phpSave": "Save",
   "phpRender": "Render",
   "phpDescription": "The rendered page will be displayed here",
-  "closeFullScreenMode": "Close full-screen mode"
+  "closeFullScreenMode": "Close full-screen mode",
+  "backToMain": "Back to main"
 }

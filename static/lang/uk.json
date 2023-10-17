@@ -64,5 +64,6 @@
   "phpSave": "Зберегти",
   "phpRender": "Рендер",
   "phpDescription": "Відрендерена сторінка буде відображена тут",
-  "closeFullScreenMode": "Закрити повноекранний режим"
+  "closeFullScreenMode": "Закрити повноекранний режим",
+  "backToMain": "Повернутися на головну"
 }

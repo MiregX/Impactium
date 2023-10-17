@@ -6,6 +6,7 @@ const vhost = require('vhost');
 const utils = require('./utils');
 const express = require('express');
 const telegram = require('./telegram');
+const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
 const { getUserDataByToken, getLanguagePack, log, setStatistics } = require('./utils');
@@ -13,6 +14,11 @@ const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_
 
 const app = express();
 
+app.use(session({
+  secret: discordClientSecret,
+  resave: false,
+  saveUninitialized: false,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -62,7 +68,7 @@ app.get('/login', (request, response) => {
     
   } catch (err) {
     console.error(err);
-    return response.render('error.ejs', { code: 500, message: 'Internal Server Error'});
+    response.render('error.ejs', { code: 500, message: 'Internal Server Error'});
   }
 });
 
@@ -71,6 +77,11 @@ app.get('/logout', (request, response) => {
   response.clearCookie('token', { domain: '.impactium.fun' });
   response.redirect('/');
   setStatistics('logouts');
+});
+
+app.get('/error', (request, response) => {
+  const lang = getLanguagePack(request.cookies.lang);
+  response.render('error.ejs', { lang, code: 500, message: request.session.error_message || "Internal Server Error"})
 });
 
 app.get('/lang/:lang', (request, response) => {

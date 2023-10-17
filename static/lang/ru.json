@@ -64,5 +64,6 @@
   "phpSave": "Сохранить",
   "phpRender": "Отобразить",
   "phpDescription": "Отрендеренная страница будет отображена здесь",
-  "closeFullScreenMode": "Закрыть полноэкранный режим"
+  "closeFullScreenMode": "Закрыть полноэкранный режим",
+  "backToMain": "Вернуться на главную"
 }

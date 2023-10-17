@@ -16,11 +16,9 @@ function getUserDataByToken(token) {
 
   if (user) {
     Object.assign(user, user[user.lastLogin]);
-    const { token, secure, ...rest } = user;
+    const { token, secure, discord, google, ...rest } = user;
     return rest;
   }
-
-  log("ПРОИЗОШЛА ХУЙНЯ, ПОЛЬЗОВАТЕЛЬ НАЕБАЛ СИСТЕМУ!", 'r');
 }
 
 function getLanguagePack(languagePack = "en") {
@@ -43,16 +41,24 @@ function userAuthentication(p) {
     const database = getDatabase();
     let userDatabase;
     if (userPayload.email) {
-      userDatabase = database.users.find(user => user[loginSource].email === userPayload.email);
+      userDatabase = database.users.find(user =>
+        user[loginSource]?.email === userPayload.email ||
+        user.google?.email === userPayload.email ||
+        user.discord?.email === userPayload.email
+      );
     } else {
-      userDatabase = database.users.find(user => user[loginSource].id === (userPayload.sub || userPayload.id))
+      userDatabase = database.users.find(user =>
+        user[loginSource]?.id === (userPayload.sub || userPayload.id) ||
+        user.google?.id === userPayload.sub ||
+        user.discord?.id === userPayload.id
+      );
     }
 
     let avatar = undefined;
 
-    if (loginSource === "google" && userPayload.picture) {
+    if (userPayload.picture) {
       avatar = userPayload.picture
-    } else if (loginSource === "discord" && userPayload.avatar) {
+    } else if (userPayload.avatar) {
       avatar = `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`
     }
 
@@ -66,8 +72,7 @@ function userAuthentication(p) {
       email: userPayload.email || undefined,
       avatar: avatar,
       displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
-      locale: userPayload.locale || "en",
-      token: token
+      locale: userPayload.locale || "en"
     }
 
     if (userDatabase) {
@@ -75,7 +80,7 @@ function userAuthentication(p) {
     } else {
       database.users.push(userToSave);
     }
-
+    log(database.users, 'g')
     saveDatabase(database);
     return { lang: userToSave[loginSource].locale, token };
   } catch (error) {
