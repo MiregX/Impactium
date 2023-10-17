@@ -65,7 +65,6 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
-          log(data.body, 'y');
           const authResult = userAuthentication({data: data.body, from: "discord"});
           response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
           response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });

@@ -6,19 +6,38 @@ const crypto = require('crypto');
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-function getUserDataByToken(token) {
+function getUserDataByToken(token, guildName = false) {
   const database = getDatabase();
   const user = database.users.find(user => user.token === token);
+  let result;
 
   if (!user) {
-    return false;
+    result = false;
   }
 
   if (user) {
     Object.assign(user, user[user.lastLogin]);
     const { token, secure, discord, google, ...rest } = user;
-    return rest;
+    result = rest;
   }
+
+  if (guildName) {
+    const foundGuild = database.guilds.find(guild => guild.name.toLowerCase() === guildName[0].toLowerCase());
+
+    if (foundGuild) {
+      if (!result) {
+        result = {};
+      }
+      result.guild = {
+        id: foundGuild.id,
+        hash: foundGuild.hash,
+        name: foundGuild.name,
+        avatar: foundGuild.avatar
+      };
+    }
+  }
+
+  return result
 }
 
 function getLanguagePack(languagePack = "en") {
@@ -80,7 +99,6 @@ function userAuthentication(p) {
     } else {
       database.users.push(userToSave);
     }
-    log(database.users, 'g')
     saveDatabase(database);
     return { lang: userToSave[loginSource].locale, token };
   } catch (error) {
@@ -433,7 +451,6 @@ async function getBattleBoard(params = false) {
         
 
         const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).skip(totalRecords - 500).toArray() : [];
-        log(result);
         return result;
       }
     }

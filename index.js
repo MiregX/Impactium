@@ -44,7 +44,7 @@ app.get('/', (request, response) => {
     setStatistics('mainWebJoins');
     
   } catch (error) {
-    log(error, 'r');
+    console.log(error, 'r');
     return response.status(500).send('Internal Server Error');
   }
 });
@@ -113,5 +113,5 @@ server.listen(80, () => {
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
-    log(`Тестовый сервер запущен`, 'y'); 
+  log(`Тестовый сервер запущен`, 'y'); 
 })

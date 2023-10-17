@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="<%= user.avatarOfGuild %>" type="image/x-icon">
+  <link rel="shortcut icon" href="<%= user.guild.avatar %>" type="image/x-icon">
   <title><%= user.nameOfGuild %></title>
   <link rel="stylesheet" href="static/style/reset.css">
   <link rel="stylesheet" href="static/style/preloader.css?v=11">
@@ -116,7 +116,7 @@ header div {
 }
 
 .title h1::after {
-  content: "<%= user.nameOfGuild %>";
+  content: "<%= user.guild.name %>";
   color: white;
   position: absolute;
   left: 0;
@@ -403,8 +403,8 @@ language .toggler img {
 
   <header>
     <div class="title" onclick="toHub()">
-      <img src="<%= user.avatarOfGuild %>">
-      <h1 id="title" ><%= user.nameOfGuild %></h1>
+      <img src="<%= user.guild.avatar %>">
+      <h1 id="title" ><%= user.guild.name %></h1>
     </div>
     <% if (user.id) { %>
     <div class="on-login">

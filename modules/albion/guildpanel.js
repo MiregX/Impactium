@@ -12,8 +12,8 @@ router.get('/', async (request, response) => {
     const lang = getLanguagePack(request.cookies.lang);
 
     const indexData = {
-      battleboardStats: await getBattleBoardStats(user.nameOfGuild),
-      deadliests: await getDeadliests(user.nameOfGuild),
+      battleboardStats: await getBattleBoardStats(user.guild.name),
+      deadliests: await getDeadliests(user.guild.name),
       lang
     }
 
