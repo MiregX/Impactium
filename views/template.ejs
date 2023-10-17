@@ -25,6 +25,12 @@
       width: 100vw;
       overflow-x: hidden;
     }
+    main {
+      display: flex;
+      flex-direction: column;
+      padding-top: 80px;
+      flex: 1;
+    }
     .preloader {
       background: var(--c-16);
     }
@@ -36,6 +42,8 @@
   <%- include('modules/preloader.ejs') %>
   <%- include('modules/language.ejs') %>
   <%- include('modules/header.ejs', { user, lang }) %>
-  <%- body %>
+  <main>
+    <%- body %>
+  </main>
 </body>
 </html>

@@ -20,7 +20,7 @@ router.get('/', async (request, response) => {
     const indexTemplate = fs.readFileSync('views/albion/index.ejs', 'utf8');
     const body = ejs.render(indexTemplate, indexData);
 
-    response.render('albion/template.ejs', {
+    response.render('template.ejs', {
       body,
       user,
       lang

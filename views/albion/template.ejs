@@ -389,62 +389,10 @@ language .toggler img {
 }
 </style>
 
-<language>
-  <div class="list">
-    <% const availableLanguages = ['en', 'uk', 'ru', 'it', 'is']; %>
-    <% for (const langCode of availableLanguages) { %>
-      <a href="/lang/<%= langCode %>"><img src="https://api.impactium.fun/langs/<%= langCode %>.png"></a>
-    <% } %>
-  </div>
-  <button class="toggler center invert" id="toggleLanguageChooseButton" onclick="toggleLanguageChoosePanel()">
-    <img src="https://api.impactium.fun/ux/earth-globe.svg">
-  </button>
-</language>
+<%- include('../modules/language.ejs') %>
+<%- include('../modules/preloader.ejs') %>
 
-  <header>
-    <div class="title" onclick="toHub()">
-      <img src="<%= user.guild.avatar %>">
-      <h1 id="title" ><%= user.guild.name %></h1>
-    </div>
-    <% if (user.id) { %>
-    <div class="on-login">
-      <div class="gold-button user-info" onclick="userinfo('<%= user.id %>')">
-        <div class="avatar">
-          <% if (user.avatar) { %>
-            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar" width="100" height="100" onerror="this.src='https://api.impactium.fun/logo/asset.png'">
-          <% } %>
-        </div>
-        <div class="user-info-text-wrapper"><p><%= user.visibleName %></p></div>
-        <div class="dropdown-list center">
-          <% if (user.isRaidLeader) { %>
-            <button class="permission">
-              <img src="https://api.impactium.fun/svg/rl-icon.svg">
-              <a href="/raidleader"><%= lang.rlpanel %></a>
-            </button>
-          <% } %>
-          <% if (user.isModerator) { %>
-            <button class="permission">
-              <img src="https://api.impactium.fun/svg/moder-icon.svg">
-              <a href="/moder"><%= lang.mdpanel %></a>
-            </button>
-          <% } %>
-          <% if (user.isAdmin) { %>
-            <button class="permission">
-              <img src="https://api.impactium.fun/svg/admin-icon.svg">
-              <a href="/management"><%= lang.adpanel %></a>
-            </button>
-          <% } %>
-        </div>
-      </div>
-      <div id="logout" class="gold-button">
-        <a href="/logout"><%= lang.logout %></a>
-      </div>
-    <% } else { %>
-      <button id="auth" onclick="auth()" class="gold-button">
-        <a href="/login"><%= lang.login %></a>
-      </button>
-    <% } %>
-  </header>
+<%- include('../modules/header.ejs', { user, lang }) %>
   <main>
     <%- body %>
   </main>

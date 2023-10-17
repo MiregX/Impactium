@@ -204,6 +204,16 @@ header .logo {
 header {
   padding: 0 2.5%;
   width: calc(100vw - 5%);
+  grid-template-columns: repeat(2, 1fr);
+}
+header > img {
+  height: 7vw;
+}
+.nav {
+  display: none;
+}
+.login-wrapper {
+  grid-column: 2 / 3;
 }
 .user {
   height: 7vw;
@@ -223,7 +233,6 @@ header {
 .temp-button {
   height: 7vw;
   width: 22vw;
-  display: none;
 }
 .temp-button .circle {
   height: 7vw;

@@ -1,10 +1,4 @@
 <style>
-main {
-  display: flex;
-  flex-direction: column;
-  padding-top: 80px;
-}
-
 .panel {
   height: calc(100vh - 80px);
 }
@@ -152,18 +146,20 @@ main {
 }
 .about-us {
   padding: 0;
-  padding-top: 40px;
 }
 .about-us .main-text {
-  font-size: 5vw;
+  font-size: 7vw;
+  text-align: center;
+  white-space: no-wrap;
 }
 .about-us .support-text {
-  font-size: 3vw;
+  font-size: 5vw;
+  width: 90%;
 }
 .panel.main {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
 }
 .about-us {
@@ -191,44 +187,39 @@ main {
 .unique-guild:hover {
   width: unset;
 }
-body {
-  min-height: 120vh;
-}
 }
 header {
   transform: translateY(-100%);
   opacity: 0;
 }
 </style>
-<main>
-  <panel class="panel main">
-    <div class="about-us">
-      <div class="center flex-dir-column">
-        <p class="main-text anim-onload"><%= lang.joinToUs %></p>
-        <p class="support-text anim-onload"><%= lang.joinToUsDesc %></p>
-      </div>
+<panel class="panel main">
+  <div class="about-us">
+    <div class="center flex-dir-column">
+      <p class="main-text anim-onload"><%= lang.joinToUs %></p>
+      <p class="support-text anim-onload"><%= lang.joinToUsDesc %></p>
     </div>
-    <div class="guilds-list anim-onload">
-      <div class="background"><img src="https://api.impactium.fun/ui/diamond-full-pattern.svg"></div>
-      <div class="guild-list-wrapper flex-dir-column">
-        <h5><%= lang.ourPartners %></h5>
+  </div>
+  <div class="guilds-list anim-onload">
+    <div class="background"><img src="https://api.impactium.fun/ui/diamond-full-pattern.svg"></div>
+    <div class="guild-list-wrapper flex-dir-column">
+      <h5><%= lang.ourPartners %></h5>
 
-          <% Object.values(nav.guilds).forEach(guild => { %>
-            <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.action %>')">
-              <div class="wrapper center-v flex gap">
-                <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
-                <% if (guild.logoMobile) { %>
-                  <img class="logoMobile" src="<%= guild.logoMobile %>">
-                <% } %>
-                <h2><%= guild.name %></h2>
-              </div>
-              <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
+        <% Object.values(nav.guilds).forEach(guild => { %>
+          <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.action %>')">
+            <div class="wrapper center-v flex gap">
+              <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
+              <% if (guild.logoMobile) { %>
+                <img class="logoMobile" src="<%= guild.logoMobile %>">
+              <% } %>
+              <h2><%= guild.name %></h2>
             </div>
-          <% }); %>
-      </div>
+            <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
+          </div>
+        <% }); %>
     </div>
-  </panel>
-</main>
+  </div>
+</panel>
 <script>
   $(window).on('load', function() {
   const header = document.querySelector('header');
