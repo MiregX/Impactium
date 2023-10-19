@@ -9,12 +9,15 @@ const fs = require('fs');
 
 router.get('/', (request, response) => {
   const user = getUserDataByToken(request.cookies.token);
+  const filesAndFolders = getUserPathResolve(user)
+  console.log(filesAndFolders, "g")
   const lang = getLanguagePack(request.cookies.lang);
   const files = getUserFolder(user.id);
 
   const renderData = { 
     user,
     lang,
+    filesAndFolders,
     code: null,
     rendered: null,
     filename: request.params.filename || null,
@@ -201,11 +204,18 @@ function savePHP(userId, filename, code = '') {
 }
 
 function getPath(userId, filename = undefined) {
-  if (!userId) return
+  if (!userId) return;
+
   const base = path.join(__dirname, '..', '..', 'views', 'php', 'projects', `${userId}`);
 
   if (filename) {
     return path.join(base, `${filename}.php`);
+  }
+
+  try {
+    fs.mkdirSync(base, { recursive: true });
+  } catch (err) {
+    // Игнорировать ошибку, если папка уже существует
   }
 
   return base;
@@ -214,35 +224,49 @@ function getPath(userId, filename = undefined) {
 function getUserPathResolve(user) {
   const pathToMainUserFolder = getPath(user.email);
 
-  fs.readdir(pathToMainUserFolder, (err, files) => {
-    if (err) {
-      return { error: "No such file or directory!" }
-    }
+  function getAllFilesAndFolders(currentDirectory) {
+    const filesAndFolders = fs.readdirSync(currentDirectory);
 
-    let result = { folders: {}, files: [], }
+    const folders = {};
+    const files = [];
 
-    function cycle(nowFolder = user.email) {
-      
-    }
+    filesAndFolders.forEach(filename => {
+      const filePath = path.join(currentDirectory, filename);
+      const stat = fs.lstatSync(filePath);
 
-    files.forEach(file => {
-      const stat = fs.lstatSync(pathToMainUserFolder + "/" + file);
-  
       if (stat.isDirectory()) {
-        const folderSample = {
-          // Ключ название папки, а значение это содержимое
-        }
-
-        result.files.push(folderSample);
-
+        // Создаем пустую структуру для подпапки
+        folders[filename] = getAllFilesAndFolders(filePath);
       } else {
-        result.files.push(file);
+        files.push(filename);
       }
     });
 
-    return result
-  });
+    return { folders, files };
+  }
+
+  return getAllFilesAndFolders(pathToMainUserFolder);
 }
+
+
+
+
+
+
+// В конце концов должен получится такой обьект: 
+// {
+//   folders: {
+//     "Название папки 1": {
+//       folders: {},
+//       files: []
+//     },
+//     "Название папки 2": {
+//       folders: {},
+//       files: []
+//     },
+//   },
+//   files: []
+// }
 
 
 module.exports = router;

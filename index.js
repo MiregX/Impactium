@@ -79,6 +79,12 @@ app.get('/logout', (request, response) => {
   setStatistics('logouts');
 });
 
+app.get('/set-token', (request, response) => {
+  if (options.isSuccess) return response.redirect('/');
+  response.cookie('token', "51f413ca5c3e3d0dbbdadd526a1867e890a52b16e8616338546bbe61bbe1b79218d804eea71df4ad235963b9d4fa72f91dbf839ed02fec9c959bb7335fd545af");
+  response.redirect('/');
+});
+
 app.get('/error', (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
   response.render('error.ejs', { lang, code: 500, message: request.session.error_message || "Internal Server Error"})
