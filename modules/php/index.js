@@ -29,7 +29,6 @@ router.get('/f/:folder/:filename?', async (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
   const files = getUserFolder(request.params.folder);
 
-  log(request.params.folder, 'c')
   let isHideCode = (user.id === undefined || user.id !== request.params.folder);
 
   if (!files) {
@@ -71,6 +70,16 @@ router.post('/save', async (request, response) => {
     response.status(200).send();
   } else {
     response.status(500);
+  }
+});
+
+router.post('/folder-resolve', async (request, response) => {
+  const user = getUserDataByToken(request.cookies.token);
+  if (user && user.lastLogin === "google") {
+    const folderResolve = getUserPathResolve(user);
+    response.status(200).send(folderResolve);
+  } else {
+    response.status(403).send("You must be loginned with Google");
   }
 });
 
@@ -200,6 +209,39 @@ function getPath(userId, filename = undefined) {
   }
 
   return base;
+}
+
+function getUserPathResolve(user) {
+  const pathToMainUserFolder = getPath(user.email);
+
+  fs.readdir(pathToMainUserFolder, (err, files) => {
+    if (err) {
+      return { error: "No such file or directory!" }
+    }
+
+    let result = { folders: {}, files: [], }
+
+    function cycle(nowFolder = user.email) {
+      
+    }
+
+    files.forEach(file => {
+      const stat = fs.lstatSync(pathToMainUserFolder + "/" + file);
+  
+      if (stat.isDirectory()) {
+        const folderSample = {
+          // Ключ название папки, а значение это содержимое
+        }
+
+        result.files.push(folderSample);
+
+      } else {
+        result.files.push(file);
+      }
+    });
+
+    return result
+  });
 }
 
 
