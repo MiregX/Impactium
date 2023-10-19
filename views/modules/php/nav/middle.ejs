@@ -1,41 +1,55 @@
 <style>
-        h2 {
-      margin-top: 0;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    li {
-      margin: 5px 0;
-    }
-    .file {
-      color: #0366d6;
-    }
-    p {
-      margin: 0;
-    }
+  folder {
+    height: 0px;
+    display: flex;
+    flex-direction: column;
+  }
+  content {
+    padding-left: 10px;
+  }
+  content > otherFolders > folder {
+    height: 0px;
+  }
+  content.active > otherFolders > folder {
+    height: unset;
+  }
 </style>
 <% function renderFolder(folderData) { %>
-    <h2><%= folderData.folderName %></h2>
-    <% if (folderData.files.length > 0) { %>
-      <ul>
-        <% folderData.files.forEach(file => { %>
-          <li><%= file %></li>
-        <% }) %>
-      </ul>
-    <% } else if (folderData.files.length === 0 && Object.keys(folderData.folders).length === 0) { %>
-      <p>Папка пустая</p>
-    <% } %>
-    <% if (Object.keys(folderData.folders).length > 0) { %>
-      <% for (const subFolderName in folderData.folders) { %>
-        <%= renderFolder({ folderName: subFolderName, ...folderData.folders[subFolderName] }) %>
+  <folder>
+    <name onclick="toggleFolderVisibility(this)"><%= folderData.folderName %></name>
+    <content>
+      <% if (Object.keys(folderData.folders).length > 0) { %>
+        <otherFolders>
+          <% for (const subFolderName in folderData.folders) { %>
+            <%= renderFolder({ folderName: subFolderName, ...folderData.folders[subFolderName] }) %>
+          <% } %>
+        </otherFolders>
       <% } %>
-    <% } %>
-  <% } %>
-  
-  <nav class="flex flex-dir-column">
-    <%= renderFolder({ folderName: 'Root', ...filesAndFolders }) %>
-  </nav>
-  
+      <% if (folderData.files.length > 0) { %>
+        <files>
+          <% folderData.files.forEach(file => { %>
+            <file> • <%= file %></file>
+          <% }) %>
+        </files>
+      <% } else if (folderData.files.length === 0 && Object.keys(folderData.folders).length === 0) { %>
+      <% } %>
+    </content>
+  </folder>
+<% } %>
+
+<%= renderFolder({ folderName: 'My Project', ...filesAndFolders }) %>
+
+<script>
+function toggleFolderVisibility(block) {
+  const folder = block.parentElement;
+  const content = folder.querySelector('content');
+
+  if (content.classList.contains('active')) {
+    content.classList.remove('active');
+  } else {
+    content.classList.add('active');
+  }
+}
+</script>
+
   

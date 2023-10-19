@@ -224,7 +224,7 @@ function getPath(userId, filename = undefined) {
 function getUserPathResolve(user) {
   const pathToMainUserFolder = getPath(user.email);
 
-  function getAllFilesAndFolders(currentDirectory) {
+  function getAllFilesAndFolders(currentDirectory = pathToMainUserFolder) {
     const filesAndFolders = fs.readdirSync(currentDirectory);
 
     const folders = {};
@@ -235,7 +235,6 @@ function getUserPathResolve(user) {
       const stat = fs.lstatSync(filePath);
 
       if (stat.isDirectory()) {
-        // Создаем пустую структуру для подпапки
         folders[filename] = getAllFilesAndFolders(filePath);
       } else {
         files.push(filename);
