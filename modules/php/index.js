@@ -92,6 +92,11 @@ router.post('/open', async (request, response) => {
     const folder = request.body.folder || user.id
     let isHideCode = request.body.folder !== user.id;
     let result = await getPHP(folder, request.body.filename, isHideCode);
+
+    if (result.error_code) {
+      response.redirect("/");
+    }
+
     result.userId = folder;
     response.status(200).send(result);
   } else {
@@ -109,29 +114,23 @@ router.post('/create', async (request, response) => {
   }
 });
 
-router.post('/delete', async (request, response) => {
+router.post('/delete', async (request, response) => { // 
   const user = getUserDataByToken(request.cookies.token);
-  if (user.id) {
-    const files = getUserFolder(user.id);
-    
-    if (files && files.includes(request.body.filename)) {
-      const filePath = getPath(user.id, request.body.filename);
+  const files = getUserFolder(request.body.folderResolve);
+  
+  if (!user.id) return response.status(401).send("You must be logged in");
+  if (!files || !files.includes(request.body.filename)) return response.status(403).send("You can't delete files that are not yours");
 
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(err);
-          response.status(500).send("Failed to delete the file");
-        } else {
-          response.status(200).send("File deleted successfully");
-        }
-      });
+  const filePath = getPath(user.id, request.body.folderResolve);
 
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      response.status(500).send("Failed to delete the file");
     } else {
-      response.status(403).send("You can't delete files that are not yours");
+      response.status(200).send("File deleted successfully");
     }
-  } else {
-    response.status(401).send("You must be logged in");
-  }
+  });
 });
 
 async function renderPHP(code, userId, filename = 'default') {
@@ -144,34 +143,20 @@ async function renderPHP(code, userId, filename = 'default') {
 
 async function getPHP(userId, filename, isHideCode = false) {
   if (!userId) return
-  const folder = getPath(userId);
   const filePath = getPath(userId, filename);
   const files = getUserFolder(userId);
 
   if (!files.includes(filename)) {
-    return { error: "This file is disappeared 🤔" };
+    return { error_code: 404, error: "This file is disappeared 🤔" };
   }
 
   const code = isHideCode ? "" : fs.readFileSync(filePath, 'utf-8');
 
   try {
-    const { stdout, stderr } = await exec(`php "${filePath}"`);
+    const { stdout } = await exec(`php "${filePath}"`);
     return { code, rendered: stdout };
   } catch (error) {
-    const errorText = error.stdout || error.stderr;
-
-    const startIndex = errorText.indexOf("Fatal error:");
-    const endIndex = errorText.indexOf(" in ");
-    const lineIndex = errorText.indexOf(" on line ");
-
-    if (startIndex !== -1 && endIndex !== -1 && lineIndex !== -1) {
-      const firstPart = errorText.substring(startIndex, endIndex).trim();
-      const secondPart = errorText.substring(lineIndex).trim();
-      const errorMessage = firstPart + " " + secondPart;
-      return { code, error: errorMessage };
-    } else {
-      return { code, error: "An error occurred while trying to find the error reason 🤡" };
-    }
+    return getErrorObjectFromStdout(error);
   }
 }
 
@@ -247,25 +232,20 @@ function getUserPathResolve(user) {
   return getAllFilesAndFolders(pathToMainUserFolder);
 }
 
+function getErrorObjectFromStdout(error) {
+  const errorText = error.stdout || error.stderr;
+  const startIndex = errorText.indexOf("Fatal error:");
+  const endIndex = errorText.indexOf(" in ");
+  const lineIndex = errorText.indexOf(" on line ");
 
+  if (startIndex !== -1 && endIndex !== -1 && lineIndex !== -1) {
+    const firstPart = errorText.substring(startIndex, endIndex).trim();
+    const secondPart = errorText.substring(lineIndex).trim();
 
-
-
-
-// В конце концов должен получится такой обьект: 
-// {
-//   folders: {
-//     "Название папки 1": {
-//       folders: {},
-//       files: []
-//     },
-//     "Название папки 2": {
-//       folders: {},
-//       files: []
-//     },
-//   },
-//   files: []
-// }
-
+    return { code, error: firstPart + " " + secondPart };
+  } else {
+    return { code, error: "An error occurred while trying to find the error reason 🤡" };
+  }
+}
 
 module.exports = router;

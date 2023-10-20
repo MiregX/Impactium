@@ -1,40 +1,36 @@
 <style>
-  folder {
-    height: 0px;
-    display: flex;
-    flex-direction: column;
-  }
-  content {
+  .content {
     padding-left: 10px;
   }
-  content > otherFolders > folder {
+  .content > .folders > .folder {
     height: 0px;
   }
-  content.active > otherFolders > folder {
+  .content.active > .folders > .folder {
     height: unset;
   }
+  .content > 
 </style>
 <% function renderFolder(folderData) { %>
-  <folder>
-    <name onclick="toggleFolderVisibility(this)"><%= folderData.folderName %></name>
-    <content>
+  <div class="folder">
+    <button onclick="toggleFolderVisibility(this)"><%= folderData.folderName %></button>
+    <div class="content">
       <% if (Object.keys(folderData.folders).length > 0) { %>
-        <otherFolders>
+        <div class="folders">
           <% for (const subFolderName in folderData.folders) { %>
             <%= renderFolder({ folderName: subFolderName, ...folderData.folders[subFolderName] }) %>
           <% } %>
-        </otherFolders>
+        </div>
       <% } %>
       <% if (folderData.files.length > 0) { %>
-        <files>
+        <div class="files">
           <% folderData.files.forEach(file => { %>
-            <file> • <%= file %></file>
+            <button><%= file %></button>
           <% }) %>
-        </files>
+        </div>
       <% } else if (folderData.files.length === 0 && Object.keys(folderData.folders).length === 0) { %>
       <% } %>
-    </content>
-  </folder>
+    </div>
+  </div>
 <% } %>
 
 <%= renderFolder({ folderName: 'My Project', ...filesAndFolders }) %>
