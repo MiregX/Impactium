@@ -25,23 +25,41 @@ passport.use(new GoogleStrategy({
   callbackURL: `https://impactium.fun/oauth2/callback/google`,
   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
 }, async (accessToken, refreshToken, profile, done) => {
-  done(null, profile);
+  try {
+    console.log("Итерация профиля");
+    done(null, profile)
+  } catch (error) {
+    console.log("Итерация ошибки профиля");
+    done(error)
+  }
 }));
+
+router.use((err, req, res, next) => {
+  console.log("Работа middleware"); // Не выводится в консоль, не срабатывает
+  console.error(err);
+  res.redirect('https://impactium.fun/error');
+});
 
 router.get('/login/google', passport.authenticate('google'));
 
-router.get('/callback/google', passport.authenticate('google'), (request, response) => {
-  try {
-    const authResult = userAuthentication({data: request.user._json, from: "google"});
-    response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-    response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+router.get('/callback/google', (req, res, next) => {
+  passport.authenticate('google', (err, user, info) => {
+    if (err) {
+      req.session.error_description = "Нам не удалось прочитать ваш ключ. Try again."
+      return next(err);
+    }
 
-    const previousPage = request.cookies.previousPage || '/';
-    response.redirect(previousPage);
-  } catch (error) {
-    request.session.error_message = error.name;
-    response.redirect('https://impactium.fun/error');
-  }
+    try {
+      const authResult = userAuthentication({data: user._json, from: "google"});
+      res.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
+      res.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+
+      const previousPage = req.cookies.previousPage || '/';
+      res.redirect(previousPage);
+    } catch (error) {
+      next(error);
+    }
+  })(req, res, next);
 });
 
 router.get('/login/discord', (request, response) => {

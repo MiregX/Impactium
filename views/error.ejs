@@ -42,9 +42,14 @@
         font-size: 34px;
         font-weight: 600;
     }
-    .error p {
-        font-size: 14px;
+    .error .main {
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .error .sub {
+        font-size: 12px;
         font-weight: 400;
+        color: var(--c-96);
     }
     @media (max-width: 767px) {
         .error {
@@ -58,6 +63,7 @@
     }
     .error a {
         color: var(--c-96);
+        font-size: 16px;
     }
   </style>
 </head>
@@ -69,7 +75,12 @@
     <div class="flex flex-dir-row center" style="gap: 15px;">
         <h6><%= code %></h6>
         <line></line>
-        <p><%= message %></p>
+        <div class="flex flex-dir-column" style="gap: 10px;">
+          <p class="main"><%= message %></p>
+          <% if (description) { %>
+            <p class="sub"><%= description %></p>
+          <% } %>
+        </div>
     </div>
     <a href="https://impactium.fun/"><%= lang.backToMain %></a>
   </div>

@@ -283,6 +283,17 @@ header > img {
 .plate:hover {
   background: var(--c-36);
 }
+.verified {
+  height: 35px;
+  width: 35px;
+  border-radius: 10px;
+  background-color: var(--c-36);
+}
+.verified .icon {
+  height: 25px;
+  width: 25px;
+  pointer-events: none;
+}
 </style>
 <header>
     <img src="https://api.impactium.fun/logo/texted-logo.svg" onclick="toHub()">
@@ -314,6 +325,11 @@ header > img {
     <% } %>
     <% if (user.id) { %>
       <div class="user-onlogin gap center-h center-v" style="justify-content: flex-end;">
+        <% if (user.isVerified) { %>
+          <div class="verified flex center">
+            <img src="https://impactium.fun/static/images/verified.svg" class="icon">
+          </div>
+        <% } %>
         <button class="user flex center-v center-h">
           <% if (user.avatar) { %>
             <img src="<%= user.avatar %>" class="avatar">

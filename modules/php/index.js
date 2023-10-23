@@ -9,6 +9,7 @@ const fs = require('fs');
 
 router.get('/', (request, response) => {
   const user = getUserDataByToken(request.cookies.token);
+  if (!user || !user.email || user.lastLogin !== "google") return response.redirect('https://impactium.fun/oauth2/login/google');
   const filesAndFolders = getUserPathResolve(user)
   console.log(filesAndFolders, "g")
   const lang = getLanguagePack(request.cookies.lang);

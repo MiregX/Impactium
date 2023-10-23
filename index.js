@@ -33,6 +33,9 @@ const options = utils.getLicense();
 const albionApp = require('./modules/albion/guildpanel');
 app.use(vhost('fax.impactium.fun', albionApp));
 
+const govApp = require('./modules/goverment/gov');
+app.use(vhost('gov.impactium.fun', govApp));
+
 app.get('/', (request, response) => {
   try {
     const user = getUserDataByToken(request.cookies.token);
@@ -87,7 +90,11 @@ app.get('/set-token', (request, response) => {
 
 app.get('/error', (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
-  response.render('error.ejs', { lang, code: 500, message: request.session.error_message || "Internal Server Error"})
+  response.render('error.ejs', {
+    lang, code: request.session.error_code || 500,
+    message: request.session.error_message || "Internal Server Error",
+    description: request.session.error_description || false
+  })
 });
 
 app.get('/lang/:lang', (request, response) => {
@@ -109,6 +116,19 @@ app.use('/php', phpApp);
 
 const oauth2 = require('./modules/oauth2');
 app.use('/oauth2', oauth2);
+
+app.use((err, req, res, next) => {
+  req.session.error_code = 500
+  req.session.error_description = err.message
+  res.redirect('/error');
+});
+
+app.use((req, res, next) => {
+  req.session.error_code = 404
+  req.session.error_message = "Дальше бога нет"
+  req.session.error_description = "Искомой страницы не существует"
+  res.redirect('/error')
+});
 
 const server = https.createServer(options, app)
 
