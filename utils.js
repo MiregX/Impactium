@@ -332,19 +332,16 @@ async function getBattleBoard(params = false) {
   try {
     if (params) {
       if (Array.isArray(params.base)) { // Массборд
-        log("1")
         return await getMultiBoard(params.base);
       }
 
       const id = parseInt(params.base);
       if (typeof id === "number" && !isNaN(id)) { // Поиск по id
-        log("2")
         const battle = await Battleboard.findOne({ id });
         return battle || false;
       }      
   
       if (typeof params.base === "string") {
-        log("3")
         const normalizedName = params.base.toLowerCase();
 
         const filter = {
@@ -376,7 +373,6 @@ async function getBattleBoard(params = false) {
         
 
         const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).skip(totalRecords - 500).toArray() : [];
-        log(result)
         return result;
       }
     }
