@@ -1,4 +1,4 @@
-const { getUserDataByToken, getDatabase, getLanguagePack, log, formatDate, getBattleBoard, reportCounter, saveBattleBoard } = require('../utils');
+const { User, getLanguagePack, log, formatDate, getBattleBoard, reportCounter, saveBattleBoard } = require('../utils');
 const { deadPlayersListCreation } = require('./autoregear');
 const express = require('express');
 const router = express.Router();
@@ -10,9 +10,9 @@ const fs = require('fs');
 const { nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 router.get('/', async (request, response) => {
-  const user = getUserDataByToken(request.cookies.token);
+  const user = new User();
+  await user.fetch(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
-  const database = getDatabase();
   const battleboard = await getBattleBoard();
   const pagetype = nav.products['metrix'];
   
@@ -23,8 +23,8 @@ router.get('/', async (request, response) => {
       formatDate,
       cutFame
     };
-    const metrixTemplate = fs.readFileSync('views/metrix/metrix.ejs', 'utf8');
-    const renderedMetrixTemplate = ejs.render(metrixTemplate, metrixData);
+
+    const renderedMetrixTemplate = ejs.render(fs.readFileSync('views/metrix/metrix.ejs', 'utf8'), metrixData);
 
     response.render('template.ejs', {
       body: renderedMetrixTemplate,
@@ -32,9 +32,10 @@ router.get('/', async (request, response) => {
       user,
       lang
     });
-  } catch (err) {
-    console.error(err);
-    return response.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.log(error);
+    request.session.error_description = error.message;
+    return next(error);
   }
 });
 
@@ -51,7 +52,8 @@ router.get('/search/:name', async (request, response) => {
   const battleboard = await getBattleBoard(requestPayload);
 
   if (request.accepts('html')) {
-    const user = getUserDataByToken(request.cookies.token);
+    const user = new User();
+    await user.fetch(request.cookies.token);
     const lang = getLanguagePack(request.cookies.lang);
     const pagetype = nav.products['metrix'];
 
@@ -72,9 +74,10 @@ router.get('/search/:name', async (request, response) => {
         lang,
         pagetype
       });
-    } catch (err) {
-      console.error(err);
-      return response.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.log(error);
+      request.session.error_description = error.message;
+      return next(error);
     }
   } else if (request.accepts('json')) {
     return response.status(200).json(battleboard);
@@ -107,9 +110,10 @@ router.get('/battle/:ids', async (request, response) => {
       lang,
       pagetype
     });
-  } catch (err) {
-    console.error(err);
-    return response.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.log(error);
+    request.session.error_description = error.message;
+    return next(error);
   }
 });
 
