@@ -1,6 +1,6 @@
 const https = require('https');
 const fs = require('fs');
-const { getUserDataByToken, getDatabase, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken } = require('./utils');
+const { getUserDataByToken, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken } = require('./utils');
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
@@ -31,7 +31,7 @@ mainBot.on('interactionCreate', async (interaction) => {
 
 async function updateUserDisplayName() {
   try {
-    const database = getDatabase();
+    const database = getDatabaseOld();
 
     const userIds = new Set();
     for (const user of database.users) {
@@ -177,7 +177,7 @@ async function applyRegear(requestData, guild) {
 }
 
 function updateBalance(playerId, guild, dataFromInput) {
-  const database = getDatabase();
+  const database = getDatabaseOld();
   const userPayload = database.find(user => user.id === playerId);
   const guildObj = userPayload.guilds.find(guildObj => guildObj.nameOfGuild === guild);
   const newBalance = parseInt(guildObj.balance) + parseInt(dataFromInput);
@@ -191,7 +191,7 @@ mainBot.on('interactionCreate', async (interaction) => {
   const { commandName, options } = interaction;
   const lang = getDiscordLanguagePack(interaction.guildId);
 
-  const database = getDatabase();
+  const database = getDatabaseOld();
 
   if (commandName === 'remove-money' || commandName === 'add-money') {
 
@@ -255,7 +255,7 @@ mainBot.on('interactionCreate', async (interaction) => {
 
 mainBot.on('interactionCreate', async (interaction) => {
   const { commandName, options } = interaction;
-  const database = getDatabase();
+  const database = getDatabaseOld();
   const lang = getDiscordLanguagePack(interaction.guildId);
 
   if (commandName === 'change-lang') {
@@ -364,7 +364,7 @@ function normalizedNick(displayName) {
 }
 
 async function getUnknownUser(guildId, playerName) {
-  const database = getDatabase();
+  const database = getDatabaseOld();
 
   const guild = mainBot.guilds.cache.get(guildId);
   if (!guild) return
@@ -435,7 +435,7 @@ const startMainBot = async () => {
 };
 
 async function addGuildInfo() {
-  const database = getDatabase();
+  const database = getDatabaseOld();
 
   await mainBot.guilds.fetch();
 
@@ -461,7 +461,7 @@ async function addGuildInfo() {
 }
 
 async function updateUserRoles(member, isLeaver = false) {
-  const database = getDatabase();
+  const database = getDatabaseOld();
   const sparedGuild = database.spares.find((guildInfo) => guildInfo.guildId === member.guild.id);
 
   if (!sparedGuild || !sparedGuild.memberRole) {
@@ -523,7 +523,7 @@ async function updateUserRoles(member, isLeaver = false) {
 }
 
 async function addRegearedBalance(playersList) {
-  const database = getDatabase();
+  const database = getDatabaseOld();
 
   for (const player of playersList) {
     const guild = database.guilds.find(guild => guild.hash === player.guildId);

@@ -5,6 +5,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { request } = require('http');
 
 function getUserDataByToken(token, guildName = false) {
   const database = getDatabase();
@@ -40,6 +41,45 @@ function getUserDataByToken(token, guildName = false) {
   return result
 }
 
+class User {
+  constructor(token) {
+    this.token = token;
+    this.findUser(this.token);
+  }
+
+
+  async findUser(token) {
+    const database = await getDatabase("users");
+    this.userDatabase = await database.findOne({ token });
+
+    if (!this.userDatabase) {
+      this.user = false;
+    } else {
+      const { token, secure, discord, google, ...rest } = this.userDatabase;
+      this.user = rest;
+    }
+  }
+
+  async greet() {
+    if (!this.user) {
+      console.log('Пользователь не найден');
+    } else if (this.user.name) {
+      console.log(`Здравствуйте, пользователь ${this.user.name}`);
+    } else {
+      console.log('Здравствуйте, анонимный пользователь');
+    }
+  }
+
+  async getGuild(guildParam) {
+    this.user.guild = this.userDatabase.discord.guilds.find(guild => guild.name.toLowerCase() === guildParam.toLowerCase() || guild.id === guildParam)
+  }
+}
+
+const user = new User("token");
+user.greet()
+
+
+
 function getLanguagePack(languagePack = "en") {
   let lang;
   try {
@@ -50,29 +90,34 @@ function getLanguagePack(languagePack = "en") {
   return lang;
 }
 
-function userAuthentication(p) {
+async function userAuthentication(p) {
   const loginSource = p.from;
   const userPayload = p.data;
   try {
     if (userPayload.error || userPayload.message) return { error: "Error during authorization" };
 
     const token = generateToken(64);
-    const database = getDatabase();
+    const Database = await getDatabase("users");
     let userDatabase;
+    
     if (userPayload.email) {
-      userDatabase = database.users.find(user =>
-        user[loginSource]?.email === userPayload.email ||
-        user.google?.email === userPayload.email ||
-        user.discord?.email === userPayload.email
-      );
+      userDatabase = await Database.collection("users").findOne({
+        $or: [
+          { [loginSource + ".email"]: userPayload.email },
+          { "google.email": userPayload.email },
+          { "discord.email": userPayload.email }
+        ]
+      });
     } else {
-      userDatabase = database.users.find(user =>
-        user[loginSource]?.id === (userPayload.sub || userPayload.id) ||
-        user.google?.id === userPayload.sub ||
-        user.discord?.id === userPayload.id
-      );
+      userDatabase = await Database.collection("users").findOne({
+        $or: [
+          { [loginSource + ".id"]: userPayload.sub || userPayload.id },
+          { "google.id": userPayload.sub },
+          { "discord.id": userPayload.id }
+        ]
+      });
     }
-
+    
     let avatar = undefined;
 
     if (userPayload.picture) {
@@ -95,9 +140,10 @@ function userAuthentication(p) {
     }
 
     if (userDatabase) {
-      Object.assign(userDatabase, userToSave);
+      const resultUser = Object.assign(userDatabase, userToSave);
+      // запихнуть вместо существующего пользователя в базе данных на нового
     } else {
-      database.users.push(userToSave);
+      await Database.insertOne(userToSave);
     }
     saveDatabase(database);
     return { lang: userToSave[loginSource].locale, token };
@@ -113,6 +159,16 @@ function userAuthentication(p) {
 
 function generateToken(sumbolsLong) {
   return crypto.randomBytes(sumbolsLong).toString('hex');
+}
+
+async function getDatabase(collection) {
+  await databaseConnect();
+  try {
+    const Database = mongo.db().collection(collection);
+    return Database;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function saveNewGuildLanguage(lang, guildId) {
@@ -178,78 +234,13 @@ function formatDate(toDate = false, isPrevDay = false) {
   };
 }
 
-function getDatabase() {
+function getDatabaseOld() {
   const database = JSON.parse(fs.readFileSync('json/database.json', 'utf8'));
   return database;
 }
 
 function saveDatabase(database) {
   fs.writeFileSync('json/database.json', JSON.stringify(database, null, 2), 'utf8');
-}
-
-function getStatistics(isFilter = false) {
-  let statistics = JSON.parse(fs.readFileSync('json/statistics.json', 'utf8'));
-  
-  if (isFilter) {
-    statistics = statistics.slice(-7);
-  }
-  
-  return statistics;
-}
-
-function saveStatistics(statistics) {
-  fs.writeFileSync('json/statistics.json', JSON.stringify(statistics, null, 2), 'utf8');
-}
-
-function setStatistics(statParam, count = 1, guild = "unset") {
-  let statistics = getStatistics();
-  
-  if (typeof count === 'string') {
-    count = parseInt(count);
-  }
-  
-  const today = formatDate(false).date;
-  const thisDay = statistics.find(object => object.day === today);
-  
-  if (thisDay) {
-    thisDay.stats[statParam] += count;
-    saveStatistics(statistics);
-  } else {
-    createNewStatisticsDay();
-  }
-}
-
-function createNewStatisticsDay() {
-  let statistics = getStatistics();
-  const today = formatDate(false).date;
-  const yesterday = formatDate(true).date;
-  const newDayData = {
-    day: today,
-    stats: {
-      mainWebJoins: 0,
-      guildsWebJoins: 0,
-      ctaWebJoins: 0,
-      regearWebJoins: 0,
-      ctaTickets: 0,
-      regearTickets: 0,
-      userInfoJoins: 0,
-      logins: 0,
-      logouts: 0,
-      langen: 0,
-      langit: 0,
-      langis: 0,
-      langru: 0,
-      languk: 0,
-      discordBotAllComs: 0,
-      discordBotSumbalComs: 0,
-      discordBotAddbalComs: 0,
-      discordBotRembalComs: 0,
-      documentationJoins: 0
-    }
-  };
-
-  statistics.push(newDayData);
-  saveStatistics(statistics);
 }
 
 async function getMultiBoard(ids) {
@@ -461,7 +452,6 @@ async function getBattleBoard(params = false) {
   }
 }
 
-
 function getLicense() {
   try {
     const path = 'C:\\Users\\Mark\\';
@@ -474,6 +464,7 @@ function getLicense() {
     return { isSuccess: false };
   }
 }
+
 async function saveBattleBoard(data) {
   const existBattles = await mongo.db().collection("battleboard").find({ id: { $in: data.map(item => item.id) } }).toArray();
 
@@ -492,9 +483,9 @@ module.exports = {
   userAuthentication,
   saveBattleBoard,
   getLanguagePack,
+  databaseConnect,
+  getDatabaseOld, // удалить
   getBattleBoard,
-  setStatistics,
-  getStatistics,
   getMultiBoard,
   reportCounter,
   generateToken,
