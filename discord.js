@@ -532,6 +532,7 @@ async function addRegearedBalance(playersList) {
 
 mainBot.once('ready', () => {
   log('Impactium бот запущен!', 'c');
+  log(`----------------------`);
   addGuildInfo();
 });
 

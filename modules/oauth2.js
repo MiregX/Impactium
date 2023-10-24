@@ -2,8 +2,8 @@ const fs = require('fs');
 const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
-const { userAuthentication, log } = require('../utils');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const { getDatabase, generateToken } = require('../utils');
 const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const router = express.Router();
@@ -34,32 +34,29 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-router.use((err, req, res, next) => {
-  console.log("Работа middleware"); // Не выводится в консоль, не срабатывает
-  console.error(err);
-  res.redirect('https://impactium.fun/error');
-});
+// router.use((err, req, res, next) => {
+//   res.redirect('https://impactium.fun/error');
+// });
 
 router.get('/login/google', passport.authenticate('google'));
 
-router.get('/callback/google', (req, res, next) => {
+router.get('/callback/google', (request, response, next) => {
   passport.authenticate('google', (err, user, info) => {
     if (err) {
-      req.session.error_description = "Нам не удалось прочитать ваш ключ. Try again."
+      request.session.error_description = "Нам не удалось прочитать ваш ключ. Try again."
       return next(err);
     }
 
     try {
-      const authResult = userAuthentication({data: user._json, from: "google"});
-      res.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-      res.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
-
-      const previousPage = req.cookies.previousPage || '/';
-      res.redirect(previousPage);
+      userAuthentication({data: user._json, from: "discord"}).then(authResult => {
+        response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
+        response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+        response.redirect(request.cookies.previousPage || '/');
+      });
     } catch (error) {
       next(error);
     }
-  })(req, res, next);
+  })(request, response, next);
 });
 
 router.get('/login/discord', (request, response) => {
@@ -83,12 +80,11 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
-          const authResult = userAuthentication({data: data.body, from: "discord"});
-          response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-          response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
-
-          const previousPage = request.cookies.previousPage || '/';
-          return response.redirect(previousPage);
+          userAuthentication({data: data.body, from: "discord"}).then(authResult => {
+            response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
+            response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+            response.redirect(request.cookies.previousPage || '/');
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -102,5 +98,71 @@ router.get('/callback/discord', (request, response) => {
       response.redirect('https://impactium.fun/error');
     });
 });
+
+async function userAuthentication(p) {
+  const loginSource = p.from;
+  const userPayload = p.data;
+  try {
+    if (userPayload.error || userPayload.message) return { error: "Error during authorization" };
+
+    const token = generateToken(64);
+    const Database = await getDatabase("users");
+    let userDatabase;
+    
+    if (userPayload.email) {
+      userDatabase = await Database.findOne({
+        $or: [
+          { [loginSource + ".email"]: userPayload.email },
+          { "google.email": userPayload.email },
+          { "discord.email": userPayload.email }
+        ]
+      });
+    } else {
+      userDatabase = await Database.findOne({
+        $or: [
+          { [loginSource + ".id"]: userPayload.sub || userPayload.id },
+          { "google.id": userPayload.sub },
+          { "discord.id": userPayload.id }
+        ]
+      });
+    }
+    
+    let avatar = undefined;
+
+    if (userPayload.picture) {
+      avatar = userPayload.picture
+    } else if (userPayload.avatar) {
+      avatar = `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`
+    }
+
+    const userToSave = {
+      lastLogin: loginSource,
+      token: token,
+    }
+
+    userToSave[loginSource] = {
+      id: userPayload.sub || userPayload.id,
+      email: userPayload.email || undefined,
+      avatar: avatar,
+      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
+      locale: userPayload.locale || "en"
+    }
+
+    if (userDatabase) {
+      Object.assign(userDatabase, userToSave);
+    
+      await Database.updateOne(
+        { _id: userDatabase._id },
+        { $set: userDatabase }
+      );
+    } else {
+      await Database.insertOne(userToSave);
+    }
+    console.log({ lang: userToSave[loginSource].locale, token })
+    return { lang: userToSave[loginSource].locale, token };
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = router;

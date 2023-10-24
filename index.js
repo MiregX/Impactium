@@ -9,7 +9,7 @@ const telegram = require('./telegram');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
-const { getUserDataByToken, getLanguagePack, log, setStatistics } = require('./utils');
+const { User, getLanguagePack, log } = require('./utils');
 const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
@@ -38,14 +38,13 @@ app.use(vhost('gov.impactium.fun', govApp));
 
 app.get('/', (request, response) => {
   try {
-    const user = getUserDataByToken(request.cookies.token);
-    const lang = getLanguagePack(request.cookies.lang);
-
-    const indexTemplate = fs.readFileSync('views/index.ejs', 'utf8');
-    const body = ejs.render(indexTemplate, { user, lang, nav });
-    response.render('template.ejs', { body, user, lang, nav });
-    setStatistics('mainWebJoins');
-    
+    const user = new User();
+    user.fetch(request.cookies.token).then(() => {
+      const lang = getLanguagePack(request.cookies.lang);
+      const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), { user, lang, nav });
+      
+      response.render('template.ejs', { body, user, lang, nav });
+    });
   } catch (error) {
     console.log(error, 'r');
     return response.status(500).send('Internal Server Error');
@@ -53,8 +52,8 @@ app.get('/', (request, response) => {
 });
 
 app.get('/login', (request, response) => {
-  const user = getUserDataByToken(request.cookies.token);
-  if (user) return response.redirect('/');
+  const user = new User(request.cookies.token);
+  if (user.id) return response.redirect('/');
   const lang = getLanguagePack(request.cookies.lang);
   const previousPage = request.header('Referer') || '/';
   response.cookie('previousPage', previousPage, { domain: '.impactium.fun', secure: true });
@@ -79,12 +78,11 @@ app.get('/logout', (request, response) => {
   global.logged.delete(request.ip);
   response.clearCookie('token', { domain: '.impactium.fun' });
   response.redirect('/');
-  setStatistics('logouts');
 });
 
 app.get('/set-token', (request, response) => {
   if (options.isSuccess) return response.redirect('/');
-  response.cookie('token', "51f413ca5c3e3d0dbbdadd526a1867e890a52b16e8616338546bbe61bbe1b79218d804eea71df4ad235963b9d4fa72f91dbf839ed02fec9c959bb7335fd545af");
+  response.cookie('token', "321");
   response.redirect('/');
 });
 
@@ -102,7 +100,6 @@ app.get('/lang/:lang', (request, response) => {
   response.cookie('lang', newLang, { domain: '.impactium.fun', secure: true });
   response.cookie('lang', request.params.lang);
   response.redirect('back');
-  setStatistics(`lang${newLang}`);
 });
 
 const terminalRouter = require('./modules/terminal');
@@ -115,11 +112,13 @@ const phpApp = require('./modules/php/index');
 app.use('/php', phpApp);
 
 const oauth2 = require('./modules/oauth2');
+const { Console } = require('console');
 app.use('/oauth2', oauth2);
 
 app.use((err, req, res, next) => {
   req.session.error_code = 500
   req.session.error_description = err.message
+  console.log(err);
   res.redirect('/error');
 });
 
@@ -139,5 +138,5 @@ server.listen(80, () => {
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
-  log(`Тестовый сервер запущен`, 'y'); 
+  log(`Тестовый сервер запущен`); 
 })

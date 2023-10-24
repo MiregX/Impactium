@@ -42,43 +42,34 @@ function getUserDataByToken(token, guildName = false) {
 }
 
 class User {
-  constructor(token) {
-    this.token = token;
-    this.findUser(this.token);
+  constructor() {
+    this.id = false;
   }
 
+  async fetch(token) {
+    const Database = await getDatabase("users");
+    const userDatabase = await Database.findOne({ token });
 
-  async findUser(token) {
-    const database = await getDatabase("users");
-    this.userDatabase = await database.findOne({ token });
-
-    if (!this.userDatabase) {
-      this.user = false;
-    } else {
-      const { token, secure, discord, google, ...rest } = this.userDatabase;
-      this.user = rest;
+    if (userDatabase) {
+      const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
+      const { token, secure, discord, google, ...rest } = user;
+      Object.assign(this, rest);
     }
-  }
-
-  async greet() {
-    if (!this.user) {
-      console.log('Пользователь не найден');
-    } else if (this.user.name) {
-      console.log(`Здравствуйте, пользователь ${this.user.name}`);
-    } else {
-      console.log('Здравствуйте, анонимный пользователь');
-    }
-  }
-
-  async getGuild(guildParam) {
-    this.user.guild = this.userDatabase.discord.guilds.find(guild => guild.name.toLowerCase() === guildParam.toLowerCase() || guild.id === guildParam)
   }
 }
 
-const user = new User("token");
-user.greet()
-
-
+// async greet() {
+//   if (!this.user) {
+//     console.log('Пользователь не найден');
+//   } else if (this.user.name) {
+//     console.log(`Здравствуйте, пользователь ${this.user.name}`);
+//   } else {
+//     console.log('Здравствуйте, анонимный пользователь');
+//   }
+// }
+// async getGuild(guildParam) {
+//   this.user.guild = this.userDatabase.discord.guilds.find(guild => guild.name.toLowerCase() === guildParam.toLowerCase() || guild.id === guildParam)
+// }
 
 function getLanguagePack(languagePack = "en") {
   let lang;
@@ -90,67 +81,7 @@ function getLanguagePack(languagePack = "en") {
   return lang;
 }
 
-async function userAuthentication(p) {
-  const loginSource = p.from;
-  const userPayload = p.data;
-  try {
-    if (userPayload.error || userPayload.message) return { error: "Error during authorization" };
 
-    const token = generateToken(64);
-    const Database = await getDatabase("users");
-    let userDatabase;
-    
-    if (userPayload.email) {
-      userDatabase = await Database.collection("users").findOne({
-        $or: [
-          { [loginSource + ".email"]: userPayload.email },
-          { "google.email": userPayload.email },
-          { "discord.email": userPayload.email }
-        ]
-      });
-    } else {
-      userDatabase = await Database.collection("users").findOne({
-        $or: [
-          { [loginSource + ".id"]: userPayload.sub || userPayload.id },
-          { "google.id": userPayload.sub },
-          { "discord.id": userPayload.id }
-        ]
-      });
-    }
-    
-    let avatar = undefined;
-
-    if (userPayload.picture) {
-      avatar = userPayload.picture
-    } else if (userPayload.avatar) {
-      avatar = `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`
-    }
-
-    const userToSave = {
-      lastLogin: loginSource,
-      token: token,
-    }
-
-    userToSave[loginSource] = {
-      id: userPayload.sub || userPayload.id,
-      email: userPayload.email || undefined,
-      avatar: avatar,
-      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
-      locale: userPayload.locale || "en"
-    }
-
-    if (userDatabase) {
-      const resultUser = Object.assign(userDatabase, userToSave);
-      // запихнуть вместо существующего пользователя в базе данных на нового
-    } else {
-      await Database.insertOne(userToSave);
-    }
-    saveDatabase(database);
-    return { lang: userToSave[loginSource].locale, token };
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 // users.find(user => {
 //   (user[user.lastLogin].id === id) ||
@@ -480,7 +411,6 @@ async function saveBattleBoard(data) {
 module.exports = {
   saveNewGuildLanguage,
   getUserDataByToken,
-  userAuthentication,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
@@ -494,6 +424,7 @@ module.exports = {
   formatDate,
   getLicense,
   ftpUpload,
+  User,
   log,
 };
 
