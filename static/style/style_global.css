@@ -12,6 +12,7 @@
   --w-3: #e8e8e8;
   --trans: cubic-bezier(.21,.29,0,.94);
   --w: #e8e8e8;
+  --purple-accent: #e8e8e8;
 }
 .gap {
   gap: 15px;

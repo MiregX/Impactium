@@ -3,18 +3,27 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
-const { getUserDataByToken, getDatabase, getLanguagePack, setStatistics, log, getBattleBoard, saveDatabase, formatDate } = require('../../utils');
+const { User, Guild, getDatabase, getLanguagePack, log, getBattleBoard, saveDatabase, formatDate } = require('../../utils');
 const utils = require('../../utils');
 
 router.get('/', async (request, response) => {
   try {
-    const user = getUserDataByToken(request.cookies.token, request.subdomains);
+    const user = new User();
+    await user.fetch(request.cookies.token);
+    user.setGuild(request.subdomains);
+
+    const guild = new Guild();
+    await guild.fetch(request.subdomains);
+
     const lang = getLanguagePack(request.cookies.lang);
 
+    await getBattleBoardStats(guild.name);
+    await getDeadliests(guild.name);
+
     const indexData = {
-      battleboardStats: await getBattleBoardStats(user.guild.name),
-      deadliests: await getDeadliests(user.guild.name),
-      lang
+      lang,
+      guild,
+      user
     }
 
     const indexTemplate = fs.readFileSync('views/albion/index.ejs', 'utf8');
@@ -26,29 +35,27 @@ router.get('/', async (request, response) => {
       lang
     });
 
-    setStatistics('guildsWebJoins');
-
   } catch (err) {
     console.error(err);
     return response.status(500).send('Internal Server Error');
   }
 });
 
-async function getDeadliests(guild) {
-  const database = getDatabase();
-  const foundGuild = database.guilds.find(guildObj => guildObj.name.toLowerCase() === guild.toLowerCase());
+async function getDeadliests(guildName) {
+  const guilds = await getDatabase("guilds");
+  const foundGuild = await guilds.findOne({ name: { $regex: `^${guildName}$`, $options: 'i' } });
   const sixHoursAgo = new Date(Date.now() - 60 * 60 * 1000 * 6);
 
-  if (foundGuild && foundGuild.stats.deadliest.timestamp > sixHoursAgo) {
+  if (foundGuild && foundGuild.stats?.deadliest?.timestamp > sixHoursAgo) {
     return foundGuild.stats.deadliest.list;
   }
 
   let deadliests = [];
-  const battleboard = await getBattleBoard({base: guild, filters: { battlesLimit: 100, minimumGuildPlayers: 10}});
+  const battleboard = await getBattleBoard({base: guildName, filters: { battlesLimit: 100, minimumGuildPlayers: 10}});
 
   battleboard.forEach(battle => {
     Object.values(battle.players).forEach(player => {
-      if (player.guildName.toLowerCase() === guild.toLowerCase()) {
+      if (player.guildName.toLowerCase() === guildName.toLowerCase()) {
         let existingPlayer = deadliests.find(p => p.name === player.name);
 
         if (existingPlayer) {
@@ -64,22 +71,21 @@ async function getDeadliests(guild) {
 
   foundGuild.stats.deadliest = { timestamp: Date.now(), list: deadliests.slice(0, 5) }
 
-  saveDatabase(database);
-
   return deadliests;
 }
 
-async function getBattleBoardStats(guild) {
+async function getBattleBoardStats(guildName) {
   let battleStats = {};
 
-  const database = getDatabase();
-  const foundGuild = database.guilds.find(guildObj => guildObj.name.toLowerCase() === guild.toLowerCase());
+  const guild = new Guild();
+  await guild.fetch(guild);
+
   const sixHoursAgo = new Date(Date.now() - 60 * 60 * 1000 * 6);
 
-  if (foundGuild?.stats?.battleboard?.timestamp > sixHoursAgo && false) {
-    return foundGuild.stats.battleboard.list;
+  if (guild?.stats?.battleboard?.timestamp > sixHoursAgo && false) {
+    return guild.stats.battleboard.list;
   } else {
-    const battleboard = await getBattleBoard({base: guild, filters: { battlesLimit: 100, minimumPlayers: 20, minimumGuildPlayers: 10}});
+    const battleboard = await getBattleBoard({base: guildName, filters: { battlesLimit: 100, minimumPlayers: 20, minimumGuildPlayers: 10}});
 
     battleboard.forEach(battle => {
       const startTime = new Date(battle.startTime);
@@ -96,7 +102,7 @@ async function getBattleBoardStats(guild) {
       }
 
       const report = utils.reportCounter(battle);
-      const normalizedGuildName = guild.toLowerCase();
+      const normalizedGuildName = guildName.toLowerCase();
 
       const foundReportPlayers = report.players.find(object => object.guild.toLowerCase() === normalizedGuildName);
       const foundReportKills = report.killsCount.find(object => object.guild.toLowerCase() === normalizedGuildName);
@@ -117,11 +123,16 @@ async function getBattleBoardStats(guild) {
       }
     });
   }
+  
+  if (!guild.stats) {
+    guild.stats = {};
+  }
 
-  foundGuild.stats.battleboard = { timestamp: Date.now(), list: Object.values(battleStats) };
-  saveDatabase(database);
+  guild.stats.battleboard = { timestamp: Date.now(), list: Object.values(battleStats) };
 
   battleStats = Object.values(battleStats).splice(0, 14);
+
+  // guild.save()
 
   return battleStats;
 }

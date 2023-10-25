@@ -1,5 +1,4 @@
 const { User, getLanguagePack, log, formatDate, getBattleBoard, reportCounter, saveBattleBoard } = require('../utils');
-const { deadPlayersListCreation } = require('./autoregear');
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
@@ -86,8 +85,9 @@ router.get('/search/:name', async (request, response) => {
 
 router.get('/battle/:ids', async (request, response) => {
   const ids = request.params.ids.split(',');
+  const user = new User();
+  await user.fetch(request.cookies.token);
   const battleboard = await getBattleBoard(ids);
-  const user = getUserDataByToken(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
   const pagetype = nav.products['metrix'];
 

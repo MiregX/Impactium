@@ -1,31 +1,26 @@
-const { getUserDataByToken, getDatabase, getLanguagePack, log, getStatistics } = require('../utils');
+const { User, getDatabase, getLanguagePack, log } = require('../utils');
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const ejs = require('ejs');
 
-router.get('/', (request, response) => {
-  const user = getUserDataByToken(request.cookies.token);
+router.get('/', async (request, response) => {
+  const user = new User();
+  await user.fetch(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
-
-  const database = getDatabase();
-  const statistics = getStatistics(true);
 
   !user.isCreator ? response.redirect('/') : null;
 
   try {
     const terminalData = {
       user,
-      database,
-      lang,
-      statistics
+      lang
     };
 
-    const terminalTemplate = fs.readFileSync('views/terminal.ejs', 'utf8');
-    const renderedTerminalTemplate = ejs.render(terminalTemplate, terminalData);
+    const body = ejs.render(fs.readFileSync('views/terminal.ejs', 'utf8'), terminalData);
 
     response.render('template.ejs', {
-      body: renderedTerminalTemplate,
+      body,
       user,
       lang
     });

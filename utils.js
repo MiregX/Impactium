@@ -7,40 +7,6 @@ const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { request } = require('http');
 
-function getUserDataByToken(token, guildName = false) {
-  const database = getDatabase();
-  const user = database.users.find(user => user.token === token);
-  let result;
-
-  if (!user) {
-    result = false;
-  }
-
-  if (user) {
-    Object.assign(user, user[user.lastLogin]);
-    const { token, secure, discord, google, ...rest } = user;
-    result = rest;
-  }
-
-  if (guildName) {
-    const foundGuild = database.guilds.find(guild => guild.name.toLowerCase() === guildName[0].toLowerCase());
-
-    if (foundGuild) {
-      if (!result) {
-        result = {};
-      }
-      result.guild = {
-        id: foundGuild.id,
-        hash: foundGuild.hash,
-        name: foundGuild.name,
-        avatar: foundGuild.avatar
-      };
-    }
-  }
-
-  return result
-}
-
 class User {
   constructor() {
     this.id = false;
@@ -53,23 +19,39 @@ class User {
     if (userDatabase) {
       const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
       const { token, secure, discord, google, ...rest } = user;
+      this.private = userDatabase;
       Object.assign(this, rest);
     }
   }
+
+  setGuild(guildKey) {
+    if (this.lastLogin !== "discord") return
+    this.guild = this.guilds.find(guild =>
+      guild.name.toLowerCase() === guildKey.toLowerCase() || 
+      guild.id.toLowerCase() === guildKey.toLowerCase())
+  }
 }
 
-// async greet() {
-//   if (!this.user) {
-//     console.log('Пользователь не найден');
-//   } else if (this.user.name) {
-//     console.log(`Здравствуйте, пользователь ${this.user.name}`);
-//   } else {
-//     console.log('Здравствуйте, анонимный пользователь');
-//   }
-// }
-// async getGuild(guildParam) {
-//   this.user.guild = this.userDatabase.discord.guilds.find(guild => guild.name.toLowerCase() === guildParam.toLowerCase() || guild.id === guildParam)
-// }
+class Guild {
+  constructor() {
+    this.id = false;
+  }
+
+  async fetch(guildKey) {
+    const Guilds = await getDatabase("guilds");
+    const guild = await Guilds.findOne({
+      $or: [
+        { name: { $regex: `^${guildKey}$`, $options: 'i' } },
+        { id: { $regex: `^${guildKey}$`, $options: 'i' } },
+        { hash: { $regex: `^${guildKey}$`, $options: 'i' } }
+      ]
+    });
+    
+    if (guild) {
+      Object.assign(this, guild);
+    }
+  }
+}
 
 function getLanguagePack(languagePack = "en") {
   let lang;
@@ -80,8 +62,6 @@ function getLanguagePack(languagePack = "en") {
   }
   return lang;
 }
-
-
 
 // users.find(user => {
 //   (user[user.lastLogin].id === id) ||
@@ -325,7 +305,7 @@ async function databaseConnect() {
 }
 
 async function getBattleBoard(params = false) {
-  const { battlesLimit = 50, minimumPlayers = 10, minimumGuildPlayers = 1 } = params.filters || {}
+  const { battlesLimit = 50, minimumPlayers = 10, minimumGuildPlayers = 5 } = params.filters || {}
   await databaseConnect();
   const Battleboard = mongo.db().collection("battleboard");
 
@@ -350,10 +330,11 @@ async function getBattleBoard(params = false) {
         
         const totalRecords = await Battleboard.countDocuments();
 
-        const cursor = Battleboard.find({}).skip(totalRecords - 500);
+        const cursor = Battleboard.find({}).skip(totalRecords - 5000);
         
         while (await cursor.hasNext()) {
           const battle = await cursor.next();
+
           const players = Object.values(battle.players);
         
           const isBattleValid = players.length >= minimumPlayers &&
@@ -372,11 +353,13 @@ async function getBattleBoard(params = false) {
         }
         
 
-        const result = (filter.$or.length > 0) ? await Battleboard.find({ $or: filter.$or }).skip(totalRecords - 500).toArray() : [];
+        console.log(filter);
+        const result = await Battleboard.find({ $or: filter.$or }).toArray();
+        console.log(result);
         return result;
       }
     }
-    const battleboard = await Battleboard.find({}).sort({ id: -1 }).limit(50).toArray();
+    const battleboard = await Battleboard.find({}).sort({ id: -1 }).limit(battlesLimit).toArray();
     return battleboard;
   } catch (error) {
     console.log(error);
@@ -396,21 +379,29 @@ function getLicense() {
   }
 }
 
+async function deleteBattleRecords(Battleboard, limit) {
+  const records = await Battleboard.find().limit(limit).toArray();
+  const idArray = records.map(record => record.id);
+
+  await Battleboard.deleteMany({ id: { $in: idArray } });
+}
+
 async function saveBattleBoard(data) {
-  const existBattles = await mongo.db().collection("battleboard").find({ id: { $in: data.map(item => item.id) } }).toArray();
+  const Battleboard = await getDatabase("battleboard");
+  const existBattles = await Battleboard.find({ id: { $in: data.map(item => item.id) } }).toArray();
 
   data = data.filter(battle => !existBattles.some(existingBattle => existingBattle.id === battle.id)); // Фильтрация по несуществующим ID
 
   data = data.filter(battle => Object.keys(battle.players).length > 9); // Фильтрация по кол-ву игроков > 9
 
   if (data.length > 0) {
-    await mongo.db().collection("battleboard").insertMany(data);
+    await deleteBattleRecords(Battleboard, data.length);
+    await Battleboard.insertMany(data);
   }
 }
 
 module.exports = {
   saveNewGuildLanguage,
-  getUserDataByToken,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
@@ -424,6 +415,7 @@ module.exports = {
   formatDate,
   getLicense,
   ftpUpload,
+  Guild,
   User,
   log,
 };

@@ -80,11 +80,11 @@ p.graphs {
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-<% if (deadliests.length > 0) { %>
+<% if (guild.stats?.deadliests?.length > 0) { %>
 <div class="deadliests-players">
   <h3 class="center-v"><%= lang.topkillers %> <span><%= lang.by25lastBattles%></span></h3>
   <div class="players">
-    <% deadliests.splice(0, 5).forEach((item, index) => { %>
+    <% guild.stats.deadliests.splice(0, 5).forEach((item, index) => { %>
       <div class="player center-v" style="gap: 10px;">
         <span><%= index + 1 %></span>
         <h6><%= item.name %></h6>
@@ -109,7 +109,7 @@ p.graphs {
 <p class="graphs"><%= lang.fameDisplayedInKK %></p>
 
 <script>
-const data = JSON.parse(`<%- JSON.stringify(battleboardStats) %>`);
+const data = JSON.parse(`<%- JSON.stringify(guild.stats.battleboardStats) %>`);
 
 const dates = data.map(day => day.date);
 dates.reverse();

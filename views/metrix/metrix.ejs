@@ -99,22 +99,18 @@ main {
 .search-block button img {
   height: 20px;
 }
-.warning-about-links {
-  margin-top: 10px;
-  font-weight: 400;
-  font-size: 12px;
-  color: var(--lp);
-  margin-bottom: 25px;
-}
 .battles-wrapper {
   width: 100%;
   height: auto;
   position: relative;
   margin-bottom: 100px;
+  background-color: #ffffff03;
+  backdrop-filter: blur(7px);
+  border-radius: 10px;
+  box-shadow: 0px 0px 2px 2px var(--c-64);
 }
-.battle-block {
-  border-bottom: 1px solid var(--gh);
-  background: var(--b);
+.dbb {
+  border-bottom: 1px solid var(--c-24);
   height: 30px;
   padding: 5px 10px;
   font-size: 12px;
@@ -123,38 +119,41 @@ main {
   gap: 10px;
   transition: all 0.2s cubic-bezier(.21,.29,0,.94);
 }
-.battles-wrapper .battle-block {
+.battles-wrapper .dbb.title {
   padding: 5px 10px 5px 0px;
 }
-.battles-wrapper .battle-block.selected {
-  background: var(--bo);
+.battles-wrapper .dbb.selected {    
+  background: #ffffff05;
   backdrop-filter: blur(15px);
-  box-shadow: 0 0px 3px 2px var(--lp);
-  z-index: 3;
+  box-shadow: 0 0px 2px 0px var(--c-36);
 }
-.battles-wrapper .battle-block:hover {
+.battles-wrapper .dbb:hover {
   box-shadow: 0 0px 3px var(--p);
   background: var(--g);
   padding: 5px 20px;
   transform: scale(1.03);
 }
-.battles-wrapper .battle-block.selected:hover {
+.battles-wrapper .dbb.selected:hover {
   background: var(--bo);
   box-shadow: 0 0px 3px 2px var(--fame-text);
 }
-.battles-wrapper .battle-block:hover .alliances:after {
+.battles-wrapper .dbb:hover .alliances:after {
   background: none;
 }
-.battles-wrapper .battle-block:last-child {
+.battles-wrapper .dbb:first-child {
+  border-top: 1px solid var(--c-24);
+  border-radius: 5px 5px 0px 0px;
+}
+.battles-wrapper .dbb:last-child {
   border-bottom: none;
   border-radius: 0px 0px 5px 5px;
 }
-.battle-block .time {
+.dbb .time {
   color: var(--gh);
   width: 70px;
   white-space: nowrap;
 }
-.battle-block .alliances {
+.dbb .alliances {
   display: flex;
   height: 100%;
   align-items: center;
@@ -163,56 +162,58 @@ main {
   white-space: nowrap;
   overflow: hidden;
 }
-.battle-block .alliances span {
+.dbb .alliances span {
   color: var(--gh);
   font-weight: 800;
 }
-.battle-block .playersNum {
+.dbb .playersNum {
   text-align: center;
   width: 50px;
 }
 
-.battle-block .totalKills {
+.dbb .totalKills {
   text-align: center;
   width: 50px;
 }
 
-.battle-block .totalFame {
+.dbb .totalFame {
   text-align: center;
   width: 50px;
   white-space: nowrap;
 }
-.battle-block .id {
+.dbb .id {
   color: var(--p);
   width: 80px;
   text-align: right;
   text-decoration: underline;
 }
-.battle-block.title * {
+.dbb.title * {
   font-size: 15px;
 }
-.battles-wrapper .battle-block * {
+.battles-wrapper .dbb * {
   cursor: pointer;
 }
-.battle-block.title {
+.dbb.title {
   border-radius: 5px 5px 0 0;
   border-bottom: 3px solid var(--p);
-  margin-top: 20px;
+  pointer-events: none;
+  padding: 10px 10px;
+  padding-bottom: 0px;
 }
 .totalFame.mills {
   color: #36d936;
   text-shadow: 0px 1px 2px #36d93640;
   font-weight: 800;
 }
-.battle-block.title div img {
+.dbb.title div img {
   height: 25px;
 }
-.battle-block .totalKills.killing-spree {
+.dbb .totalKills.killing-spree {
   color: #ff4e4e;
   text-shadow: 0px 1px 2px #ff4e4e88;
   font-weight: 800;
 }
-.battle-block .playersNum.massive {
+.dbb .playersNum.massive {
   color: #ffee00;
   text-shadow: 0px 1px 2px #ffee0088;
   font-weight: 800;
@@ -298,7 +299,7 @@ main {
   stroke-dasharray: 70.5096664428711 9999999;
   stroke-dashoffset: -262.2723388671875;
 }
-.battle-block .multilog-checkbox {
+.dbb .multilog-checkbox {
   background: none;
   box-shadow: none;
   border: none;
@@ -306,11 +307,11 @@ main {
   overflow: hidden;
   transition: all 0.3s cubic-bezier(.21,.29,0,.94);
 }
-.battle-block .multilog-checkbox.active {
+.dbb .multilog-checkbox.active {
   width: 20px;
   margin-left: 10px;
 }
-.battle-block .multilog-checkbox:after {
+.dbb .multilog-checkbox:after {
   display: none;
 }
 .multilog-redirect {
@@ -540,18 +541,7 @@ main {
     </div>
   </div>
 </div>
-<div class="test"></div>
 
-
-
-<div class="battle-block flex-dir-row center-v title">
-  <div class="time">Время</div>
-  <div class="alliances">Стороны битвы (гильдии, альянсы)</div>
-  <div class="playersNum"><img src="https://api.impactium.fun/albion/icons/players.png"></div>
-  <div class="totalKills"><img src="https://api.impactium.fun/albion/icons/kills.png"></div>
-  <div class="totalFame"><img src="https://api.impactium.fun/albion/icons/fame.png"></div>
-  <div class="id" style="text-decoration: none;">ID</div>
-</div>
 <div class="battles-wrapper flex-dir-column">
   <div class="waiting-wrapper" id="waitingWrapper">
     <div class="waiting-block"></div>
@@ -564,8 +554,16 @@ main {
     <div class="waiting-block"></div>
     <div class="waiting-block"></div>
   </div>
+  <div class="dbb title flex-dir-row center-v ">
+    <div class="time">Время</div>
+    <div class="alliances">Стороны битвы (гильдии, альянсы)</div>
+    <div class="playersNum"><img src="https://api.impactium.fun/albion/icons/players.png"></div>
+    <div class="totalKills"><img src="https://api.impactium.fun/albion/icons/kills.png"></div>
+    <div class="totalFame"><img src="https://api.impactium.fun/albion/icons/fame.png"></div>
+    <div class="id" style="text-decoration: none;">ID</div>
+  </div>
   <% battleboard.forEach(function(item) { %>
-      <div class="battle-block flex-dir-row center-v" onclick="redirectBattle(<%= item.id %>, this)">
+      <div class="dbb real flex-dir-row center-v" onclick="redirectBattle(<%= item.id %>, this)">
         <div class="multilog-checkbox center">
           <input type="checkbox" id="multilogCheckbox" autocomplete="off">
           <svg viewBox="0 0 64 64" height="16px" width="16px">
@@ -626,7 +624,7 @@ multilogModeCheckbox.addEventListener("change", function() {
 
 function toggleMultilogMode(isEnable) {
   const battlesWrapper = document.querySelector('.battles-wrapper');
-  const battles = battlesWrapper.querySelectorAll('.battle-block');
+  const battles = battlesWrapper.querySelectorAll('.dbb.real');
 
   battles.forEach(battle => {
     const checkbox = battle.querySelector('.multilog-checkbox');
@@ -732,7 +730,7 @@ function returnBack() {
 
 function clearBattleBoard() {
   const elementsWrapper = document.querySelector('.battles-wrapper');
-  const elements = elementsWrapper.querySelectorAll('.battle-block');
+  const elements = elementsWrapper.querySelectorAll('.dbb.real');
 
   elements.forEach(element => {
     const checkbox = element.querySelector('input[type="checkbox"]');
