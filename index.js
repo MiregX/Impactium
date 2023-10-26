@@ -30,9 +30,6 @@ global.logged = global.logged || new Map();
 
 const options = utils.getLicense();
 
-const albionApp = require('./modules/albion/guildpanel');
-app.use(vhost('fax.impactium.fun', albionApp));
-
 const govApp = require('./modules/goverment/gov');
 app.use(vhost('gov.impactium.fun', govApp));
 
@@ -111,8 +108,10 @@ app.use('/metrix', metrixRouter);
 const phpApp = require('./modules/php/index');
 app.use('/php', phpApp);
 
+const albionApp = require('./modules/albion/guildpanel');
+app.use('/fax', albionApp);
+
 const oauth2 = require('./modules/oauth2');
-const { Console } = require('console');
 app.use('/oauth2', oauth2);
 
 app.use((err, req, res, next) => {

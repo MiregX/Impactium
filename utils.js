@@ -34,7 +34,7 @@ class User {
 
 class Guild {
   constructor() {
-    this.id = false;
+    this.name = false;
   }
 
   async fetch(guildKey) {
@@ -49,6 +49,15 @@ class Guild {
     
     if (guild) {
       Object.assign(this, guild);
+    }
+  }
+
+  async save() {
+    const Guilds = await getDatabase("guilds");
+    const guild = await Guilds.findOne({ _id: this._id });
+
+    if (guild) {
+      await Guilds.updateOne({ _id: this._id }, { $set: this });
     }
   }
 }
@@ -351,11 +360,9 @@ async function getBattleBoard(params = false) {
             break;
           }
         }
-        
 
-        console.log(filter);
         const result = await Battleboard.find({ $or: filter.$or }).toArray();
-        console.log(result);
+        console.log(result.map(r => r.id));
         return result;
       }
     }
@@ -379,7 +386,9 @@ function getLicense() {
   }
 }
 
-async function deleteBattleRecords(Battleboard, limit) {
+async function deleteBattleRecords(limit) {
+  const Battleboard = await getDatabase("battleboard");
+
   const records = await Battleboard.find().limit(limit).toArray();
   const idArray = records.map(record => record.id);
 
@@ -395,8 +404,8 @@ async function saveBattleBoard(data) {
   data = data.filter(battle => Object.keys(battle.players).length > 9); // Фильтрация по кол-ву игроков > 9
 
   if (data.length > 0) {
-    await deleteBattleRecords(Battleboard, data.length);
     await Battleboard.insertMany(data);
+    await deleteBattleRecords(data.length);
   }
 }
 

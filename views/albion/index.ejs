@@ -80,11 +80,11 @@ p.graphs {
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-<% if (guild.stats?.deadliests?.length > 0) { %>
+<% if (guild.stats.deadliest.list.length > 0) { %>
 <div class="deadliests-players">
   <h3 class="center-v"><%= lang.topkillers %> <span><%= lang.by25lastBattles%></span></h3>
   <div class="players">
-    <% guild.stats.deadliests.splice(0, 5).forEach((item, index) => { %>
+    <% guild.stats.deadliest.list.splice(0, 5).forEach((item, index) => { %>
       <div class="player center-v" style="gap: 10px;">
         <span><%= index + 1 %></span>
         <h6><%= item.name %></h6>
