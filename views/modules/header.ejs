@@ -324,7 +324,7 @@ header > img {
     <% if (user.id) { %>
       <div class="user-onlogin gap center-h center-v" style="justify-content: flex-end;">
         <% if (user.isVerified) { %>
-          <div class="verified flex center">
+          <div class="verified flex center" <% if (user.isCreator) { %>onclick="terminal()"<% } %>>
             <img src="https://impactium.fun/static/images/verified.svg" class="icon">
           </div>
         <% } %>

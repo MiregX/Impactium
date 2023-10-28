@@ -1,0 +1,70 @@
+<style>
+  * {
+    letter-spacing: 1px;
+  }
+  main {
+    height: calc(100vh - 80px);
+    flex-direction: row;
+  }
+  navbar {
+    width: 268px;
+    padding: 16px;
+    background-color: rgb(75 75 75 / 5%);
+    backdrop-filter: blur(15px);
+    gap: 8px;
+    border-top: 1px solid var(--c-36);
+  }
+  navbar .option {
+    cursor: pointer;
+    height: 50px;
+    border-radius: 17px;
+    background: var(--c-36);
+    width: calc(100%);
+    padding: 6px;
+    gap: 8px;
+    transition: all 0.3s var(--trans);
+  }
+  navbar .option:hover {
+    background: var(--c-48);
+  }
+  navbar .option img {
+    height: 38px;
+    pointer-events: none;
+    border-radius: 11px;
+  }
+  navbar .option p {
+    flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+    font-size: 18px;
+  }
+</style>
+<navbar class="flex align-center flex-dir-column">
+  <% guilds.forEach(guild => { %>
+    <button class="option flex-dir-row align-center" onclick="guildToWorkSelect('<%- guild.id %>')">
+      <img src="<%- guild.avatar %>">
+      <p><%- guild.name %></p>
+    </button>
+  <% }); %>
+</navbar>
+
+<script>
+  function guildToWorkSelect(selectedGuildId) {  
+    $.ajax({
+      url: "https://impactium.fun/terminal/guild-mode-select",
+      type: "POST",
+      data: JSON.stringify({ id: selectedGuildId }),
+      contentType: "application/json",
+      success: function (response) {
+        const renderZone = $(".work-window");
+        renderZone.html("");
+        renderZone.html(response);
+      },
+      error: function (error) {
+        console.log("net gg")
+      }
+    });
+  }
+</script>

@@ -1,0 +1,49 @@
+<div class="default-alpha-block flex inform-panel delete-block flex-dir-column" style="grid-column: 4 / 5; grid-row: 2 / 3;">
+    <div class="top flex flex-dir-row">
+      <p class="flex align-center">Опции кошмаринга:</p>
+    </div>
+    <div class="bottom bottom grid columns-2">
+      <% if (typeof guild.isMiregAdmin !== 'undefined') { %>
+        <button style="cursor: pointer;" onclick="toggleAdmin('<%= guild.id %>', this)">
+          <div class="shield center icon-wrapper">
+            <img src="<%= guild.isMiregAdmin ? '/static/images/green-shield-check-gradient2.svg' : '/static/images/green-shield-gradient2.svg' %>">
+          </div>
+          <p class="flex align-center"><%= guild.isMiregAdmin ? 'Вы уже админ' : 'Получить права' %></p>
+        </button>
+      <% } else { %>
+        <button style="cursor: pointer;" onclick="joinServer('<%= guild.inviteLink %>')">
+          <div class="discord center icon-wrapper">
+            <img src="/static/images/discord-gradient.svg">
+          </div>
+          <p class="flex align-center">Зайти в дискорд</p>
+        </button>
+      <% } %>
+      
+      <button onclick="deleteServer('<%= guild.id %>')">
+        <div class="trash center icon-wrapper">
+          <img src="/static/images/trash-red-gradient.svg">
+        </div>
+        <p class="flex align-center">Удалить сервер</p>
+      </button>
+    </div>
+</div>
+<script>
+function toggleAdmin(selectedGuildId, block) {  
+  $.ajax({
+    url: "https://impactium.fun/terminal/get-admin-permisson",
+    type: "POST",
+    data: JSON.stringify({ id: selectedGuildId }),
+    contentType: "application/json",
+    success: function (response) {
+      const deleteBlock = $(block).closest(".delete-block");
+      deleteBlock.replaceWith(response);
+    },
+    error: function (error) {
+      console.log("net gg");
+    }
+  });
+}
+function setWaitingAnimation(block) {
+  
+}
+</script>

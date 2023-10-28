@@ -1,5 +1,6 @@
 const fs = require('fs');
 const ejs = require('ejs');
+const cors = require('cors');
 const path = require('path');
 const https = require('https');
 const vhost = require('vhost');
@@ -20,6 +21,7 @@ app.use(session({
   saveUninitialized: false,
 }));
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use('/static', express.static('static', { setHeaders: (response, path) => { response.setHeader('Cache-Control', 'public, max-age=1'); }}));
@@ -125,6 +127,7 @@ app.use((req, res, next) => {
   req.session.error_code = 404
   req.session.error_message = "Дальше бога нет"
   req.session.error_description = "Искомой страницы не существует"
+  console.log("err"); // срабатывает
   res.redirect('/error')
 });
 

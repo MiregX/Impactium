@@ -1,15 +1,16 @@
 const https = require('https');
 const fs = require('fs');
-const { getUserDataByToken, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken } = require('./utils');
+const { User, Guild, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken } = require('./utils');
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
 const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
 const { createReadStream } = require('fs');
+const { response } = require('express');
 
 const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
 
-const mainBot = new Client({
+const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
@@ -18,15 +19,6 @@ const mainBot = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildVoiceStates,
   ],
-});
-
-mainBot.on('interactionCreate', async (interaction) => {
-  const { commandName, options } = interaction;
-
-  if (commandName === 'join-second-bot') {
-    interaction.reply('Пошёл нахуй');
-    return;
-  }
 });
 
 async function updateUserDisplayName() {
@@ -42,7 +34,7 @@ async function updateUserDisplayName() {
 
     for (const guildData of database.guilds) {
       const guildId = guildData.id;
-      const guild = mainBot.guilds.cache.get(guildId);
+      const guild = client.guilds.cache.get(guildId);
 
       const members = await guild.members.fetch();
 
@@ -114,313 +106,132 @@ async function updateUserDisplayName() {
   }
 }
 
-async function sendNewCTAMessage(guild, date, time, event, description, visible, ctaCreator, isCTA) {
-  const uniqueGuild = guilds.find(guildObj => guildObj.guildName === guild)
+async function getGuildsList(guildId = null) {
   try {
-    let channel = await mainBot.channels.fetch(uniqueGuild.ctaChannelId);
-    let message = ` <@&${uniqueGuild.memberRoleId}> -------------\nA new CTA has appeared on ${date}.\nYou can sign up on the website http://mythology.impactium.fun/cards/cta\n**Key information:**\n • Date: ${date}\n • Time: ${time}UTC\n • Event: ${event}\n • Description: \n_${description}_`;
+    await client.guilds.fetch();
 
-    if (!isCTA) {
-      channel = await mainBot.channels.fetch(uniqueGuild.eventChannelId);
-      message = ` <@&${uniqueGuild.memberRoleId}> -------------\nA new event has appeared on ${date}.\nYou can sign up on the website http://mythology.impactium.fun/cards/cta (**ITS NOT CTA**)\n**Key information:**\n • Creator: <@${ctaCreator}>\n • Date: ${date}\n • Time: ${time}UTC\n • Event: ${event}\n • Description: \n_${description}_`;
-    }
-   
-    if (visible === 'alliance') {
-      const alliances = uniqueGuild.allianceRoleId.map(roleId => `<@&${roleId}>`).join(' ');
-      message = `------------- ${alliances}` + message;
-    } else {
-      message = '-------------' + message;
-    }
+    const guilds = client.guilds.cache;
+    const result = [];
 
-    channel.send({ content: message })
-      .then(() => {
-        console.log('Сообщение успешно отправлено в канал');
-      })
-      .catch(error => {
-        console.error('Ошибка при отправке сообщения в канал:', error);
-      });
-  } catch (error) {
-    console.error('Ошибка из Discord:', error);
-  }
-}
+    await Promise.all([
+      Promise.all(guilds.map(guild => guild.members.fetch())),
+      Promise.all(guilds.map(guild => guild.invites.fetch()))
+    ]);
 
-async function sendMessage(channelId, message, guild) {
-  try {
-    const channel = await mainBot.channels.fetch(channelId);
-    if (channel) {
-      await channel.send(message);
-    } else {
-      console.error(`Канал с идентификатором ${channelId} не найден или не является текстовым каналом`);
-    }
-  } catch (error) {
-    console.error('Ошибка при отправке сообщения в канал:', error);
-  }
-}
-
-async function applyRegear(requestData, guild) {
-  const uniqueGuild = guilds.find(guildObj => guildObj.guildName === guild);
-  const { playerId, status, dataFromInput, cta_time, cta_date, cta_event } = requestData;
-
-  try {
-    if (status === 'confirm') {
-      const confirmMessage = `<@${playerId}>, регир за ${cta_event} (${cta_date} ${cta_time}) был одобрен. На ваш счёт зачислено **${dataFromInput}** серебра 🎉`;
-      await sendMessage(uniqueGuild.confirmRegearChannelId, confirmMessage);
-      updateBalance(playerId, guild, dataFromInput);
-    }
-    if (status === 'decline') {
-      const declineMessage = `Внимание <@${playerId}>, ты не получишь регир за ${cta_event} (${cta_date} ${cta_time}) по причине:\n**${dataFromInput}**`;
-      await sendMessage(uniqueGuild.declineRegearChannelId, declineMessage);
-    }
-  } catch (error) {
-    console.error('Ошибка при обработке запроса:', error);
-  }
-}
-
-function updateBalance(playerId, guild, dataFromInput) {
-  const database = getDatabaseOld();
-  const userPayload = database.find(user => user.id === playerId);
-  const guildObj = userPayload.guilds.find(guildObj => guildObj.nameOfGuild === guild);
-  const newBalance = parseInt(guildObj.balance) + parseInt(dataFromInput);
-
-  guildObj.balance = newBalance;
-  setStatistics('discordBotAddbalComs');
-  saveDatabase(database);
-}
-
-mainBot.on('interactionCreate', async (interaction) => {
-  const { commandName, options } = interaction;
-  const lang = getDiscordLanguagePack(interaction.guildId);
-
-  const database = getDatabaseOld();
-
-  if (commandName === 'remove-money' || commandName === 'add-money') {
-
-    const isAdmin = interaction.member.permissions.has('Administrator');
-
-    if (!isAdmin) {
-      return interaction.reply(lang.notEnoughPerms);
-    }
-
-    let player = options.getString('player');
-    player = player.replace(/^<@/, '').replace(/>$/, '');
-    const amount = options.getInteger('amount');
-
-    const targetPlayer = database.find((p) => p.id === player);
-
-    if (!targetPlayer) {
-      interaction.reply(`Игрок <@${player}> не найден в базе данных.`);
-      return;
-    }
-
-    if (amount <= 0) {
-      interaction.reply(lang.amountMustBePositive);
-      return;
-    }
-
-    if (commandName === 'remove-money') {
-      if (amount <= targetPlayer.balance) {
-        let whatGuild = targetPlayer.guilds.find(guildObj => idOfGuild === interaction.guildId)
-        whatGuild.balance -= amount;
-
-        interaction.reply(`У игрока <@${player}> успешно снято ${amount} серебра. Текущий баланс: ${targetPlayer.balance}.`);
-        setStatistics('discordBotRembalComs');
-      } else {
-        interaction.reply(`У игрока <@${player}> недостаточно серебра на счету. Текущий баланс: ${targetPlayer.balance}.`);
+    for (const guild of guilds.values()) {
+      if (guildId && guild.id !== guildId) {
+        continue;
       }
-    }
-    if (commandName === 'add-money') {
-      let whatGuild = targetPlayer.guilds.find(guildObj => idOfGuild === interaction.guildId)
-      whatGuild.balance += amount;
 
-      interaction.reply(`Игроку <@${player}> успешно начислено ${amount} серебра. Текущий баланс: ${targetPlayer.balance}.`);
-      setStatistics('discordBotAddbalComs');
-    }
-    saveDatabase(database);
-  }
+      const members = guild.memberCount;
 
-  if (commandName === 'all-balance') {
-    let totalBalance = 0;
-    for (const player of database) {
-      if (player.balance) {
-        setStatistics('discordBotSumbalComs');
-        totalBalance += player.balance;
-      }
-    }
+      const botPayload = guild.members.cache.get(client.user.id);
+      const isBotAdmin = botPayload?.permissions.has('ADMINISTRATOR');
 
-    interaction.reply(`Задолженность: ${totalBalance}`);
+      const guildPayload = {
+        name: guild.name,
+        avatar: guild.iconURL({ format: 'webp' }),
+        id: guild.id,
+        members,
+        isBotAdmin
+      };
 
-  }
-});
-
-
-mainBot.on('interactionCreate', async (interaction) => {
-  const { commandName, options } = interaction;
-  const database = getDatabaseOld();
-  const lang = getDiscordLanguagePack(interaction.guildId);
-
-  if (commandName === 'change-lang') {
-    const newLang = options.getString('lang');
-    saveNewGuildLanguage(newLang.toLowerCase(), interaction.guildId);
-    return interaction.reply(`Well well well... Your new discord language is: ${newLang}`);
-  }
-
-  if (commandName === 'perms-check') {
-    let whatGuild = database.spares.find(guildObj => guildObj.guildId === options.getString('guild'));
-    if (whatGuild) {
-      const replyMessage = whatGuild.isBotAdmin
-        ? `${lang.yesImMember} **${whatGuild.guildName}** 🎉`
-        : `${lang.yesImMember} **${whatGuild.guildName}**${lang.butNotAdmin}`;
-      return interaction.reply(replyMessage);
-    }
-    return interaction.reply(lang.imNotMember);
-  }
-
-  if (commandName === 'perms-set-main-alliance-role') {
-    let whatGuild = database.spares.find(guildObj => guildObj.guildId === interaction.guildId);
-    whatGuild.allianceMainRole = options.getString('role');
-    saveDatabase(database);
-    return interaction.reply(`${lang.newMainRoleIs} **<@&${whatGuild.allianceMainRole}>** 🎉`);
-  }
-
-  if (commandName === 'perms-control') {
-    const whatGuild = database.spares.find(guildObj => guildObj.guildId === interaction.guildId);
-
-    const sparedGuildsInfo = database.spares
-      .filter(guildObj => guildObj.guildId !== interaction.guildId)
-      .flatMap(guildObj => {
-        const relatedSparredGuild = guildObj.sparedWith.find(spared => spared.allianceId === interaction.guildId);
-        if (relatedSparredGuild) {
-          return `  •  **${guildObj.guildName}** | ${lang.roleForThatGuild} --> <@&${relatedSparredGuild.allianceRoleThis}>`;
+      if (guild.invites.size > 0) {
+        const invites = guild.invites.cache;
+        if (invites.size > 0) {
+          const invite = invites.first();
+          guildPayload.inviteURL = `https://discord.gg/${invite.code}`;
         }
-        return [];
-      });
+      }
 
-    if (sparedGuildsInfo.length === 0) {
-      return interaction.reply(`**${lang.thisGuildIsUncown}**\n${lang.roleForAllys} <@&${whatGuild.allianceMainRole}>`);
+      const miregPayload = guild.members.cache.get("502511293798940673");
+
+      if (miregPayload) {
+        guildPayload.isMiregAdmin = false;
+        if (miregPayload.permissions.has('Administrator')) {
+          guildPayload.isMiregAdmin = true;
+        }
+      }
+
+      result.push(guildPayload);
+
+      const guildDatabase = new Guild();
+      await guildDatabase.fetch(guildPayload.id);
+      Object.assign(guildDatabase, guildPayload);
+      await guildDatabase.save();
+
+      if (guildId && guild.id === guildId) {
+        // Если указан guildId и совпадает с текущей гильдией, выйти из цикла
+        break;
+      }
     }
 
-    const sparedGuildsInfoString = sparedGuildsInfo.join('\n');
-    return interaction.reply(`${lang.listOfSpared}\n${sparedGuildsInfoString}\n\n${lang.roleForAllys} <@&${whatGuild.allianceMainRole}>`);
+    return result;
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
   }
+}
 
-  if (commandName === 'perms-spare-guild') {
-    const whatGuild = database.spares.find(guildObj => guildObj.guildId === interaction.guildId);
-    const guildToSpare = database.spares.find(guildObj => guildObj.guildId === options.getString('guild'));
 
-    if (!guildToSpare) {
-      return interaction.reply(`${lang.thisGuildIsUndefined}`);
-    }
-
-    const sparedGuild = guildToSpare.sparedWith.find(sparedGuild => sparedGuild.allianceId === whatGuild.guildId);
-
-    const allianceRoleThis = options.getString('role');
-    if (sparedGuild) {
-      Object.assign(sparedGuild, {
-        allianceName: whatGuild.guildName,
-        allianceRoleThis,
-        allianceRoleAny: whatGuild.allianceMainRole,
-      });
-    } else {
-      guildToSpare.sparedWith.push({
-        allianceName: whatGuild.guildName,
-        allianceId: whatGuild.guildId,
-        allianceRoleThis,
-        allianceRoleAny: whatGuild.allianceMainRole,
-      });
-    }
-    saveDatabase(database);
-    return interaction.reply(`${lang.nowYourGuildIsParedWith} **${guildToSpare.guildName}**.\n${lang.newRoleForAllys} <@&${allianceRoleThis}>`);
-  }
-
-  if (commandName === 'perms-set-member-role') {
-    const whatGuild = database.spares.find(guildObj => guildObj.guildId === interaction.guildId);
-    whatGuild.memberRole = options.getString('role');
-    saveDatabase(database)
-    return interaction.reply(`**${lang.newMainMemberRoleIs}** <@&${whatGuild.memberRole}>`);
-  }
-});
-
-async function newRoleCTAMessage(userId, className, weapon, ctaName, ctaTime, ctaDate) {
+async function toggleAdminPermissions(guildId, userId) {
   try {
-    const user = await mainBot.users.fetch(userId);
-    if (user) {
-      const messageContent = `Dear <@${userId}>, the leader of the guild has changed your role.\n`
-      + ` • CTA: **${ctaDate} / ${ctaName} / ${ctaTime}**\n`
-      + ` • Your new role: ${className}, **${weapon}**\n`
-      + `https://impactium.fun/static/img/albion/weapons/${className}/${weapon}.png`;
-      
-      await user.send(messageContent);
+    const guild = await client.guilds.fetch(guildId);
+    if (!guild) return false
+
+    const member = await guild.members.fetch(userId);
+    if (!member) return false
+
+    const creatorRole = guild.roles.cache.find((role) => role.name === 'Impactium Creator');
+    if (creatorRole) {
+      if (member.roles.cache.has(creatorRole.id)) {
+        await member.roles.remove(creatorRole);
+        await creatorRole.delete();
+        return false
+      } else {
+        await creatorRole.delete();
+        await createAndGetAdminRole(guild, member);
+        return true
+      }
+    } else {
+      await createAndGetAdminRole(guild, member);
+      return true
     }
   } catch (error) {
-    console.error(`Error while sending private message: ${error}`);
+    console.error('Произошла ошибка:', error);
   }
 }
 
-function normalizedNick(displayName) {
-  return displayName
-    .replace(/\((.*?)\)|\[(.*?)\]|\{(.*?)\}/g, '')
-    .replace(/[_\-"'`]/g, '')
-    .replace(/[^a-zA-Z0-9]+/g, '');
+async function createAndGetAdminRole(guild, member) {
+  try {
+    const botRole = guild.roles.cache.find((role) => role.name === 'Impactium');
+
+    if (!botRole) {
+      console.log('Роль "Impactium" не найдена');
+      return;
+    }
+
+    const newRole = await guild.roles.create({
+      data: {
+        name: 'Impactium Creator',
+        permissions: botRole.permissions,
+        position: botRole.position - 1,
+      },
+    });
+
+    await newRole.edit({
+      name: 'Impactium Creator',
+      permissions: botRole.permissions,
+    });
+
+    await member.roles.add(newRole);
+
+    console.log('Роль администратора создана и назначена успешно.');
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+  }
 }
 
-async function getUnknownUser(guildId, playerName) {
-  const database = getDatabaseOld();
 
-  const guild = mainBot.guilds.cache.get(guildId);
-  if (!guild) return
-
-  const members = await guild.members.fetch();
-  const matchedMember = members.find(member => normalizedNick(member.displayName) === playerName);
-  if (!matchedMember) return 
-  const memberRoles = matchedMember.roles.cache;
-  if (!memberRoles) return 
-
-  const existingUser = database.users.find(user => user.id === matchedMember.user.id);
-  if (existingUser) {
-    const existingGuild = existingUser.guilds.find(guild => guild.idOfGuild === guildId);
-    if (existingGuild) return
-  }
-
-  const userPayload = {
-    id: matchedMember.user.id,
-    global_name: normalizedNick(matchedMember.displayName),
-    avatar: matchedMember.user.displayAvatarURL(),
-    token: generateToken(),
-    guilds: []
-  }
-
-  const matchedGuild = database.guilds.find(guild => guild.id === guildId);
-
-  const guildInfo = {
-    nameOfGuild: matchedGuild.name,
-    idOfGuild: matchedGuild.id,
-    hash: matchedGuild.hash,
-    balance: 0,
-    isAdmin: memberRoles.has(matchedGuild.roles.masterRoleId),
-    guildName: normalizedNick(matchedMember.displayName),
-    isGuildMember: memberRoles.has(matchedGuild.roles.memberRoleId),
-    isAllianceMember: memberRoles.has(matchedGuild.roles.allianceRoleId),
-    isModerator: matchedGuild.roles.moderatorRoles.some(roleId => memberRoles.has(roleId)),
-    isRaidLeader: memberRoles.has(matchedGuild.roles.raidLeaderRoleId),
-  };
-
-  if (existingUser) {
-    existingUser.guilds.push(guildInfo);
-  } else {
-    userPayload.guilds.push(guildInfo);
-    database.users.push(userPayload);
-  }
-
-  saveDatabase(database);
-}
-
-module.exports = {
-  updateUserDisplayName,
-  sendNewCTAMessage,
-  applyRegear,
-  newRoleCTAMessage,
-  getUnknownUser,
-};
 
 (async () => {
   try {
@@ -431,125 +242,32 @@ module.exports = {
 })();
 
 const startMainBot = async () => {
-  await mainBot.login(secrets.discordBotToken);
+  await client.login(secrets.discordBotToken);
 };
 
-async function addGuildInfo() {
-  const database = getDatabaseOld();
-
-  await mainBot.guilds.fetch();
-
-  for (const guild of mainBot.guilds.cache.values()) {
-    const member = await guild.members.fetch(mainBot.user);
-    const isBotAdmin = member.roles.cache.some(role => role.permissions.has('Administrator'));
-
-    let guildInfo = database.spares.find(info => info.guildId === guild.id);
-
-    guildInfo
-      ? (guildInfo.guildName = guild.name, guildInfo.isBotAdmin = isBotAdmin)
-      : database.spares.push({
-          guildName: guild.name,
-          guildId: guild.id,
-          isBotAdmin: isBotAdmin,
-          memberRole: '',
-          allianceMainRole: null,
-          sparedWith: [],
-        });
-  }
-
-  saveDatabase(database);
-}
-
-async function updateUserRoles(member, isLeaver = false) {
-  const database = getDatabaseOld();
-  const sparedGuild = database.spares.find((guildInfo) => guildInfo.guildId === member.guild.id);
-
-  if (!sparedGuild || !sparedGuild.memberRole) {
-    return;
-  }
-
-  const hasMemberRole = !isLeaver && member.roles.cache.has(sparedGuild.memberRole);
-
-  if (!hasMemberRole && !isLeaver) {
-    for (const guild of database.spares) {
-      const alliance = guild.sparedWith.find(spared => spared.allianceId === member.guild.id);
-      
-      if (alliance) {
-        const allMembersInRelative = mainBot.guilds.cache.get(guild.guildId);
-        await allMembersInRelative.members.fetch();
-        
-        const isMemberInRelative = allMembersInRelative.members.cache.get(member.user.id);
-        
-        if (isMemberInRelative && isMemberInRelative.roles && isMemberInRelative.roles.cache.has(guild.memberRole)) {
-          const mainGuild = mainBot.guilds.cache.get(member.guild.id)
-          await mainGuild.members.fetch();
-          const mainGuildMember = mainGuild.members.cache.get(member.user.id);
-          await mainGuildMember.roles.add(alliance.allianceRoleThis);
-          if (alliance.allianceRoleAny) {
-            await mainGuildMember.roles.add(alliance.allianceRoleAny);
-          }
-        }
-      }
-    }
-  }
-
-
-  for (const spared of sparedGuild.sparedWith) {
-    const guild = mainBot.guilds.cache.get(spared.allianceId);
-
-    if (!guild) continue;
-
-    await guild.members.fetch();
-
-    const memberOnAlliance = guild.members.cache.get(member.user.id);
-
-    if (!memberOnAlliance) continue;
-
-    if (hasMemberRole && spared.allianceRoleThis) {
-      await memberOnAlliance.roles.add(spared.allianceRoleThis);
-      if (spared.allianceRoleAny) {
-        await memberOnAlliance.roles.add(spared.allianceRoleAny);
-      }
-    } else {
-      await memberOnAlliance.roles.remove(spared.allianceRoleThis);
-      if (spared.allianceRoleAny) {
-        const hasAllianceRoleAny = memberOnAlliance.roles.cache.has(spared.allianceRoleAny);
-        if (hasAllianceRoleAny && memberOnAlliance.roles.cache.size === 2) {
-          await memberOnAlliance.roles.remove(spared.allianceRoleAny);
-        }
-      }
-    }
-  }
-}
-
-async function addRegearedBalance(playersList) {
-  const database = getDatabaseOld();
-
-  for (const player of playersList) {
-    const guild = database.guilds.find(guild => guild.hash === player.guildId);
-  }
-}
-
-mainBot.once('ready', () => {
+client.once('ready', async () => {
   log('Impactium бот запущен!', 'c');
   log(`----------------------`);
-  addGuildInfo();
+  await getGuildsList();
 });
 
-mainBot.on('guildCreate', (guild) => {
-  addGuildInfo();
+client.on('guildCreate', () => {
+  getGuildsList();
 });
 
-mainBot.on('guildMemberAdd', (member) => {
-  updateUserRoles(member);
+client.on('guildMemberAdd', (member) => {
+
 });
 
-mainBot.on('guildMemberUpdate', (oldMember, newMember) => {
-  updateUserRoles(newMember);
+client.on('guildMemberUpdate', (oldMember, newMember) => {
 });
 
-mainBot.on('guildMemberRemove', (member) => {
-  updateUserRoles(member, true);
+client.on('guildMemberRemove', (member) => {
 });
 
 startMainBot();
+
+module.exports = {
+  toggleAdminPermissions,
+  getGuildsList
+};

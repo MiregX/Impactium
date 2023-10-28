@@ -46,7 +46,7 @@ class Guild {
         { hash: { $regex: `^${guildKey}$`, $options: 'i' } }
       ]
     });
-    
+
     if (guild) {
       Object.assign(this, guild);
     }
@@ -58,6 +58,8 @@ class Guild {
 
     if (guild) {
       await Guilds.updateOne({ _id: this._id }, { $set: this });
+    } else {
+      await Guilds.insertOne(this);
     }
   }
 }
