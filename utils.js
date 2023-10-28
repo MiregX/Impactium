@@ -35,6 +35,7 @@ class User {
 class Guild {
   constructor() {
     this.name = false;
+    this.isFetched = false;
   }
 
   async fetch(guildKey) {
@@ -49,6 +50,7 @@ class Guild {
 
     if (guild) {
       Object.assign(this, guild);
+      this.isFetched = true;
     }
   }
 

@@ -58,15 +58,14 @@ router.post('/get-admin-permisson', async (request, response) => {
   if (!user.isCreator) return response.redirect('/');
 
   const guild = new Guild();
-
-  const result = await toggleAdminPermissions(request.body.id, user.id);
-
   await guild.fetch(request.body.id);
 
+  guild.isMiregAdmin = await toggleAdminPermissions(request.body.id, user.id);
+
   if (guild.id) {
-    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/8-ght-panel.ejs', 'utf8'), { guild: { isMiregAdmin: result } });
+    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/8-ght-panel.ejs', 'utf8'), { guild });
     response.status(200).send(body);
-    await getGuildsList();
+    await guild.save();
   } else {
     response.status(403).send()
   }
