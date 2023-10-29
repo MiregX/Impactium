@@ -20,62 +20,25 @@
     width: calc(100% - 12px);
     height: 38px;
     padding: 6px;
+    gap: 8px;
   }
   .main-inform > img {
     height: 38px;
     pointer-events: none;
     border-radius: 11px;
   }
-  .delete-block .top {
-    height: 38px;
-    width: 100%;
-  }
-  .delete-block .top > p {
-    font-size: 20px;
-    text-shadow: 0px 3px 8px var(--c-24);
-    font-weight: 600;
-    height: 38px;
-  }
-  .delete-block .bottom {
-    gap: 8px;
-  }
-  .delete-block .bottom > button {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-  }
-  .delete-block .bottom > button img {
-    height: 30px;
-  }
-  .delete-block .bottom > button > p {
-    font-size: 15px;
-    width: min-content;
+  .main-inform h1 {
+    font-size: 22px;
+    text-shadow: 0px 2px 5px var(--c-16);
     flex: 1;
-    height: 38px;
-    padding-left: 8px;
-    text-align: left;
-    overflow: hidden;
-  }
-  .delete-block .icon-wrapper {
-    height: 38px;
-    width: 38px;
-    border-radius: 5px;
-  }
-  .delete-block .trash {
-    background: #493333;
-  }
-  .delete-block .shield {
-    background: #354933;
-  }
-  .delete-block .discord {
-    background: #333849;
   }
 </style>
 <div class="flex align-center main-inform default-alpha-block">
   <img src="<%= guild.avatar %>">
+  <h1><%= guild.name %></h1>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\8-ght-panel.ejs', guild) %>
 </div>
 <div class="guild-information">
   <div class="default-alpha-block flex inform-panel" style="grid-column: 1 / 2; grid-row: 1 / 2;">
   </div>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\8-ght-panel.ejs', guild) %>
 </div>

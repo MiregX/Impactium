@@ -1,49 +1,226 @@
-<div class="default-alpha-block flex inform-panel delete-block flex-dir-column" style="grid-column: 4 / 5; grid-row: 2 / 3;">
-    <div class="top flex flex-dir-row">
-      <p class="flex align-center">Опции кошмаринга:</p>
+<style>
+  :root {
+    --trash-gradient: linear-gradient(145deg, rgba(255,147,147,1) 0%, rgba(241,47,47,1) 100%);
+    --shield-gradient: linear-gradient(145deg, rgba(166,255,156,1) 0%, rgba(17,169,0,1) 100%);
+    --discord-gradient: linear-gradient(145deg, rgba(156,186,255,1) 0%, rgba(20,45,103,1) 100%);
+    --refresh-gradient: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(55,55,55,1) 100%);
+    --trash: #493333;
+    --shield: #354933;
+    --discord: #333849;
+  }
+  .action-buttons {
+    gap: 8px;
+  }
+  .action-buttons > button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    border-radius: 11px;
+    transition: all 0.3s var(--trans);
+    cursor: pointer;
+  }
+  .action-buttons > button.shield {
+    background: var(--shield-gradient);
+  }
+  .action-buttons > button.trash {
+    background: var(--trash-gradient);
+  }
+  .action-buttons > button.discord {
+    background: var(--discord-gradient);
+  }
+  .action-buttons > button.grey {
+    background: var(--refresh-gradient) !important;
+  }
+  .action-buttons > button img {
+    height: 30px;
+    pointer-events: none;
+  }
+  .action-buttons > button img.rotate {
+    animation: refreshRotation infinite 1s var(--trans);
+  }
+  @keyframes refreshRotation {
+    0% {
+      rotate: 360deg;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+  .action-buttons .icon-wrapper {
+    height: 36px;
+    width: 36px;
+    border-radius: 10px;
+    transition: all 0.3s var(--trans);
+  }
+  .action-buttons .trash .icon-wrapper{
+    background: var(--trash);
+  }
+  .action-buttons .shield .icon-wrapper {
+    background: var(--shield);
+  }
+  .action-buttons .discord .icon-wrapper {
+    background: var(--discord);
+  }
+  .action-buttons .grey .icon-wrapper {
+    background: var(--c-64);
+  }
+  .on-hover-block {
+    position: relative;
+  }
+  .on-hover-block:hover::after,
+  .on-hover-block:hover::before {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0%);
+  }
+  .on-hover-block::after,
+  .on-hover-block::before {
+    cursor: default;
+    pointer-events: none;
+    position: absolute;
+    transition: all .3s var(--trans);
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 0 7px;
+  }
+  .on-hover-block::after {
+    height: 30px;
+    bottom: -38px;
+    border-radius: 5px;
+    padding: 0 6px;
+    text-shadow: 0px 2px 5px var(--c-16);
+  }
+  .on-hover-block::before {
+    color: transparent;
+    content: "";
+    height: 32px;
+    bottom: -39px;
+    border-radius: 6px;
+  }
+  .trash.on-hover-block::before {
+    content: "Удалить сервер";
+    background: var(--trash-gradient);
+    right: 0px;
+  }
+  .shield.on-hover-block::before {
+    content: "Переключить админку";
+    background: var(--shield-gradient);
+  }
+  .discord.on-hover-block::before {
+    content: "Вступить";
+    background: var(--discord-gradient);
+  }
+  .grey.on-hover-block::before {
+    background: var(--refresh-gradient);
+  }
+
+  .trash.on-hover-block::after {
+    content: "Удалить сервер";
+    background: var(--trash);
+    right: 1px;
+  }
+  .shield.on-hover-block::after {
+    content: "Переключить админку";
+    background: var(--shield);
+  }
+  .discord.on-hover-block::after {
+    content: "Вступить";
+    background: var(--discord);
+  }
+  .grey.on-hover-block::after {
+    background: var(--c-64);
+  }
+</style>
+<div class="action-buttons flex flex-dir-row">
+  <% if (typeof guild.isMiregAdmin !== 'undefined') { %>
+    <button onclick="toggleAdmin('<%= guild.id %>', this)" class="flex center shield on-hover-block">
+      <div class="flex center icon-wrapper">
+        <img src="<%= guild.isMiregAdmin ? '/static/images/green-shield-check-gradient2.svg' : '/static/images/green-shield-gradient2.svg' %>">
+      </div>
+    </button>
+  <% } %>
+  <button onclick="window.location.href = '<%= guild.inviteURL %>'" class="flex center discord on-hover-block">
+    <div class="flex center icon-wrapper">
+      <img src="/static/images/discord-gradient.svg">
     </div>
-    <div class="bottom bottom grid columns-2">
-      <% if (typeof guild.isMiregAdmin !== 'undefined') { %>
-        <button style="cursor: pointer;" onclick="toggleAdmin('<%= guild.id %>', this)">
-          <div class="shield center icon-wrapper">
-            <img src="<%= guild.isMiregAdmin ? '/static/images/green-shield-check-gradient2.svg' : '/static/images/green-shield-gradient2.svg' %>">
-          </div>
-          <p class="flex align-center"><%= guild.isMiregAdmin ? 'Вы уже админ' : 'Получить права' %></p>
-        </button>
-      <% } else { %>
-        <button style="cursor: pointer;" onclick="joinServer('<%= guild.inviteLink %>')">
-          <div class="discord center icon-wrapper">
-            <img src="/static/images/discord-gradient.svg">
-          </div>
-          <p class="flex align-center">Зайти в дискорд</p>
-        </button>
-      <% } %>
-      
-      <button onclick="deleteServer('<%= guild.id %>')">
-        <div class="trash center icon-wrapper">
-          <img src="/static/images/trash-red-gradient.svg">
-        </div>
-        <p class="flex align-center">Удалить сервер</p>
-      </button>
+  </button>
+  <button onclick="deleteServer('<%= guild.id %>')" class="flex center trash on-hover-block">
+    <div class="flex center icon-wrapper">
+      <img src="/static/images/trash-red-gradient.svg">
     </div>
+  </button>
 </div>
 <script>
-function toggleAdmin(selectedGuildId, block) {  
+function toggleAdmin(selectedGuildId, block) {
+  setWaitingMode(block);
+  const buttonsBlock = $(block).closest(".action-buttons");
+  const stylesBlock = buttonsBlock.prev("style").first();
+  const scriptBlock = buttonsBlock.prev("script").first();
+  const clickedButtonIndex = buttonsBlock.find("button").index(block);
+
   $.ajax({
     url: "https://impactium.fun/terminal/get-admin-permisson",
     type: "POST",
     data: JSON.stringify({ id: selectedGuildId }),
     contentType: "application/json",
     success: function (response) {
-      const deleteBlock = $(block).closest(".delete-block");
-      deleteBlock.replaceWith(response);
+      stylesBlock.remove();
+      scriptBlock.remove();
+      buttonsBlock.replaceWith(response);
+
+      const newButton = $(".action-buttons").find("button").eq(clickedButtonIndex);
+      newButton.addClass("grey");
+      setTimeout(() => {
+        newButton.removeClass("grey");
+      }, 1);
     },
     error: function (error) {
-      console.log("net gg");
+      // Обработка ошибки по вашим требованиям
     }
   });
 }
-function setWaitingAnimation(block) {
-  
+
+function setWaitingMode(block) {
+  $(block).find("img").attr("src", "/static/images/refresh.svg").addClass("rotate");
+  $(block).addClass("grey");
 }
+
+function deleteServer(selectedGuildId, block) {
+  setWaitingMode(block);
+  const buttonsBlock = $(block).closest(".action-buttons");
+  const stylesBlock = buttonsBlock.prev("style").first();
+  const scriptBlock = buttonsBlock.prev("script").first();
+  const clickedButtonIndex = buttonsBlock.find("button").index(block);
+
+  $.ajax({
+    url: "https://impactium.fun/terminal/delete-guild",
+    type: "POST",
+    data: JSON.stringify({ id: selectedGuildId }),
+    contentType: "application/json",
+    success: function (response) {
+      stylesBlock.remove();
+      scriptBlock.remove();
+      buttonsBlock.replaceWith(response);
+
+      const newButton = $(".action-buttons").find("button").eq(clickedButtonIndex);
+      newButton.addClass("grey");
+      setTimeout(() => {
+        newButton.removeClass("grey");
+      }, 1);
+    },
+    error: function (error) {
+      // Обработка ошибки по вашим требованиям
+    }
+  });
+}
+
 </script>

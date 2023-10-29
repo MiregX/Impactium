@@ -127,7 +127,6 @@ app.use((req, res, next) => {
   req.session.error_code = 404
   req.session.error_message = "Дальше бога нет"
   req.session.error_description = "Искомой страницы не существует"
-  console.log("err"); // срабатывает
   res.redirect('/error')
 });
 
