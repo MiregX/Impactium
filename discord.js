@@ -276,6 +276,16 @@ async function discordStatisticsVoiceMembers(oldState, newState) {
   await guildDatabase.save()
 }
 
+async function discordStatisticsMessageActivity(message) {
+  const guildDiscord = await client.guilds.fetch(message.guildId);
+  const guildDatabase = new Guild();
+  await guildDatabase.fetch(member.guild.id);
+  const statisticsField = guildDatabase.statField();
+  statisticsField++ 
+
+  await guildDatabase.save();
+}
+
 (async () => {
   try {
     await rest.put(Routes.applicationCommands(secrets.discordClientID), { body: commands });
@@ -288,10 +298,10 @@ const startMainBot = async () => {
   await client.login(secrets.discordBotToken);
 };
 
-client.once('ready', async () => {
+client.once('ready', () => {
   log('Impactium бот запущен!', 'c');
   log(`----------------------`);
-  await getGuildsList();
+  getGuildsList();
 });
 
 client.on('guildCreate', () => {
@@ -314,10 +324,16 @@ client.on('voiceStateUpdate', (oldState, newState) => {
   discordStatisticsVoiceMembers(oldState, newState);
 });
 
+client.on('messageCreate', (message) => {
+  discordStatisticsMessageActivity(message);
+});
+
 
 startMainBot();
 
 module.exports = {
+  discordStatisticsMessageActivity,
+  discordStatisticsTotalMembers,
   discordStatisticsVoiceMembers,
   toggleAdminPermissions,
   getGuildsList,
