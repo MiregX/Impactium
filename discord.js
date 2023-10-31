@@ -1,6 +1,6 @@
 const https = require('https');
 const fs = require('fs');
-const { User, Guild, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken } = require('./utils');
+const { User, Guild, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken, formatDate } = require('./utils');
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
@@ -255,7 +255,46 @@ async function deleteGuild(guildId) {
   }
 }
 
+async function statisticsDiscordCounter(member) {
+  console.log(member);
 
+  const timestamp = formatDate()
+
+  const guildDs = await client.guilds.fetch(member.guild.id);
+  const guildDb = new Guild();
+  await guildDb.fetch(member.guild.id)
+  if (!guildDb.id || !guildDs.id) return console.log("Missing guild ID for either guildDb or guildDs.");
+
+  const memberCount = guildDs.memberCount;
+
+  if (!guildDb.statistics) {
+    guildDb.statistics = {}
+  }
+  
+  const dateObj = guildDb.statistics[timestamp.date] ?? (guildDb.statistics[timestamp.date] = {});
+  const timeKey = timestamp.time.slice(0, 2);
+  const timeObj = dateObj[timeKey] ?? (dateObj[timeKey] = {});
+  
+  timeObj.members = memberCount;
+  
+  await guildDb.save();
+}
+
+async function statisticsVoiceDiscordCounter(oldState, newState) {
+  const guildDb = new Guild();
+  await guildDb.fetch(newState.guild)
+  const statField = guildDb.statField();
+
+  if (oldState.channel === null && newState.channel !== null) {
+    statField.voiceMembers = (statField.voiceMembers || 0) + 1;
+  } else if (newState.channel === null) {
+    statField.voiceMembers = (statField.voiceMembers || 0) - 1;
+  }
+
+  statField.voiceMembers = Math.max(0, statField.voiceMembers);
+
+  await guildDb.save()
+}
 
 (async () => {
   try {
@@ -280,18 +319,26 @@ client.on('guildCreate', () => {
 });
 
 client.on('guildMemberAdd', (member) => {
-
+  statisticsDiscordCounter(member);
 });
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
+  statisticsDiscordCounter(newMember);
 });
 
 client.on('guildMemberRemove', (member) => {
+  statisticsDiscordCounter(member);
 });
+
+client.on('voiceStateUpdate', (oldState, newState) => {
+  statisticsVoiceDiscordCounter(oldState, newState);
+});
+
 
 startMainBot();
 
 module.exports = {
+  statisticsVoiceDiscordCounter,
   toggleAdminPermissions,
   getGuildsList,
   deleteGuild

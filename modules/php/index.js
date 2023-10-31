@@ -1,4 +1,4 @@
-const { getUserDataByToken, getLanguagePack, log, getDatabase, saveDatabase } = require('../../utils');
+const { User, getLanguagePack, log, getDatabase, saveDatabase } = require('../../utils');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const express = require('express');
@@ -7,8 +7,10 @@ const path = require('path');
 const ejs = require('ejs');
 const fs = require('fs');
 
-router.get('/', (request, response) => {
-  const user = getUserDataByToken(request.cookies.token);
+router.get('/', async (request, response) => {
+  const user = new User();
+  await user.fetch(request.cookies.token);
+  
   if (!user || !user.email || user.lastLogin !== "google") return response.redirect('https://impactium.fun/oauth2/login/google');
   const filesAndFolders = getUserPathResolve(user)
   console.log(filesAndFolders, "g")

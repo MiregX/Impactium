@@ -54,6 +54,19 @@ class Guild {
     }
   }
 
+  statField() {
+    const timestamp = formatDate()
+
+    if (!this.statistics) {
+      this.statistics = {}
+    }
+  
+    const dateObj = this.statistics[timestamp.date] ?? (this.statistics[timestamp.date] = {});
+    const timeObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = {});
+
+    return timeObj
+  }
+
   async save() {
     const Guilds = await getDatabase("guilds");
     const guild = await Guilds.findOne({ _id: this._id });
@@ -152,6 +165,7 @@ function formatDate(toDate = false, isPrevDay = false) {
 
   return {
     time: `${hours}:${minutes}:${seconds}`,
+    hour: `${hours}`,
     shortTime: `${hours}:${minutes}`,
     date: `${day}.${month}.${year}`,
     shortDate: `${hours}:${minutes} ${day}.${month}`
