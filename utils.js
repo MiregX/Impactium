@@ -43,11 +43,11 @@ class Guild {
     const guild = await Guilds.findOne({
       $or: [
         { name: { $regex: `^${guildKey}$`, $options: 'i' } },
-        { id: { $regex: `^${guildKey}$`, $options: 'i' } },
-        { hash: { $regex: `^${guildKey}$`, $options: 'i' } }
+        { id: guildKey },
+        { hash: guildKey }
       ]
     });
-
+    
     if (guild) {
       Object.assign(this, guild);
       this.isFetched = true;
