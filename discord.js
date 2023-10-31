@@ -255,33 +255,25 @@ async function deleteGuild(guildId) {
   }
 }
 
-async function discordStatisticsTotalMembers(member) {
-  const guildDiscord = await client.guilds.fetch(member.guild.id);
+async function discordStatistics(guildId, action, ...args) {
   const guildDatabase = new Guild();
-  await guildDatabase.fetch(member.guild.id);
-  const statisticsField = guildDatabase.statField();
-  
-  statisticsField.totalMembers = guildDiscord.memberCount;
-  
-  await guildDatabase.save();
-}
-
-async function discordStatisticsVoiceMembers(oldState, newState) {
-  const guildDatabase = new Guild();
-  await guildDatabase.fetch(newState.guild.id)
+  await guildDatabase.fetch(guildId);
   const statField = guildDatabase.statField();
 
-  statField.voiceMembers = Math.max(0, (statField.voiceMembers || 0) + (oldState.channel === null && newState.channel !== null ? 1 : (newState.channel === null ? -1 : 0)));
-
-  await guildDatabase.save()
-}
-
-async function discordStatisticsMessageActivity(message) {
-  const guildDiscord = await client.guilds.fetch(message.guildId);
-  const guildDatabase = new Guild();
-  await guildDatabase.fetch(member.guild.id);
-  const statisticsField = guildDatabase.statField();
-  statisticsField++ 
+  switch (action) {
+    case 'totalMembers':
+      const memberCount = await client.guilds.fetch(guildId).memberCount;
+      statField.totalMembers = memberCount;
+      break;
+    case 'voiceMembers':
+      const [oldState, newState] = args;
+      statField.voiceMembers = Math.max(0, (statField.voiceMembers || 0) + (oldState.channel === null && newState.channel !== null ? 1 : (newState.channel === null ? -1 : 0)));
+      break;
+    case 'messageActivity':
+      statField.messagesPerHour >= 0 ? statField.messagesPerHour++ : statField.messagesPerHour = 1;
+      break;
+    default:
+  }
 
   await guildDatabase.save();
 }
@@ -309,33 +301,31 @@ client.on('guildCreate', () => {
 });
 
 client.on('guildMemberAdd', (member) => {
-  discordStatisticsTotalMembers(member);
+  discordStatistics(member.guild.id, 'totalMembers');
 });
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  discordStatisticsTotalMembers(newMember);
+  discordStatistics(member.guild.id, 'totalMembers');
 });
 
 client.on('guildMemberRemove', (member) => {
-  discordStatisticsTotalMembers(member);
+  discordStatistics(member.guild.id, 'totalMembers');
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  discordStatisticsVoiceMembers(oldState, newState);
+  discordStatistics(newState.guild.id, 'voiceMembers');
 });
 
 client.on('messageCreate', (message) => {
-  discordStatisticsMessageActivity(message);
+  discordStatistics(message.guildId, 'messageActivity');
 });
 
 
 startMainBot();
 
 module.exports = {
-  discordStatisticsMessageActivity,
-  discordStatisticsTotalMembers,
-  discordStatisticsVoiceMembers,
   toggleAdminPermissions,
+  discordStatistics,
   getGuildsList,
   deleteGuild
 };
