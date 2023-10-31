@@ -305,7 +305,7 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  discordStatistics(member.guild.id, 'totalMembers');
+  discordStatistics(newMember.guild.id, 'totalMembers');
 });
 
 client.on('guildMemberRemove', (member) => {
