@@ -1,0 +1,66 @@
+<style>
+  #myChart {
+    height: calc(100%) !important;
+    width: calc(100%) !important;
+  }
+</style>
+<div class="default-alpha-block 1st flex inform-panel flex-dir-row" style="grid-column: 1 / 2; grid-row: 1 / 2; overflow: hidden;">
+  <canvas id="myChart"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<script>
+  // Получите данные из JSON и преобразуйте их в удобный формат
+  const rawData = JSON.parse(`<%- JSON.stringify(guild.statistics) %>`);
+  const data = []; // Массив для данных графика
+
+  // Создайте массив для меток (часов)
+  const labels = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`) + ':00');
+
+  // Пройдитесь по каждой дате
+  Object.values(rawData).forEach(date => {
+    console.log(date)
+    for (const hour of labels) {
+      const entry = date[hour.slice(0, 2)] || { messagesPerHour: 0 };
+      data.push(entry.messagesPerHour);
+    }
+  });
+
+  const canvas = document.getElementById('myChart').getContext('2d');
+
+  new Chart(canvas, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        data: data,
+        borderColor: 'rgb(187, 0, 255)',
+        borderWidth: 3,
+        pointRadius: 0,
+        lineTension: 0.5,
+      },
+    ],
+  },
+  options: {
+    responsive: false,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false,
+        opacity: 0,
+      },
+    },
+    scales: {
+      x: {
+        display: false,
+      },
+      y: {
+        display: false,
+      },
+    },
+    width: 400, // Установите ширину в пикселях
+    height: 200, // Установите высоту в пикселях
+  },
+});
+
+</script>

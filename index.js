@@ -79,12 +79,6 @@ app.get('/logout', (request, response) => {
   response.redirect('/');
 });
 
-app.get('/set-token', (request, response) => {
-  if (options.isSuccess) return response.redirect('/');
-  response.cookie('token', "321");
-  response.redirect('/');
-});
-
 app.get('/error', (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
   response.render('error.ejs', {
