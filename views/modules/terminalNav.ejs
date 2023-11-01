@@ -56,11 +56,25 @@
   navbar .option .users > p {
     margin-bottom: -2px;
     font-size: 11px;
-  } 
+  }
+  navbar .option.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    filter: brightness(0.5) saturate(0);
+  }
 </style>
 <navbar class="flex align-center flex-dir-column">
-  <% guilds.forEach(guild => { %>
-    <button class="option flex-dir-row align-center" onclick="guildToWorkSelect('<%- guild.id %>')">
+  <% 
+    guilds.sort((a, b) => {
+      if (a.isBotAdmin && !b.isBotAdmin) return -1;
+      if (!a.isBotAdmin && b.isBotAdmin) return 1;
+
+      if (a.members > b.members) return -1;
+      if (a.members < b.members) return 1;
+
+    }).forEach(guild => { 
+  %>
+    <button class="option <% if (!guild.isBotAdmin) { %>disabled <% } %>flex-dir-row align-center" onclick="guildToWorkSelect('<%- guild.id %>')">
       <img src="<%- guild.avatar %>">
       <p><%- guild.name %></p>
       <div class="users flex flex-dir-row center">
@@ -70,7 +84,6 @@
     </button>
   <% }); %>
 </navbar>
-
 <script>
   function guildToWorkSelect(selectedGuildId) {  
     $.ajax({

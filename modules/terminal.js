@@ -30,9 +30,10 @@ router.get('/', async (request, response) => {
       user,
       lang
     });
-  } catch (err) {
-    console.error(err);
-    return response.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.log(error);
+    request.session.error_message = error.name;
+    response.redirect('https://impactium.fun/error');
   }
 });
 

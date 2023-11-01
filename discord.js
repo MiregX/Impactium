@@ -1,6 +1,6 @@
 const https = require('https');
 const fs = require('fs');
-const { User, Guild, getDatabaseOld, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken, formatDate } = require('./utils');
+const { User, Guild, getDatabase, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken, formatDate } = require('./utils');
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
@@ -113,15 +113,22 @@ async function getGuildsList(guildId = null) {
     const guilds = client.guilds.cache;
     const result = [];
 
+    const Guilds = await getDatabase("guilds");
+
     await Promise.all([
-      Promise.all(guilds.map(guild => guild.members.fetch()))
+      Promise.all(guilds.map(guild => guild.members.fetch())),
     ]);
+
+    const availableGuildIds = guilds.map(guild => guild.id); // Список доступных гильдий
 
     for (const guild of guilds.values()) {
       if (guildId && guild.id !== guildId) {
         continue;
       }
 
+      const guildDatabase = new Guild();
+      await guildDatabase.fetch(guild.id);
+      
       const members = guild.memberCount;
 
       const botPayload = guild.members.cache.get(client.user.id);
@@ -151,16 +158,18 @@ async function getGuildsList(guildId = null) {
         }
       }
 
+      // Если кол-во записей в колекции больше чем доступно боту, то для лишних поменять значение isBotAdmin в false
+
       result.push(guildPayload);
 
-      const guildDatabase = new Guild();
-      await guildDatabase.fetch(guildPayload.id);
       Object.assign(guildDatabase, guildPayload);
+
       await guildDatabase.save();
 
-      if (guildId && guild.id === guildId) {
-        break;
-      }
+      await Guilds.updateMany(
+        { id: { $nin: availableGuildIds } },
+        { $set: { isBotAdmin: false, isBotAvailable: false } }
+      );
     }
 
     return result;
@@ -313,7 +322,7 @@ client.on('guildMemberRemove', (member) => {
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  discordStatistics(newState.guild.id, 'voiceMembers');
+  discordStatistics(newState.guild.id, 'voiceMembers', oldState, newState);
 });
 
 client.on('messageCreate', (message) => {
