@@ -4,7 +4,7 @@ const { User, Guild, getDatabase, saveDatabase, setStatistics, log, saveSpares, 
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
-const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
 const { createReadStream } = require('fs');
 const { response } = require('express');
 
@@ -237,9 +237,7 @@ async function deleteGuild(guildId) {
     const members = await guild.members.fetch();
     members.forEach(async (member) => {
       try {
-        if (member.kickable) {
-          await member.kick();
-        }
+        await member.kick();
       } catch (error) {
       }
     });
@@ -287,6 +285,18 @@ async function discordStatistics(guildId, action, ...args) {
   await guildDatabase.save();
 }
 
+async function summaryUsersFromDiscordServersCounter() {
+  await client.guilds.fetch()
+  const guilds = client.guilds.cache;
+  let totalMembers = 0
+
+  for (const guild of guilds.values()) {
+    totalMembers += guild.memberCount;
+  }
+
+  setClientPresence(`${totalMembers} unique users.`);
+}
+
 (async () => {
   try {
     await rest.put(Routes.applicationCommands(secrets.discordClientID), { body: commands });
@@ -295,14 +305,18 @@ async function discordStatistics(guildId, action, ...args) {
   }
 })();
 
-const startMainBot = async () => {
-  await client.login(secrets.discordBotToken);
-};
+function setClientPresence(message) {
+  client.user.setPresence({
+    activities: [{ name: message, type: ActivityType.Watching }],
+    status: 'dnd',
+  });
+}
 
 client.once('ready', () => {
   log('Impactium бот запущен!', 'c');
   log(`----------------------`);
   getGuildsList();
+  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('guildCreate', () => {
@@ -311,14 +325,17 @@ client.on('guildCreate', () => {
 
 client.on('guildMemberAdd', (member) => {
   discordStatistics(member.guild.id, 'totalMembers');
+  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
   discordStatistics(newMember.guild.id, 'totalMembers');
+  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('guildMemberRemove', (member) => {
   discordStatistics(member.guild.id, 'totalMembers');
+  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
@@ -329,8 +346,7 @@ client.on('messageCreate', (message) => {
   discordStatistics(message.guildId, 'messageActivity');
 });
 
-
-startMainBot();
+await client.login(secrets.discordBotToken);
 
 module.exports = {
   toggleAdminPermissions,
