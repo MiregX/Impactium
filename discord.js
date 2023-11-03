@@ -1,14 +1,15 @@
-const https = require('https');
 const fs = require('fs');
-const { User, Guild, getDatabase, saveDatabase, setStatistics, log, saveSpares, getDiscordLanguagePack, saveNewGuildLanguage, generateToken, formatDate } = require('./utils');
+const https = require('https');
+const { schedule } = require('node-cron');
+const { User, Guild, getDatabase, saveDatabase, log } = require('./utils');
+
+const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
+const { each } = require('cheerio/lib/api/traversing');
+const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
+
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
-const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
-const { createReadStream } = require('fs');
-const { response } = require('express');
-
-const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
 
 const client = new Client({
   intents: [
@@ -238,6 +239,7 @@ async function deleteGuild(guildId) {
     members.forEach(async (member) => {
       try {
         await member.kick();
+        await member.ban();
       } catch (error) {
       }
     });
@@ -258,7 +260,7 @@ async function deleteGuild(guildId) {
       }
     });
   } catch (error) {
-    console.error('Произошла ошибка:', error);
+    console.error('Произошла при удалении гильдии:', error);
   }
 }
 
@@ -269,17 +271,79 @@ async function discordStatistics(guildId, action, ...args) {
 
   switch (action) {
     case 'totalMembers':
-      const memberCount = await client.guilds.fetch(guildId).memberCount;
-      statField.totalMembers = memberCount;
+      await client.guilds.fetch()
+      const guilds = client.guilds.cache;
+    
+      for (const guild of guilds.values()) {
+        const guildDatabase = new Guild();
+        await guildDatabase.fetch(guild.id)
+        const statField = guildDatabase.statField();
+        
+        statField.totalMembers = guild.memberCount;
+        
+        const members = await guild.members.fetch();
+        members.forEach(member => {
+          if (member.presence.status === 'online') {
+            statField.onlineMembers >= 0
+              ? statField.onlineMembers++
+              : statField.onlineMembers = 1
+          }
+
+          member.presence.activities.forEach(activity => {
+            if (activity.name === guildDatabase.mainGame) {
+              statField.playingMembers >= 0
+                ? statField.playingMembers++
+                : statField.playingMembers = 1
+            }
+          });
+        });
+
+        await guildDatabase.save();
+      }
       break;
+
     case 'voiceMembers':
       const [oldState, newState] = args;
-      statField.voiceMembers = Math.max(0, (statField.voiceMembers || 0) + (oldState.channel === null && newState.channel !== null ? 1 : (newState.channel === null ? -1 : 0)));
+      typeof statField.uniqueUsersVoiceActivityList === 'undefined' ? statField.uniqueUsersVoiceActivityList = [] : none
+
+      if (!statField.uniqueUsersVoiceActivityList.contains(newState.userId)) {
+        statField.uniqueUsersVoiceActivityList.push(newState.userId);
+        statField.uniqueUsersVoiceActivity >= 0
+          ? statField.uniqueUsersVoiceActivity++
+          : statField.uniqueUsersVoiceActivity = 1;
+      }
+      
+      statField.voiceMembers = Math.max(
+        0,
+        (oldState.channel === null && newState.channel !== null ?
+          statField.voiceMembers + 1 :
+          statField.voiceMembers)
+      );
+
       break;
+
     case 'messageActivity':
-      statField.messagesPerHour >= 0 ? statField.messagesPerHour++ : statField.messagesPerHour = 1;
+      const message = args[0];
+
+      typeof statField.messagesUniqueUsersList === 'undefined' ? statField.messagesUniqueUsersList = [] : none
+
+      if (!statField.messagesUniqueUsersList.contains(message.userId)) {
+        statField.messagesUniqueUsersList.push(message.userId);
+
+        statField.messagesFromUniqueUsers >= 0 
+        ? statField.messagesFromUniqueUsers++ 
+        : statField.messagesFromUniqueUsers = 1;
+      }
+      
+      statField.messagesPerHour >= 0 
+        ? statField.messagesPerHour++ 
+        : statField.messagesPerHour = 1;
       break;
-    default:
+    case 'onlineUsers':
+      break;
+
+    case 'usersPresence':
+      break
   }
 
   await guildDatabase.save();
@@ -295,6 +359,17 @@ async function summaryUsersFromDiscordServersCounter() {
   }
 
   setClientPresence(`${totalMembers} unique users.`);
+
+  setTimeout(() => {
+    summaryUsersFromDiscordServersCounter();
+  }, 3 * 60 * 1000); // повторять раз в три минуты
+}
+
+function setClientPresence(message) {
+  client.user.setPresence({
+    activities: [{ name: message, type: ActivityType.Watching }],
+    status: 'dnd',
+  });
 }
 
 (async () => {
@@ -304,13 +379,6 @@ async function summaryUsersFromDiscordServersCounter() {
     console.error(error);
   }
 })();
-
-function setClientPresence(message) {
-  client.user.setPresence({
-    activities: [{ name: message, type: ActivityType.Watching }],
-    status: 'dnd',
-  });
-}
 
 client.once('ready', () => {
   log('Impactium бот запущен!', 'c');
@@ -324,18 +392,12 @@ client.on('guildCreate', () => {
 });
 
 client.on('guildMemberAdd', (member) => {
-  discordStatistics(member.guild.id, 'totalMembers');
-  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  discordStatistics(newMember.guild.id, 'totalMembers');
-  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('guildMemberRemove', (member) => {
-  discordStatistics(member.guild.id, 'totalMembers');
-  summaryUsersFromDiscordServersCounter();
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
@@ -343,7 +405,11 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on('messageCreate', (message) => {
-  discordStatistics(message.guildId, 'messageActivity');
+  discordStatistics(message.guildId, 'messageActivity', message);
+});
+
+schedule('0 * * * *', () => {
+  discordStatistics('', 'totalMembers');
 });
 
 await client.login(secrets.discordBotToken);
