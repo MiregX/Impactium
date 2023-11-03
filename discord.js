@@ -339,11 +339,6 @@ async function discordStatistics(guildId, action, ...args) {
         ? statField.messagesPerHour++ 
         : statField.messagesPerHour = 1;
       break;
-    case 'onlineUsers':
-      break;
-
-    case 'usersPresence':
-      break
   }
 
   await guildDatabase.save();
