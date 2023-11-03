@@ -205,14 +205,14 @@ header {
     <div class="guild-list-wrapper flex-dir-column">
       <h5><%= lang.ourPartners %></h5>
 
-        <% Object.values(nav.guilds).forEach(guild => { %>
-          <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= guild.action %>')">
+        <% Object.values(nav.partners).forEach(partner => { %>
+          <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= partner.action %>')">
             <div class="wrapper center-v flex gap">
-              <img class="<%= guild.logoMobile ? 'logoDesktop' : '' %>" src="<%= guild.logo %>">
-              <% if (guild.logoMobile) { %>
-                <img class="logoMobile" src="<%= guild.logoMobile %>">
+              <img class="<%= partner.logoMobile ? 'logoDesktop' : '' %>" src="<%= partner.logo %>">
+              <% if (partner.logoMobile) { %>
+                <img class="logoMobile" src="<%= partner.logoMobile %>">
               <% } %>
-              <h2><%= guild.name %></h2>
+              <h2><%= partner.name %></h2>
             </div>
             <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
           </div>

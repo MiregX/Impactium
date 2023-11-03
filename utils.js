@@ -80,13 +80,13 @@ class Guild {
 }
 
 function getLanguagePack(languagePack = "en") {
-  let lang;
-  try {
-    lang = require(`./static/lang/${languagePack}.json`);
-  } catch (err) {
-    lang = require(`./static/lang/en.json`);
-  }
-  return lang;
+  const locale = require(`./static/lang/locale.json`);
+
+  return new Proxy(locale, {
+    get(target, prop) {
+      return target[prop] && target[prop][languagePack] ? target[prop][languagePack] : `Missing translation for "${prop}" in "${languagePack}"`;
+    },
+  });
 }
 
 // users.find(user => {
