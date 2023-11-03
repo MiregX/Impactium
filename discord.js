@@ -4,12 +4,11 @@ const { schedule } = require('node-cron');
 const { User, Guild, getDatabase, saveDatabase, log } = require('./utils');
 
 const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
-const { each } = require('cheerio/lib/api/traversing');
-const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
-
 
 const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
+
+const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
 
 const client = new Client({
   intents: [
@@ -21,91 +20,6 @@ const client = new Client({
     GatewayIntentBits.GuildVoiceStates,
   ],
 });
-
-async function updateUserDisplayName() {
-  try {
-    const database = getDatabaseOld();
-
-    const userIds = new Set();
-    for (const user of database.users) {
-      userIds.add(user.id);
-    }
-
-    const guildMembersMap = new Map();
-
-    for (const guildData of database.guilds) {
-      const guildId = guildData.id;
-      const guild = client.guilds.cache.get(guildId);
-
-      const members = await guild.members.fetch();
-
-      if (!members) return
-
-      const membersInDatabase = members.filter(member => userIds.has(member.user.id));
-      guildMembersMap.set(guildId, membersInDatabase);
-    }
-
-    const updatedUsers = [];
-
-    for (const user of database.users) {
-      const userId = user.id;
-
-      const updatedGuilds = [];
-      for (const guildData of user.guilds) {
-        const guildId = guildData.id;
-        const members = guildMembersMap.get(guildId);
-
-        if (members) {
-          const member = members.get(userId);
-          if (member) {
-            const displayName = member.displayName
-              .replace(/\((.*?)\)|\[(.*?)\]|\{(.*?)\}/g, '')
-              .replace(/[_\-"'`]/g, '')
-              .replace(/[^a-zA-Z0-9]+/g, '');
-
-            const roles = member.roles.cache;
-
-            const isModerator = roles.some(role => guildData.roles.moderatorRoles.includes(role.id));
-            const isRaidLeader = roles.some(guildData.roles.raidLeaderRoleId);
-            const isAdmin = roles.has(guildData.roles.guildMasterRoleId);
-
-            const isAllianceMember = roles.has(guildData.roles.allianceRoleId);
-
-            let guildBalance = 0;
-            if (user.guilds && Array.isArray(user.guilds)) {
-              const existingGuild = user.guilds.find(g => g.idOfGuild === guildId);
-              if (existingGuild && typeof existingGuild.balance === 'number') {
-                guildBalance = existingGuild.balance;
-              }
-            }
-
-            const guildInfo = {
-              nameOfGuild: guildData.guildName,
-              idOfGuild: guildData.guildId,
-              balance: guildBalance,
-              isAdmin: isAdmin,
-              guildName: displayName,
-              isGuildMember: roles.has(guildData.memberRoleId),
-              isAllianceMember: isAllianceMember,
-              isModerator: isModerator,
-              isRaidLeader: isRaidLeader,
-            };
-            updatedGuilds.push(guildInfo);
-          }
-        }
-      }
-
-      user.guilds = updatedGuilds;
-      updatedUsers.push(user);
-    }
-    database.users.push(updatedUsers);
-
-    saveDatabase(database);
-
-  } catch (error) {
-    console.error('Произошла ошибка:', error);
-  }
-}
 
 async function getGuildsList(guildId = null) {
   try {
@@ -290,7 +204,7 @@ async function discordStatistics(guildId, action, ...args) {
           }
 
           member.presence.activities.forEach(activity => {
-            if (activity.name === guildDatabase.mainGame) {
+            if (typeof guildDatabase.mainGame !== 'undefined' && activity.name === guildDatabase.mainGame) {
               statField.playingMembers >= 0
                 ? statField.playingMembers++
                 : statField.playingMembers = 1
@@ -407,7 +321,7 @@ schedule('0 * * * *', () => {
   discordStatistics('', 'totalMembers');
 });
 
-await client.login(secrets.discordBotToken);
+client.login(secrets.discordBotToken);
 
 module.exports = {
   toggleAdminPermissions,

@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "axios": "^1.5.0",
-    "cheerio": "^1.0.0-rc.12",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "discord.js": "^14.11.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
@@ -10,6 +10,7 @@
     "ftp-client": "^0.2.0",
     "mongodb": "^6.1.0",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.2",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "telegraf": "^4.14.0",
