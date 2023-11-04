@@ -196,8 +196,8 @@ async function discordStatistics(guildId, action, ...args) {
         statField.totalMembers = guild.memberCount;
         
         const members = await guild.members.fetch();
-        members.forEach(member => {
-          if (member.presence.status === 'online') {
+        members.forEach(async (member) => {
+          if (member.presence?.status === 'online') {
             statField.onlineMembers >= 0
               ? statField.onlineMembers++
               : statField.onlineMembers = 1
@@ -208,11 +208,13 @@ async function discordStatistics(guildId, action, ...args) {
               statField.playingMembers >= 0
                 ? statField.playingMembers++
                 : statField.playingMembers = 1
+            } else {
+              statField.playingMembers >= 0
+                ? statField.playingMembers++
+                : statField.playingMembers = 1
             }
           });
         });
-
-        await guildDatabase.save();
       }
       break;
 
@@ -294,6 +296,7 @@ client.once('ready', () => {
   log(`----------------------`);
   getGuildsList();
   summaryUsersFromDiscordServersCounter();
+  discordStatistics('', 'totalMembers');
 });
 
 client.on('guildCreate', () => {
