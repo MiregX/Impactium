@@ -8,11 +8,11 @@
     width: 100%;
   }
   .inform-panel {
-    width: calc(100% - 24px);
-    height: calc(100% - 24px);
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
     background: var(--c-36);
-    border-radius: 17px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 4px;
     gap: 8px;
     box-shadow: 0px 10px 12px #00000040;
   }
@@ -39,16 +39,16 @@
   <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\main-panel-buttons.ejs', guild) %>
 </div>
 <div class="guild-information">
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'totalMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'totalRegionalMembers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'totalMembers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'totalRegionalMembers' }) %>
 
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'onlineMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'playingMembers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'onlineMembers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'playingMembers' }) %>
   
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'messagesPerHour' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'messagesFromUniqueUsers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'messagesPerHour' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'messagesFromUniqueUsers' }) %>
 
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'voiceMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang, name: 'uniqueUsersVoiceActivity' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'voiceMembers' }) %>
+  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'uniqueUsersVoiceActivity' }) %>
   
 </div>

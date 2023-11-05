@@ -1,24 +1,24 @@
 <style>
-  .inform-panel > canvas {
-    height: unset !important;
-    width: unset !important;
+  .inform-panel canvas {
+    max-height: 100% !important;
+    max-width: 100% !important;
   }
 </style>
-<div class="default-alpha-block 1st flex inform-panel flex-dir-row" style="overflow: hidden;">
-  <div class="line-one">
+<div class="default-alpha-block 1st flex inform-panel flex-dir-column" style="overflow: hidden;">
+  <div class="line-one flex">
     <p></p>
     <button>
       <img src="">
     </button>
   </div>
-  <div class="line-two">
+  <div class="line-two flex">
     <div class="bar">
       <span id="maxY"></span>
       <p id="nameY"></p>
     </div>
-    <canvas id=""></canvas>
+    <canvas id="<%= name %>"></canvas>
   </div>
-  <div class="line-three">
+  <div class="line-three flex">
     <div class="toggler">
       <button id="toDays">1d</button>
       <button id="toWeeks">1w</button>
@@ -27,58 +27,65 @@
     <span id="maxX"></span>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 <script>
-  const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
-  const data = [];
+  (function() {
+    const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
+    const statisticsName = "<%= name %>"
+    const data = [];
 
-  const labels = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`) + ':00');
+    const hours = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`) + ':00');
 
-  Object.values(rawData).forEach(date => {
-    console.log(date)
-    for (const hour of labels) {
-      const entry = date[hour.slice(0, 2)] || { messagesPerHour: 0 };
-      data.push(entry.messagesPerHour);
-    }
-  });
+    let previousValue = 0;
 
-  console.log(data)
+    Object.values(rawData).forEach(date => {
+      for (const hour of hours) {
+        const entry = date[hour.slice(0, 2)];
+        const value = entry && entry[statisticsName] !== undefined 
+          ? entry[statisticsName]
+          : previousValue;
 
-  const canvas = document.getElementById('').getContext('2d');
+        data.push(value);
+        previousValue = value;
+      }
+    });
 
-  new Chart(canvas, {
-  type: 'line',
-  data: {
-    labels: labels,
-    datasets: [
-      {
-        data: data,
-        borderColor: 'rgb(187, 0, 255)',
-        borderWidth: 3,
-        pointRadius: 0,
-        lineTension: 0.5,
+    const canvas = document.getElementById('<%= name %>').getContext('2d');
+
+    new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: hours,
+        datasets: [
+          {
+            data: data,
+            borderColor: 'rgb(187, 0, 255)',
+            borderWidth: 3,
+            pointRadius: 0,
+            lineTension: 0.2,
+          },
+        ],
       },
-    ],
-  },
-  options: {
-    responsive: false,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        display: false,
-        opacity: 0,
+      options: {
+        responsive: false,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false,
+            opacity: 0,
+          },
+        },
+        scales: {
+          x: {
+            display: false,
+          },
+          y: {
+            display: false,
+          },
+        },
+        width: "auto",
+        height: "auto",
       },
-    },
-    scales: {
-      x: {
-        display: false,
-      },
-      y: {
-        display: false,
-      },
-    },
-    width: "auto",
-    height: "auto",
-  },
-});
-
+    });
+  })();
 </script>

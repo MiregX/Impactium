@@ -198,20 +198,12 @@ async function discordStatistics(guildId, action, ...args) {
         const members = await guild.members.fetch();
         members.forEach(async (member) => {
           if (member.presence?.status === 'online') {
-            statField.onlineMembers >= 0
-              ? statField.onlineMembers++
-              : statField.onlineMembers = 1
+            statField.onlineMembers++
           }
 
           member.presence?.activities?.forEach(activity => {
-            if (typeof guildDatabase.mainGame !== 'undefined' && activity.name === guildDatabase.mainGame) {
-              statField.playingMembers >= 0
-                ? statField.playingMembers++
-                : statField.playingMembers = 1
-            } else {
-              statField.playingMembers >= 0
-                ? statField.playingMembers++
-                : statField.playingMembers = 1
+            if (activity.name === guildDatabase.mainGame || !guildDatabase.mainGame) {
+              statField.playingMembers++
             }
           });
         });
@@ -223,15 +215,9 @@ async function discordStatistics(guildId, action, ...args) {
     case 'voiceMembers': // Заполняем три поля
       const [oldState, newState] = args;
 
-      if (!statField.uniqueUsersVoiceActivityList) {
-        statField.uniqueUsersVoiceActivityList = [];
-      }
-      
       if (!statField.uniqueUsersVoiceActivityList.includes(newState.id)) {
         statField.uniqueUsersVoiceActivityList.push(newState.id);
-        statField.uniqueUsersVoiceActivity >= 0
-          ? statField.uniqueUsersVoiceActivity++
-          : statField.uniqueUsersVoiceActivity = 1;
+        statField.uniqueUsersVoiceActivity++
       }
       
       statField.voiceMembers = Math.max(
@@ -245,23 +231,13 @@ async function discordStatistics(guildId, action, ...args) {
 
     case 'messageActivity':
       const message = args[0];
-      log(message)
-
-      if (!statField.messagesUniqueUsersList) {
-        statField.messagesUniqueUsersList = [];
-      }
 
       if (!statField.messagesUniqueUsersList.includes(message.id)) {
         statField.messagesUniqueUsersList.push(message.id);
-
-        statField.messagesFromUniqueUsers >= 0 
-        ? statField.messagesFromUniqueUsers++ 
-        : statField.messagesFromUniqueUsers = 1;
+        statField.messagesFromUniqueUsers++ 
       }
       
-      statField.messagesPerHour >= 0 
-        ? statField.messagesPerHour++ 
-        : statField.messagesPerHour = 1;
+      statField.messagesPerHour++
       break;
   }
   

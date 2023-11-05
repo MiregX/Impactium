@@ -68,11 +68,10 @@ class Guild {
       messagesFromUniqueUsers: 0,
       voiceMembers: 0,
       messagesPerHour: 0,
-      totalMembers: 0,
       onlineMembers: 0,
       playingMembers: 0
     }
-    
+
     const dateObj = this.statistics[timestamp.date] ?? (this.statistics[timestamp.date] = {});
     const timeObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = statisticsDefaultObject);
 
