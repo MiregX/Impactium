@@ -71,7 +71,7 @@ class Guild {
     const Guilds = await getDatabase("guilds");
     const guild = await Guilds.findOne({ _id: this._id });
 
-    if (guild) {
+    if (guild && this.isFetched) {
       await Guilds.updateOne({ _id: this._id }, { $set: this });
     } else {
       await Guilds.insertOne(this);

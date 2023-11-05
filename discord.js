@@ -203,7 +203,7 @@ async function discordStatistics(guildId, action, ...args) {
               : statField.onlineMembers = 1
           }
 
-          member.presence.activities.forEach(activity => {
+          member.presence?.activities?.forEach(activity => {
             if (typeof guildDatabase.mainGame !== 'undefined' && activity.name === guildDatabase.mainGame) {
               statField.playingMembers >= 0
                 ? statField.playingMembers++
@@ -215,14 +215,18 @@ async function discordStatistics(guildId, action, ...args) {
             }
           });
         });
+        
+        await guildDatabase.save();
       }
+      
       break;
 
     case 'voiceMembers':
       const [oldState, newState] = args;
-      typeof statField.uniqueUsersVoiceActivityList === 'undefined' ? statField.uniqueUsersVoiceActivityList = [] : none
 
-      if (!statField.uniqueUsersVoiceActivityList.contains(newState.userId)) {
+      typeof statField.uniqueUsersVoiceActivityList === 'undefined' ? statField.uniqueUsersVoiceActivityList = [] : none;
+      
+      if (!statField.uniqueUsersVoiceActivityList.includes(newState.userId)) {
         statField.uniqueUsersVoiceActivityList.push(newState.userId);
         statField.uniqueUsersVoiceActivity >= 0
           ? statField.uniqueUsersVoiceActivity++
@@ -231,10 +235,10 @@ async function discordStatistics(guildId, action, ...args) {
       
       statField.voiceMembers = Math.max(
         0,
-        (oldState.channel === null && newState.channel !== null ?
-          statField.voiceMembers + 1 :
-          statField.voiceMembers)
-      );
+        (oldState.channel === null && newState.channel !== null
+          ? statField.voiceMembers + 1
+          : statField.voiceMembers)
+      );      
 
       break;
 
@@ -243,7 +247,7 @@ async function discordStatistics(guildId, action, ...args) {
 
       typeof statField.messagesUniqueUsersList === 'undefined' ? statField.messagesUniqueUsersList = [] : none
 
-      if (!statField.messagesUniqueUsersList.contains(message.userId)) {
+      if (!statField.messagesUniqueUsersList.includes(message.userId)) {
         statField.messagesUniqueUsersList.push(message.userId);
 
         statField.messagesFromUniqueUsers >= 0 
@@ -256,7 +260,7 @@ async function discordStatistics(guildId, action, ...args) {
         : statField.messagesPerHour = 1;
       break;
   }
-
+  
   await guildDatabase.save();
 }
 
