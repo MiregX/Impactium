@@ -215,19 +215,20 @@ async function discordStatistics(guildId, action, ...args) {
             }
           });
         });
-        
         await guildDatabase.save();
       }
       
       break;
 
-    case 'voiceMembers':
+    case 'voiceMembers': // Заполняем три поля
       const [oldState, newState] = args;
 
-      typeof statField.uniqueUsersVoiceActivityList === 'undefined' ? statField.uniqueUsersVoiceActivityList = [] : none;
+      if (!statField.uniqueUsersVoiceActivityList) {
+        statField.uniqueUsersVoiceActivityList = [];
+      }
       
-      if (!statField.uniqueUsersVoiceActivityList.includes(newState.userId)) {
-        statField.uniqueUsersVoiceActivityList.push(newState.userId);
+      if (!statField.uniqueUsersVoiceActivityList.includes(newState.id)) {
+        statField.uniqueUsersVoiceActivityList.push(newState.id);
         statField.uniqueUsersVoiceActivity >= 0
           ? statField.uniqueUsersVoiceActivity++
           : statField.uniqueUsersVoiceActivity = 1;
@@ -244,11 +245,14 @@ async function discordStatistics(guildId, action, ...args) {
 
     case 'messageActivity':
       const message = args[0];
+      log(message)
 
-      typeof statField.messagesUniqueUsersList === 'undefined' ? statField.messagesUniqueUsersList = [] : none
+      if (!statField.messagesUniqueUsersList) {
+        statField.messagesUniqueUsersList = [];
+      }
 
-      if (!statField.messagesUniqueUsersList.includes(message.userId)) {
-        statField.messagesUniqueUsersList.push(message.userId);
+      if (!statField.messagesUniqueUsersList.includes(message.id)) {
+        statField.messagesUniqueUsersList.push(message.id);
 
         statField.messagesFromUniqueUsers >= 0 
         ? statField.messagesFromUniqueUsers++ 

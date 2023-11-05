@@ -60,9 +60,21 @@ class Guild {
     if (!this.statistics) {
       this.statistics = {}
     }
-  
+    
+    const statisticsDefaultObject = {
+      uniqueUsersVoiceActivityList: [],
+      messagesUniqueUsersList: [],
+      uniqueUsersVoiceActivity: 0,
+      messagesFromUniqueUsers: 0,
+      voiceMembers: 0,
+      messagesPerHour: 0,
+      totalMembers: 0,
+      onlineMembers: 0,
+      playingMembers: 0
+    }
+    
     const dateObj = this.statistics[timestamp.date] ?? (this.statistics[timestamp.date] = {});
-    const timeObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = {});
+    const timeObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = statisticsDefaultObject);
 
     return timeObj
   }
@@ -73,7 +85,7 @@ class Guild {
 
     if (guild && this.isFetched) {
       await Guilds.updateOne({ _id: this._id }, { $set: this });
-    } else {
+    } else if (this.name && this.avatar && this.isBotAdmin) {
       await Guilds.insertOne(this);
     }
   }

@@ -4,9 +4,9 @@
     width: unset !important;
   }
 </style>
-<div class="default-alpha-block 1st flex inform-panel flex-dir-row" style="grid-column: 1 / 2; grid-row: 1 / 2; overflow: hidden;">
+<div class="default-alpha-block 1st flex inform-panel flex-dir-row" style="overflow: hidden;">
   <div class="line-one">
-    <p><%= lang.[typeOfStatisics] %></p>
+    <p></p>
     <button>
       <img src="">
     </button>
@@ -16,7 +16,7 @@
       <span id="maxY"></span>
       <p id="nameY"></p>
     </div>
-    <canvas id="<%= typeOfStatisics %>"></canvas>
+    <canvas id=""></canvas>
   </div>
   <div class="line-three">
     <div class="toggler">
@@ -28,7 +28,7 @@
   </div>
 </div>
 <script>
-  const rawData = JSON.parse(`<%- JSON.stringify(data) %>`);
+  const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
   const data = [];
 
   const labels = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`) + ':00');
@@ -43,7 +43,7 @@
 
   console.log(data)
 
-  const canvas = document.getElementById('<%= panelName %>').getContext('2d');
+  const canvas = document.getElementById('').getContext('2d');
 
   new Chart(canvas, {
   type: 'line',
