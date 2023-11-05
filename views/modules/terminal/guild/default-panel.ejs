@@ -1,12 +1,6 @@
-<style>
-  .inform-panel canvas {
-    max-height: 100% !important;
-    max-width: 100% !important;
-  }
-</style>
 <div class="default-alpha-block 1st flex inform-panel flex-dir-column" style="overflow: hidden;">
-  <div class="line-one flex">
-    <p></p>
+  <div class="line-one flex align-center justify-between">
+    <p><%= lang[name].statisticsName %></p>
     <button>
       <img src="">
     </button>
@@ -16,7 +10,9 @@
       <span id="maxY"></span>
       <p id="nameY"></p>
     </div>
-    <canvas id="<%= name %>"></canvas>
+    <div class="canwas-wrapper">
+      <canvas id="<%= name %>"></canvas>
+    </div>
   </div>
   <div class="line-three flex">
     <div class="toggler">
@@ -27,65 +23,73 @@
     <span id="maxX"></span>
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 <script>
-  (function() {
-    const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
-    const statisticsName = "<%= name %>"
-    const data = [];
+(function() {
+  const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
+  const statisticsName = "<%= name %>";
 
-    const hours = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`) + ':00');
+  const labels = [];
+  const data = [];
 
-    let previousValue = 0;
+  let previousValue = 0;
 
-    Object.values(rawData).forEach(date => {
-      for (const hour of hours) {
-        const entry = date[hour.slice(0, 2)];
-        const value = entry && entry[statisticsName] !== undefined 
-          ? entry[statisticsName]
-          : previousValue;
+  const lastDates = Object.keys(rawData).slice(-2);
 
-        data.push(value);
-        previousValue = value;
-      }
-    });
+  lastDates.forEach(date => {
+  const hours = Object.keys(rawData[date]).sort();
+  hours.forEach(hour => {
+    const entry = rawData[date][hour][statisticsName] || 0;
+    data.push(entry);
+    labels.push(`${hour}:00`);
+  });
+});
 
-    const canvas = document.getElementById('<%= name %>').getContext('2d');
+  function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.floor(Math.abs((Math.sin(hash) * 16777215) % 16777215)).toString(16);
+    return `#${"000000".substring(0, 6 - color.length) + color}`;
+  }
 
-    new Chart(canvas, {
-      type: 'line',
-      data: {
-        labels: hours,
-        datasets: [
-          {
-            data: data,
-            borderColor: 'rgb(187, 0, 255)',
-            borderWidth: 3,
-            pointRadius: 0,
-            lineTension: 0.2,
-          },
-        ],
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: {
-            display: false,
-            opacity: 0,
-          },
+  const borderColor = stringToColor(statisticsName);
+
+  const canvas = document.getElementById('<%= name %>').getContext('2d');
+
+  new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          borderColor: borderColor,
+          borderWidth: 3,
+          pointRadius: 0,
+          lineTension: 0.2,
         },
-        scales: {
-          x: {
-            display: false,
-          },
-          y: {
-            display: false,
-          },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // Установите это значение в false
+      plugins: {
+        legend: {
+          display: false,
+          opacity: 0,
         },
-        width: "auto",
-        height: "auto",
       },
-    });
-  })();
+      scales: {
+        x: {
+          display: false,
+        },
+        y: {
+          display: false,
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+})();
 </script>

@@ -4,7 +4,7 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 8px;
-    height: 224px;
+    height: 340px;
     width: 100%;
   }
   .inform-panel {
@@ -13,7 +13,7 @@
     background: var(--c-36);
     border-radius: 10px;
     padding: 4px;
-    gap: 8px;
+    gap: 4px;
     box-shadow: 0px 10px 12px #00000040;
   }
   .main-inform {
@@ -32,7 +32,54 @@
     text-shadow: 0px 2px 5px var(--c-16);
     flex: 1;
   }
+  .inform-panel canvas {
+    max-height: 100% !important;
+    max-width: 100% !important;
+  }
+  .line-one,
+  .line-three {
+    max-height: 32px;
+    min-height: 32px;
+    height: 32px;
+    .toggler {
+      height: 32px;
+      width: 32px;
+      border-radius: 12px;
+      background: var(--c-24);
+      overflow: hidden;
+      font-size: 8px;
+    }
+  }
+  .line-one p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 16px;
+    margin-left: 4px;
+    width: calc(100% - 40px);
+    font-size: 12px;
+  }
+  .line-one button {
+    height: 32px;
+    width: 32px;
+    border-radius: 12px;
+    background: var(--c-24);
+    overflow: hidden;
+  }
+  .line-two {
+    flex: 1;
+    height: calc(100% - 64px - 8px);
+    padding: 1px;
+    gap: 4px;
+    .bar {
+      width: 32px;
+    }
+  }
+  .canwas-wrapper {
+    width: calc(100% - 32px - 4px);
+  }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 <div class="flex align-center main-inform default-alpha-block">
   <img src="<%= guild.avatar %>">
   <h1><%= guild.name %></h1>
@@ -52,3 +99,8 @@
   <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'uniqueUsersVoiceActivity' }) %>
   
 </div>
+<script>
+  setTimeout(() => {
+    $('.line-two').css('padding', '0');
+  }, 10);
+</script>

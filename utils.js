@@ -95,10 +95,31 @@ function getLanguagePack(languagePack = "en") {
 
   return new Proxy(locale, {
     get(target, prop) {
-      return target[prop] && target[prop][languagePack] ? target[prop][languagePack] : `Missing translation for "${prop}" in "${languagePack}"`;
+      if (target[prop]) {
+        if (typeof target[prop] === "object") {
+          if (typeof target[prop][languagePack] === "string") {
+            return target[prop][languagePack]
+          } else {
+            const translations = {};
+            for (let key in target[prop]) {
+              if (target[prop][key] && target[prop][key][languagePack]) {
+                translations[key] = target[prop][key][languagePack];
+              }
+            }
+            return translations;
+          }
+        } else if (typeof target[prop] === "string") {
+          return target[prop];
+        }
+      }
+      return `Missing translation for "${prop}" in "${languagePack}"`;
     },
   });
 }
+
+
+
+
 
 // users.find(user => {
 //   (user[user.lastLogin].id === id) ||
@@ -117,15 +138,6 @@ async function getDatabase(collection) {
   } catch (error) {
     console.log(error);
   }
-}
-
-function saveNewGuildLanguage(lang, guildId) {
-  const database = getDatabase()
-  const languagePack = database.guilds.find(guildObj => guildObj.guildId === guildId);
-
-  languagePack.guildMainLanguage = lang;
-
-  saveDatabase(database);
 }
 
 function log(...args) {

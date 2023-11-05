@@ -41,12 +41,14 @@ router.post('/guild-mode-select', async (request, response) => {
   const user = new User();
   await user.fetch(request.cookies.token);
   if (!user.isCreator) return response.redirect('/');
+  
+  const lang = getLanguagePack(request.cookies.lang);
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
 
   if (guild.id) {
-    const body = ejs.render(fs.readFileSync('views/modules/terminalGuild.ejs', 'utf8'), { guild });
+    const body = ejs.render(fs.readFileSync('views/modules/terminalGuild.ejs', 'utf8'), { guild, lang });
     response.status(200).send(body);
   } else {
     response.status(403).send()
