@@ -11,7 +11,7 @@
     width: calc(100% - 8px);
     height: calc(100% - 8px);
     background: var(--c-36);
-    border-radius: 10px;
+    border-radius: 13px;
     padding: 4px;
     gap: 4px;
     box-shadow: 0px 10px 12px #00000040;
@@ -73,10 +73,26 @@
     gap: 4px;
     .bar {
       width: 32px;
+      position: relative;
     }
+  }
+  .line-two .bar span {
+    font-size: 8px;
+    position: absolute;
+    top: 0;
+    right: -2px;
+  }
+  .line-three p {
+    flex: 1;
+  }
+  .line-three span {
+    font-size: 8px;
   }
   .canwas-wrapper {
     width: calc(100% - 32px - 4px);
+    border: 1px dotted var(--c-48);
+    border-bottom: none;
+    border-right: none;
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
