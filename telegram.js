@@ -20,6 +20,7 @@ bot.start((ctx) => {
 });
 
 bot.action('update_button', async (ctx) => {
+  return
   try {
     const database = getDatabase();
 

@@ -131,6 +131,7 @@ function generateToken(sumbolsLong) {
 }
 
 async function getDatabase(collection) {
+  if (!collection) return 
   await databaseConnect();
   try {
     const Database = mongo.db().collection(collection);
@@ -451,7 +452,6 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
-  saveNewGuildLanguage,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,

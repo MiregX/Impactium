@@ -193,6 +193,7 @@ async function discordStatistics(guildId, action, ...args) {
         await guildDatabase.fetch(guild.id)
         const statField = guildDatabase.statField();
         
+        guildDatabase.members = guild.memberCount
         statField.totalMembers = guild.memberCount;
         
         const members = await guild.members.fetch();
@@ -232,8 +233,8 @@ async function discordStatistics(guildId, action, ...args) {
     case 'messageActivity':
       const message = args[0];
 
-      if (!statField.messagesUniqueUsersList.includes(message.id)) {
-        statField.messagesUniqueUsersList.push(message.id);
+      if (!statField.messagesUniqueUsersList.includes(message.authorId)) {
+        statField.messagesUniqueUsersList.push(message.authorId);
         statField.messagesFromUniqueUsers++ 
       }
       

@@ -53,11 +53,15 @@
   .line-one p {
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
+    overflow-x: hidden;
     height: 16px;
     margin-left: 4px;
     width: calc(100% - 40px);
     font-size: 12px;
+  }
+  .line-one p::after,
+  .line-one p::before {
+    content: attr(onHoverValue);
   }
   .line-one button {
     height: 32px;

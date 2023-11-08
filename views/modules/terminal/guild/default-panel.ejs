@@ -1,6 +1,6 @@
 <div class="default-alpha-block 1st flex inform-panel flex-dir-column" style="overflow: hidden;">
   <div class="line-one flex align-center justify-between">
-    <p><%= lang[name].statisticsName %></p>
+    <p onHoverValue="<%= lang[name].statisticsNameFull %>" class="on-hover-block"><%= lang[name].statisticsName %></p>
     <button>
       <img src="">
     </button>
@@ -28,12 +28,12 @@
   const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
   const statisticsName = "<%= name %>";
 
-  const labels = [];
-  const data = [];
+  let labels = [];
+  let data = [];
 
   let previousValue = 0;
 
-  const lastDates = Object.keys(rawData).slice(-2);
+  const lastDates = Object.keys(rawData).slice(-3);
   
   lastDates.forEach(date => {
     const hours = Object.keys(rawData[date]).sort();
@@ -41,7 +41,7 @@
     hours.forEach(hour => {
       const entry = rawData[date][hour][statisticsName] || 0;
       data.push(entry);
-      labels.push(`${hour}:00`);
+      labels.push(`${date} ${hour}:00`);
       if (hour > $('#<%= name %>MaxX').text()) {
         $('#<%= name %>MaxX').text(`${hour}:00`);
       }
@@ -50,6 +50,13 @@
       }
     });
   });
+  
+  labels = labels.slice(-47);
+  data = data.slice(-47);
+
+  const borderColor = stringToColor(statisticsName);
+  const canvas = document.getElementById('<%= name %>').getContext('2d');
+  const isBeginAtZero = !data.some(value => value > 0);
 
   function stringToColor(str) {
     let hash = 0;
@@ -60,21 +67,18 @@
     return `#${"000000".substring(0, 6 - color.length) + color}`;
   }
 
-  const borderColor = stringToColor(statisticsName);
-
-  const canvas = document.getElementById('<%= name %>').getContext('2d');
 
   new Chart(canvas, {
     type: 'line',
     data: {
-      labels: labels,
+      labels: labels.slice(-47),
       datasets: [
         {
-          data: data,
+          data: data.slice(-47),
           borderColor: borderColor,
           borderWidth: 3,
           pointRadius: 0,
-          lineTension: 0.2,
+          lineTension: 0.4,
         },
       ],
     },
@@ -93,7 +97,7 @@
         },
         y: {
           display: false,
-          beginAtZero: true,
+          beginAtZero: isBeginAtZero,
         },
       },
     },
