@@ -100,6 +100,53 @@
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<script>
+  
+  function generateChart(blockName, labels, data, isBeginAtZero) {
+    new Chart(document.getElementById(blockName).getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            borderColor: getBorderColor(blockName),
+            borderWidth: 3,
+            pointRadius: 0,
+            lineTension: 0.4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Установите это значение в false
+        plugins: {
+          legend: {
+            display: false,
+            opacity: 0,
+          },
+        },
+        scales: {
+          x: {
+            display: false,
+          },
+          y: {
+            display: false,
+            beginAtZero: isBeginAtZero,
+          },
+        },
+      },
+    });
+  }
+  function getBorderColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.floor(Math.abs((Math.sin(hash) * 16777215) % 16777215)).toString(16);
+    return `#${"000000".substring(0, 6 - color.length) + color}`;
+  }
+</script>
 <div class="flex align-center main-inform default-alpha-block">
   <img src="<%= guild.avatar %>">
   <h1><%= guild.name %></h1>

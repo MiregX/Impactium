@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="line-three flex">
-    <div class="toggler">
+    <div class="toggler" onclick="changeDayWeekVisibility(this)">
       <button id="toDays">1d</button>
       <button id="toWeeks">1w</button>
     </div>
@@ -54,53 +54,9 @@
   labels = labels.slice(-47);
   data = data.slice(-47);
 
-  const borderColor = stringToColor(statisticsName);
-  const canvas = document.getElementById('<%= name %>').getContext('2d');
   const isBeginAtZero = !data.some(value => value > 0);
 
-  function stringToColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const color = Math.floor(Math.abs((Math.sin(hash) * 16777215) % 16777215)).toString(16);
-    return `#${"000000".substring(0, 6 - color.length) + color}`;
-  }
+  generateChart("<%= name %>", labels, data, isBeginAtZero);
 
-
-  new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels: labels.slice(-47),
-      datasets: [
-        {
-          data: data.slice(-47),
-          borderColor: borderColor,
-          borderWidth: 3,
-          pointRadius: 0,
-          lineTension: 0.4,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // Установите это значение в false
-      plugins: {
-        legend: {
-          display: false,
-          opacity: 0,
-        },
-      },
-      scales: {
-        x: {
-          display: false,
-        },
-        y: {
-          display: false,
-          beginAtZero: isBeginAtZero,
-        },
-      },
-    },
-  });
-})();
+  })();
 </script>
