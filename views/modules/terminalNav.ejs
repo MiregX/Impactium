@@ -85,20 +85,20 @@
   <% }); %>
 </navbar>
 <script>
-  function guildToWorkSelect(selectedGuildId) {  
-    $.ajax({
-      url: "https://impactium.fun/terminal/guild-mode-select",
-      type: "POST",
-      data: JSON.stringify({ id: selectedGuildId }),
-      contentType: "application/json",
-      success: function (response) {
-        const renderZone = $(".work-window");
-        renderZone.html("");
-        renderZone.html(response);
-      },
-      error: function (error) {
-        console.log("net gg")
-      }
-    });
-  }
+function guildToWorkSelect(selectedGuildId) {
+  $.ajax({
+    url: "/terminal/guild-mode-select",
+    type: "POST",
+    data: JSON.stringify({ id: selectedGuildId }),
+    contentType: "application/json",
+    success: function (response) {
+      const renderZone = $(".work-window");
+      renderZone.html("");
+      renderZone.html(response);
+    },
+    error: function (error) {
+      console.log("net gg");
+    }
+  });
+}
 </script>

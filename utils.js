@@ -3,10 +3,10 @@ const ftp = require('ftp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
+const locale = require(`./static/lang/locale.json`);
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { request } = require('http');
-
 class User {
   constructor() {
     this.id = false;
@@ -91,14 +91,12 @@ class Guild {
 }
 
 function getLanguagePack(languagePack = "en") {
-  const locale = require(`./static/lang/locale.json`);
-
-  return new Proxy(locale, {
+  const languageProxy = new Proxy(locale, {
     get(target, prop) {
       if (target[prop]) {
         if (typeof target[prop] === "object") {
           if (typeof target[prop][languagePack] === "string") {
-            return target[prop][languagePack]
+            return target[prop][languagePack];
           } else {
             const translations = {};
             for (let key in target[prop]) {
@@ -115,6 +113,10 @@ function getLanguagePack(languagePack = "en") {
       return `Missing translation for "${prop}" in "${languagePack}"`;
     },
   });
+
+  languageProxy.debugPath = __dirname;
+
+  return languageProxy;
 }
 
 

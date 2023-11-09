@@ -92,4 +92,5 @@ router.post('/delete-guild', async (request, response) => {
     response.status(403).send()
   }
 });
+
 module.exports = router;

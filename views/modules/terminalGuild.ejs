@@ -103,20 +103,20 @@
 <div class="flex align-center main-inform default-alpha-block">
   <img src="<%= guild.avatar %>">
   <h1><%= guild.name %></h1>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\main-panel-buttons.ejs', guild) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/main-panel-buttons.ejs`, guild) %>
 </div>
 <div class="guild-information">
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'totalMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'totalRegionalMembers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'totalMembers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'totalRegionalMembers' }) %>
 
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'onlineMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'playingMembers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'onlineMembers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'playingMembers' }) %>
   
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'messagesPerHour' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'messagesFromUniqueUsers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'messagesPerHour' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'messagesFromUniqueUsers' }) %>
 
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'voiceMembers' }) %>
-  <%- include('C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\views\\modules\\terminal\\guild\\default-panel.ejs', { stat: guild.statistics, lang: lang, name: 'uniqueUsersVoiceActivity' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'voiceMembers' }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/default-panel.ejs`, { stat: guild.statistics, lang: lang, name: 'uniqueUsersVoiceActivity' }) %>
   
 </div>
 <script>

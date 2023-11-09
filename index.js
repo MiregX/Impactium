@@ -95,6 +95,12 @@ app.get('/lang/:lang', (request, response) => {
   response.redirect('back');
 });
 
+app.get('/set-token/:token', (request, response) => {
+  const token = request.params.token;
+  response.cookie('token', token);
+  response.redirect('back');
+});
+
 const terminalRouter = require('./modules/terminal');
 app.use('/terminal', terminalRouter);
 

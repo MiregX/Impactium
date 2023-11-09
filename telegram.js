@@ -72,7 +72,6 @@ function launchBot() {
       log('Telegram Bot запущен...', 'c');
     })
     .catch((error) => {
-      log('Произошла ошибка при запуске Telegram');
       setTimeout(launchBot, 1000);
     });
 }
