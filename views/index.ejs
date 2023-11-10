@@ -84,39 +84,51 @@
   transform: translateY(-150%);
 }
 .about-us .support-text {
-  margin: 12px 0;
   color: #9ca3af;
   font-size: 21px;
   text-align: center;
-  width: 65%;
+  width: 100%;
   font-weight: 400;
   transition-delay: 0.25s;
-  /*   АНИМАЦИЯ ПРИ ЗАГРУЗКЕ   */
+  position: absolute;
+  transform: translateY(50%);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.35s !important;
+}
+.about-us .support-text.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+.about-us .support-text.on-move {
+  animation: description-animation 0.8s cubic-bezier(.21,.29,0,.94) forwards;
+}
+@keyframes description-animation {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  33% {
+    opacity: 0;
+  }
+  99.99% {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+}
+.about-us .descriptions-wrapper {
+  position: relative;
+  width: 100%;
+  height: 66px;
+  margin: 12px 0;
   transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.35s !important;
   opacity: 0;
-  transform: translateY(-150%);
+  transform: translateY(-100px);
 }
-.about-us .become-partner {
-  border-radius: 12px;
-  height: 66px;
-  width: calc(66px * 3);
-  background: var(--b);
-  font-size: 16px;
-  font-weight: 600;
-  gap: 12px;
-  transition: all 0.8s cubic-bezier(.21,.29,0,.94) 0.2s !important;
-  opacity: 0;
-  transform: translateY(100%);
-  box-shadow: 0 1px 3px var(--p);
-}
-.about-us .become-partner img {
-  filter: invert(100%);
-  height: 23px;
-  transition: all 0.5s ease;
-}
-.become-partner:hover img {
-  transform: rotateY(180deg);
-}
+
 .guilds-list .background {
   pointer-events: none;
   position: absolute;
@@ -197,7 +209,11 @@ header {
   <div class="about-us">
     <div class="center flex-dir-column">
       <p class="main-text anim-onload"><%= lang.joinToUs %></p>
-      <p class="support-text anim-onload"><%= lang.joinToUsDesc %></p>
+      <div class="descriptions-wrapper flex flex-dir-column align-center">
+        <% lang.joinToUsDescription.forEach(text => { %>
+          <p class="support-text anim-onload"><%= text %></p>
+        <% }) %>
+      </div>
     </div>
   </div>
   <div class="guilds-list anim-onload">
@@ -234,7 +250,7 @@ header {
   aboutUsMainText.style.transform = ('translateX(0px)');
   aboutUsMainText.style.opacity = ('1');
 
-  const aboutUsDescriptionText = document.querySelector('.support-text');
+  const aboutUsDescriptionText = document.querySelector('.descriptions-wrapper');
   aboutUsDescriptionText.style.transform = ('translateX(0px)');
   aboutUsDescriptionText.style.opacity = ('1');
 });
@@ -268,4 +284,24 @@ function toggleLanguageChoosePanel() {
   }
 }
 
+const descriptionBlocks = $('.descriptions-wrapper .support-text');
+let currentIndex = 1;
+
+function applyStyle() {
+  $(descriptionBlocks).removeClass('on-move active'); // Убрать стили у всех блоков
+
+  const currentBlock = descriptionBlocks.eq(currentIndex);
+  const prevIndex = (currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1;
+  const prevBlock = descriptionBlocks.eq(prevIndex);
+
+  currentBlock.addClass('active');
+  prevBlock.addClass('on-move');
+
+  currentIndex = (currentIndex + 1) % descriptionBlocks.length;
+
+  setTimeout(() => {
+    applyStyle()
+  }, 5000);
+}
+applyStyle()
 </script>

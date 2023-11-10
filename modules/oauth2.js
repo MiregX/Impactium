@@ -88,14 +88,12 @@ router.get('/callback/discord', (request, response) => {
         })
         .catch((error) => {
           console.log(error);
-          request.session.error_message = error.name;
-          response.redirect('https://impactium.fun/error');
+          response.redirect('/');
         });
     })
     .catch((error) => {
       console.log(error);
-      request.session.error_message = error.name;
-      response.redirect('https://impactium.fun/error');
+      response.redirect('/');
     });
 });
 

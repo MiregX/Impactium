@@ -94,8 +94,17 @@ function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
     get(target, prop) {
       if (target[prop]) {
+        console.log(typeof target[prop]);
         if (typeof target[prop] === "object") {
-          if (typeof target[prop][languagePack] === "string") {
+          if (Array.isArray(target[prop])) {
+            const translations = target[prop].map(item => {
+              if (item && item[languagePack]) {
+                return item[languagePack];
+              }
+              return `Missing translation for "${prop}" in "${languagePack}"`;
+            });
+            return translations;
+          } else if (typeof target[prop][languagePack] === "string") {
             return target[prop][languagePack];
           } else {
             const translations = {};
@@ -115,7 +124,7 @@ function getLanguagePack(languagePack = "en") {
   });
 
   languageProxy.debugPath = __dirname;
-
+  log(languageProxy);
   return languageProxy;
 }
 
@@ -414,6 +423,7 @@ async function getBattleBoard(params = false) {
     return battleboard;
   } catch (error) {
     console.log(error);
+    return []
   }
 }
 

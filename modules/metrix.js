@@ -32,9 +32,7 @@ router.get('/', async (request, response) => {
       lang
     });
   } catch (error) {
-    console.log(error);
-    request.session.error_description = error.message;
-    return next(error);
+    response.redirect('/');
   }
 });
 
@@ -74,9 +72,7 @@ router.get('/search/:name', async (request, response) => {
         pagetype
       });
     } catch (error) {
-      console.log(error);
-      request.session.error_description = error.message;
-      return next(error);
+      response.redirect('/');
     }
   } else if (request.accepts('json')) {
     return response.status(200).json(battleboard);
@@ -111,9 +107,7 @@ router.get('/battle/:ids', async (request, response) => {
       pagetype
     });
   } catch (error) {
-    console.log(error);
-    request.session.error_description = error.message;
-    return next(error);
+    response.redirect('/');
   }
 });
 

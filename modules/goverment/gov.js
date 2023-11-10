@@ -3,12 +3,13 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
-const { getUserDataByToken, getDatabase, getLanguagePack, log, saveDatabase } = require('../../utils');
+const { User, getDatabase, getLanguagePack, log, saveDatabase } = require('../../utils');
 const utils = require('../../utils');
 
 router.get('/', async (request, response) => {
   try {
-    const user = getUserDataByToken(request.cookies.token, request.subdomains);
+    const user = new User();
+    await user.fetch(request.cookies.token)
     const lang = getLanguagePack(request.cookies.lang);
 
     const indexData = {
@@ -25,7 +26,7 @@ router.get('/', async (request, response) => {
     });
   } catch (err) {
     console.error(err);
-    response.redirect('https://impactium.fun/error')
+    response.redirect('/');
   }
 });
 

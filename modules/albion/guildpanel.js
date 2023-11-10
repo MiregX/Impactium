@@ -39,7 +39,7 @@ router.get('/', async (request, response) => {
 
   } catch (err) {
     console.error(err);
-    return response.status(500).send('Internal Server Error');
+    return response.redirect('/');
   }
 });
 

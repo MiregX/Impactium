@@ -46,7 +46,7 @@ app.get('/', (request, response) => {
     });
   } catch (error) {
     console.log(error, 'r');
-    return response.status(500).send('Internal Server Error');
+    response.redirect('/');
   }
 });
 
@@ -69,7 +69,7 @@ app.get('/login', (request, response) => {
     
   } catch (err) {
     console.error(err);
-    response.render('error.ejs', { code: 500, message: 'Internal Server Error'});
+    response.redirect('/');
   }
 });
 
@@ -81,11 +81,7 @@ app.get('/logout', (request, response) => {
 
 app.get('/error', (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
-  response.render('error.ejs', {
-    lang, code: request.session.error_code || 500,
-    message: request.session.error_message || "Internal Server Error",
-    description: request.session.error_description || false
-  })
+  response.render('error.ejs', { lang })
 });
 
 app.get('/lang/:lang', (request, response) => {
@@ -116,11 +112,7 @@ app.use('/fax', albionApp);
 const oauth2 = require('./modules/oauth2');
 app.use('/oauth2', oauth2);
 
-app.use((err, req, res, next) => {
-  req.session.error_code = 500
-  req.session.error_description = err.message
-  console.log(err);
-  res.redirect('/error');
+app.use((err, request, response, next) => {
 });
 
 app.use((req, res, next) => {
