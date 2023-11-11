@@ -95,7 +95,7 @@ header line {
 header line:last-child {
   display: none;
 }
-header > img {
+header > div > svg {
   height: 40px;
   -webkit-user-drag: none;
   user-select: none;
@@ -291,9 +291,26 @@ header > img {
   width: 25px;
   pointer-events: none;
 }
+
+.logo {
+  animation: inner-logo-animation 0s linear 3.3s forwards;
+}
+
+@keyframes inner-logo-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 </style>
 <header>
-    <img src="https://api.impactium.fun/logo/impactium-full-e8v4.svg" onclick="toHub()">
+    <div style="gap: 1vw; opacity: 0;" class="logo flex flex-dir-row align-center">
+      <img src="https://api.impactium.fun/logo/impactium_v4.svg" onclick="toHub()" style="height: 48px;">
+      <p style="font-size: 30px; font-weight: 600;">Impactium</p>
+    </div>
     <% if (typeof nav !== 'undefined') { %>
       <div class="nav flex">
         <% Object.keys(nav).forEach(category => { %>

@@ -94,7 +94,6 @@ function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
     get(target, prop) {
       if (target[prop]) {
-        console.log(typeof target[prop]);
         if (typeof target[prop] === "object") {
           if (Array.isArray(target[prop])) {
             const translations = target[prop].map(item => {
@@ -124,7 +123,6 @@ function getLanguagePack(languagePack = "en") {
   });
 
   languageProxy.debugPath = __dirname;
-  log(languageProxy);
   return languageProxy;
 }
 

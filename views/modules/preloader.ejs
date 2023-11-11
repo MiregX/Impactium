@@ -5,122 +5,102 @@
   height: 100vh;
   width: 100vw;
   background: var(--c-16);
+  transition: all 1.25s var(--trans) 1.5s;
 }
 
-@keyframes honeycomb {
-  0%,
-  20%,
-  80%,
+@keyframes logo-animation-first {
+  0% {
+    stroke-dashoffset: 589.7821044921875px;
+    stroke-dasharray: 589.7821044921875px;
+  }
+
   100% {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    transform: scale(0);
-  }
-
-  30%,
-  70% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
+    stroke-dashoffset: 1179.564208984375px;
+    stroke-dasharray: 589.7821044921875px;
   }
 }
 
-.honeycomb {
-  height: 24px;
-  position: relative;
-  width: 24px;
+@keyframes logo-animation-second {
+  0% {
+    stroke-dashoffset: 110.46501922607422px;
+    stroke-dasharray: 110.46501922607422px;
+  }
+
+  100% {
+    stroke-dashoffset: 220.93003845214844px;
+    stroke-dasharray: 110.46501922607422px;
+  }
 }
 
-.honeycomb div {
-  -webkit-animation: honeycomb 2.1s infinite backwards;
-  animation: honeycomb 2.1s infinite backwards;
-  background: #e8e8e8;
-  height: 12px;
-  margin-top: 6px;
+@keyframes preloader-out-animation {
+  0% {
+  }
+  100% {
+    left: 2vw;
+    transform: translate(0%, -50%);
+    top: 40px;
+  }
+}
+.preloader > div {
   position: absolute;
-  width: 24px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.preloader.outter-animation {
+  background: transparent;
+}
+.preloader.outter-animation div {
+  animation: preloader-out-animation 1s var(--trans) 1.75s forwards;
+}
+.preloader svg {
+  height: 72px;
+  transition: all 1s var(--trans) 1.75s;
 }
 
-.honeycomb div:after, .honeycomb div:before {
-  content: '';
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  position: absolute;
-  left: 0;
-  right: 0;
+.preloader.preloader.outter-animation svg {
+  height: 48px;
 }
 
-.honeycomb div:after {
-  top: -6px;
-  border-bottom: 6px solid #e8e8e8;
+.preloader > div > p {
+  font-size: 48px;
+  overflow: hidden;
+  width: 0px;
+  font-weight: 600;
+  transition: width 0.5s var(--trans) 1s, font-size 1s var(--trans) 1.75s;
 }
 
-.honeycomb div:before {
-  bottom: -5.9px;
-  border-top: 6px solid #e8e8e8;
+.preloader.outter-animation > div > p {
+  font-size: 30px;
+  width: 256px;
 }
 
-.honeycomb div:nth-child(1) {
-  -webkit-animation-delay: 0s;
-  animation-delay: 0s;
-  left: -28px;
-  top: 0;
+
+.preloader.preloader.outter-animation .logo-animation-first {
+  animation: logo-animation-first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
 
-.honeycomb div:nth-child(2) {
-  -webkit-animation-delay: 0.1s;
-  animation-delay: 0.1s;
-  left: -14px;
-  top: 22px;
+.preloader.preloader.outter-animation .logo-animation-second  {
+  animation: logo-animation-second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
 
-.honeycomb div:nth-child(3) {
-  -webkit-animation-delay: 0.2s;
-  animation-delay: 0.2s;
-  left: 14px;
-  top: 22px;
-}
-
-.honeycomb div:nth-child(4) {
-  -webkit-animation-delay: 0.3s;
-  animation-delay: 0.3s;
-  left: 28px;
-  top: 0;
-}
-.honeycomb div:nth-child(5) {
-  -webkit-animation-delay: 0.4s;
-  animation-delay: 0.4s;
-  left: 14px;
-  top: -22px;
-}
-.honeycomb div:nth-child(6) {
-  -webkit-animation-delay: 0.5s;
-  animation-delay: 0.5s;
-  left: -14px;
-  top: -22px;
-}
-.honeycomb div:nth-child(7) {
-  -webkit-animation-delay: 0.6s;
-  animation-delay: 0.6s;
-  left: 0;
-  top: 0;
-}
 </style>
-<div class="preloader center" style="z-index: 9;">
-  <div class="honeycomb">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+<div class="preloader" style="z-index: 9;">
+  <div class="flex flex-dir-row center" style="gap: 1vw;">
+    <svg viewBox="-11.439 -11.421 403.213 522.815" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="15" stroke-width="12" transform="matrix(3.130766, 0, 0, 3.130766, -102.465179, -42.383404)" style="">
+        <path style="paint-order: markers stroke; stroke: rgb(232, 232, 232); stroke-width: 14.0541px;" d="M 101.029 151.687 C 104.583 140.367 103.311 126.12 111.702 117.729 C 125.54 103.891 145.608 96.295 150.177 77.627 C 153.035 65.951 143.679 57.123 126.238 49.704 C 95.979 38.811 65.978 27.81 36.102 16.917 M 150.838 169.855 C 120.962 158.962 90.961 147.961 60.702 137.068 C 43.261 129.649 33.905 120.821 36.763 109.145 C 41.332 90.477 61.662 82.62 75.238 69.044 C 83.63 60.652 82.357 46.405 85.911 35.085 M 36.102 16.917 L 75.094 68.892 M 111.783 117.796 L 150.838 169.855" class="logo-animation-first"></path>
+        <path style="paint-order: markers stroke; stroke: rgb(232, 232, 232); stroke-width: 14.0541px;" d="M 125.234 51.047 C 102.473 105.997 84.364 80.48 61.201 136.4" class="logo-animation-second"></path>        
+      </g>
+    </svg>
+    <p>Impactium</p>
   </div>
 </div>
 <script>
 $(window).one('load', function() {
+  $('.preloader').addClass('outter-animation');
   setTimeout(() => {
     $('.preloader').remove();
-  }, 300);
+  }, 4000);
 });
 </script>
