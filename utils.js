@@ -83,9 +83,9 @@ class Guild {
   
     if (days.length <= 7) return;
 
-    const keys = days.slice(0, days.length - 7);
+    const keys = days.slice(0, days.length - 9);
 
-    for (const key of days.slice(0, keys.length - 7)) {
+    for (const key of keys) {
       delete this.statistics[key];
     }
 
