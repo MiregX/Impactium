@@ -15,11 +15,11 @@
     </div>
   </div>
   <div class="line-three flex">
-    <div class="toggler" onclick="changeDayWeekVisibility(this)">
+    <div class="toggler" visibilitytype="days" onclick="changeDayWeekVisibility(this)">
       <button id="toDays">1d</button>
       <button id="toWeeks">1w</button>
     </div>
-    <p id="nameX"></p>
+    <p id="<%= name %>NameX"></p>
     <span id="<%= name %>MaxX"></span>
   </div>
 </div>
@@ -33,6 +33,6 @@
   const data = <%- JSON.stringify(guild.parsedStatistics?.[name]?.values) %>;
   $(`#${statisticsName}`).data('data', data);
 
-  generateChart($(`#${statisticsName}`));
+  generateChart($(`#${statisticsName}`), -47);
 })();
 </script>

@@ -8,22 +8,7 @@ const utils = require('../../utils');
 
 router.get('/', async (request, response) => {
   try {
-    const user = new User();
-    await user.fetch(request.cookies.token)
-    const lang = getLanguagePack(request.cookies.lang);
-
-    const indexData = {
-      lang
-    }
-
-    const indexTemplate = fs.readFileSync('views/gov/index.ejs', 'utf8');
-    const body = ejs.render(indexTemplate, indexData);
-
-    response.render('template.ejs', {
-      body,
-      user,
-      lang
-    });
+    response.send("Иди нахуй чуркабес ебучий. Виртуальное государсво только для избранных");
   } catch (err) {
     console.error(err);
     response.redirect('/');
