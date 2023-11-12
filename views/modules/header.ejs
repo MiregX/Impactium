@@ -193,18 +193,13 @@ header .logo {
 }
 @media (max-width: 1080px) {
   header {
-    padding: 0 2.5%;
-    width: calc(100vw - 5%);
+    width: calc(100vw - 4vw);
   }
 }
 @media (max-width: 767px) {
 header {
-  padding: 0 2.5%;
-  width: calc(100vw - 5%);
+  width: calc(100vw - 4vw);
   grid-template-columns: repeat(2, 1fr);
-}
-header > img {
-  height: 7vw;
 }
 .nav {
   display: none;
@@ -292,7 +287,7 @@ header > img {
   pointer-events: none;
 }
 
-.logo {
+.logo.inner-animation {
   animation: inner-logo-animation 0s linear 3.3s forwards;
 }
 
@@ -408,5 +403,9 @@ function redirect(link) {
 function toHub() {
   window.location.href = "https://impactium.fun";
 }
+
+$(window).one('load', function() {
+  $('.logo').addClass('inner-animation');
+});
 
 </script>

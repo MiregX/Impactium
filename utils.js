@@ -78,6 +78,43 @@ class Guild {
     return timeObj
   }
 
+  clearStatisticsFields() {
+    const days = Object.keys(this.statistics);
+  
+    if (days.length <= 7) return;
+
+    const keys = days.slice(0, days.length - 7);
+
+    for (const key of days.slice(0, keys.length - 7)) {
+      delete this.statistics[key];
+    }
+
+    this.save()
+  }
+
+  getStatisticsField(field) {
+    if (!this.parsedStatistics) this.parsedStatistics = {};
+    if (new Date() - new Date(this.parsedStatistics[field]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
+
+    this.parsedStatistics[field] = {
+      timestamp: Date.now(),
+      labels: [],
+      values: []
+    }
+
+    Object.keys(this.statistics).forEach(date => {
+      Object.keys(this.statistics[date]).sort().forEach(hour => {
+        const entry = this.statistics[date][hour][field] || 0;
+        this.parsedStatistics[field].values.push(entry);
+        this.parsedStatistics[field].labels.push(`${date} ${hour}:00`);
+      });
+    });
+
+    if (this.parsedStatistics[field].some(value => value > 0)) this.save();
+
+    return this.parsedStatistics
+  }
+
   async save() {
     const Guilds = await getDatabase("guilds");
     const guild = await Guilds.findOne({ _id: this._id });
@@ -93,32 +130,21 @@ class Guild {
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
     get(target, prop) {
-      if (target[prop]) {
-        if (typeof target[prop] === "object") {
-          if (Array.isArray(target[prop])) {
-            const translations = target[prop].map(item => {
-              if (item && item[languagePack]) {
-                return item[languagePack];
-              }
-              return `Missing translation for "${prop}" in "${languagePack}"`;
-            });
-            return translations;
-          } else if (typeof target[prop][languagePack] === "string") {
-            return target[prop][languagePack];
-          } else {
-            const translations = {};
-            for (let key in target[prop]) {
-              if (target[prop][key] && target[prop][key][languagePack]) {
-                translations[key] = target[prop][key][languagePack];
-              }
-            }
-            return translations;
+      if (Array.isArray(target[prop])) {
+        return target[prop].map(item => item[languagePack]);
+      } else if (typeof target[prop] === "string") {
+        return target[prop];
+      } else if (typeof target[prop]?.[languagePack] === "string") {
+        return target[prop][languagePack];
+      } else {
+        const translations = {};
+        for (const key in target[prop]) {
+          if (target[prop]?.[key]?.[languagePack]) {
+            translations[key] = target[prop]?.[key]?.[languagePack];
           }
-        } else if (typeof target[prop] === "string") {
-          return target[prop];
         }
+        return translations;
       }
-      return `Missing translation for "${prop}" in "${languagePack}"`;
     },
   });
 
@@ -140,9 +166,9 @@ function generateToken(sumbolsLong) {
 }
 
 async function getDatabase(collection) {
-  if (!collection) return 
-  await databaseConnect();
+  if (!collection) return
   try {
+    await databaseConnect();
     const Database = mongo.db().collection(collection);
     return Database;
   } catch (error) {

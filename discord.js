@@ -268,6 +268,17 @@ function setClientPresence(message) {
   });
 }
 
+async function clearStaticticsFieldsFromDatabase() {
+  const Database = await getDatabase('guilds');
+  const guilds = await Database.find({}).toArray();
+  const guildsArray = guilds.map(item => item.id);
+  for (const id of guildsArray) {
+    const guild = new Guild()
+    await guild.fetch(id);
+    guild.clearStatisticsFields();
+  }
+}
+
 (async () => {
   try {
     await rest.put(Routes.applicationCommands(secrets.discordClientID), { body: commands });
@@ -281,6 +292,7 @@ client.once('ready', () => {
   log(`----------------------`);
   getGuildsList();
   summaryUsersFromDiscordServersCounter();
+  clearStaticticsFieldsFromDatabase();
   discordStatistics('', 'totalMembers');
 });
 
@@ -307,6 +319,10 @@ client.on('messageCreate', (message) => {
 
 schedule('0 * * * *', () => {
   discordStatistics('', 'totalMembers');
+});
+
+schedule('0 0 * * *', async () => {
+  clearStaticticsFieldsFromDatabase();
 });
 
 client.login(secrets.discordBotToken);

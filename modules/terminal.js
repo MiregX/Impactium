@@ -48,6 +48,7 @@ router.post('/guild-mode-select', async (request, response) => {
 
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminalGuild.ejs', 'utf8'), { guild, lang });
+    log(`Надіслано: ${(body.length / 1024 / 1024 * 8).toFixed(1)} мегабайти`, 'p')
     response.status(200).send(body);
   } else {
     response.status(403).send()

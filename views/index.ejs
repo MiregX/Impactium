@@ -287,7 +287,7 @@ function toggleLanguageChoosePanel() {
 const descriptionBlocks = $('.descriptions-wrapper .support-text');
 let currentIndex = 1;
 
-function applyStyle() {
+(function applyStyle() {
   $(descriptionBlocks).removeClass('on-move active'); // Убрать стили у всех блоков
 
   const currentBlock = descriptionBlocks.eq(currentIndex);
@@ -302,6 +302,5 @@ function applyStyle() {
   setTimeout(() => {
     applyStyle()
   }, 5000);
-}
-applyStyle()
+}());
 </script>

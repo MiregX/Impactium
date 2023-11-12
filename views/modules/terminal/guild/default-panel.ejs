@@ -25,34 +25,10 @@
 </div>
 <script>
 (function() {
-  const rawData = JSON.parse(`<%- JSON.stringify(stat) %>`);
   const statisticsName = "<%= name %>";
 
-  let labels = [];
-  let data = [];
-
-  let previousValue = 0;
-
-  const lastDates = Object.keys(rawData).slice(-3);
-  
-  lastDates.forEach(date => {
-    const hours = Object.keys(rawData[date]).sort();
-    $('#<%= name %>MaxX').text("0");
-    hours.forEach(hour => {
-      const entry = rawData[date][hour][statisticsName] || 0;
-      data.push(entry);
-      labels.push(`${date} ${hour}:00`);
-      if (hour > $('#<%= name %>MaxX').text()) {
-        $('#<%= name %>MaxX').text(`${hour}:00`);
-      }
-      if (entry > $('#<%= name %>MaxY').text()) {
-        $('#<%= name %>MaxY').text(entry);
-      }
-    });
-  });
-  
-  labels = labels.slice(-47);
-  data = data.slice(-47);
+  let labels = <%- JSON.stringify(guild.parsedStatistics[statisticsName].labels) %>;
+  let data = <%- JSON.stringify(guild.parsedStatistics[statisticsName].values) %>;
 
   const isBeginAtZero = !data.some(value => value > 0);
 
