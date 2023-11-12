@@ -94,27 +94,44 @@ class Guild {
 
   getStatisticsField(field) {
     if (!this.parsedStatistics) this.parsedStatistics = {};
-    if (new Date() - new Date(this.parsedStatistics[field]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
+  
+    const fieldsToProcess = field ? [field] : [];
 
-    this.parsedStatistics[field] = {
-      timestamp: Date.now(),
-      labels: [],
-      values: []
+    if (!field) {
+      const firstDate = Object.keys(this.statistics)[0];
+      const firstHour = Object.keys(this.statistics[firstDate])[0];
+      const sampleField = this.statistics[firstDate][firstHour];
+      
+      if (sampleField) {
+        fieldsToProcess.push(...Object.keys(sampleField));
+      }
     }
-
-    Object.keys(this.statistics).forEach(date => {
-      Object.keys(this.statistics[date]).sort().forEach(hour => {
-        const entry = this.statistics[date][hour][field] || 0;
-        this.parsedStatistics[field].values.push(entry);
-        this.parsedStatistics[field].labels.push(`${date} ${hour}:00`);
+  
+    fieldsToProcess.forEach(currentField => {
+      if (new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return;
+  
+      this.parsedStatistics[currentField] = {
+        timestamp: Date.now(),
+        labels: [],
+        values: []
+      }
+  
+      Object.keys(this.statistics).forEach(date => {
+        Object.keys(this.statistics[date]).sort().forEach(hour => {
+          const entry = this.statistics[date][hour][currentField] || 0;
+          this.parsedStatistics[currentField].values.push(entry);
+          this.parsedStatistics[currentField].labels.push(`${date} ${hour}:00`);
+        });
       });
+  
+      if (this.parsedStatistics[currentField].values.some(value => value > 0)) {
+        this.save();
+      }
     });
-
-    if (this.parsedStatistics[field].some(value => value > 0)) this.save();
-
-    return this.parsedStatistics
+  
+    return this.parsedStatistics;
   }
-
+  
   async save() {
     const Guilds = await getDatabase("guilds");
     const guild = await Guilds.findOne({ _id: this._id });

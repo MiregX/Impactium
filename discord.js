@@ -233,8 +233,8 @@ async function discordStatistics(guildId, action, ...args) {
     case 'messageActivity':
       const message = args[0];
 
-      if (!statField.messagesUniqueUsersList.includes(message.authorId)) {
-        statField.messagesUniqueUsersList.push(message.authorId);
+      if (!statField.messagesUniqueUsersList.includes(message.author.id)) {
+        statField.messagesUniqueUsersList.push(message.author.id);
         statField.messagesFromUniqueUsers++ 
       }
       
@@ -315,6 +315,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on('messageCreate', (message) => {
   discordStatistics(message.guildId, 'messageActivity', message);
+  log(message)
 });
 
 schedule('0 * * * *', () => {

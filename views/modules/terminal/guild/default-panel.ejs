@@ -27,12 +27,12 @@
 (function() {
   const statisticsName = "<%= name %>";
 
-  let labels = <%- JSON.stringify(guild.parsedStatistics[statisticsName].labels) %>;
-  let data = <%- JSON.stringify(guild.parsedStatistics[statisticsName].values) %>;
+  const labels = <%- JSON.stringify(guild.parsedStatistics?.[name]?.labels) %>;
+  $(`#${statisticsName}`).data('labels', labels);
 
-  const isBeginAtZero = !data.some(value => value > 0);
+  const data = <%- JSON.stringify(guild.parsedStatistics?.[name]?.values) %>;
+  $(`#${statisticsName}`).data('data', data);
 
-  generateChart("<%= name %>", labels, data, isBeginAtZero);
-
-  })();
+  generateChart($(`#${statisticsName}`));
+})();
 </script>

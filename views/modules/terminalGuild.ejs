@@ -101,51 +101,80 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 <script>
+function generateChart(chartBlock, specular) {
+  const canvasName = chartBlock.attr('id')
+  const chartInstance = Chart.getChart(canvasName);
+  const labels = chartBlock.data('labels').slice(specular)
+  const data = chartBlock.data('data').slice(specular)
+
+  const isBeginAtZero = !data.some(value => value > 0);
+
+  $(`#${canvasName}MaxY`).text(`${Math.max(...data)}`)
+  console.log($(`#${canvasName}MaxY`))
+
+  if (chartInstance) {
+    chartInstance.data.labels = labels;
+    chartInstance.data.datasets[0].data = data;
+    chartInstance.options.scales.y.beginAtZero = isBeginAtZero
+    console.log(isBeginAtZero)
+    chartInstance.update();
+    return
+  }
   
-  function generateChart(blockName, labels, data, isBeginAtZero) {
-    new Chart(document.getElementById(blockName).getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            data: data,
-            borderColor: getBorderColor(blockName),
-            borderWidth: 3,
-            pointRadius: 0,
-            lineTension: 0.4,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, // Установите это значение в false
-        plugins: {
-          legend: {
-            display: false,
-            opacity: 0,
-          },
-        },
-        scales: {
-          x: {
-            display: false,
-          },
-          y: {
-            display: false,
-            beginAtZero: isBeginAtZero,
-          },
+  new Chart(document.getElementById(canvasName).getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        borderColor: getBorderColor(canvasName),
+        borderWidth: 2,
+        pointRadius: 0,
+        lineTension: 0.3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false,
+          opacity: 0,
         },
       },
-    });
+      scales: {
+        x: {
+          display: false,
+        },
+        y: {
+          display: false,
+          beginAtZero: isBeginAtZero,
+        },
+      },
+    },
+  });
+}
+  
+function getBorderColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  function getBorderColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const color = Math.floor(Math.abs((Math.sin(hash) * 16777215) % 16777215)).toString(16);
-    return `#${"000000".substring(0, 6 - color.length) + color}`;
+  const color = Math.floor(Math.abs((Math.sin(hash) * 16777215) % 16777215)).toString(16);
+  return `#${"000000".substring(0, 6 - color.length) + color}`;
+}
+
+function changeDayWeekVisibility(button) {
+  const canvas = $(button).closest('.default-alpha-block').find('canvas')
+
+  if ($(button).attr('visibilityType') === 'days') {
+    $(button).attr('visibilityType', 'weeks');
+    generateChart(canvas);
+  } else {
+    $(button).attr('visibilityType', 'days');
+    generateChart(canvas, -47);
   }
+}
 </script>
 <div class="flex align-center main-inform default-alpha-block">
   <img src="<%= guild.avatar %>">
