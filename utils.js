@@ -93,25 +93,15 @@ class Guild {
   }
 
   parseStatistics(isForced = false) {
+    if (!isForced && new Date() - new Date(this.parsedStatistics.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
     if (!this.parsedStatistics) this.parsedStatistics = {};
-  
-    const fieldsToProcess = [];
 
-    if (Object.keys(this.statistics)) {
-      const firstDate = Object.keys(this.statistics)[0];
-      const firstHour = Object.keys(this.statistics[firstDate])[0];
-      const sampleField = this.statistics[firstDate][firstHour];
-      
-      if (sampleField) {
-        fieldsToProcess.push(...Object.keys(sampleField));
-      }
-    }
+    if (this.isFakeGuild) return this.parsedStatistics
 
-    fieldsToProcess.forEach(currentField => {
-      if (!isForced && new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
-  
+    const sampleField = this.statistics[Object.keys(this.statistics)[0]][Object.keys(this.statistics[Object.keys(this.statistics)[0]])[0]];
+
+    Object.keys(sampleField).forEach(currentField => {
       this.parsedStatistics[currentField] = {
-        timestamp: Date.now(),
         labels: {},
         values: []
       }
@@ -134,9 +124,10 @@ class Guild {
         });
       });
 
-      this.save();
+      this.parsedStatistics.timestamp = Date.now();
     });
-  
+
+    this.save();
     return this.parsedStatistics;
   }
   

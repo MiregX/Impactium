@@ -17,14 +17,27 @@ router.get('/', async (request, response) => {
   .toArray();
 
   guilds = guilds.sort((a, b) => {
-    if (!a.isBotAdmin && !b.isBotAdmin) return b.members - a.members;
-    if (!a.isBotAdmin) return 1;
-    if (!b.isBotAdmin) return -1;
+    // Перевіряємо isBotAdmin, якщо обидва isBotAdmin дорівнюють false, то сортуємо за кількістю учасників
+    if (!a.isBotAdmin && !b.isBotAdmin) {
+      return b.members - a.members;
+    }
+  
+    // Якщо тільки один з isBotAdmin дорівнює false, то той, у якого isBotAdmin === false, йде в кінець
+    if (!a.isBotAdmin && !a.isFakeGuild) {
+      return 1;
+    }
+    
+    if (!b.isBotAdmin && !b.isFakeGuild) {
+      return -1;
+    }
+  
+    // Якщо обидва isBotAdmin дорівнюють true, то сортуємо за кількістю учасників
     return b.members - a.members;
   });
+  
 
   const guild = new Guild();
-  await guild.fetch(guilds[0].id);
+  await guild.fetch(guilds.filter(guildDb => !guildDb.isFakeGuild)[0].id);
   guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.parseStatistics()
 
   try {
@@ -56,7 +69,7 @@ router.post('/guild-mode-select', async (request, response) => {
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
-  guild.parsedStatistics = guild.parseStatistics(true)
+  guild.parsedStatistics = guild.parseStatistics()
   
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/body.ejs', 'utf8'), { guild, lang });

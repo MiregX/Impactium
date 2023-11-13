@@ -103,7 +103,7 @@
 </style>
 <navbar class="flex align-center flex-dir-column">
   <% guilds.forEach(guild => { %>
-    <button class="option <% if (!guild.isBotAdmin) { %>disabled <% } %>flex-dir-row align-center" onclick="guildToWorkSelect('<%- guild.id %>', this)">
+    <button class="option <% if (!guild.isBotAdmin && !guild.isFakeGuild) { %>disabled <% } %>flex-dir-row align-center" onclick="guildToWorkSelect('<%- guild.id %>', this)">
       <img src="<%- guild.avatar %>">
       <p><%- guild.name %></p>
       <div class="users flex flex-dir-row center">

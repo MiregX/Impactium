@@ -216,6 +216,7 @@ async function discordStatistics(guildId, action, ...args) {
           });
         });
         await guildDatabase.save();
+        guildDatabase.parseStatistics(true);
       }
       
       break;
