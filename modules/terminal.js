@@ -13,15 +13,19 @@ router.get('/', async (request, response) => {
   const lang = getLanguagePack(request.cookies.lang);
 
   const Guilds = await getDatabase("guilds");
-  const guilds = await Guilds.find({ isBotAdmin: true })
-  .sort({ members: -1 })
+  let guilds = await Guilds.find({})
   .toArray();
+
+  guilds = guilds.sort((a, b) => {
+    if (!a.isBotAdmin && !b.isBotAdmin) return b.members - a.members;
+    if (!a.isBotAdmin) return 1;
+    if (!b.isBotAdmin) return -1;
+    return b.members - a.members;
+  });
 
   const guild = new Guild();
   await guild.fetch(guilds[0].id);
-  log(1)
-  guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.getStatisticsField()
-  log(2)
+  guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.parseStatistics()
 
   try {
     const terminalData = {
@@ -52,9 +56,7 @@ router.post('/guild-mode-select', async (request, response) => {
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
-  log(1)
-  guild.getStatisticsField()
-  log(2)
+  guild.parseStatistics()
   
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/body.ejs', 'utf8'), { guild, lang });

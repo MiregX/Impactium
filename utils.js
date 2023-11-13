@@ -92,12 +92,12 @@ class Guild {
     this.save()
   }
 
-  getStatisticsField() {
+  parseStatistics() {
     if (!this.parsedStatistics) this.parsedStatistics = {};
   
     const fieldsToProcess = [];
 
-    if (this.isBotAdmin && Object.keys(this.statistics)) {
+    if (Object.keys(this.statistics)) {
       const firstDate = Object.keys(this.statistics)[0];
       const firstHour = Object.keys(this.statistics[firstDate])[0];
       const sampleField = this.statistics[firstDate][firstHour];
