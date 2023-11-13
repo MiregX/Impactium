@@ -1,0 +1,28 @@
+<style>
+  .work-window {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 33px);
+    width: calc(100% - 33px);
+    padding: 16px;
+    gap: 8px;
+    border-top: 1px solid var(--c-36);
+    border-right: 1px solid var(--c-36);
+  }
+  .default-alpha-block {
+    background: var(--c-36);
+    border-radius: 17px;
+  }
+</style>
+<div class="work-window">
+  <% guilds = guilds.sort((a, b) => {
+    if (a.isBotAdmin && !b.isBotAdmin) return -1;
+    if (!a.isBotAdmin && b.isBotAdmin) return 1;
+
+    if (a.members > b.members) return -1;
+    if (a.members < b.members) return 1;
+
+  }) %>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/body.ejs`, { guild: guilds[0] || guild, lang }) %>
+</div>
+<%- include(`${lang.debugPath}/views/modules/terminal/guild/nav.ejs`, guilds) %>

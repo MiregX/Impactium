@@ -5,8 +5,8 @@ header {
   position: fixed;
   top: 0px;
   justify-content: space-between;
-  padding: 0 2vw;
-  width: 96vw;
+  padding: 0 16px;
+  width: calc(100vw - 32px);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
@@ -101,6 +101,10 @@ header > div > svg {
   user-select: none;
 }
 .user-onlogin {
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   justify-content: flex-end;
   grid-column: 3 / 4;
 }
@@ -108,11 +112,14 @@ header > div > svg {
   grid-column: 3 / 4;
 }
 .user {
-  color: #fff;
+  display: flex;
+  align-items: center;
+  color: var(--w);
   font-weight: 500;
-  min-width: 120px;
-  height: 40px;
-  border-radius: 16px;
+  min-width: 128px;
+  height: 48px;
+  padding: 6px;
+  border-radius: 17px;
   background: var(--c-36);
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: relative;
@@ -122,20 +129,20 @@ header > div > svg {
 }
 
 .user .avatar {
-  border-radius: 15px;
+  border-radius: 11px;
   height: 38px;
   width: 38px;
   pointer-events: none;
 }
 .user p {
-  min-width: 50px;
-  padding: 0 15px;
+  padding: 0 16px;
   text-align: center;
-  height: 40px;
+  height: 48px;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  white-space: no-wrap;
+  white-space: nowrap;
 }
 header .logo {
   height: 50px;
@@ -149,7 +156,7 @@ header .logo {
   d: path("M2 12H18M18 12L13 7M18 12L13 17");
 }
 .temp-button svg {
-  transform: translateX(-5px);
+  transform: translateX(-1px);
 }
 .temp-button:hover svg {
   transform: translateX(10px);
@@ -164,24 +171,24 @@ header .logo {
   align-items: center;
   justify-content: space-between;
   position: relative;
-  width: 120px;
-  height: 40px;
+  width: 128px;
+  height: 48px;
 }
 .temp-button .button-text {
   position: absolute;
-  width: calc(100% - 40px);
+  width: calc(100% - 48px);
   right: 0px;
   font-weight: 500;
 }
 .temp-button .circle {
   position: absolute;
   margin: 0;
-  width: 40px;
+  width: 48px;
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 48px;
   background: var(--c-36);
-  border-radius: 16px;
+  border-radius: 17px;
 }
 
 .temp-button:hover .circle {
@@ -333,13 +340,13 @@ header {
       </div>      
     <% } %>
     <% if (user.id) { %>
-      <div class="user-onlogin gap center-h center-v" style="justify-content: flex-end;">
+      <div class="user-onlogin" style="justify-content: flex-end;">
         <% if (user.isVerified) { %>
           <div class="verified flex center" <% if (user.isCreator) { %>onclick="terminal()"<% } %>>
             <img src="https://impactium.fun/static/images/verified.svg" class="icon">
           </div>
         <% } %>
-        <button class="user flex center-v center-h">
+        <button class="user flex">
           <% if (user.avatar) { %>
             <img src="<%= user.avatar %>" class="avatar">
           <% } %>

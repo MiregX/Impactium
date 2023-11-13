@@ -54,7 +54,7 @@ router.post('/guild-mode-select', async (request, response) => {
   guild.getStatisticsField()
   
   if (guild.id) {
-    const body = ejs.render(fs.readFileSync('views/modules/terminalGuild.ejs', 'utf8'), { guild, lang });
+    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/body.ejs', 'utf8'), { guild, lang });
     log(`Надіслано: ${(body.length / 1024 / 1024 * 8).toFixed(1)} мегабайти`, 'p')
     response.status(200).send(body);
   } else {
@@ -73,7 +73,7 @@ router.post('/get-admin-permisson', async (request, response) => {
   guild.isMiregAdmin = await toggleAdminPermissions(request.body.id, user.id);
 
   if (guild.id) {
-    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/8-ght-panel.ejs', 'utf8'), { guild });
+    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/main-panel-buttons.ejs', 'utf8'), { guild });
     response.status(200).send(body);
     await guild.save();
   } else {
@@ -92,7 +92,7 @@ router.post('/delete-guild', async (request, response) => {
   await deleteGuild(request.body.id);
 
   if (guild.id) {
-    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/8-ght-panel.ejs', 'utf8'), { guild });
+    const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/main-panel-buttons.ejs', 'utf8'), { guild });
     response.status(200).send(body);
     await guild.save();
   } else {
