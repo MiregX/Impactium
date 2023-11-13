@@ -211,7 +211,6 @@ async function discordStatistics(guildId, action, ...args) {
 
           member.presence?.activities.forEach(activity => {
             if (activity.name === guildDatabase.mainGame || !guildDatabase.mainGame) {
-              log("Писюн", 'r')
               statField.playingMembers++
             }
           });

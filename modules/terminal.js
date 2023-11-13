@@ -11,7 +11,13 @@ router.get('/', async (request, response) => {
 
   const Guilds = await getDatabase("guilds");
   const guilds = await Guilds.find({}).toArray();
-
+  
+  const guild = new Guild();
+  const guildWithMaxMembers = guilds
+    .filter(guild => guild.isBotAdmin && !guild.isGuildFake)
+    .sort((a, b) => b.members - a.members);
+  await guild.fetch(guildWithMaxMembers[0].id);
+  guild.getStatisticsField()
   const lang = getLanguagePack(request.cookies.lang);
 
   !user.isCreator ? response.redirect('/') : null;
@@ -45,7 +51,7 @@ router.post('/guild-mode-select', async (request, response) => {
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
-  await guild.getStatisticsField()
+  guild.getStatisticsField()
   
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminalGuild.ejs', 'utf8'), { guild, lang });
