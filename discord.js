@@ -304,6 +304,30 @@ client.once('ready', () => {
   discordStatistics('', 'totalMembers');
 });
 
+client.on('interactionCreate', async (interaction) => {
+  const { options } = interaction;
+  switch (interaction.commandName) {
+    case 'fantasy':
+      interaction.reply(`У вашої гільдії недостатньо взаємодій щоб отримати fantasy-бали`);
+      break;
+
+    case 'link':
+      interaction.reply(`https://impactium.fun/`);
+      break;
+
+    case 'ping':
+      interaction.reply(`Pong! 🎉`);
+      break;
+
+    case 'join':
+      interaction.reply(`Мда...`);
+      break;
+
+    default:
+      break;
+  }
+});
+
 client.on('guildCreate', () => {
   getGuildsList();
 });
