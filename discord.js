@@ -18,6 +18,7 @@ const client = new Client({
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildPresences,
   ],
 });
 
@@ -192,18 +193,25 @@ async function discordStatistics(guildId, action, ...args) {
         const guildDatabase = new Guild();
         await guildDatabase.fetch(guild.id)
         const statField = guildDatabase.statField();
+        const membersToFetch = [];
+        let members = await guild.members.fetch();
         
         guildDatabase.members = guild.memberCount
         statField.totalMembers = guild.memberCount;
         
-        const members = await guild.members.fetch();
+        members.forEach((member) => {
+          membersToFetch.push(member.fetch());
+        });
+        
+        members = await Promise.all(membersToFetch);
         members.forEach(async (member) => {
-          if (member.presence?.status === 'online') {
+          if (member.presence?.status) {
             statField.onlineMembers++
           }
 
-          member.presence?.activities?.forEach(activity => {
+          member.presence?.activities.forEach(activity => {
             if (activity.name === guildDatabase.mainGame || !guildDatabase.mainGame) {
+              log("Писюн", 'r')
               statField.playingMembers++
             }
           });
@@ -316,6 +324,10 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.on('messageCreate', (message) => {
   discordStatistics(message.guildId, 'messageActivity', message);
   log(message)
+});
+
+client.on("presenceUpdate", (oldGuildMember, newGuildMember) => {
+
 });
 
 schedule('0 * * * *', () => {

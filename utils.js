@@ -508,7 +508,6 @@ module.exports = {
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
-  getDatabaseOld, // удалить
   getBattleBoard,
   getMultiBoard,
   reportCounter,
