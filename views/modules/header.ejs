@@ -111,21 +111,20 @@ header > div > svg {
 .login-wrapper {
   grid-column: 3 / 4;
 }
+
 .user {
   display: flex;
   align-items: center;
   color: var(--w);
   font-weight: 500;
-  min-width: 128px;
+  max-width: 128px;
+  width: 128px;
   height: 48px;
   padding: 6px;
   border-radius: 17px;
   background: var(--c-36);
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: relative;
-}
-.user * {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
 }
 
 .user .avatar {
@@ -135,17 +134,20 @@ header > div > svg {
   pointer-events: none;
 }
 .user p {
-  padding: 0 16px;
+  padding: 0 6px;
   text-align: center;
   height: 48px;
-  display: flex;
   flex: 1;
-  align-items: center;
-  justify-content: center;
+  line-height: 48px;
+  font-size: 16px;
+  text-shadow: 0px 2px 5px var(--c-16);
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(128px - 32px - 16px - 12px);
 }
 header .logo {
-  height: 50px;
+  height: 48px;
 }
 
 #arrow-icon path.default-path {
@@ -163,6 +165,7 @@ header .logo {
 }
 .temp-button * {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  text-shadow: 0px 2px 5px var(--c-16);
 }
 .temp-button {
   display: flex;
@@ -179,6 +182,7 @@ header .logo {
   width: calc(100% - 48px);
   right: 0px;
   font-weight: 500;
+  font-size: 16px;
 }
 .temp-button .circle {
   position: absolute;
@@ -309,7 +313,7 @@ header {
 
 </style>
 <header>
-    <div style="gap: 1vw; opacity: 0;" class="logo flex flex-dir-row align-center">
+    <div style="gap: 16px; opacity: 0;" class="logo flex flex-dir-row align-center">
       <img src="https://api.impactium.fun/logo/impactium_v4.svg" onclick="toHub()" style="height: 48px;">
       <p style="font-size: 30px; font-weight: 600;">Impactium</p>
     </div>

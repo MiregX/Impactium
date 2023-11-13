@@ -92,12 +92,12 @@ class Guild {
     this.save()
   }
 
-  getStatisticsField(field) {
+  getStatisticsField() {
     if (!this.parsedStatistics) this.parsedStatistics = {};
   
-    const fieldsToProcess = field ? [field] : [];
+    const fieldsToProcess = [];
 
-    if (!field) {
+    if (this.isBotAdmin && Object.keys(this.statistics)) {
       const firstDate = Object.keys(this.statistics)[0];
       const firstHour = Object.keys(this.statistics[firstDate])[0];
       const sampleField = this.statistics[firstDate][firstHour];
@@ -106,27 +106,35 @@ class Guild {
         fieldsToProcess.push(...Object.keys(sampleField));
       }
     }
-  
+
     fieldsToProcess.forEach(currentField => {
-      if (new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return;
+      if (new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
   
       this.parsedStatistics[currentField] = {
         timestamp: Date.now(),
-        labels: [],
+        labels: {},
         values: []
       }
-  
+
       Object.keys(this.statistics).forEach(date => {
+        this.parsedStatistics[currentField].labels[date] = [];
         Object.keys(this.statistics[date]).sort().forEach(hour => {
           const entry = this.statistics[date][hour][currentField] || 0;
-          this.parsedStatistics[currentField].values.push(entry);
-          this.parsedStatistics[currentField].labels.push(`${date} ${hour}:00`);
+      
+          if (
+            this.parsedStatistics[currentField].values.length === 0 ||
+            this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][0] !== entry
+          ) {
+            this.parsedStatistics[currentField].values.push([entry, 1]);
+          } else {
+            this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][1]++;
+          }
+      
+          this.parsedStatistics[currentField].labels[date].push(`${hour}`);
         });
       });
-  
-      if (this.parsedStatistics[currentField].values.some(value => value > 0)) {
-        this.save();
-      }
+
+      this.save();
     });
   
     return this.parsedStatistics;
@@ -170,7 +178,26 @@ function getLanguagePack(languagePack = "en") {
 }
 
 
+function compressConsecutiveDuplicates(arr) {
+  const result = [];
+  let currentVal = arr[0];
+  let count = 1;
 
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] === currentVal) {
+      count++;
+    } else {
+      result.push([currentVal, count]);
+      currentVal = arr[i];
+      count = 1;
+    }
+  }
+
+  // Add the last pair
+  result.push([currentVal, count]);
+
+  console.log(result);
+}
 
 
 // users.find(user => {

@@ -23,10 +23,27 @@
 (function() {
   const statisticsName = "<%= name %>";
 
-  const labels = <%- JSON.stringify(guild.parsedStatistics?.[name]?.labels) %>;
+  const compressedLabels = <%- JSON.stringify(guild.parsedStatistics?.[name]?.labels) %>;
+  console.log(compressedLabels)
+  const labels = [];
+
+  Object.keys(compressedLabels).forEach(day => {
+    compressedLabels[day].forEach(hour => {
+      labels.push(`${day} ${hour}:00`)
+    })
+  })
+
   $(`#${statisticsName}`).data('labels', labels);
 
-  const data = <%- JSON.stringify(guild.parsedStatistics?.[name]?.values) %>;
+  const compressedData = <%- JSON.stringify(guild.parsedStatistics?.[name]?.values) %>;
+
+  const data = [];
+  compressedData.forEach(([value, count]) => {
+    for (let i = 0; i < count; i++) {
+      data.push(value);
+    }
+  });
+
   $(`#${statisticsName}`).data('data', data);
 
   generateChart($(`#${statisticsName}`), -47);

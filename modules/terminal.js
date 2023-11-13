@@ -8,19 +8,20 @@ const ejs = require('ejs');
 router.get('/', async (request, response) => {
   const user = new User();
   await user.fetch(request.cookies.token);
+  !user.isCreator ? response.redirect('/') : null;
 
-  const Guilds = await getDatabase("guilds");
-  const guilds = await Guilds.find({}).toArray();
-  
-  const guild = new Guild();
-  const guildWithMaxMembers = guilds
-    .filter(guild => guild.isBotAdmin && !guild.isGuildFake)
-    .sort((a, b) => b.members - a.members);
-  await guild.fetch(guildWithMaxMembers[0].id);
-  guild.getStatisticsField()
   const lang = getLanguagePack(request.cookies.lang);
 
-  !user.isCreator ? response.redirect('/') : null;
+  const Guilds = await getDatabase("guilds");
+  const guilds = await Guilds.find({ isBotAdmin: true })
+  .sort({ members: -1 })
+  .toArray();
+
+  const guild = new Guild();
+  await guild.fetch(guilds[0].id);
+  log(1)
+  guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.getStatisticsField()
+  log(2)
 
   try {
     const terminalData = {
@@ -51,7 +52,9 @@ router.post('/guild-mode-select', async (request, response) => {
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
+  log(1)
   guild.getStatisticsField()
+  log(2)
   
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/body.ejs', 'utf8'), { guild, lang });
