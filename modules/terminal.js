@@ -56,7 +56,7 @@ router.post('/guild-mode-select', async (request, response) => {
 
   const guild = new Guild();
   await guild.fetch(request.body.id);
-  guild.parseStatistics()
+  guild.parsedStatistics = guild.parseStatistics(true)
   
   if (guild.id) {
     const body = ejs.render(fs.readFileSync('views/modules/terminal/guild/body.ejs', 'utf8'), { guild, lang });

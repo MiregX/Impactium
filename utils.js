@@ -92,7 +92,7 @@ class Guild {
     this.save()
   }
 
-  parseStatistics() {
+  parseStatistics(isForced = false) {
     if (!this.parsedStatistics) this.parsedStatistics = {};
   
     const fieldsToProcess = [];
@@ -108,7 +108,7 @@ class Guild {
     }
 
     fieldsToProcess.forEach(currentField => {
-      if (new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
+      if (!isForced && new Date() - new Date(this.parsedStatistics[currentField]?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
   
       this.parsedStatistics[currentField] = {
         timestamp: Date.now(),
