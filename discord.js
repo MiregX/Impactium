@@ -205,7 +205,7 @@ async function discordStatistics(guildId, action, ...args) {
         
         members = await Promise.all(membersToFetch);
         members.forEach(async (member) => {
-          if (member.presence?.status) {
+          if (member.presence?.status !== "offline") {
             statField.onlineMembers++
           }
 
@@ -347,11 +347,9 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on('messageCreate', (message) => {
   discordStatistics(message.guildId, 'messageActivity', message);
-  log(message)
 });
 
 client.on("presenceUpdate", (oldGuildMember, newGuildMember) => {
-
 });
 
 schedule('0 * * * *', () => {

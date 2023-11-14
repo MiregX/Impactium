@@ -6,7 +6,6 @@ const crypto = require('crypto');
 const locale = require(`./static/lang/locale.json`);
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { request } = require('http');
 class User {
   constructor() {
     this.id = false;
