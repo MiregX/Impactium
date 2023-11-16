@@ -180,9 +180,9 @@ async function deleteGuild(guildId) {
 }
 
 async function discordStatistics(guildId, action, ...args) {
-  const guildDatabase = new GuildStatisticsInstance();
+  const guildDatabase = new Guild();
   await guildDatabase.fetch(guildId);
-  const statField = guildDatabase.statField();
+  const statField = guildDatabase.newStatsInstance().getStatisticsField();
 
   switch (action) {
     case 'totalMembers':
@@ -192,7 +192,7 @@ async function discordStatistics(guildId, action, ...args) {
       for (const guild of guilds.values()) {
         const guildDatabase = new GuildStatisticsInstance();
         await guildDatabase.fetch(guild.id)
-        const statField = guildDatabase.statField();
+        const statField = guildDatabase.getStatisticsField();
         const members = await guild.members.fetch();
         
         guildDatabase.members = guild.memberCount
