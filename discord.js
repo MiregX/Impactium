@@ -1,7 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 const { schedule } = require('node-cron');
-const { User, Guild, getDatabase, saveDatabase, log } = require('./utils');
+const { User, Guild, GuildStatisticsInstance, getDatabase, saveDatabase, log } = require('./utils');
 
 const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
 
@@ -180,7 +180,7 @@ async function deleteGuild(guildId) {
 }
 
 async function discordStatistics(guildId, action, ...args) {
-  const guildDatabase = new Guild();
+  const guildDatabase = new GuildStatisticsInstance();
   await guildDatabase.fetch(guildId);
   const statField = guildDatabase.statField();
 
@@ -190,30 +190,27 @@ async function discordStatistics(guildId, action, ...args) {
       const guilds = client.guilds.cache;
     
       for (const guild of guilds.values()) {
-        const guildDatabase = new Guild();
+        const guildDatabase = new GuildStatisticsInstance();
         await guildDatabase.fetch(guild.id)
         const statField = guildDatabase.statField();
-        const membersToFetch = [];
-        let members = await guild.members.fetch();
+        const members = await guild.members.fetch();
         
         guildDatabase.members = guild.memberCount
         statField.totalMembers = guild.memberCount;
+        statField.playingMembers = 0;
+        statField.onlineMembers = 0;
         
-        members.forEach((member) => {
-          membersToFetch.push(member.fetch());
-        });
-        
-        members = await Promise.all(membersToFetch);
-        members.forEach(async (member) => {
-          if (member.presence?.status !== "offline") {
+        members.forEach(member => {
+          if (["dnd", "idle", "online"].includes(member.presence?.status)) {
             statField.onlineMembers++
           }
 
-          member.presence?.activities.forEach(activity => {
-            if (activity.name === guildDatabase.mainGame || !guildDatabase.mainGame) {
-              statField.playingMembers++
-            }
-          });
+          statField.playingMembers += member.presence?.activities.some(activity => {
+            return activity.name === guildDatabase.mainGame 
+              || (!guildDatabase.mainGame 
+                && (typeof activity.party === 'object' 
+                  || typeof activity.applicationId === 'string'));
+          }) ? 1 : 0;
         });
         await guildDatabase.save();
         guildDatabase.parseStatistics(true);
@@ -281,7 +278,7 @@ async function clearStaticticsFieldsFromDatabase() {
   const guilds = await Database.find({}).toArray();
   const guildsArray = guilds.map(item => item.id);
   for (const id of guildsArray) {
-    const guild = new Guild()
+    const guild = new GuildStatisticsInstance()
     await guild.fetch(id);
     guild.clearStatisticsFields();
   }

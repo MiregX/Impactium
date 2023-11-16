@@ -53,81 +53,8 @@ class Guild {
     }
   }
 
-  statField() {
-    const timestamp = formatDate()
-
-    if (!this.statistics) {
-      this.statistics = {}
-    }
-    
-    const statisticsDefaultObject = {
-      uniqueUsersVoiceActivityList: [],
-      messagesUniqueUsersList: [],
-      uniqueUsersVoiceActivity: 0,
-      messagesFromUniqueUsers: 0,
-      voiceMembers: 0,
-      messagesPerHour: 0,
-      onlineMembers: 0,
-      playingMembers: 0
-    }
-
-    const dateObj = this.statistics[timestamp.date] ?? (this.statistics[timestamp.date] = {});
-    const timeObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = statisticsDefaultObject);
-
-    return timeObj
-  }
-
-  clearStatisticsFields() {
-    const days = Object.keys(this.statistics);
-  
-    if (days.length <= 7) return;
-
-    const keys = days.slice(0, days.length - 9);
-
-    for (const key of keys) {
-      delete this.statistics[key];
-    }
-
-    this.save()
-  }
-
-  parseStatistics(isForced = false) {
-    if (!isForced && new Date() - new Date(this.parsedStatistics.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
-    if (!this.parsedStatistics) this.parsedStatistics = {};
-
-    if (this.isFakeGuild) return this.parsedStatistics
-
-    const sampleField = this.statistics[Object.keys(this.statistics)[0]][Object.keys(this.statistics[Object.keys(this.statistics)[0]])[0]];
-
-    Object.keys(sampleField).forEach(currentField => {
-      this.parsedStatistics[currentField] = {
-        labels: {},
-        values: []
-      }
-
-      Object.keys(this.statistics).forEach(date => {
-        this.parsedStatistics[currentField].labels[date] = [];
-        Object.keys(this.statistics[date]).sort().forEach(hour => {
-          const entry = this.statistics[date][hour][currentField] || 0;
-      
-          if (
-            this.parsedStatistics[currentField].values.length === 0 ||
-            this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][0] !== entry
-          ) {
-            this.parsedStatistics[currentField].values.push([entry, 1]);
-          } else {
-            this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][1]++;
-          }
-      
-          this.parsedStatistics[currentField].labels[date].push(`${hour}`);
-        });
-      });
-
-      this.parsedStatistics.timestamp = Date.now();
-    });
-
-    this.save();
-    return this.parsedStatistics;
+  newStatsInstance() {
+    return new GuildStatisticsInstance(this);
   }
   
   async save() {
@@ -135,10 +62,89 @@ class Guild {
     const guild = await Guilds.findOne({ _id: this._id });
 
     if (guild && this.isFetched) {
+      delete this.isFetched
       await Guilds.updateOne({ _id: this._id }, { $set: this });
     } else if (this.name && this.avatar && this.isBotAdmin) {
       await Guilds.insertOne(this);
     }
+  }
+}
+
+class GuildStatisticsInstance extends Guild {
+  constructor(guild = null) {
+    super();
+
+    if (guild) {
+      Object.assign(this, guild);
+    }
+  }
+
+  getStatisticsField() {
+    const timestamp = formatDate();
+
+    if (!this.statistics) this.statistics = {};
+
+    const dateObj = this.statistics[timestamp.date] ?? (this.statistics[timestamp.date] = {});
+    const statObj = dateObj[timestamp.hour] ?? (dateObj[timestamp.hour] = {});
+
+    return statObj;
+  }
+
+  clearStatisticsFields() {
+    const days = Object.keys(this.statistics);
+
+    if (days.length <= 7) return;
+
+    const keys = days.slice(0, days.length - 8);
+
+    for (const key of keys) {
+      delete this.statistics[key];
+    }
+
+    this.save();
+  }
+
+  parseStatistics(isForced = false) {
+    if (!isForced && new Date() - new Date(this.parsedStatistics?.timestamp) < 60 * 60 * 1000) return this.parsedStatistics;
+    if (!this.parsedStatistics) this.parsedStatistics = {};
+
+    if (this.isFakeGuild) return this.parsedStatistics;
+
+    const sampleField = this.statistics[Object.keys(this.statistics)[0]][Object.keys(this.statistics[Object.keys(this.statistics)[0]])[0]];
+
+    if (typeof sampleField !== 'object' || Array.isArray(sampleField)) return;
+
+    Object.keys(sampleField).forEach((currentField) => {
+      this.parsedStatistics[currentField] = {
+        labels: {},
+        values: [],
+      };
+
+      Object.keys(this.statistics).forEach((date) => {
+        this.parsedStatistics[currentField].labels[date] = [];
+        Object.keys(this.statistics[date])
+          .sort()
+          .forEach((hour) => {
+            const entry = this.statistics[date][hour][currentField] || 0;
+
+            if (
+              this.parsedStatistics[currentField].values.length === 0 ||
+              this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][0] !== entry
+            ) {
+              this.parsedStatistics[currentField].values.push([entry, 1]);
+            } else {
+              this.parsedStatistics[currentField].values[this.parsedStatistics[currentField].values.length - 1][1]++;
+            }
+
+            this.parsedStatistics[currentField].labels[date].push(`${hour}`);
+          });
+      });
+
+      this.parsedStatistics.timestamp = Date.now();
+    });
+
+    this.save();
+    return this.parsedStatistics;
   }
 }
 
@@ -166,29 +172,6 @@ function getLanguagePack(languagePack = "en") {
   languageProxy.debugPath = __dirname;
   return languageProxy;
 }
-
-
-function compressConsecutiveDuplicates(arr) {
-  const result = [];
-  let currentVal = arr[0];
-  let count = 1;
-
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] === currentVal) {
-      count++;
-    } else {
-      result.push([currentVal, count]);
-      currentVal = arr[i];
-      count = 1;
-    }
-  }
-
-  // Add the last pair
-  result.push([currentVal, count]);
-
-  console.log(result);
-}
-
 
 // users.find(user => {
 //   (user[user.lastLogin].id === id) ||
@@ -263,11 +246,6 @@ function formatDate(toDate = false, isPrevDay = false) {
     date: `${day}.${month}.${year}`,
     shortDate: `${hours}:${minutes} ${day}.${month}`
   };
-}
-
-function getDatabaseOld() {
-  const database = JSON.parse(fs.readFileSync('json/database.json', 'utf8'));
-  return database;
 }
 
 function saveDatabase(database) {
@@ -362,32 +340,7 @@ function reportCounter(battleboard) {
     .sort((a, b) => b.fame - a.fame)
     .slice(0, 4);
 
-  result.winner = calculateWinnerGuild(result);
-
   return result;
-}
-
-function calculateWinnerGuild(result) {
-  const guildCounts = {};
-  let guild = false;
-  let alliance = false;
-
-  for (const category in result) {
-    const firstGuild = result[category][0].guild;
-    const firstAlliance = result[category][0].alliance;
-
-    guildCounts[firstGuild] = (guildCounts[firstGuild] || 0) + 1;
-    
-    if (guildCounts[firstGuild] >= 2) {
-      guild = firstGuild;
-      if (!alliance) {
-        alliance = firstAlliance;
-      }
-      break;
-    }
-  }
-
-  return { guild, alliance };
 }
 
 function ftpUpload(filePathOnHost) {
@@ -534,6 +487,7 @@ module.exports = {
   formatDate,
   getLicense,
   ftpUpload,
+  GuildStatisticsInstance,
   Guild,
   User,
   log,

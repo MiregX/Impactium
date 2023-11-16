@@ -1,4 +1,4 @@
-const { User, Guild, getDatabase, getLanguagePack, log } = require('../utils');
+const { User, Guild, GuildStatisticsInstance, getDatabase, getLanguagePack, log } = require('../utils');
 const { getGuildsList, toggleAdminPermissions, deleteGuild } = require('../discord');
 const express = require('express');
 const router = express.Router();
@@ -36,7 +36,7 @@ router.get('/', async (request, response) => {
   });
   
 
-  const guild = new Guild();
+  const guild = new GuildStatisticsInstance();
   await guild.fetch(guilds.filter(guildDb => !guildDb.isFakeGuild)[0].id);
   guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.parseStatistics()
 
@@ -67,7 +67,7 @@ router.post('/guild-mode-select', async (request, response) => {
   
   const lang = getLanguagePack(request.cookies.lang);
 
-  const guild = new Guild();
+  const guild = new GuildStatisticsInstance();
   await guild.fetch(request.body.id);
   guild.parsedStatistics = guild.parseStatistics()
   
