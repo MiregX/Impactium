@@ -11,6 +11,9 @@ header {
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
 }
+header * {
+  letter-spacing: 0px;
+}
 header-background {
   z-index: 1;
   top: -80px;
@@ -293,7 +296,7 @@ header {
   background-color: var(--c-36);
 }
 .verified .icon {
-  height: 25px;
+  height: calc(100% / 3 * 2);
   width: 25px;
   pointer-events: none;
 }
@@ -309,6 +312,49 @@ header {
   100% {
     opacity: 1;
   }
+}
+
+.default-onhover-block {
+  position: relative;
+}
+
+.default-onhover-block::after,
+.default-onhover-block::before {
+  position: absolute;
+  content: attr(onover-content);
+  height: calc(100% - 10px);
+  border-radius: 7px;
+  padding: 4px 9px;
+  opacity: 0;
+  background: var(--c-36);
+  color: var(--w);
+  z-index: 2;
+  white-space: nowrap;
+  line-height: normal;
+  font-weight: 400;
+  transition: all 0.4s var(--trans);
+  pointer-events: none;
+  transform: translateY(calc(80% + 10px));
+}
+
+.default-onhover-block::before {
+  border-radius: 8px;
+  padding: 5px 10px;
+  background: linear-gradient(155deg, var(--c-64) 0%, var(--c-96) 100%);
+  color: transparent;
+}
+
+.default-onhover-block:hover::after,
+.default-onhover-block:hover::before {
+  opacity: 1;
+}
+
+.default-onhover-block:hover::after {
+  transform: translateY(calc(100% + 10px));
+}
+
+.default-onhover-block:hover::before {
+  transform: translateY(calc(100% + 8px));
 }
 
 </style>
@@ -346,7 +392,7 @@ header {
     <% if (user.id) { %>
       <div class="user-onlogin" style="justify-content: flex-end;">
         <% if (user.isVerified) { %>
-          <div class="verified flex center" <% if (user.isCreator) { %>onclick="terminal()"<% } %>>
+          <div class="verified flex center default-onhover-block" onover-content="Открыть терминал" <% if (user.isCreator) { %>onclick="terminal()"<% } %>>
             <img src="https://impactium.fun/static/images/verified.svg" class="icon">
           </div>
         <% } %>

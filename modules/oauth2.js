@@ -49,8 +49,8 @@ router.get('/callback/google', (request, response, next) => {
 
     try {
       userAuthentication({data: user._json, from: "discord"}).then(authResult => {
-        response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-        response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+        response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
+        response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
         response.redirect(request.cookies.previousPage || '/');
       });
     } catch (error) {
@@ -81,8 +81,8 @@ router.get('/callback/discord', (request, response) => {
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
           userAuthentication({data: data.body, from: "discord"}).then(authResult => {
-            response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true });
-            response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true });
+            response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
+            response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.redirect(request.cookies.previousPage || '/');
           });
         })

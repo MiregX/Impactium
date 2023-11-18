@@ -220,6 +220,7 @@ async function discordStatistics(guildId, action, ...args) {
 
     case 'voiceMembers': // Заполняем три поля
       const [oldState, newState] = args;
+      if (!statField.uniqueUsersVoiceActivityList) statField.uniqueUsersVoiceActivityList = [];
 
       if (!statField.uniqueUsersVoiceActivityList.includes(newState.id)) {
         statField.uniqueUsersVoiceActivityList.push(newState.id);
@@ -237,7 +238,7 @@ async function discordStatistics(guildId, action, ...args) {
 
     case 'messageActivity':
       const message = args[0];
-
+      if (!statField.messagesUniqueUsersList) statField.messagesUniqueUsersList = []; 
       if (!statField.messagesUniqueUsersList.includes(message.author.id)) {
         statField.messagesUniqueUsersList.push(message.author.id);
         statField.messagesFromUniqueUsers++ 

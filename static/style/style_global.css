@@ -13,6 +13,7 @@
   --trans: cubic-bezier(.21,.29,0,.94);
   --w: #e8e8e8;
   --purple-accent: #e8e8e8;
+  --icons-default-height: calc(100% / 3 * 2);
 }
 .gap {
   gap: 15px;
@@ -122,3 +123,4 @@
 .pointer {
   cursor: pointer !important;
 }
+
