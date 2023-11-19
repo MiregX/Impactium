@@ -64,7 +64,6 @@
 </div>
 <script>
 $(".mode-chooser").on("click", function() {
-  console.log("egg"); // не выводится в консоль
   const loadmeValue = $(this).attr("loadme");
   $.ajax({
     url: `/terminal/loadme`,
@@ -75,10 +74,8 @@ $(".mode-chooser").on("click", function() {
       const renderZone = $(".app");
       renderZone.html("");
       renderZone.html(response);
-      console.log("gg");
     },
     error: function (error) {
-      console.log("net gg");
     }
   });
 });
