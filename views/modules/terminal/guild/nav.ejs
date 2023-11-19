@@ -131,7 +131,7 @@ function guildToWorkSelect(selectedGuildId, button) {
     contentType: "application/json",
     success: function (response) {
       toggleWaitingScreenToNav(button, false);
-      const renderZone = $(".work-window");
+      const renderZone = $(".app .work-window");
       renderZone.html("");
       renderZone.html(response);
     },

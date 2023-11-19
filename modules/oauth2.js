@@ -154,6 +154,7 @@ async function userAuthentication(p) {
         { $set: userDatabase }
       );
     } else {
+      userToSave.nthRegister = await Database.countDocuments();
       await Database.insertOne(userToSave);
     }
     console.log({ lang: userToSave[loginSource].locale, token })

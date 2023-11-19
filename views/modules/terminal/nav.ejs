@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--c-36);
+    position: relative;
   }
   .basic-nav .mode-chooser {
     display: flex;
@@ -23,21 +24,62 @@
   .basic-nav .mode-chooser img {
     height: 32px;
   }
+  .basic-nav .mode-chooser::before {
+    content: "";
+    position: absolute;
+    background: var(--w);
+    display: flex;
+    height: 0px;
+    width: 0px;
+    border-radius: 0 4px 4px 0;
+    left: 0;
+    transition: all 0.2s var(--trans);
+  }
+  .basic-nav .mode-chooser:hover::before {
+    height: 24px;
+    width: 4px;
+  }
+  .basic-nav .mode-chooser.active::before {
+    pointer-events: none;
+    width: 4px;
+    height: 36px;
+  }
 </style>
 <div class="basic-nav">
-  <div class="mode-chooser">
+  <div class="mode-chooser" loadme="search-panel">
     <img src="https://api.impactium.fun/svg/search.svg">
   </div>
-  <div class="mode-chooser">
+  <div class="mode-chooser" loadme="guild-statistics">
     <img src="https://api.impactium.fun/svg/chart.svg">
   </div>
-  <div class="mode-chooser">
+  <div class="mode-chooser" loadme="doxbin-registry">
     <img src="https://api.impactium.fun/svg/earth-globe.svg">
   </div>
-  <div class="mode-chooser">
+  <div class="mode-chooser" loadme="user-schedule">
     <img src="https://api.impactium.fun/svg/sparkle-whiter.svg">
   </div>
-  <div class="mode-chooser">
+  <div class="mode-chooser" loadme="some-settings">
     <img src="https://api.impactium.fun/svg/gear.svg">
   </div>
 </div>
+<script>
+$(".mode-chooser").on("click", function() {
+  console.log("egg"); // не выводится в консоль
+  const loadmeValue = $(this).attr("loadme");
+  $.ajax({
+    url: `/terminal/loadme`,
+    type: "POST",
+    data: JSON.stringify({ value: loadmeValue }),
+    contentType: "application/json",
+    success: function (response) {
+      const renderZone = $(".app");
+      renderZone.html("");
+      renderZone.html(response);
+      console.log("gg");
+    },
+    error: function (error) {
+      console.log("net gg");
+    }
+  });
+});
+</script>

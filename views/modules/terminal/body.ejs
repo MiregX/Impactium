@@ -1,4 +1,9 @@
 <style>
+  .app {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
   .work-window {
     display: flex;
     flex-direction: column;
@@ -14,7 +19,9 @@
     border-radius: 17px;
   }
 </style>
-<div class="work-window">
-  <%- include(`${lang.debugPath}/views/modules/terminal/guild/body.ejs`, { guild: guilds.filter(guildDb => !guildDb.isFakeGuild)[0], lang }) %>
+<div class="app">
+  <div class="work-window">
+    <%- include(`${lang.debugPath}/views/modules/terminal/guild/body.ejs`, { guild: guilds.filter(guildDb => !guildDb.isFakeGuild)[0], lang }) %>
+  </div>
+  <%- include(`${lang.debugPath}/views/modules/terminal/guild/nav.ejs`, guilds) %>
 </div>
-<%- include(`${lang.debugPath}/views/modules/terminal/guild/nav.ejs`, guilds) %>

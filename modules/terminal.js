@@ -1,4 +1,4 @@
-const { User, Guild, GuildStatisticsInstance, getDatabase, getLanguagePack, log } = require('../utils');
+const { User, Guild, Schedule, GuildStatisticsInstance, getDatabase, getLanguagePack, log } = require('../utils');
 const { getGuildsList, toggleAdminPermissions, deleteGuild } = require('../discord');
 const express = require('express');
 const router = express.Router();
@@ -9,41 +9,12 @@ router.get('/', async (request, response) => {
   const user = new User();
   await user.fetch(request.cookies.token);
   !user.isCreator ? response.redirect('/') : null;
-
   const lang = getLanguagePack(request.cookies.lang);
-
-  const Guilds = await getDatabase("guilds");
-  let guilds = await Guilds.find({})
-  .toArray();
-
-  guilds = guilds.sort((a, b) => {
-    // Перевіряємо isBotAdmin, якщо обидва isBotAdmin дорівнюють false, то сортуємо за кількістю учасників
-    if (!a.isBotAdmin && !b.isBotAdmin) {
-      return b.members - a.members;
-    }
-  
-    // Якщо тільки один з isBotAdmin дорівнює false, то той, у якого isBotAdmin === false, йде в кінець
-    if (!a.isBotAdmin && !a.isFakeGuild) {
-      return 1;
-    }
-    
-    if (!b.isBotAdmin && !b.isFakeGuild) {
-      return -1;
-    }
-  
-    // Якщо обидва isBotAdmin дорівнюють true, то сортуємо за кількістю учасників
-    return b.members - a.members;
-  });
-  
-
-  const guild = new GuildStatisticsInstance();
-  await guild.fetch(guilds.filter(guildDb => !guildDb.isFakeGuild)[0].id);
-  guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.parseStatistics()
 
   try {
     const terminalData = {
       user,
-      guilds,
+      guilds: await handleGuildsStatistics(),
       lang
     };
 
@@ -117,5 +88,53 @@ router.post('/delete-guild', async (request, response) => {
     response.status(403).send()
   }
 });
+
+router.post('/loadme', async (request, response) => {
+  try {
+    const user = new User();
+    await user.fetch(request.cookies.token);
+    if (!user.isCreator) return response.redirect('/');
+    const lang = getLanguagePack(request.cookies.lang);
+    let body = "";
+    switch (request.body.value) {
+      case 'user-schedule':
+        const schedule = new Schedule(user._id);
+        await schedule.fetch();
+        body = ejs.render(fs.readFileSync('views/modules/terminal/schedule/main.ejs', 'utf8'), { schedule, lang });
+        break;
+
+      case 'guild-statistics':
+        const guilds = await handleGuildsStatistics()
+        body = ejs.render(fs.readFileSync('views/modules/terminal/guild/main.ejs', 'utf8'), { guilds, lang });
+        break;
+
+      default:
+        response.status(403)
+        break;
+    }
+
+    response.status(200).send(body);
+  } catch (error) {
+    log("Ошибка в функции /loadme в /terminal:" + error, 'r')
+  }
+});
+
+async function handleGuildsStatistics() {
+  const Guilds = await getDatabase("guilds");
+  let guilds = await Guilds.find({}).toArray();
+
+  guilds = guilds.sort((a, b) => {
+    if (!a.isBotAdmin && !b.isBotAdmin) return b.members - a.members;
+    if (!a.isBotAdmin && !a.isFakeGuild) return 1;
+    if (!b.isBotAdmin && !b.isFakeGuild)return -1;
+    return b.members - a.members;
+  });
+  
+  const guild = new GuildStatisticsInstance();
+  await guild.fetch(guilds.filter(guildDb => !guildDb.isFakeGuild)[0].id);
+  guilds.find(guildDb => guildDb.id === guild.id).parsedStatistics = guild.parseStatistics()
+
+  return guilds;
+}
 
 module.exports = router;

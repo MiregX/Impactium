@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const locale = require(`./static/lang/locale.json`);
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
 class User {
   constructor() {
     this.id = false;
@@ -149,6 +150,41 @@ class GuildStatisticsInstance extends Guild {
   }
 }
 
+class Schedule {
+  constructor(id) {
+    this.id = id;
+    this.isFetched = false;
+  }
+
+  async fetch(id = this.id) {
+    const Schedules = await getDatabase("schedules");
+    const schedule = await Schedules.findOne({ id });
+
+    if (schedule) {
+      Object.assign(this, schedule);
+      this.isFetched = true;
+    } else if (this.id) {
+      await Schedules.insertOne(this);
+      this.isFetched = true;
+    }
+  }
+
+  async save() {
+    const Schedules = await getDatabase("schedules");
+    const schedule = await Schedules.findOne({ _id: this._id });
+
+    if (schedule || this._id) {
+      delete this.isFetched
+      await Schedules.updateOne({ _id: this._id }, { $set: this });
+      this.isFetched = true;
+    } else {
+      delete this.isFetched
+      await Schedules.insertOne(this);
+      this.isFetched = true;
+    }
+  }
+}
+
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
     get(target, prop) {
@@ -247,10 +283,6 @@ function formatDate(toDate = false, isPrevDay = false) {
     date: `${day}.${month}.${year}`,
     shortDate: `${hours}:${minutes} ${day}.${month}`
   };
-}
-
-function saveDatabase(database) {
-  fs.writeFileSync('json/database.json', JSON.stringify(database, null, 2), 'utf8');
 }
 
 async function getMultiBoard(ids) {
@@ -476,6 +508,7 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
+  GuildStatisticsInstance,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
@@ -483,12 +516,11 @@ module.exports = {
   getMultiBoard,
   reportCounter,
   generateToken,
-  saveDatabase,
   getDatabase,
   formatDate,
   getLicense,
   ftpUpload,
-  GuildStatisticsInstance,
+  Schedule,
   Guild,
   User,
   log,
