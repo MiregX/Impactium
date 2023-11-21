@@ -30,6 +30,17 @@ class User {
       guild.name.toLowerCase() === guildKey.toLowerCase() || 
       guild.id.toLowerCase() === guildKey.toLowerCase())
   }
+
+  async save() {
+    const Users = await getDatabase("users");
+    const user = await Users.findOne({ _id: this._id });
+
+    if (user && this.isFetched || this._id) {
+      delete this.isFetched
+      await Users.updateOne({ _id: this._id }, { $set: this });
+      this.isFetched = true;
+    }
+  }
 }
 
 class Guild {
@@ -180,6 +191,77 @@ class Schedule {
     } else {
       delete this.isFetched
       await Schedules.insertOne(this);
+      this.isFetched = true;
+    }
+  }
+}
+
+class Player {
+  constructor(id) {
+    this.id = id;
+    this.isFetched = false;
+  }
+
+  async fetch(id = this.id) {
+    const Players = await getDatabase("minecraftPlayers");
+    const player = await Players.findOne({
+      $or: [
+        { id },
+        { discordId: id }
+      ]
+    });
+
+    if (player) {
+      Object.assign(this, player);
+      this.isFetched = true;
+    } else if (this.id) {
+      await Players.insertOne(this);
+      this.isFetched = true;
+    }
+  }
+
+  setNickname(newNickname) {
+    try {
+      if (this.nickname) {
+        const toPushObject = [this.nickname, Date.now()]
+        Array.isArray(this.oldNicknames)
+        ? this.oldNicknames.push(toPushObject)
+        : this.oldNicknames = [toPushObject]
+      }
+
+      this.nickname = newNickname;
+      this.save()
+      return 200
+    } catch (error) { log('Error during nickname change at Player' + error); return 500 }
+  }
+  
+  setSkin() {
+    try {
+      if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
+            
+      const filePath = `minecraftPlayersSkins/${this.id}.png`
+      this.skinLink = `https://api.impactium.fun/${filePath}`
+      ftpUpload(filePath)
+    } catch (error) {
+      
+    }
+  }
+
+  setIcon() {
+
+  }
+
+  async save() {
+    const Players = await getDatabase("minecraftPlayers");
+    const player = await Players.findOne({ _id: this._id });
+
+    if (player || this._id) {
+      delete this.isFetched
+      await Players.updateOne({ _id: this._id }, { $set: this });
+      this.isFetched = true;
+    } else {
+      delete this.isFetched
+      await Players.insertOne(this);
       this.isFetched = true;
     }
   }
@@ -387,7 +469,7 @@ function ftpUpload(filePathOnHost) {
   const absoluteFilePath = path.join(__dirname, 'static/img/', filePathOnHost);
 
   ftpClient.on('ready', () => {
-    ftpClient.put(absoluteFilePath, `/api.impactium.fun/htdocs/static/img/${filePathOnHost}`, (err) => {
+    ftpClient.put(absoluteFilePath, `/api.impactium.fun/htdocs/${filePathOnHost}`, (err) => {
       if (err) {
         console.error('Ошибка при загрузке файла:', err);
       }
