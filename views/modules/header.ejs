@@ -128,6 +128,7 @@ header > div > svg {
   background: var(--c-36);
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: relative;
+  cursor: pointer;
 }
 
 .user .avatar {
@@ -400,7 +401,7 @@ header {
             <img src="https://impactium.fun/static/images/verified.svg" class="icon">
           </div>
         <% } %>
-        <button class="user flex">
+        <button onclick="me()" class="user flex">
           <% if (user.avatar) { %>
             <img src="<%= user.avatar %>" class="avatar">
           <% } %>
@@ -457,6 +458,9 @@ function login() {
 }
 function terminal() {
   window.location.href = "/terminal";
+}
+function me() {
+  window.location.href = "/me";
 }
 function redirect(link) {
   window.location.href = link;

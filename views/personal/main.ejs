@@ -1,0 +1,92 @@
+<style>
+.app {
+  width: calc(100vw - 30vw);
+  padding: 0 15vw;
+  display: flex;
+}
+.app nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center
+}
+
+.app nav button {
+  background: var(--c-36);
+  padding: 8px;
+  flex: 1;
+  min-height: 32px;
+  min-width: 192px;
+  gap: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+}
+.app nav button:hover {
+  background: var(--c-48);
+}
+.app nav button.selected {
+  background: var(--c-48);
+}
+.app nav button p {
+  flex: 1;
+  text-align: left;
+}
+.panel {
+  display: flex;
+  flex: 1;
+}
+</style>
+<div class="app">
+  <nav>
+    <button class="selected" >
+      <img src="">
+      <p>My Profile</p>
+    </button>
+    <button onclick="getRender(`minecraft`)">
+      <img src="https://api.impactium.fun/ux/cube.svg">
+      <p>Minecraft Account</p>
+    </button>
+    <button>
+      <img src="">
+      <p>Settings</p>
+    </button>
+  </nav>
+  <div class="panel">
+    <% prerender = prerender || 'minecraft' %>
+  </div>
+</div>
+
+<script>
+$('.app nav button').on('click', function () {
+  $('.app nav button.previous').removeClass('previous');
+  $('.app nav button.selected').addClass('previous');
+  $('.app nav button.selected').removeClass('selected');
+  $(this).addClass('selected');
+});
+
+function getRender(page) {
+  $.ajax({
+    type: 'GET',
+    url: "/me/" + page,
+    headers: {
+      'Cache-Control': 'no-store',
+      'Accept': 'semipage'
+    },
+    success: function (response) {
+      const renderZone = $(".app .panel");
+      history.pushState(null, null, `/me/${page}`);
+      renderZone.html("");
+      renderZone.html(response);
+    },
+    error: function (error) {
+      const buttonOnError = $('.app nav button.previous')
+      $(buttonOnError).removeClass('previous');
+      $('.app nav button.selected').removeClass('selected');
+      $(buttonOnError).addClass('selected');
+    }
+  });
+}
+<% prerender = prerender || 'minecraft' %>
+getRender(`<%= prerender %>`)
+</script>

@@ -106,6 +106,9 @@ app.use('/metrix', metrixRouter);
 const phpApp = require('./modules/php/index');
 app.use('/php', phpApp);
 
+const meApp = require('./modules/me');
+app.use('/me', meApp);
+
 const albionApp = require('./modules/albion/guildpanel');
 app.use('/fax', albionApp);
 

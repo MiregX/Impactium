@@ -10,6 +10,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 class User {
   constructor() {
     this.id = false;
+    this.isFetched = false;
   }
 
   async fetch(token) {
@@ -17,6 +18,7 @@ class User {
     const userDatabase = await Database.findOne({ token });
 
     if (userDatabase) {
+      this.isFetched = true;
       const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
       const { token, secure, discord, google, ...rest } = user;
       this.private = userDatabase;
@@ -37,6 +39,7 @@ class User {
 
     if (user && this.isFetched || this._id) {
       delete this.isFetched
+      delete this.private
       await Users.updateOne({ _id: this._id }, { $set: this });
       this.isFetched = true;
     }
@@ -196,7 +199,7 @@ class Schedule {
   }
 }
 
-class Player {
+class MinecraftPlayer {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
@@ -222,6 +225,7 @@ class Player {
 
   setNickname(newNickname) {
     try {
+      if (this.lastNicknameChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
       if (this.nickname) {
         const toPushObject = [this.nickname, Date.now()]
         Array.isArray(this.oldNicknames)
@@ -229,6 +233,7 @@ class Player {
         : this.oldNicknames = [toPushObject]
       }
 
+      this.nicknameLastChangeTimestamp = Date.now()
       this.nickname = newNickname;
       this.save()
       return 200
@@ -238,17 +243,15 @@ class Player {
   setSkin() {
     try {
       if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
-            
-      const filePath = `minecraftPlayersSkins/${this.id}.png`
-      this.skinLink = `https://api.impactium.fun/${filePath}`
-      ftpUpload(filePath)
+
+      const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
+      this.skinLink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
+      this.skinIconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
+      this.save();
+      return 200
     } catch (error) {
       
     }
-  }
-
-  setIcon() {
-
   }
 
   async save() {
@@ -261,6 +264,7 @@ class Player {
       this.isFetched = true;
     } else {
       delete this.isFetched
+      this.registered = Date.now();
       await Players.insertOne(this);
       this.isFetched = true;
     }
@@ -603,6 +607,7 @@ module.exports = {
   getLicense,
   ftpUpload,
   Schedule,
+  MinecraftPlayer,
   Guild,
   User,
   log,
