@@ -217,9 +217,8 @@ class MinecraftPlayer {
     if (player) {
       Object.assign(this, player);
       this.isFetched = true;
-    } else if (this.id) {
-      await Players.insertOne(this);
-      this.isFetched = true;
+    } else {
+      await this.save()
     }
   }
 
@@ -265,6 +264,10 @@ class MinecraftPlayer {
     } else {
       delete this.isFetched
       this.registered = Date.now();
+      const Database = await getDatabase("users");
+      const user = await Database.findOne({ _id: this.id });
+      if (user.discord?.name) this.setNickname(user.discord.name);
+      else this.setNickname(generateToken(16));
       await Players.insertOne(this);
       this.isFetched = true;
     }
@@ -545,7 +548,6 @@ async function getBattleBoard(params = false) {
         }
 
         const result = await Battleboard.find({ $or: filter.$or }).toArray();
-        console.log(result.map(r => r.id));
         return result;
       }
     }

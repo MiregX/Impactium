@@ -1,8 +1,12 @@
 <style>
+header {
+  padding: 0 15vw
+}
 .app {
-  width: calc(100vw - 30vw);
-  padding: 0 15vw;
+  padding: 3vh 15vw 0 15vw;
   display: flex;
+  height: calc(100vh - 80px);
+  gap: 32px;
 }
 .app nav {
   display: flex;
@@ -14,7 +18,6 @@
 .app nav button {
   background: var(--c-36);
   padding: 8px;
-  flex: 1;
   min-height: 32px;
   min-width: 192px;
   gap: 8px;
@@ -33,8 +36,11 @@
   text-align: left;
 }
 .panel {
+  position: relative;
   display: flex;
+  flex-direction: row;
   flex: 1;
+  justify-content: space-between;
 }
 </style>
 <div class="app">
@@ -53,7 +59,10 @@
     </button>
   </nav>
   <div class="panel">
-    <% prerender = prerender || 'minecraft' %>
+    <% if (typeof prerender === 'undefined') prerender = 'minecraftBody'; %>
+    <% if (typeof user === 'undefined') user = player; %>
+    <%- include(`${lang.debugPath}/views/personal/${prerender}.ejs`, { user, lang }) %>
+    
   </div>
 </div>
 
@@ -78,6 +87,7 @@ function getRender(page) {
       history.pushState(null, null, `/me/${page}`);
       renderZone.html("");
       renderZone.html(response);
+      initCards()
     },
     error: function (error) {
       const buttonOnError = $('.app nav button.previous')
@@ -87,6 +97,61 @@ function getRender(page) {
     }
   });
 }
-<% prerender = prerender || 'minecraft' %>
-getRender(`<%= prerender %>`)
+
+const initCards = () => {
+  cardsContainer = document.querySelector(".panel");
+  cards = Array.from(document.querySelectorAll(".dynamic"));
+  overlay = document.querySelector(".overlay");
+  cards.forEach(initOverlayCard);
+  document.body.addEventListener("pointermove", applyOverlayMask);
+};
+
+let cardsContainer = document.querySelector(".panel");
+let cards = Array.from(document.querySelectorAll(".profile"));
+let overlay = document.querySelector(".overlay");
+
+const applyOverlayMask = (e) => {
+  const overlayEl = e.currentTarget;
+  const x = e.pageX - cardsContainer.offsetLeft;
+  const y = e.pageY - cardsContainer.offsetTop;
+
+  overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
+};
+
+const createOverlayCta = (overlayCard, buttonEl) => {
+  const overlayCta = document.createElement("div");
+  buttonEl.classList.forEach((className) => {
+    overlayCta.classList.add(className);
+  });
+  overlayCta.textContent = buttonEl.textContent;
+  overlayCta.setAttribute("aria-hidden", true);
+  overlayCard.append(overlayCta);
+};
+
+const observer = new ResizeObserver((entries) => {
+  entries.forEach((entry) => {
+    const cardIndex = cards.indexOf(entry.target);
+    let width = entry.borderBoxSize[0].inlineSize;
+    let height = entry.borderBoxSize[0].blockSize;
+
+    if (cardIndex >= 0) {
+      overlay.children[cardIndex].style.width = `${width}px`;
+      overlay.children[cardIndex].style.height = `${height}px`;
+    }
+  });
+});
+
+const initOverlayCard = (cardEl) => {
+  const overlayCard = document.createElement("div");
+  cardEl.classList.forEach((className) => {
+    overlayCard.classList.add(className);
+  });
+  const toOverlayViewElement = cardEl.querySelector('[toOverlayView]');
+  if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
+  overlay.append(overlayCard);
+  observer.observe(cardEl);
+};
+
+initCards()
+
 </script>

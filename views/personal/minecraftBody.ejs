@@ -1,18 +1,190 @@
 <style>
+.profile {
+  --flow-space: 0.5em;
+  padding: 1.5em 2em !important;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  align-items: start;
+  gap: 1.25em;
+  height: min-content;
+}
 
+.dynamic {
+  --hue: 275;
+  --saturation: 82.26%;
+  --lightness: 51.37%;
+  --hsl: var(--hue), var(--saturation), var(--lightness);
+}
+
+.privileges {
+  line-height: 1.4;
+}
+
+.privileges li::before {
+  display: inline-block;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='16' title='check' fill='%23dddddd'%3E%3Cpath d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z' /%3E%3C/svg%3E");
+  transform: translateY(0.25ch);
+  margin-right: 1ch;
+}
+
+.profile .header {
+  font-size: 1.05em;
+  font-weight: 600;
+}
+
+.profile .player {
+  font-size: 1.75em;
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.profile .player img {
+  image-rendering: pixelated;
+  height: 24px;
+}
+
+.privileges > * + * {
+  margin-top: var(--flow-space, 1.25em);
+}
+
+.change_profile,
+.default_panel_style input {
+  display: block;
+  align-self: end;
+  margin: 1em 0 0.5em 0;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0d0d0d;
+  padding: 0.7em;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--opacity, 0);
+  -webkit-mask: radial-gradient(
+    25rem 25rem at var(--x) var(--y),
+    #000 1%,
+    transparent 50%
+  );
+  mask: radial-gradient(
+    25rem 25rem at var(--x) var(--y),
+    #000 1%,
+    transparent 50%
+  );
+  transition: 400ms mask ease;
+  will-change: mask;
+}
+
+.overlay .dynamic {
+  background-color: hsla(var(--hsl), 0.15);
+  border-color: hsla(var(--hsl), 1);
+  box-shadow: 0 0 0 1px inset hsl(var(--hsl));
+}
+
+.overlay .change_profile {
+  display: block;
+  grid-row: -1;
+  width: 100%;
+  background-color: hsl(var(--hsl));
+  box-shadow: 0 0 0 1px hsl(var(--hsl));
+}
+
+:not(.overlay) > .dynamic {
+  transition: 400ms background ease;
+  will-change: background;
+}
+
+:not(.overlay) > .dynamic:hover {
+  --lightness: 95%;
+  background: hsla(var(--hsl), 0.1);
+}
+.top_line {
+  height: min-content;
+  gap: 32px;
+}
+.controls {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  height: min-content;
+}
+
+.default_panel_style {
+  padding: 0.75em 1em;
+  border-radius: 16px;
+  color: #eceff1;
+  background-color: #2b2b2b;
+  border: 1px solid #eceff133;
+}
+.default_panel_style input {
+  text-align: left;
+  padding: 0.44em;
+  background-color: none;
+  border: 1px solid #0d0d0d;
+}
+.overlay .default_panel_style {
+  display: flex;
+  justify-content: end;
+}
+.overlay .save-button {
+  border-radius: 10px;
+  position: relative;
+  width: min-content;
+}
 </style>
-<div class="nickname">
-  <p>Игровой никнейм:
-    <div>
-      Никнейм монжо изменять раз в 24 часа
+<div class="top_line flex-dir-row">
+  <div class="dynamic default_panel_style profile">
+    <h2 class="header">Мой профиль</h2>
+    <p class="player"><img src="<%= player.skinIconLink%>"><%= player.nickname %></p>
+    <ul role="list" class="privileges">
+      <li>Доступ к перезапуску сервера</li>
+      <li>Возможность откатывать сервер</li>
+      <li>Администратор</li>
+    </ul>
+    <a href="" class="change_profile" toOverlayView>Изменить профиль</a>
+  </div>
+  <div class="controls">
+    <div class="default_panel_style dynamic">
+      <p>Изменить никнейм</p>
+      <div class="flex" style="gap: 8px;">
+        <input type="text" value="<%= player.nickname %>" toMerge placeholder="Введи ник">
+        <a href="" class="change_profile save-button" toOverlayView>Сохранить</a>
+      </div>
     </div>
-  </p>
-  <input type="text">
-  <p>Изменения вступят в силу сразу</p>
+  </div>
 </div>
-<div class="skin">
-  <>
-</div>
+<div class="overlay flex" style="gap: 32px;"></div>
 <script>
-
+function getRender(page) {
+  $.ajax({
+    type: 'GET',
+    url: "/me/" + page,
+    headers: {
+      'Cache-Control': 'no-store',
+      'Accept': 'semipage'
+    },
+    success: function (response) {
+      const renderZone = $(".app .panel");
+      history.pushState(null, null, `/me/${page}`);
+      renderZone.html("");
+      renderZone.html(response);
+      initCards()
+    },
+    error: function (error) {
+      const buttonOnError = $('.app nav button.previous')
+      $(buttonOnError).removeClass('previous');
+      $('.app nav button.selected').removeClass('selected');
+      $(buttonOnError).addClass('selected');
+    }
+  });
+}
 </script>

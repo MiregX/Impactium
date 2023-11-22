@@ -15,6 +15,7 @@ const setUserAndPlayer = async (request, response, next) => {
 
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
+  log(player)
 
   const lang = getLanguagePack(request.cookies.lang);
 
@@ -34,16 +35,18 @@ router.get('/', async (request, response) => {
   const user = new User();
   await user.fetch(request.cookies.token);  
   const lang = getLanguagePack(request.cookies.lang);
+  const player = new MinecraftPlayer(user._id);
+  await player.fetch();
   
   try {
-    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), { lang, user });
+    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), { lang, user, player });
     response.render('template.ejs', {
       body,
       user,
       lang
     });
   } catch (error) {
-    log(error)
+    console.log(error)
     response.redirect('/');
   }
 });
@@ -59,7 +62,8 @@ router.get('/minecraft', async (request, response) => {
   } else {
     const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), {
       user: request.user,
-      prerender: "minecraft",
+      prerender: "minecraftBody",
+      player: request.player,
       lang: request.lang
     });
 
