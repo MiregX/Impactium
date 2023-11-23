@@ -15,11 +15,10 @@ const setUserAndPlayer = async (request, response, next) => {
 
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
-  log(player)
 
   const lang = getLanguagePack(request.cookies.lang);
 
-  if (!user || !player.isFetched) return response.redirect('https://impactium.fun/login');
+  if (!user.isFetched) return response.redirect('https://impactium.fun/');
 
   request.user = user;
   request.player = player;
@@ -29,11 +28,12 @@ const setUserAndPlayer = async (request, response, next) => {
   next();
 };
 
-router.use(/^\/minecraft(?:\/|$)/, setUserAndPlayer);
+router.use('/minecraft', setUserAndPlayer);
 
 router.get('/', async (request, response) => {
   const user = new User();
-  await user.fetch(request.cookies.token);  
+  await user.fetch(request.cookies.token);
+  if (!user.isFetched) return response.redirect('https://impactium.fun/');
   const lang = getLanguagePack(request.cookies.lang);
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
@@ -55,7 +55,7 @@ router.get('/minecraft', async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
 
   const minecraftTemplate = fs.readFileSync('views/personal/minecraftBody.ejs', 'utf8');
-  const body = ejs.render(minecraftTemplate, {player: request.player, user: request.user, lang: request.lang });
+  const body = ejs.render(minecraftTemplate, request.composed);
 
   if (request.headers.accept === 'semipage') {
     response.status(200).send(body);
@@ -79,12 +79,23 @@ router.post('/settings', async (request, response) => {
   
 });
 
+router.post('/minecraft/register', async (request, response) => {
+  if (request.player.registered) return 500;
+  try {
+    const result = await request.player.setNickname(request.user.displayName);
+    await request.player.register();
+    response.status(result).send();
+  } catch (error) {
+    console.log(error);
+    response.status(500).send();
+  }
+});
+
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
-    request.player.setNickname(request.body.newNickname);
-    response.status(200)
+    const result = await request.player.setNickname(request.body.newNickname);
+    response.status(result)
   } catch (error) {
-    sucessStatus = 500;
     log('Ошибка в функции смены ника игрока' + error);
     response.status(500)
   }
@@ -117,7 +128,7 @@ router.post('/minecraft/setSkin', async (request, response) => {
         // await cutSkinToPlayerIcon(filePath);
         //ftpUpload(iconPath)
 
-        request.player.setSkin()
+        // request.player.setSkin(/* оригинальное названия файла */)
 
         response.status(200);
       } catch (error) {

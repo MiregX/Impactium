@@ -6,7 +6,7 @@
   grid-template-rows: auto auto auto 1fr;
   align-items: start;
   gap: 1.25em;
-  height: min-content;
+  min-width: 256px;
 }
 
 .dynamic {
@@ -43,6 +43,9 @@
   image-rendering: pixelated;
   height: 24px;
 }
+.profile .change_profile {
+  width: 100%;
+}
 
 .privileges > * + * {
   margin-top: var(--flow-space, 1.25em);
@@ -61,9 +64,10 @@
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
+  grid-row: -1;
 }
-
 .overlay {
+  height: fit-content;
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -109,34 +113,66 @@
 .top_line {
   height: min-content;
   gap: 32px;
+  width: 100%;
 }
 .controls {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  height: min-content;
+  gap: 32px;
 }
-
+.overlay .controls {
+  height: unset !important;
+}
 .default_panel_style {
   padding: 0.75em 1em;
   border-radius: 16px;
   color: #eceff1;
   background-color: #2b2b2b;
   border: 1px solid #eceff133;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .default_panel_style input {
   text-align: left;
   padding: 0.44em;
-  background-color: none;
   border: 1px solid #0d0d0d;
+  flex: 1;
+}
+.default_button_style {
+  text-align: left;
+  border: 1px solid #0d0d0d;
+  flex: 1;
+  margin: 1em 0 0.5em 0;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0d0d0d;
+  line-height: normal;
+  padding: 0.44em;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  grid-row: -1;
+}
+.default_button_style.grayed {
+  color: var(--c-96);
+}
+.upload-button {
+  padding: calc(0.7em - 6px) calc(2.8em - 6px);
+}
+.upload-button img {
+  height: 24px;
+}
+.overlay .upload-button {
+  width: fit-content;
 }
 .overlay .default_panel_style {
   display: flex;
   justify-content: end;
 }
 .overlay .save-button {
-  border-radius: 10px;
   position: relative;
   width: min-content;
 }
@@ -144,20 +180,67 @@
 <div class="top_line flex-dir-row">
   <div class="dynamic default_panel_style profile">
     <h2 class="header">Мой профиль</h2>
-    <p class="player"><img src="<%= player.skinIconLink%>"><%= player.nickname %></p>
-    <ul role="list" class="privileges">
-      <li>Доступ к перезапуску сервера</li>
-      <li>Возможность откатывать сервер</li>
-      <li>Администратор</li>
-    </ul>
-    <a href="" class="change_profile" toOverlayView>Изменить профиль</a>
+
+    <p class="player">
+      <%- player.skinIconLink 
+        ? `<img src="${player.skinIconLink}">` 
+        : (player.registered 
+          ? `<img src="https://api.impactium.fun/minecraftPlayersSkins/steve_icon.png">` 
+          : ''
+        ) %>
+
+      <%= (player.registered && player.nickname) 
+        ? player.nickname 
+        : (player.registered 
+          ? lang.playerHasNoNickname 
+          : lang.playerNotRegisteredYet
+        ) %>
+    </p>
+
+    <% if (Array.isArray(player.privileges)) { %>
+      <ul role="list" class="privileges">
+        <% player.privileges?.forEach(privilege => { %>
+          <li><%= lang[privilege.title] %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <a class="change_profile" toOverlayView
+    <%- player.registered 
+      ? '>Изменить профиль' 
+      :  onclick="registerPlayer()" >Зарегестрироваться %>
+    </a>
+
   </div>
-  <div class="controls">
+  <div class="controls calc_overlay">
     <div class="default_panel_style dynamic">
       <p>Изменить никнейм</p>
       <div class="flex" style="gap: 8px;">
-        <input type="text" value="<%= player.nickname %>" toMerge placeholder="Введи ник">
+        <input type="text" value="<%= player.nickname %>" placeholder="Введи ник">
         <a href="" class="change_profile save-button" toOverlayView>Сохранить</a>
+      </div>
+    </div>
+    <div class="default_panel_style dynamic">
+      <p>Изменить облик</p>
+      <div class="flex" style="gap: 8px;">
+        <p class="default_button_style grayed">skinOriginalName.png</p>
+        <a href="" class="change_profile upload-button" toOverlayView>
+          <img src="https://api.impactium.fun/ux/uploads.svg">
+        </a>
+      </div>
+    </div>
+    <div class="default_panel_style dynamic">
+      <p>Изменить никнейм</p>
+      <div class="flex" style="gap: 8px;">
+        <input type="text" value="<%= player.nickname %>">
+        <a href="" class="change_profile save-button" toOverlayView></a>
+      </div>
+    </div>
+    <div class="default_panel_style dynamic">
+      <p>Изменить никнейм</p>
+      <div class="flex" style="gap: 8px;">
+        <input type="text" value="<%= player.nickname %>">
+        <a href="" class="change_profile save-button" toOverlayView></a>
       </div>
     </div>
   </div>
@@ -186,5 +269,12 @@ function getRender(page) {
       $(buttonOnError).addClass('selected');
     }
   });
+}
+
+function registerPlayer() {
+  $.post("/me/minecraft/register")
+    .done(function(response) {
+      getRender('minecraft')
+    })
 }
 </script>

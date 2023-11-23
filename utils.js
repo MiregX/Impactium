@@ -222,34 +222,40 @@ class MinecraftPlayer {
     }
   }
 
-  setNickname(newNickname) {
-    try {
-      if (this.lastNicknameChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
-      if (this.nickname) {
-        const toPushObject = [this.nickname, Date.now()]
-        Array.isArray(this.oldNicknames)
-        ? this.oldNicknames.push(toPushObject)
-        : this.oldNicknames = [toPushObject]
-      }
+  async setNickname(newNickname) {
+    if (this.lastNicknameChangeTimestamp < 24 * 60 * 60 * 1000 && this.nickname) return 415;
 
-      this.nicknameLastChangeTimestamp = Date.now()
-      this.nickname = newNickname;
-      this.save()
-      return 200
-    } catch (error) { log('Error during nickname change at Player' + error); return 500 }
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 400;
+
+    if (this.nickname) {
+      const toPushObject = [this.nickname, Date.now()]
+      Array.isArray(this.oldNicknames)
+      ? this.oldNicknames.push(toPushObject)
+      : this.oldNicknames = [toPushObject]
+    }
+
+    this.nicknameLastChangeTimestamp = Date.now()
+    this.nickname = newNickname;
+    await this.save()
+    return 200
   }
   
-  setSkin() {
-    try {
-      if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
+  async setSkin(originalImageName) {
+    if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
 
-      const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
-      this.skinLink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
-      this.skinIconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
-      this.save();
-      return 200
-    } catch (error) {
-      
+    const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
+    this.originalImageName = originalImageName;
+    this.skinLink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
+    this.skinIconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
+    await this.save();
+    return 200
+  }
+
+  async register() {
+    if (!this.registered) {
+      this.registered = Date.now()
+      delete this.lastNicknameChangeTimestamp 
+      await this.save()
     }
   }
 
@@ -263,11 +269,6 @@ class MinecraftPlayer {
       this.isFetched = true;
     } else {
       delete this.isFetched
-      this.registered = Date.now();
-      const Database = await getDatabase("users");
-      const user = await Database.findOne({ _id: this.id });
-      if (user.discord?.name) this.setNickname(user.discord.name);
-      else this.setNickname(generateToken(16));
       await Players.insertOne(this);
       this.isFetched = true;
     }

@@ -41,21 +41,14 @@ header {
   flex-direction: row;
   flex: 1;
   justify-content: space-between;
+  width: 100%;
 }
 </style>
 <div class="app">
   <nav>
-    <button class="selected" >
-      <img src="">
-      <p>My Profile</p>
-    </button>
-    <button onclick="getRender(`minecraft`)">
+    <button class="selected" onclick="getRender(`minecraft`)">
       <img src="https://api.impactium.fun/ux/cube.svg">
       <p>Minecraft Account</p>
-    </button>
-    <button>
-      <img src="">
-      <p>Settings</p>
     </button>
   </nav>
   <div class="panel">
@@ -98,17 +91,10 @@ function getRender(page) {
   });
 }
 
-const initCards = () => {
-  cardsContainer = document.querySelector(".panel");
-  cards = Array.from(document.querySelectorAll(".dynamic"));
-  overlay = document.querySelector(".overlay");
-  cards.forEach(initOverlayCard);
-  document.body.addEventListener("pointermove", applyOverlayMask);
-};
-
-let cardsContainer = document.querySelector(".panel");
-let cards = Array.from(document.querySelectorAll(".profile"));
-let overlay = document.querySelector(".overlay");
+let cardsContainer
+let cards
+let overlay
+let calcOverlay
 
 const applyOverlayMask = (e) => {
   const overlayEl = e.currentTarget;
@@ -116,16 +102,6 @@ const applyOverlayMask = (e) => {
   const y = e.pageY - cardsContainer.offsetTop;
 
   overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
-};
-
-const createOverlayCta = (overlayCard, buttonEl) => {
-  const overlayCta = document.createElement("div");
-  buttonEl.classList.forEach((className) => {
-    overlayCta.classList.add(className);
-  });
-  overlayCta.textContent = buttonEl.textContent;
-  overlayCta.setAttribute("aria-hidden", true);
-  overlayCard.append(overlayCta);
 };
 
 const observer = new ResizeObserver((entries) => {
@@ -140,18 +116,82 @@ const observer = new ResizeObserver((entries) => {
     }
   });
 });
+const initCards = () => {
+  cardsContainer = document.querySelector(".panel");
+  cards = Array.from(document.querySelectorAll(".dynamic"));
+  overlay = document.querySelector(".overlay");
+  calcOverlay = document.querySelectorAll(".calc_overlay");
 
-const initOverlayCard = (cardEl) => {
+  // Словарь для отслеживания, создан ли уже calc_overlay блок для определенного родительского блока
+  const calcOverlayMap = new Map();
+
+  cards.forEach((cardEl) => {
+    const parentCalcOverlay = cardEl.closest(".calc_overlay");
+
+    if (parentCalcOverlay) {
+      handleCalcOverlay(cardEl, parentCalcOverlay, calcOverlayMap);
+    } else {
+      handleRegularOverlay(cardEl);
+    }
+
+    observer.observe(cardEl);
+  });
+
+  document.body.addEventListener("pointermove", applyOverlayMask);
+};
+
+const handleCalcOverlay = (cardEl, parentCalcOverlay, calcOverlayMap) => {
+  // Если карточка находится в блоке calc_overlay, создаем блок-обертку (если не создан ранее) и добавляем в нее карточку
+  const parentId = parentCalcOverlay.id;
   const overlayCard = document.createElement("div");
   cardEl.classList.forEach((className) => {
     overlayCard.classList.add(className);
   });
   const toOverlayViewElement = cardEl.querySelector('[toOverlayView]');
   if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
-  overlay.append(overlayCard);
-  observer.observe(cardEl);
+
+  if (!calcOverlayMap.has(parentId)) {
+    const overlayWrapper = document.createElement("div");
+    overlayWrapper.classList.add("calc_overlay");
+    parentCalcOverlay.classList.forEach((className) => {
+      overlayWrapper.classList.add(className);
+    });
+    calcOverlayMap.set(parentId, overlayWrapper);
+    overlay.appendChild(overlayWrapper);
+  }
+
+  calcOverlayMap.get(parentId).appendChild(overlayCard);
 };
 
-initCards()
+const handleRegularOverlay = (cardEl) => {
+  const overlayCard = document.createElement("div");
+  cardEl.classList.forEach((className) => {
+    overlayCard.classList.add(className);
+  });
+  const toOverlayViewElement = cardEl.querySelector('[toOverlayView]');
+  if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
+  overlay.appendChild(overlayCard);
+};
 
+const createOverlayCta = (overlayCard, buttonEl) => {
+  const overlayCta = document.createElement("div");
+  buttonEl.classList.forEach((className) => {
+    overlayCta.classList.add(className);
+  });
+  overlayCta.textContent = buttonEl.textContent;
+  overlayCta.setAttribute("aria-hidden", true);
+
+  const imgElements = buttonEl.querySelectorAll('img');
+  imgElements.forEach((imgElement) => {
+    const clonedImg = imgElement.cloneNode(true);
+    const imgWrapper = document.createElement('div');
+    imgWrapper.appendChild(clonedImg);
+    overlayCta.appendChild(imgWrapper);
+  });
+
+  overlayCard.append(overlayCta);
+};
+
+
+initCards();
 </script>
