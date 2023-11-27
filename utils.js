@@ -8,12 +8,12 @@ const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 class User {
-  constructor() {
-    this.id = false;
+  constructor(token) {
+    this.token = token;
     this.isFetched = false;
   }
 
-  async fetch(token) {
+  async fetch(token = this.token) {
     const Database = await getDatabase("users");
     const userDatabase = await Database.findOne({ token });
 
@@ -242,11 +242,13 @@ class MinecraftPlayer {
   
   async setSkin(originalImageName) {
     if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
+    if (!this.skin) this.skin = {} 
 
     const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
-    this.originalImageName = originalImageName;
-    this.skinLink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
-    this.skinIconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
+    this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
+    this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
+    this.skin.originalTitle = originalImageName;
+    this.lastSkinChangeTimestamp = Date.now();
     await this.save();
     return 200
   }
@@ -256,7 +258,13 @@ class MinecraftPlayer {
       this.registered = Date.now()
       delete this.lastNicknameChangeTimestamp 
       await this.save()
+    } else {
+      console.log("Игрок зареган!", 'r')
     }
+  }
+
+  init() {
+    return new MinecraftPlayerAchievementInstance(this);
   }
 
   async save() {
@@ -272,6 +280,25 @@ class MinecraftPlayer {
       await Players.insertOne(this);
       this.isFetched = true;
     }
+  }
+}
+
+class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
+  constructor(player) {
+    super(player ? player.id : null)
+
+    if (player) {
+      Object.assign(this, player);
+    }
+  }
+
+  setAchievement(type) {
+    if (!this.achievements) this.achievements = {};
+    const validTypes = ['permissions', 'events', 'casual', 'warrior', 'killer', 'donate']
+    if (!validTypes.includes(type)) return 400;
+
+    this.achievements[type] = { type }
+    
   }
 }
 
@@ -471,10 +498,10 @@ function ftpUpload(filePathOnHost) {
   const ftpConfig = {
     host: 'ftpupload.net',
     user: 'b12_33593520',
-    password: 'loginandpass'
+    password: 'requestUserPassword'
   };
 
-  const absoluteFilePath = path.join(__dirname, 'static/img/', filePathOnHost);
+  const absoluteFilePath = path.join(__dirname, 'static/images/', filePathOnHost);
 
   ftpClient.on('ready', () => {
     ftpClient.put(absoluteFilePath, `/api.impactium.fun/htdocs/${filePathOnHost}`, (err) => {
@@ -484,6 +511,12 @@ function ftpUpload(filePathOnHost) {
       ftpClient.end();
     });
   });
+
+  ftpClient.on('error', (err) => {
+    console.error('Ошибка при подключении к FTP:', err);
+  });
+
+  ftpClient.connect(ftpConfig);
 }
 
 const mongo = new MongoClient(mongoLogin, {
@@ -597,7 +630,9 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
+  MinecraftPlayerAchievementInstance,
   GuildStatisticsInstance,
+  MinecraftPlayer,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
@@ -610,7 +645,6 @@ module.exports = {
   getLicense,
   ftpUpload,
   Schedule,
-  MinecraftPlayer,
   Guild,
   User,
   log,

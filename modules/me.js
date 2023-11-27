@@ -1,4 +1,4 @@
-const { User, MinecraftPlayer, getLanguagePack, log, ftpUpload } = require('../utils');
+const { User, MinecraftPlayer, MinecraftPlayerAchievementInstance, getLanguagePack, log, ftpUpload } = require('../utils');
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
@@ -101,63 +101,66 @@ router.post('/minecraft/setNickname', async (request, response) => {
   }
 });
 
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  fileFilter: (req, file, callback) => {
+    file.mimetype === 'image/png'
+      ? callback(null, true)
+      : callback(new Error('Неверный формат файла. Пожалуйста, загрузите PNG изображение.'));
+  }
+}).single('skin');
+
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
-    const storage = multer.memoryStorage();
-    const upload = multer({
-      storage,
-      fileFilter: (req, file, callback) => {
-        file.mimetype === 'image/png'
-          ? callback(null, true)
-          : callback(new Error('Неверный формат файла. Пожалуйста, загрузите PNG изображение.'));
-      }
-    }).single('image');
-
     upload(request, response, async (error) => {
       if (!request.file || error) return response.status(400);
 
       try {
         const image = await Jimp.read(request.file.buffer);
         const { width, height } = image.bitmap;
+        if (width !== 64 || height !== 64) return response.status(201).send();
+        if (request.player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return response.status(202).send();
 
-        if (width !== 64 || height !== 64) return response.status(415);
-        if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return response.status(416);
+        await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
+        await request.player.setSkin(request.file.originalname);
+        ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
 
-        await saveSkinToLocalStorage(request.file.buffer, `${this.id}.png`);
-        ftpUpload(`minecraftPlayersSkins/${this.id}.png`)
-        // await cutSkinToPlayerIcon(filePath);
-        //ftpUpload(iconPath)
-
-        // request.player.setSkin(/* оригинальное названия файла */)
-
-        response.status(200);
+        response.status(200).send();
       } catch (error) {
-        log('Ошибка во время обработки изображения: ' + error);
-        response.status(500);
+        console.error('Error processing image:', error);
+        response.status(500).send({ message: 'Internal Server Error' });
       }
     });
   } catch (error) {
-    log('Ошибка во время выгрузки файла скина на сервер' + error);
-    response.status(500);
+    console.error('Error uploading skin file to the server:', error);
+    response.status(500).send({ message: 'Internal Server Error' });
   }
 });
 
-function saveSkinToLocalStorage(imageBuffer, filePath) {
-  const absolutePath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins', filePath);
+// await cutSkinToPlayerIcon(filePath);
+
+
+async function saveSkinToLocalStorage(imageBuffer, filePath) {
+  const absolutePath = path.join(__dirname, '..', 'static', 'images', 'minecraftPlayersSkins', filePath);
+  console.log(absolutePath)
 
   const dirname = path.dirname(absolutePath);
   if (!fs.existsSync(dirname)) {
-    fs.mkdirSync(dirname, { recursive: true });
+    try {
+      fs.mkdirSync(dirname, { recursive: true });
+      console.log(`Directory created: ${dirname}`);
+    } catch (error) {
+      console.error(`Error creating directory ${dirname}: ${error.message}`);
+      throw error; // Опционально: пробросить ошибку выше, чтобы её можно было обработать в другом месте
+    }
   }
 
-  return new Promise((resolve, reject) => {
-    fs.writeFile(absolutePath, imageBuffer, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(absolutePath);
-      }
-    });
+  return fs.promises.writeFile(absolutePath, imageBuffer)
+  .then(() => absolutePath)
+  .catch((error) => {
+    console.error(`Error writing file ${absolutePath}: ${error.message}`);
+    throw error; // Опционально: пробросить ошибку выше, чтобы её можно было обработать в другом месте
   });
 }
 

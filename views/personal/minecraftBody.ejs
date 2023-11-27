@@ -1,4 +1,18 @@
 <style>
+:root {
+  --hammer: url("https://api.impactium.fun/ux/hammer-v3.svg");
+  --hammer-accent: #F14C50;
+  --cube: url("https://api.impactium.fun/ux/cube-v1.svg");
+  --cube-accent: rgb(163, 255, 163);
+  --shield: url("https://api.impactium.fun/ux/shield-v1.svg");
+  --shield-accent: #417FFD;
+  --sword: url("https://api.impactium.fun/ux/sword-v1.svg");
+  --sword-accent: #F2DE4C;
+  --event: url("https://api.impactium.fun/ux/party-v1.svg");
+  --event-accent: #E465FD;
+  --diamond: url("https://api.impactium.fun/ux/diamond-v2.svg");
+  --diamond-accent: #72E4F2;
+}
 .profile {
   --flow-space: 0.5em;
   padding: 1.5em 2em !important;
@@ -17,21 +31,55 @@
 }
 
 .privileges {
+  width: 100%;
   line-height: 1.4;
 }
 
 .privileges li::before {
   display: inline-block;
-  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='16' title='check' fill='%23dddddd'%3E%3Cpath d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z' /%3E%3C/svg%3E");
-  transform: translateY(0.25ch);
+  transform: translateY(0.3ch);
   margin-right: 1ch;
 }
+
+.privileges hr {
+  height: 4px;
+  width: 100%;
+  background: var(--c-48);
+  border-radius: 2px;
+  display: flex;
+  border: none;
+}
+.privileges hr::after {
+  content: "";
+  min-width: 10%;
+  width: 10%;
+  border-radius: 2px;
+}
+
+.privileges li[--hammer]::before { content: var(--hammer) }
+.privileges li[--hammer] hr::after { background-color: var(--hammer-accent) }
+
+.privileges li[--cube]::before { content: var(--cube) }
+.privileges li[--cube] hr::after { background-color: var(--cube-accent) }
+
+.privileges li[--shield]::before { content: var(--shield) }
+.privileges li[--shield] hr::after { background-color: var(--shield-accent) }
+
+.privileges li[--sword]::before { content: var(--sword) }
+.privileges li[--sword] hr::after { background-color: var(--sword-accent) }
+
+.privileges li[--event]::before { content: var(--event) }
+.privileges li[--event] hr::after { background-color: var(--event-accent) }
+
+.privileges li[--diamond]::before { content: var(--diamond) }
+.privileges li[--diamond] hr::after { background-color: var(--diamond-accent) }
+
+
 
 .profile .header {
   font-size: 1.05em;
   font-weight: 600;
 }
-
 .profile .player {
   font-size: 1.75em;
   font-weight: 600;
@@ -51,6 +99,7 @@
   margin-top: var(--flow-space, 1.25em);
 }
 
+
 .change_profile,
 .default_panel_style input {
   display: block;
@@ -65,6 +114,8 @@
   font-size: 1rem;
   font-weight: 600;
   grid-row: -1;
+}
+.default_panel_style input {
 }
 .overlay {
   height: fit-content;
@@ -119,13 +170,14 @@
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 32px;
 }
 .overlay .controls {
   height: unset !important;
 }
 .default_panel_style {
+  overflow: hidden;
   padding: 0.75em 1em;
   border-radius: 16px;
   color: #eceff1;
@@ -138,10 +190,14 @@
 .default_panel_style input {
   text-align: left;
   padding: 0.44em;
+  width: 100%;
   border: 1px solid #0d0d0d;
   flex: 1;
 }
 .default_button_style {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   text-align: left;
   border: 1px solid #0d0d0d;
   flex: 1;
@@ -161,9 +217,11 @@
 }
 .upload-button {
   padding: calc(0.7em - 6px) calc(2.8em - 6px);
+  cursor: pointer;
 }
 .upload-button img {
   height: 24px;
+  pointer-events: none;
 }
 .overlay .upload-button {
   width: fit-content;
@@ -182,12 +240,10 @@
     <h2 class="header">Мой профиль</h2>
 
     <p class="player">
-      <%- player.skinIconLink 
-        ? `<img src="${player.skinIconLink}">` 
-        : (player.registered 
-          ? `<img src="https://api.impactium.fun/minecraftPlayersSkins/steve_icon.png">` 
-          : ''
-        ) %>
+      <%- player.registered 
+        ? `<img src="${player.skin?.iconLink}" onerror="this.src='https://api.impactium.fun/minecraftPlayersSkins/steve.png'">`
+        : ''
+      %>
 
       <%= (player.registered && player.nickname) 
         ? player.nickname 
@@ -197,11 +253,14 @@
         ) %>
     </p>
 
-    <% if (Array.isArray(player.privileges)) { %>
+    <% if (player.registered) { %>
       <ul role="list" class="privileges">
-        <% player.privileges?.forEach(privilege => { %>
-          <li><%= lang[privilege.title] %></li>
-        <% }); %>
+        <li --hammer>Права<hr></li>
+        <li --cube>Казуал I<hr></li>
+        <li --shield>Воин I<hr></li>
+        <li --sword>Убийца I<hr></li>
+        <li --event>Рол-плей I<hr></li>
+        <li --diamond>Донат I<hr></li>
       </ul>
     <% } %>
 
@@ -223,24 +282,11 @@
     <div class="default_panel_style dynamic">
       <p>Изменить облик</p>
       <div class="flex" style="gap: 8px;">
-        <p class="default_button_style grayed">skinOriginalName.png</p>
-        <a href="" class="change_profile upload-button" toOverlayView>
+        <p class="default_button_style <% if (player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) 'grayed' %>" id="skinName"><%- player.skin?.originalTitle %></p>
+        <input type="file" id="fileInput" style="display: none;">
+        <label for="fileInput" class="change_profile upload-button" toOverlayView>
           <img src="https://api.impactium.fun/ux/uploads.svg">
-        </a>
-      </div>
-    </div>
-    <div class="default_panel_style dynamic">
-      <p>Изменить никнейм</p>
-      <div class="flex" style="gap: 8px;">
-        <input type="text" value="<%= player.nickname %>">
-        <a href="" class="change_profile save-button" toOverlayView></a>
-      </div>
-    </div>
-    <div class="default_panel_style dynamic">
-      <p>Изменить никнейм</p>
-      <div class="flex" style="gap: 8px;">
-        <input type="text" value="<%= player.nickname %>">
-        <a href="" class="change_profile save-button" toOverlayView></a>
+        </label>
       </div>
     </div>
   </div>

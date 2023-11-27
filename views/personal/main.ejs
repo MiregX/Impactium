@@ -110,7 +110,7 @@ const observer = new ResizeObserver((entries) => {
     let width = entry.borderBoxSize[0].inlineSize;
     let height = entry.borderBoxSize[0].blockSize;
 
-    if (cardIndex >= 0) {
+    if (cardIndex >= 0 && overlay.children[cardIndex]) {
       overlay.children[cardIndex].style.width = `${width}px`;
       overlay.children[cardIndex].style.height = `${height}px`;
     }
@@ -192,6 +192,32 @@ const createOverlayCta = (overlayCard, buttonEl) => {
   overlayCard.append(overlayCta);
 };
 
-
 initCards();
+
+const fileInput = $("#fileInput");
+fileInput.change(handleFileUpload);
+
+function handleFileUpload() {
+  const file = fileInput[0].files[0];
+  
+  if (file) {
+    const formData = new FormData();
+    formData.append("skin", file, file.name);
+
+    $.ajax({
+      url: "https://impactium.fun/me/minecraft/setSkin",
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        $('#skinName').text(file.name)
+        $('#skinName').addClass('grayed')
+      },
+      error: function(error) {
+        getRender('minecraft');
+      }
+    });
+  }
+}
 </script>
