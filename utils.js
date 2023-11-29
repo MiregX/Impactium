@@ -1,5 +1,6 @@
 const fs = require('fs');
 const ftp = require('ftp');
+const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
@@ -223,9 +224,14 @@ class MinecraftPlayer {
   }
 
   async setNickname(newNickname) {
-    if (this.lastNicknameChangeTimestamp < 24 * 60 * 60 * 1000 && this.nickname) return 415;
+    if (Date.now() - this.lastNicknameChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
 
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 400;
+
+    const Players = await getDatabase("minecraftPlayers");
+    const possiblePlayerWithSameNickname = await Players.findOne({ nickname: newNickname });
+
+    if (possiblePlayerWithSameNickname) return 416;
 
     if (this.nickname) {
       const toPushObject = [this.nickname, Date.now()]
@@ -240,8 +246,12 @@ class MinecraftPlayer {
     return 200
   }
   
-  async setSkin(originalImageName) {
-    if (this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
+  async setSkin(originalImageName, imageBuffer) {
+    const image = await Jimp.read(imageBuffer);
+    const { width, height } = image.bitmap;
+
+    if (width !== 64 || height !== 64) return 414;
+    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
     if (!this.skin) this.skin = {} 
 
     const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";

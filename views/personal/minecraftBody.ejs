@@ -173,6 +173,12 @@
   grid-template-rows: repeat(3, 1fr);
   gap: 32px;
 }
+.overlay .controls .default_panel_style:nth-child(1) {
+  --hue: 120
+}
+.overlay .controls .default_panel_style:nth-child(2) {
+  --hue: 350
+}
 .overlay .controls {
   height: unset !important;
 }
@@ -241,7 +247,7 @@
 
     <p class="player">
       <%- player.registered 
-        ? `<img src="${player.skin?.iconLink}" onerror="this.src='https://api.impactium.fun/minecraftPlayersSkins/steve.png'">`
+        ? `<img src="${player.skin?.iconLink}?timestamp=${Date.now()}" onerror="this.src='https://api.impactium.fun/minecraftPlayersSkins/steve.png'">`
         : ''
       %>
 
@@ -282,9 +288,10 @@
     <div class="default_panel_style dynamic">
       <p>Изменить облик</p>
       <div class="flex" style="gap: 8px;">
-        <p class="default_button_style <% if (player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) 'grayed' %>" id="skinName"><%- player.skin?.originalTitle %></p>
+        <% const isDisabled = Date.now() - player.lastSkinChangeTimestamp < 60 * 60 * 1000 %>
+        <p class="default_button_style <%= isDisabled ? 'grayed' : '' %>" id="skinName"><%- player.skin?.originalTitle %></p>
         <input type="file" id="fileInput" style="display: none;">
-        <label for="fileInput" class="change_profile upload-button" toOverlayView>
+        <label for="fileInput" class="change_profile upload-button <%= isDisabled ? 'no-pointers' : '' %>" <%= isDisabled ? '' : 'toOverlayView' %>>
           <img src="https://api.impactium.fun/ux/uploads.svg">
         </label>
       </div>
@@ -293,30 +300,6 @@
 </div>
 <div class="overlay flex" style="gap: 32px;"></div>
 <script>
-function getRender(page) {
-  $.ajax({
-    type: 'GET',
-    url: "/me/" + page,
-    headers: {
-      'Cache-Control': 'no-store',
-      'Accept': 'semipage'
-    },
-    success: function (response) {
-      const renderZone = $(".app .panel");
-      history.pushState(null, null, `/me/${page}`);
-      renderZone.html("");
-      renderZone.html(response);
-      initCards()
-    },
-    error: function (error) {
-      const buttonOnError = $('.app nav button.previous')
-      $(buttonOnError).removeClass('previous');
-      $('.app nav button.selected').removeClass('selected');
-      $(buttonOnError).addClass('selected');
-    }
-  });
-}
-
 function registerPlayer() {
   $.post("/me/minecraft/register")
     .done(function(response) {

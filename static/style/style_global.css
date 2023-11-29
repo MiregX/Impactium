@@ -134,3 +134,6 @@
 ul {
 list-style: none;
 }
+.no-pointers {
+  pointer-events: none;
+}

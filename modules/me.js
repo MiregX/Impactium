@@ -114,19 +114,19 @@ const upload = multer({
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
     upload(request, response, async (error) => {
-      if (!request.file || error) return response.status(400);
+      if (!request.file || error) return response.status(400).send(400)
 
       try {
-        const image = await Jimp.read(request.file.buffer);
-        const { width, height } = image.bitmap;
-        if (width !== 64 || height !== 64) return response.status(201).send();
-        if (request.player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return response.status(202).send();
+        const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
+        if (status !== 200) return response.status(status).send(status)
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
-        await request.player.setSkin(request.file.originalname);
-        ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
+        await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
 
-        response.status(200).send();
+        ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
+        ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
+
+        response.status(status).send(status);
       } catch (error) {
         console.error('Error processing image:', error);
         response.status(500).send({ message: 'Internal Server Error' });
@@ -138,8 +138,22 @@ router.post('/minecraft/setSkin', async (request, response) => {
   }
 });
 
-// await cutSkinToPlayerIcon(filePath);
+async function cutSkinToPlayerIcon(imageBuffer, playerId) {
+  try {
+    const image = await Jimp.read(imageBuffer);
+    const skinFaceLayer1 = image.clone().crop(8, 8, 8, 8);
+    const skinFaceLayer2 = image.clone().crop(40, 8, 8, 8);
 
+    skinFaceLayer1.blit(skinFaceLayer2, 0, 0);
+
+    const iconBuffer = await skinFaceLayer1.getBufferAsync(Jimp.MIME_PNG);
+
+    await saveSkinToLocalStorage(iconBuffer, `${playerId}_icon.png`);
+
+  } catch (error) {
+    console.error('Error processing and saving icon:', error);
+  }
+}
 
 async function saveSkinToLocalStorage(imageBuffer, filePath) {
   const absolutePath = path.join(__dirname, '..', 'static', 'images', 'minecraftPlayersSkins', filePath);
@@ -152,7 +166,6 @@ async function saveSkinToLocalStorage(imageBuffer, filePath) {
       console.log(`Directory created: ${dirname}`);
     } catch (error) {
       console.error(`Error creating directory ${dirname}: ${error.message}`);
-      throw error; // Опционально: пробросить ошибку выше, чтобы её можно было обработать в другом месте
     }
   }
 

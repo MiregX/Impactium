@@ -44,29 +44,7 @@ header {
   width: 100%;
 }
 </style>
-<div class="app">
-  <nav>
-    <button class="selected" onclick="getRender(`minecraft`)">
-      <img src="https://api.impactium.fun/ux/cube.svg">
-      <p>Minecraft Account</p>
-    </button>
-  </nav>
-  <div class="panel">
-    <% if (typeof prerender === 'undefined') prerender = 'minecraftBody'; %>
-    <% if (typeof user === 'undefined') user = player; %>
-    <%- include(`${lang.debugPath}/views/personal/${prerender}.ejs`, { user, lang }) %>
-    
-  </div>
-</div>
-
 <script>
-$('.app nav button').on('click', function () {
-  $('.app nav button.previous').removeClass('previous');
-  $('.app nav button.selected').addClass('previous');
-  $('.app nav button.selected').removeClass('selected');
-  $(this).addClass('selected');
-});
-
 function getRender(page) {
   $.ajax({
     type: 'GET',
@@ -90,6 +68,29 @@ function getRender(page) {
     }
   });
 }
+</script>
+<div class="app">
+  <nav>
+    <button class="selected" onclick="getRender(`minecraft`)">
+      <img src="https://api.impactium.fun/ux/cube.svg">
+      <p>Minecraft Account</p>
+    </button>
+  </nav>
+  <div class="panel">
+    <% if (typeof prerender === 'undefined') prerender = 'minecraftBody'; %>
+    <% if (typeof user === 'undefined') user = player; %>
+    <%- include(`${lang.debugPath}/views/personal/${prerender}.ejs`, { user, lang }) %>
+    
+  </div>
+</div>
+
+<script>
+$('.app nav button').on('click', function () {
+  $('.app nav button.previous').removeClass('previous');
+  $('.app nav button.selected').addClass('previous');
+  $('.app nav button.selected').removeClass('selected');
+  $(this).addClass('selected');
+});
 
 let cardsContainer
 let cards
@@ -211,10 +212,13 @@ function handleFileUpload() {
       processData: false,
       contentType: false,
       success: function(data) {
+        console.log(data)
         $('#skinName').text(file.name)
         $('#skinName').addClass('grayed')
+        getRender('minecraft')
       },
       error: function(error) {
+        console.log(error)
         getRender('minecraft');
       }
     });
