@@ -90,6 +90,9 @@
 .profile .player img {
   image-rendering: pixelated;
   height: 24px;
+  width: 24px;
+  image-rendering: optimizeSpeed;
+  background: var(--c-48);
 }
 .profile .change_profile {
   width: 100%;
@@ -115,7 +118,15 @@
   font-weight: 600;
   grid-row: -1;
 }
-.default_panel_style input {
+.default_panel_style p {
+  flex: 1;
+}
+.default_panel_style span {
+  font-size: 12px;
+}
+.default_panel_style img {
+  margin-right: 4px;
+  height: 12px;
 }
 .overlay {
   height: fit-content;
@@ -218,9 +229,6 @@
   font-weight: 600;
   grid-row: -1;
 }
-.default_button_style.grayed {
-  color: var(--c-96);
-}
 .upload-button {
   padding: calc(0.7em - 6px) calc(2.8em - 6px);
   cursor: pointer;
@@ -240,6 +248,22 @@
   position: relative;
   width: min-content;
 }
+#skinUploadOnErrorMessageContainer,
+#nicknameUpdateOnErrorMessageContainer {
+  color: var(--c-96);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+  text-wrap: nowrap;
+  transform: translateY(calc(0.5em + 50%));
+}
+.grayed {
+  color: var(--c-96) !important;
+}
+.greyed {
+  filter: brightness(0.55) !important;
+}
 </style>
 <div class="top_line flex-dir-row">
   <div class="dynamic default_panel_style profile">
@@ -247,7 +271,7 @@
 
     <p class="player">
       <%- player.registered 
-        ? `<img src="${player.skin?.iconLink}?timestamp=${Date.now()}" onerror="this.src='https://api.impactium.fun/minecraftPlayersSkins/steve.png'">`
+        ? `<img src="${player.skin?.iconLink}?timestamp=${Date.now() * Math.random(0, 100)}" onerror="this.src='https://api.impactium.fun/minecraftPlayersSkins/steve_icon.png'">`
         : ''
       %>
 
@@ -278,25 +302,61 @@
 
   </div>
   <div class="controls calc_overlay">
+    <!-- Панель для изменения никнейма -->
     <div class="default_panel_style dynamic">
-      <p>Изменить никнейм</p>
-      <div class="flex" style="gap: 8px;">
-        <input type="text" value="<%= player.nickname %>" placeholder="Введи ник">
-        <a href="" class="change_profile save-button" toOverlayView>Сохранить</a>
+      <div class="flex panel-header align-center">
+        <p>Изменить никнейм</p>
+  
+        <!-- Таймер, если изменение никнейма заблокировано -->
+        <% const isDisabledNicknameChange = Date.now() - player.nicknameLastChangeTimestamp < 60 * 60 * 1000 %>
+        <%- isDisabledNicknameChange
+          ? `<img src="https://api.impactium.fun/ux/timer.svg">
+             <span id="nicknameTimer" timestamp="${player.nicknameLastChangeTimestamp}"></span>`
+          : ''
+        %>
+      </div>
+  
+      <!-- Сообщение об ошибке при обновлении никнейма -->
+      <p id="nicknameUpdateOnErrorMessageContainer"></p>
+  
+      <div class="flex panel-footer" style="gap: 8px;">
+        <!-- Поле для ввода нового никнейма -->
+        <input type="text" id="nicknameField" value="<%= player.nickname %>" placeholder="Введи ник" class="<%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>">
+        
+        <!-- Кнопка "Сохранить" для изменения никнейма -->
+        <div onclick="updateNickname()" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>Сохранить</div>
       </div>
     </div>
+  
+    <!-- Панель для изменения облика -->
     <div class="default_panel_style dynamic">
-      <p>Изменить облик</p>
-      <div class="flex" style="gap: 8px;">
-        <% const isDisabled = Date.now() - player.lastSkinChangeTimestamp < 60 * 60 * 1000 %>
-        <p class="default_button_style <%= isDisabled ? 'grayed' : '' %>" id="skinName"><%- player.skin?.originalTitle %></p>
+      <div class="flex panel-header align-center">
+        <p>Изменить облик</p>
+  
+        <!-- Таймер, если изменение облика заблокировано -->
+        <% const isDisabledSkinChange = Date.now() - player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000 %>
+        <%- isDisabledSkinChange
+          ? `<img src="https://api.impactium.fun/ux/timer.svg">
+             <span id="skinTimer" timestamp="${player.lastSkinChangeTimestamp}"></span>`
+          : ''
+        %>
+      </div>
+  
+      <!-- Сообщение об ошибке при загрузке облика -->
+      <p id="skinUploadOnErrorMessageContainer"></p>
+  
+      <div class="flex panel-footer" style="gap: 8px;">
+        <!-- Название текущего облика -->
+        <p class="default_button_style <%= isDisabledSkinChange ? 'grayed' : '' %>" id="skinName"><%- player.skin?.originalTitle %></p>
+        
+        <!-- Кнопка "Загрузить" для изменения облика -->
         <input type="file" id="fileInput" style="display: none;">
-        <label for="fileInput" class="change_profile upload-button <%= isDisabled ? 'no-pointers' : '' %>" <%= isDisabled ? '' : 'toOverlayView' %>>
+        <label for="fileInput" onclick="handleFileUpload()" class="change_profile upload-button <%= isDisabledSkinChange ? 'no-pointers greyed' : '' %>" <%= isDisabledSkinChange ? '' : 'toOverlayView' %>>
           <img src="https://api.impactium.fun/ux/uploads.svg">
         </label>
       </div>
     </div>
-  </div>
+  </div>  
 </div>
 <div class="overlay flex" style="gap: 32px;"></div>
 <script>
@@ -306,4 +366,38 @@ function registerPlayer() {
       getRender('minecraft')
     })
 }
+
+function updateTimer() {
+  const updateElementTimer = (element, maxTime, onTimerEnd) => {
+    if (element) {
+      const remainingTime = maxTime - (Date.now() - parseInt(element.attr('timestamp')));
+      const minutes = Math.floor((remainingTime / 1000 / 60) % 60).toString().padStart(2, '0');
+      const seconds = Math.floor((remainingTime / 1000) % 60).toString().padStart(2, '0');
+
+      if (remainingTime > 0) {
+        const hoursDisplay = Math.floor(remainingTime / (1000 * 60 * 60)).toString().padStart(2, '0');
+        const timeString = `${hoursDisplay !== "00" ? hoursDisplay + ':' : ''}${minutes}:${seconds}`;
+        element.text(timeString);
+      } else {
+        onTimerEnd(element);
+      }
+    }
+  };
+
+  const handleTimerEnd = (element) => {
+    const topLine = element.parent();
+    $('img', topLine).remove();
+    $('span', topLine).remove();
+    const parentBlock = topLine.parent();
+    $('.panel-footer p', parentBlock).removeClass('grayed')
+    $('.panel-footer label', parentBlock).removeClass('no-pointers greyed').attr('toOverlayView', '');
+  };
+
+  updateElementTimer($('#skinTimer'), 24 * 60 * 60 * 1000, handleTimerEnd);
+  updateElementTimer($('#nicknameTimer'), 60 * 60 * 1000, handleTimerEnd);
+
+  setTimeout(updateTimer, 1000);
+}
+
+updateTimer();
 </script>

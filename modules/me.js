@@ -9,6 +9,15 @@ const fs = require('fs');
 
 const router = express.Router();
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: (req, file, callback) => {
+    file.mimetype === 'image/png'
+      ? callback(null, true)
+      : callback(new Error('Неверный формат файла. Пожалуйста, загрузите PNG изображение.'));
+  }
+}).single('skin');
+
 const setUserAndPlayer = async (request, response, next) => {
   const user = new User();
   await user.fetch(request.cookies.token);
@@ -20,30 +29,23 @@ const setUserAndPlayer = async (request, response, next) => {
 
   if (!user.isFetched) return response.redirect('https://impactium.fun/');
 
+  request.composed = { user, player, lang };
   request.user = user;
   request.player = player;
   request.lang = lang;
-  request.composed = { user, player, lang };
 
   next();
 };
 
-router.use('/minecraft', setUserAndPlayer);
+router.use('/', setUserAndPlayer);
 
 router.get('/', async (request, response) => {
-  const user = new User();
-  await user.fetch(request.cookies.token);
-  if (!user.isFetched) return response.redirect('https://impactium.fun/');
-  const lang = getLanguagePack(request.cookies.lang);
-  const player = new MinecraftPlayer(user._id);
-  await player.fetch();
-  
   try {
-    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), { lang, user, player });
+    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), request.composed);
     response.render('template.ejs', {
       body,
-      user,
-      lang
+      user: request.user,
+      lang: request.lang
     });
   } catch (error) {
     console.log(error)
@@ -75,66 +77,51 @@ router.get('/minecraft', async (request, response) => {
   }
 });
 
-router.post('/settings', async (request, response) => {
-  
-});
-
 router.post('/minecraft/register', async (request, response) => {
-  if (request.player.registered) return 500;
+  if (request.player.registered) return response.sendStatus(200);
   try {
-    const result = await request.player.setNickname(request.user.displayName);
+    const status = await request.player.setNickname(request.user.displayName);
     await request.player.register();
-    response.status(result).send();
+    response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
     console.log(error);
-    response.status(500).send();
+    response.status(500).send(request.lang.errorCode_500);
   }
 });
 
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
-    const result = await request.player.setNickname(request.body.newNickname);
-    response.status(result)
+    const status = await request.player.setNickname(request.body.newNickname);
+    response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
-    log('Ошибка в функции смены ника игрока' + error);
-    response.status(500)
+    console.log(error);
+    response.status(500).send(request.lang.errorCode_500);
   }
 });
-
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage,
-  fileFilter: (req, file, callback) => {
-    file.mimetype === 'image/png'
-      ? callback(null, true)
-      : callback(new Error('Неверный формат файла. Пожалуйста, загрузите PNG изображение.'));
-  }
-}).single('skin');
 
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
     upload(request, response, async (error) => {
-      if (!request.file || error) return response.status(400).send(400)
-
+      if (!request.file || error) return response.status(410).send(request.lang.errorCode_410);
       try {
-        const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
-        if (status !== 200) return response.status(status).send(status)
+        const timestamp = Date.now()
+        const status = await request.player.setSkin(request.file.originalname, request.file.buffer, timestamp);
+        if (status !== 200) return response.status(status).send(request.lang[`errorCode_${status}`])
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
 
         ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
-        ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
+        ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon_${timestamp}.png`);
 
-        response.status(status).send(status);
+        response.status(status).send(request.lang[`errorCode_${status}`]);
       } catch (error) {
-        console.error('Error processing image:', error);
-        response.status(500).send({ message: 'Internal Server Error' });
+        response.status(500).send(request.lang.errorCode_500);
       }
     });
   } catch (error) {
-    console.error('Error uploading skin file to the server:', error);
-    response.status(500).send({ message: 'Internal Server Error' });
+    console.log(error);
+    response.status(500).send(request.lang.errorCode_500);
   }
 });
 
@@ -151,30 +138,17 @@ async function cutSkinToPlayerIcon(imageBuffer, playerId) {
     await saveSkinToLocalStorage(iconBuffer, `${playerId}_icon.png`);
 
   } catch (error) {
-    console.error('Error processing and saving icon:', error);
+    console.log(error);
   }
 }
 
 async function saveSkinToLocalStorage(imageBuffer, filePath) {
   const absolutePath = path.join(__dirname, '..', 'static', 'images', 'minecraftPlayersSkins', filePath);
-  console.log(absolutePath)
-
   const dirname = path.dirname(absolutePath);
-  if (!fs.existsSync(dirname)) {
-    try {
-      fs.mkdirSync(dirname, { recursive: true });
-      console.log(`Directory created: ${dirname}`);
-    } catch (error) {
-      console.error(`Error creating directory ${dirname}: ${error.message}`);
-    }
-  }
+
+  if (!fs.existsSync(dirname)) fs.mkdirSync(dirname, { recursive: true });
 
   return fs.promises.writeFile(absolutePath, imageBuffer)
-  .then(() => absolutePath)
-  .catch((error) => {
-    console.error(`Error writing file ${absolutePath}: ${error.message}`);
-    throw error; // Опционально: пробросить ошибку выше, чтобы её можно было обработать в другом месте
-  });
 }
 
 module.exports = router;

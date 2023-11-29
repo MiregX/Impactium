@@ -195,10 +195,8 @@ const createOverlayCta = (overlayCard, buttonEl) => {
 
 initCards();
 
-const fileInput = $("#fileInput");
-fileInput.change(handleFileUpload);
-
 function handleFileUpload() {
+  const fileInput = $("#fileInput");
   const file = fileInput[0].files[0];
   
   if (file) {
@@ -211,17 +209,70 @@ function handleFileUpload() {
       data: formData,
       processData: false,
       contentType: false,
-      success: function(data) {
-        console.log(data)
-        $('#skinName').text(file.name)
-        $('#skinName').addClass('grayed')
-        getRender('minecraft')
+      success: function(data, textStatus, jqXHR) {
+        handleResult(jqXHR.status, jqXHR.responseText);
       },
-      error: function(error) {
-        console.log(error)
-        getRender('minecraft');
+      error: function(jqXHR, textStatus, errorThrown) {
+        handleResult(jqXHR.status, jqXHR.responseText);
       }
-    });
+    })
   }
 }
+
+function handleResult(status, message) {
+  switch (status) {
+    case 410:
+      setSkinSetterWarning(message)
+      break;
+    case 411:
+      setSkinSetterWarning(message)
+      break;
+    case 414:
+      setSkinSetterWarning(message)
+      break;
+    case 412:
+      setNicknameSetterWarning(message)
+      break;
+    case 413:
+      setNicknameSetterWarning(message)
+      break;
+    case 415:
+      setNicknameSetterWarning(message)
+      break;
+    case 416:
+      setNicknameSetterWarning(message)
+      break;
+    default:
+      setTimeout(getRender('minecraft'), 500);
+      break;
+  }
+}
+
+function setSkinSetterWarning(message) {
+  const skinUploadOnErrorMessageContainer = $('#skinUploadOnErrorMessageContainer')
+  skinUploadOnErrorMessageContainer.text(message)
+}
+function setNicknameSetterWarning(message) {
+  const nicknameUpdateOnErrorMessageContainer = $('#nicknameUpdateOnErrorMessageContainer')
+  nicknameUpdateOnErrorMessageContainer.text(message)
+}
+
+function updateNickname() {
+  const nickname = $('#nicknameField').val();
+  const requestData = JSON.stringify({ newNickname: nickname });
+
+  $.ajax({
+    url: "https://impactium.fun/me/minecraft/setNickname",
+    type: "POST",
+    data: requestData,
+    contentType: 'application/json',
+    success: function(data, textStatus, jqXHR) {
+      handleResult(jqXHR.status, jqXHR.responseText);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      handleResult(jqXHR.status, jqXHR.responseText);
+    }
+  });
+}
+
 </script>

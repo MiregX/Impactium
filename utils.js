@@ -226,7 +226,7 @@ class MinecraftPlayer {
   async setNickname(newNickname) {
     if (Date.now() - this.lastNicknameChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
 
-    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 400;
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 412;
 
     const Players = await getDatabase("minecraftPlayers");
     const possiblePlayerWithSameNickname = await Players.findOne({ nickname: newNickname });
@@ -246,19 +246,19 @@ class MinecraftPlayer {
     return 200
   }
   
-  async setSkin(originalImageName, imageBuffer) {
+  async setSkin(originalImageName, imageBuffer, timestamp) {
     const image = await Jimp.read(imageBuffer);
     const { width, height } = image.bitmap;
 
-    if (width !== 64 || height !== 64) return 414;
-    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 415;
-    if (!this.skin) this.skin = {} 
+    if (width !== 64 || height !== 64) return 411;
+    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 414;
+    if (!this.skin) this.skin = {}
 
     const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
-    this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
+    this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon_${timestamp}.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
     this.skin.originalTitle = originalImageName;
-    this.lastSkinChangeTimestamp = Date.now();
+    this.lastSkinChangeTimestamp = timestamp;
     await this.save();
     return 200
   }
@@ -268,12 +268,10 @@ class MinecraftPlayer {
       this.registered = Date.now()
       delete this.lastNicknameChangeTimestamp 
       await this.save()
-    } else {
-      console.log("Игрок зареган!", 'r')
     }
   }
 
-  init() {
+  initAchievments() {
     return new MinecraftPlayerAchievementInstance(this);
   }
 
@@ -520,10 +518,6 @@ function ftpUpload(filePathOnHost) {
       }
       ftpClient.end();
     });
-  });
-
-  ftpClient.on('error', (err) => {
-    console.error('Ошибка при подключении к FTP:', err);
   });
 
   ftpClient.connect(ftpConfig);
