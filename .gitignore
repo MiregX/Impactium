@@ -3,6 +3,8 @@ logs
 node_modules
 static/images/*
 *.log
+minecraft_server/
+minecraft_server
 *.json
 *.png
 *.webp

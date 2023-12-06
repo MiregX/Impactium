@@ -385,12 +385,6 @@ function updateTimer() {
   };
 
   const handleTimerEnd = (element) => {
-    const topLine = element.parent();
-    $('img', topLine).remove();
-    $('span', topLine).remove();
-    const parentBlock = topLine.parent();
-    $('.panel-footer p', parentBlock).removeClass('grayed')
-    $('.panel-footer label', parentBlock).removeClass('no-pointers greyed').attr('toOverlayView', '');
   };
 
   updateElementTimer($('#skinTimer'), 24 * 60 * 60 * 1000, handleTimerEnd);

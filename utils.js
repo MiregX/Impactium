@@ -3,6 +3,7 @@ const ftp = require('ftp');
 const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const locale = require(`./static/lang/locale.json`);
 const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
@@ -305,8 +306,53 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
     const validTypes = ['permissions', 'events', 'casual', 'warrior', 'killer', 'donate']
     if (!validTypes.includes(type)) return 400;
 
-    this.achievements[type] = { type }
+    this.achievements[type] = { 
+      type
+    }
+  }
+}
+
+class ImpactiumServer {
+  constructor() {
+    this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
+    this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
+  }
+
+  async fetchWhitelist() {
+    const Players = await getDatabase("minecraftPlayers");
+    const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
+    const nicknames = distinctNicknames.map(player => player.nickname).filter(n => n);
+    const whitelistedPlayers = JSON.parse(fs.readFileSync(this.whitelistPath, 'utf-8'));
     
+    const newWhitelistFile = []
+    nicknames.forEach(nickname => {
+      const existPlayer = whitelistedPlayers.find(player => player.name === nickname)
+      if (existPlayer) {
+        newWhitelistFile.push(existPlayer)
+      } else {
+        newWhitelistFile.push({ uuid: uuidv4(), name: nickname })
+      }
+    });
+
+    fs.writeFileSync(this.whitelistPath, JSON.stringify(newWhitelistFile, null, 2), 'utf-8')
+  }
+
+  async fetchAchievements() {
+    const players = JSON.parse(fs.readFileSync(this.whitelistPath, 'utf-8'));
+  
+    await Promise.all(players.map(async (player, index) => {
+      const playerAchievementsFilePath = path.join(this.achievementsFolder, `${player.uuid}.json`);
+      
+      try {
+        const playerAchievements = fs.readFileSync(playerAchievementsFilePath, 'utf-8');
+        player.stats = JSON.parse(playerAchievements).stats;
+        players[index] = player;
+      } catch (error) {
+        players.splice(index, 1);
+      }
+    }));
+
+    return players;
   }
 }
 
@@ -637,6 +683,7 @@ module.exports = {
   MinecraftPlayerAchievementInstance,
   GuildStatisticsInstance,
   MinecraftPlayer,
+  ImpactiumServer,
   saveBattleBoard,
   getLanguagePack,
   databaseConnect,
