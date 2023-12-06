@@ -315,9 +315,13 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
 class ImpactiumServer {
   constructor() {
+    this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
     this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
     this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
-    this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
+    this.mergedIconSourseMapFile = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'minecraft', 'font', 'default.json');
+    this.defaultIconSourseMapFile = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
+    this.defaultPlayersSkinsFolderPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    this.resoursePackIconsPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
   }
 
   launch() {
@@ -359,7 +363,7 @@ class ImpactiumServer {
     const Players = await getDatabase("minecraftPlayers");
     const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
     const nicknames = distinctNicknames.map(player => player.nickname).filter(n => n);
-    const whitelistedPlayers = JSON.parse(fs.readFileSync(this.whitelistPath, 'utf-8'));
+    const whitelistedPlayers = purge(this.whitelistPath);
     
     const newWhitelistFile = []
     nicknames.forEach(nickname => {
@@ -372,17 +376,17 @@ class ImpactiumServer {
     });
 
     fs.writeFileSync(this.whitelistPath, JSON.stringify(newWhitelistFile, null, 2), 'utf-8')
+    this.command('whitelist reload');
   }
 
   async fetchAchievements() {
-    const players = JSON.parse(fs.readFileSync(this.whitelistPath, 'utf-8'));
+    const players = purge(this.whitelistPath)
   
     await Promise.all(players.map(async (player, index) => {
       const playerAchievementsFilePath = path.join(this.achievementsFolder, `${player.uuid}.json`);
       
       try {
-        const playerAchievements = fs.readFileSync(playerAchievementsFilePath, 'utf-8');
-        player.stats = JSON.parse(playerAchievements).stats;
+        player.stats = purge(playerAchievementsFilePath).stats;
         players[index] = player;
       } catch (error) {
         players.splice(index, 1);
@@ -393,6 +397,27 @@ class ImpactiumServer {
   }
 
   async fetchIcons() {
+    const Players = await getDatabase("minecraftPlayers");
+    const whitelistedPlayers = purge(this.whitelistPath);
+    const packageIconsSourseList = purge(this.defaultIconSourseMapFile);
+
+    await Promise.all(whitelistedPlayers.forEach(async (playerWhitelistObj, index) => {
+      const player = await Players.findOne({ nickname: playerWhitelistObj.name });
+
+      if (player?.skin?.iconLink) {
+        packageIconsSourseList.providers.push({
+          type: "bitmap",
+          file: `minecraft:font/${player.nickname.toLowerCase()}.png`,
+          ascent: 8,
+          height: 8,
+          chars: [String.fromCharCode(index + 5000)]
+        })
+        нужно найти в папке this.defaultPlayersSkinsFolderPath картинку с player.id + _icon.png и переместить её в папку 
+        this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)}"`)
+      }
+    }));
+
+    fs.writeFileSync(this.mergedIconSourseMapFile, JSON.stringify(packageIconsSourseList, null, 2), 'utf-8')
   }
 }
 
@@ -621,6 +646,10 @@ async function databaseConnect() {
   if (!mongo.isConnected) {
     await mongo.connect();
   }
+}
+
+function purge(sourse) {
+  return JSON.parse(fs.readFileSync(sourse, 'utf-8'));
 }
 
 async function getBattleBoard(params = false) {

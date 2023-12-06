@@ -190,6 +190,9 @@
 .overlay .controls .default_panel_style:nth-child(2) {
   --hue: 350
 }
+.overlay .controls .default_panel_style:nth-child(3) {
+  --hue: 35
+}
 .overlay .controls {
   height: unset !important;
 }
@@ -324,7 +327,9 @@
         <input type="text" id="nicknameField" value="<%= player.nickname %>" placeholder="Введи ник" class="<%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>">
         
         <!-- Кнопка "Сохранить" для изменения никнейма -->
-        <div onclick="updateNickname()" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>Сохранить</div>
+        <div onclick="updateNickname()" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>
+          Сохранить
+        </div>
       </div>
     </div>
   
@@ -354,6 +359,23 @@
         <label for="fileInput" onclick="handleFileUpload()" class="change_profile upload-button <%= isDisabledSkinChange ? 'no-pointers greyed' : '' %>" <%= isDisabledSkinChange ? '' : 'toOverlayView' %>>
           <img src="https://api.impactium.fun/ux/uploads.svg">
         </label>
+      </div>
+    </div>
+
+    <!-- Панель для изменения пароля -->
+    <div class="default_panel_style dynamic">
+      <div class="flex panel-header align-center">
+        <p>Изменить пароль</p>
+      </div>
+
+      <p id="passwordUpdateOnErrorMessageContainer"></p>
+  
+      <div class="flex panel-footer" style="gap: 8px;">
+        <input type="text" id="passwordField" value="<%= player.password %>" placeholder="Введи новый пароль">
+        
+        <div onclick="updatePassword()" class="change_profile save-button" toOverlayView>
+          Подтвердить
+        </div>
       </div>
     </div>
   </div>  
