@@ -3,6 +3,7 @@ const ftp = require('ftp');
 const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
+const { spawn } = require('child_process');
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const locale = require(`./static/lang/locale.json`);
@@ -316,6 +317,42 @@ class ImpactiumServer {
   constructor() {
     this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
     this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
+    this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
+  }
+
+  launch() {
+    this.minecraftServerProcess = spawn('cmd.exe', ['/c', 'start', 'cmd.exe', '/k', `call "${this.starterPath}"`], {
+      cwd: path.dirname(this.starterPath),
+      shell: true
+    });
+
+    this.minecraftServerProcess.stdout.on('data', (data) => {
+      console.log(`[MC]: ${data}`);
+    });
+
+    this.minecraftServerProcess.stderr.on('data', (data) => {
+      console.error(`[MC] Серверная ошибка: ${data}`);
+    });
+
+    this.minecraftServerProcess.on('close', (code) => {
+      console.log(`[MC] Сервер схлопнулся с кодом: ${code}`);
+    });
+
+    this.minecraftServerProcess.on('error', (err) => {
+      console.error(`[MC] Error: ${err}`);
+    });
+  }
+
+  command(command) {
+    if (!this.minecraftServerProcess) return [0, `[MC] Ошибка: Сервер не запущен.`];
+    this.minecraftServerProcess.stdin.write(`${command}\n`);
+    return [1, `[MC] Команда выполнена.`];
+  }
+
+  stopServer() {
+    if (!this.minecraftServerProcess) return [0, '[MC] Ошибка: Сервер не запущен.'];
+    this.minecraftServerProcess.kill();
+    return [1, `[MC] Сервер успешно остановлен.`];
   }
 
   async fetchWhitelist() {
@@ -353,6 +390,9 @@ class ImpactiumServer {
     }));
 
     return players;
+  }
+
+  async fetchIcons() {
   }
 }
 

@@ -10,7 +10,7 @@ const telegram = require('./telegram');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
-const { User, getLanguagePack, log } = require('./utils');
+const { User, ImpactiumServer, getLanguagePack, log } = require('./utils');
 const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
@@ -128,6 +128,8 @@ options.isSuccess
 ? // Если ключ правильный и сертификат найден
 server.listen(80, () => {
   log(`Основной сервер запущен`, 'g');
+  const mcs = new ImpactiumServer()
+  mcs.launch();
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
