@@ -315,9 +315,8 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
 class ImpactiumServer {
   constructor() {
-    if (ImpactiumServer.instance) {
-      return ImpactiumServer.instance;
-    }
+    if (ImpactiumServer.instance) return ImpactiumServer.instance;
+    
     this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
     this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
     this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
@@ -334,9 +333,6 @@ class ImpactiumServer {
       shell: true,
       stdio: ['pipe', 'pipe', 'pipe'],
       encoding: 'utf-8',
-    });
-
-    this.minecraftServerProcess.stdout.on('data', (data) => {
     });
 
     this.minecraftServerProcess.stderr.on('data', (data) => {
@@ -363,38 +359,43 @@ class ImpactiumServer {
   stopServer() {
     if (!this.minecraftServerProcess) return false;
     this.minecraftServerProcess.stdin.write(`stop\n`);
+    delete this.minecraftServerProcess
     console.log(`[MC] Сервер остановлен`)
     return true;
   }
 
   async fetchWhitelist() {
-    fs.writeFileSync(this.whitelistPath, JSON.stringify([], null, 2), 'utf-8')
     const nicknames = await getPlayersNicknamesArray()
-    
+    const players = purge(this.whitelistPath)
+
     nicknames.forEach(nickname => {
-      this.command(`whitelist add ${nickname}`)
+      const existPlayer = players.find(player => player.name === nickname)
+      if (!existPlayer) {
+        this.command(`whitelist add ${nickname}`)
+      }
     });
 
-    this.test()
-  }
+    players.forEach(player => {
+      if (!nicknames.includes(player.name)) {
+        this.command(`whitelist remove ${player.name}`)
+      }
+    })
 
-  test() {
     this.command('whitelist reload');
   }
 
   async fetchAchievements() {
     const players = purge(this.whitelistPath)
   
-    await Promise.all(players.map(async (player, index) => {
+    players = players.map((player) => {
       const playerAchievementsFilePath = path.join(this.achievementsFolder, `${player.uuid}.json`);
-      
       try {
         player.stats = purge(playerAchievementsFilePath).stats;
-        players[index] = player;
+        return player;
       } catch (error) {
-        players.splice(index, 1);
+        return false;
       }
-    }));
+    }).filter(Boolean);
 
     return players;
   }
