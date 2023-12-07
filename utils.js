@@ -315,6 +315,9 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
 class ImpactiumServer {
   constructor() {
+    if (ImpactiumServer.instance) {
+      return ImpactiumServer.instance;
+    }
     this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
     this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
     this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
@@ -322,60 +325,60 @@ class ImpactiumServer {
     this.defaultIconSourseMapFile = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
     this.defaultPlayersSkinsFolderPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
     this.resoursePackIconsPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    ImpactiumServer.instance = this;
   }
 
   launch() {
-    this.minecraftServerProcess = spawn('cmd.exe', ['/c', 'start', 'cmd.exe', '/k', `call "${this.starterPath}"`], {
+    this.minecraftServerProcess = spawn('cmd.exe', ['/c', `call "${this.starterPath}"`], {
       cwd: path.dirname(this.starterPath),
-      shell: true
+      shell: true,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      encoding: 'utf-8',
     });
 
     this.minecraftServerProcess.stdout.on('data', (data) => {
-      console.log(`[MC]: ${data}`);
     });
 
     this.minecraftServerProcess.stderr.on('data', (data) => {
-      console.error(`[MC] Серверная ошибка: ${data}`);
+      console.error(data);
     });
 
     this.minecraftServerProcess.on('close', (code) => {
-      console.log(`[MC] Сервер схлопнулся с кодом: ${code}`);
+      console.log(code);
     });
 
     this.minecraftServerProcess.on('error', (err) => {
-      console.error(`[MC] Error: ${err}`);
+      console.error(err);
     });
   }
 
   command(command) {
-    if (!this.minecraftServerProcess) return [0, `[MC] Ошибка: Сервер не запущен.`];
+    // в этой части кода выполняется if даже не смотря на то что я запустил перед этим процесс launch и  this.minecraftServerProcess должно быть в области видимости метода
+    if (!this.minecraftServerProcess) return false;
     this.minecraftServerProcess.stdin.write(`${command}\n`);
-    return [1, `[MC] Команда выполнена.`];
+    console.log(`[MC] ${command}`)
+    return true;
   }
 
   stopServer() {
-    if (!this.minecraftServerProcess) return [0, '[MC] Ошибка: Сервер не запущен.'];
-    this.minecraftServerProcess.kill();
-    return [1, `[MC] Сервер успешно остановлен.`];
+    if (!this.minecraftServerProcess) return false;
+    this.minecraftServerProcess.stdin.write(`stop\n`);
+    console.log(`[MC] Сервер остановлен`)
+    return true;
   }
 
   async fetchWhitelist() {
-    const Players = await getDatabase("minecraftPlayers");
-    const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
-    const nicknames = distinctNicknames.map(player => player.nickname).filter(n => n);
-    const whitelistedPlayers = purge(this.whitelistPath);
+    fs.writeFileSync(this.whitelistPath, JSON.stringify([], null, 2), 'utf-8')
+    const nicknames = await getPlayersNicknamesArray()
     
-    const newWhitelistFile = []
     nicknames.forEach(nickname => {
-      const existPlayer = whitelistedPlayers.find(player => player.name === nickname)
-      if (existPlayer) {
-        newWhitelistFile.push(existPlayer)
-      } else {
-        newWhitelistFile.push({ uuid: uuidv4(), name: nickname })
-      }
+      this.command(`whitelist add ${nickname}`)
     });
 
-    fs.writeFileSync(this.whitelistPath, JSON.stringify(newWhitelistFile, null, 2), 'utf-8')
+    this.test()
+  }
+
+  test() {
     this.command('whitelist reload');
   }
 
@@ -412,7 +415,7 @@ class ImpactiumServer {
           height: 8,
           chars: [String.fromCharCode(index + 5000)]
         })
-        нужно найти в папке this.defaultPlayersSkinsFolderPath картинку с player.id + _icon.png и переместить её в папку 
+        // нужно найти в папке this.defaultPlayersSkinsFolderPath картинку с player.id + _icon.png и переместить её в папку 
         this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)}"`)
       }
     }));
@@ -710,6 +713,13 @@ async function getBattleBoard(params = false) {
     console.log(error);
     return []
   }
+}
+
+async function getPlayersNicknamesArray() {
+  const Players = await getDatabase("minecraftPlayers");
+  const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
+  const nicknames = distinctNicknames.map(player => player.nickname).filter(n => n);
+  return nicknames
 }
 
 function getLicense() {

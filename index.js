@@ -35,6 +35,7 @@ const options = utils.getLicense();
 const govApp = require('./modules/goverment/gov');
 app.use(vhost('gov.impactium.fun', govApp));
 
+const mcs = new ImpactiumServer()
 app.get('/', (request, response) => {
   try {
     const user = new User();
@@ -128,7 +129,6 @@ options.isSuccess
 ? // Если ключ правильный и сертификат найден
 server.listen(80, () => {
   log(`Основной сервер запущен`, 'g');
-  const mcs = new ImpactiumServer()
   mcs.launch();
 })
 : // Если ключ неправильный или не найден

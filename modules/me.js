@@ -1,4 +1,4 @@
-const { User, MinecraftPlayer, MinecraftPlayerAchievementInstance, getLanguagePack, log, ftpUpload } = require('../utils');
+const { User, ImpactiumServer, MinecraftPlayer, MinecraftPlayerAchievementInstance, getLanguagePack, log, ftpUpload } = require('../utils');
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
@@ -8,6 +8,7 @@ const ejs = require('ejs');
 const fs = require('fs');
 
 const router = express.Router();
+const mcs = new ImpactiumServer();
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -92,6 +93,10 @@ router.post('/minecraft/register', async (request, response) => {
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.body.newNickname);
+    if (status === 200) {
+      const mcs = new ImpactiumServer()
+      await mcs.fetchWhitelist()
+    }
     response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
     console.log(error);
