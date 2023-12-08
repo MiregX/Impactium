@@ -105,6 +105,7 @@ router.post('/minecraft/setNickname', async (request, response) => {
 });
 
 router.post('/minecraft/setSkin', async (request, response) => {
+  console.log('Пришло')
   try {
     upload(request, response, async (error) => {
       if (!request.file || error) return response.status(410).send(request.lang.errorCode_410);

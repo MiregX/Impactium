@@ -1,0 +1,27 @@
+<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>">
+    <div class="flex panel-header align-center">
+      <p><%= lang.changeSkin %></p>
+
+      <!-- Таймер, если изменение облика заблокировано -->
+      <% const isDisabledSkinChange = Date.now() - player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000 %>
+      <%- isDisabledSkinChange
+        ? `<img src="https://api.impactium.fun/ux/timer.svg">
+           <span id="skinTimer" timestamp="${player.lastSkinChangeTimestamp}"></span>`
+        : ''
+      %>
+    </div>
+
+    <!-- Сообщение об ошибке при загрузке облика -->
+    <p id="skinUploadOnErrorMessageContainer"></p>
+
+    <div class="flex panel-footer" style="gap: 8px;">
+      <!-- Название текущего облика -->
+      <p class="default_button_style <%= isDisabledSkinChange || !player.skin?.originalTitle ? 'grayed' : '' %>" id="skinName"><%- player.skin?.originalTitle || lang.skinNotSettled %></p>
+      
+      <!-- Кнопка "Загрузить" для изменения облика -->
+      <input type="file" id="fileInput" style="display: none;">
+      <label for="fileInput" onclick="handleFileUpload()" class="change_profile upload-button <%= isDisabledSkinChange ? 'no-pointers greyed' : '' %>" <%= isDisabledSkinChange ? '' : 'toOverlayView' %>>
+        <img src="https://api.impactium.fun/ux/uploads.svg">
+      </label>
+    </div>
+  </div>

@@ -268,7 +268,7 @@ class MinecraftPlayer {
   async register() {
     if (!this.registered) {
       this.registered = Date.now()
-      delete this.lastNicknameChangeTimestamp 
+      delete this.nicknameLastChangeTimestamp 
       await this.save()
     }
   }
@@ -417,7 +417,7 @@ class ImpactiumServer {
           chars: [String.fromCharCode(index + 5000)]
         })
         // нужно найти в папке this.defaultPlayersSkinsFolderPath картинку с player.id + _icon.png и переместить её в папку 
-        this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)}"`)
+        this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)} "`)
       }
     }));
 

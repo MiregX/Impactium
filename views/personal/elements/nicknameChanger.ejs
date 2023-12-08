@@ -1,0 +1,26 @@
+<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>">
+    <div class="flex panel-header align-center">
+      <p><%= lang.changeNickname %></p>
+
+      <!-- Таймер, если изменение никнейма заблокировано -->
+      <% const isDisabledNicknameChange = Date.now() - player.nicknameLastChangeTimestamp < 60 * 60 * 1000 %>
+      <%- isDisabledNicknameChange
+        ? `<img src="https://api.impactium.fun/ux/timer.svg">
+           <span id="nicknameTimer" timestamp="${player.nicknameLastChangeTimestamp}"></span>`
+        : ''
+      %>
+    </div>
+
+    <!-- Сообщение об ошибке при обновлении никнейма -->
+    <p id="nicknameUpdateOnErrorMessageContainer"></p>
+
+    <div class="flex panel-footer" style="gap: 8px;">
+      <!-- Поле для ввода нового никнейма -->
+      <input type="text" id="nicknameField" value="<%= player.nickname %>" placeholder="<%= lang.enterNickname %>" class="<%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>">
+      
+      <!-- Кнопка "Сохранить" для изменения никнейма -->
+      <div onclick="updateNickname()" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>
+        <%= lang.apply %>
+      </div>
+    </div>
+  </div>
