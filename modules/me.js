@@ -83,7 +83,8 @@ router.post('/minecraft/register', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.user.displayName);
     await request.player.register();
-    response.status(status).send(request.lang[`errorCode_${status}`]);
+    const panel = ejs.render(fs.readFileSync('views/personal/elements/playerCredentials.ejs', 'utf8'), request.composed);
+    response.status(status).send(panel);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
@@ -103,22 +104,34 @@ router.post('/minecraft/setNickname', async (request, response) => {
     response.status(500).send(request.lang.errorCode_500);
   }
 });
+router.post('/minecraft/setPassword', async (request, response) => {
+  try {
+    const status = await request.player.setPassword(request.body.newPassword);
+    if (status === 200) {
+      const mcs = new ImpactiumServer()
+      mcs.command(`authme register ${request.player.nickname} ${request.body.newPassword}`)
+      mcs.command(`authme changepassword ${request.player.nickname} ${request.body.newPassword}`)
+    }
+    response.status(status).send(request.lang[`errorCode_${status}`]);
+  } catch (error) {
+    console.log(error);
+    response.status(500).send(request.lang.errorCode_500);
+  }
+});
 
 router.post('/minecraft/setSkin', async (request, response) => {
-  console.log('Пришло')
   try {
     upload(request, response, async (error) => {
       if (!request.file || error) return response.status(410).send(request.lang.errorCode_410);
       try {
-        const timestamp = Date.now()
-        const status = await request.player.setSkin(request.file.originalname, request.file.buffer, timestamp);
+        const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
         if (status !== 200) return response.status(status).send(request.lang[`errorCode_${status}`])
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
 
         ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
-        ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon_${timestamp}.png`);
+        ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
 
         response.status(status).send(request.lang[`errorCode_${status}`]);
       } catch (error) {

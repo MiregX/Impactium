@@ -2,8 +2,8 @@
 :root {
   --hammer: url("https://api.impactium.fun/ux/hammer-v3.svg");
   --hammer-accent: #F14C50;
-  --cube: url("https://api.impactium.fun/ux/cube-v1.svg");
-  --cube-accent: rgb(163, 255, 163);
+  --casual: url("https://api.impactium.fun/ux/cube-v1.svg");
+  --casual-accent: rgb(163, 255, 163);
   --shield: url("https://api.impactium.fun/ux/shield-v1.svg");
   --shield-accent: #417FFD;
   --sword: url("https://api.impactium.fun/ux/sword-v1.svg");
@@ -36,7 +36,9 @@
   width: 100%;
   line-height: 1.4;
 }
-
+.profile ul {
+  flex: 1;
+}
 .privileges li::before {
   display: inline-block;
   transform: translateY(0.3ch);
@@ -61,8 +63,8 @@
 .privileges li[--hammer]::before { content: var(--hammer) }
 .privileges li[--hammer] hr::after { background-color: var(--hammer-accent) }
 
-.privileges li[--cube]::before { content: var(--cube) }
-.privileges li[--cube] hr::after { background-color: var(--cube-accent) }
+.privileges li[--casual]::before { content: var(--casual) }
+.privileges li[--casual] hr::after { background-color: var(--casual-accent) }
 
 .privileges li[--shield]::before { content: var(--shield) }
 .privileges li[--shield] hr::after { background-color: var(--shield-accent) }
@@ -256,6 +258,17 @@
   height: 24px;
   pointer-events: none;
 }
+@keyframes rotateAnimation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.upload-button img.rotate {
+  animation: rotateAnimation 2s linear infinite;
+}
 .overlay .upload-button {
   width: fit-content;
 }
@@ -282,6 +295,9 @@
 }
 .greyed {
   filter: brightness(0.55) !important;
+}
+.profile p {
+  flex: unset;
 }
 </style>
 <div class="top_line flex-dir-row">

@@ -202,30 +202,56 @@ const createOverlayCta = (overlayCard, buttonEl) => {
 initCards();
 
 function handleFileUpload() {
+  console.log('вызывлся')
   const fileInput = $("#fileInput");
   const file = fileInput[0].files[0];
-  
+    console.log(fileInput) 
+    console.log(fileInput[0]) 
+    console.log(fileInput[0].files)
+    console.log(fileInput[0].files[0])
+
   if (file) {
+    console.log('файл') // не выолняется
     const formData = new FormData();
     formData.append("skin", file, file.name);
-
+    togglerSkinButtonWaiter(true /* isWait */)
     $.ajax({
       url: "https://impactium.fun/me/minecraft/setSkin",
       type: "POST",
       data: formData,
       processData: false,
       contentType: false,
-      success: function(data, textStatus, jqXHR) {
+      success: function (data, textStatus, jqXHR) {
+        handleResult(jqXHR.status, jqXHR.responseText);
+
+        fileInput.val("");
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
         handleResult(jqXHR.status, jqXHR.responseText);
       },
-      error: function(jqXHR, textStatus, errorThrown) {
-        handleResult(jqXHR.status, jqXHR.responseText);
-      }
-    })
+    });
   }
 }
 
+function togglerSkinButtonWaiter(isWait) {
+  const image = $('label.upload-button img');
+  if (isWait) {
+    image.attr('src', 'https://api.impactium.fun/ux/loader24p.svg');
+    image.addClass('rotate');
+  } else {
+    image.attr('src', 'https://api.impactium.fun/ux/uploads.svg');
+    image.removeClass('rotate');
+    return
+  }
+
+  setTimeout(() => {
+    setSkinSetterWarning('Something went wrong.')
+    togglerSkinButtonWaiter(false)
+  }, 2000);
+}
+
 function handleResult(status, message) {
+  console.log('овтет')
   switch (status) {
     case 410:
       setSkinSetterWarning(message)
@@ -269,6 +295,24 @@ function updateNickname() {
 
   $.ajax({
     url: "https://impactium.fun/me/minecraft/setNickname",
+    type: "POST",
+    data: requestData,
+    contentType: 'application/json',
+    success: function(data, textStatus, jqXHR) {
+      handleResult(jqXHR.status, jqXHR.responseText);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      handleResult(jqXHR.status, jqXHR.responseText);
+    }
+  });
+}
+
+function updatePassword() {
+  const password = $('#passwordField').val();
+  const requestData = JSON.stringify({ newPassword: password });
+
+  $.ajax({
+    url: "https://impactium.fun/me/minecraft/setPassword",
     type: "POST",
     data: requestData,
     contentType: 'application/json',

@@ -248,7 +248,7 @@ class MinecraftPlayer {
     return 200
   }
   
-  async setSkin(originalImageName, imageBuffer, timestamp) {
+  async setSkin(originalImageName, imageBuffer) {
     const image = await Jimp.read(imageBuffer);
     const { width, height } = image.bitmap;
 
@@ -257,11 +257,19 @@ class MinecraftPlayer {
     if (!this.skin) this.skin = {}
 
     const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
-    this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon_${timestamp}.png`;
+    this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
     this.skin.originalTitle = originalImageName;
-    this.lastSkinChangeTimestamp = timestamp;
+    this.lastSkinChangeTimestamp = Date.now();
     await this.save();
+    return 200
+  }
+
+  async setPassword(newPassword) {
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 412;
+
+    this.password = newPassword;
+    await this.save()
     return 200
   }
 
@@ -316,11 +324,14 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 class ImpactiumServer {
   constructor() {
     if (ImpactiumServer.instance) return ImpactiumServer.instance;
-    
-    this.starterPath = path.join(__dirname, 'minecraft_server', 'server_start.bat');
+    this.path = {
+      folder: {},
+      file: {}
+    }
     this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
     this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
-    this.mergedIconSourseMapFile = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'minecraft', 'font', 'default.json');
+    this.mergedIconSourseMapFile = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
+    this.resoursePackIcons = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
     this.defaultIconSourseMapFile = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
     this.defaultPlayersSkinsFolderPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
     this.resoursePackIconsPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
@@ -328,8 +339,9 @@ class ImpactiumServer {
   }
 
   launch() {
-    this.minecraftServerProcess = spawn('cmd.exe', ['/c', `call "${this.starterPath}"`], {
-      cwd: path.dirname(this.starterPath),
+    this.path.file.starter = path.join(__dirname, 'minecraft_server', 'server_start.bat');
+    this.minecraftServerProcess = spawn('cmd.exe', ['/c', `call "${this.path.file.starter}"`], {
+      cwd: path.dirname(this.path.file.starter),
       shell: true,
       stdio: ['pipe', 'pipe', 'pipe'],
       encoding: 'utf-8',
@@ -400,14 +412,14 @@ class ImpactiumServer {
     return players;
   }
 
-  async fetchIcons() {
+  async fetchResoursePack() {
     const Players = await getDatabase("minecraftPlayers");
     const whitelistedPlayers = purge(this.whitelistPath);
     const packageIconsSourseList = purge(this.defaultIconSourseMapFile);
-
-    await Promise.all(whitelistedPlayers.forEach(async (playerWhitelistObj, index) => {
+  
+    await Promise.all(whitelistedPlayers.map(async (playerWhitelistObj, index) => {
       const player = await Players.findOne({ nickname: playerWhitelistObj.name });
-
+  
       if (player?.skin?.iconLink) {
         packageIconsSourseList.providers.push({
           type: "bitmap",
@@ -415,13 +427,24 @@ class ImpactiumServer {
           ascent: 8,
           height: 8,
           chars: [String.fromCharCode(index + 5000)]
-        })
-        // нужно найти в папке this.defaultPlayersSkinsFolderPath картинку с player.id + _icon.png и переместить её в папку 
-        this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)} "`)
+        });
+  
+        // Путь к исходной картинке
+        const sourceImagePath = `${this.defaultPlayersSkinsFolderPath}/${player.id}_icon.png`;
+        const destinationImagePath = `${this.resoursePackIcons}/${player.nickname.toLowerCase()}.png`;
+  
+        try {
+          await fs.rename(sourceImagePath, destinationImagePath);
+          await this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)} "`);
+        } catch (error) {
+        }
       }
     }));
-
-    fs.writeFileSync(this.mergedIconSourseMapFile, JSON.stringify(packageIconsSourseList, null, 2), 'utf-8')
+  
+    try {
+      await fs.writeFile(this.mergedIconSourseMapFile, JSON.stringify(packageIconsSourseList, null, 2), 'utf-8');
+    } catch (error) {
+    }
   }
 }
 
