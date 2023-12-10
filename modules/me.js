@@ -83,8 +83,7 @@ router.post('/minecraft/register', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.user.displayName);
     await request.player.register();
-    const panel = ejs.render(fs.readFileSync('views/personal/elements/playerCredentials.ejs', 'utf8'), request.composed);
-    response.status(status).send(panel);
+    response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
@@ -94,24 +93,16 @@ router.post('/minecraft/register', async (request, response) => {
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.body.newNickname);
-    if (status === 200) {
-      const mcs = new ImpactiumServer()
-      await mcs.fetchWhitelist()
-    }
     response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
   }
 });
+
 router.post('/minecraft/setPassword', async (request, response) => {
   try {
     const status = await request.player.setPassword(request.body.newPassword);
-    if (status === 200) {
-      const mcs = new ImpactiumServer()
-      mcs.command(`authme register ${request.player.nickname} ${request.body.newPassword}`)
-      mcs.command(`authme changepassword ${request.player.nickname} ${request.body.newPassword}`)
-    }
     response.status(status).send(request.lang[`errorCode_${status}`]);
   } catch (error) {
     console.log(error);

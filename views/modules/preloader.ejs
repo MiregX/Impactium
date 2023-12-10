@@ -115,23 +115,21 @@
   </div>
 </div>
 <script>
-$(window).one('load', function() {
-  const visitedBefore = localStorage.getItem("visitedBefore");
-
-  if (visitedBefore !== "true") {
-    console.log(!visitedBefore);
-    $('.preloader').addClass('outter-animation');
-    setTimeout(() => {
-      $('.preloader').remove();
-    }, 4000);
-    localStorage.setItem("visitedBefore", "true");
-  } else {
-    $('.preloader').addClass('fast-animation');
-    $('header .logo').css('opacity', 1);
-    setTimeout(() => {
-      $('.preloader').remove();
-    }, 500);
-  }
-});
-
+  $(window).one('load', function() {
+    const visitedBefore = localStorage.getItem("visitedBefore");
+  
+    if (visitedBefore !== "true") {
+      $('.preloader').addClass('outter-animation');
+      setTimeout(() => {
+        $('.preloader').remove();
+      }, 4000);
+      localStorage.setItem("visitedBefore", "true");
+    } else {
+      $('.preloader').addClass('fast-animation');
+      $('header .logo').css('opacity', 1);
+      setTimeout(() => {
+        $('.preloader').remove();
+      }, 500);
+    }
+  });
 </script>

@@ -8,6 +8,8 @@ minecraft_server
 *.json
 *.png
 *.webp
+resourse_pack
+resourse_pack/*
 *.jpg
 *.jpeg
 npm-debug.log*

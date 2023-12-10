@@ -1,4 +1,18 @@
 <style>
+:root {
+  --hammer: url("https://api.impactium.fun/ux/hammer-v3.svg");
+  --hammer-accent: #F14C50;
+  --casual: url("https://api.impactium.fun/ux/cube-v1.svg");
+  --casual-accent: rgb(163, 255, 163);
+  --shield: url("https://api.impactium.fun/ux/shield-v1.svg");
+  --shield-accent: #417FFD;
+  --sword: url("https://api.impactium.fun/ux/sword-v1.svg");
+  --sword-accent: #F2DE4C;
+  --event: url("https://api.impactium.fun/ux/party-v1.svg");
+  --event-accent: #E465FD;
+  --diamond: url("https://api.impactium.fun/ux/diamond-v2.svg");
+  --diamond-accent: #72E4F2;
+}
 .panel {
   height: calc(100vh - 80px);
 }
@@ -18,63 +32,6 @@
   justify-content: center;
   flex-direction: column;
 }
-
-.guilds-list {
-  width: 600px;
-  background: #ffffff03;
-  border-radius: 12px 0 0 32px;
-  backdrop-filter: blur(3px);
-  border-right: 0px;
-  padding: 10px;
-  transition: all 0.8s cubic-bezier(.21,.29,0,.94) !important;
-  opacity: 0;
-  transform: translateX(50%);
-  box-shadow: 0 1px 3px var(--c-36);
-  border: 1px solid #36363680;
-  border-right: none;
-}
-
-.guild-list-wrapper {
-  gap: 12px;
-}
-.guild-list-wrapper h5 {
-  margin-top: 5px;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--w);
-}
-.unique-guild {
-  border-radius: 22px;
-  border: 1px solid var(--c-24);
-  height: 60px;
-  padding: 10px;
-  align-items: center;
-  width: 300px;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: all 0.2s var(--trans);
-}
-.unique-guild:hover {
-  width: 320px;
-}
-.unique-guild h2 {
-  font-weight: 600;
-}
-.unique-guild img {
-  height: 40px;
-  width: 40px;
-  border-radius: 15px;
-}
-.unique-guild .logoMobile {
-  display: none;
-}
-.unique-guild img.arrow {
-  height: 20px;
-  width: 20px;
-  filter: invert(100%);
-  margin-right: 10px;
-}
-
 .about-us .main-text {
   font-size: 42px;
   font-weight: 700;
@@ -128,112 +85,183 @@
   opacity: 0;
   transform: translateY(-100px);
 }
-
-.guilds-list .background {
-  pointer-events: none;
+.panel .right {
+  display: flex;
+  padding: 1.8em 2.1em;
+  gap: 12px;
+  width: 45vw;
+  border-radius: 32px 0 0 32px;
+  backdrop-filter: blur(3px);
+  border-right: 0px;
+  transition: all 0.8s var(--trans) !important;
+  opacity: 0;
+  transform: translateX(50%);
+  border: 1px solid #36363680;
+  border-right: none;
+}
+.panel .right > h2 {
+  font-size: 18px;
+}
+.panel .right .background-wrapper {
   position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
   overflow: hidden;
 }
-.guilds-list .background img {
+.background {
+  pointer-events: none;
+}
+.diamond.background {
   position: absolute;
   top: 50%;
   transform: translate(40%, -40%);
   right: 0;
+  z-index: -2;
+}
+.mireg.background {
   z-index: -1;
+  height: 80%;
+  transform: translateX(20%);
 }
-@media (max-width: 767px) {
-.unique-guild .logoMobile {
-  display: block;
-}
-.unique-guild .logoDesktop {
-  display: none;
-}
-main {
-  position: relative; 
-  overflow: hidden;
-}
-.about-us {
-  padding: 0;
-}
-.about-us .main-text {
-  font-size: 7vw;
+.panel .right a {
+  width: 50%;
+  text-decoration: none;
   text-align: center;
-  white-space: no-wrap;
+  padding: 0.7em 2.1em;
+  background: #7C1AC2;
+  border-radius: 12px;
+  z-index: 3;
 }
-.about-us .support-text {
-  font-size: 5vw;
-  width: 90%;
+.privileges {
+  width: 50%;
 }
-.panel.main {
+.privileges li {
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.privileges li::before {
+  display: inline-block;
+  transform: translateY(0.3ch);
+  margin-right: 1ch;
+}
+.privileges hr {
+  margin-top: 4px;
+  height: 4px;
+  width: 100%;
+  background: var(--c-48);
+  border-radius: 2px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  border: none;
 }
-.about-us {
-  width: unset;
-  height: unset;
+.privileges hr::after {
+  content: "";
+  transition: all 1s var(--trans);
+  min-width: 20px;
+  width: 0%;
+  border-radius: 2px;
 }
-.guilds-list {
-  backdrop-filter: none;
-  width: calc(95vw - 5vw);
-  padding: 10px;
-  border-radius: 15px;
-  margin: 0 2.5vw;
-  position: relative;
+.privileges li.width-100 hr::after {
+  width: 100%;
 }
-.guild-list-wrapper h5 {
-  margin-top: 0px;
-}
-.guild-list-wrapper {
-  gap: 10px;
-}
-.unique-guild {
-  width: unset;
-  min-width: unset;
-}
-.unique-guild:hover {
-  width: unset;
-}
-}
-header {
-  transform: translateY(-100%);
-  opacity: 0;
+.privileges li[--hammer]::before { content: var(--hammer) }
+.privileges li[--hammer] hr::after { background-color: var(--hammer-accent) }
+
+.privileges li[--casual]::before { content: var(--casual) }
+.privileges li[--casual] hr::after { background-color: var(--casual-accent) }
+
+.privileges li[--shield]::before { content: var(--shield) }
+.privileges li[--shield] hr::after { background-color: var(--shield-accent) }
+
+.privileges li[--sword]::before { content: var(--sword) }
+.privileges li[--sword] hr::after { background-color: var(--sword-accent) }
+
+.privileges li[--event]::before { content: var(--event) }
+.privileges li[--event] hr::after { background-color: var(--event-accent) }
+
+.privileges li[--diamond]::before { content: var(--diamond) }
+.privileges li[--diamond] hr::after { background-color: var(--diamond-accent) }
+@media (max-width: 767px) {
+  .about-us {
+    width: 90vw;
+    height: unset;
+    margin-top: 2.1em;
+    padding: 0;
+  }
+  .about-us > div {
+    width: 100%;
+  }
+  .about-us .main-text {
+    font-size: 26px;
+  }
+  .about-us .support-text {
+    font-size: 22px;
+    width: 100%;
+  }
+  .panel.main {
+    flex-direction: column;
+  }
+  .panel .right {
+    overflow: hidden;
+    margin-bottom: 5vw;
+    width: 90vw;
+    border-radius: 32px;
+    border-right: 1px solid #36363680;
+    border-right: inherit;
+  }
+  .panel .right > h2 {
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+  }
+  .panel .right .privileges {
+    width: 100%;
+  }
+  .panel .right a {
+    width: 100%;
+  }
+  .diamond.background {
+    display: none;
+  }
+  .mireg.background {
+    filter: blur(5px) brightness(0.5);
+    height: auto;
+    width: 100%;
+    transform: none;
+  }
 }
 </style>
+
 <panel class="panel main">
   <div class="about-us">
     <div class="center flex-dir-column">
-      <p class="main-text anim-onload"><%= lang.joinToUs %></p>
+      <p class="main-text"><%= lang.joinToUs %></p>
       <div class="descriptions-wrapper flex flex-dir-column align-center">
         <% lang.joinToUsDescription.forEach(text => { %>
-          <p class="support-text anim-onload"><%= text %></p>
+          <p class="support-text"><%= text %></p>
         <% }) %>
       </div>
     </div>
   </div>
-  <div class="guilds-list anim-onload">
-    <div class="background"><img src="https://api.impactium.fun/ui/diamond-full-pattern.svg"></div>
-    <div class="guild-list-wrapper flex-dir-column">
-      <h5><%= lang.ourPartners %></h5>
-
-        <% Object.values(nav.partners).forEach(partner => { %>
-          <div class="unique-guild flex-dir-row predis" onclick="redirect('<%= partner.action %>')">
-            <div class="wrapper center-v flex gap">
-              <img class="<%= partner.logoMobile ? 'logoDesktop' : '' %>" src="<%= partner.logo %>">
-              <% if (partner.logoMobile) { %>
-                <img class="logoMobile" src="<%= partner.logoMobile %>">
-              <% } %>
-              <h2><%= partner.name %></h2>
-            </div>
-            <img class="arrow" src="https://api.impactium.fun/ux/to-left.svg">
-          </div>
-        <% }); %>
+  <div class="right flex-dir-column">
+    <div class="background-wrapper">
+      <img class="diamond background" src="https://api.impactium.fun/ui/diamond-full-pattern.svg">
+      <img class="mireg background" src="https://api.impactium.fun/ui/mireg_with_shield.png">
     </div>
+    <h2>Поиграй на нашем проекте чудище ебаное</h2>
+    <ul class="privileges">
+      <li --hammer>Администрация не вмешивается в игровой процесс<hr></li>
+      <li --casual>Открытый мир без привата. Строешь и ломаешь где хочешь<hr></li>
+      <li --shield>Высылаем спортиков против нон-РП гриферов<hr></li>
+      <li --sword>Уникальная система поощерений. Заходи на сервер раз в сутки и тогда файлик с папки mods не снесёт тебе винду<hr></li>
+      <li --event>Шедевроролплей с админкой и кристалами<hr></li>
+      <li --diamond>Задонать 15 гривен и получи уникальный скин писюна на меч<hr></li>
+    </ul>
+    <a href="https://impactium.fun/me/minecraft">Играть на майнкрафт сервере</a>
   </div>
 </panel>
 <script>
@@ -242,7 +270,7 @@ header {
   header.style.transform = ('translateY(0px)');
   header.style.opacity = ('1');
 
-  const gl = document.querySelector('.guilds-list');
+  const gl = document.querySelector('.right');
   gl.style.transform = ('translateX(0px)');
   gl.style.opacity = ('1');
 
@@ -253,6 +281,16 @@ header {
   const aboutUsDescriptionText = document.querySelector('.descriptions-wrapper');
   aboutUsDescriptionText.style.transform = ('translateX(0px)');
   aboutUsDescriptionText.style.opacity = ('1');
+
+  setTimeout(() => {
+  const lis = $('.privileges li');
+
+  lis.each((index, li) => {
+    setTimeout(() => {
+      $(li).addClass('width-100');
+    }, (index + 1) * 250);
+  });
+}, 800);
 });
 
 function redirectPhp() {

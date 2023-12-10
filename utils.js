@@ -3,12 +3,14 @@ const ftp = require('ftp');
 const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
-const { spawn } = require('child_process');
-const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
+const { v4: uuidv4 } = require('uuid');
+const { spawn } = require('child_process');
+const { pterosocket } = require('pterosocket')
+const SftpClient = require('ssh2-sftp-client');
 const locale = require(`./static/lang/locale.json`);
-const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 
 class User {
   constructor(token) {
@@ -201,7 +203,6 @@ class Schedule {
     }
   }
 }
-
 class MinecraftPlayer {
   constructor(id) {
     this.id = id;
@@ -245,6 +246,7 @@ class MinecraftPlayer {
     this.nicknameLastChangeTimestamp = Date.now()
     this.nickname = newNickname;
     await this.save()
+    this.initAuthMe()
     return 200
   }
   
@@ -270,6 +272,7 @@ class MinecraftPlayer {
 
     this.password = newPassword;
     await this.save()
+    this.initAuthMe()
     return 200
   }
 
@@ -278,6 +281,14 @@ class MinecraftPlayer {
       this.registered = Date.now()
       delete this.nicknameLastChangeTimestamp 
       await this.save()
+    }
+  }
+
+  initAuthMe() {
+    if (this.nickname && this.password) {
+      const mcs = new ImpactiumServer();
+      mcs.command(`authme register ${this.nickname} ${this.password}`)
+      mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
     }
   }
 
@@ -324,61 +335,41 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 class ImpactiumServer {
   constructor() {
     if (ImpactiumServer.instance) return ImpactiumServer.instance;
+    
+    this.sftp = new SFTP()
+
     this.path = {
       folder: {},
       file: {}
     }
-    this.whitelistPath = path.join(__dirname, 'minecraft_server', 'whitelist.json');
-    this.achievementsFolder = path.join(__dirname, 'minecraft_server', 'world', 'stats');
-    this.mergedIconSourseMapFile = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
-    this.resoursePackIcons = path.join(__dirname, 'minecraft_server', 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
-    this.defaultIconSourseMapFile = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
-    this.defaultPlayersSkinsFolderPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
-    this.resoursePackIconsPath = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    this.connect = {
+      origin: "https://mgr.hosting-minecraft.pro",
+      api_key: "ptlc_UTbPzglyHG6y2EtNJA9HkN1qIASd51THGqWUuZMXjFJ",
+      server_no: "d9aa118c"
+    }
+    
     ImpactiumServer.instance = this;
   }
 
   launch() {
-    this.path.file.starter = path.join(__dirname, 'minecraft_server', 'server_start.bat');
-    this.minecraftServerProcess = spawn('cmd.exe', ['/c', `call "${this.path.file.starter}"`], {
-      cwd: path.dirname(this.path.file.starter),
-      shell: true,
-      stdio: ['pipe', 'pipe', 'pipe'],
-      encoding: 'utf-8',
-    });
+    this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
 
-    this.minecraftServerProcess.stderr.on('data', (data) => {
-      console.error(data);
-    });
-
-    this.minecraftServerProcess.on('close', (code) => {
-      console.log(code);
-    });
-
-    this.minecraftServerProcess.on('error', (err) => {
-      console.error(err);
-    });
+    this.server.on("start", ()=>{
+      log("WS Соединение с панелью управления установлено!", 'y')
+    })
   }
 
   command(command) {
-    // в этой части кода выполняется if даже не смотря на то что я запустил перед этим процесс launch и  this.minecraftServerProcess должно быть в области видимости метода
-    if (!this.minecraftServerProcess) return false;
-    this.minecraftServerProcess.stdin.write(`${command}\n`);
-    console.log(`[MC] ${command}`)
-    return true;
-  }
-
-  stopServer() {
-    if (!this.minecraftServerProcess) return false;
-    this.minecraftServerProcess.stdin.write(`stop\n`);
-    delete this.minecraftServerProcess
-    console.log(`[MC] Сервер остановлен`)
+    if (!this.server) return false;
+    this.server.writeCommand(command);
+    log(`[MC] -> ${command}`, 'g')
     return true;
   }
 
   async fetchWhitelist() {
+    await this.sftp.connect()
     const nicknames = await getPlayersNicknamesArray()
-    const players = purge(this.whitelistPath)
+    const players = JSON.parse(await this.sftp.read('whitelist.json'));
 
     nicknames.forEach(nickname => {
       const existPlayer = players.find(player => player.name === nickname)
@@ -394,27 +385,37 @@ class ImpactiumServer {
     })
 
     this.command('whitelist reload');
+    await this.sftp.close()
   }
 
   async fetchAchievements() {
-    const players = purge(this.whitelistPath)
+    await this.sftp.connect()
+    try {
+      let players = JSON.parse(await this.sftp.read('whitelist.json'));
+      const results = [];
   
-    players = players.map((player) => {
-      const playerAchievementsFilePath = path.join(this.achievementsFolder, `${player.uuid}.json`);
-      try {
-        player.stats = purge(playerAchievementsFilePath).stats;
-        return player;
-      } catch (error) {
-        return false;
+      for (const player of players) {
+        try {
+          const result = await this.sftp.read(`world/stats/${player.uuid}.json`);
+          const stats = JSON.parse(result).stats;
+          if (!stats) continue;
+          player.stats = stats;
+          results.push(player);
+        } catch (error) {
+          continue;
+        }
       }
-    }).filter(Boolean);
-
-    return players;
+      
+      await this.sftp.close()
+      return results;
+    } catch (error) { return [] }
   }
 
   async fetchResoursePack() {
+    this.path.file.whitelist = path.join(__dirname, 'minecraft_server', 'whitelist.json');
+
     const Players = await getDatabase("minecraftPlayers");
-    const whitelistedPlayers = purge(this.whitelistPath);
+    const whitelistedPlayers = purge(this.path.file.whitelist);
     const packageIconsSourseList = purge(this.defaultIconSourseMapFile);
   
     await Promise.all(whitelistedPlayers.map(async (playerWhitelistObj, index) => {
@@ -447,6 +448,57 @@ class ImpactiumServer {
     }
   }
 }
+
+class SFTP {
+  constructor() {
+    if (!SFTP.instance) {
+      this.sftp = new SftpClient();
+      this.config = {
+        host: 'd27.joinserver.xyz',
+        port: 7477,
+        username: 'b8rj8c2t.d9aa118c',
+        password: 'Eevee888'
+      };
+      SFTP.instance = this;
+    }
+
+    return SFTP.instance;
+  }
+
+  async connect() {
+    if (!this.sftp.connected) {
+      await this.sftp.connect(this.config);
+    }
+  }
+
+  async put(localFilePath, remoteFilePath) {
+    try {
+      const result = await this.sftp.put(localFilePath, remoteFilePath);
+      return result;
+    } catch (error) {return ''}
+  }
+
+  async get(remoteFilePath, localFilePath) {
+    try {
+      const result = await this.sftp.get(remoteFilePath, localFilePath);
+      return result;
+    } catch (error) {return ''}
+  }
+
+  async read(remoteFilePath) {
+    try {
+      const result = await this.sftp.get(remoteFilePath);
+      return result.toString();
+    } catch (error) {return ''}
+  }
+
+  async close() {
+    await this.sftp.end();
+  }
+}
+
+module.exports = SFTP;
+
 
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {

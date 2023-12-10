@@ -6,7 +6,6 @@ const https = require('https');
 const vhost = require('vhost');
 const utils = require('./utils');
 const express = require('express');
-const telegram = require('./telegram');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
@@ -129,7 +128,8 @@ options.isSuccess
 ? // Если ключ правильный и сертификат найден
 server.listen(80, () => {
   log(`Основной сервер запущен`, 'g');
-  mcs.launch();
+  mcs.launch()  
+  mcs.fetchAchievements()
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
