@@ -287,7 +287,8 @@ class MinecraftPlayer {
   initAuthMe() {
     if (this.nickname && this.password) {
       const mcs = new ImpactiumServer();
-      mcs.command(`authme register ${this.nickname} ${this.password}`)
+      mcs.fetchWhitelist();
+      mcs.command(`authme register ${this.nickname} ${this.password}`);
       mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
     }
   }
@@ -411,41 +412,65 @@ class ImpactiumServer {
     } catch (error) { return [] }
   }
 
-  async fetchResoursePack() {
-    this.path.file.whitelist = path.join(__dirname, 'minecraft_server', 'whitelist.json');
+  async fetchResoursePackIcons() {
+    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    this.path.file.basic = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
+    this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
+    this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
-    const Players = await getDatabase("minecraftPlayers");
-    const whitelistedPlayers = purge(this.path.file.whitelist);
-    const packageIconsSourseList = purge(this.defaultIconSourseMapFile);
+    await this.sftp.connect()
+    const whitelistedPlayers = JSON.parse(await this.sftp.read('whitelist.json'));
+    const resultedJson = purge(this.path.file.basic);
   
+    const Players = await getDatabase("minecraftPlayers");
     await Promise.all(whitelistedPlayers.map(async (playerWhitelistObj, index) => {
       const player = await Players.findOne({ nickname: playerWhitelistObj.name });
   
       if (player?.skin?.iconLink) {
-        packageIconsSourseList.providers.push({
+        const playerName = player.nickname.toLowerCase();
+        const playerChar = String.fromCharCode(index + 5000);
+        const playerCode = `\\u${(index + 5000).toString(16).padStart(4, '0')}`;
+
+        resultedJson.providers.push({
           type: "bitmap",
-          file: `minecraft:font/${player.nickname.toLowerCase()}.png`,
+          file: `minecraft:font/${playerName}.png`,
           ascent: 8,
           height: 8,
-          chars: [String.fromCharCode(index + 5000)]
+          chars: [JSON.parse(`"${playerCode}"`)]
         });
   
         // Путь к исходной картинке
-        const sourceImagePath = `${this.defaultPlayersSkinsFolderPath}/${player.id}_icon.png`;
-        const destinationImagePath = `${this.resoursePackIcons}/${player.nickname.toLowerCase()}.png`;
+        const sourceImagePath = `${this.path.folder.icons}\\${player.id}_icon.png`;
+        const destinationImagePath = `${this.path.folder.resoursePackIcons}\\${playerName}.png`;
   
         try {
-          await fs.rename(sourceImagePath, destinationImagePath);
-          await this.command(`user ${player.nickname} meta setprefix 2 "${String.fromCharCode(index + 5000)} "`);
+          await fs.promises.copyFile(sourceImagePath, destinationImagePath);
+          this.command(`lp user ${player.nickname} meta setprefix 2 "${playerChar} "`);
         } catch (error) {
+          const playerIndex = resultedJson.providers.findIndex(provider => provider.file === `minecraft:font/${playerName}.png`);
+          if (playerIndex !== -1) {
+            resultedJson.providers.splice(playerIndex, 1);
+          }
         }
       }
     }));
   
     try {
-      await fs.writeFile(this.mergedIconSourseMapFile, JSON.stringify(packageIconsSourseList, null, 2), 'utf-8');
+      console.log(resultedJson)
+      fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
     } catch (error) {
+      console.log(error)
     }
+  }
+
+  async processResoursePackIcons() {
+    this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
+    const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
+    playersWithFetchedIcon.forEach((playerObj, index) => {
+      if (index < 3) return
+      const playerNickname = playerObj.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
+      this.command(`user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
+    })
   }
 }
 

@@ -130,6 +130,7 @@ server.listen(80, () => {
   log(`Основной сервер запущен`, 'g');
   mcs.launch()  
   mcs.fetchAchievements()
+  mcs.fetchResoursePackIcons()
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
