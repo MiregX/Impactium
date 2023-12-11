@@ -4,6 +4,7 @@ const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
+const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 const { spawn } = require('child_process');
 const { pterosocket } = require('pterosocket')
@@ -214,7 +215,8 @@ class MinecraftPlayer {
     const player = await Players.findOne({
       $or: [
         { id },
-        { discordId: id }
+        { discordId: id },
+        { nickname: { $regex: new RegExp(`^${id}$`, 'i') } }
       ]
     });
 
@@ -348,6 +350,7 @@ class ImpactiumServer {
       api_key: "ptlc_UTbPzglyHG6y2EtNJA9HkN1qIASd51THGqWUuZMXjFJ",
       server_no: "d9aa118c"
     }
+    this.players = {}
     
     ImpactiumServer.instance = this;
   }
@@ -366,35 +369,43 @@ class ImpactiumServer {
     log(`[MC] -> ${command}`, 'g')
     return true;
   }
+  
+  async getDatabasePlayers() {
+    const Players = await getDatabase("minecraftPlayers");
+    const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
+    this.players.database = distinctNicknames.map(player => player.nickname).filter(n => n);
+    return this.players.database;
+  }
+  async getWhitelistPlayers() {
+    await this.sftp.connect();
+    const players = await this.sftp.read('whitelist.json');
+    await this.sftp.close();
+    this.players.whitelist = JSON.parse(players)
+    return this.players.whitelist;
+  }
 
   async fetchWhitelist() {
-    await this.sftp.connect()
-    const nicknames = await getPlayersNicknamesArray()
-    const players = JSON.parse(await this.sftp.read('whitelist.json'));
+    await this.getDatabasePlayers();
+    await this.getWhitelistPlayers() 
 
-    nicknames.forEach(nickname => {
-      const existPlayer = players.find(player => player.name === nickname)
-      if (!existPlayer) {
-        this.command(`whitelist add ${nickname}`)
-      }
+    this.players.nicknames.forEach(nickname => {
+      const existPlayer = this.players.whitelist.find(player => player.name === nickname)
+      if (!existPlayer) this.command(`whitelist add ${nickname}`);
     });
 
-    players.forEach(player => {
-      if (!nicknames.includes(player.name)) {
-        this.command(`whitelist remove ${player.name}`)
-      }
+    this.players.whitelist.forEach(player => {
+      if (!this.players.nicknames.includes(player.name)) this.command(`whitelist remove ${player.name}`);
     })
 
     this.command('whitelist reload');
-    await this.sftp.close()
   }
 
   async fetchAchievements() {
-    await this.sftp.connect()
     try {
-      let players = JSON.parse(await this.sftp.read('whitelist.json'));
+      const players = await this.getWhitelistPlayers();
       const results = [];
   
+      await this.sftp.connect()
       for (const player of players) {
         try {
           const result = await this.sftp.read(`world/stats/${player.uuid}.json`);
@@ -418,19 +429,25 @@ class ImpactiumServer {
     this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
-    await this.sftp.connect()
-    const whitelistedPlayers = JSON.parse(await this.sftp.read('whitelist.json'));
+    await this.getWhitelistPlayers()
     const resultedJson = purge(this.path.file.basic);
   
-    const Players = await getDatabase("minecraftPlayers");
-    await Promise.all(whitelistedPlayers.map(async (playerWhitelistObj, index) => {
-      const player = await Players.findOne({ nickname: playerWhitelistObj.name });
-  
-      if (player?.skin?.iconLink) {
-        const playerName = player.nickname.toLowerCase();
-        const playerChar = String.fromCharCode(index + 5000);
-        const playerCode = `\\u${(index + 5000).toString(16).padStart(4, '0')}`;
+    const currentIndex = 5000;
 
+    await Promise.all(this.players.whitelist.map(async (whitelistPlayer) => {
+      const player = new MinecraftPlayer()
+      await player.fetch(whitelistPlayer.name);
+      
+      if (!(player?.skin?.iconLink)) return false
+      
+      const playerName = player.nickname.toLowerCase();
+      const playerCode = `\\u${(currentIndex).toString(16).padStart(4, '0')}`;
+      
+      try {
+        await fs.promises.copyFile(
+          `${this.path.folder.icons}\\${player.id}_icon.png`, 
+          `${this.path.folder.resoursePackIcons}\\${playerName}.png`);
+          
         resultedJson.providers.push({
           type: "bitmap",
           file: `minecraft:font/${playerName}.png`,
@@ -438,39 +455,110 @@ class ImpactiumServer {
           height: 8,
           chars: [JSON.parse(`"${playerCode}"`)]
         });
-  
-        // Путь к исходной картинке
-        const sourceImagePath = `${this.path.folder.icons}\\${player.id}_icon.png`;
-        const destinationImagePath = `${this.path.folder.resoursePackIcons}\\${playerName}.png`;
-  
-        try {
-          await fs.promises.copyFile(sourceImagePath, destinationImagePath);
-          this.command(`lp user ${player.nickname} meta setprefix 2 "${playerChar} "`);
-        } catch (error) {
-          const playerIndex = resultedJson.providers.findIndex(provider => provider.file === `minecraft:font/${playerName}.png`);
-          if (playerIndex !== -1) {
-            resultedJson.providers.splice(playerIndex, 1);
-          }
-        }
-      }
+
+        currentIndex++;
+      } catch (error) {}
     }));
   
-    try {
-      console.log(resultedJson)
-      fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
-    } catch (error) {
-      console.log(error)
-    }
+    fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
   }
 
   async processResoursePackIcons() {
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
+
+    const ResoursePackInstance = new ResoursePackInstance()
+
+    await ResoursePackInstance.archiveResoursePack();
+    await ResoursePackInstance.calculateHashsum();
+    await ResoursePackInstance.saveHashsumIntoServerProperties();
+
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
     playersWithFetchedIcon.forEach((playerObj, index) => {
       if (index < 3) return
       const playerNickname = playerObj.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
-      this.command(`user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
-    })
+      this.command(`lp user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
+    });
+
+    this.command('restart');
+  }
+}
+
+class ResoursePackInstance {
+  constructor() {
+    this.sftp = new SFTP()
+    
+    this.path = {
+      folder: {},
+      file: {}
+    }
+  }
+
+  async archiveResoursePack() {
+    this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium ResoursePack.zip');
+
+    return new Promise((resolve, reject) => {
+      const output = fs.createWriteStream(this.path.folder.resourcePack);
+  
+      const archive = archiver('zip', {
+        zlib: { level: 9 }
+      });
+  
+      output.on('close', function () {
+        resolve();
+      });
+  
+      archive.on('error', function (err) {
+        reject(err);
+      });
+  
+      archive.pipe(output);
+  
+      archive.directory(folderPath, false);
+      
+      archive.finalize();
+    });
+  }
+
+  async calculateHashsum() {
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'ImpactiumResoursePack.zip')
+
+    return new Promise((resolve, reject) => {
+      const stream = fs.createReadStream(this.path.file.resoursePackDestination);
+  
+      const hash = crypto.createHash('sha256');
+  
+      stream.on('end', function () {
+        this.hashsum = hash.digest('hex');
+        resolve(hash.digest('hex'));
+      });
+  
+      stream.on('error', function (err) {
+        reject(err);
+      });
+  
+      stream.pipe(hash);
+    });
+  }
+  
+  async saveHashsumIntoServerProperties() {
+    await this.sftp.connect()
+    const serverProperties = await this.sftp.read('server.properties');
+    
+    const lines = serverProperties.split('\n');
+    
+    let resourcePackSha1Index = -1;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith('resource-pack-sha1=')) {
+        resourcePackSha1Index = i;
+        break;
+      }
+    }
+    
+    lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
+    
+    await this.sftp.save('server.properties', lines.join('\n'))
+    await this.sftp.close()
   }
 }
 
@@ -515,6 +603,10 @@ class SFTP {
       const result = await this.sftp.get(remoteFilePath);
       return result.toString();
     } catch (error) {return ''}
+  }
+
+  async save(remoteFilePath, data) {
+    await this.sftp.put(Buffer.from(data), remoteFilePath);
   }
 
   async close() {
@@ -816,13 +908,6 @@ async function getBattleBoard(params = false) {
   }
 }
 
-async function getPlayersNicknamesArray() {
-  const Players = await getDatabase("minecraftPlayers");
-  const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
-  const nicknames = distinctNicknames.map(player => player.nickname).filter(n => n);
-  return nicknames
-}
-
 function getLicense() {
   try {
     const path = 'C:\\Users\\Mark\\';
@@ -862,6 +947,7 @@ async function saveBattleBoard(data) {
 module.exports = {
   MinecraftPlayerAchievementInstance,
   GuildStatisticsInstance,
+  ResoursePackInstance,
   MinecraftPlayer,
   ImpactiumServer,
   saveBattleBoard,
