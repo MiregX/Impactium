@@ -6,6 +6,7 @@ const https = require('https');
 const vhost = require('vhost');
 const utils = require('./utils');
 const express = require('express');
+const { schedule } = require('node-cron');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
@@ -126,13 +127,16 @@ const server = https.createServer(options, app)
 
 options.isSuccess
 ? // Если ключ правильный и сертификат найден
-server.listen(80, () => {
+server.listen(80, async () => {
   log(`Основной сервер запущен`, 'g');
-  mcs.launch()  
-  mcs.fetchAchievements()
-  mcs.fetchResoursePackIcons()
+  mcs.launch()
+  await mcs.fetchResoursePackIcons();
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
   log(`Тестовый сервер запущен`); 
 })
+
+schedule('0 */3 * * *', async () => {
+  await mcs.processResoursePackIcons();
+});

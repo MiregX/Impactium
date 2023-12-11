@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 const { spawn } = require('child_process');
+const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const locale = require(`./static/lang/locale.json`);
@@ -432,7 +433,7 @@ class ImpactiumServer {
     await this.getWhitelistPlayers()
     const resultedJson = purge(this.path.file.basic);
   
-    const currentIndex = 5000;
+    let currentIndex = 5000;
 
     await Promise.all(this.players.whitelist.map(async (whitelistPlayer) => {
       const player = new MinecraftPlayer()
@@ -466,19 +467,18 @@ class ImpactiumServer {
   async processResoursePackIcons() {
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
-    const ResoursePackInstance = new ResoursePackInstance()
+    this.ResoursePackInstance = new ResoursePackInstance()
 
-    await ResoursePackInstance.archiveResoursePack();
-    await ResoursePackInstance.calculateHashsum();
-    await ResoursePackInstance.saveHashsumIntoServerProperties();
+    await this.ResoursePackInstance.archiveResoursePack();
+    await this.ResoursePackInstance.saveHashsumIntoServerProperties();
 
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
-    playersWithFetchedIcon.forEach((playerObj, index) => {
-      if (index < 3) return
+    playersWithFetchedIcon.providers.forEach(async (playerObj, index) => {
+      if (index < 4) return
       const playerNickname = playerObj.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
       this.command(`lp user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
     });
-
+    
     this.command('restart');
   }
 }
@@ -495,10 +495,10 @@ class ResoursePackInstance {
 
   async archiveResoursePack() {
     this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium ResoursePack.zip');
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
 
     return new Promise((resolve, reject) => {
-      const output = fs.createWriteStream(this.path.folder.resourcePack);
+      const output = fs.createWriteStream(this.path.file.resoursePackDestination);
   
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -514,51 +514,84 @@ class ResoursePackInstance {
   
       archive.pipe(output);
   
-      archive.directory(folderPath, false);
+      archive.directory(this.path.folder.resoursePack, false);
       
       archive.finalize();
     });
   }
 
   async calculateHashsum() {
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'ImpactiumResoursePack.zip')
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
 
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.path.file.resoursePackDestination);
-  
-      const hash = crypto.createHash('sha256');
-  
-      stream.on('end', function () {
-        this.hashsum = hash.digest('hex');
+      const hash = crypto.createHash('sha1');
+
+      stream.on('data', (chunk) => {
+        hash.update(chunk);
+      });
+
+      stream.on('end', () => {
         resolve(hash.digest('hex'));
       });
-  
-      stream.on('error', function (err) {
+
+      stream.on('error', (err) => {
         reject(err);
       });
-  
-      stream.pipe(hash);
     });
   }
   
   async saveHashsumIntoServerProperties() {
-    await this.sftp.connect()
+    await this.sftp.connect();
+    this.hashsum = await this.calculateHashsum();
+
     const serverProperties = await this.sftp.read('server.properties');
-    
     const lines = serverProperties.split('\n');
-    
     let resourcePackSha1Index = -1;
+    let resourcePackIndex = -1;
+
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].startsWith('resource-pack-sha1=')) {
         resourcePackSha1Index = i;
-        break;
+      }
+      if (lines[i].startsWith('resource-pack=')) {
+        resourcePackIndex = i;
       }
     }
-    
+
     lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
-    
-    await this.sftp.save('server.properties', lines.join('\n'))
-    await this.sftp.close()
+    lines[resourcePackIndex] = `resource-pack=https\://www.impactium.fun/me/minecraft/rp/${this.hashsum}?timestamp=${Date.now()}`;
+
+    await this.sftp.save('server.properties', lines.join('\n'));
+    await this.sftp.close();
+  }
+
+  async uploadResoursePackToDropbox() {
+    this.accessToken = 'sl.Bri_LQdMvmf3jNBFF0uni7UTG8gTleIKqnSr8DZrMIzPJqXi907jRL3dhRlgSavJgYE0-1DgRqvzz6Ud_wi2B5SRQaUubXtunFRvRs0OqVmXyhlh-XbIZ18nSzT-v-EgKlOOdZEVxFdg6Nncl9uL5q8';
+    this.dropbox = new Dropbox({ accessToken: this.accessToken });
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
+
+    try {
+      const fileContent = fs.readFileSync(this.path.file.resoursePackDestination);
+      const date = formatDate()
+
+      await this.dropbox.filesUpload({
+        path: `/ImpactiumRP_${date.time}_${date.date}.zip`,
+        contents: fileContent,
+      });
+
+      const link = await this.dropbox.sharingCreateSharedLinkWithSettings({
+        path: `${destinationPath}`,
+        settings: {
+          requested_visibility: { '.tag': 'public' },
+        },
+      });
+
+      return link.result.url;
+    } catch (error) {
+      const link = await this.uploadResoursePackToDropbox();
+      return link
+    }
   }
 }
 
