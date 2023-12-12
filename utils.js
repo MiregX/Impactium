@@ -357,11 +357,15 @@ class ImpactiumServer {
   }
 
   launch() {
-    this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
-
-    this.server.on("start", ()=>{
-      log("WS Соединение с панелью управления установлено!", 'y')
-    })
+    try {
+      this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
+      
+      this.server.on("start", ()=>{
+        log("WS Соединение с панелью управления установлено!", 'y')
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   command(command) {
@@ -544,6 +548,7 @@ class ResoursePackInstance {
   async saveHashsumIntoServerProperties() {
     await this.sftp.connect();
     this.hashsum = await this.calculateHashsum();
+    this.link = await this.uploadResoursePackToDropbox();
 
     const serverProperties = await this.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
@@ -560,7 +565,7 @@ class ResoursePackInstance {
     }
 
     lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
-    lines[resourcePackIndex] = `resource-pack=https\://www.impactium.fun/me/minecraft/rp/${this.hashsum}?timestamp=${Date.now()}`;
+    lines[resourcePackIndex] = `resource-pack=${this.link}`;
 
     await this.sftp.save('server.properties', lines.join('\n'));
     await this.sftp.close();
