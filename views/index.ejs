@@ -252,16 +252,18 @@
       <img class="diamond background" src="https://api.impactium.fun/ui/diamond-full-pattern.svg">
       <img class="mireg background" src="https://api.impactium.fun/ui/mireg_with_shield.png">
     </div>
-    <h2>Поиграй на нашем проекте чудище ебаное</h2>
+    <h2><%= lang.playOnOurProject %></h2>
     <ul class="privileges">
-      <li --hammer>Администрация не вмешивается в игровой процесс<hr></li>
-      <li --casual>Открытый мир без привата. Строешь и ломаешь где хочешь<hr></li>
-      <li --shield>Высылаем спортиков против нон-РП гриферов<hr></li>
-      <li --sword>Уникальная система поощерений. Заходи на сервер раз в сутки и тогда файлик с папки mods не снесёт тебе винду<hr></li>
-      <li --event>Шедевроролплей с админкой и кристалами<hr></li>
-      <li --diamond>Задонать 15 гривен и получи уникальный скин писюна на меч<hr></li>
+      <li --hammer><%= lang.administrationNotIntervenes %><hr></li>
+      <li --casual><%= lang.openWorldWithoutPrivates %><hr></li>
+      <li --shield><%= lang.sendAthletesAgainstNonRP %><hr></li>
+      <li --sword><%= lang.uniqueRewardsSystem %><hr></li>
+      <li --event><%= lang.masterpieceRoleplayWithAdmins %><hr></li>
+      <li --diamond><%= lang.donateAndGetUniqueSkin %><hr></li>
     </ul>
-    <a href="https://impactium.fun/me/minecraft">Играть на майнкрафт сервере</a>
+    <a href="https://impactium.fun/me/minecraft">
+      <%- player.registered ? lang.myProfile : lang.register %>
+    </a>
   </div>
 </panel>
 <script>

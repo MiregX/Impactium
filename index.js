@@ -10,7 +10,7 @@ const { schedule } = require('node-cron');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 // const { updateUserDisplayName } = require('./discord');
-const { User, ImpactiumServer, getLanguagePack, log } = require('./utils');
+const { User, ImpactiumServer, MinecraftPlayer, getLanguagePack, log } = require('./utils');
 const { discordClientSecret, nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 
 const app = express();
@@ -39,9 +39,11 @@ const mcs = new ImpactiumServer()
 app.get('/', (request, response) => {
   try {
     const user = new User();
-    user.fetch(request.cookies.token).then(() => {
+    user.fetch(request.cookies.token).then( async () => {
+      const player = new MinecraftPlayer();
+      await player.fetch(user._id);
       const lang = getLanguagePack(request.cookies.lang);
-      const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), { user, lang, nav });
+      const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), { user, lang, nav, player });
       
       response.render('template.ejs', { body, user, lang, nav });
     });
@@ -130,13 +132,19 @@ options.isSuccess
 server.listen(80, async () => {
   log(`Основной сервер запущен`, 'g');
   mcs.launch()
-  await mcs.fetchResoursePackIcons();
+  try {
+    await mcs.fetchWhitelist();
+    await mcs.fetchResoursePackIcons();
+    await mcs.processResoursePackIcons();
+  } catch (error) {
+    console.log(error)
+  }
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
   log(`Тестовый сервер запущен`); 
 })
 
-schedule('0 */3 * * *', async () => {
+schedule('0 */6 * * *', async () => {
   await mcs.processResoursePackIcons();
 });

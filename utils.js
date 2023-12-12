@@ -12,7 +12,7 @@ const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const locale = require(`./static/lang/locale.json`);
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { colors, mongoLogin } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
+const { colors, mongoLogin, dropboxToken, sftpConfig, minecraftServerAPI } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
 
 class User {
   constructor(token) {
@@ -348,7 +348,7 @@ class ImpactiumServer {
     }
     this.connect = {
       origin: "https://mgr.hosting-minecraft.pro",
-      api_key: "ptlc_UTbPzglyHG6y2EtNJA9HkN1qIASd51THGqWUuZMXjFJ",
+      api_key: minecraftServerAPI,
       server_no: "d9aa118c"
     }
     this.players = {}
@@ -393,13 +393,13 @@ class ImpactiumServer {
     await this.getDatabasePlayers();
     await this.getWhitelistPlayers() 
 
-    this.players.nicknames.forEach(nickname => {
+    this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.name === nickname)
       if (!existPlayer) this.command(`whitelist add ${nickname}`);
     });
 
     this.players.whitelist.forEach(player => {
-      if (!this.players.nicknames.includes(player.name)) this.command(`whitelist remove ${player.name}`);
+      if (!this.players.database.includes(player.name)) this.command(`whitelist remove ${player.name}`);
     })
 
     this.command('whitelist reload');
@@ -472,9 +472,7 @@ class ImpactiumServer {
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
     this.ResoursePackInstance = new ResoursePackInstance()
-
-    await this.ResoursePackInstance.archiveResoursePack();
-    await this.ResoursePackInstance.saveHashsumIntoServerProperties();
+    await this.ResoursePackInstance.fetchServerProperties();
 
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
     playersWithFetchedIcon.providers.forEach(async (playerObj, index) => {
@@ -495,12 +493,11 @@ class ResoursePackInstance {
       folder: {},
       file: {}
     }
+    this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
   }
 
   async archiveResoursePack() {
-    this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
-
     return new Promise((resolve, reject) => {
       const output = fs.createWriteStream(this.path.file.resoursePackDestination);
   
@@ -525,8 +522,6 @@ class ResoursePackInstance {
   }
 
   async calculateHashsum() {
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
-
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.path.file.resoursePackDestination);
       const hash = crypto.createHash('sha1');
@@ -545,10 +540,11 @@ class ResoursePackInstance {
     });
   }
   
-  async saveHashsumIntoServerProperties() {
+  async fetchServerProperties() {
     await this.sftp.connect();
+    await this.archiveResoursePack();
     this.hashsum = await this.calculateHashsum();
-    this.link = await this.uploadResoursePackToDropbox();
+    this.link = await this.processResoursePackUpload();
 
     const serverProperties = await this.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
@@ -563,7 +559,7 @@ class ResoursePackInstance {
         resourcePackIndex = i;
       }
     }
-
+    console.log(this.hashsum, "  ------  ", this.link)
     lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
     lines[resourcePackIndex] = `resource-pack=${this.link}`;
 
@@ -571,31 +567,91 @@ class ResoursePackInstance {
     await this.sftp.close();
   }
 
-  async uploadResoursePackToDropbox() {
-    this.accessToken = 'sl.Bri_LQdMvmf3jNBFF0uni7UTG8gTleIKqnSr8DZrMIzPJqXi907jRL3dhRlgSavJgYE0-1DgRqvzz6Ud_wi2B5SRQaUubXtunFRvRs0OqVmXyhlh-XbIZ18nSzT-v-EgKlOOdZEVxFdg6Nncl9uL5q8';
-    this.dropbox = new Dropbox({ accessToken: this.accessToken });
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
+  async processResoursePackUpload() {
+    this.dropbox = new Dropbox({ accessToken: dropboxToken });
+  
+    try {
+      const uploadSuccess = await this.uploadResoursePack()
+      if (!uploadSuccess) throw error;
 
+      const downloadLink = await this.getDownloadLink();
+      if (!!downloadLink) {
+        this.downloadLink = downloadLink; 
+      } else {
+        this.downloadLink = await this.generateDownloadLink()
+      }
+      return this.downloadLink.replace('&dl=0', '&dl=1');
+    } catch (error) {
+      return await this.uploadResoursePackToDropbox();
+    }
+  }
+
+  async isResoursePackExist() {
+    try {
+      const metadata = await this.dropbox.filesGetMetadata({ path: '/Impactium RP.zip' });
+      return !!metadata;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async deleteResoursePack() {
+    try {
+      await this.dropbox.filesDeleteV2({ path: '/Impactium RP.zip' });
+    } catch (error) {
+      if(this.isResoursePackExist()) return await this.deleteResoursePack();
+      return true
+    }
+  }
+
+  async uploadResoursePack() {
     try {
       const fileContent = fs.readFileSync(this.path.file.resoursePackDestination);
-      const date = formatDate()
-
-      await this.dropbox.filesUpload({
-        path: `/ImpactiumRP_${date.time}_${date.date}.zip`,
+      const uploadSuccess = await this.dropbox.filesUpload({
+        path: `/Impactium RP.zip`,
         contents: fileContent,
       });
+      if (uploadSuccess.status === 200) {
+        return uploadSuccess;
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      await this.deleteResoursePack();
+      return await this.uploadResoursePack();
+    }
+      
+  }
 
+  async getDownloadLink() {
+    try {
+      const existingLinks = await this.dropbox.sharingListSharedLinks({
+        path: '/Impactium RP.zip',
+      });
+
+      if (existingLinks.result.links.length > 0) {
+        const firstLink = existingLinks.result.links[0].url;
+        return firstLink
+      } else {
+        return false;
+      }
+    } catch (error) {
+      if (error.status === 409) return false;
+      return await this.getDownloadLink();
+    }
+  }
+
+  async generateDownloadLink() {
+    try {
       const link = await this.dropbox.sharingCreateSharedLinkWithSettings({
-        path: `${destinationPath}`,
+        path: '/Impactium RP.zip',
         settings: {
           requested_visibility: { '.tag': 'public' },
         },
       });
-
-      return link.result.url;
+      return link.result.url
     } catch (error) {
-      const link = await this.uploadResoursePackToDropbox();
-      return link
+      return await this.generateDownloadLink()
     }
   }
 }
@@ -604,12 +660,6 @@ class SFTP {
   constructor() {
     if (!SFTP.instance) {
       this.sftp = new SftpClient();
-      this.config = {
-        host: 'd27.joinserver.xyz',
-        port: 7477,
-        username: 'b8rj8c2t.d9aa118c',
-        password: 'Eevee888'
-      };
       SFTP.instance = this;
     }
 
@@ -618,7 +668,7 @@ class SFTP {
 
   async connect() {
     if (!this.sftp.connected) {
-      await this.sftp.connect(this.config);
+      await this.sftp.connect(sftpConfig);
     }
   }
 
@@ -756,7 +806,7 @@ function formatDate(toDate = false, isPrevDay = false) {
 }
 
 async function getMultiBoard(ids) {
-  const Battleboard = mongo.db().collection("battleboard");
+  const Battleboard = await getDatabase("battleboard");
 
   const numericIds = ids.map(id => parseInt(id)).filter(numericId => !isNaN(numericId));
 
@@ -877,9 +927,14 @@ const mongo = new MongoClient(mongoLogin, {
 });
 
 async function databaseConnect() {
-  if (!mongo.isConnected) {
-    await mongo.connect();
+  try {
+    if (!mongo.isConnected) {
+      await mongo.connect();
+    }
+  } catch (error) {
+    console.log(error)
   }
+
 }
 
 function purge(sourse) {
@@ -889,7 +944,7 @@ function purge(sourse) {
 async function getBattleBoard(params = false) {
   const { battlesLimit = 50, minimumPlayers = 10, minimumGuildPlayers = 5 } = params.filters || {}
   await databaseConnect();
-  const Battleboard = mongo.db().collection("battleboard");
+  const Battleboard = await getDatabase("battleboard");
 
   try {
     if (params) {
