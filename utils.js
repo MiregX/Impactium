@@ -322,17 +322,33 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
     if (player) {
       Object.assign(this, player);
+      this.server = new ImpactiumServer();
+      if (!this.achievments) this.achievments = {}
     }
   }
 
-  setAchievement(type) {
-    if (!this.achievements) this.achievements = {};
-    const validTypes = ['permissions', 'events', 'casual', 'warrior', 'killer', 'donate']
-    if (!validTypes.includes(type)) return 400;
+  async fetchPlayerStatistics() {
+    await this.server.fetchStatistics();
 
-    this.achievements[type] = { 
-      type
-    }
+    const playerStatsFromServer = this.server.players.stats.find(player => player.name === this.nickname.toLowerCase())
+
+    playerStatsFromServer
+      ? this.stats = playerStatsFromServer
+      : this.stats = {}
+
+    this.stats.lastFetched = this.server.players.lastStatsFetch
+
+    await this.save();
+    return this.stats
+  }
+
+  async processPlayerAchievments() {
+    if ((Date.now() - this.stats?.lastFetched) > 1000 * 60 * 10) return await this.fetchPlayerStatistics();
+
+  }
+
+  async setAchievment() {
+    if (!this.achievments) this.achievments = {}
   }
 }
 
@@ -405,7 +421,8 @@ class ImpactiumServer {
     this.command('whitelist reload');
   }
 
-  async fetchAchievements() {
+  async fetchStatistics() {
+    if ((Date.now() - this.players.lastStatsFetch) < 1000 * 60 * 10) return this.players.stats
     try {
       const players = await this.getWhitelistPlayers();
       const results = [];
@@ -424,6 +441,8 @@ class ImpactiumServer {
       }
       
       await this.sftp.close()
+      this.players.stats = results;
+      this.players.lastStatsFetch = Date.now(); 
       return results;
     } catch (error) { return [] }
   }
