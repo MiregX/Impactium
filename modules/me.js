@@ -25,6 +25,8 @@ const setUserAndPlayer = async (request, response, next) => {
 
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
+  const achievmentsInstance = player.initAchievments()
+  await achievmentsInstance.process();
 
   const lang = getLanguagePack(request.cookies.lang);
 
@@ -94,6 +96,7 @@ router.post('/minecraft/setNickname', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.body.newNickname);
     response.status(status).send(request.lang[`errorCode_${status}`]);
+    await mcs.fetchResoursePack();
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
@@ -110,6 +113,17 @@ router.post('/minecraft/setPassword', async (request, response) => {
   }
 });
 
+router.get('/minecraft/getAchievments', async (request, response) => {
+  try {
+    request.player.achievments = request.player.initAchievments();
+    await request.player.achievments.process();
+    response.status(200).send(request.player.achievments);
+  } catch (error) {
+    console.log(error);
+    response.status(500).send(request.lang.errorCode_500);
+  }
+});
+
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
     upload(request, response, async (error) => {
@@ -120,11 +134,14 @@ router.post('/minecraft/setSkin', async (request, response) => {
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
+        await mcs.fetchResoursePack();
 
         ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
         ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
 
+
         response.status(status).send(request.lang[`errorCode_${status}`]);
+        
       } catch (error) {
         response.status(500).send(request.lang.errorCode_500);
       }

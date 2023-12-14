@@ -134,8 +134,7 @@ server.listen(80, async () => {
   mcs.launch()
   try {
     await mcs.fetchWhitelist();
-    await mcs.fetchResoursePackIcons();
-    await mcs.processResoursePackIcons();
+    await mcs.fetchResoursePack();
   } catch (error) {
     console.log(error)
   }
@@ -146,5 +145,5 @@ app.listen(3000, () => {
 })
 
 schedule('0 */6 * * *', async () => {
-  await mcs.processResoursePackIcons();
+  await mcs.processResoursePack();
 });

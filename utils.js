@@ -205,6 +205,7 @@ class Schedule {
     }
   }
 }
+
 class MinecraftPlayer {
   constructor(id) {
     this.id = id;
@@ -308,7 +309,7 @@ class MinecraftPlayer {
       delete this.isFetched
       await Players.updateOne({ _id: this._id }, { $set: this });
       this.isFetched = true;
-    } else {
+    } else if (this.id) {
       delete this.isFetched
       await Players.insertOne(this);
       this.isFetched = true;
@@ -322,33 +323,189 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
     if (player) {
       Object.assign(this, player);
-      this.server = new ImpactiumServer();
       if (!this.achievments) this.achievments = {}
     }
   }
 
-  async fetchPlayerStatistics() {
-    await this.server.fetchStatistics();
+  async fetchStats() {
+    const mcs = new ImpactiumServer();
+    await mcs.fetchStatistics();
 
-    const playerStatsFromServer = this.server.players.stats.find(player => player.name === this.nickname.toLowerCase())
+    const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.nickname)
 
     playerStatsFromServer
-      ? this.stats = playerStatsFromServer
+      ? this.stats = playerStatsFromServer.stats
       : this.stats = {}
 
-    this.stats.lastFetched = this.server.players.lastStatsFetch
+    this.lastStatsFetch = mcs.players.lastStatsFetch
 
     await this.save();
     return this.stats
   }
 
-  async processPlayerAchievments() {
-    if ((Date.now() - this.stats?.lastFetched) > 1000 * 60 * 10) return await this.fetchPlayerStatistics();
+  async process() {
+    if (this.achievments?.processed && (Date.now() - this.achievments?.processed) < 1000 * 60 * 10) return this.achievments
+    if (!this.lastStatsFetch || (Date.now() - this.lastStatsFetch) > 1000 * 60 * 10) await this.fetchStats();
+    this.getCasual()
+    this.getKiller()
+    this.getDefence()
 
+    this.save();
+    return this.achievments
   }
 
-  async setAchievment() {
+  getCasual() {    
+    this.clear('casual');
+
+    this.set({
+      type: 'casual',
+      stage: 'diamonds',
+      score: this.select('mined', 'diamond_ore') + this.select('mined', 'deepslate_diamond_ore'),
+      limit: 10
+    });
+    this.set({
+      type: 'casual',
+      stage: 'netherite',
+      score: this.select('mined', 'ancient_debris'),
+      limit: 4
+    });
+    this.set({
+      type: 'casual',
+      stage: 'totemOfUndying',
+      score: this.select('picked_up', 'totem_of_undying'),
+      limit: 1
+    });
+    this.set({
+      type: 'casual',
+      stage: 'echoShard',
+      score: this.select('picked_up', 'echo_shard'),
+      limit: 1
+    });
+    this.set({
+      type: 'casual',
+      stage: 'reinforcedDeepslate',
+      score: this.select('mined', 'reinforced_deepslate'),
+      limit: 64
+    });
+  }
+
+  getKiller() {
+    this.clear('killer');
+
+    this.set({
+      type: 'killer',
+      stage: 'kills',
+      score: this.select('custom', 'mob_kills'),
+      limit: 500
+    });
+    this.set({
+      type: 'killer',
+      stage: 'wither',
+      score: this.select('killed', 'wither'),
+      limit: 1
+    });
+    this.set({
+      type: 'killer',
+      stage: 'dragon',
+      score: this.select('killed', 'ender_dragon'),
+      limit: 1
+    });
+    this.set({
+      type: 'killer',
+      stage: 'warden',
+      score: this.select('killed', 'warden'),
+      limit: 1
+    });
+    this.set({
+      type: 'killer',
+      stage: 'damage',
+      score: this.select('custom', 'damage_dealt'),
+      limit: 1000000
+    });
+  }
+
+  getDefence() {
+    this.clear('defence');
+    const damageTaken = this.select('custom', 'damage_taken')
+    
+    this.set({
+      type: 'defence',
+      stage: 'damageOne',
+      score: damageTaken,
+      limit: 100000
+    });
+    this.set({
+      type: 'defence',
+      stage: 'damageTwo',
+      score: damageTaken,
+      limit: 250000
+    });
+    this.set({
+      type: 'defence',
+      stage: 'damageThree',
+      score: damageTaken,
+      limit: 500000
+    });
+    this.set({
+      type: 'defence',
+      stage: 'damageFour',
+      score: damageTaken,
+      limit: 750000
+    });
+    this.set({
+      type: 'defence',
+      stage: 'damageFive',
+      score: damageTaken,
+      limit: 1000000
+    });
+  }
+
+  select(type, entity) {
+    return this.stats?.[`minecraft:${type}`]?.[`minecraft:${entity}`] || 0;
+  }
+
+  clear(type) {
     if (!this.achievments) this.achievments = {}
+    this.achievments[type] = { stages: {} }
+  }
+
+  set(ach) {
+    this.achievments[ach.type].stages[ach.stage] = {
+      icon: this.getIcon(ach.stage),
+      score: ach.score,
+      limit: ach.limit,
+      percentage: Math.min((ach.score / ach.limit) * 100, 100),
+      isDone: ach.score >= ach.limit
+    };
+    
+    const doneStages = Object.values(this.achievments[ach.type].stages)
+    .filter(stage => stage.isDone)
+    .length;
+
+    this.achievments[ach.type].doneStages = doneStages
+    this.achievments[ach.type].symbol = this.getRomanianNumber(doneStages);
+    this.achievments.processed = Date.now();
+  }
+
+  getIcon(stage) {
+    return `https://api.impactium.fun/achievment/${stage}.png`
+  }
+
+  getRomanianNumber(number) {
+    switch (number) {
+      case 1:
+        return 'I'
+      case 2:
+        return 'II'
+      case 3:
+        return 'III'
+      case 4:
+        return 'IV'
+      case 5:
+        return 'V'
+      default:
+        '';
+    }
   }
 }
 
@@ -373,15 +530,11 @@ class ImpactiumServer {
   }
 
   launch() {
-    try {
-      this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
-      
-      this.server.on("start", ()=>{
-        log("WS Соединение с панелью управления установлено!", 'y')
-      }) 
-    } catch (error) {
-      console.log(error)
-    }
+    this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
+    
+    this.server.on("start", ()=>{
+      log("WS Соединение с панелью управления установлено!", 'y')
+    })
   }
 
   command(command) {
@@ -397,6 +550,7 @@ class ImpactiumServer {
     this.players.database = distinctNicknames.map(player => player.nickname).filter(n => n);
     return this.players.database;
   }
+
   async getWhitelistPlayers() {
     await this.sftp.connect();
     const players = await this.sftp.read('whitelist.json');
@@ -408,17 +562,22 @@ class ImpactiumServer {
   async fetchWhitelist() {
     await this.getDatabasePlayers();
     await this.getWhitelistPlayers() 
+    let isNewPlayersExist = false;
 
     this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.name === nickname)
-      if (!existPlayer) this.command(`whitelist add ${nickname}`);
+      if (existPlayer) return 
+      this.command(`whitelist add ${nickname}`);
+      isNewPlayersExist = true
     });
 
     this.players.whitelist.forEach(player => {
-      if (!this.players.database.includes(player.name)) this.command(`whitelist remove ${player.name}`);
+      if (this.players.database.includes(player.name)) return 
+      this.command(`whitelist remove ${player.name}`);
+      isNewPlayersExist = true  
     })
 
-    this.command('whitelist reload');
+    if (isNewPlayersExist) this.command('whitelist reload');
   }
 
   async fetchStatistics() {
@@ -447,7 +606,7 @@ class ImpactiumServer {
     } catch (error) { return [] }
   }
 
-  async fetchResoursePackIcons() {
+  async fetchResoursePack() {
     this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
     this.path.file.basic = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
     this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
@@ -487,7 +646,7 @@ class ImpactiumServer {
     fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
   }
 
-  async processResoursePackIcons() {
+  async processResoursePack() {
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
     this.ResoursePackInstance = new ResoursePackInstance()
