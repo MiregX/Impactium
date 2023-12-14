@@ -5,10 +5,9 @@ const { User, Guild, GuildStatisticsInstance, getDatabase, saveDatabase, log } =
 
 const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
 
-const secrets = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
 const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
 
-const rest = new REST({ version: '10' }).setToken(secrets.discordBotToken);
+const rest = new REST({ version: '10' }).setToken(process.env.discordBotToken);
 
 const client = new Client({
   intents: [
@@ -287,7 +286,7 @@ async function clearStaticticsFieldsFromDatabase() {
 
 (async () => {
   try {
-    await rest.put(Routes.applicationCommands(secrets.discordClientID), { body: commands });
+    await rest.put(Routes.applicationCommands(process.env.discordClientID), { body: commands });
   } catch (error) {
     console.error(error);
   }
@@ -358,7 +357,7 @@ schedule('0 0 * * *', async () => {
   clearStaticticsFieldsFromDatabase();
 });
 
-client.login(secrets.discordBotToken);
+client.login(process.env.discordBotToken);
 
 module.exports = {
   toggleAdminPermissions,

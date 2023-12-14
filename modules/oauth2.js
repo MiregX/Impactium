@@ -1,10 +1,11 @@
+require('dotenv').config();
 const fs = require('fs');
 const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { getDatabase, generateToken } = require('../utils');
-const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
+const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = process.env
 
 const router = express.Router();
 

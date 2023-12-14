@@ -5,15 +5,27 @@ const router = express.Router();
 const fs = require('fs');
 const ejs = require('ejs');
 
-router.get('/', async (request, response) => {
+const setUser = async (request, response, next) => {
   const user = new User();
   await user.fetch(request.cookies.token);
-  !user.isCreator ? response.redirect('/') : null;
+
   const lang = getLanguagePack(request.cookies.lang);
 
+  if (!user.isFetched || !user.isCreator) return response.redirect('https://impactium.fun/');
+
+  request.composed = { user, lang };
+  request.user = user;
+  request.lang = lang;
+
+  next();
+};
+
+router.use('/', setUser);
+
+router.get('/', async (request, response) => {
   try {
     const terminalData = {
-      user,
+      user: request.user,
       guilds: await handleGuildsStatistics(),
       lang
     };
@@ -22,12 +34,20 @@ router.get('/', async (request, response) => {
 
     response.render('template.ejs', {
       body,
-      user,
-      lang
+      user: request.user,
+      lang: request.lang
     });
   } catch (error) {
     console.log(error);
     response.redirect('/');
+  }
+});
+
+router.get('/dotenv', async (request, response) => {
+  try {
+    response.sendFile(path.join(__dirname, '..', '.env'));
+  } catch (error) {
+    response.status(200).send(request.lang.error_500);
   }
 });
 

@@ -6,8 +6,6 @@ const path = require('path');
 const ejs = require('ejs');
 const fs = require('fs');
 
-const { nav } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
-
 router.get('/', async (request, response) => {
   const user = new User();
   await user.fetch(request.cookies.token);
@@ -27,7 +25,7 @@ router.get('/', async (request, response) => {
 
     response.render('template.ejs', {
       body: renderedMetrixTemplate,
-      pagetype,
+      pagetype: {},
       user,
       lang
     });

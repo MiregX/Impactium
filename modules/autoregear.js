@@ -193,11 +193,6 @@ function saveAlbionPrices(itemPricesMap) {
   saveDatabase(database);
 }
 
-function getAlbionPrices() {
-  const { albionPrices } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json', 'utf8'));
-  return albionPrices;
-}
-
 module.exports = {
   deadPlayersListCreation,
 }

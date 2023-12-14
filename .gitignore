@@ -1,15 +1,13 @@
 # Logs
 logs
-node_modules
 static/images/*
+node_modules
 *.log
 minecraft_server/
 minecraft_server
 *.json
 *.png
 *.webp
-resourse_pack
-resourse_pack/*
 *.jpg
 *.jpeg
 npm-debug.log*
@@ -139,8 +137,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-*.json
-*.json
-json/codes_and_tokens.json
-*.json
-json/statistics.json

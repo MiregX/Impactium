@@ -12,7 +12,7 @@ const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const locale = require(`./static/lang/locale.json`);
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { colors, mongoLogin, dropboxToken, sftpConfig, minecraftServerAPI } = JSON.parse(fs.readFileSync('json/codes_and_tokens.json'), 'utf8');
+const { mongoLogin, dropboxToken, sftpConfig, minecraftServerAPI } = process.env;
 
 class User {
   constructor(token) {
@@ -846,7 +846,7 @@ class SFTP {
 
   async connect() {
     if (!this.sftp.connected) {
-      await this.sftp.connect(sftpConfig);
+      await this.sftp.connect(JSON.parse(sftpConfig));
     }
   }
 
@@ -929,9 +929,18 @@ async function getDatabase(collection) {
 }
 
 function log(...args) {
+  const colors = {
+    r: "\u001b[31m",
+    g: "\u001b[32m",
+    y: "\u001b[33m",
+    b: "\u001b[34m",
+    p: "\u001b[35m",
+    c: "\u001b[36m",
+    o: "\u001b[0m"
+  }
+
   let message = '';
   let color = 'o';
-
   for (const arg of args) {
     if (typeof arg === 'string') {
       if (arg in colors) {

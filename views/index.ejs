@@ -241,9 +241,11 @@
     <div class="center flex-dir-column">
       <p class="main-text"><%= lang.joinToUs %></p>
       <div class="descriptions-wrapper flex flex-dir-column align-center">
-        <% lang.joinToUsDescription.forEach(text => { %>
-          <p class="support-text"><%= text %></p>
-        <% }) %>
+        <% if (lang.joinToUsDescription.length > 3) { %>
+          <% lang.joinToUsDescription.forEach(text => { %>
+            <p class="support-text"><%= text %></p>
+          <% }) %>
+        <% } %>
       </div>
     </div>
   </div>
