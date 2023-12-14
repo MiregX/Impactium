@@ -205,19 +205,19 @@ options.isSuccess
 ? // Если ключ правильный и сертификат найден
 server.listen(80, async () => {
   log(`Основной сервер запущен`, 'g');
-  processHosting;
+  processHosting();
 })
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
   log(`Тестовый сервер запущен`);
-  processHosting;
+  processHosting();
 })
 
 const processHosting = async () => {
   try {
     mcs.launch();
-    mcs.fetchWhitelist();
-    mcs.fetchResoursePack();
+    await mcs.fetchWhitelist();
+    await mcs.fetchResoursePack();
   } catch (error) {
     console.log(error);
   }

@@ -1,0 +1,808 @@
+{
+  "login": {
+    "uk": "Увійти",
+    "it": "Accesso",
+    "en": "Login",
+    "ru": "Войти"
+  },
+  "logout": {
+    "uk": "Вийти",
+    "it": "Disconnettersi",
+    "en": "Logout",
+    "ru": "Выйти"
+  },
+  "partners": {
+    "uk": "Партнери",
+    "it": "Partner",
+    "en": "Partners",
+    "ru": "Партнёры"
+  },
+  "products": {
+    "uk": "Сервіси",
+    "it": "Servizzi",
+    "en": "Services",
+    "ru": "Сервисы"
+  },
+  "cont": {
+    "uk": "Сервіси",
+    "it": "Servizzi",
+    "en": "Services",
+    "ru": "Сервисы"
+  },
+  "joinToUs": {
+    "uk": "Приєднуйтесь до нас",
+    "it": "Unisciti a noi",
+    "en": "Join Our Community",
+    "ru": "Присоединяйтесь к нам"
+  },
+  "joinToUsDescription": [
+    {
+      "uk": "Ми - причина всіх твоїх невдач. Ми поставимо тобі трагедію в двох актах.",
+      "it": "Noi siamo la causa di tutti i tuoi fallimenti. Organizzeremo per te una tragedia in due atti.",
+      "en": "We are the cause of all your failures. We will stage a tragedy for you in two acts.",
+      "ru": "Мы - причина всех твоих неудач. Мы устроим тебе трагедию в двух актах."
+    },
+    {
+      "uk": "Втративши все, ціна перемоги зростає в нескінченність. Ми позбавимо тебе всього, до чого ти коли-небудь торкався.",
+      "it": "Perdendo tutto, il costo della vittoria cresce all'infinito. Ti priviamo di tutto ciò a cui hai mai toccato.",
+      "en": "Losing everything, the price of victory grows to infinity. We will deprive you of everything you have ever touched.",
+      "ru": "Потеряв всё, цена победы растёт в бесконечность. Мы лишим тебя всего, к чему ты когда либо прикасался."
+    },
+    {
+      "uk": "Не існує таких вибачень, які ти міг би сказати собі, за всю ту слабкість, яку ти виявив.",
+      "it": "Non esistono scuse che tu possa dire a te stesso per tutta quella debolezza che hai mostrato.",
+      "en": "There are no apologies you could say to yourself for all that weakness you've shown.",
+      "ru": "Не существует таких извинений, которые ты мог бы сказать себе, за всю ту слабость, которую ты проявил."
+    },
+    {
+      "uk": "Використання наших технологій несе за собою абсолютну відповідальність. Готовий ти цю відповідальність прийняти?",
+      "it": "L'uso delle nostre tecnologie comporta una responsabilità assoluta. Sei pronto a assumerti questa responsabilità?",
+      "en": "Using our technologies carries absolute responsibility. Are you ready to take on this responsibility?",
+      "ru": "Использование наших технологий несёт за собой абсолютную ответственность. Готов ли ты эту ответственность принять?"
+    },
+    {
+      "uk": "Морально-етичні обмеження закінчуються там, де починається зручність сверх-хижаків.",
+      "it": "I limiti morali ed etici finiscono dove inizia il comfort degli iper-predatori.",
+      "en": "Moral and ethical constraints end where the convenience of super-predators begins.",
+      "ru": "Морально-этические ограничения заканчиваются там, где начинается удобство сверх-хищников."
+    }
+  ],
+  "ourPartners": {
+    "uk": "Наші партнери",
+    "it": "I nostri partner",
+    "en": "Our Partners",
+    "ru": "Наши партнеры"
+  },
+  "contact": {
+    "uk": "Контакти",
+    "it": "Contatti",
+    "en": "Contacts",
+    "ru": "Контакты"
+  },
+  "backToMain": {
+    "uk": "Повернутися на головну",
+    "it": "Torna alla pagina principale",
+    "en": "Back to main",
+    "ru": "Вернуться на главную"
+  },
+  "totalMembers": {
+    "statisticsName": {
+      "uk": "Кількість учасників",
+      "it": "Membri totali",
+      "en": "Total Members",
+      "ru": "Кол-во участников"
+    },
+    "statisticsNameFull": {
+      "uk": "Загальна кількість учасників на сервері",
+      "it": "Membri totali nel server",
+      "en": "Total members on the server",
+      "ru": "Общее количество участников на сервере"
+    }
+  },
+  "onlineMembers": {
+    "statisticsName": {
+      "uk": "Учасників онлайн",
+      "it": "Membri online",
+      "en": "Online Members",
+      "ru": "Кол-во онлайн"
+    },
+    "statisticsNameFull": {
+      "uk": "Загальна кількість учасників в мережі",
+      "it": "Membri online nel server",
+      "en": "Total members online",
+      "ru": "Общее количество участников в сети"
+    }
+  },
+  "playingMembers": {
+    "statisticsName": {
+      "uk": "Учасників у грі",
+      "it": "Membri che giocano",
+      "en": "Playing Members",
+      "ru": "Кол-во игроков"
+    },
+    "statisticsNameFull": {
+      "uk": "Загальна кількість учасників, які грають",
+      "it": "Membri che giocano nel server",
+      "en": "Total members playing",
+      "ru": "Общее количество участников в игре"
+    }
+  },
+  "voiceMembers": {
+    "statisticsName": {
+      "uk": "Активність в голосовому чаті",
+      "it": "Membri in chat vocale",
+      "en": "Voice Activity",
+      "ru": "Активность в гол."
+    },
+    "statisticsNameFull": {
+      "uk": "Активність в голосових каналах",
+      "it": "Attività vocale nel server",
+      "en": "Voice activity in channels",
+      "ru": "Активность в голосовых каналах"
+    }
+  },
+  "uniqueUsersVoiceActivity": {
+    "statisticsName": {
+      "uk": "Унікальних кор. в войсі",
+      "it": "Utenti unici in chat vocale",
+      "en": "Unique Voice Users",
+      "ru": "Уникальных в голосовых."
+    },
+    "statisticsNameFull": {
+      "uk": "Кількість унікальних приєднань до голосових каналів",
+      "it": "Utenti unici in chat vocale nel server",
+      "en": "Number of unique joins in voice channels",
+      "ru": "Количество уникальных присоединений в голосовые каналы"
+    }
+  },
+  "messagesFromUniqueUsers": {
+    "statisticsName": {
+      "uk": "Унікальних кор. в чаті",
+      "it": "Messaggi da utenti unici",
+      "en": "Messages from Unique Users",
+      "ru": "Уникальных участников в чате"
+    },
+    "statisticsNameFull": {
+      "uk": "Кількість унікальних користувачів, які писали в чат",
+      "it": "Messaggi da utenti unici nel server",
+      "en": "Number of unique users who messaged in chat",
+      "ru": "Количество уникальных пользователей написавших в чат"
+    }
+  },
+  "messagesPerHour": {
+    "statisticsName": {
+      "uk": "Повідомлень в год.",
+      "it": "Numero messaggi/ora",
+      "en": "Messages per hour",
+      "ru": "Кол-во сообщений в час"      
+    },
+    "statisticsNameFull": {
+      "uk": "Кількість унікальних користувачів, які писали в чат",
+      "it": "Messaggi da utenti unici nel server",
+      "en": "Number of unique users who messaged in chat",
+      "ru": "Количество уникальных пользователей написавших в чат"
+    }
+  },
+  "totalRegionalMembers": {
+    "statisticsName": {
+      "uk": "Учасників з регіону",
+      "it": "Membri totali della regione",
+      "en": "Total regional members",
+      "ru": "Участники из региона"
+    },
+    "statisticsNameFull": {
+      "uk": "Кількість учасників з регіону, вказаних як основних у налаштуваннях серверу",
+      "it": "Numero totale dei membri regionali specificati come principali nelle impostazioni del server",
+      "en": "Total number of regional members specified as primary in server settings",
+      "ru": "Общее количество участников из региона, указанных как основные в настройках сервера"
+    }
+  },
+  "playerNotRegisteredYet": {
+    "uk": "Немає акаунту",
+    "it": "",
+    "en": "No account",
+    "ru": "Нет аккаунта"
+  },
+  "playerHasNoNickname": {
+    "uk": "Немає ігрового імені",
+    "it": "",
+    "en": "No nickname",
+    "ru": "Нет никнейма"
+  },
+  "skinChangeWouldBeAbleAgainOn": {
+    "uk": "Ви зможете змінити вигляд через:",
+    "it": "Potrai cambiare di nuovo l'aspetto tra:",
+    "en": "You would be able to change your skin again in:",
+    "ru": "Вы сможете снова сменить облик через:"
+  },
+  "skinNotSettled": {
+    "uk": "Ви не встановили костюм",
+    "it": "Non hai impostato la skin",
+    "en": "You have not set the skin",
+    "ru": "Вы не установили скин"
+  },
+  "myProfile": {
+    "uk": "Мій профіль",
+    "it": "Il mio profilo",
+    "en": "My profile",
+    "ru": "Мой профиль"
+  },
+  "changeNickname": {
+    "uk": "Змінити нікнейм",
+    "it": "Cambia nickname",
+    "en": "Change nickname",
+    "ru": "Изменить никнейм"
+  },
+  "enterNickname": {
+      "uk": "Введіть нікнейм",
+      "it": "Inserisci nickname",
+      "en": "Enter nickname",
+      "ru": "Введи ник"
+  },
+  "changeSkin": {
+      "uk": "Змінити вигляд",
+      "it": "Cambia skin",
+      "en": "Change skin",
+      "ru": "Изменить облик"
+  },
+  "playOnOurProject": {
+    "uk": "Грай на нашому проекті, чудіще єбліве",
+    "it": "Gioca sul nostro progetto, mostriciattolo dannato",
+    "en": "Play on our project, you stupid nigger",
+    "ru": "Играй на нашем проекте, чудище ебаное"
+  },
+  "administrationNotIntervenes": {
+    "uk": "Адміністрація не втручається в ігровий процес",
+    "it": "L'amministrazione non interviene nel processo di gioco",
+    "en": "Administration does not intervene in the gameplay",
+    "ru": "Администрация не вмешивается в игровой процесс"
+  },
+  "openWorldWithoutPrivates": {
+    "uk": "Відкритий світ без привату. Будуй і ламай де завгодно",
+    "it": "Mondo aperto senza privati. Costruisci e distruggi dove vuoi",
+    "en": "Open world without privates. Build and break wherever you want",
+    "ru": "Открытый мир без привата. Строй и ломай где хочешь"
+  },
+  "sendAthletesAgainstNonRP": {
+    "uk": "Висилаємо спортиків проти нон-РП гриферів",
+    "it": "Inviamo atleti contro i griefer non RP",
+    "en": "Send athletes against non-RP griefers",
+    "ru": "Высылаем спортиков против нон-РП гриферов"
+  },
+  "uniqueRewardsSystem": {
+    "uk": "Унікальна система заохочень. Заходь на сервер раз в добу і тоді файлик з папки mods не знесе тобі вінду",
+    "it": "Sistema di ricompense unico. Entra nel server una volta al giorno e allora il file dalla cartella mods non ti cancellerà Windows",
+    "en": "Unique rewards system. Log in to the server once a day and then the file from the mods folder won't wipe your Windows",
+    "ru": "Уникальная система поощрений. Заходи на сервер раз в сутки и тогда файлик с папки mods не снесёт тебе винду"
+  },
+  "masterpieceRoleplayWithAdmins": {
+    "uk": "Шедевроролплей з адмінкою та кристалами",
+    "it": "Capolavoro del gioco di ruolo con gli admin e i cristalli",
+    "en": "Masterpiece roleplay with admins and crystals",
+    "ru": "Шедевроролплей с админкой и кристалами"
+  },
+  "donateAndGetUniqueSkin": {
+    "uk": "Задонать 15 гривень і отримай унікальний скин пісюна на меч",
+    "it": "Donare 15 grivne e ricevi una skin unica del pene sulla spada",
+    "en": "Donate 15 hryvnias and get a unique penis skin on the sword",
+    "ru": "Задонати 15 гривень і отримай унікальний скин пісюна на меч"
+  },
+  "changePassword": {
+      "uk": "Змінити пароль",
+      "it": "Cambia la password",
+      "en": "Change password",
+      "ru": "Изменить пароль"
+  },
+  "enterNewPassword": {
+      "uk": "Введіть новий пароль",
+      "it": "Inserisci nuova password",
+      "en": "Enter new password",
+      "ru": "Введи новый пароль"
+  },
+  "saveChanges": {
+      "uk": "Зберегти зміни",
+      "it": "Salva modifiche",
+      "en": "Save changes",
+      "ru": "Изменить профиль"
+  },
+  "register": {
+      "uk": "Зареєструватися",
+      "it": "Registrati",
+      "en": "Register",
+      "ru": "Зарегестрироваться"
+  },
+  "confirm": {
+      "uk": "Підтвердити",
+      "it": "Conferma",
+      "en": "Confirm",
+      "ru": "Подтвердить"
+  },
+  "apply": {
+      "uk": "Зберегти",
+      "it": "Applica",
+      "en": "Apply",
+      "ru": "Сохранить"
+  },
+  "achievmentTitle_casual": {
+      "uk": "Казуальність",
+      "it": "",
+      "en": "Casuality",
+      "ru": "Казуальность"
+  },
+  "achievmentTitle_killer": {
+      "uk": "Вбивця",
+      "it": "Assasino",
+      "en": "Killer",
+      "ru": "Убийца"
+  },
+  "achievmentTitle_defence": {
+      "uk": "Воїн",
+      "it": "",
+      "en": "Warrior",
+      "ru": "Воин"
+  },
+  "achievmentTitle_hammer": {
+      "uk": "Відданість",
+      "it": "Devozione",
+      "en": "Devotion",
+      "ru": "Преданность"
+  },
+  "achievmentTitle_event": {
+      "uk": "Тусовщик",
+      "it": "Eventi",
+      "en": "Events",
+      "ru": "Тусовщик"
+  },
+  "achievmentTitle_donate": {
+      "uk": "Донатер",
+      "it": "Donatore",
+      "en": "Donator",
+      "ru": "Донатер"
+  },
+  "becomeMayor_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Мы будем строить и реконструировать"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Побывать мером спавна"
+    }
+  },
+  "playsFromFirstSeason_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Настоящий олд"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Наиграть на первом сезоне 50 часов"
+    }
+  },
+  "petition_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Подпишите мою петицию!"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Собрать митинг за ваше президенство"
+    }
+  },
+  "diamonds_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Блестяшки"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Добыть 10 алмазной руды"
+    }
+  },
+  "netherite_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "В первый раз...?"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Добыть 4 древних обломка"
+    }
+  },
+  "endStone_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Великая разчистка"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Добыть 2048 эндерняка"
+    }
+  },
+  "shrieker_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Похоже это лишнее"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Разрушить 16 скалк-крикунов"
+    }
+  },
+  "reinforcedDeepslate_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Безумец блять."
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Сломать 64 блока рамки портала"
+    }
+  },
+  "damageOne_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Хлюпик"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Получить 100.000 урона"
+    }
+  },
+  "damageTwo_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Шнурок"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Получить 250.000 урона"
+    }
+  },
+  "damageThree_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Тюбик"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Получить 500.000 урона"
+    }
+  },
+  "damageFour_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Воин"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Получить 750.000 урона"
+    }
+  },
+  "damageFive_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Неуязвимый"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Получить 1.000.000 урона"
+    }
+  },
+  "kills_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Охотник"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Убить 500 существ"
+    }
+  },
+  "wither_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Это потому что я чёрный?"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Запиздячить Иссушителя"
+    }
+  },
+  "dragon_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Э, а где яйца!"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Нахлабучить Эндер-дракона"
+    }
+  },
+  "warden_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Типа крутой"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Затыкать Вардена"
+    }
+  },
+  "damage_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Ведьмак"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Нанести 1.000.000 урона"
+    }
+  },
+  "eventOne_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Великая застройка"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Поучавствовать в обустройстве спавна"
+    }
+  },
+  "eventTwo_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Инфарктиум момент"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Побывать на ивенте"
+    }
+  },
+  "eventThree_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Тяните карту Мистер Лис"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Выиграть в казино / аукционе 3 раза"
+    }
+  },
+  "eventFour_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Организатор"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Провести событие / ивент"
+    }
+  },
+  "eventFive_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Дикий флекс"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Провести 10 событий / ивентов"
+    }
+  },
+  "donaterOne_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Филантроп"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Пожертвовать серверу 10$"
+    }
+  },
+  "donaterTwo_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Благодеятель"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Пожертвовать серверу 20$"
+    }
+  },
+  "donaterThree_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Верни маме карту"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Пожертвовать серверу 30$"
+    }
+  },
+  "donaterFour_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Акционер"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Пожертвовать серверу 40$"
+    }
+  },
+  "donaterFive_todo": {
+    "title": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Инвестор"
+    },
+    "description": {
+      "uk": "",
+      "it": "",
+      "en": "",
+      "ru": "Пожертвовать серверу 50$"
+    }
+  },
+  "errorCode_400": {
+    "uk": "Ви не авторизовані",
+    "it": "Non sei autorizzato",
+    "en": "You are not authorized",
+    "ru": "Вы не авторизированы"
+  },
+  "errorCode_410": {
+    "uk": "Невірне розширення файлу",
+    "it": "Estensione del file non valida",
+    "en": "Invalid file extension",
+    "ru": "Неверное разширение файла"
+  },
+  "errorCode_411": {
+    "uk": "Скін повинен мати розмір 64 на 64 пікселі",
+    "it": "Lo skin deve essere di dimensioni 64 per 64 pixel",
+    "en": "Skin must be 64 by 64 pixels in size",
+    "ru": "Скин должен быть размером 64 на 64 пикселя"
+  },
+  "errorCode_412": {
+    "uk": "Невірний регістр. Дозволяються тільки a-z, 0-9, '_'",
+    "it": "Maiuscole non valide. Consentiti solo a-z, 0-9, '_'",
+    "en": "Invalid case. Only a-z, 0-9, '_' are allowed",
+    "ru": "Неверный регистр. Разрешаются только a-z, 0-9, '_'"
+  },
+  "errorCode_413": {
+    "uk": "Нікнейм повинен бути від 3 до 32 символів",
+    "it": "Il nickname deve essere lungo da 3 a 32 caratteri",
+    "en": "Nickname must be between 3 and 32 characters",
+    "ru": "Никнейм должен быть от 3 до 32 символов"
+  },
+  "errorCode_414": {
+    "uk": "Зовнішній вигляд можна змінювати лише раз на 24 години",
+    "it": "L'aspetto può essere cambiato solo una volta ogni 24 ore",
+    "en": "Appearance can be changed only once in 24 hours",
+    "ru": "Облик можно менять только раз в 24 часа"
+  },
+  "errorCode_415": {
+    "uk": "Нікнейм можна змінювати лише раз на годину",
+    "it": "Il nickname può essere cambiato solo una volta all'ora",
+    "en": "Nickname can be changed only once per hour",
+    "ru": "Никнейм можно менять только раз час"
+  },
+  "errorCode_416": {
+    "uk": "Гравець з таким нікнеймом вже існує",
+    "it": "Giocatore con lo stesso nickname già esistente",
+    "en": "Player with such nickname already exists",
+    "ru": "Игрок с таким ником уже существует"
+  },  
+  "errorCode_500": {
+    "uk": "Внутрішня помилка сервера",
+    "it": "Errore interno del server",
+    "en": "Internal server error",
+    "ru": "Внутренняя ошибка сервера"
+  }
+}

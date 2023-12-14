@@ -7,6 +7,7 @@ const ejs = require('ejs');
 const fs = require('fs');
 
 router.get('/', async (request, response) => {
+  return response.status(200).send();
   const user = new User();
   await user.fetch(request.cookies.token);
   const lang = getLanguagePack(request.cookies.lang);
@@ -35,6 +36,7 @@ router.get('/', async (request, response) => {
 });
 
 router.get('/search/:name', async (request, response) => {
+  return response.status(200).send();
   response.setHeader('Cache-Control', 'no-store');
   const { isEnabled, battlesLimit, minimumPlayers, minimumGuildPlayers } = request.cookies.filters || {};
   const filters = isEnabled ? { battlesLimit, minimumPlayers, minimumGuildPlayers } : {}
@@ -78,6 +80,7 @@ router.get('/search/:name', async (request, response) => {
 });
 
 router.get('/battle/:ids', async (request, response) => {
+  return response.status(200).send();
   const ids = request.params.ids.split(',');
   const user = new User();
   await user.fetch(request.cookies.token);
@@ -125,9 +128,5 @@ async function cyclicUpdateBattleBoard() {
     setTimeout(cyclicUpdateBattleBoard, 1000);
   }
 }
-
-
-cyclicUpdateBattleBoard();
-
 
 module.exports = router;

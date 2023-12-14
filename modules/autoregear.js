@@ -4,6 +4,7 @@ const { getBattleBoard, log, getDatabase, saveDatabase, getUnknownUser } = requi
 const discord = require('../discord');
 
 async function deadPlayersListCreation(data) {
+  return
   const database = getDatabase();
   let foundCount = 0;
   const playersList = [];
@@ -46,6 +47,7 @@ async function deadPlayersListCreation(data) {
 }
 
 async function getPricesForVictimsInventory(playersList) {
+  return
   const playersListDebug = playersList;
   let database = getDatabase();
   try {
@@ -110,6 +112,7 @@ async function getPricesForVictimsInventory(playersList) {
 
 
 function summarizeItemPrices(response) {
+  return
   const itemPricesMap = new Map();
 
   response.data.forEach(item => {
@@ -135,6 +138,7 @@ function summarizeItemPrices(response) {
 }
 
 async function getDeathInfoFromLedger(playerData) {
+  return
   try {
     const response = await axios.get(`https://murderledger.com/api/players/${playerData.name}/events?skip=0&sort=time&take=50`, {
       timeout: 10000,

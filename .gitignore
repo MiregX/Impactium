@@ -3,9 +3,6 @@ logs
 static/images/*
 node_modules
 *.log
-minecraft_server/
-minecraft_server
-*.json
 *.png
 *.webp
 *.jpg
@@ -37,6 +34,7 @@ coverage
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
+resourse_pack/*
 
 # Bower dependency directory (https://bower.io/)
 bower_components

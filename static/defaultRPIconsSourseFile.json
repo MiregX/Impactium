@@ -1,0 +1,40 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/steve.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "\u4996"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/logopt1.png",
+            "ascent": 0,
+            "height": 33,
+            "chars": [
+                "\u4997"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/logopt2.png",
+            "ascent": 0,
+            "height": 33,
+            "chars": [
+                "\u4998"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/logopt3.png",
+            "ascent": 0,
+            "height": 33,
+            "chars": [
+                "\u4999"
+            ]
+        }
+    ]
+}

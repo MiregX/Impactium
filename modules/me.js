@@ -25,8 +25,8 @@ const setUserAndPlayer = async (request, response, next) => {
 
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
-  const achievmentsInstance = player.initAchievments()
-  await achievmentsInstance.process();
+  const achievementsInstance = player.initAchievements()
+  await achievementsInstance.process();
 
   const lang = getLanguagePack(request.cookies.lang);
 
@@ -113,11 +113,11 @@ router.post('/minecraft/setPassword', async (request, response) => {
   }
 });
 
-router.get('/minecraft/getAchievments', async (request, response) => {
+router.get('/minecraft/getAchievements', async (request, response) => {
   try {
-    request.player.achievments = request.player.initAchievments();
-    await request.player.achievments.process();
-    response.status(200).send(request.player.achievments);
+    request.player.achievements = request.player.initAchievements();
+    await request.player.achievements.process();
+    response.status(200).send(request.player.achievements);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);

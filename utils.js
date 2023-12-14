@@ -297,7 +297,7 @@ class MinecraftPlayer {
     }
   }
 
-  initAchievments() {
+  initAchievements() {
     return new MinecraftPlayerAchievementInstance(this);
   }
 
@@ -323,7 +323,7 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
 
     if (player) {
       Object.assign(this, player);
-      if (!this.achievments) this.achievments = {}
+      if (!this.achievements) this.achievements = {}
     }
   }
 
@@ -344,14 +344,14 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
   }
 
   async process() {
-    if (this.achievments?.processed && (Date.now() - this.achievments?.processed) < 1000 * 60 * 10) return this.achievments
+    if (this.achievements?.processed && (Date.now() - this.achievements?.processed) < 1000 * 60 * 10) return this.achievements
     if (!this.lastStatsFetch || (Date.now() - this.lastStatsFetch) > 1000 * 60 * 10) await this.fetchStats();
     this.getCasual()
     this.getKiller()
     this.getDefence()
 
     this.save();
-    return this.achievments
+    return this.achievements
   }
 
   getCasual() {    
@@ -371,15 +371,15 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
     });
     this.set({
       type: 'casual',
-      stage: 'totemOfUndying',
-      score: this.select('picked_up', 'totem_of_undying'),
-      limit: 1
+      stage: 'endStone',
+      score: this.select('mined', 'end_stone'),
+      limit: 2048
     });
     this.set({
       type: 'casual',
-      stage: 'echoShard',
-      score: this.select('picked_up', 'echo_shard'),
-      limit: 1
+      stage: 'shrieker',
+      score: this.select('mined', 'sculk_shrieker'),
+      limit: 16
     });
     this.set({
       type: 'casual',
@@ -465,30 +465,30 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
   }
 
   clear(type) {
-    if (!this.achievments) this.achievments = {}
-    this.achievments[type] = { stages: {} }
+    if (!this.achievements) this.achievements = {}
+    this.achievements[type] = { stages: {} }
   }
 
   set(ach) {
-    this.achievments[ach.type].stages[ach.stage] = {
+    this.achievements[ach.type].stages[ach.stage] = {
       icon: this.getIcon(ach.stage),
       score: ach.score,
       limit: ach.limit,
-      percentage: Math.min((ach.score / ach.limit) * 100, 100),
+      percentage: Math.min(Math.floor((ach.score / ach.limit) * 100), 100),
       isDone: ach.score >= ach.limit
     };
     
-    const doneStages = Object.values(this.achievments[ach.type].stages)
+    const doneStages = Object.values(this.achievements[ach.type].stages)
     .filter(stage => stage.isDone)
     .length;
 
-    this.achievments[ach.type].doneStages = doneStages
-    this.achievments[ach.type].symbol = this.getRomanianNumber(doneStages);
-    this.achievments.processed = Date.now();
+    this.achievements[ach.type].doneStages = doneStages
+    this.achievements[ach.type].symbol = this.getRomanianNumber(doneStages);
+    this.achievements.processed = Date.now();
   }
 
   getIcon(stage) {
-    return `https://api.impactium.fun/achievment/${stage}.png`
+    return `https://api.impactium.fun/achievement/${stage}.png`
   }
 
   getRomanianNumber(number) {
@@ -837,7 +837,11 @@ class ResoursePackInstance {
 class SFTP {
   constructor() {
     if (!SFTP.instance) {
-      this.sftp = new SftpClient();
+      try {
+        this.sftp = new SftpClient();
+      } catch (error) {
+        console.log(error);
+      }
       SFTP.instance = this;
     }
 
@@ -846,7 +850,9 @@ class SFTP {
 
   async connect() {
     if (!this.sftp.connected) {
-      await this.sftp.connect(JSON.parse(sftpConfig));
+      try {
+        await this.sftp.connect(JSON.parse(sftpConfig));
+      } catch (error) { return await this.connect() }
     }
   }
 
@@ -882,6 +888,23 @@ class SFTP {
 
 module.exports = SFTP;
 
+const mongo = new MongoClient(mongoLogin, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function databaseConnect() {
+  try {
+    if (!mongo.isConnected) {
+      await mongo.connect();
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
@@ -1103,25 +1126,6 @@ function ftpUpload(filePathOnHost) {
   });
 
   ftpClient.connect(ftpConfig);
-}
-
-const mongo = new MongoClient(mongoLogin, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function databaseConnect() {
-  try {
-    if (!mongo.isConnected) {
-      await mongo.connect();
-    }
-  } catch (error) {
-    console.log(error)
-  }
-
 }
 
 function purge(sourse) {
