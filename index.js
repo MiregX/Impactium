@@ -177,18 +177,10 @@ app.get('/set-token/:token', (request, response) => {
 const terminalRouter = require('./modules/terminal');
 app.use('/terminal', terminalRouter);
 
-const metrixRouter = require('./modules/metrix');
-app.use('/metrix', metrixRouter);
-
-const phpApp = require('./modules/php/index');
-app.use('/php', phpApp);
-
 const meApp = require('./modules/me');
 app.use('/me', meApp);
 
-const albionApp = require('./modules/albion/guildpanel');
-app.use('/fax', albionApp);
-
+const ggApp = require('./modules/gg');
 const oauth2 = require('./modules/oauth2');
 app.use('/oauth2', oauth2);
 
@@ -216,8 +208,8 @@ app.listen(3000, () => {
 const processHosting = async () => {
   try {
     mcs.launch();
-    await mcs.fetchWhitelist();
-    await mcs.fetchResoursePack();
+    // await mcs.fetchWhitelist();
+    // await mcs.fetchResoursePack();
   } catch (error) {
     console.log(error);
   }

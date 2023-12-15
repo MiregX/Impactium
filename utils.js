@@ -80,6 +80,7 @@ class Guild {
   }
   
   async save() {
+    if (this.player) delete this.player
     const Guilds = await getDatabase("guilds");
     const guild = await Guilds.findOne({ _id: this._id });
 
@@ -210,8 +211,11 @@ class MinecraftPlayer {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
+    this.achievements = new Achievements(this)
   }
-
+  get Achievements() {
+    return this.achievements;
+  }
   async fetch(id = this.id) {
     const Players = await getDatabase("minecraftPlayers");
     const player = await Players.findOne({
@@ -224,12 +228,13 @@ class MinecraftPlayer {
 
     if (player) {
       Object.assign(this, player);
+      this.achievements = { achievements: this.achievements }
+      this.achievements = new Achievements(this)
       this.isFetched = true;
     } else {
       await this.save()
     }
   }
-
   async setNickname(newNickname) {
     if (Date.now() - this.lastNicknameChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
 
@@ -253,7 +258,6 @@ class MinecraftPlayer {
     this.initAuthMe()
     return 200
   }
-  
   async setSkin(originalImageName, imageBuffer) {
     const image = await Jimp.read(imageBuffer);
     const { width, height } = image.bitmap;
@@ -270,7 +274,6 @@ class MinecraftPlayer {
     await this.save();
     return 200
   }
-
   async setPassword(newPassword) {
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 412;
 
@@ -279,7 +282,6 @@ class MinecraftPlayer {
     this.initAuthMe()
     return 200
   }
-
   async register() {
     if (!this.registered) {
       this.registered = Date.now()
@@ -287,7 +289,6 @@ class MinecraftPlayer {
       await this.save()
     }
   }
-
   initAuthMe() {
     if (this.nickname && this.password) {
       const mcs = new ImpactiumServer();
@@ -296,18 +297,24 @@ class MinecraftPlayer {
       mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
     }
   }
-
-  initAchievements() {
-    return new MinecraftPlayerAchievementInstance(this);
+  serialize() {
+    return Object.assign(this, Object.keys(this).reduce((acc, key) => {
+        if (this[key]?.[key] !== undefined) {
+            acc[key] = this[key][key];
+        } else {
+            acc[key] = this[key];
+        }
+        return acc;
+    }, {}));
   }
-
   async save() {
     const Players = await getDatabase("minecraftPlayers");
     const player = await Players.findOne({ _id: this._id });
 
     if (player || this._id) {
       delete this.isFetched
-      await Players.updateOne({ _id: this._id }, { $set: this });
+      const parsed = this.serialize();
+      await Players.updateOne({ _id: this._id }, { $set: parsed });
       this.isFetched = true;
     } else if (this.id) {
       delete this.isFetched
@@ -316,44 +323,45 @@ class MinecraftPlayer {
     }
   }
 }
-
-class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
+class Achievements {
   constructor(player) {
-    super(player ? player.id : null)
-
-    if (player) {
-      Object.assign(this, player);
-      if (!this.achievements) this.achievements = {}
-    }
+    const existAchievements = player.achievements
+    player.achievements = this;
+    this.player = player;
+    this.achievements = existAchievements ? existAchievements : {}
   }
-
-  async fetchStats() {
+  get target() {
+    return this.achievements;
+  }
+  test() {
+    console.log('gg')
+  }
+  async fetch() {
     const mcs = new ImpactiumServer();
     await mcs.fetchStatistics();
 
     const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.nickname)
 
     playerStatsFromServer
-      ? this.stats = playerStatsFromServer.stats
-      : this.stats = {}
+      ? this.player.stats = playerStatsFromServer.player.stats
+      : this.player.stats = {}
 
-    this.lastStatsFetch = mcs.players.lastStatsFetch
+    this.player.stats.processed = mcs.players.lastStatsFetch
 
-    await this.save();
-    return this.stats
+    this.player.isSerialized = false;
+    await this.player.save();
+    return this.player.stats()
   }
-
   async process() {
     if (this.achievements?.processed && (Date.now() - this.achievements?.processed) < 1000 * 60 * 10) return this.achievements
-    if (!this.lastStatsFetch || (Date.now() - this.lastStatsFetch) > 1000 * 60 * 10) await this.fetchStats();
+    if (!this.player.stats?.processed || (Date.now() - this.player.stats?.processed) > 1000 * 60 * 10) await this.fetch();
     this.getCasual()
     this.getKiller()
     this.getDefence()
 
-    this.save();
-    return this.achievements
+    this.player.save();
+    return this
   }
-
   getCasual() {    
     this.clear('casual');
 
@@ -388,7 +396,6 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
       limit: 64
     });
   }
-
   getKiller() {
     this.clear('killer');
 
@@ -423,7 +430,6 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
       limit: 1000000
     });
   }
-
   getDefence() {
     this.clear('defence');
     const damageTaken = this.select('custom', 'damage_taken')
@@ -459,16 +465,12 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
       limit: 1000000
     });
   }
-
   select(type, entity) {
-    return this.stats?.[`minecraft:${type}`]?.[`minecraft:${entity}`] || 0;
+    return this.player.stats?.[`minecraft:${type}`]?.[`minecraft:${entity}`] || 0;
   }
-
   clear(type) {
-    if (!this.achievements) this.achievements = {}
     this.achievements[type] = { stages: {} }
   }
-
   set(ach) {
     this.achievements[ach.type].stages[ach.stage] = {
       icon: this.getIcon(ach.stage),
@@ -486,11 +488,9 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
     this.achievements[ach.type].symbol = this.getRomanianNumber(doneStages);
     this.achievements.processed = Date.now();
   }
-
   getIcon(stage) {
     return `https://api.impactium.fun/achievement/${stage}.png`
   }
-
   getRomanianNumber(number) {
     switch (number) {
       case 1:
@@ -508,7 +508,6 @@ class MinecraftPlayerAchievementInstance extends MinecraftPlayer {
     }
   }
 }
-
 class ImpactiumServer {
   constructor() {
     if (ImpactiumServer.instance) return ImpactiumServer.instance;
@@ -662,7 +661,6 @@ class ImpactiumServer {
     this.command('restart');
   }
 }
-
 class ResoursePackInstance {
   constructor() {
     this.sftp = new SFTP()
@@ -1229,7 +1227,6 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
-  MinecraftPlayerAchievementInstance,
   GuildStatisticsInstance,
   ResoursePackInstance,
   MinecraftPlayer,

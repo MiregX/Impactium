@@ -1,11 +1,9 @@
 const fs = require('fs');
 const https = require('https');
 const { schedule } = require('node-cron');
-const { User, Guild, GuildStatisticsInstance, getDatabase, saveDatabase, log } = require('./utils');
+const { User, Guild, GuildStatisticsInstance, getDatabase, log } = require('./utils');
 
 const { Client, GatewayIntentBits, REST, Routes, ActivityType } = require('discord.js');
-
-const commands = JSON.parse(fs.readFileSync('json/commands.json', 'utf8'));
 
 const rest = new REST({ version: '10' }).setToken(process.env.discordBotToken);
 
@@ -263,7 +261,7 @@ async function summaryUsersFromDiscordServersCounter() {
 
   setTimeout(() => {
     summaryUsersFromDiscordServersCounter();
-  }, 3 * 60 * 1000); // повторять раз в три минуты
+  }, 60 * 60 * 1000);
 }
 
 function setClientPresence(message) {
@@ -286,7 +284,7 @@ async function clearStaticticsFieldsFromDatabase() {
 
 (async () => {
   try {
-    await rest.put(Routes.applicationCommands(process.env.discordClientID), { body: commands });
+    await rest.put(Routes.applicationCommands(process.env.discordClientID), { body: {} });
   } catch (error) {
     console.error(error);
   }
@@ -296,9 +294,9 @@ client.once('ready', () => {
   log('Impactium бот запущен!', 'c');
   log(`----------------------`);
   getGuildsList();
-  summaryUsersFromDiscordServersCounter();
   clearStaticticsFieldsFromDatabase();
-  discordStatistics('', 'totalMembers');
+  // summaryUsersFromDiscordServersCounter();
+  // discordStatistics('', 'totalMembers');
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -339,11 +337,11 @@ client.on('guildMemberRemove', (member) => {
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  discordStatistics(newState.guild.id, 'voiceMembers', oldState, newState);
+  // discordStatistics(newState.guild.id, 'voiceMembers', oldState, newState);
 });
 
 client.on('messageCreate', (message) => {
-  discordStatistics(message.guildId, 'messageActivity', message);
+  // discordStatistics(message.guildId, 'messageActivity', message);
 });
 
 client.on("presenceUpdate", (oldGuildMember, newGuildMember) => {
@@ -361,7 +359,6 @@ client.login(process.env.discordBotToken);
 
 module.exports = {
   toggleAdminPermissions,
-  discordStatistics,
   getGuildsList,
   deleteGuild
 };

@@ -1,4 +1,4 @@
-const { User, ImpactiumServer, MinecraftPlayer, MinecraftPlayerAchievementInstance, getLanguagePack, log, ftpUpload, formatDate } = require('../utils');
+const { User, ImpactiumServer, MinecraftPlayer, getLanguagePack, log, ftpUpload, formatDate } = require('../utils');
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
@@ -20,13 +20,12 @@ const upload = multer({
 }).single('skin');
 
 const setUserAndPlayer = async (request, response, next) => {
+  try {
   const user = new User();
   await user.fetch(request.cookies.token);
 
   const player = new MinecraftPlayer(user._id);
   await player.fetch();
-  const achievementsInstance = player.initAchievements()
-  await achievementsInstance.process();
 
   const lang = getLanguagePack(request.cookies.lang);
 
@@ -38,6 +37,10 @@ const setUserAndPlayer = async (request, response, next) => {
   request.lang = lang;
 
   next();
+  } catch (error) {
+    console.log(error);
+    response.redirect('https://impactium.fun/');
+  }
 };
 
 router.use('/', setUserAndPlayer);
@@ -94,6 +97,7 @@ router.post('/minecraft/register', async (request, response) => {
 
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
+
     const status = await request.player.setNickname(request.body.newNickname);
     response.status(status).send(request.lang[`errorCode_${status}`]);
     await mcs.fetchResoursePack();
@@ -115,9 +119,8 @@ router.post('/minecraft/setPassword', async (request, response) => {
 
 router.get('/minecraft/getAchievements', async (request, response) => {
   try {
-    request.player.achievements = request.player.initAchievements();
-    await request.player.achievements.process();
-    response.status(200).send(request.player.achievements);
+    request.player.achievements.process();
+    response.status(200).send(request.player.serialize());
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
