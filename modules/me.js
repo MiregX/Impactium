@@ -119,7 +119,8 @@ router.post('/minecraft/setPassword', async (request, response) => {
 
 router.get('/minecraft/getAchievements', async (request, response) => {
   try {
-    request.player.achievements.process();
+    log(typeof request.user._id)
+    await request.player.achievements.process();
     response.status(200).send(request.player.serialize());
   } catch (error) {
     console.log(error);

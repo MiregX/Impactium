@@ -180,7 +180,6 @@ app.use('/terminal', terminalRouter);
 const meApp = require('./modules/me');
 app.use('/me', meApp);
 
-const ggApp = require('./modules/gg');
 const oauth2 = require('./modules/oauth2');
 app.use('/oauth2', oauth2);
 

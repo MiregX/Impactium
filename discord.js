@@ -293,8 +293,6 @@ async function clearStaticticsFieldsFromDatabase() {
 client.once('ready', () => {
   log('Impactium бот запущен!', 'c');
   log(`----------------------`);
-  getGuildsList();
-  clearStaticticsFieldsFromDatabase();
   // summaryUsersFromDiscordServersCounter();
   // discordStatistics('', 'totalMembers');
 });
@@ -324,7 +322,6 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.on('guildCreate', () => {
-  getGuildsList();
 });
 
 client.on('guildMemberAdd', (member) => {
@@ -348,11 +345,9 @@ client.on("presenceUpdate", (oldGuildMember, newGuildMember) => {
 });
 
 schedule('0 * * * *', () => {
-  discordStatistics('', 'totalMembers');
 });
 
 schedule('0 0 * * *', async () => {
-  clearStaticticsFieldsFromDatabase();
 });
 
 client.login(process.env.discordBotToken);

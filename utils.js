@@ -4,6 +4,7 @@ const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
+const { ObjectId } = require('bson'); 
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 const { spawn } = require('child_process');
@@ -316,11 +317,19 @@ class MinecraftPlayer {
       const parsed = this.serialize();
       await Players.updateOne({ _id: this._id }, { $set: parsed });
       this.isFetched = true;
-    } else if (this.id) {
+    } else {
+      if (this.id?.type == "Buffer") this.id = new ObjectId(this.id.data);
+      const newPlayer = await Players.findOne({ id: this.id });
       delete this.isFetched
-      await Players.insertOne(this);
+      const parsed = this.serialize();
+      if (newPlayer) {
+        await Players.updateOne({ id: this.id }, { $set: parsed });
+      } else {
+        await Players.insertOne(parsed);
+      }
       this.isFetched = true;
     }
+    this.achievements = new Achievements(this)
   }
 }
 class Achievements {
@@ -333,24 +342,18 @@ class Achievements {
   get target() {
     return this.achievements;
   }
-  test() {
-    console.log('gg')
-  }
   async fetch() {
     const mcs = new ImpactiumServer();
     await mcs.fetchStatistics();
-
     const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.nickname)
 
     playerStatsFromServer
-      ? this.player.stats = playerStatsFromServer.player.stats
+      ? this.player.stats = playerStatsFromServer.stats
       : this.player.stats = {}
 
     this.player.stats.processed = mcs.players.lastStatsFetch
 
-    this.player.isSerialized = false;
-    await this.player.save();
-    return this.player.stats()
+    return this.player.stats;
   }
   async process() {
     if (this.achievements?.processed && (Date.now() - this.achievements?.processed) < 1000 * 60 * 10) return this.achievements
@@ -735,7 +738,7 @@ class ResoursePackInstance {
         resourcePackIndex = i;
       }
     }
-    console.log(this.hashsum, "  ------  ", this.link)
+
     lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
     lines[resourcePackIndex] = `resource-pack=${this.link}`;
 
