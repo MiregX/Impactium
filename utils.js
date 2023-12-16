@@ -4,7 +4,7 @@ const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
-const { ObjectId } = require('bson'); 
+const { ObjectId } = require('mongodb');
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 const { spawn } = require('child_process');
@@ -299,70 +299,86 @@ class MinecraftPlayer {
     }
   }
   serialize() {
-    return Object.assign(this, Object.keys(this).reduce((acc, key) => {
-        if (this[key]?.[key] !== undefined) {
-            acc[key] = this[key][key];
+    const visited = new Set();
+  
+    function serializeObject(obj) {
+      if (visited.has(obj)) {
+        return {};
+      }
+      visited.add(obj);
+  
+      return Object.keys(obj).reduce((acc, key) => {
+        if (key === 'id' || key === '_id') {
+          acc[key] = new ObjectId(obj[key]);
+        } else if (key === 'achievements') {
+          if (obj[key] && typeof obj[key] === 'object') {
+            Object.keys(obj[key]).forEach(subKey => {
+              if (subKey === 'player') {
+              } else if (typeof obj[key][subKey] === 'object') {
+                acc[subKey] = serializeObject(obj[key][subKey]);
+              } else {
+                acc[subKey] = obj[key][subKey];
+              }
+            });
+          }
+        } else if (typeof obj[key] === 'object') {
+          acc[key] = serializeObject(obj[key]);
         } else {
-            acc[key] = this[key];
+          acc[key] = obj[key];
         }
         return acc;
-    }, {}));
+      }, {});
+    }
+  
+    return serializeObject(this);
   }
+  
   async save() {
     const Players = await getDatabase("minecraftPlayers");
     const player = await Players.findOne({ _id: this._id });
 
+    console.log(this.serialize())
+    
     if (player || this._id) {
       delete this.isFetched
-      const parsed = this.serialize();
-      await Players.updateOne({ _id: this._id }, { $set: parsed });
+      await Players.updateOne({ _id: this._id }, { $set: this.serialize() });
       this.isFetched = true;
-    } else {
-      if (this.id?.type == "Buffer") this.id = new ObjectId(this.id.data);
-      const newPlayer = await Players.findOne({ id: this.id });
+    } else if (this.id) {
       delete this.isFetched
-      const parsed = this.serialize();
-      if (newPlayer) {
-        await Players.updateOne({ id: this.id }, { $set: parsed });
-      } else {
-        await Players.insertOne(parsed);
-      }
+      await Players.insertOne(this.serialize());
       this.isFetched = true;
     }
-    this.achievements = new Achievements(this)
   }
 }
 class Achievements {
   constructor(player) {
-    const existAchievements = player.achievements
-    player.achievements = this;
+    const existAchievements = player.achievements?.processed ? player.achievements : {}
     this.player = player;
-    this.achievements = existAchievements ? existAchievements : {}
-  }
-  get target() {
-    return this.achievements;
+    this.achievements = {}
+    Object.assign(this.achievements, existAchievements)
   }
   async fetch() {
     const mcs = new ImpactiumServer();
     await mcs.fetchStatistics();
-    const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.nickname)
+    const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.player.nickname)
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats
       : this.player.stats = {}
 
     this.player.stats.processed = mcs.players.lastStatsFetch
-
-    return this.player.stats;
+    await this.player.save()
   }
+
   async process() {
-    if (this.achievements?.processed && (Date.now() - this.achievements?.processed) < 1000 * 60 * 10) return this.achievements
-    if (!this.player.stats?.processed || (Date.now() - this.player.stats?.processed) > 1000 * 60 * 10) await this.fetch();
+    if (this.player.achievements?.processed && (Date.now() - this.player.achievements.processed) < 1000 / 60 / 10) return this;
+    if (this.player.stats?.processed && (Date.now() - this.player.stats?.processed) > 1000 / 60 / 10) await this.fetch();
+    
     this.getCasual()
     this.getKiller()
     this.getDefence()
 
-    this.player.save();
+    await this.player.save();
     return this
   }
   getCasual() {    

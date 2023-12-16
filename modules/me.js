@@ -31,7 +31,7 @@ const setUserAndPlayer = async (request, response, next) => {
 
   if (!user.isFetched) return response.redirect('https://impactium.fun/');
 
-  request.composed = { user, player, lang };
+  request.composed = { user, player: player.serialize(), lang };
   request.user = user;
   request.player = player;
   request.lang = lang;
@@ -71,7 +71,7 @@ router.get('/minecraft', async (request, response) => {
     const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), {
       user: request.user,
       prerender: "minecraftBody",
-      player: request.player,
+      player: request.player.serialize(),
       lang: request.lang
     });
 
@@ -119,9 +119,13 @@ router.post('/minecraft/setPassword', async (request, response) => {
 
 router.get('/minecraft/getAchievements', async (request, response) => {
   try {
-    log(typeof request.user._id)
     await request.player.achievements.process();
-    response.status(200).send(request.player.serialize());
+    const panel = fs.readFileSync('views/personal/elements/achievementsModule.ejs', 'utf8');
+    const html = ejs.render(panel, {
+      player: request.player.serialize(),
+      lang: request.lang
+    });
+    response.status(200).send(html);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
