@@ -207,8 +207,7 @@ app.listen(3000, () => {
 const processHosting = async () => {
   try {
     mcs.launch();
-    // await mcs.fetchWhitelist();
-    // await mcs.fetchResoursePack();
+    await mcs.fetchWhitelist();
   } catch (error) {
     console.log(error);
   }

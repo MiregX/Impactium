@@ -212,7 +212,7 @@ class MinecraftPlayer {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
-    this.achievements = new Achievements(this)
+    this.achievements = {};
   }
   get Achievements() {
     return this.achievements;
@@ -229,7 +229,6 @@ class MinecraftPlayer {
 
     if (player) {
       Object.assign(this, player);
-      this.achievements = { achievements: this.achievements }
       this.achievements = new Achievements(this)
       this.isFetched = true;
     } else {
@@ -310,26 +309,25 @@ class MinecraftPlayer {
       return Object.keys(obj).reduce((acc, key) => {
         if (key === 'id' || key === '_id') {
           acc[key] = new ObjectId(obj[key]);
-        } else if (key === 'achievements') {
-          if (obj[key] && typeof obj[key] === 'object') {
-            Object.keys(obj[key]).forEach(subKey => {
-              if (subKey === 'player') {
-              } else if (typeof obj[key][subKey] === 'object') {
-                acc[subKey] = serializeObject(obj[key][subKey]);
-              } else {
-                acc[subKey] = obj[key][subKey];
-              }
-            });
+        } else if (key === 'player') {
+        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+          if (Array.isArray(obj[key])) {
+            acc[key] = obj[key].map(item => serializeObject(item));
+          } else {
+            const nested = serializeObject(obj[key]);
+            if (Object.keys(nested).length === 1 && nested[key] !== undefined) {
+              acc[key] = nested[key];
+            } else {
+              acc[key] = nested;
+            }
           }
-        } else if (typeof obj[key] === 'object') {
-          acc[key] = serializeObject(obj[key]);
         } else {
           acc[key] = obj[key];
         }
         return acc;
       }, {});
     }
-  
+
     return serializeObject(this);
   }
   
@@ -337,8 +335,6 @@ class MinecraftPlayer {
     const Players = await getDatabase("minecraftPlayers");
     const player = await Players.findOne({ _id: this._id });
 
-    console.log(this.serialize())
-    
     if (player || this._id) {
       delete this.isFetched
       await Players.updateOne({ _id: this._id }, { $set: this.serialize() });
@@ -352,10 +348,9 @@ class MinecraftPlayer {
 }
 class Achievements {
   constructor(player) {
-    const existAchievements = player.achievements?.processed ? player.achievements : {}
-    this.player = player;
     this.achievements = {}
-    Object.assign(this.achievements, existAchievements)
+    Object.assign(this.achievements, player.achievements)
+    this.player = player;
   }
   async fetch() {
     const mcs = new ImpactiumServer();
@@ -492,7 +487,6 @@ class Achievements {
   }
   set(ach) {
     this.achievements[ach.type].stages[ach.stage] = {
-      icon: this.getIcon(ach.stage),
       score: ach.score,
       limit: ach.limit,
       percentage: Math.min(Math.floor((ach.score / ach.limit) * 100), 100),
@@ -506,9 +500,6 @@ class Achievements {
     this.achievements[ach.type].doneStages = doneStages
     this.achievements[ach.type].symbol = this.getRomanianNumber(doneStages);
     this.achievements.processed = Date.now();
-  }
-  getIcon(stage) {
-    return `https://api.impactium.fun/achievement/${stage}.png`
   }
   getRomanianNumber(number) {
     switch (number) {
@@ -668,6 +659,7 @@ class ImpactiumServer {
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
 
     this.ResoursePackInstance = new ResoursePackInstance()
+    await this.fetchResoursePack();
     await this.ResoursePackInstance.fetchServerProperties();
 
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
@@ -777,7 +769,8 @@ class ResoursePackInstance {
       }
       return this.downloadLink.replace('&dl=0', '&dl=1');
     } catch (error) {
-      return await this.uploadResoursePackToDropbox();
+      console.log(error)
+      return await this.uploadResoursePack();
     }
   }
 

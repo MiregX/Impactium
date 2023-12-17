@@ -1,124 +1,4 @@
-<style>
-.achievements_module {
-  --hue: 120;
-  --saturation: 100%;
-  --lightness: 82%;
-  grid-row: 1 / 4;
-  grid-column: 2 / 3;
-  gap: 16px;
-}
-.selection_wrapper {
-  gap: 8px;
-  justify-content: flex-start;
-  height: 32px;
-}
-.selection_wrapper > button {
-  padding: 5px;
-  border: 1px solid #0d0d0d;
-  background-color: #0d0d0d;
-  border-radius: 8px;
-  transition: 0.4s all var(--trans);
-}
-.selection_wrapper > button.selected[--hammer] { border: 1px solid var(--hammer-accent) }
-.selection_wrapper > button.selected[--casual] { border: 1px solid var(--casual-accent) }
-.selection_wrapper > button.selected[--killer] { border: 1px solid var(--killer-accent) }
-.selection_wrapper > button.selected[--defence] { border: 1px solid var(--defence-accent) }
-.selection_wrapper > button.selected[--event] { border: 1px solid var(--event-accent) }
-.selection_wrapper > button.selected[--donate] { border: 1px solid var(--donate-accent) }
-
-.stages[--hammer] hr { background-color: var(--hammer-accent)}
-.stages[--casual] hr { background-color: var(--casual-accent)}
-.stages[--killer] hr { background-color: var(--killer-accent)}
-.stages[--defence] hr { background-color: var(--defence-accent)}
-.stages[--event] hr { background-color: var(--event-accent)}
-.stages[--donate] hr { background-color: var(--donate-accent)}
-
-.relative_panel {
-  position: relative;
-  flex: 1;
-}
-.relative_panel .stages {
-  position: absolute;
-  display: none;
-  flex-direction: column;
-  flex: 1;
-  gap: 4px;
-  width: -webkit-fill-available;
-  height: -webkit-fill-available;
-}
-.relative_panel .stages line.bottom {
-  height: 10px;
-  position: absolute;
-  width: calc(100% + 2em);
-  bottom: -0.75em;
-  background: var(--c-48);
-  left: -1em;
-}
-.relative_panel .stages line.bottom hr {
-  height: 100%;
-  border: none;
-}
-.relative_panel .stages.selected {
-  display: flex;
-}
-.stages .stage .icon {
-  image-rendering: pixelated;
-  height: 32px;
-  padding: 4px;
-}
-.stages .stage > text {
-  flex: 1;
-  padding: 2px;
-  gap: 2px;
-  font-size: 14px;
-}
-.stages .stage > text .grayed {
-  color: var(--c-96);
-}
-.stages .stage > div {
-  width: 96px;
-  position: relative;
-}
-.stages .stage > div > span {
-  white-space: nowrap;
-  position: absolute;
-  transform: translateY(60%);
-  text-align: center;
-  width: 100%;
-}
-.stages .stage > div line {
-  width: 100%;
-  background-color: var(--c-48);
-  height: 4px;
-  border-radius: 2px;
-}
-.stages .stage > div line hr {
-  height: 4px;
-  width: 41.6%;
-  border-radius: 2px;
-  border: none;
-}
-.stages .stage .percentage {
-  width: 64px;
-  text-align: center;
-}
-.stages .embed {
-  border: none;
-  height: 1px;
-  background-color: var(--c-48) !important;
-}
-.stages .embed:first-child {
-  background-color: transparent !important;
-}
-.achievements_module[achievement="hammer"] { --hue: 359; --saturation: 85%; --lightness: 62%; }
-.achievements_module[achievement="casual"] { --hue: 120; --saturation: 100%; --lightness: 82%; }
-.achievements_module[achievement="killer"] { --hue: 58; --saturation: 100%; --lightness: 61%; }
-.achievements_module[achievement="defence"] { --hue: 220; --saturation: 98%; --lightness: 62%; }
-.achievements_module[achievement="event"] { --hue: 290; --saturation: 97%; --lightness: 69%; }
-.achievements_module[achievement="donate"] { --hue: 187; --saturation: 83%; --lightness: 70%; }
-
-</style>
-<div class="achievements_module default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>" achievement="hammer" processed="<%= player.achievements?.processed %>">
+<div class="achievements_module default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>" achievement="casual" processed="<%= player.achievements?.processed %>">
   <div class="selection_wrapper flex flex-dir-row">
     <% const allAchievements = {
       casual: [
@@ -150,11 +30,11 @@
         ['eventFive', 10]
       ],
       donate: [
-        ['donaterOne', 10],
-        ['donaterTwo', 20],
-        ['donaterThree', 30],
-        ['donaterFour', 40],
-        ['donaterFive', 50]
+        ['donateOne', 10],
+        ['donateTwo', 20],
+        ['donateThree', 30],
+        ['donateFour', 40],
+        ['donateFive', 50]
       ],
       hammer: [
         ['becomeMayor', 1],
@@ -165,9 +45,14 @@
     <% let isFirstButtonProcessed = false %>
     <% let isFirstPanelProcessed = false %>
     <% Object.keys(allAchievements).forEach(achKey => { %>
-      <button class="<%= isFirstButtonProcessed ? '' : 'selected' %>" onclick="achievementSelection(this)" --achievement="<%= achKey %>" --<%= achKey %>>
+      <button class="<%= isFirstButtonProcessed ? '' : 'selected' %> <%= achKey %>" onclick="achievementSelection(this)" --achievement="<%= achKey %>" --<%= achKey %>>
         <img src="https://api.impactium.fun/ux/<%= achKey %>.svg">
       </button>
+    <% if (Object.keys(allAchievements).indexOf(achKey) === Object.keys(allAchievements).length - 1) { %>
+    <div class="align-center justify-end loader" style="flex: 1;">
+      <img src="https://api.impactium.fun/ux/loader24p.svg">
+    </div>
+    <% } %>
       <% isFirstButtonProcessed = true %>
     <% }); %>
   </div>
@@ -180,7 +65,7 @@
             <hr class="embed">
             <% if (stage) { %>
               <div class="flex flex-dir-row align-center stage">
-                <img src="<%= stage.icon %>" class="icon">
+                <img src="https://api.impactium.fun/achievement/<%= stageKey[0] %>.png" class="icon">
                 <text class="flex flex-dir-column">
                   <p><%= lang[`${stageKey[0]}_todo`].title %></p>
                   <p class="grayed"><%= lang[`${stageKey[0]}_todo`].description %></p>
@@ -219,54 +104,3 @@
     <% }); %>
   </div>
 </div>
-<script>
-  function achievementSelection(caller) {
-    const allButtons = $('.selection_wrapper button');
-    allButtons.each(function() {
-      $(this).removeClass('selected');
-    });
-
-    const buttonInitiator = $(caller);
-    buttonInitiator.addClass('selected');
-
-    displayAchievementPanel(buttonInitiator.attr('--achievement'));
-  }
-  function displayAchievementPanel(achievementToCall) {
-    const allPanels = $('.achievements_module .stages')
-    allPanels.each(function() {
-      $(this).removeClass('selected');
-    });
-
-    const blockToDisplay = $(`.achievements_module .stages.${achievementToCall}`);
-    if (blockToDisplay) {
-      blockToDisplay.addClass('selected')
-    }
-    const p = $('.achievements_module');
-    p.attr('achievement', achievementToCall);
-  }
-  function onloadAchievementsFetcher() {
-    const achievements = $('.achievements_module');
-    const lastFetch = parseInt(achievements.attr('processed'), 10);
-
-    const elapsedTime = (Date.now() - lastFetch) / 1000 / 60;
-
-    console.log(`Прошло ${elapsedTime} минут`);
-    if (elapsedTime / 60 < 1) return
-    $.ajax({
-      url: "https://impactium.fun/me/minecraft/getAchievements",
-      type: "GET",
-      contentType: 'application/json',
-      success: function(data, textStatus, jqXHR) {
-        handleAchievementsResult(jqXHR.responseText);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        handleAchievementsResult(jqXHR.responseText);
-      }
-    });
-  }
-
-  function handleAchievementsResult(html) {
-    $('.achievements_module').replaceWith(html);
-  }
-  onloadAchievementsFetcher();
-</script>

@@ -681,7 +681,7 @@
       "ru": "Провести 10 событий/ивентов"
     }
   },
-  "donaterOne_todo": {
+  "donateOne_todo": {
     "title": {
       "uk": "Філантроп",
       "it": "Filantropo",
@@ -695,7 +695,7 @@
       "ru": "Пожертвовать серверу 10$"
     }
   },
-  "donaterTwo_todo": {
+  "donateTwo_todo": {
     "title": {
       "uk": "Благодійник",
       "it": "Benefattore",
@@ -709,7 +709,7 @@
       "ru": "Пожертвовать серверу 20$"
     }
   },
-  "donaterThree_todo": {
+  "donateThree_todo": {
     "title": {
       "uk": "Верни мамі карту",
       "it": "Ridai la carta a tua madre",
@@ -723,7 +723,7 @@
       "ru": "Пожертвовать серверу 30$"
     }
   },
-  "donaterFour_todo": {
+  "donateFour_todo": {
     "title": {
       "uk": "Акціонер",
       "it": "Azione",
@@ -737,7 +737,7 @@
       "ru": "Пожертвовать серверу 40$"
     }
   },
-  "donaterFive_todo": {
+  "donateFive_todo": {
     "title": {
       "uk": "Інвестор",
       "it": "Investitore",
