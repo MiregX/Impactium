@@ -552,6 +552,14 @@ class ImpactiumServer {
     log(`[MC] -> ${command}`, 'g')
     return true;
   }
+
+  restart() {
+    if (!this.server) return false;
+    this.server.writeCommand('say Сервер будет перезагружен через 1 минуту');
+    setTimeout(() => {
+      this.server.writeCommand('restart');
+    }, 60000);
+  }
   
   async getDatabasePlayers() {
     const Players = await getDatabase("minecraftPlayers");
@@ -669,7 +677,7 @@ class ImpactiumServer {
       this.command(`lp user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
     });
     
-    this.command('restart');
+    this.restart();
   }
 }
 class ResoursePackInstance {
@@ -732,6 +740,7 @@ class ResoursePackInstance {
     await this.archiveResoursePack();
     this.hashsum = await this.calculateHashsum();
     this.link = await this.processResoursePackUpload();
+    if (!this.link) return;
 
     const serverProperties = await this.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
@@ -759,7 +768,7 @@ class ResoursePackInstance {
   
     try {
       const uploadSuccess = await this.uploadResoursePack()
-      if (!uploadSuccess) throw error;
+      if (!uploadSuccess) return false;
 
       const downloadLink = await this.getDownloadLink();
       if (!!downloadLink) {
@@ -779,6 +788,7 @@ class ResoursePackInstance {
       const metadata = await this.dropbox.filesGetMetadata({ path: '/Impactium RP.zip' });
       return !!metadata;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }
@@ -787,6 +797,7 @@ class ResoursePackInstance {
     try {
       await this.dropbox.filesDeleteV2({ path: '/Impactium RP.zip' });
     } catch (error) {
+      console.log(error);
       if(this.isResoursePackExist()) return await this.deleteResoursePack();
       return true
     }
@@ -805,6 +816,8 @@ class ResoursePackInstance {
         throw error;
       }
     } catch (error) {
+      console.log(error);
+      if (error.status === 401) return false
       await this.deleteResoursePack();
       return await this.uploadResoursePack();
     }
@@ -839,6 +852,7 @@ class ResoursePackInstance {
       });
       return link.result.url
     } catch (error) {
+      console.log(error);
       return await this.generateDownloadLink()
     }
   }

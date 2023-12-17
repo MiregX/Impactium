@@ -44,9 +44,10 @@ main {
 .panel {
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 32px;
   width: 100%;
 }
 </style>
@@ -64,7 +65,7 @@ function getRender(page) {
       history.pushState(null, null, `/me/${page}`);
       renderZone.html("");
       renderZone.html(response);
-      initCards()
+      // initCards()
     },
     error: function (error) {
       const buttonOnError = $('.app nav button.previous')
@@ -98,38 +99,19 @@ $('.app nav button').on('click', function () {
   $(this).addClass('selected');
 });
 
+let panel
 let cardsContainer
 let cards
 let overlay
 let calcOverlay
 
-const applyOverlayMask = (e) => {
-  const overlayEl = e.currentTarget;
-  const x = e.pageX - cardsContainer.offsetLeft;
-  const y = e.pageY - cardsContainer.offsetTop;
-
-  overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
-};
-
-const observer = new ResizeObserver((entries) => {
-  entries.forEach((entry) => {
-    const cardIndex = cards.indexOf(entry.target);
-    let width = entry.borderBoxSize[0].inlineSize;
-    let height = entry.borderBoxSize[0].blockSize;
-
-    if (cardIndex >= 0 && overlay.children[cardIndex]) {
-      overlay.children[cardIndex].style.width = `${width}px`;
-      overlay.children[cardIndex].style.height = `${height}px`;
-    }
-  });
-});
 const initCards = () => {
-  cardsContainer = document.querySelector(".panel");
+  panel = document.querySelector(".panel");
+  cardsContainer = document.querySelectorAll(".liner"); // блоки top_line и middle_line, внутри них лежат сами динамики
   cards = Array.from(document.querySelectorAll(".dynamic"));
   overlay = document.querySelector(".overlay");
   calcOverlay = document.querySelectorAll(".calc_overlay");
 
-  // Словарь для отслеживания, создан ли уже calc_overlay блок для определенного родительского блока
   const calcOverlayMap = new Map();
 
   cards.forEach((cardEl) => {
@@ -148,7 +130,6 @@ const initCards = () => {
 };
 
 const handleCalcOverlay = (cardEl, parentCalcOverlay, calcOverlayMap) => {
-  // Если карточка находится в блоке calc_overlay, создаем блок-обертку (если не создан ранее) и добавляем в нее карточку
   const parentId = parentCalcOverlay.id;
   const overlayCard = document.createElement("div");
   cardEl.classList.forEach((className) => {
@@ -199,7 +180,28 @@ const createOverlayCta = (overlayCard, buttonEl) => {
   overlayCard.append(overlayCta);
 };
 
-initCards();
+const observer = new ResizeObserver((entries) => {
+  entries.forEach((entry) => {
+    const cardIndex = cards.indexOf(entry.target);
+    let width = entry.borderBoxSize[0].inlineSize;
+    let height = entry.borderBoxSize[0].blockSize;
+
+    if (cardIndex >= 0 && overlay.children[cardIndex]) {
+      overlay.children[cardIndex].style.width = `${width}px`;
+      overlay.children[cardIndex].style.height = `${height}px`;
+    }
+  });
+});
+
+const applyOverlayMask = (e) => {
+  const overlayEl = e.currentTarget;
+  const x = e.pageX - panel.offsetLeft;
+  const y = e.pageY - panel.offsetTop;
+
+  overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
+};
+
+// initCards();
 
 function handleFileUpload() {
   console.log('вызывлся')
@@ -211,10 +213,9 @@ function handleFileUpload() {
     console.log(fileInput[0].files[0])
 
   if (file) {
-    console.log('файл') // не выолняется
     const formData = new FormData();
     formData.append("skin", file, file.name);
-    togglerSkinButtonWaiter(true /* isWait */)
+    togglerSkinButtonWaiter(true)
     $.ajax({
       url: "https://impactium.fun/me/minecraft/setSkin",
       type: "POST",

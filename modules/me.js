@@ -118,7 +118,6 @@ router.post('/minecraft/setPassword', async (request, response) => {
 });
 
 router.get('/minecraft/getAchievements', async (request, response) => {
-  console.log("Прилетел запрос")
   try {
     await request.player.achievements.process();
     const panel = fs.readFileSync('views/personal/elements/achievementsModule.ejs', 'utf8');

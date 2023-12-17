@@ -456,7 +456,7 @@
     }
   }
 </style>
-<div class="top_line flex-dir-row">
+<div class="top_line flex-dir-row liner">
   <%- include(`${lang.debugPath}/views/personal/elements/playerCredentials.ejs`, { player, lang }) %>
   <div class="controls calc_overlay">
     <!-- Панель для изменения никнейма -->
@@ -471,6 +471,9 @@
     <!-- Панель для изменения пароля -->
     <%- include(`${lang.debugPath}/views/personal/elements/achievementsModule.ejs`, { player, lang }) %>
   </div>  
+</div>
+<div class="middle_line flex-dir-row liner">
+  <%- include(`${lang.debugPath}/views/personal/elements/serverInfo.ejs`, { player, lang }) %>
 </div>
 <div class="overlay flex" style="gap: 32px;"></div>
 <script>
