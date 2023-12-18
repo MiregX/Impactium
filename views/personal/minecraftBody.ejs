@@ -22,9 +22,6 @@
   gap: 1.25em;
   min-width: 256px;
 }
-.profile .change_profile {
-  cursor: pointer;
-}
 .dynamic {
   --hue: 275;
   --saturation: 82.26%;
@@ -116,6 +113,7 @@
 .change_profile,
 .default_panel_style input {
   display: block;
+  cursor: pointer;
   align-self: end;
   margin: 1em 0 0.5em 0;
   text-align: center;
@@ -128,6 +126,9 @@
   font-weight: 600;
   grid-row: -1;
 }
+.default_panel_style input {
+  cursor: text;
+}
 .default_panel_style p {
   flex: 1;
 }
@@ -139,6 +140,7 @@
   height: 12px;
 }
 .overlay {
+  flex-direction: column;
   height: fit-content;
   position: absolute;
   inset: 0;
@@ -186,7 +188,7 @@
 .top_line {
   height: min-content;
   gap: 32px;
-  width: 100%;
+  width: 100% !important;
 }
 .controls {
   flex: 1;
@@ -454,6 +456,10 @@
     to {
       transform: rotate(360deg);
     }
+  }
+  .overlay .middle_line {
+    height: unset !important;
+    width: unset !important;
   }
 </style>
 <div class="top_line flex-dir-row liner">

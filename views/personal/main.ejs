@@ -100,67 +100,65 @@ $('.app nav button').on('click', function () {
 });
 
 let panel
-let cardsContainer
+let liners
 let cards
 let overlay
 let calcOverlay
-
+let calcOverlayMap = new Map();
 const initCards = () => {
-  panel = document.querySelector(".panel");
-  cardsContainer = document.querySelectorAll(".liner"); // блоки top_line и middle_line, внутри них лежат сами динамики
-  cards = Array.from(document.querySelectorAll(".dynamic"));
-  overlay = document.querySelector(".overlay");
-  calcOverlay = document.querySelectorAll(".calc_overlay");
+  updateSelectors();
 
-  const calcOverlayMap = new Map();
+  liners.forEach(line => {
+    const lineDuplicate = document.createElement("div");
+    lineDuplicate.classList.add(...line.classList);
 
-  cards.forEach((cardEl) => {
-    const parentCalcOverlay = cardEl.closest(".calc_overlay");
-
+    const parentCalcOverlay = line.querySelector(".calc_overlay");
     if (parentCalcOverlay) {
-      handleCalcOverlay(cardEl, parentCalcOverlay, calcOverlayMap);
+      const calcOverlay = document.createElement("div");
+      calcOverlay.classList.add(...parentCalcOverlay.classList);
+      line.querySelectorAll('.dynamic').forEach(parentCard => {
+        const card = createCard(parentCard);
+        const conteiner = parentCard.closest('.calc_overlay')
+        if (conteiner) {
+          calcOverlay.appendChild(card);
+        } else {
+          lineDuplicate.appendChild(card);
+        }
+      });
+      lineDuplicate.appendChild(calcOverlay);
     } else {
-      handleRegularOverlay(cardEl);
+      line.querySelectorAll('.dynamic').forEach(parentCard => {
+        const card = createCard(parentCard);
+        lineDuplicate.appendChild(card);
+      });
     }
 
-    observer.observe(cardEl);
+    overlay.appendChild(lineDuplicate);
+  });
+
+  cards.forEach(cardElement => {
+    observer.observe(cardElement);
   });
 
   document.body.addEventListener("pointermove", applyOverlayMask);
 };
 
-const handleCalcOverlay = (cardEl, parentCalcOverlay, calcOverlayMap) => {
-  const parentId = parentCalcOverlay.id;
+const createCard = (cardElement) => {
   const overlayCard = document.createElement("div");
-  cardEl.classList.forEach((className) => {
-    overlayCard.classList.add(className);
-  });
-  const toOverlayViewElement = cardEl.querySelector('[toOverlayView]');
+  overlayCard.classList.add(...cardElement.classList);
+  const toOverlayViewElement = cardElement.querySelector('[toOverlayView]');
   if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
-
-  if (!calcOverlayMap.has(parentId)) {
-    const overlayWrapper = document.createElement("div");
-    overlayWrapper.classList.add("calc_overlay");
-    parentCalcOverlay.classList.forEach((className) => {
-      overlayWrapper.classList.add(className);
-    });
-    calcOverlayMap.set(parentId, overlayWrapper);
-    overlay.appendChild(overlayWrapper);
-  }
-
-  calcOverlayMap.get(parentId).appendChild(overlayCard);
+  return overlayCard
 };
 
-const handleRegularOverlay = (cardEl) => {
-  const overlayCard = document.createElement("div");
-  cardEl.classList.forEach((className) => {
-    overlayCard.classList.add(className);
-  });
-  const toOverlayViewElement = cardEl.querySelector('[toOverlayView]');
-  if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
-  overlay.appendChild(overlayCard);
-};
-
+function updateSelectors() {
+  panel = document.querySelector(".panel");
+  liners = document.querySelectorAll(".liner");
+  cards = Array.from(document.querySelectorAll(".dynamic"));
+  overlay = document.querySelector(".overlay");
+  calcOverlay = document.querySelectorAll(".calc_overlay");
+  calcOverlayMap = new Map();
+}
 const createOverlayCta = (overlayCard, buttonEl) => {
   const overlayCta = document.createElement("div");
   buttonEl.classList.forEach((className) => {
@@ -201,7 +199,7 @@ const applyOverlayMask = (e) => {
   overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
 };
 
-// initCards();
+initCards();
 
 function handleFileUpload() {
   console.log('вызывлся')
