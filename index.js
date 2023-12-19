@@ -174,6 +174,13 @@ app.get('/set-token/:token', (request, response) => {
   response.redirect('back');
 });
 
+app.get('/status', (request, response) => {
+  setTimeout(() => {
+    
+  }, 5000);
+  response.sendStatus(200);
+});
+
 const terminalRouter = require('./modules/terminal');
 app.use('/terminal', terminalRouter);
 
@@ -183,7 +190,8 @@ app.use('/me', meApp);
 const oauth2 = require('./modules/oauth2');
 app.use('/oauth2', oauth2);
 
-app.use((err, request, response, next) => {
+app.use((err, req, res, next) => {
+  res.redirect('/')
 });
 
 app.use((req, res, next) => {

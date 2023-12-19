@@ -668,8 +668,8 @@ class ImpactiumServer {
 
     this.ResoursePackInstance = new ResoursePackInstance()
     await this.fetchResoursePack();
-    await this.ResoursePackInstance.fetchServerProperties();
-
+    const result = await this.ResoursePackInstance.fetchServerProperties();
+    if (!result) return
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
     playersWithFetchedIcon.providers.forEach(async (playerObj, index) => {
       if (index < 4) return
