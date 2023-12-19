@@ -27,10 +27,8 @@ passport.use(new GoogleStrategy({
   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    console.log("Итерация профиля");
     done(null, profile)
   } catch (error) {
-    console.log("Итерация ошибки профиля");
     done(error)
   }
 }));
@@ -158,7 +156,6 @@ async function userAuthentication(p) {
       userToSave.nthRegister = await Database.countDocuments();
       await Database.insertOne(userToSave);
     }
-    console.log({ lang: userToSave[loginSource].locale, token })
     return { lang: userToSave[loginSource].locale, token };
   } catch (error) {
     console.log(error);

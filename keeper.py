@@ -5,7 +5,7 @@ import psutil
 
 def check_status():
     try:
-        response = requests.get("https://impactium.fun/status", timeout=3)
+        response = requests.get("https://impactium.fun/status", timeout=10)
         if response.status_code != 200:
             restart_node_server()
     except requests.exceptions.RequestException:
@@ -29,4 +29,4 @@ def restart_node_server():
 if __name__ == "__main__":
     while True:
         check_status()
-        time.sleep(5)
+        time.sleep(15)

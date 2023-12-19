@@ -216,6 +216,7 @@ const processHosting = async () => {
   try {
     mcs.launch();
     await mcs.fetchWhitelist();
+    await mcs.processResoursePack();
   } catch (error) {
     console.log(error);
   }

@@ -308,159 +308,177 @@
 .profile p {
   flex: unset;
 }
-</style>
-<style>
-  .achievements_module {
-    --hue: 120;
-    --saturation: 100%;
-    --lightness: 82%;
-    grid-row: 1 / 4;
-    grid-column: 2 / 3;
-    gap: 16px;
+.achievements_module {
+  --hue: 120;
+  --saturation: 100%;
+  --lightness: 82%;
+  grid-row: 1 / 4;
+  grid-column: 2 / 3;
+  gap: 16px;
+}
+.selection_wrapper {
+  gap: 8px;
+  justify-content: flex-start;
+  height: 32px;
+}
+.selection_wrapper > button {
+  padding: 5px;
+  border: 1px solid #0d0d0d;
+  background-color: #0d0d0d;
+  border-radius: 8px;
+  transition: 0.4s all var(--trans);
+}
+.selection_wrapper > button.selected[--hammer] { border: 1px solid var(--hammer-accent) }
+.selection_wrapper > button.selected[--casual] { border: 1px solid var(--casual-accent) }
+.selection_wrapper > button.selected[--killer] { border: 1px solid var(--killer-accent) }
+.selection_wrapper > button.selected[--defence] { border: 1px solid var(--defence-accent) }
+.selection_wrapper > button.selected[--event] { border: 1px solid var(--event-accent) }
+.selection_wrapper > button.selected[--donate] { border: 1px solid var(--donate-accent) }
+
+.stages[--hammer] hr { background-color: var(--hammer-accent)}
+.stages[--casual] hr { background-color: var(--casual-accent)}
+.stages[--killer] hr { background-color: var(--killer-accent)}
+.stages[--defence] hr { background-color: var(--defence-accent)}
+.stages[--event] hr { background-color: var(--event-accent)}
+.stages[--donate] hr { background-color: var(--donate-accent)}
+
+.relative_panel {
+  position: relative;
+  flex: 1;
+}
+.relative_panel .stages {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+}
+.relative_panel .stages line.bottom {
+  height: 10px;
+  position: absolute;
+  width: calc(100% + 2em);
+  bottom: -0.75em;
+  background: var(--c-48);
+  left: -1em;
+}
+.relative_panel .stages line.bottom hr {
+  height: 100%;
+  border: none;
+}
+.relative_panel .stages.selected {
+  display: flex;
+}
+.stages .stage .icon {
+  height: 32px;
+  padding: 4px;
+}
+.stages.defence .stage .icon,
+.stages.donate .stage .icon,
+.stages.killer .stage .icon {
+  image-rendering: pixelated;
+}
+.stages .stage > text {
+  padding: 2px;
+  width: -webkit-fill-available;
+  max-width: calc(100% - 32px - 8px - 96px);
+  gap: 2px;
+  font-size: 14px;
+}
+.stages .stage > text p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 4px);
+}
+.stages .stage > text .grayed {
+  color: var(--c-96);
+}
+.stages .stage > div {
+  min-width: 96px;
+  position: relative;
+}
+.stages .stage > div > span {
+  white-space: nowrap;
+  position: absolute;
+  transform: translateY(60%);
+  text-align: center;
+  width: 100%;
+}
+.stages .stage > div line {
+  width: 100%;
+  background-color: var(--c-48);
+  height: 4px;
+  border-radius: 2px;
+}
+.stages .stage > div line hr {
+  height: 4px;
+  width: 41.6%;
+  border-radius: 2px;
+  border: none;
+}
+.stages .stage .percentage {
+  width: 64px;
+  text-align: center;
+}
+.stages .embed {
+  border: none;
+  height: 1px;
+  background-color: var(--c-48) !important;
+}
+.stages .embed:first-child {
+  background-color: transparent !important;
+}
+.achievements_module[achievement="hammer"] { --hue: 359; --saturation: 85%; --lightness: 62%; }
+.achievements_module[achievement="casual"] { --hue: 120; --saturation: 100%; --lightness: 82%; }
+.achievements_module[achievement="killer"] { --hue: 58; --saturation: 100%; --lightness: 61%; }
+.achievements_module[achievement="defence"] { --hue: 220; --saturation: 98%; --lightness: 62%; }
+.achievements_module[achievement="event"] { --hue: 290; --saturation: 97%; --lightness: 69%; }
+.achievements_module[achievement="donate"] { --hue: 187; --saturation: 83%; --lightness: 70%; }
+
+.selection_wrapper > div {
+  display: none;
+}
+.selection_wrapper > div.loader.active {
+  display: flex;
+}
+.selection_wrapper > div.loader.active > img {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
   }
-  .selection_wrapper {
-    gap: 8px;
-    justify-content: flex-start;
-    height: 32px;
+  to {
+    transform: rotate(360deg);
   }
-  .selection_wrapper > button {
-    padding: 5px;
-    border: 1px solid #0d0d0d;
-    background-color: #0d0d0d;
-    border-radius: 8px;
-    transition: 0.4s all var(--trans);
-  }
-  .selection_wrapper > button.selected[--hammer] { border: 1px solid var(--hammer-accent) }
-  .selection_wrapper > button.selected[--casual] { border: 1px solid var(--casual-accent) }
-  .selection_wrapper > button.selected[--killer] { border: 1px solid var(--killer-accent) }
-  .selection_wrapper > button.selected[--defence] { border: 1px solid var(--defence-accent) }
-  .selection_wrapper > button.selected[--event] { border: 1px solid var(--event-accent) }
-  .selection_wrapper > button.selected[--donate] { border: 1px solid var(--donate-accent) }
-  
-  .stages[--hammer] hr { background-color: var(--hammer-accent)}
-  .stages[--casual] hr { background-color: var(--casual-accent)}
-  .stages[--killer] hr { background-color: var(--killer-accent)}
-  .stages[--defence] hr { background-color: var(--defence-accent)}
-  .stages[--event] hr { background-color: var(--event-accent)}
-  .stages[--donate] hr { background-color: var(--donate-accent)}
-  
-  .relative_panel {
-    position: relative;
-    flex: 1;
-  }
-  .relative_panel .stages {
-    position: absolute;
-    display: none;
+}
+.overlay .middle_line {
+  height: unset !important;
+  width: unset !important;
+}
+@media (max-width: 767px) {
+  .app {
     flex-direction: column;
-    flex: 1;
-    gap: 4px;
-    width: -webkit-fill-available;
-    height: -webkit-fill-available;
   }
-  .relative_panel .stages line.bottom {
-    height: 10px;
-    position: absolute;
-    width: calc(100% + 2em);
-    bottom: -0.75em;
-    background: var(--c-48);
-    left: -1em;
+  .panel {
+    flex-direction: column;
   }
-  .relative_panel .stages line.bottom hr {
-    height: 100%;
-    border: none;
+  .liner {
+    flex-direction: column;
   }
-  .relative_panel .stages.selected {
-    display: flex;
+  .controls {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(1, 1fr);
   }
-  .stages .stage .icon {
-    height: 32px;
-    padding: 4px;
-  }
-  .stages.defence .stage .icon,
-  .stages.donate .stage .icon,
-  .stages.killer .stage .icon {
-    image-rendering: pixelated;
-  }
-  .stages .stage > text {
-    padding: 2px;
-    width: -webkit-fill-available;
-    max-width: calc(100% - 32px - 8px - 96px);
-    gap: 2px;
-    font-size: 14px;
-  }
-  .stages .stage > text p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: calc(100% - 4px);
-  }
-  .stages .stage > text .grayed {
-    color: var(--c-96);
-  }
-  .stages .stage > div {
-    min-width: 96px;
-    position: relative;
-  }
-  .stages .stage > div > span {
-    white-space: nowrap;
-    position: absolute;
-    transform: translateY(60%);
-    text-align: center;
-    width: 100%;
-  }
-  .stages .stage > div line {
-    width: 100%;
-    background-color: var(--c-48);
-    height: 4px;
-    border-radius: 2px;
-  }
-  .stages .stage > div line hr {
-    height: 4px;
-    width: 41.6%;
-    border-radius: 2px;
-    border: none;
-  }
-  .stages .stage .percentage {
-    width: 64px;
-    text-align: center;
-  }
-  .stages .embed {
-    border: none;
-    height: 1px;
-    background-color: var(--c-48) !important;
-  }
-  .stages .embed:first-child {
-    background-color: transparent !important;
-  }
-  .achievements_module[achievement="hammer"] { --hue: 359; --saturation: 85%; --lightness: 62%; }
-  .achievements_module[achievement="casual"] { --hue: 120; --saturation: 100%; --lightness: 82%; }
-  .achievements_module[achievement="killer"] { --hue: 58; --saturation: 100%; --lightness: 61%; }
-  .achievements_module[achievement="defence"] { --hue: 220; --saturation: 98%; --lightness: 62%; }
-  .achievements_module[achievement="event"] { --hue: 290; --saturation: 97%; --lightness: 69%; }
-  .achievements_module[achievement="donate"] { --hue: 187; --saturation: 83%; --lightness: 70%; }
-  
-  .selection_wrapper > div {
-    display: none;
-  }
-  .selection_wrapper > div.loader.active {
-    display: flex;
-  }
-  .selection_wrapper > div.loader.active > img {
-    animation: rotate 2s linear infinite;
+  .achievements_module {
+    grid-row: 4 / 16;
+    grid-column: 1 / 2;
   }
 
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  .overlay .middle_line {
-    height: unset !important;
-    width: unset !important;
-  }
+}
 </style>
 <div class="top_line flex-dir-row liner">
   <%- include(`${lang.debugPath}/views/personal/elements/playerCredentials.ejs`, { player, lang }) %>

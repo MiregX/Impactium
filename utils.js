@@ -581,18 +581,18 @@ class ImpactiumServer {
     await this.getWhitelistPlayers() 
     let isNewPlayersExist = false;
 
+    this.players.whitelist.forEach(player => {
+      if (this.players.database.includes(player.name)) return 
+      this.command(`whitelist remove ${player.name}`);
+      isNewPlayersExist = true  
+    })
+
     this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.name === nickname)
       if (existPlayer) return 
       this.command(`whitelist add ${nickname}`);
       isNewPlayersExist = true
     });
-
-    this.players.whitelist.forEach(player => {
-      if (this.players.database.includes(player.name)) return 
-      this.command(`whitelist remove ${player.name}`);
-      isNewPlayersExist = true  
-    })
 
     if (isNewPlayersExist) this.command('whitelist reload');
   }
@@ -740,7 +740,7 @@ class ResoursePackInstance {
     await this.archiveResoursePack();
     this.hashsum = await this.calculateHashsum();
     this.link = await this.processResoursePackUpload();
-    if (!this.link) return;
+    if (!this.link) return false;
 
     const serverProperties = await this.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
@@ -761,6 +761,7 @@ class ResoursePackInstance {
 
     await this.sftp.save('server.properties', lines.join('\n'));
     await this.sftp.close();
+    return true
   }
 
   async processResoursePackUpload() {
@@ -779,16 +780,15 @@ class ResoursePackInstance {
       return this.downloadLink.replace('&dl=0', '&dl=1');
     } catch (error) {
       console.log(error)
-      return await this.uploadResoursePack();
     }
   }
 
   async isResoursePackExist() {
     try {
       const metadata = await this.dropbox.filesGetMetadata({ path: '/Impactium RP.zip' });
+      if (metadata.status === 401) return false
       return !!metadata;
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
@@ -796,8 +796,9 @@ class ResoursePackInstance {
   async deleteResoursePack() {
     try {
       await this.dropbox.filesDeleteV2({ path: '/Impactium RP.zip' });
+      return true
     } catch (error) {
-      console.log(error);
+      if (error.status === 401) return false
       if(this.isResoursePackExist()) return await this.deleteResoursePack();
       return true
     }
@@ -818,7 +819,8 @@ class ResoursePackInstance {
     } catch (error) {
       console.log(error);
       if (error.status === 401) return false
-      await this.deleteResoursePack();
+      const deleter = await this.deleteResoursePack();
+      if (!deleter) return false
       return await this.uploadResoursePack();
     }
       
