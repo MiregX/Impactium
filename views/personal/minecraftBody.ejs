@@ -563,12 +563,11 @@ updateTimer();
   }
   function onloadAchievementsFetcher() {
     $('.selection_wrapper > div').addClass('active')
-    const achievements = $('.achievements_module');
-    const lastFetch = parseInt(achievements.attr('processed'), 10);
+    const lastFetch = parseInt($('.achievements_module').attr('processed'), 10);
+    console.log(lastFetch)
 
-    const elapsedTime = (Date.now() - lastFetch) / 1000 / 60;
+    if ((Date.now() - lastFetch) < 1000 * 60 * 10) return $('.selection_wrapper > div').removeClass('active')
 
-    if (elapsedTime / 60 < 1) return $('.selection_wrapper > div').removeClass('active')
     $.ajax({
       url: "https://impactium.fun/me/minecraft/getAchievements",
       type: "GET",
@@ -585,6 +584,7 @@ updateTimer();
   function handleAchievementsResult(html) {
     const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
     $('.achievements_module').replaceWith(html);
+    initCards();
     achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
   }
   onloadAchievementsFetcher();

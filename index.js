@@ -36,7 +36,7 @@ app.use(vhost('gov.impactium.fun', govApp));
 
 const mcs = new ImpactiumServer()
 const nav = {
-  "guilds": {
+  "partners": {
     "fax": {
       "name": "Fax",
       "logo": "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=256",
@@ -153,6 +153,7 @@ app.get('/login', (request, response) => {
 app.get('/logout', (request, response) => {
   global.logged.delete(request.ip);
   response.clearCookie('token', { domain: '.impactium.fun' });
+  response.clearCookie('token');
   response.redirect('/');
 });
 
@@ -171,6 +172,7 @@ app.get('/lang/:lang', (request, response) => {
 app.get('/set-token/:token', (request, response) => {
   const token = request.params.token;
   response.cookie('token', token);
+  response.cookie('token', token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
   response.redirect('back');
 });
 
@@ -215,13 +217,17 @@ app.listen(3000, () => {
 const processHosting = async () => {
   try {
     mcs.launch();
-    await mcs.fetchWhitelist();
-    await mcs.processResoursePack();
+    await mcs.updateWhitelist();
+    await mcs.fetchStats();
+    await mcs.resourcePack.process();
   } catch (error) {
     console.log(error);
   }
 }
 
 schedule('0 */6 * * *', async () => {
-  await mcs.processResoursePack();
+  await mcs.resourcePack.process();
+});
+schedule('*/10 * * * *', async () => {
+  await mcs.fetchStats();
 });

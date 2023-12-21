@@ -100,7 +100,6 @@ router.post('/minecraft/setNickname', async (request, response) => {
 
     const status = await request.player.setNickname(request.body.newNickname);
     response.status(status).send(request.lang[`errorCode_${status}`]);
-    await mcs.fetchResoursePack();
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);
@@ -142,14 +141,12 @@ router.post('/minecraft/setSkin', async (request, response) => {
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
-        await mcs.fetchResoursePack();
 
         ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
         ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
 
 
         response.status(status).send(request.lang[`errorCode_${status}`]);
-        
       } catch (error) {
         response.status(500).send(request.lang.errorCode_500);
       }

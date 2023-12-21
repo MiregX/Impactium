@@ -214,9 +214,11 @@ class MinecraftPlayer {
     this.isFetched = false;
     this.achievements = {};
   }
+
   get Achievements() {
     return this.achievements;
   }
+
   async fetch(id = this.id) {
     const Players = await getDatabase("minecraftPlayers");
     const player = await Players.findOne({
@@ -235,6 +237,7 @@ class MinecraftPlayer {
       await this.save()
     }
   }
+
   async setNickname(newNickname) {
     if (Date.now() - this.lastNicknameChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
 
@@ -258,6 +261,7 @@ class MinecraftPlayer {
     this.initAuthMe()
     return 200
   }
+
   async setSkin(originalImageName, imageBuffer) {
     const image = await Jimp.read(imageBuffer);
     const { width, height } = image.bitmap;
@@ -274,6 +278,7 @@ class MinecraftPlayer {
     await this.save();
     return 200
   }
+
   async setPassword(newPassword) {
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 412;
 
@@ -282,6 +287,7 @@ class MinecraftPlayer {
     this.initAuthMe()
     return 200
   }
+
   async register() {
     if (!this.registered) {
       this.registered = Date.now()
@@ -289,14 +295,16 @@ class MinecraftPlayer {
       await this.save()
     }
   }
+
   initAuthMe() {
     if (this.nickname && this.password) {
       const mcs = new ImpactiumServer();
-      mcs.fetchWhitelist();
+      mcs.updateWhitelist();
       mcs.command(`authme register ${this.nickname} ${this.password}`);
       mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
     }
   }
+
   serialize() {
     const visited = new Set();
   
@@ -346,16 +354,28 @@ class MinecraftPlayer {
     }
   }
 }
+
 class Achievements {
   constructor(player) {
     this.achievements = {}
     Object.assign(this.achievements, player.achievements)
     this.player = player;
   }
+
+  async process() {
+    if (this.player.achievements?.processed && Date.now() - this.player.achievements.processed < 1000 * 60 * 10) return;
+    if (!this.player.stats?.processed || Date.now() - this.player.stats?.processed > 1000 * 60 * 10) await this.fetch();
+    
+    this.getCasual()
+    this.getKiller()
+    this.getDefence()
+
+    await this.player.save();
+  }
+
   async fetch() {
     const mcs = new ImpactiumServer();
-    await mcs.fetchStatistics();
-    const playerStatsFromServer = mcs.players.stats.find(player => player.name === this.player.nickname)
+    const playerStatsFromServer = mcs.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname.toLowerCase())
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats
@@ -365,17 +385,6 @@ class Achievements {
     await this.player.save()
   }
 
-  async process() {
-    if (this.player.achievements?.processed && (Date.now() - this.player.achievements.processed) < 1000 / 60 / 10) return this;
-    if (this.player.stats?.processed && (Date.now() - this.player.stats?.processed) > 1000 / 60 / 10) await this.fetch();
-    
-    this.getCasual()
-    this.getKiller()
-    this.getDefence()
-
-    await this.player.save();
-    return this
-  }
   getCasual() {    
     this.clear('casual');
 
@@ -410,6 +419,7 @@ class Achievements {
       limit: 64
     });
   }
+
   getKiller() {
     this.clear('killer');
 
@@ -444,6 +454,7 @@ class Achievements {
       limit: 1000000
     });
   }
+
   getDefence() {
     this.clear('defence');
     const damageTaken = this.select('custom', 'damage_taken')
@@ -479,12 +490,15 @@ class Achievements {
       limit: 1000000
     });
   }
+
   select(type, entity) {
     return this.player.stats?.[`minecraft:${type}`]?.[`minecraft:${entity}`] || 0;
   }
+
   clear(type) {
     this.achievements[type] = { stages: {} }
   }
+
   set(ach) {
     this.achievements[ach.type].stages[ach.stage] = {
       score: ach.score,
@@ -501,8 +515,11 @@ class Achievements {
     this.achievements[ach.type].symbol = this.getRomanianNumber(doneStages);
     this.achievements.processed = Date.now();
   }
+
   getRomanianNumber(number) {
     switch (number) {
+      case 0:
+        return ''
       case 1:
         return 'I'
       case 2:
@@ -513,8 +530,6 @@ class Achievements {
         return 'IV'
       case 5:
         return 'V'
-      default:
-        '';
     }
   }
 }
@@ -534,6 +549,8 @@ class ImpactiumServer {
       server_no: "d9aa118c"
     }
     this.players = {}
+
+    this.resourcePack = new ResoursePackInstance(this);
     
     ImpactiumServer.instance = this;
   }
@@ -555,8 +572,11 @@ class ImpactiumServer {
 
   restart() {
     if (!this.server) return false;
-    this.server.writeCommand('say Сервер будет перезагружен через 1 минуту');
+    this.server.writeCommand('/title @a times 20 160 20');
+    this.server.writeCommand('/title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
+    this.server.writeCommand('/title @a title {"text":"Restart"}');
     setTimeout(() => {
+      this.server.writeCommand('kick *');
       this.server.writeCommand('restart');
     }, 60000);
   }
@@ -576,29 +596,29 @@ class ImpactiumServer {
     return this.players.whitelist;
   }
 
-  async fetchWhitelist() {
+  async updateWhitelist() {
     await this.getDatabasePlayers();
     await this.getWhitelistPlayers() 
-    let isNewPlayersExist = false;
+    let isChanged = false;
 
     this.players.whitelist.forEach(player => {
       if (this.players.database.includes(player.name)) return 
       this.command(`whitelist remove ${player.name}`);
-      isNewPlayersExist = true  
+      isChanged = true  
     })
 
     this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.name === nickname)
       if (existPlayer) return 
       this.command(`whitelist add ${nickname}`);
-      isNewPlayersExist = true
+      isChanged = true
     });
 
-    if (isNewPlayersExist) this.command('whitelist reload');
+    if (isChanged) this.command('whitelist reload');
   }
 
-  async fetchStatistics() {
-    if ((Date.now() - this.players.lastStatsFetch) < 1000 * 60 * 10) return this.players.stats
+  async fetchStats() {
+    if (this.players.lastStatsFetch && (Date.now() - this.players.lastStatsFetch) < 1000 * 60 * 10) return this.players.stats
     try {
       const players = await this.getWhitelistPlayers();
       const results = [];
@@ -622,26 +642,48 @@ class ImpactiumServer {
       return results;
     } catch (error) { return [] }
   }
+}
 
-  async fetchResoursePack() {
-    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+class ResoursePackInstance {
+  constructor(ImpactiumServer) {
+    this.mcs = ImpactiumServer;
+    this.sftp = new SFTP()
+    
+    this.path = {
+      folder: {},
+      file: {}
+    }
+    this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
     this.path.file.basic = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
+    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
     this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
+  }
 
-    await this.getWhitelistPlayers()
+  async process() {
+    await this.putIcons(); // запихиваем иконки в рп
+    await this.archive();
+    await this.hashsum(); // получаем хешсумму
+    const success = await this.upload(); // выгружаем сам ресурс-пак
+    if (!success) return;
+    await this.updateServerProperties(); // обновляем сервер
+    await this.setIcons();
+    
+    this.mcs.restart();
+  }
+
+  async putIcons() {
+    await this.mcs.getWhitelistPlayers()
     const resultedJson = purge(this.path.file.basic);
-  
-    let currentIndex = 5000;
 
-    await Promise.all(this.players.whitelist.map(async (whitelistPlayer) => {
+    await Promise.all(this.mcs.players.whitelist.map(async (whitelistPlayer, index) => {
       const player = new MinecraftPlayer()
       await player.fetch(whitelistPlayer.name);
-      
-      if (!(player?.skin?.iconLink)) return false
-      
+      if (!(player?.skin?.iconLink)) return
+
       const playerName = player.nickname.toLowerCase();
-      const playerCode = `\\u${(currentIndex).toString(16).padStart(4, '0')}`;
+      const playerCode = `\\u${(index + 5000).toString(16).padStart(4, '0')}`;
       
       try {
         await fs.promises.copyFile(
@@ -655,44 +697,22 @@ class ImpactiumServer {
           height: 8,
           chars: [JSON.parse(`"${playerCode}"`)]
         });
-
-        currentIndex++;
       } catch (error) {}
     }));
   
     fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
   }
 
-  async processResoursePack() {
-    this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
-
-    this.ResoursePackInstance = new ResoursePackInstance()
-    await this.fetchResoursePack();
-    const result = await this.ResoursePackInstance.fetchServerProperties();
-    if (!result) return
+  async setIcons() {
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
-    playersWithFetchedIcon.providers.forEach(async (playerObj, index) => {
+    playersWithFetchedIcon.providers.forEach(async (player, index) => {
       if (index < 4) return
-      const playerNickname = playerObj.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
-      this.command(`lp user ${playerNickname} meta setprefix 2 "${playerObj.chars[0]} "`);
+      const playerNickname = player.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
+      this.mcs.command(`lp user ${playerNickname} meta setprefix 2 "${player.chars[0]} "`);
     });
-    
-    this.restart();
-  }
-}
-class ResoursePackInstance {
-  constructor() {
-    this.sftp = new SFTP()
-    
-    this.path = {
-      folder: {},
-      file: {}
-    }
-    this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
-    this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
   }
 
-  async archiveResoursePack() {
+  async archive() {
     return new Promise((resolve, reject) => {
       const output = fs.createWriteStream(this.path.file.resoursePackDestination);
   
@@ -716,7 +736,7 @@ class ResoursePackInstance {
     });
   }
 
-  async calculateHashsum() {
+  async hashsum() {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.path.file.resoursePackDestination);
       const hash = crypto.createHash('sha1');
@@ -726,7 +746,8 @@ class ResoursePackInstance {
       });
 
       stream.on('end', () => {
-        resolve(hash.digest('hex'));
+        this.hashsum = hash.digest('hex')
+        resolve(this.hashsum);
       });
 
       stream.on('error', (err) => {
@@ -735,116 +756,106 @@ class ResoursePackInstance {
     });
   }
   
-  async fetchServerProperties() {
+  async updateServerProperties() {
     await this.sftp.connect();
-    await this.archiveResoursePack();
-    this.hashsum = await this.calculateHashsum();
-    this.link = await this.processResoursePackUpload();
-    if (!this.link) return false;
 
     const serverProperties = await this.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
-    let resourcePackSha1Index = -1;
-    let resourcePackIndex = -1;
 
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].startsWith('resource-pack-sha1=')) {
-        resourcePackSha1Index = i;
+        lines[i] = `resource-pack-sha1=${this.hashsum}`;
       }
       if (lines[i].startsWith('resource-pack=')) {
-        resourcePackIndex = i;
+        lines[i] = `resource-pack=${this.link}`;
       }
     }
-
-    lines[resourcePackSha1Index] = `resource-pack-sha1=${this.hashsum}`;
-    lines[resourcePackIndex] = `resource-pack=${this.link}`;
 
     await this.sftp.save('server.properties', lines.join('\n'));
     await this.sftp.close();
-    return true
   }
 
-  async processResoursePackUpload() {
+  async upload() {
     this.dropbox = new Dropbox({ accessToken: dropboxToken });
   
     try {
-      const uploadSuccess = await this.uploadResoursePack()
+      const uploadSuccess = await this.putDropbox()
       if (!uploadSuccess) return false;
-
-      const downloadLink = await this.getDownloadLink();
-      if (!!downloadLink) {
-        this.downloadLink = downloadLink; 
-      } else {
-        this.downloadLink = await this.generateDownloadLink()
-      }
-      return this.downloadLink.replace('&dl=0', '&dl=1');
+      await this.getLink();
+      return true
     } catch (error) {
       console.log(error)
+      return false
     }
   }
 
-  async isResoursePackExist() {
+  async putDropbox() {
+    console.log("putDropbox()")
+    try {
+      const fileContent = fs.readFileSync(this.path.file.resoursePackDestination);
+      const upload = await this.dropbox.filesUpload({
+        path: `/Impactium RP.zip`,
+        contents: fileContent,
+      });
+      if (upload.status === 200) {
+        return true;
+      } else {
+        throw new Error(upload);
+      }
+    } catch (error) {
+      if (error.status === 401) {
+        log("Токен Dropbox закончился", 'r');
+        return false
+      } else if (error.status === 409) {
+        await this.deleteDropdox();
+      } else {
+        return console.log(error);
+      }
+      return await this.putDropbox();
+    } 
+  }
+
+  async isExist() {
+    console.log("isExist()")
     try {
       const metadata = await this.dropbox.filesGetMetadata({ path: '/Impactium RP.zip' });
-      if (metadata.status === 401) return false
       return !!metadata;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }
 
-  async deleteResoursePack() {
+  async deleteDropdox() {
+    console.log("deleteDropdox()")
     try {
       await this.dropbox.filesDeleteV2({ path: '/Impactium RP.zip' });
-      return true
     } catch (error) {
-      if (error.status === 401) return false
-      if(this.isResoursePackExist()) return await this.deleteResoursePack();
-      return true
+      if(this.isExist()) await this.deleteDropdox();
     }
   }
 
-  async uploadResoursePack() {
-    try {
-      const fileContent = fs.readFileSync(this.path.file.resoursePackDestination);
-      const uploadSuccess = await this.dropbox.filesUpload({
-        path: `/Impactium RP.zip`,
-        contents: fileContent,
-      });
-      if (uploadSuccess.status === 200) {
-        return uploadSuccess;
-      } else {
-        throw error;
-      }
-    } catch (error) {
-      console.log(error);
-      if (error.status === 401) return false
-      const deleter = await this.deleteResoursePack();
-      if (!deleter) return false
-      return await this.uploadResoursePack();
-    }
-      
-  }
-
-  async getDownloadLink() {
+  async getLink() {
+    console.log("getLink()")
     try {
       const existingLinks = await this.dropbox.sharingListSharedLinks({
         path: '/Impactium RP.zip',
       });
 
       if (existingLinks.result.links.length > 0) {
-        const firstLink = existingLinks.result.links[0].url;
-        return firstLink
+        this.link = existingLinks.result.links[0].url;
       } else {
-        return false;
+        this.link = await this.generateLink();
       }
+      this.link = this.link.replace('&dl=0', '&dl=1');
     } catch (error) {
-      if (error.status === 409) return false;
-      return await this.getDownloadLink();
+      console.log(error)
+      return await this.getLink();
     }
   }
 
-  async generateDownloadLink() {
+  async generateLink() {
+    console.log("generateLink()")
     try {
       const link = await this.dropbox.sharingCreateSharedLinkWithSettings({
         path: '/Impactium RP.zip',
@@ -854,8 +865,8 @@ class ResoursePackInstance {
       });
       return link.result.url
     } catch (error) {
-      console.log(error);
-      return await this.generateDownloadLink()
+      if (error.status === 409) return
+      return await this.generateLink()
     }
   }
 }
@@ -911,8 +922,6 @@ class SFTP {
     await this.sftp.end();
   }
 }
-
-module.exports = SFTP;
 
 const mongo = new MongoClient(mongoLogin, {
   serverApi: {
@@ -1272,6 +1281,7 @@ module.exports = {
   ftpUpload,
   Schedule,
   Guild,
+  SFTP,
   User,
   log,
 };

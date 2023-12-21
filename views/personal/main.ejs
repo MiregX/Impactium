@@ -120,6 +120,7 @@ let calcOverlay
 let calcOverlayMap = new Map();
 const initCards = () => {
   updateSelectors();
+  overlay.innerHTML = ""
 
   liners.forEach(line => {
     const lineDuplicate = document.createElement("div");
@@ -202,8 +203,6 @@ const observer = new ResizeObserver((entries) => {
     let width = entry.borderBoxSize[0].inlineSize;
     let height = entry.borderBoxSize[0].blockSize;
     const overlayCards = overlay.querySelectorAll(`.${cardClasses}`);
-    console.log(cardClasses, width, height)
-    console.log(overlayCards)
     overlayCards.forEach((overlayCard) => {
       overlayCard.style.width = `${width}px`;
       overlayCard.style.height = `${height}px`;
@@ -232,13 +231,8 @@ const applyOverlayMask = (e) => {
 initCards();
 
 function handleFileUpload() {
-  console.log('вызывлся')
   const fileInput = $("#fileInput");
   const file = fileInput[0].files[0];
-    console.log(fileInput) 
-    console.log(fileInput[0]) 
-    console.log(fileInput[0].files)
-    console.log(fileInput[0].files[0])
 
   if (file) {
     const formData = new FormData();
@@ -280,7 +274,6 @@ function togglerSkinButtonWaiter(isWait) {
 }
 
 function handleResult(status, message) {
-  console.log('овтет')
   switch (status) {
     case 410:
       setSkinSetterWarning(message)
