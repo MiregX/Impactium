@@ -11,7 +11,6 @@ const { spawn } = require('child_process');
 const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
-const locale = require(`./static/lang/locale.json`);
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { mongoLogin, dropboxToken, sftpConfig, minecraftServerAPI } = process.env;
 
@@ -939,6 +938,8 @@ async function databaseConnect() {
     console.log(error)
   }
 }
+
+const locale = require(`/static/lang/locale.json`);
 
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
