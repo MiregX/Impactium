@@ -499,7 +499,9 @@
 <div class="middle_line flex-dir-row liner">
   <%- include(`${lang.debugPath}/views/personal/elements/serverInfo.ejs`, { player, lang }) %>
 </div>
-<div class="overlay flex" style="gap: 32px;"></div>
+<div class="overlay flex" style="gap: 32px;">
+<p>Хуй</p>
+</div>
 <script>
 function registerPlayer() {
   $.post("/me/minecraft/register")
@@ -562,14 +564,14 @@ updateTimer();
     p.attr('achievement', achievementToCall);
   }
   function onloadAchievementsFetcher() {
-    $('.selection_wrapper > div').addClass('active')
+    if ($('.achievements_module').hasClass('blocked')) return;
+    $('.selection_wrapper > div').addClass('active');
     const lastFetch = parseInt($('.achievements_module').attr('processed'), 10);
-    console.log(lastFetch)
 
     if ((Date.now() - lastFetch) < 1000 * 60 * 10) return $('.selection_wrapper > div').removeClass('active')
 
     $.ajax({
-      url: "https://impactium.fun/me/minecraft/getAchievements",
+      url: "/me/minecraft/getAchievements",
       type: "GET",
       contentType: 'application/json',
       success: function(data, textStatus, jqXHR) {
@@ -584,7 +586,6 @@ updateTimer();
   function handleAchievementsResult(html) {
     const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
     $('.achievements_module').replaceWith(html);
-    initCards();
     achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
   }
   onloadAchievementsFetcher();

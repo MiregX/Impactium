@@ -290,9 +290,8 @@ class MinecraftPlayer {
 
   async register() {
     if (!this.registered) {
-      this.registered = Date.now()
-      delete this.nicknameLastChangeTimestamp 
-      await this.save()
+      this.registered = Date.now(); 
+      await this.save();
     }
   }
 
@@ -965,11 +964,6 @@ function getLanguagePack(languagePack = "en") {
   languageProxy.debugPath = __dirname;
   return languageProxy;
 }
-
-// users.find(user => {
-//   (user[user.lastLogin].id === id) ||
-//   (user[user.lastLogin].email === email)
-// });
 
 function generateToken(sumbolsLong) {
   return crypto.randomBytes(sumbolsLong).toString('hex');

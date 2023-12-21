@@ -120,7 +120,8 @@ let calcOverlay
 let calcOverlayMap = new Map();
 const initCards = () => {
   updateSelectors();
-  overlay.innerHTML = ""
+  $('.overlay').html("");
+  overlay.innerHTML = "";
 
   liners.forEach(line => {
     const lineDuplicate = document.createElement("div");
@@ -177,22 +178,11 @@ function updateSelectors() {
   calcOverlayMap = new Map();
 }
 const createOverlayCta = (overlayCard, buttonEl) => {
-  const overlayCta = document.createElement("div");
-  buttonEl.classList.forEach((className) => {
-    overlayCta.classList.add(className);
-  });
-  overlayCta.textContent = buttonEl.textContent;
-  overlayCta.setAttribute("aria-hidden", true);
-
+  const overlayCta = buttonEl.cloneNode(true);
   const imgElements = buttonEl.querySelectorAll('img');
-  imgElements.forEach((imgElement) => {
-    const clonedImg = imgElement.cloneNode(true);
-    const imgWrapper = document.createElement('div');
-    imgWrapper.appendChild(clonedImg);
-    overlayCta.appendChild(imgWrapper);
-  });
-
-  overlayCard.append(overlayCta);
+  
+  overlayCta.setAttribute("aria-hidden", true);
+  overlayCard.appendChild(overlayCta);
 };
 
 const observer = new ResizeObserver((entries) => {
@@ -212,13 +202,12 @@ const observer = new ResizeObserver((entries) => {
 
 
 const applyOverlayMaskOnCenter = (e) => {
-  const overlayEl = document.querySelector(".overlay"); // Замените на ваш реальный селектор
   const x = window.innerWidth * 0.5 + window.scrollX;
   const y = window.innerHeight * 0.5 + window.scrollY;
   
-  overlayEl.style.setProperty("--opacity", "1");
-  overlayEl.style.setProperty("--x", `${x}px`);
-  overlayEl.style.setProperty("--y", `${y}px`);
+  overlay.style.setProperty("--opacity", "1");
+  overlay.style.setProperty("--x", `${x}px`);
+  overlay.style.setProperty("--y", `${y}px`);
 };
 
 const applyOverlayMask = (e) => {
@@ -239,7 +228,7 @@ function handleFileUpload() {
     formData.append("skin", file, file.name);
     togglerSkinButtonWaiter(true)
     $.ajax({
-      url: "https://impactium.fun/me/minecraft/setSkin",
+      url: "/me/minecraft/setSkin",
       type: "POST",
       data: formData,
       processData: false,
@@ -316,7 +305,7 @@ function updateNickname() {
   const requestData = JSON.stringify({ newNickname: nickname });
 
   $.ajax({
-    url: "https://impactium.fun/me/minecraft/setNickname",
+    url: "/me/minecraft/setNickname",
     type: "POST",
     data: requestData,
     contentType: 'application/json',
@@ -334,7 +323,7 @@ function updatePassword() {
   const requestData = JSON.stringify({ newPassword: password });
 
   $.ajax({
-    url: "https://impactium.fun/me/minecraft/setPassword",
+    url: "/me/minecraft/setPassword",
     type: "POST",
     data: requestData,
     contentType: 'application/json',

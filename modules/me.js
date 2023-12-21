@@ -86,9 +86,8 @@ router.get('/minecraft', async (request, response) => {
 router.post('/minecraft/register', async (request, response) => {
   if (request.player.registered) return response.sendStatus(200);
   try {
-    const status = await request.player.setNickname(request.user.displayName);
     await request.player.register();
-    response.status(status).send(request.lang[`errorCode_${status}`]);
+    response.sendStatus(200);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.errorCode_500);

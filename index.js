@@ -117,6 +117,7 @@ app.get('/', (request, response) => {
       const player = new MinecraftPlayer();
       await player.fetch(user._id);
       const lang = getLanguagePack(request.cookies.lang);
+      console.log(lang)
       const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), { user, lang, nav, player });
       
       response.render('template.ejs', { body, user, lang, nav });
@@ -211,7 +212,6 @@ server.listen(80, async () => {
 : // Если ключ неправильный или не найден
 app.listen(3000, () => { 
   log(`Тестовый сервер запущен`);
-  processHosting();
 })
 
 const processHosting = async () => {

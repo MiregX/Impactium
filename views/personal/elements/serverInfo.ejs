@@ -1,8 +1,48 @@
 <style>
   .server_info {
     width: 100%;
+    flex-direction: row;
+  }
+  .server_info .ip {
+    width: fit-content;
+    flex: unset;
+    flex-direction: row;
+    display: flex;
+    margin: 0;
+    gap: 0.44em;
+    border: none !important;
+  }
+  .server_info .ip > span {
+    color: var(--c-96);
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+  .server_info .ip > p {
+    line-height: 24px;
   }
 </style>
 <div class="server_info default_panel_style dynamic">
+  <div style="flex: 1;">
 
+  </div>
+  <div class="ip change_profile default_button_style" onclick="copy(this)" toCopy="play.impactium.fun" toOverlayView>
+    <span class="center">IP:</span>
+    <p>play.impactium.fun</p>
+  </div>
 </div>
+<script>
+async function copy(block) {
+  const text = $(block).attr('toCopy');
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
+}
+</script>
