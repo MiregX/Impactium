@@ -323,10 +323,14 @@
 }
 .selection_wrapper > button {
   padding: 5px;
+  cursor: pointer;
   border: 1px solid #0d0d0d;
   background-color: #0d0d0d;
   border-radius: 8px;
   transition: 0.4s all var(--trans);
+}
+.selection_wrapper > button > img {
+  pointer-events: none;
 }
 .selection_wrapper > button.selected[--hammer] { border: 1px solid var(--hammer-accent) }
 .selection_wrapper > button.selected[--casual] { border: 1px solid var(--casual-accent) }
@@ -586,6 +590,8 @@ updateTimer();
   function handleAchievementsResult(html) {
     const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
     $('.achievements_module').replaceWith(html);
+    $('.overlay').empty();
+    initCards();
     achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
   }
   onloadAchievementsFetcher();

@@ -63,6 +63,17 @@ main {
   gap: 32px;
   width: 100%;
 }
+@media (max-width: 1080px) {
+  header {
+    padding: 0 32px;
+  }
+  .app {
+    flex-direction: column;
+  }
+  .app nav {
+    align-items: flex-start;
+  }
+}
 </style>
 <script>
 function getRender(page) {
@@ -120,8 +131,7 @@ let calcOverlay
 let calcOverlayMap = new Map();
 const initCards = () => {
   updateSelectors();
-  $('.overlay').html("");
-  overlay.innerHTML = "";
+  $('.overlay').empty();
 
   liners.forEach(line => {
     const lineDuplicate = document.createElement("div");
