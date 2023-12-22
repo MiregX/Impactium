@@ -161,6 +161,7 @@ const initCards = () => {
     overlay.appendChild(lineDuplicate);
   });
 
+  cards = Array.from(document.querySelectorAll(".dynamic"));
   cards.forEach(cardElement => {
     observer.observe(cardElement);
   });
@@ -182,7 +183,6 @@ const createCard = (cardElement) => {
 function updateSelectors() {
   panel = document.querySelector(".panel");
   liners = document.querySelectorAll(".liner");
-  cards = Array.from(document.querySelectorAll(".dynamic"));
   overlay = document.querySelector(".overlay");
   calcOverlay = document.querySelectorAll(".calc_overlay");
   calcOverlayMap = new Map();

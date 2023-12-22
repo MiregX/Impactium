@@ -864,6 +864,7 @@ class ResoursePackInstance {
       return link.result.url
     } catch (error) {
       if (error.status === 409) return
+      if (error.status === 401) return
       return await this.generateLink()
     }
   }
@@ -939,7 +940,7 @@ async function databaseConnect() {
   }
 }
 
-const locale = require(`/static/lang/locale.json`);
+const locale = require(`./static/lang/locale.json`);
 
 function getLanguagePack(languagePack = "en") {
   const languageProxy = new Proxy(locale, {
