@@ -74,35 +74,87 @@ main {
     align-items: flex-start;
   }
 }
+#messageWrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 16px;
+  gap: 14px;
+  right: 16px;
+}
+@keyframes message-animation {
+  0% {
+    transform: translateX(calc(100% + 16px));
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+#messageWrapper div {
+  padding: 0.75em 1em;
+  padding-top: calc(0.75em - 6px);
+  font-size: 16px;
+  font-weight: 600;
+  max-width: calc(15vw - 32px);
+  border-radius: 16px;
+  transition: opacity 0.5s var(--trans);
+  animation: message-animation 0.5s var(--trans) forwards;
+}
+#messageWrapper div p {
+  line-height: 24px;
+}
+#messageWrapper div p::before {
+  transform: translateY(6px);
+  display: inline-block;
+  margin-right: 6px;
+  height: 24px;
+}
+
+
+#messageWrapper div[type="success"] {
+  background: #d2fbd0;
+  border: 1px solid #0d5f07;
+}
+#messageWrapper div[type="success"] p {
+  color: #0d5f07;
+}
+#messageWrapper div[type="success"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-check.svg");
+}
+
+
+#messageWrapper div[type="warning"] {
+  background: #fbf8d0;
+  border: 1px solid #5f5907;
+}
+#messageWrapper div[type="warning"] p {
+  color: #5f5907;
+}
+#messageWrapper div[type="warning"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-minus.svg");
+}
+
+
+#messageWrapper div[type="attention"] {
+  background: #fbd0d0;
+  border: 1px solid #5f0707;
+}
+#messageWrapper div[type="attention"] p {
+  color: #5f0707;
+}
+#messageWrapper div[type="attention"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-xmark.svg");
+}
+#messageWrapper div.toHide {
+  opacity: 0;
+}
 </style>
 <script>
-function getRender(page) {
-  $.ajax({
-    type: 'GET',
-    url: "/me/" + page,
-    headers: {
-      'Cache-Control': 'no-store',
-      'Accept': 'semipage'
-    },
-    success: function (response) {
-      const renderZone = $(".app .panel");
-      history.pushState(null, null, `/me/${page}`);
-      renderZone.html("");
-      renderZone.html(response);
-      // initCards()
-    },
-    error: function (error) {
-      const buttonOnError = $('.app nav button.previous')
-      $(buttonOnError).removeClass('previous');
-      $('.app nav button.selected').removeClass('selected');
-      $(buttonOnError).addClass('selected');
-    }
-  });
-}
 </script>
 <div class="app">
   <nav>
-    <button class="selected" onclick="getRender(`minecraft`)">
+    <button class="selected">
       <img src="https://api.impactium.fun/ux/casual.svg">
       <p>Minecraft Account</p>
     </button>
@@ -113,25 +165,20 @@ function getRender(page) {
     <%- include(`${lang.debugPath}/views/personal/${prerender}.ejs`, { user, lang }) %>
     
   </div>
+  <div class="none" id="copiedMessage" text="<%= lang.copiedMessage %>"></div>
+  <div id="messageWrapper">
+  </div>
 </div>
 
 <script>
-$('.app nav button').on('click', function () {
-  $('.app nav button.previous').removeClass('previous');
-  $('.app nav button.selected').addClass('previous');
-  $('.app nav button.selected').removeClass('selected');
-  $(this).addClass('selected');
-});
 
 let panel
 let liners
-let cards
 let overlay
-let calcOverlay
-let calcOverlayMap = new Map();
 const initCards = () => {
+  observer.disconnect();
   updateSelectors();
-  $('.overlay').empty();
+  const cards = Array.from(document.querySelectorAll(".dynamic"));
 
   liners.forEach(line => {
     const lineDuplicate = document.createElement("div");
@@ -161,7 +208,6 @@ const initCards = () => {
     overlay.appendChild(lineDuplicate);
   });
 
-  cards = Array.from(document.querySelectorAll(".dynamic"));
   cards.forEach(cardElement => {
     observer.observe(cardElement);
   });
@@ -171,7 +217,6 @@ const initCards = () => {
     document.body.addEventListener("pointermove", applyOverlayMask);
   }
 };
-
 const createCard = (cardElement) => {
   const overlayCard = document.createElement("div");
   overlayCard.classList.add(...cardElement.classList);
@@ -179,13 +224,10 @@ const createCard = (cardElement) => {
   if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
   return overlayCard
 };
-
 function updateSelectors() {
   panel = document.querySelector(".panel");
   liners = document.querySelectorAll(".liner");
   overlay = document.querySelector(".overlay");
-  calcOverlay = document.querySelectorAll(".calc_overlay");
-  calcOverlayMap = new Map();
 }
 const createOverlayCta = (overlayCard, buttonEl) => {
   const overlayCta = buttonEl.cloneNode(true);
@@ -194,7 +236,6 @@ const createOverlayCta = (overlayCard, buttonEl) => {
   overlayCta.setAttribute("aria-hidden", true);
   overlayCard.appendChild(overlayCta);
 };
-
 const observer = new ResizeObserver((entries) => {
   entries.forEach((entry) => {
     const cardElement = entry.target;
@@ -202,15 +243,13 @@ const observer = new ResizeObserver((entries) => {
 
     let width = entry.borderBoxSize[0].inlineSize;
     let height = entry.borderBoxSize[0].blockSize;
-    const overlayCards = overlay.querySelectorAll(`.${cardClasses}`);
+    const overlayCards =  overlay.querySelectorAll(`.${cardClasses}`);
     overlayCards.forEach((overlayCard) => {
       overlayCard.style.width = `${width}px`;
       overlayCard.style.height = `${height}px`;
     });
   });
 });
-
-
 const applyOverlayMaskOnCenter = (e) => {
   const x = window.innerWidth * 0.5 + window.scrollX;
   const y = window.innerHeight * 0.5 + window.scrollY;
@@ -219,40 +258,32 @@ const applyOverlayMaskOnCenter = (e) => {
   overlay.style.setProperty("--x", `${x}px`);
   overlay.style.setProperty("--y", `${y}px`);
 };
-
 const applyOverlayMask = (e) => {
   const overlayEl = e.currentTarget;
   const x = e.pageX - panel.offsetLeft;
   const y = e.pageY - panel.offsetTop;
   overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
 };
-
 initCards();
 
-function handleFileUpload() {
-  const fileInput = $("#fileInput");
-  const file = fileInput[0].files[0];
-
-  if (file) {
-    const formData = new FormData();
-    formData.append("skin", file, file.name);
-    togglerSkinButtonWaiter(true)
-    $.ajax({
-      url: "/me/minecraft/setSkin",
-      type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function (data, textStatus, jqXHR) {
-        handleResult(jqXHR.status, jqXHR.responseText);
-
-        fileInput.val("");
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        handleResult(jqXHR.status, jqXHR.responseText);
-      },
-    });
-  }
+function getRender(page) {
+  $.ajax({
+    type: 'GET',
+    url: "/me/minecraft/" + page,
+    headers: {
+      'Cache-Control': 'no-store',
+      'Accept': 'panel'
+    },
+    success: function (response) {
+      const renderZone = $(`.app .panel > .${page}`);
+      renderZone.html("");
+      renderZone.html(response);
+      $('.overlay').empty();
+      initCards()
+    },
+    error: function (error) {
+    }
+  });
 }
 
 function togglerSkinButtonWaiter(isWait) {
@@ -263,87 +294,91 @@ function togglerSkinButtonWaiter(isWait) {
   } else {
     image.attr('src', 'https://api.impactium.fun/ux/uploads.svg');
     image.removeClass('rotate');
-    return
+  }
+}
+
+function ajax(block) {
+  const destination = $(block).attr('link');
+  let data, contentType, type;
+
+  if (destination === 'setNickname') {
+    data = JSON.stringify({ newNickname: $('#nicknameField').val() });
+    type = "POST";
+    contentType = "application/json";
+  } else if (destination === 'setSkin') {
+    const fileInput = $(block)[0];
+    const file = fileInput.files[0];
+
+    if (!file) return;
+
+    data = new FormData();
+    type = "POST";
+    contentType = false;
+    data.append("skin", file, file.name);
+    togglerSkinButtonWaiter(true);
+  } else if (destination === 'setPassword') {
+    data = JSON.stringify({ newPassword: $('#passwordField').val() });
+    type = "POST";
+    contentType = "application/json";
   }
 
+  $.ajax({
+    url: `/me/minecraft/${destination}`,
+    type: type,
+    data: data,
+    contentType: contentType,
+    processData: false,
+    success: function (data, textStatus, jqXHR) {
+      newMessage(jqXHR.status, jqXHR.responseText);
+      console.log(data, textStatus, jqXHR)
+      getRender(destination);
+      if (destination === 'setSkin') {
+        $(block).val("");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      newMessage(jqXHR.status, jqXHR.responseText);
+      getRender(destination);
+    },
+    complete: function() {
+      if (destination === 'setSkin') {
+        togglerSkinButtonWaiter(false);
+      }
+    }
+  });
+}
+
+
+function newMessage(code, text) {
+  const type = code < 400 ? 'success' : (code >= 400 && code < 500 ? 'warning' : 'attention');
+  const message = $('<div></div>', {
+    'type': type
+  });
+  message.append(`<p>${text}</p>`);
+  $('#messageWrapper').append(message);
   setTimeout(() => {
-    setSkinSetterWarning('Something went wrong.')
-    togglerSkinButtonWaiter(false)
-  }, 2000);
+    message.addClass('toHide')
+    setTimeout(() => {
+      message.remove();
+    }, 500);
+  }, 5000);
 }
 
-function handleResult(status, message) {
-  switch (status) {
-    case 410:
-      setSkinSetterWarning(message)
-      break;
-    case 411:
-      setSkinSetterWarning(message)
-      break;
-    case 414:
-      setSkinSetterWarning(message)
-      break;
-    case 412:
-      setNicknameSetterWarning(message)
-      break;
-    case 413:
-      setNicknameSetterWarning(message)
-      break;
-    case 415:
-      setNicknameSetterWarning(message)
-      break;
-    case 416:
-      setNicknameSetterWarning(message)
-      break;
-    default:
-      setTimeout(getRender('minecraft'), 500);
-      break;
+async function copy(block) {
+  const copiedMessage = $('#copiedMessage').attr('text');
+  const text = $(block).attr('toCopy');
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  } finally {
+    newMessage(200, `"${text}" ${copiedMessage}`)
   }
-}
-
-function setSkinSetterWarning(message) {
-  const skinUploadOnErrorMessageContainer = $('#skinUploadOnErrorMessageContainer')
-  skinUploadOnErrorMessageContainer.text(message)
-}
-function setNicknameSetterWarning(message) {
-  const nicknameUpdateOnErrorMessageContainer = $('#nicknameUpdateOnErrorMessageContainer')
-  nicknameUpdateOnErrorMessageContainer.text(message)
-}
-
-function updateNickname() {
-  const nickname = $('#nicknameField').val();
-  const requestData = JSON.stringify({ newNickname: nickname });
-
-  $.ajax({
-    url: "/me/minecraft/setNickname",
-    type: "POST",
-    data: requestData,
-    contentType: 'application/json',
-    success: function(data, textStatus, jqXHR) {
-      handleResult(jqXHR.status, jqXHR.responseText);
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      handleResult(jqXHR.status, jqXHR.responseText);
-    }
-  });
-}
-
-function updatePassword() {
-  const password = $('#passwordField').val();
-  const requestData = JSON.stringify({ newPassword: password });
-
-  $.ajax({
-    url: "/me/minecraft/setPassword",
-    type: "POST",
-    data: requestData,
-    contentType: 'application/json',
-    success: function(data, textStatus, jqXHR) {
-      handleResult(jqXHR.status, jqXHR.responseText);
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      handleResult(jqXHR.status, jqXHR.responseText);
-    }
-  });
 }
 
 </script>

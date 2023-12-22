@@ -258,7 +258,7 @@ class MinecraftPlayer {
     this.nickname = newNickname;
     await this.save()
     this.initAuthMe()
-    return 200
+    return 210
   }
 
   async setSkin(originalImageName, imageBuffer) {
@@ -275,7 +275,7 @@ class MinecraftPlayer {
     this.skin.originalTitle = originalImageName;
     this.lastSkinChangeTimestamp = Date.now();
     await this.save();
-    return 200
+    return 211
   }
 
   async setPassword(newPassword) {
@@ -284,7 +284,7 @@ class MinecraftPlayer {
     this.password = newPassword;
     await this.save()
     this.initAuthMe()
-    return 200
+    return 212
   }
 
   async register() {
@@ -373,7 +373,8 @@ class Achievements {
 
   async fetch() {
     const mcs = new ImpactiumServer();
-    const playerStatsFromServer = mcs.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname.toLowerCase())
+
+    const playerStatsFromServer = mcs.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats

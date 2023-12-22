@@ -1,4 +1,4 @@
-<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %> skin_changer">
+<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %> setSkin">
     <div class="flex panel-header align-center">
       <p><%= lang.changeSkin %></p>
 
@@ -19,8 +19,8 @@
       <p class="default_button_style <%= isDisabledSkinChange || !player.skin?.originalTitle ? 'grayed' : '' %>" id="skinName"><%- player.skin?.originalTitle || lang.skinNotSettled %></p>
       
       <!-- Кнопка "Загрузить" для изменения облика -->
-      <input type="file" id="fileInput" style="display: none;">
-      <label for="fileInput" onclick="handleFileUpload()" class="change_profile upload-button <%= isDisabledSkinChange ? 'no-pointers greyed' : '' %>" <%= isDisabledSkinChange ? '' : 'toOverlayView' %>>
+      <input type="file" id="fileInput" style="display: none;" onchange="ajax(this)" link="setSkin">
+      <label for="fileInput" class="change_profile upload-button <%= isDisabledSkinChange ? 'no-pointers greyed' : '' %>" <%= isDisabledSkinChange ? '' : 'toOverlayView' %>>
         <img src="https://api.impactium.fun/ux/uploads.svg">
       </label>
     </div>

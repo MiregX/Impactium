@@ -218,7 +218,6 @@ const processHosting = async () => {
     mcs.launch();
     await mcs.updateWhitelist();
     await mcs.fetchStats();
-    await mcs.resourcePack.process();
   } catch (error) {
     console.log(error);
   }

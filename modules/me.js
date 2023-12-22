@@ -83,6 +83,22 @@ router.get('/minecraft', async (request, response) => {
   }
 });
 
+
+router.get('/minecraft/*', async (request, response, next) => {
+  if (typeof request.headers.accept !== 'undefined' && request.headers.accept !== 'panel') return next();
+  if (typeof request.headers.accept === 'undefined') return response.redirect('/me/minecraft')
+  try {
+    console.log(request.params[0])
+    console.log(request.headers.accept)
+    const panel = fs.readFileSync(`views/personal/elements/${request.params[0]}.ejs`, 'utf8');
+    const html = ejs.render(panel, request.composed);
+    response.status(200).send(html);
+  } catch (error) {
+    console.log(error);
+    response.redirect('/');
+  }
+});
+
 router.post('/minecraft/register', async (request, response) => {
   if (request.player.registered) return response.sendStatus(200);
   try {
@@ -90,28 +106,27 @@ router.post('/minecraft/register', async (request, response) => {
     response.sendStatus(200);
   } catch (error) {
     console.log(error);
-    response.status(500).send(request.lang.errorCode_500);
+    response.status(500).send(request.lang.code_500);
   }
 });
 
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
-
     const status = await request.player.setNickname(request.body.newNickname);
-    response.status(status).send(request.lang[`errorCode_${status}`]);
+    response.status(status).send(request.lang[`code_${status}`]);
   } catch (error) {
     console.log(error);
-    response.status(500).send(request.lang.errorCode_500);
+    response.status(500).send(request.lang.code_500);
   }
 });
 
 router.post('/minecraft/setPassword', async (request, response) => {
   try {
     const status = await request.player.setPassword(request.body.newPassword);
-    response.status(status).send(request.lang[`errorCode_${status}`]);
+    response.status(status).send(request.lang[`code_${status}`]);
   } catch (error) {
     console.log(error);
-    response.status(500).send(request.lang.errorCode_500);
+    response.status(500).send(request.lang.code_500);
   }
 });
 
@@ -126,17 +141,18 @@ router.get('/minecraft/getAchievements', async (request, response) => {
     response.status(200).send(html);
   } catch (error) {
     console.log(error);
-    response.status(500).send(request.lang.errorCode_500);
+    response.status(500).send(request.lang.code_500);
   }
 });
+
 
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
     upload(request, response, async (error) => {
-      if (!request.file || error) return response.status(410).send(request.lang.errorCode_410);
+      if (!request.file || error) return response.status(410).send(request.lang.code_410);
       try {
         const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
-        if (status !== 200) return response.status(status).send(request.lang[`errorCode_${status}`])
+        if (status !== 200) return response.status(status).send(request.lang[`code_${status}`])
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
@@ -145,14 +161,15 @@ router.post('/minecraft/setSkin', async (request, response) => {
         ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
 
 
-        response.status(status).send(request.lang[`errorCode_${status}`]);
+        response.status(status).send(request.lang[`code_${status}`]);
       } catch (error) {
-        response.status(500).send(request.lang.errorCode_500);
+        console.log(error)
+        response.status(500).send(request.lang.code_500);
       }
     });
   } catch (error) {
     console.log(error);
-    response.status(500).send(request.lang.errorCode_500);
+    response.status(500).send(request.lang.code_500);
   }
 });
 

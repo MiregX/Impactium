@@ -21,6 +21,9 @@
   .server_info .ip > p {
     line-height: 24px;
   }
+  .overlay .server_info .ip > span {
+    color: white;
+  }
 </style>
 <div class="server_info default_panel_style dynamic">
   <div style="flex: 1;">
@@ -31,18 +34,3 @@
     <p>play.impactium.fun</p>
   </div>
 </div>
-<script>
-async function copy(block) {
-  const text = $(block).attr('toCopy');
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (err) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-  }
-}
-</script>

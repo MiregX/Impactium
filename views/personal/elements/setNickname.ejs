@@ -1,4 +1,4 @@
-<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %> nickname_changer">
+<div class="default_panel_style dynamic <%= player.registered ? '' : 'blocked' %> setNickname">
     <div class="flex panel-header align-center">
       <p><%= lang.changeNickname %></p>
 
@@ -19,7 +19,7 @@
       <input type="text" id="nicknameField" value="<%= player.nickname %>" placeholder="<%= lang.enterNickname %>" class="<%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>">
       
       <!-- Кнопка "Сохранить" для изменения никнейма -->
-      <div onclick="updateNickname()" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>
+      <div onclick="ajax(this)" link="setNickname" class="change_profile save-button <%= isDisabledNicknameChange ? 'no-pointers grayed' : '' %>" <%= isDisabledNicknameChange ? '' : 'toOverlayView' %>>
         <%= lang.apply %>
       </div>
     </div>

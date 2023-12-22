@@ -13,15 +13,6 @@
   --donate: url("https://api.impactium.fun/ux/donate.svg");
   --donate-accent: #72E4F2;
 }
-.profile {
-  --flow-space: 0.5em;
-  padding: 1.5em 2em !important;
-  display: grid;
-  grid-template-rows: auto auto auto 1fr;
-  align-items: start;
-  gap: 1.25em;
-  min-width: 256px;
-}
 .dynamic {
   --hue: 275;
   --saturation: 82.26%;
@@ -29,6 +20,16 @@
   --hsl: var(--hue), var(--saturation), var(--lightness);
 }
 
+.profile {
+  --flow-space: 0.5em;
+  --hue: 240;
+  padding: 1.5em 2em !important;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  align-items: start;
+  gap: 1.25em;
+  min-width: 256px;
+}
 .privileges {
   width: 100%;
   line-height: 1.4;
@@ -488,13 +489,13 @@
   <%- include(`${lang.debugPath}/views/personal/elements/playerCredentials.ejs`, { player, lang }) %>
   <div class="controls calc_overlay">
     <!-- Панель для изменения никнейма -->
-    <%- include(`${lang.debugPath}/views/personal/elements/nicknameChanger.ejs`, { player, lang }) %>
+    <%- include(`${lang.debugPath}/views/personal/elements/setNickname.ejs`, { player, lang }) %>
     
     <!-- Панель для изменения облика -->
-    <%- include(`${lang.debugPath}/views/personal/elements/skinChanger.ejs`, { player, lang }) %>
+    <%- include(`${lang.debugPath}/views/personal/elements/setSkin.ejs`, { player, lang }) %>
     
     <!-- Панель для изменения пароля -->
-    <%- include(`${lang.debugPath}/views/personal/elements/passwordChanger.ejs`, { player, lang }) %>
+    <%- include(`${lang.debugPath}/views/personal/elements/setPassword.ejs`, { player, lang }) %>
     
     <!-- Панель для изменения пароля -->
     <%- include(`${lang.debugPath}/views/personal/elements/achievementsModule.ejs`, { player, lang }) %>
@@ -504,7 +505,6 @@
   <%- include(`${lang.debugPath}/views/personal/elements/serverInfo.ejs`, { player, lang }) %>
 </div>
 <div class="overlay flex" style="gap: 32px;">
-<p>Хуй</p>
 </div>
 <script>
 function registerPlayer() {
@@ -542,57 +542,55 @@ function updateTimer() {
 
 updateTimer();
 
-  function achievementSelection(caller) {
-    const allButtons = $('.selection_wrapper button');
-    allButtons.each(function() {
-      $(this).removeClass('selected');
-    });
+function achievementSelection(caller) {
+  const allButtons = $('.selection_wrapper button');
+  allButtons.each(function() {
+    $(this).removeClass('selected');
+  });
 
-    const buttonInitiator = $(caller);
-    buttonInitiator.addClass('selected');
-    $(`.overlay .selection_wrapper button.${buttonInitiator.attr('--achievement')}`).addClass('selected');
+  const buttonInitiator = $(caller);
+  buttonInitiator.addClass('selected');
+  $(`.overlay .selection_wrapper button.${buttonInitiator.attr('--achievement')}`).addClass('selected');
 
-    displayAchievementPanel(buttonInitiator.attr('--achievement'));
+  displayAchievementPanel(buttonInitiator.attr('--achievement'));
+}
+function displayAchievementPanel(achievementToCall) {
+  const allPanels = $('.achievements_module .stages')
+  allPanels.each(function() {
+    $(this).removeClass('selected');
+  });
+
+  const blockToDisplay = $(`.achievements_module .stages.${achievementToCall}`);
+  if (blockToDisplay) {
+    blockToDisplay.addClass('selected')
   }
-  function displayAchievementPanel(achievementToCall) {
-    const allPanels = $('.achievements_module .stages')
-    allPanels.each(function() {
-      $(this).removeClass('selected');
-    });
+  const p = $('.achievements_module');
+  p.attr('achievement', achievementToCall);
+}
+function onloadAchievementsFetcher() {
+  if ($('.achievements_module').hasClass('blocked')) return;
+  $('.selection_wrapper > div').addClass('active');
+  const lastFetch = parseInt($('.achievements_module').attr('processed'), 10);
 
-    const blockToDisplay = $(`.achievements_module .stages.${achievementToCall}`);
-    if (blockToDisplay) {
-      blockToDisplay.addClass('selected')
+  if ((Date.now() - lastFetch) < 1000 * 60 * 10) return $('.selection_wrapper > div').removeClass('active')
+
+  $.ajax({
+    url: "/me/minecraft/getAchievements",
+    type: "GET",
+    contentType: 'application/json',
+    success: function(data, textStatus, jqXHR) {
+      handleAchievementsResult(jqXHR.responseText);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      handleAchievementsResult(jqXHR.responseText);
     }
-    const p = $('.achievements_module');
-    p.attr('achievement', achievementToCall);
-  }
-  function onloadAchievementsFetcher() {
-    if ($('.achievements_module').hasClass('blocked')) return;
-    $('.selection_wrapper > div').addClass('active');
-    const lastFetch = parseInt($('.achievements_module').attr('processed'), 10);
+  });
+}
 
-    if ((Date.now() - lastFetch) < 1000 * 60 * 10) return $('.selection_wrapper > div').removeClass('active')
-
-    $.ajax({
-      url: "/me/minecraft/getAchievements",
-      type: "GET",
-      contentType: 'application/json',
-      success: function(data, textStatus, jqXHR) {
-        handleAchievementsResult(jqXHR.responseText);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        handleAchievementsResult(jqXHR.responseText);
-      }
-    });
-  }
-
-  function handleAchievementsResult(html) {
-    const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
-    $('.achievements_module').replaceWith(html);
-    $('.overlay').empty();
-    initCards();
-    achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
-  }
-  onloadAchievementsFetcher();
+function handleAchievementsResult(html) {
+  const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
+  $('.achievements_module').replaceWith(html);
+  achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
+}
+onloadAchievementsFetcher();
 </script>

@@ -751,55 +751,79 @@
       "ru": "Пожертвовать серверу 50$"
     }
   },
-  "errorCode_400": {
+  "copiedMessage": {
+    "uk": "скопійовано в буфер обміну",
+    "it": "copiato negli appunti",
+    "en": "copied to clipboard",
+    "ru": "скопировано в буфер обмена"
+  },
+  "code_210": {
+    "uk": "Ваш нікнейм успішно оновлено. Деякі досягнення та предмети можуть зникнути.",
+    "it": "Il tuo nickname è stato aggiornato con successo. Alcuni achievement e oggetti potrebbero scomparire.",
+    "en": "Your nickname has been successfully updated. Some achievements and items may disappear.",
+    "ru": "Ваш никнейм успешно обновлен. Некоторые достижения и предметы могут исчезнуть."
+  },
+  "code_211": {
+    "uk": "Зміна скіна пройшла успішно. Тепер ваш персонаж виглядає інакше. Зазвичай зміни вступають в силу протягом 6 годин.",
+    "it": "Il cambio di skin è avvenuto con successo. Ora il tuo personaggio ha un aspetto diverso. Di solito le modifiche diventano effettive entro 6 ore.",
+    "en": "Skin change was successful. Now your character looks different. Usually, changes take effect within 6 hours.",
+    "ru": "Изменение скина прошло успешно. Теперь ваш персонаж выглядит по-другому. Обычно изменения вступают в силу в течение 6 часов."
+  },
+  "code_212": {
+    "uk": "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
+    "it": "La tua password è stata modificata con successo. Usa /l <password> per accedere.",
+    "en": "Password successfully changed. Use /l <your password> to log in.",
+    "ru": "Пароль успешно изменен. Используйте /l <ваш пароль> для входа."
+  },  
+  "code_400": {
     "uk": "Ви не авторизовані",
     "it": "Non sei autorizzato",
     "en": "You are not authorized",
     "ru": "Вы не авторизированы"
   },
-  "errorCode_410": {
+  "code_410": {
     "uk": "Невірне розширення файлу",
     "it": "Estensione del file non valida",
     "en": "Invalid file extension",
     "ru": "Неверное разширение файла"
   },
-  "errorCode_411": {
+  "code_411": {
     "uk": "Скін повинен мати розмір 64 на 64 пікселі",
     "it": "Lo skin deve essere di dimensioni 64 per 64 pixel",
     "en": "Skin must be 64 by 64 pixels in size",
     "ru": "Скин должен быть размером 64 на 64 пикселя"
   },
-  "errorCode_412": {
+  "code_412": {
     "uk": "Невірний регістр. Дозволяються тільки a-z, 0-9, '_'",
     "it": "Maiuscole non valide. Consentiti solo a-z, 0-9, '_'",
     "en": "Invalid case. Only a-z, 0-9, '_' are allowed",
     "ru": "Неверный регистр. Разрешаются только a-z, 0-9, '_'"
   },
-  "errorCode_413": {
+  "code_413": {
     "uk": "Нікнейм повинен бути від 3 до 32 символів",
     "it": "Il nickname deve essere lungo da 3 a 32 caratteri",
     "en": "Nickname must be between 3 and 32 characters",
     "ru": "Никнейм должен быть от 3 до 32 символов"
   },
-  "errorCode_414": {
+  "code_414": {
     "uk": "Зовнішній вигляд можна змінювати лише раз на 24 години",
     "it": "L'aspetto può essere cambiato solo una volta ogni 24 ore",
     "en": "Appearance can be changed only once in 24 hours",
     "ru": "Облик можно менять только раз в 24 часа"
   },
-  "errorCode_415": {
+  "code_415": {
     "uk": "Нікнейм можна змінювати лише раз на годину",
     "it": "Il nickname può essere cambiato solo una volta all'ora",
     "en": "Nickname can be changed only once per hour",
     "ru": "Никнейм можно менять только раз час"
   },
-  "errorCode_416": {
+  "code_416": {
     "uk": "Гравець з таким нікнеймом вже існує",
     "it": "Giocatore con lo stesso nickname già esistente",
     "en": "Player with such nickname already exists",
     "ru": "Игрок с таким ником уже существует"
   },  
-  "errorCode_500": {
+  "code_500": {
     "uk": "Внутрішня помилка сервера",
     "it": "Errore interno del server",
     "en": "Internal server error",
