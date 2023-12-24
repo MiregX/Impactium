@@ -1,5 +1,6 @@
 <style>
   .server_info {
+    --lightness: 100%;
     width: 100%;
     flex-direction: row;
   }
@@ -21,8 +22,14 @@
   .server_info .ip > p {
     line-height: 24px;
   }
+  .overlay .server_info .ip {
+    background: #0d0d0d;
+  }
   .overlay .server_info .ip > span {
-    color: white;
+    color: var(--w);
+  }
+  .overlay .server_info .ip > p {
+    color: var(--w);
   }
 </style>
 <div class="server_info default_panel_style dynamic">

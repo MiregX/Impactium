@@ -62,7 +62,7 @@ router.get('/', async (request, response) => {
 router.get('/minecraft', async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
 
-  const minecraftTemplate = fs.readFileSync('views/personal/minecraftBody.ejs', 'utf8');
+  const minecraftTemplate = fs.readFileSync('views/personal/minecraft.ejs', 'utf8');
   const body = ejs.render(minecraftTemplate, request.composed);
 
   if (request.headers.accept === 'semipage') {
@@ -70,7 +70,7 @@ router.get('/minecraft', async (request, response) => {
   } else {
     const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), {
       user: request.user,
-      prerender: "minecraftBody",
+      prerender: "minecraft",
       player: request.player.serialize(),
       lang: request.lang
     });
@@ -88,8 +88,6 @@ router.get('/minecraft/*', async (request, response, next) => {
   if (typeof request.headers.accept !== 'undefined' && request.headers.accept !== 'panel') return next();
   if (typeof request.headers.accept === 'undefined') return response.redirect('/me/minecraft')
   try {
-    console.log(request.params[0])
-    console.log(request.headers.accept)
     const panel = fs.readFileSync(`views/personal/elements/${request.params[0]}.ejs`, 'utf8');
     const html = ejs.render(panel, request.composed);
     response.status(200).send(html);

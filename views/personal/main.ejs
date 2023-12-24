@@ -160,7 +160,7 @@ main {
     </button>
   </nav>
   <div class="panel">
-    <% if (typeof prerender === 'undefined') prerender = 'minecraftBody'; %>
+    <% if (typeof prerender === 'undefined') prerender = 'minecraft'; %>
     <% if (typeof user === 'undefined') user = player; %>
     <%- include(`${lang.debugPath}/views/personal/${prerender}.ejs`, { user, lang }) %>
     

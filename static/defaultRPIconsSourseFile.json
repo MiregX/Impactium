@@ -2,6 +2,24 @@
     "providers": [
         {
             "type": "bitmap",
+            "file": "minecraft:font/svaston.png",
+            "ascent": 0,
+            "height": 33,
+            "chars": [
+                "\u4994"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/empty.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "\u4995"
+            ]
+        },
+        {
+            "type": "bitmap",
             "file": "minecraft:font/steve.png",
             "ascent": 8,
             "height": 8,

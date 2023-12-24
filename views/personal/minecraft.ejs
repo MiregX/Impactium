@@ -510,7 +510,7 @@
 function registerPlayer() {
   $.post("/me/minecraft/register")
     .done(function(response) {
-      getRender('minecraft')
+      location.reload();
     })
 }
 
@@ -590,7 +590,9 @@ function onloadAchievementsFetcher() {
 function handleAchievementsResult(html) {
   const selectedButton = $('.selection_wrapper button.selected').attr("--achievement");
   $('.achievements_module').replaceWith(html);
+  $('.overlay').empty();
   achievementSelection(document.querySelector(`.selection_wrapper button.${selectedButton}`));
+  initCards();
 }
 onloadAchievementsFetcher();
 </script>

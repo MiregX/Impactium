@@ -821,8 +821,14 @@
     "uk": "Гравець з таким нікнеймом вже існує",
     "it": "Giocatore con lo stesso nickname già esistente",
     "en": "Player with such nickname already exists",
-    "ru": "Игрок с таким ником уже существует"
-  },  
+    "ru": "Такой никнейм уже занят"
+  },
+  "code_417": {
+    "uk": "Вибачте, але ви не можете встановити той же самий нікнейм, який ви вже маєте",
+    "it": "Spiacenti, non puoi impostare lo stesso nickname che hai già",
+    "en": "Sorry, but you cannot set the same nickname that you already have",
+    "ru": "Извините, но вы не можете установить тот же никнейм, который уже используете"
+  },
   "code_500": {
     "uk": "Внутрішня помилка сервера",
     "it": "Errore interno del server",

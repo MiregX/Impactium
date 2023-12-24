@@ -238,12 +238,14 @@ class MinecraftPlayer {
   }
 
   async setNickname(newNickname) {
-    if (Date.now() - this.lastNicknameChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
-
+    if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 412;
+    if (this.nickname && this.nickname?.toLowerCase() === newNickname.toLowerCase()) return 419
 
     const Players = await getDatabase("minecraftPlayers");
-    const possiblePlayerWithSameNickname = await Players.findOne({ nickname: newNickname });
+    const possiblePlayerWithSameNickname = await Players.findOne({
+      nickname: new RegExp('^' + newNickname + '$', 'i')
+    });    
 
     if (possiblePlayerWithSameNickname) return 416;
 
@@ -571,12 +573,16 @@ class ImpactiumServer {
 
   restart() {
     if (!this.server) return false;
-    this.server.writeCommand('/title @a times 20 160 20');
-    this.server.writeCommand('/title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
-    this.server.writeCommand('/title @a title {"text":"Restart"}');
+    this.command('title @a times 20 160 20');
+    this.command('title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
     setTimeout(() => {
-      this.server.writeCommand('kick *');
-      this.server.writeCommand('restart');
+      this.command('title @a title {"text":"Restart"}');
+    }, 500);
+    setTimeout(() => {
+      this.command('kickall');
+      setTimeout(() => {
+        this.command('restart');
+      }, 500);
     }, 60000);
   }
   
@@ -705,7 +711,7 @@ class ResoursePackInstance {
   async setIcons() {
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
     playersWithFetchedIcon.providers.forEach(async (player, index) => {
-      if (index < 4) return
+      if (index < 6) return
       const playerNickname = player.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
       this.mcs.command(`lp user ${playerNickname} meta setprefix 2 "${player.chars[0]} "`);
     });
@@ -783,8 +789,11 @@ class ResoursePackInstance {
       await this.getLink();
       return true
     } catch (error) {
-      console.log(error)
-      return false
+      if (error.status === 401) {
+        log("Токен Dropbox закончился", 'r');
+        return false
+      }
+      return await this.upload()
     }
   }
 
