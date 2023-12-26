@@ -220,8 +220,12 @@ const initCards = () => {
 const createCard = (cardElement) => {
   const overlayCard = document.createElement("div");
   overlayCard.classList.add(...cardElement.classList);
-  const toOverlayViewElement = cardElement.querySelector('[toOverlayView]');
-  if (toOverlayViewElement) createOverlayCta(overlayCard, toOverlayViewElement);
+  const toOverlayViewElement = cardElement.querySelectorAll('[toOverlayView]');
+  if (toOverlayViewElement) {
+    toOverlayViewElement.forEach(element => {
+      createOverlayCta(overlayCard, element);
+    });
+  }
   return overlayCard
 };
 function updateSelectors() {

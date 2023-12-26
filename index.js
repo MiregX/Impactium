@@ -177,10 +177,14 @@ app.get('/set-token/:token', (request, response) => {
 });
 
 app.get('/status', (request, response) => {
-  setTimeout(() => {
-    
-  }, 5000);
   response.sendStatus(200);
+});
+
+app.get('/resourse-pack', (request, response) => {
+  if (request.cookies.lastResoursePackDownload && Date.now() - request.cookies.lastResoursePackDownload < 1000 * 60 * 10) return response.sendStatus(403);
+  response.cookie('lastResoursePackDownload', Date.now());
+  response.cookie('lastResoursePackDownload', Date.now(), { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
+  response.download(path.join(__dirname, 'static', 'Impactium RP.zip'), 'Impactium RP.zip');
 });
 
 const terminalRouter = require('./modules/terminal');

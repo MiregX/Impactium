@@ -6,13 +6,10 @@ header {
   top: 0px;
   justify-content: space-between;
   padding: 0 16px;
-  width: calc(100vw - 32px);
+  width: 100vw;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
-}
-header * {
-  letter-spacing: 0px;
 }
 header-background {
   z-index: 1;
@@ -206,15 +203,8 @@ header .logo {
 .temp-button:hover .button-text {
  color: #fff;
 }
-@media (max-width: 1080px) {
-  header {
-    width: calc(100vw - 4vw);
-  }
-}
 @media (max-width: 767px) {
 header {
-  width: calc(100vw - 4vw);
-  padding: 0;
   grid-template-columns: repeat(2, 1fr);
 }
 .nav {
@@ -287,8 +277,8 @@ header {
 }
 </style>
 <header>
-    <div style="gap: 16px; opacity: 0;" class="logo flex flex-dir-row align-center">
-      <img src="https://api.impactium.fun/logo/impactium_v4.svg" onclick="toHub()" style="height: 48px;">
+    <div style="gap: 16px; opacity: 0;" onclick="toHub()" class="logo flex flex-dir-row align-center">
+      <img src="https://api.impactium.fun/logo/impactium_v4.svg" style="height: 48px;">
       <p style="font-size: 30px; font-weight: 600;">Impactium</p>
     </div>
     <% if (typeof nav !== 'undefined') { %>

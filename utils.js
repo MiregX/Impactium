@@ -12,7 +12,7 @@ const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { mongoLogin, dropboxToken, sftpConfig, minecraftServerAPI } = process.env;
+const { mongoLogin, dropboxAppKey, dropboxAppSecret, dropboxAccessToken, sftpConfig, minecraftServerAPI } = process.env;
 
 class User {
   constructor(token) {
@@ -667,12 +667,10 @@ class ResoursePackInstance {
   }
 
   async process() {
-    await this.putIcons(); // запихиваем иконки в рп
+    await this.putIcons();
     await this.archive();
-    await this.hashsum(); // получаем хешсумму
-    const success = await this.upload(); // выгружаем сам ресурс-пак
-    if (!success) return;
-    await this.updateServerProperties(); // обновляем сервер
+    await this.hashsum();
+    await this.updateServerProperties();
     await this.setIcons();
     
     this.mcs.restart();
@@ -771,112 +769,10 @@ class ResoursePackInstance {
       if (lines[i].startsWith('resource-pack-sha1=')) {
         lines[i] = `resource-pack-sha1=${this.hashsum}`;
       }
-      if (lines[i].startsWith('resource-pack=')) {
-        lines[i] = `resource-pack=${this.link}`;
-      }
     }
 
     await this.sftp.save('server.properties', lines.join('\n'));
     await this.sftp.close();
-  }
-
-  async upload() {
-    this.dropbox = new Dropbox({ accessToken: dropboxToken });
-  
-    try {
-      const uploadSuccess = await this.putDropbox()
-      if (!uploadSuccess) return false;
-      await this.getLink();
-      return true
-    } catch (error) {
-      if (error.status === 401) {
-        log("Токен Dropbox закончился", 'r');
-        return false
-      }
-      return await this.upload()
-    }
-  }
-
-  async putDropbox() {
-    console.log("putDropbox()")
-    try {
-      const fileContent = fs.readFileSync(this.path.file.resoursePackDestination);
-      const upload = await this.dropbox.filesUpload({
-        path: `/Impactium RP.zip`,
-        contents: fileContent,
-      });
-      if (upload.status === 200) {
-        return true;
-      } else {
-        throw new Error(upload);
-      }
-    } catch (error) {
-      if (error.status === 401) {
-        log("Токен Dropbox закончился", 'r');
-        return false
-      } else if (error.status === 409) {
-        await this.deleteDropdox();
-      } else {
-        return console.log(error);
-      }
-      return await this.putDropbox();
-    } 
-  }
-
-  async isExist() {
-    console.log("isExist()")
-    try {
-      const metadata = await this.dropbox.filesGetMetadata({ path: '/Impactium RP.zip' });
-      return !!metadata;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
-
-  async deleteDropdox() {
-    console.log("deleteDropdox()")
-    try {
-      await this.dropbox.filesDeleteV2({ path: '/Impactium RP.zip' });
-    } catch (error) {
-      if(this.isExist()) await this.deleteDropdox();
-    }
-  }
-
-  async getLink() {
-    console.log("getLink()")
-    try {
-      const existingLinks = await this.dropbox.sharingListSharedLinks({
-        path: '/Impactium RP.zip',
-      });
-
-      if (existingLinks.result.links.length > 0) {
-        this.link = existingLinks.result.links[0].url;
-      } else {
-        this.link = await this.generateLink();
-      }
-      this.link = this.link.replace('&dl=0', '&dl=1');
-    } catch (error) {
-      console.log(error)
-      return await this.getLink();
-    }
-  }
-
-  async generateLink() {
-    console.log("generateLink()")
-    try {
-      const link = await this.dropbox.sharingCreateSharedLinkWithSettings({
-        path: '/Impactium RP.zip',
-        settings: {
-          requested_visibility: { '.tag': 'public' },
-        },
-      });
-      return link.result.url
-    } catch (error) {
-      if (error.status === 409) return
-      if (error.status === 401) return
-      return await this.generateLink()
-    }
   }
 }
 

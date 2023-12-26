@@ -3,40 +3,70 @@
     --lightness: 100%;
     width: 100%;
     flex-direction: row;
+    gap: 1em;
   }
-  .server_info .ip {
+  .server_info .default {
     width: fit-content;
     flex: unset;
     flex-direction: row;
+    align-items: center;
     display: flex;
     margin: 0;
+    padding: 0.44em 0.88em;
     gap: 0.44em;
     border: none !important;
   }
-  .server_info .ip > span {
+  .server_info .default > span {
     color: var(--c-96);
-    width: 24px;
     height: 24px;
     font-size: 16px;
   }
-  .server_info .ip > p {
+  .server_info .default > p {
     line-height: 24px;
   }
-  .overlay .server_info .ip {
+  .server_info .default > img {
+    height: 20px;
+    width: 20px;
+  }
+  .overlay .server_info .default {
     background: #0d0d0d;
   }
-  .overlay .server_info .ip > span {
+  .overlay .server_info .default > span {
     color: var(--w);
   }
-  .overlay .server_info .ip > p {
+  .overlay .server_info .default > p {
     color: var(--w);
+  }
+  .server_info .version {
+    cursor: default;
+  }
+  .overlay .version {
+    opacity: 0;
+  }
+  .server_info .donate {
+    justify-content: space-around
   }
 </style>
 <div class="server_info default_panel_style dynamic">
-  <div style="flex: 1;">
-
+  <div class="default version change_profile default_button_style" toOverlayView>
+    <span class="center"><%= lang.version %></span>
+    <p>1.20.2</p>
   </div>
-  <div class="ip change_profile default_button_style" onclick="copy(this)" toCopy="play.impactium.fun" toOverlayView>
+
+  <div class="default voice change_profile default_button_style" onclick="window.open('https://modrinth.com/plugin/plasmo-voice/versions?g=1.20.2&l=fabric', '_blank')" toOverlayView>
+    <span class="center"><%= lang.downloadVoiceChat %></span>
+    <img src="https://api.impactium.fun/ux/mic.svg">
+  </div>
+
+  <div class="default telegram change_profile default_button_style" onclick="window.open('https://t.me/+8OB7E0xJwlFhY2Iy', '_blank')" toOverlayView>
+    <span class="center"><%= lang.playerChat %></span>
+    <img src="https://api.impactium.fun/ux/telegram-v1.svg">
+  </div>
+  <div class="default donate change_profile default_button_style" style="flex: 1;" onclick="window.open('https://t.me/MiregX', '_blank')" toOverlayView>
+    <span class="center"><%= lang.supportOurServer %></span>
+    <img src="https://api.impactium.fun/logo/impactium_v4.svg">
+  </div>
+  <div class="default ip change_profile default_button_style" onclick="copy(this)" toCopy="play.impactium.fun" toOverlayView>
     <span class="center">IP:</span>
     <p>play.impactium.fun</p>
   </div>

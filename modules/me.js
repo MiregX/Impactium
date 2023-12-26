@@ -29,7 +29,7 @@ const setUserAndPlayer = async (request, response, next) => {
 
   const lang = getLanguagePack(request.cookies.lang);
 
-  if (!user.isFetched) return response.redirect('https://impactium.fun/');
+  if (!user.isFetched) return response.redirect('https://impactium.fun/login');
 
   request.composed = { user, player: player.serialize(), lang };
   request.user = user;
@@ -82,7 +82,6 @@ router.get('/minecraft', async (request, response) => {
     });
   }
 });
-
 
 router.get('/minecraft/*', async (request, response, next) => {
   if (typeof request.headers.accept !== 'undefined' && request.headers.accept !== 'panel') return next();

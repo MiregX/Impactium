@@ -37,34 +37,34 @@
   },
   "joinToUsDescription": [
     {
-      "uk": "Ми - причина всіх твоїх невдач. Ми поставимо тобі трагедію в двох актах.",
-      "it": "Noi siamo la causa di tutti i tuoi fallimenti. Organizzeremo per te una tragedia in due atti.",
-      "en": "We are the cause of all your failures. We will stage a tragedy for you in two acts.",
-      "ru": "Мы - причина всех твоих неудач. Мы устроим тебе трагедию в двух актах."
+      "uk": "Використання голосового чату не обов'язкове, але бажане. Без нього тебе засруть інші гравці.",
+      "it": "L'uso della chat vocale non è obbligatorio, ma consigliato. Senza di essa, gli altri giocatori ti infastidiranno.",
+      "en": "The use of voice chat is not mandatory, but recommended. Without it, other players may spam you.",
+      "ru": "Использование войс-чата не обязательно, но желательно. Без него тебя засрут другие игроки."
     },
     {
-      "uk": "Втративши все, ціна перемоги зростає в нескінченність. Ми позбавимо тебе всього, до чого ти коли-небудь торкався.",
-      "it": "Perdendo tutto, il costo della vittoria cresce all'infinito. Ti priviamo di tutto ciò a cui hai mai toccato.",
-      "en": "Losing everything, the price of victory grows to infinity. We will deprive you of everything you have ever touched.",
-      "ru": "Потеряв всё, цена победы растёт в бесконечность. Мы лишим тебя всего, к чему ты когда либо прикасался."
+      "uk": "Будь готовий знайти на своїй базі величезну обсидіанову свастику. І немає жодних гарантій, що це не зробив адмін )",
+      "it": "Sii pronto a scoprire una grande svastica di ossidiana nella tua base. E non ci sono garanzie che non l'abbia fatta l'amministratore )",
+      "en": "Be prepared to discover a huge obsidian swastika at your base. And there are no guarantees that the admin didn't create it )",
+      "ru": "Будь готов обнаружить у себя на базе огромную обсидиановую свастику. И нет никаких гарантий, что это сделал не админ )"
     },
     {
-      "uk": "Не існує таких вибачень, які ти міг би сказати собі, за всю ту слабкість, яку ти виявив.",
-      "it": "Non esistono scuse che tu possa dire a te stesso per tutta quella debolezza che hai mostrato.",
-      "en": "There are no apologies you could say to yourself for all that weakness you've shown.",
-      "ru": "Не существует таких извинений, которые ты мог бы сказать себе, за всю ту слабость, которую ты проявил."
+      "uk": "Перше правило лісу - завжди ховай шалкера в ендер-скрині. Друге правило лісу: за гриф - сват і дудос",
+      "it": "La prima regola del bosco - nascondi sempre lo shulker nell'ender chest. La seconda regola del bosco: per il grief - DDoS",
+      "en": "The first rule of the forest - always hide the shulker in the ender chest. The second rule of the forest: for grief - DDoS",
+      "ru": "Первое правило леса - всегда прячь шалкера в эндер-чест. Второе правило леса: за гриф - сват и дудос"
     },
     {
-      "uk": "Використання наших технологій несе за собою абсолютну відповідальність. Готовий ти цю відповідальність прийняти?",
-      "it": "L'uso delle nostre tecnologie comporta una responsabilità assoluta. Sei pronto a assumerti questa responsabilità?",
-      "en": "Using our technologies carries absolute responsibility. Are you ready to take on this responsibility?",
-      "ru": "Использование наших технологий несёт за собой абсолютную ответственность. Готов ли ты эту ответственность принять?"
+      "uk": "Незважаючи на рофельність проекту, адмін цілком адекватна людина. Якщо є проблеми - пиши в тг @MiregX",
+      "it": "Nonostante la natura scherzosa del progetto, l'amministratore è una persona del tutto ragionevole. Se ci sono problemi, scrivi su Telegram a @MiregX",
+      "en": "Despite the project's humorous nature, the admin is quite reasonable. If you have issues, contact on Telegram @MiregX",
+      "ru": "Не смотря на рофельность проекта, админ вполне вменяемый человек. Если есть проблемы - пиши в тг @MiregX"
     },
     {
-      "uk": "Морально-етичні обмеження закінчуються там, де починається зручність сверх-хижаків.",
-      "it": "I limiti morali ed etici finiscono dove inizia il comfort degli iper-predatori.",
-      "en": "Moral and ethical constraints end where the convenience of super-predators begins.",
-      "ru": "Морально-этические ограничения заканчиваются там, где начинается удобство сверх-хищников."
+      "uk": "Ходять чутки, що за виконання всіх досягнень на сайті можна отримати бан.",
+      "it": "Circolano voci che eseguire tutti gli obiettivi sul sito può portare al ban.",
+      "en": "Rumors are circulating that completing all achievements on the site may result in a ban.",
+      "ru": "Ходят слухи, что за выполнение всех достижений на сайте можно получить бан."
     }
   ],
   "ourPartners": {
@@ -323,9 +323,33 @@
       "en": "Apply",
       "ru": "Сохранить"
   },
+  "version": {
+    "uk": "Версія",
+    "it": "Versione",
+    "en": "Version",
+    "ru": "Версия"
+  },
+  "downloadVoiceChat": {
+    "uk": "Завантажити голосовий чат",
+    "it": "Scarica la chat vocale",
+    "en": "Download voice chat",
+    "ru": "Скачать голосовой чат"
+  },
+  "supportOurServer": {
+    "uk": "Підтримати проект",
+    "it": "Sostieni il progetto",
+    "en": "Support our server",
+    "ru": "Поддержать проект"
+  },
+  "playerChat": {
+    "uk": "Чат гравців сервера",
+    "it": "Chat con il giocatore",
+    "en": "Server player`s chat",
+    "ru": "Чат игроков сервера"
+  },
   "achievmentTitle_casual": {
       "uk": "Казуальність",
-      "it": "",
+      "it": "Casualità",
       "en": "Casuality",
       "ru": "Казуальность"
   },
