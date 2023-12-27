@@ -110,7 +110,7 @@ router.post('/minecraft/register', async (request, response) => {
 router.post('/minecraft/setNickname', async (request, response) => {
   try {
     const status = await request.player.setNickname(request.body.newNickname);
-    response.status(status).send(request.lang[`code_${status}`]);
+    response.status(status).send(request.lang.nickname[`${status}`]);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.code_500);
@@ -120,7 +120,7 @@ router.post('/minecraft/setNickname', async (request, response) => {
 router.post('/minecraft/setPassword', async (request, response) => {
   try {
     const status = await request.player.setPassword(request.body.newPassword);
-    response.status(status).send(request.lang[`code_${status}`]);
+    response.status(status).send(request.lang.password[`${status}`]);
   } catch (error) {
     console.log(error);
     response.status(500).send(request.lang.code_500);
@@ -146,10 +146,10 @@ router.get('/minecraft/getAchievements', async (request, response) => {
 router.post('/minecraft/setSkin', async (request, response) => {
   try {
     upload(request, response, async (error) => {
-      if (!request.file || error) return response.status(410).send(request.lang.code_410);
+      if (!request.file || error) return response.status(401).send(request.lang.skin[`401`]);
       try {
         const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
-        if (status !== 200) return response.status(status).send(request.lang[`code_${status}`])
+        if (status !== 200) return response.status(status).send(request.lang.skin[`${status}`])
 
         await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
         await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
@@ -158,7 +158,7 @@ router.post('/minecraft/setSkin', async (request, response) => {
         ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
 
 
-        response.status(status).send(request.lang[`code_${status}`]);
+        response.status(status).send(request.lang.skin[`${status}`]);
       } catch (error) {
         console.log(error)
         response.status(500).send(request.lang.code_500);

@@ -300,16 +300,16 @@
       "ru": "Введи новый пароль"
   },
   "saveChanges": {
-      "uk": "Зберегти зміни",
-      "it": "Salva modifiche",
-      "en": "Save changes",
-      "ru": "Изменить профиль"
+      "uk": "На головну",
+      "it": "To main page",
+      "en": "To main page",
+      "ru": "На главную"
   },
   "register": {
       "uk": "Зареєструватися",
       "it": "Registrati",
       "en": "Register",
-      "ru": "Зарегестрироваться"
+      "ru": "Зарегистрироваться"
   },
   "confirm": {
       "uk": "Підтвердити",
@@ -781,77 +781,107 @@
     "en": "copied to clipboard",
     "ru": "скопировано в буфер обмена"
   },
-  "code_210": {
-    "uk": "Ваш нікнейм успішно оновлено. Деякі досягнення та предмети можуть зникнути.",
-    "it": "Il tuo nickname è stato aggiornato con successo. Alcuni achievement e oggetti potrebbero scomparire.",
-    "en": "Your nickname has been successfully updated. Some achievements and items may disappear.",
-    "ru": "Ваш никнейм успешно обновлен. Некоторые достижения и предметы могут исчезнуть."
-  },
-  "code_211": {
-    "uk": "Зміна скіна пройшла успішно. Тепер ваш персонаж виглядає інакше. Зазвичай зміни вступають в силу протягом 6 годин.",
-    "it": "Il cambio di skin è avvenuto con successo. Ora il tuo personaggio ha un aspetto diverso. Di solito le modifiche diventano effettive entro 6 ore.",
-    "en": "Skin change was successful. Now your character looks different. Usually, changes take effect within 6 hours.",
-    "ru": "Изменение скина прошло успешно. Теперь ваш персонаж выглядит по-другому. Обычно изменения вступают в силу в течение 6 часов."
-  },
-  "code_212": {
-    "uk": "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
-    "it": "La tua password è stata modificata con successo. Usa /l <password> per accedere.",
-    "en": "Password successfully changed. Use /l <your password> to log in.",
-    "ru": "Пароль успешно изменен. Используйте /l <ваш пароль> для входа."
-  },  
   "code_400": {
     "uk": "Ви не авторизовані",
     "it": "Non sei autorizzato",
     "en": "You are not authorized",
     "ru": "Вы не авторизированы"
   },
-  "code_410": {
-    "uk": "Невірне розширення файлу",
-    "it": "Estensione del file non valida",
-    "en": "Invalid file extension",
-    "ru": "Неверное разширение файла"
+  "skin": {
+    "200": {
+      "uk": "Зміна скіна пройшла успішно. Тепер ваш персонаж виглядає інакше. Зазвичай зміни вступають в силу протягом 6 годин.",
+      "it": "Il cambio di skin è avvenuto con successo. Ora il tuo personaggio ha un aspetto diverso. Di solito le modifiche diventano effettive entro 6 ore.",
+      "en": "Skin change was successful. Now your character looks different. Usually, changes take effect within 6 hours.",
+      "ru": "Изменение скина прошло успешно. Теперь ваш персонаж выглядит по-другому. Обычно изменения вступают в силу в течение 6 часов."
+    },
+    "401": {
+      "uk": "Невірне розширення файлу",
+      "it": "Estensione del file non valida",
+      "en": "Invalid file extension",
+      "ru": "Неверное разширение файла"
+    },
+    "402": {
+      "uk": "Скін повинен мати розмір 64 на 64 пікселі",
+      "it": "Lo skin deve essere di dimensioni 64 per 64 pixel",
+      "en": "Skin must be 64 by 64 pixels in size",
+      "ru": "Скин должен быть размером 64 на 64 пикселя"
+    },
+    "403": {
+      "uk": "Зовнішній вигляд можна змінювати лише раз на 24 години",
+      "it": "L'aspetto può essere cambiato solo una volta ogni 24 ore",
+      "en": "Appearance can be changed only once in 24 hours",
+      "ru": "Облик можно менять только раз в 24 часа"
+    }
   },
-  "code_411": {
-    "uk": "Скін повинен мати розмір 64 на 64 пікселі",
-    "it": "Lo skin deve essere di dimensioni 64 per 64 pixel",
-    "en": "Skin must be 64 by 64 pixels in size",
-    "ru": "Скин должен быть размером 64 на 64 пикселя"
+  "nickname": {
+    "200": {
+      "uk": "Ваш нікнейм успішно оновлено. Деякі досягнення та предмети можуть зникнути.",
+      "it": "Il tuo nickname è stato aggiornato con successo. Alcuni achievement e oggetti potrebbero scomparire.",
+      "en": "Your nickname has been successfully updated. Some achievements and items may disappear.",
+      "ru": "Ваш никнейм успешно обновлен. Некоторые достижения и предметы могут исчезнуть."
+    },
+    "401": {
+      "uk": "Невірний регістр. Дозволяються тільки a-z, 0-9, '_'",
+      "it": "Maiuscole non valide. Consentiti solo a-z, 0-9, '_'",
+      "en": "Invalid case. Only a-z, 0-9, '_' are allowed",
+      "ru": "Неверный регистр. Разрешаются только a-z, 0-9, '_'"
+    },
+    "402": {
+      "uk": "Нікнейм повинен бути від 3 до 32 символів",
+      "it": "Il nickname deve essere lungo da 3 a 32 caratteri",
+      "en": "Nickname must be between 3 and 32 characters",
+      "ru": "Никнейм должен быть от 3 до 32 символов"
+    },
+    "403": {
+      "uk": "Нікнейм можна змінювати лише раз на годину",
+      "it": "Il nickname può essere cambiato solo una volta all'ora",
+      "en": "Nickname can be changed only once per hour",
+      "ru": "Никнейм можно менять только раз час"
+    },
+    "404": {
+      "uk": "Гравець з таким нікнеймом вже існує",
+      "it": "Giocatore con lo stesso nickname già esistente",
+      "en": "Player with such nickname already exists",
+      "ru": "Такой никнейм уже занят"
+    },
+    "405": {
+      "uk": "Вибачте, але ви не можете встановити той же самий нікнейм, який ви вже маєте",
+      "it": "Spiacenti, non puoi impostare lo stesso nickname che hai già",
+      "en": "Sorry, but you cannot set the same nickname that you already have",
+      "ru": "Извините, но вы не можете установить тот же никнейм, который уже используете"
+    },
+    "406": {
+      "uk": "Пароль і нікнейм не можуть збігатися. Будь креативніший, чучело",
+      "it": "La password e il nickname non possono coincidere. Sii più creativo, fantoccio",
+      "en": "Password and nickname cannot match. Be more creative, dummy",
+      "ru": "Пароль и никнейм не могут совпадать. Будь креативнее, чучело"
+    }
   },
-  "code_412": {
-    "uk": "Невірний регістр. Дозволяються тільки a-z, 0-9, '_'",
-    "it": "Maiuscole non valide. Consentiti solo a-z, 0-9, '_'",
-    "en": "Invalid case. Only a-z, 0-9, '_' are allowed",
-    "ru": "Неверный регистр. Разрешаются только a-z, 0-9, '_'"
-  },
-  "code_413": {
-    "uk": "Нікнейм повинен бути від 3 до 32 символів",
-    "it": "Il nickname deve essere lungo da 3 a 32 caratteri",
-    "en": "Nickname must be between 3 and 32 characters",
-    "ru": "Никнейм должен быть от 3 до 32 символов"
-  },
-  "code_414": {
-    "uk": "Зовнішній вигляд можна змінювати лише раз на 24 години",
-    "it": "L'aspetto può essere cambiato solo una volta ogni 24 ore",
-    "en": "Appearance can be changed only once in 24 hours",
-    "ru": "Облик можно менять только раз в 24 часа"
-  },
-  "code_415": {
-    "uk": "Нікнейм можна змінювати лише раз на годину",
-    "it": "Il nickname può essere cambiato solo una volta all'ora",
-    "en": "Nickname can be changed only once per hour",
-    "ru": "Никнейм можно менять только раз час"
-  },
-  "code_416": {
-    "uk": "Гравець з таким нікнеймом вже існує",
-    "it": "Giocatore con lo stesso nickname già esistente",
-    "en": "Player with such nickname already exists",
-    "ru": "Такой никнейм уже занят"
-  },
-  "code_417": {
-    "uk": "Вибачте, але ви не можете встановити той же самий нікнейм, який ви вже маєте",
-    "it": "Spiacenti, non puoi impostare lo stesso nickname che hai già",
-    "en": "Sorry, but you cannot set the same nickname that you already have",
-    "ru": "Извините, но вы не можете установить тот же никнейм, который уже используете"
+  "password": {
+    "200": {
+      "uk": "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
+      "it": "La tua password è stata modificata con successo. Usa /l <password> per accedere.",
+      "en": "Password successfully changed. Use /l <your password> to log in.",
+      "ru": "Пароль успешно изменен. Используйте /l <ваш пароль> для входа."
+    },
+    "401": {
+      "uk": "Пароль і нікнейм не можуть збігатися. Будь креативніше, чучело",
+      "it": "La password e il nickname non possono coincidere. Sii più creativo, fantoccio",
+      "en": "Password and nickname cannot match. Be more creative, dummy",
+      "ru": "Пароль и никнейм не могут совпадать. Будь креативнее, чучело"
+    },
+    "402": {
+      "uk": "Завийобістий пароль. Спробуй щось простіше.",
+      "it": "Password troppo fottutamente fantastico. Prova qualcosa di più semplice.",
+      "en": "Password too fucking awesome. Try something simpler.",
+      "ru": "Пароль слишком ахуенен. Будь проще, придумай новый."
+    },
+    "403": {
+      "uk": "В тебе вже стоїть цей пароль. Не клацай, а то клацну зубами по яйцях",
+      "it": "Hai già questa password. Non cliccare, altrimenti cliccherò con i denti sulle palle",
+      "en": "You already have this password. Don't click, or I'll click with my teeth on your balls",
+      "ru": "У тебя и так стоит этот пароль. Не клацай, а то клацну зубами по яйцам"
+    }
   },
   "code_500": {
     "uk": "Внутрішня помилка сервера",

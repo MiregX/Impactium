@@ -238,16 +238,17 @@ class MinecraftPlayer {
   }
 
   async setNickname(newNickname) {
-    if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 415;
-    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 412;
-    if (this.nickname && this.nickname?.toLowerCase() === newNickname.toLowerCase()) return 419
+    if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 403;
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 401;
+    if (this.nickname?.toLowerCase() === (newNickname ?? '').toLowerCase()) return 405;
+    if (this.nickname?.toLowerCase() === this.password?.toLowerCase()) return 406;
 
     const Players = await getDatabase("minecraftPlayers");
     const possiblePlayerWithSameNickname = await Players.findOne({
       nickname: new RegExp('^' + newNickname + '$', 'i')
     });    
 
-    if (possiblePlayerWithSameNickname) return 416;
+    if (possiblePlayerWithSameNickname) return 404;
 
     if (this.nickname) {
       const toPushObject = [this.nickname, Date.now()]
@@ -260,15 +261,15 @@ class MinecraftPlayer {
     this.nickname = newNickname;
     await this.save()
     this.initAuthMe()
-    return 210
+    return 200
   }
 
   async setSkin(originalImageName, imageBuffer) {
     const image = await Jimp.read(imageBuffer);
     const { width, height } = image.bitmap;
 
-    if (width !== 64 || height !== 64) return 411;
-    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 414;
+    if (width !== 64 || height !== 64) return 402;
+    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 403;
     if (!this.skin) this.skin = {}
 
     const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
@@ -277,16 +278,18 @@ class MinecraftPlayer {
     this.skin.originalTitle = originalImageName;
     this.lastSkinChangeTimestamp = Date.now();
     await this.save();
-    return 211
+    return 200
   }
 
   async setPassword(newPassword) {
-    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 412;
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 402;
+    if (this.nickname?.toLowerCase() === newPassword.toLowerCase()) return 401;
+    if (this.password === newPassword) return 403;
 
     this.password = newPassword;
     await this.save()
     this.initAuthMe()
-    return 212
+    return 200
   }
 
   async register() {

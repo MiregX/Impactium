@@ -110,6 +110,36 @@
   margin-top: var(--flow-space, 1.25em);
 }
 
+.panel [toOverlayView] {
+  position: relative;
+}
+.panel [toOverlayView]::before {
+  content: "";
+  height: calc(100% - 1px);
+  width: calc(100% - 1px);
+  z-index: 1;
+  border-radius: 10px;
+  background: #0d0d0d;
+  transform: translate(-0.7em, -0.7em);
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.panel [toOverlayView]::after {
+  content: url("https://api.impactium.fun/ux/loader24p.svg");
+  top: calc(50% - 12px);
+  left: calc(50% - 12px);
+  animation: rotateAnimation 2s linear infinite;
+  position: absolute;
+  height: 24px;
+  z-index: 2;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.panel [toOverlayView].wait::before,
+.panel [toOverlayView].wait::after {
+  opacity: 1;
+}
 
 .change_profile,
 .default_panel_style input {
@@ -129,6 +159,7 @@
 }
 .default_panel_style input {
   cursor: text;
+  z-index: 1;
 }
 .default_panel_style p {
   flex: 1;
@@ -202,10 +233,10 @@
   --hue: 120
 }
 .overlay .controls .default_panel_style:nth-child(2) {
-  --hue: 350
+  --hue: 45
 }
 .overlay .controls .default_panel_style:nth-child(3) {
-  --hue: 35
+  --hue: 350
 }
 .overlay .controls {
   height: unset !important;
@@ -246,7 +277,9 @@
   font-size: 1rem;
   font-weight: 600;
   grid-row: -1;
+  z-index: 1;
 }
+
 .controls .default_panel_style.blocked::after {
   content: url(https://api.impactium.fun/ux/lock24p.svg);
   display: flex;
@@ -302,9 +335,11 @@
 }
 .grayed {
   color: var(--c-96) !important;
+  z-index: 0 !important;
 }
 .greyed {
   filter: brightness(0.55) !important;
+  z-index: 0;
 }
 .profile p {
   flex: unset;

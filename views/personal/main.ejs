@@ -279,9 +279,8 @@ function getRender(page) {
       'Accept': 'panel'
     },
     success: function (response) {
-      const renderZone = $(`.app .panel > .${page}`);
-      renderZone.html("");
-      renderZone.html(response);
+      const renderZone = $(`.app .panel .${page}`);
+      renderZone.replaceWith(response);
       $('.overlay').empty();
       initCards()
     },
@@ -303,6 +302,7 @@ function togglerSkinButtonWaiter(isWait) {
 
 function ajax(block) {
   const destination = $(block).attr('link');
+  responseWaiter(block, true);
   let data, contentType, type;
 
   if (destination === 'setNickname') {
@@ -348,6 +348,7 @@ function ajax(block) {
       if (destination === 'setSkin') {
         togglerSkinButtonWaiter(false);
       }
+      responseWaiter(destination, false);
     }
   });
 }
@@ -382,6 +383,18 @@ async function copy(block) {
     document.body.removeChild(textarea);
   } finally {
     newMessage(200, `"${text}" ${copiedMessage}`)
+  }
+}
+
+function responseWaiter(block, isWait) {
+  try {
+    if (isWait) {
+      block.classList.add('wait');
+    } else {
+      block.classList.remove('wait');
+    } 
+  } catch (error) {
+    
   }
 }
 
