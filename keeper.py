@@ -29,4 +29,4 @@ def restart_node_server():
 if __name__ == "__main__":
     while True:
         check_status()
-        time.sleep(15)
+        time.sleep(60)

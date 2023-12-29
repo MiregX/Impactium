@@ -38,10 +38,10 @@ const mcs = new ImpactiumServer()
 const nav = {
   "partners": {
     "fax": {
-      "name": "Fax",
-      "logo": "https://cdn.discordapp.com/icons/806816080508354611/4dd75efaafb2cc17185720ce85f0a87c.webp?size=256",
-      "description": "#1 S21 | More: @faxnocap",
-      "action": "https://fax.impactium.fun"
+      "name": "Кавунярня",
+      "logo": "https://cdn.discordapp.com/icons/1060561700123840582/f8ca992b9aa561a23a5f840dbada56a5.webp?size=96",
+      "description": "Приємний сервер",
+      "action": "https://discord.gg/cCCGxfQnzY"
     },
     "spwordls": {
       "name": "SPWordls",
@@ -180,13 +180,6 @@ app.get('/status', (request, response) => {
   response.sendStatus(200);
 });
 
-app.get('/resourse-pack', (request, response) => {
-  if (request.cookies.lastResoursePackDownload && Date.now() - request.cookies.lastResoursePackDownload < 1000 * 60 * 10) return response.sendStatus(403);
-  response.cookie('lastResoursePackDownload', Date.now());
-  response.cookie('lastResoursePackDownload', Date.now(), { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-  response.download(path.join(__dirname, 'static', 'Impactium RP.zip'), 'Impactium RP.zip');
-});
-
 const terminalRouter = require('./modules/terminal');
 app.use('/terminal', terminalRouter);
 
@@ -222,6 +215,7 @@ const processHosting = async () => {
     mcs.launch();
     await mcs.updateWhitelist();
     await mcs.fetchStats();
+    await mcs.resourcePack.process();
   } catch (error) {
     console.log(error);
   }

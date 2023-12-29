@@ -12,7 +12,7 @@ const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { mongoLogin, dropboxAppKey, dropboxAppSecret, dropboxAccessToken, sftpConfig, minecraftServerAPI } = process.env;
+const { mongoLogin, sftpConfig, minecraftServerAPI, ftpConfig } = process.env;
 
 class User {
   constructor(token) {
@@ -610,13 +610,13 @@ class ImpactiumServer {
     let isChanged = false;
 
     this.players.whitelist.forEach(player => {
-      if (this.players.database.includes(player.name)) return 
+      if (this.players.database.find(nickname => nickname.toLowerCase() === player.name.toLowerCase())) return 
       this.command(`whitelist remove ${player.name}`);
       isChanged = true  
     })
 
     this.players.database.forEach(nickname => {
-      const existPlayer = this.players.whitelist.find(player => player.name === nickname)
+      const existPlayer = this.players.whitelist.find(player => player.name.toLowerCase() === nickname.toLowerCase())
       if (existPlayer) return 
       this.command(`whitelist add ${nickname}`);
       isChanged = true
@@ -656,7 +656,7 @@ class ResoursePackInstance {
   constructor(ImpactiumServer) {
     this.mcs = ImpactiumServer;
     this.sftp = new SFTP()
-    
+    this.ftp = new ftp();
     this.path = {
       folder: {},
       file: {}
@@ -673,6 +673,7 @@ class ResoursePackInstance {
     await this.putIcons();
     await this.archive();
     await this.hashsum();
+    await this.upload();
     await this.updateServerProperties();
     await this.setIcons();
     
@@ -760,6 +761,19 @@ class ResoursePackInstance {
         reject(err);
       });
     });
+  }
+
+  async upload() {
+    this.ftp.on('ready', () => {
+      this.ftp.put(this.path.file.resoursePackDestination, `/api.impactium.fun/htdocs/Impactium_RP.zip`, async (err) => {
+        this.ftp.end();
+        if (err) console.log(err);
+        if (err) return await this.upload();
+        return true;
+      });
+    });
+
+    this.ftp.connect(JSON.parse(ftpConfig));
   }
   
   async updateServerProperties() {
