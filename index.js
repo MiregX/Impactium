@@ -215,13 +215,15 @@ const processHosting = async () => {
     mcs.launch();
     await mcs.updateWhitelist();
     await mcs.fetchStats();
-    await mcs.resourcePack.process();
   } catch (error) {
     console.log(error);
   }
 }
 
 schedule('0 */6 * * *', async () => {
+  await mcs.resourcePack.process();
+});
+schedule('0 0 * * *', async () => {
   await mcs.resourcePack.process();
 });
 schedule('*/10 * * * *', async () => {

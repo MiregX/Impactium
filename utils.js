@@ -565,6 +565,7 @@ class ImpactiumServer {
     this.server.on("start", ()=>{
       log("WS Соединение с панелью управления установлено!", 'y')
     })
+    this.server.on("console_output", packet => this.output(packet))
   }
 
   command(command) {
@@ -572,6 +573,10 @@ class ImpactiumServer {
     this.server.writeCommand(command);
     log(`[MC] -> ${command}`, 'g')
     return true;
+  }
+
+  output(packet) {
+    if (packet.includes('[Not Secure]')) return;
   }
 
   restart() {
