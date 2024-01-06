@@ -21,6 +21,7 @@
     "pqry": "^1.2.2",
     "pterosocket": "^1.0.6",
     "ssh2-sftp-client": "^9.1.0",
+    "telegraf": "^4.15.3",
     "unirest": "^0.6.0",
     "vhost": "^3.0.2",
     "ws": "^8.13.0"

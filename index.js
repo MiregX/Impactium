@@ -163,8 +163,7 @@ app.get('/error', (request, response) => {
 });
 
 app.get('/lang/:lang', (request, response) => {
-  const newLang = request.params.lang;
-  response.cookie('lang', newLang, { domain: '.impactium.fun', secure: true });
+  response.cookie('lang', request.params.lang, { domain: '.impactium.fun', secure: true });
   response.cookie('lang', request.params.lang);
   response.redirect('back');
 });

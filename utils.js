@@ -4,15 +4,16 @@ const Jimp = require('jimp');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
-const { ObjectId } = require('mongodb');
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
+const { ObjectId } = require('mongodb');
+const { Telegraf } = require('telegraf');
 const { spawn } = require('child_process');
 const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { mongoLogin, sftpConfig, minecraftServerAPI, ftpConfig } = process.env;
+const { mongoLogin, sftpConfig, minecraftServerAPI, ftpConfig, telegramBotToken } = process.env;
 
 class User {
   constructor(token) {
@@ -241,7 +242,7 @@ class MinecraftPlayer {
     if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 403;
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 401;
     if (this.nickname?.toLowerCase() === (newNickname ?? '').toLowerCase()) return 405;
-    if (this.nickname?.toLowerCase() === this.password?.toLowerCase()) return 406;
+    if (typeof this.nickname !== 'undefined' && this.nickname?.toLowerCase() === this.password?.toLowerCase()) return 406;
 
     const Players = await getDatabase("minecraftPlayers");
     const possiblePlayerWithSameNickname = await Players.findOne({
@@ -555,6 +556,7 @@ class ImpactiumServer {
     this.players = {}
 
     this.resourcePack = new ResoursePackInstance(this);
+    this.telegramBot = new TelegramBotHandler();
     
     ImpactiumServer.instance = this;
   }
@@ -562,22 +564,30 @@ class ImpactiumServer {
   launch() {
     this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
     
-    this.server.on("start", ()=>{
-      log("WS Соединение с панелью управления установлено!", 'y')
+    this.server.on("start", () => {
+      log("WS Соединение с панелью управления установлено!", 'y');
+      this.command('list', true);
     })
-    this.server.on("console_output", packet => this.output(packet))
+    this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '').substring(17)) })
   }
 
-  command(command) {
+  command(command, isQuiet = false) {
     if (!this.server) return false;
     this.server.writeCommand(command);
-    log(`[MC] -> ${command}`, 'g')
+    if (!isQuiet) log(`[MC] -> ${command}`, 'g');
     return true;
   }
 
-  output(packet) {
-    if (packet.includes('[Not Secure]')) return;
-  }
+  output(message) {
+    if (!message.startsWith('[Not Secure]') && message.endsWith('joined the game') || message.endsWith('left the game')) {
+      this.command('list', true);
+    }
+    if (message.startsWith('Players:')) {
+      const players = message.substring(9).split(', ').length;
+      this.telegramBot.editMessage(players + 10);
+    }
+}
+
 
   restart() {
     if (!this.server) return false;
@@ -718,7 +728,7 @@ class ResoursePackInstance {
   async setIcons() {
     const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
     playersWithFetchedIcon.providers.forEach(async (player, index) => {
-      if (index < 6) return
+      if (index < 12) return
       const playerNickname = player.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
       this.mcs.command(`lp user ${playerNickname} meta setprefix 2 "${player.chars[0]} "`);
     });
@@ -795,6 +805,25 @@ class ResoursePackInstance {
 
     await this.sftp.save('server.properties', lines.join('\n'));
     await this.sftp.close();
+  }
+}
+
+
+class TelegramBotHandler {
+  constructor() {
+    if (ImpactiumServer.instance) return ImpactiumServer.instance;
+    this.bot = new Telegraf(telegramBotToken)
+    this.bot.telegram.getMe();
+    this.channelId = '-1001649611744'
+    this.messageId = 676
+    this.basicMessage = `Текущий онлайн на сервере: `
+    ImpactiumServer.instance = this
+  }
+
+  async editMessage(text) {
+    try {
+      await this.bot.telegram.editMessageText(this.channelId, this.messageId, null, this.basicMessage + text);
+    } catch (error) { }
   }
 }
 
