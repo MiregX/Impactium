@@ -187,5 +187,6 @@ schedule('0 0 * * *', async () => {
   await mcs.resourcePack.process();
 });
 schedule('*/10 * * * *', async () => {
+  mcs.command('list', true);
   await mcs.fetchStats();
 });

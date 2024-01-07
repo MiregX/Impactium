@@ -1,6 +1,7 @@
 <style>
   .achievements_module .reward {
     width: -webkit-fill-available;
+    max-height: 96px;
     flex: 1;
     border-radius: 8px;
     overflow: hidden;
@@ -35,6 +36,7 @@
   }
   .achievements_module .reward .claim img {
     background-color: var(--c-16);
+    image-rendering: pixelated;
     pointer-events: none;
     border-radius: 4px;
     padding: 4px;
@@ -46,46 +48,82 @@
 <div class="achievements_module default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>" achievement="casual" processed="<%= player.stats?.processed %>">
   <div class="selection_wrapper flex flex-dir-row">
     <% const allAchievements = {
-      casual: [
-        ['diamonds', 10],
-        ['netherite', 4],
-        ['endStone', 2048],
-        ['shrieker', 16],
-        ['reinforcedDeepslate', 64]
-      ],
-      defence: [
-        ['damageOne', 100000],
-        ['damageTwo', 250000],
-        ['damageThree', 500000],
-        ['damageFour', 750000],
-        ['damageFive', 1000000]
-      ],
-      killer: [
-        ['kills', 500],
-        ['wither', 1],
-        ['dragon', 1],
-        ['warden', 1],
-        ['damage', 1000000]
-      ],
-      event: [
-        ['eventOne', 1],
-        ['eventTwo', 1],
-        ['eventThree', 3],
-        ['eventFour', 1],
-        ['eventFive', 10]
-      ],
-      donate: [
-        ['donateOne', 10],
-        ['donateTwo', 20],
-        ['donateThree', 30],
-        ['donateFour', 40],
-        ['donateFive', 50]
-      ],
-      hammer: [
-        ['becomeMayor', 1],
-        ['playsFromFirstSeason', 1],
-        ['petition', 1]
-      ]
+      "casual": {
+        "stages": [
+          ['diamonds', 10],
+          ['netherite', 4],
+          ['endStone', 2048],
+          ['shrieker', 16],
+          ['reinforcedDeepslate', 64]
+        ],
+        "reward": {
+          "icon": "https://static.wikia.nocookie.net/minecraft/images/5/55/HasteNew.png",
+          "type": "effect"
+        }
+      },
+      "defence": {
+        "stages": [
+          ['damageOne', 100000],
+          ['damageTwo', 250000],
+          ['damageThree', 500000],
+          ['damageFour', 750000],
+          ['damageFive', 1000000]
+        ],
+        "reward": {
+          "icon": "https://static.wikia.nocookie.net/minecraft/images/0/05/ResistanceNew.png",
+          "type": "effect"
+        }
+      },
+      "killer": {
+        "stages": [
+          ['kills', 500],
+          ['wither', 1],
+          ['dragon', 1],
+          ['warden', 1],
+          ['damage', 1000000]
+        ],
+        "reward": {
+          "icon": "https://static.wikia.nocookie.net/minecraft/images/b/b8/StrengthNew.png",
+          "type": "effect"
+        }
+      },
+      "event": {
+        "stages": [
+          ['eventOne', 1],
+          ['eventTwo', 1],
+          ['eventThree', 3],
+          ['eventFour', 1],
+          ['eventFive', 10]
+        ],
+        "reward": {
+          "icon": "",
+          "type": ""
+        }
+      },
+      "donate": {
+        "stages": [
+          ['donateOne', 10],
+          ['donateTwo', 20],
+          ['donateThree', 30],
+          ['donateFour', 40],
+          ['donateFive', 50]
+        ],
+        "reward": {
+          "icon": "",
+          "type": ""
+        }
+      },
+      "hammer": {
+        "stages": [
+          ['becomeMayor', 1],
+          ['playsFromFirstSeason', 1],
+          ['petition', 1]
+        ],
+        "reward": {
+          "icon": "https://api.impactium.fun/achievement/thunderBolt.png",
+          "type": "ability"
+        }
+      }
     } %>    
     <% let isFirstButtonProcessed = false %>
     <% let isFirstPanelProcessed = false %>
@@ -105,7 +143,7 @@
     <% Object.keys(allAchievements).forEach(achKey => { %>
         <% let percentage = [0, 0] %>
         <div class="<%= achKey %> stages <%= isFirstPanelProcessed ? '' : 'selected' %>" --achievement="<%= achKey %>" --<%= achKey %>>
-          <% allAchievements[achKey].forEach(stageKey => { %>
+          <% allAchievements[achKey].stages.forEach(stageKey => { %>
             <% const stage = player.achievements?.[achKey]?.stages[stageKey[0]] %>
             <hr class="embed">
             <% if (stage) { %>
@@ -143,10 +181,10 @@
           <% }); %>
           <div class="reward flex flex-dir-row">
             <div style="flex: 1;display: flex;flex-direction: column;gap: 8px;">
-              <p class="title">Награда: <span>Эффект</span></p>
+              <p class="title"><%= lang.reward %>: <span><%= lang[allAchievements[achKey].reward.type] %></span></p>
               <div class="flex flex-dir-row align-center claim">
-                <img src="https://static.wikia.nocookie.net/minecraft/images/5/55/HasteNew.png">
-                <p>Спешка I</p>
+                <img src="<%= allAchievements[achKey].reward.icon %>">
+                <p><%= lang[`${achKey}_reward`] %></p>
               </div>
             </div>
             <button class="activate">

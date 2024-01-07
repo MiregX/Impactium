@@ -360,7 +360,7 @@ class MinecraftPlayer {
 
 class Achievements {
   constructor(player) {
-    this.achievements = {}
+    this.achievements = player.achievements
     Object.assign(this.achievements, player.achievements)
     this.player = player;
   }
@@ -383,7 +383,9 @@ class Achievements {
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats
-      : this.player.stats = {}
+      : !this.player.stats
+        ? this.player.stats = {}
+        : null
 
     this.player.stats.processed = mcs.players.lastStatsFetch
     await this.player.save()
@@ -567,7 +569,7 @@ class ImpactiumServer {
       log("WS Соединение с панелью управления установлено!", 'y');
       this.command('list', true);
     })
-    this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '').substring(17)) })
+    this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
   }
 
   command(command, isQuiet = false) {
@@ -578,15 +580,28 @@ class ImpactiumServer {
   }
 
   output(message) {
-    if (!message.startsWith('[Not Secure]') && message.endsWith('joined the game') || message.endsWith('left the game')) {
-      this.command('list', true);
-    }
+    if (message.slice(0, 17).includes('WARN') || message.substring(17).startsWith('[Not Secure]'))
+      return
+
+    message = message.substring(17)
+
+    if (message.endsWith('joined the game'))
+      this.players.online++
+      this.telegramBot.editMessage(this.players.online)
+
+    if (message.endsWith('left the game'))
+      this.players.online--
+      this.telegramBot.editMessage(this.players.online)
+
     if (message.startsWith('Players:')) {
       const players = message.substring(9).split(', ').length;
-      this.telegramBot.editMessage(players + 10);
+      this.players.online = players + 10
+      this.telegramBot.editMessage(this.players.online);
     }
-}
 
+    if (message.endsWith('issued server command: /x'))
+      applyAchievementEffect(message.split(" ")[0])
+  }
 
   restart() {
     if (!this.server) return false;
@@ -663,6 +678,14 @@ class ImpactiumServer {
       this.players.lastStatsFetch = Date.now(); 
       return results;
     } catch (error) { return [] }
+  }
+
+  async applyAchievementEffect(nickname) {
+    const player = new MinecraftPlayer()
+    await player.fetch(nickname);
+    if (!player.achievements?.active)
+      return
+    this.command(`effect give ${player.nickname} minecraft:${player.achievements.active} infinite 1 true`)
   }
 }
 

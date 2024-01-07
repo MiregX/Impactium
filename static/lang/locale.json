@@ -335,6 +335,24 @@
     "en": "Version",
     "ru": "Версия"
   },
+  "reward": {
+    "uk": "Нагороди",
+    "it": "Rewards",
+    "en": "Rewards",
+    "ru": "Награды"
+  },
+  "effect": {
+    "uk": "Ефект",
+    "it": "Effetto",
+    "en": "Effect",
+    "ru": "Эффект"
+  },
+  "ability": {
+    "uk": "Здібність",
+    "it": "Abilità",
+    "en": "Ability",
+    "ru": "Способность"
+  },
   "downloadVoiceChat": {
     "uk": "Завантажити голосовий чат",
     "it": "Scarica la chat vocale",
@@ -388,6 +406,42 @@
       "it": "Donatore",
       "en": "Donator",
       "ru": "Донатер"
+  },
+  "casual_reward": {
+    "uk": "Квапливість I",
+    "it": "Sollecitudine I",
+    "en": "Haste I",
+    "ru": "Спешка I"
+  },
+  "defence_reward": {
+    "uk": "Стійкість I",
+    "it": "Resistenza I",
+    "en": "Resistance I",
+    "ru": "Сопротивление I"
+  },
+  "killer_reward": {
+    "uk": "Сила I",
+    "it": "Forza I",
+    "en": "Strength I",
+    "ru": "Сила I"
+  },
+  "event_reward": {
+    "uk": "",
+    "it": "",
+    "en": "",
+    "ru": ""
+  },
+  "donate_reward": {
+    "uk": "",
+    "it": "",
+    "en": "",
+    "ru": ""
+  },
+  "hammer_reward": {
+    "uk": "",
+    "it": "",
+    "en": "",
+    "ru": ""
   },
   "becomeMayor_todo": {
     "title": {
@@ -649,10 +703,10 @@
       "ru": "Привет, друг"
     },
     "description": {
-      "uk": "Запросити 2 гравців",
-      "it": "Invita 2 giocatori",
-      "en": "Invite 2 players",
-      "ru": "Пригласить 2 игрока"
+      "uk": "Запросити 1 гравців",
+      "it": "Invita 1 giocatori",
+      "en": "Invite 1 players",
+      "ru": "Пригласить 1 игрока"
     }
   },
   "eventTwo_todo": {
