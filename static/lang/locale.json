@@ -227,6 +227,12 @@
     "en": "My profile",
     "ru": "Мой профиль"
   },
+  "buySomeStuff": {
+    "uk": "Купити ресурси",
+    "it": "Acquistare risorse",
+    "en": "Buy resources",
+    "ru": "Купить ресурсы"
+  },
   "changeNickname": {
     "uk": "Змінити нікнейм",
     "it": "Cambia nickname",
@@ -637,72 +643,72 @@
   },
   "eventOne_todo": {
     "title": {
-      "uk": "Велика застройка",
-      "it": "Grande costruzione",
-      "en": "Great Construction",
-      "ru": "Великая застройка"
+      "uk": "Привіт, друже",
+      "it": "Ciao amico",
+      "en": "Hello, friend",
+      "ru": "Привет, друг"
     },
     "description": {
-      "uk": "Взяти участь в облаштуванні спавну",
-      "it": "Partecipa alla costruzione dello spawn",
-      "en": "Participate in spawn development",
-      "ru": "Поучаствовать в обустройстве спавна"
+      "uk": "Запросити 2 гравців",
+      "it": "Invita 2 giocatori",
+      "en": "Invite 2 players",
+      "ru": "Пригласить 2 игрока"
     }
   },
   "eventTwo_todo": {
     "title": {
-      "uk": "Інфарктіум момент",
-      "it": "Momento Infarctium",
-      "en": "Infarctium Moment",
-      "ru": "Инфарктиум момент"
+      "uk": "Більше - краще!",
+      "it": "Più è meglio!",
+      "en": "More is better!",
+      "ru": "Больше - лучше!"
     },
     "description": {
-      "uk": "Бути на івенті",
-      "it": "Partecipa all'evento",
-      "en": "Attend an event",
-      "ru": "Побывать на ивенте"
+      "uk": "Запросити 2 гравців",
+      "it": "Invita 2 giocatori",
+      "en": "Invite 2 players",
+      "ru": "Пригласить 2 игрока"
     }
   },
   "eventThree_todo": {
     "title": {
-      "uk": "Тягни карту Містер Ліс",
-      "it": "Tira la mappa, Mr. Fox",
-      "en": "Pull the Map, Mr. Fox",
-      "ru": "Тяните карту Мистер Лис"
+      "uk": "Міпо!",
+      "it": "Meepo!",
+      "en": "Meepo!",
+      "ru": "Мипо!"
     },
     "description": {
-      "uk": "Виграти в казино/аукціоні 3 рази",
-      "it": "Vinci al casinò/asta 3 volte",
-      "en": "Win in casino/auction 3 times",
-      "ru": "Выиграть в казино/аукционе 3 раза"
+      "uk": "Запросити 3 гравців",
+      "it": "Invita 3 giocatori",
+      "en": "Invite 3 players",
+      "ru": "Пригласить 3 игрока"
     }
   },
   "eventFour_todo": {
     "title": {
-      "uk": "Організатор",
-      "it": "Organizzatore",
-      "en": "Organizer",
-      "ru": "Организатор"
+      "uk": "Разом веселіше",
+      "it": "Insieme è più divertente",
+      "en": "Together is more fun",
+      "ru": "Вместе веселее"
     },
     "description": {
-      "uk": "Провести подію/івент",
-      "it": "Organizza un evento",
-      "en": "Host an event",
-      "ru": "Провести событие/ивент"
+      "uk": "Запросити 5 гравців",
+      "it": "Invita 5 giocatori",
+      "en": "Invite 5 players",
+      "ru": "Пригласить 5 игроков"
     }
   },
   "eventFive_todo": {
     "title": {
-      "uk": "Дикий флекс",
-      "it": "Flessione selvaggia",
-      "en": "Wild Flex",
-      "ru": "Дикий флекс"
+      "uk": "Піар менеджер",
+      "it": "Gestore di pubblicità",
+      "en": "PR Manager",
+      "ru": "Пиар менеджер"
     },
     "description": {
-      "uk": "Провести 10 подій/івентів",
-      "it": "Organizza 10 eventi",
-      "en": "Host 10 events",
-      "ru": "Провести 10 событий/ивентов"
+      "uk": "Запросити 10 гравців",
+      "it": "Invita 10 giocatori",
+      "en": "Invite 10 players",
+      "ru": "Пригласить 10 игроков"
     }
   },
   "donateOne_todo": {

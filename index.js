@@ -31,67 +31,34 @@ global.logged = global.logged || new Map();
 
 const options = utils.getLicense();
 
-const govApp = require('./modules/goverment/gov');
-app.use(vhost('gov.impactium.fun', govApp));
-
 const mcs = new ImpactiumServer()
 const nav = {
   "partners": {
-    "fax": {
+    "kavuryarnya": {
       "name": "Кавунярня",
       "logo": "https://cdn.discordapp.com/icons/1060561700123840582/f8ca992b9aa561a23a5f840dbada56a5.webp?size=96",
       "description": "Приємний сервер",
       "action": "https://discord.gg/cCCGxfQnzY"
     },
-    "spwordls": {
-      "name": "SPWordls",
-      "logo": "https://cdn.discordapp.com/icons/648968606734090250/a_1d805b6a79ebf012dff6dbde3715f93b.webp?size=256",
-      "description": "Сервер Пятёрки",
-      "action": "https://spworlds.ru/"
-    },
-    "libertyRust": {
-      "name": "Liberty Rust",
-      "logo": "https://cdn.discordapp.com/icons/1044602567063261274/17cb7fcad1b9b49c831ddd293a509226.webp?size=256",
-      "description": "Українські сервери Rust",
-      "action": "https://liberty-rust.com.ua/"
-    },
-    "bdu": {
-      "name": "BDU",
-      "logo": "https://cdn.discordapp.com/icons/1018142775230865408/e6f8f55eaec5edb5d15ecee933628826.webp?size=256",
-      "description": "Великий україномовний колектив",
-      "action": "https://discord.gg/zxczABBEGz"
-    },
-    "snf": {
-      "name": "Sex & Fles",
-      "logo": "https://cdn.discordapp.com/icons/1075444237895749783/7f16a37d7835058af4550aa405f5f9db.webp?size=256",
-      "description": "AO Tier 1 guild",
-      "action": ""
-    },
     "mythology": {
       "name": "Mythology",
       "logo": "https://cdn.discordapp.com/icons/1086575520214437888/3ed5f68e7cfe818d8976b412f68d2074.webp?size=256",
-      "description": "Dead AO guild",
+      "description": "Trixel`s AO guild",
       "action": ""
     }
   },
   "products": {
+    "mcs": {
+      "name": "Minecraft Server",
+      "logo": "https://api.impactium.fun/logo/impactium-tw.png",
+      "description": "Майнкрафт сервер.",
+      "action": "https://impactium.fun/me"
+    },
     "discord": {
       "name": "Impactium Bot",
       "logo": "https://api.impactium.fun/logo/impactium-wb.png",
       "description": "Автороли для альянса.",
       "action": "https://discord.com/oauth2/authorize?client_id=1123714909356687360&scope=bot&permissions=8"
-    },
-    "metrix": {
-      "name": "Eclipse Metrix",
-      "logo": "https://api.impactium.fun/logo/eclipsemetrix.png",
-      "description": "Statistics for Albion Online.",
-      "action": "/metrix"
-    },
-    "php": {
-      "name": "PHP Compiler",
-      "logo": "https://api.impactium.fun/logo/php-compiler.jpeg",
-      "description": "School assistant project.",
-      "action": "/php"
     }
   },
   "contact": {
@@ -100,12 +67,6 @@ const nav = {
       "logo": "https://api.impactium.fun/logo/impactium-bw.png",
       "description": "Impactium | Кошмаринг",
       "action": "https://t.me/impactium"
-    },
-    "discord": {
-      "name": "Our Discord",
-      "logo": "https://cdn.discordapp.com/icons/673965541987319818/3aed0d0f7cab0d8ba11d0f1ace308684.webp?size=96",
-      "description": "Impactium | Сообщество",
-      "action": "https://discord.com/invite/W7yNDPJ"
     }
   }
 }  

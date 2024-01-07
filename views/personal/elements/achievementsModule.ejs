@@ -1,3 +1,48 @@
+<style>
+  .achievements_module .reward {
+    width: -webkit-fill-available;
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 8px 0;
+    background: #161616aa;
+    padding: 8px;
+  }
+  .achievements_module .reward p.title {
+    height: 12px;
+    color: var(--w-1);
+    font-size: 12px;
+    line-height: 12px;
+    flex: unset;
+  }
+  .achievements_module .reward p.title span {
+    color: var(--w);
+  }
+  .achievements_module .reward button.activate {
+    display: flex;
+    cursor: pointer;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: var(--c-16);
+    border-radius: 4px;
+    padding: 8px;
+  }
+  .achievements_module .reward .claim {
+    height: 100%;
+    overflow: hidden;
+    gap: 4px;
+  }
+  .achievements_module .reward .claim img {
+    background-color: var(--c-16);
+    pointer-events: none;
+    border-radius: 4px;
+    padding: 4px;
+    aspect-ratio: 1 / 1;
+    height: 100%;
+  }
+</style>
+
 <div class="achievements_module default_panel_style dynamic <%= player.registered ? '' : 'blocked' %>" achievement="casual" processed="<%= player.stats?.processed %>">
   <div class="selection_wrapper flex flex-dir-row">
     <% const allAchievements = {
@@ -96,6 +141,18 @@
               <% percentage[1]++ %>
             <% } %>
           <% }); %>
+          <div class="reward flex flex-dir-row">
+            <div style="flex: 1;display: flex;flex-direction: column;gap: 8px;">
+              <p class="title">Награда: <span>Эффект</span></p>
+              <div class="flex flex-dir-row align-center claim">
+                <img src="https://static.wikia.nocookie.net/minecraft/images/5/55/HasteNew.png">
+                <p>Спешка I</p>
+              </div>
+            </div>
+            <button class="activate">
+              Активировать
+            </button>
+          </div>
           <line class="bottom">
             <hr width="<%= percentage[0] / percentage[1] %>%">
           </line>

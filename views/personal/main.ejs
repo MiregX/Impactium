@@ -156,7 +156,11 @@ main {
   <nav>
     <button class="selected">
       <img src="https://api.impactium.fun/ux/casual.svg">
-      <p>Minecraft Account</p>
+      <p><%= lang.myProfile %></p>
+    </button>
+    <button>
+      <img src="https://api.impactium.fun/ux/donate.svg">
+      <p><%= lang.buySomeStuff %></p>
     </button>
   </nav>
   <div class="panel">
@@ -397,5 +401,21 @@ function responseWaiter(block, isWait) {
     
   }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const buttons = document.querySelectorAll('nav button');
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      // Удаляем класс 'selected' у всех кнопок
+      buttons.forEach(function (btn) {
+        btn.classList.remove('selected');
+      });
+
+      // Добавляем класс 'selected' только той кнопке, на которую было нажато
+      button.classList.add('selected');
+    });
+  });
+});
 
 </script>

@@ -137,11 +137,11 @@ header > div > svg {
 .user p {
   padding: 0 6px;
   text-align: center;
-  height: 48px;
+  height: 24px;
   flex: 1;
-  line-height: 48px;
+  line-height: 24px;
   font-size: 16px;
-  text-shadow: 0px 2px 5px var(--c-16);
+  text-shadow: 0px 2px 5px var(--c-36);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -266,6 +266,23 @@ header {
 .logo.inner-animation {
   animation: inner-logo-animation 0s linear 3.3s forwards;
 }
+.user .balance {
+  display: flex;
+  font-size: 10px;
+  line-height: 14px;
+  align-items: center;
+  height: 14px;
+  gap: 4px;
+  color: var(--w-2);
+}
+.user .balance::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: url(https://api.impactium.fun/ux/donate.svg) no-repeat center center;
+  display: block;
+  background-size: cover;
+}
 
 @keyframes inner-logo-animation {
   0% {
@@ -318,7 +335,10 @@ header {
           <% if (user.avatar) { %>
             <img src="<%= user.avatar %>" class="avatar">
           <% } %>
-          <p class="button-text"><%= user.displayName %></p>
+          <div>
+            <p class="button-text"><%= user.displayName %></p>
+            <p class="balance"><%= user.balance || 0 %></p>
+          </div>
         </button>
         <button id="logout" onclick="logout()" class="temp-button">
           <div class="circle">

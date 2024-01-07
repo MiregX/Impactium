@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 const { ObjectId } = require('mongodb');
-const { Telegraf } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 const { spawn } = require('child_process');
 const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
@@ -212,7 +212,6 @@ class MinecraftPlayer {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
-    this.achievements = {};
   }
 
   get Achievements() {
@@ -811,20 +810,32 @@ class ResoursePackInstance {
 
 class TelegramBotHandler {
   constructor() {
-    if (ImpactiumServer.instance) return ImpactiumServer.instance;
-    this.bot = new Telegraf(telegramBotToken)
-    this.bot.telegram.getMe();
+    if (TelegramBotHandler.instance) return TelegramBotHandler.instance;
+    TelegramBotHandler.instance = this
     this.channelId = '-1001649611744'
     this.messageId = 676
-    this.basicMessage = `Текущий онлайн на сервере: `
-    ImpactiumServer.instance = this
+    this.basicMessage = `Текущий онлайн на сервере`
+    try {
+      this.bot = new Telegraf(telegramBotToken)
+      this.bot.telegram.getMe();
+    } catch (error) {
+      return new TelegramBotHandler();
+    }
   }
 
   async editMessage(text) {
     try {
-      await this.bot.telegram.editMessageText(this.channelId, this.messageId, null, this.basicMessage + text);
+      await this.bot.telegram.editMessageText(
+        this.channelId,
+        this.messageId,
+        null,
+        this.basicMessage,
+        Markup.inlineKeyboard([
+          Markup.button.callback(`Онлайн: ${text}`, 'onlineButtonCallback'),
+        ])
+      );
     } catch (error) { }
-  }
+  } 
 }
 
 class SFTP {
