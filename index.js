@@ -69,42 +69,57 @@ const nav = {
       "action": "https://t.me/impactium"
     }
   }
-}  
+}
+
+const middleware = async (request, response, next) => {
+  try {
+
+    if (request.query.ref && !request.cookie.referal) {
+      response.cookie('referal', request.query.ref, { domain: '.impactium.fun', secure: true });
+      response.cookie('referal', request.query.ref);
+    }
+
+    const user = new User();
+    await user.fetch(request.cookies.token);
+
+    const lang = getLanguagePack(request.cookies.lang);
+
+    request.composed = { user, lang };
+    request.user = user;
+    request.lang = lang;
+
+    next();
+  } catch (error) {
+    console.log(error);
+    response.redirect('https://impactium.fun/');
+  }
+};
+
+app.use('/', middleware);
 
 app.get('/', (request, response) => {
   try {
-    const user = new User();
-    user.fetch(request.cookies.token).then( async () => {
-      const player = new MinecraftPlayer();
-      await player.fetch(user._id);
-      const lang = getLanguagePack(request.cookies.lang);
-      const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), { user, lang, nav, player });
-      
-      response.render('template.ejs', { body, user, lang, nav });
-    });
+    const body = ejs.render(fs.readFileSync('views/index.ejs', 'utf8'), request.composed);
+    response.render('template.ejs', { ...request.composed, body, nav });
   } catch (error) {
-    console.log(error, 'r');
-    response.redirect('/');
+    console.log(error);
+    response.sendStatus(500);
   }
 });
 
 app.get('/login', (request, response) => {
-  const user = new User(request.cookies.token);
-  if (user.id) return response.redirect('/');
-  const lang = getLanguagePack(request.cookies.lang);
+  if (request.user.id) return response.redirect('/');
   const previousPage = request.header('Referer') || '/';
   response.cookie('previousPage', previousPage, { domain: '.impactium.fun', secure: true });
   
   try {
     const loginTemplate = fs.readFileSync('views/login.ejs', 'utf8');
-    const body = ejs.render(loginTemplate, lang);
+    const body = ejs.render(loginTemplate, { lang: request.lang });
 
     response.render('template.ejs', {
       body,
-      user,
-      lang
+      lang: request.lang
     });
-    
   } catch (err) {
     console.error(err);
     response.redirect('/');
@@ -119,8 +134,7 @@ app.get('/logout', (request, response) => {
 });
 
 app.get('/error', (request, response) => {
-  const lang = getLanguagePack(request.cookies.lang);
-  response.render('error.ejs', { lang })
+  response.render('error.ejs', { lang: request.lang })
 });
 
 app.get('/lang/:lang', (request, response) => {

@@ -54,6 +54,75 @@ class User {
   }
 }
 
+class Referal {
+  constructor(key) {
+    this.code = typeof key === 'string'
+      ? key
+      : key._id
+  }
+
+  async fetch(key = this.code) {
+    this.code = typeof key === 'string'
+    ? key
+    : key._id
+    const Referals = await getDatabase('referals');
+    const referal = await Referals.findOne({
+      $or: [
+        { id: this.code },
+        { code: this.code }
+      ]
+    });
+
+    if (referal) {
+      Object.assign(this, referal);
+    } else {
+      await this.create();
+    }
+  }
+
+  async create() {
+    if (this.code.length <= 8 || this._id)
+      return
+
+    Object.assign(this, {
+      id: this.code,
+      code: this.newCode(),
+      parent: null,
+      childrens: []
+    });
+
+    const Referals = await getDatabase('referals');
+    await Referals.insertOne(this);
+    await this.fetch()
+  }
+
+  async newCode() {
+    const code = generateToken(8);
+    const possibleReferalWithSameCode = new Referal(code);
+    await possibleReferalWithSameCode.fetch();
+    if (possibleReferalWithSameCode._id)
+      return this.newCode();
+    return code;
+  }
+
+  async setParent(parent) {
+    if (this.parent)
+      return;
+
+    this.parent = parent
+    this.save();
+  }
+
+  async save() {
+    const Referals = await getDatabase('referals');
+    const referal = await Referals.findOne({ _id: this._id });
+
+    if (referal) {
+      await Referals.updateOne({ _id: this._id }, { $set: this });
+    }
+  }
+}
+
 class Guild {
   constructor() {
     this.name = false;

@@ -19,31 +19,23 @@ const upload = multer({
   }
 }).single('skin');
 
-const setUserAndPlayer = async (request, response, next) => {
+const middleware = async (request, response, next) => {
+  if (!request.user.isFetched) return response.redirect('https://impactium.fun/login');
   try {
-  const user = new User();
-  await user.fetch(request.cookies.token);
+    const player = new MinecraftPlayer(request.user._id);
+    await player.fetch();
 
-  const player = new MinecraftPlayer(user._id);
-  await player.fetch();
+    request.composed.player = player.serialize();
+    request.player = player;
 
-  const lang = getLanguagePack(request.cookies.lang);
-
-  if (!user.isFetched) return response.redirect('https://impactium.fun/login');
-
-  request.composed = { user, player: player.serialize(), lang };
-  request.user = user;
-  request.player = player;
-  request.lang = lang;
-
-  next();
+    next();
   } catch (error) {
     console.log(error);
     response.redirect('https://impactium.fun/');
   }
 };
 
-router.use('/', setUserAndPlayer);
+router.use('/', middleware);
 
 router.get('/', async (request, response) => {
   try {
