@@ -4,7 +4,7 @@ const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { getDatabase, generateToken } = require('../utils');
+const { getDatabase, generateToken, Referal } = require('../utils');
 const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = process.env
 
 const router = express.Router();
@@ -47,7 +47,7 @@ router.get('/callback/google', (request, response, next) => {
     }
 
     try {
-      userAuthentication({data: user._json, from: "discord"}).then(authResult => {
+      userAuthentication({data: user._json, from: "discord", referal: request.cookies.referal}).then(authResult => {
         response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
         response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
         response.redirect(request.cookies.previousPage || '/');
@@ -79,7 +79,7 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
-          userAuthentication({data: data.body, from: "discord"}).then(authResult => {
+          userAuthentication({data: data.body, from: "discord", referal: request.cookies.referal}).then(authResult => {
             response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.redirect(request.cookies.previousPage || '/');
@@ -152,9 +152,17 @@ async function userAuthentication(p) {
         { _id: userDatabase._id },
         { $set: userDatabase }
       );
+
+      const referal = new Referal(userDatabase._id);
+      await referal.fetch();
     } else {
       userToSave.nthRegister = await Database.countDocuments();
-      await Database.insertOne(userToSave);
+      const insertedUser = await Database.insertOne(userToSave);
+      if (p.referal) {
+        const referal = new Referal(insertedUser.insertedId)
+        await referal.fetch();
+        await referal.setParent(p.referal);
+      }
     }
     return { lang: userToSave[loginSource].locale, token };
   } catch (error) {

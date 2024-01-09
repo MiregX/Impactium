@@ -73,10 +73,12 @@ const nav = {
 
 const middleware = async (request, response, next) => {
   try {
-
-    if (request.query.ref && !request.cookie.referal) {
-      response.cookie('referal', request.query.ref, { domain: '.impactium.fun', secure: true });
-      response.cookie('referal', request.query.ref);
+    if (request.query.ref) {
+      if (!request.cookies.referal) {
+        response.cookie('referal', request.query.ref, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
+        response.cookie('referal', request.query.ref);
+      }
+      return response.redirect(request.path);
     }
 
     const user = new User();
@@ -91,7 +93,7 @@ const middleware = async (request, response, next) => {
     next();
   } catch (error) {
     console.log(error);
-    response.redirect('https://impactium.fun/');
+    response.sendStatus(500);
   }
 };
 
@@ -118,10 +120,11 @@ app.get('/login', (request, response) => {
 
     response.render('template.ejs', {
       body,
+      user: request.user,
       lang: request.lang
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     response.redirect('/');
   }
 });
@@ -130,6 +133,12 @@ app.get('/logout', (request, response) => {
   global.logged.delete(request.ip);
   response.clearCookie('token', { domain: '.impactium.fun' });
   response.clearCookie('token');
+  response.redirect('/');
+});
+
+app.get('/l', (request, response) => {
+  response.clearCookie('referal', { domain: '.impactium.fun' });
+  response.clearCookie('referal');
   response.redirect('/');
 });
 

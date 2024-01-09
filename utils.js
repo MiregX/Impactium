@@ -56,15 +56,15 @@ class User {
 
 class Referal {
   constructor(key) {
-    this.code = typeof key === 'string'
-      ? key
-      : key._id
+    this.code = key._id
+      ? key._id
+      : key
   }
 
   async fetch(key = this.code) {
-    this.code = typeof key === 'string'
-    ? key
-    : key._id
+    this.code = key._id
+    ? key._id
+    : key
     const Referals = await getDatabase('referals');
     const referal = await Referals.findOne({
       $or: [
@@ -86,22 +86,23 @@ class Referal {
 
     Object.assign(this, {
       id: this.code,
-      code: this.newCode(),
+      code: await this.newCode(),
       parent: null,
       childrens: []
     });
-
+    
     const Referals = await getDatabase('referals');
     await Referals.insertOne(this);
     await this.fetch()
   }
 
   async newCode() {
-    const code = generateToken(8);
-    const possibleReferalWithSameCode = new Referal(code);
-    await possibleReferalWithSameCode.fetch();
-    if (possibleReferalWithSameCode._id)
-      return this.newCode();
+    const code = generateToken(4);
+    const Referals = await getDatabase('referals');
+    const referal = await Referals.findOne({ code });
+    if (referal) {
+      return await this.newCode();
+    }
     return code;
   }
 
@@ -430,7 +431,8 @@ class MinecraftPlayer {
 class Achievements {
   constructor(player) {
     this.achievements = player.achievements
-    Object.assign(this.achievements, player.achievements)
+    if (player.achievements)
+      Object.assign(this.achievements, player.achievements);
     this.player = player;
   }
 
@@ -1336,6 +1338,7 @@ module.exports = {
   getLicense,
   ftpUpload,
   Schedule,
+  Referal,
   Guild,
   SFTP,
   User,

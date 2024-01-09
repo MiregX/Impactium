@@ -27,6 +27,7 @@ def restart_node_server():
     subprocess.Popen(["node", "index.js"], cwd=cmd_path, shell=True)
 
 if __name__ == "__main__":
+    restart_node_server();
     while True:
         check_status()
         time.sleep(60)
