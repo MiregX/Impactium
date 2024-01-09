@@ -30,6 +30,8 @@ class User {
       const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
       const { token, secure, discord, google, ...rest } = user;
       this.private = userDatabase;
+      this.referal = new Referal(this._id);
+      await this.referal.fetch();
       Object.assign(this, rest);
     }
   }
@@ -48,6 +50,7 @@ class User {
     if (user && this.isFetched || this._id) {
       delete this.isFetched
       delete this.private
+      delete this.referal
       await Users.updateOne({ _id: this._id }, { $set: this });
       this.isFetched = true;
     }
@@ -88,7 +91,8 @@ class Referal {
       id: this.code,
       code: await this.newCode(),
       parent: null,
-      childrens: []
+      childrens: [],
+      isAllChildrensConfirmed: true
     });
     
     const Referals = await getDatabase('referals');
@@ -112,6 +116,25 @@ class Referal {
 
     this.parent = parent
     this.save();
+  }
+
+  async newChildren(childrenId) {
+    const isExist = this.childrens.find(children => children.id === childrenId);
+    if (!childrenId || isExist)
+      return;
+
+    this.childrens.push({
+      id: childrenId,
+      registered: Date.now(),
+      isConfirmed: false
+    });
+
+    this.isAllChildrensConfirmed = false;
+
+    await this.save();
+    // const parent = new MinecraftPlayer(this.id);
+    // await parent.fetch();
+    // parent.achievements.getEvent(this.childrens.length);
   }
 
   async save() {
@@ -378,6 +401,17 @@ class MinecraftPlayer {
     }
   }
 
+  async balance(number) {
+    if (typeof this.balance === 'undefined' || isNaN(this.balance))
+      this.balance = 0;
+
+    if (typeof number !== 'number' || number === 0 || !number.isInteger())
+      return;
+
+    this.balance += number;
+    await this.save()
+  }
+
   serialize() {
     const visited = new Set();
   
@@ -568,6 +602,42 @@ class Achievements {
     });
   }
 
+  async getEvent(totalReferals, confirmedReferals) {
+    await this.player.balance(50 * confirmedReferals);
+    this.clear('event');
+    
+    this.set({
+      type: 'event',
+      stage: 'eventOne',
+      score: totalReferals,
+      limit: 1
+    });
+    this.set({
+      type: 'event',
+      stage: 'eventTwo',
+      score: totalReferals,
+      limit: 2
+    });
+    this.set({
+      type: 'event',
+      stage: 'eventThree',
+      score: totalReferals,
+      limit: 3
+    });
+    this.set({
+      type: 'event',
+      stage: 'eventFour',
+      score: totalReferals,
+      limit: 5
+    });
+    this.set({
+      type: 'event',
+      stage: 'eventFive',
+      score: totalReferals,
+      limit: 10
+    });
+  }
+
   select(type, entity) {
     return this.player.stats?.[`minecraft:${type}`]?.[`minecraft:${entity}`] || 0;
   }
@@ -629,6 +699,7 @@ class ImpactiumServer {
 
     this.resourcePack = new ResoursePackInstance(this);
     this.telegramBot = new TelegramBotHandler();
+    this.referals = new ReferalFetcher();
     
     ImpactiumServer.instance = this;
   }
@@ -901,7 +972,6 @@ class ResoursePackInstance {
   }
 }
 
-
 class TelegramBotHandler {
   constructor() {
     if (TelegramBotHandler.instance) return TelegramBotHandler.instance;
@@ -981,6 +1051,75 @@ class SFTP {
 
   async close() {
     await this.sftp.end();
+  }
+}
+
+class ReferalFetcher {
+  constructor (server) {
+    this.server = server;
+  }
+
+  async init() {
+    if (!this.server.players.lastStatsFetch)
+      await this.server.fetchStats();
+
+    await this.getReferals();
+
+    this.referals.forEach(async (referal) => {
+      if (referal.isAllChildrensConfirmed)
+        return;
+
+      let unconfirmedChildrens = referal.childrens.filter(children => !children.isConfirmed).length;
+      let confirmedChildrens = 0;
+      let hasBeenChanged = false;
+
+      referal.childrens.forEach(async (children) => {
+        const processedChildren = await this.processChildren(children);
+        if (processedChildren) {
+          unconfirmedChildrens--;
+          confirmedChildrens++;
+          hasBeenChanged = true;
+        }
+      });
+
+      if (hasBeenChanged) {
+        if (unconfirmedChildrens === 0) {
+          referal.isAllChildrensConfirmed = true
+        }
+        await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
+        const referalPlayer = new MinecraftPlayer(referal.id);
+        await referalPlayer.fetch();
+        const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
+        await referalPlayer.achievements.getEvent(totalConfirmedChildrens, confirmedChildrens);
+        await referalPlayer.save();
+      }
+    });
+  }
+
+  async getReferals() {
+    this.Referals = await getDatabase('referals');
+    this.referals = await Referals.find({}).toArray();
+    this.referals = this.referals.filter(referal => referal.childrens.length !== 0 && !referal.isAllChildrensConfirmed);
+    return this.referals
+  }
+
+  async processChildren(children) {
+    if (children.isConfirmed)
+      return false;
+    const player = new MinecraftPlayer(children.id);
+    await player.fetch();
+    await player.achievements.fetch();
+    const playedTicks = player.achievements.select('custom', 'play_time');
+    if (player.registered 
+      && player.nickname 
+      && typeof playedTicks === 'number' 
+      && !isNaN(playedTicks) 
+      && playedTicks / 20 / 60 / 60 > 50) {
+        children.isConfirmed = true;
+        return true
+    } else {
+      return false;
+    }
   }
 }
 

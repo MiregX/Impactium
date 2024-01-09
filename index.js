@@ -208,6 +208,7 @@ schedule('0 */6 * * *', async () => {
 });
 schedule('0 0 * * *', async () => {
   await mcs.resourcePack.process();
+  await mcs.referals.init();
 });
 schedule('*/10 * * * *', async () => {
   mcs.command('list', true);

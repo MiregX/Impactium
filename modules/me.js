@@ -1,4 +1,4 @@
-const { User, ImpactiumServer, MinecraftPlayer, getLanguagePack, log, ftpUpload, formatDate } = require('../utils');
+const { ImpactiumServer, MinecraftPlayer, getLanguagePack, log, ftpUpload, formatDate, Referal } = require('../utils');
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
@@ -24,7 +24,7 @@ const middleware = async (request, response, next) => {
   try {
     const player = new MinecraftPlayer(request.user._id);
     await player.fetch();
-
+    
     request.composed.player = player.serialize();
     request.player = player;
 
