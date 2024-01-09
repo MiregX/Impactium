@@ -158,9 +158,9 @@ async function userAuthentication(p) {
     } else {
       userToSave.nthRegister = await Database.countDocuments();
       const insertedUser = await Database.insertOne(userToSave);
+      const referal = new Referal(insertedUser.insertedId)
+      await referal.fetch();
       if (p.referal) {
-        const referal = new Referal(insertedUser.insertedId)
-        await referal.fetch();
         await referal.setParent(p.referal);
       }
     }
