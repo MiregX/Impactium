@@ -736,7 +736,9 @@ class ImpactiumServer {
     if (message.startsWith('There are') && message.endsWith('players online.')) {
       const players = parseInt(message.split(' ')[2]);
       this.players.online = players + 10
-      this.telegramBot.editMessage(this.players.online);
+      if (this.players.online >= 10) {
+        this.telegramBot.editMessage(this.players.online);
+      }
     }
 
     if (message.endsWith('issued server command: /x'))
