@@ -30,7 +30,7 @@ class User {
       const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
       const { token, secure, discord, google, ...rest } = user;
       this.private = userDatabase;
-      this.referal = new Referal(this._id);
+      this.referal = new Referal(this.private._id);
       await this.referal.fetch();
       Object.assign(this, rest);
     }
@@ -59,15 +59,11 @@ class User {
 
 class Referal {
   constructor(key) {
-    this.code = key._id
-      ? key._id
-      : key
+    this.code = key
   }
 
   async fetch(key = this.code) {
-    this.code = key._id
-    ? key._id
-    : key
+    this.code = key
     const Referals = await getDatabase('referals');
     const referal = await Referals.findOne({
       $or: [
@@ -695,7 +691,9 @@ class ImpactiumServer {
       api_key: minecraftServerAPI,
       server_no: "d9aa118c"
     }
-    this.players = {}
+    this.players = {
+      online: 0
+    }
 
     this.resourcePack = new ResoursePackInstance(this);
     this.telegramBot = new TelegramBotHandler();
@@ -735,8 +733,8 @@ class ImpactiumServer {
       this.players.online--
       this.telegramBot.editMessage(this.players.online)
 
-    if (message.startsWith('Players:')) {
-      const players = message.substring(9).split(', ').length;
+    if (message.startsWith('There are') && message.endsWith('players online.')) {
+      const players = parseInt(message.split(' ')[2]);
       this.players.online = players + 10
       this.telegramBot.editMessage(this.players.online);
     }
@@ -995,7 +993,7 @@ class TelegramBotHandler {
         null,
         this.basicMessage,
         Markup.inlineKeyboard([
-          Markup.button.callback(`Онлайн: ${text}`, 'onlineButtonCallback'),
+          Markup.button.callback(`Онлайн: ${text} / 50`, 'onlineButtonCallback'),
         ])
       );
     } catch (error) { }
@@ -1065,41 +1063,37 @@ class ReferalFetcher {
 
     await this.getReferals();
 
-    this.referals.forEach(async (referal) => {
-      if (referal.isAllChildrensConfirmed)
-        return;
-
-      let unconfirmedChildrens = referal.childrens.filter(children => !children.isConfirmed).length;
+    for (const referal of this.referals) {
       let confirmedChildrens = 0;
-      let hasBeenChanged = false;
-
-      referal.childrens.forEach(async (children) => {
+    
+      for (const children of referal.childrens) {
         const processedChildren = await this.processChildren(children);
         if (processedChildren) {
-          unconfirmedChildrens--;
           confirmedChildrens++;
-          hasBeenChanged = true;
         }
-      });
-
-      if (hasBeenChanged) {
-        if (unconfirmedChildrens === 0) {
-          referal.isAllChildrensConfirmed = true
+      }
+    
+      if (confirmedChildrens > 0) {
+        const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
+        if (totalConfirmedChildrens === referal.childrens.length) {
+          referal.isAllChildrensConfirmed = true;
         }
+    
         await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
+    
         const referalPlayer = new MinecraftPlayer(referal.id);
         await referalPlayer.fetch();
-        const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
+    
         await referalPlayer.achievements.getEvent(totalConfirmedChildrens, confirmedChildrens);
         await referalPlayer.save();
       }
-    });
+    }
   }
 
   async getReferals() {
     this.Referals = await getDatabase('referals');
     this.referals = await Referals.find({}).toArray();
-    this.referals = this.referals.filter(referal => referal.childrens.length !== 0 && !referal.isAllChildrensConfirmed);
+    this.referals = this.referals.filter(referal => referal.childrens.length > 0 && !referal.isAllChildrensConfirmed);
     return this.referals
   }
 

@@ -371,6 +371,12 @@
     "en": "Server player`s chat",
     "ru": "Чат игроков сервера"
   },
+  "copyMyReferalLink": {
+    "uk": "Моє реферальне посилання",
+    "it": "Mio link di referral",
+    "en": "My referral link",
+    "ru": "Моя реферальная ссылка"
+  },
   "achievmentTitle_casual": {
       "uk": "Казуальність",
       "it": "Casualità",
