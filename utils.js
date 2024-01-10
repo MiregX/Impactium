@@ -132,9 +132,12 @@ class Referal {
 
   completeChildren(childrenId) {
     const children = this.childrens.find(c => c.id === childrenId);
-    if (children) {
+    if (children && !children.isConfirmed) {
       children.isConfirmed = true;
       this.isAllChildrensConfirmed();
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -489,12 +492,14 @@ class Achievements {
       if (player.parent) {
         const parentReferal = new Referal(player.parent);
         await parentReferal.fetch();
-        parentReferal.completeChildren(this.player.id);
-        const parentAccount = new MinecraftPlayer(parentReferal.id)
-        await parentAccount.fetch();
-        parentAccount.achievements.getEvent(parentReferal.childrens.filter(c => c.isChanged).length, 1);
-        await parentReferal.save();
-        await parentAccount.save();
+        const isChildrenWasChanged = parentReferal.completeChildren(this.player.id);
+        if (isChildrenWasChanged) {
+          const parentAccount = new MinecraftPlayer(parentReferal.id)
+          await parentAccount.fetch();
+          parentAccount.achievements.getEvent(parentReferal.childrens.filter(c => c.isChanged).length, 1);
+          await parentReferal.save();
+          await parentAccount.save();
+        }
       }
     }
 
