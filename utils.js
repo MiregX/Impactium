@@ -88,7 +88,7 @@ class Referal {
       code: await this.newCode(),
       parent: null,
       childrens: [],
-      isAllChildrensConfirmed: true
+      childrensConfirmed: true
     });
     
     const Referals = await getDatabase('referals');
@@ -111,7 +111,7 @@ class Referal {
       return;
 
     this.parent = parent
-    this.save();
+    await this.save();
   }
 
   async newChildren(childrenId) {
@@ -125,12 +125,21 @@ class Referal {
       isConfirmed: false
     });
 
-    this.isAllChildrensConfirmed = false;
+    this.isAllChildrensConfirmed();
 
     await this.save();
-    // const parent = new MinecraftPlayer(this.id);
-    // await parent.fetch();
-    // parent.achievements.getEvent(this.childrens.length);
+  }
+
+  completeChildren(childrenId) {
+    const children = this.childrens.find(c => c.id === childrenId);
+    if (children) {
+      children.isConfirmed = true;
+      this.isAllChildrensConfirmed();
+    }
+  }
+
+  isAllChildrensConfirmed() {
+    this.childrensConfirmed = this.childrens.every(c => c.isConfirmed);
   }
 
   async save() {
@@ -401,7 +410,7 @@ class MinecraftPlayer {
     if (typeof this.balance === 'undefined' || isNaN(this.balance))
       this.balance = 0;
 
-    if (typeof number !== 'number' || number === 0 || !number.isInteger())
+    if (typeof number !== 'number' || number === 0)
       return;
 
     this.balance += number;
@@ -474,6 +483,21 @@ class Achievements {
     this.getKiller()
     this.getDefence()
 
+    if (this.playedHours() > 50) {
+      const player = new Referal(this.player.id);
+      await player.fetch();
+      if (player.parent) {
+        const parentReferal = new Referal(player.parent);
+        await parentReferal.fetch();
+        parentReferal.completeChildren(this.player.id);
+        const parentAccount = new MinecraftPlayer(parentReferal.id)
+        await parentAccount.fetch();
+        parentAccount.achievements.getEvent(parentReferal.childrens.filter(c => c.isChanged).length, 1);
+        await parentReferal.save();
+        await parentAccount.save();
+      }
+    }
+
     await this.player.save();
   }
 
@@ -492,6 +516,12 @@ class Achievements {
     await this.player.save()
   }
 
+  playedHours() {
+    return this.select('custom', 'play_time')
+      ? this.select('custom', 'play_time') / 20 / 60 / 60
+      : 0
+  }
+  
   getCasual() {    
     this.clear('casual');
 
@@ -692,7 +722,10 @@ class ImpactiumServer {
       server_no: "d9aa118c"
     }
     this.players = {
-      online: 0
+      online: {
+        list: [],
+        count: 0
+      }
     }
 
     this.resourcePack = new ResoursePackInstance(this);
@@ -726,19 +759,20 @@ class ImpactiumServer {
     message = message.substring(17)
 
     if (message.endsWith('joined the game'))
-      this.players.online++
+      this.players.online.count++;
+      this.players.online.list.push(message.split(' ')[0]);
       this.telegramBot.editMessage(this.players.online)
 
     if (message.endsWith('left the game'))
-      this.players.online--
+      this.players.online.count--;
+      this.players.online.list = this.players.online.list.filter(p => p !== message.split(' ')[0]);
       this.telegramBot.editMessage(this.players.online)
 
-    if (message.startsWith('There are') && message.endsWith('players online.')) {
-      const players = parseInt(message.split(' ')[2]);
-      this.players.online = players + 10
-      if (this.players.online >= 10) {
-        this.telegramBot.editMessage(this.players.online);
-      }
+    if (message.startsWith('Players:')) {
+      const players = message.substring(9).split(', ');
+      this.players.online.list = players.map(p => p.split(' ')[1]);
+      this.players.online.count = players.length + 10
+      this.telegramBot.editMessage(this.players.online);
     }
 
     if (message.endsWith('issued server command: /x'))
@@ -978,7 +1012,7 @@ class TelegramBotHandler {
     TelegramBotHandler.instance = this
     this.channelId = '-1001649611744'
     this.messageId = 676
-    this.basicMessage = `Текущий онлайн на сервере`
+    this.basicMessage = `Сейчас на сервере:`
     try {
       this.bot = new Telegraf(telegramBotToken)
       this.bot.telegram.getMe();
@@ -987,15 +1021,15 @@ class TelegramBotHandler {
     }
   }
 
-  async editMessage(text) {
+  async editMessage(online) {
     try {
       await this.bot.telegram.editMessageText(
         this.channelId,
         this.messageId,
         null,
-        this.basicMessage,
+        this.basicMessage + online.list.sort().join("\n   "),
         Markup.inlineKeyboard([
-          Markup.button.callback(`Онлайн: ${text} / 50`, 'onlineButtonCallback'),
+          Markup.button.callback(`Онлайн: ${online.count} / 50`, 'onlineButtonCallback'),
         ])
       );
     } catch (error) { }
@@ -1056,12 +1090,14 @@ class SFTP {
 
 class ReferalFetcher {
   constructor (server) {
-    this.server = server;
+    if (ReferalFetcher.instance) return ReferalFetcher.instance;
+    this.mcs = server;
+    ReferalFetcher.instance = this
   }
 
   async init() {
-    if (!this.server.players.lastStatsFetch)
-      await this.server.fetchStats();
+    if (!this.mcs.players.lastStatsFetch)
+      await this.mcs.fetchStats();
 
     await this.getReferals();
 
@@ -1077,9 +1113,7 @@ class ReferalFetcher {
     
       if (confirmedChildrens > 0) {
         const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
-        if (totalConfirmedChildrens === referal.childrens.length) {
-          referal.isAllChildrensConfirmed = true;
-        }
+        referal.childrensConfirmed = referal.childrens.every(c => c.isConfirmed);
     
         await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
     
@@ -1095,7 +1129,7 @@ class ReferalFetcher {
   async getReferals() {
     this.Referals = await getDatabase('referals');
     this.referals = await Referals.find({}).toArray();
-    this.referals = this.referals.filter(referal => referal.childrens.length > 0 && !referal.isAllChildrensConfirmed);
+    this.referals = this.referals.filter(referal => referal.childrens.length > 0 && !referal.childrensConfirmed);
     return this.referals
   }
 
