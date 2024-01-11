@@ -1,0 +1,102 @@
+.preloader {
+  pointer-events: none;
+  position: fixed;
+  z-index: 5;
+  height: 100vh;
+  width: 100vw;
+  background: var(--c-16);
+  transition: all 1.25s var(--trans) 1.5s;
+}
+
+@keyframes logo-animation-first {
+  0% {
+    stroke-dashoffset: 589.7821044921875px;
+    stroke-dasharray: 589.7821044921875px;
+  }
+
+  100% {
+    stroke-dashoffset: 1179.564208984375px;
+    stroke-dasharray: 589.7821044921875px;
+  }
+}
+
+@keyframes logo-animation-second {
+  0% {
+    stroke-dashoffset: 110.46501922607422px;
+    stroke-dasharray: 110.46501922607422px;
+  }
+
+  100% {
+    stroke-dashoffset: 220.93003845214844px;
+    stroke-dasharray: 110.46501922607422px;
+  }
+}
+
+@keyframes preloader-out-animation {
+  0% {
+  }
+  100% {
+    left: 16px;
+    transform: translate(0%, -50%);
+    top: 40px;
+  }
+}
+.preloader > div {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.preloader.outter-animation {
+  background: transparent;
+}
+.preloader.outter-animation div {
+  animation: preloader-out-animation 1s var(--trans) 1.75s forwards;
+}
+.preloader svg {
+  height: 72px;
+  opacity: 0;
+  transition: height 1s var(--trans) 1.75s, opacity 0s linear;
+}
+
+.preloader.outter-animation svg {
+  height: 48px;
+  opacity: 1;
+}
+
+.preloader > div > p {
+  font-size: 48px;
+  overflow: hidden;
+  width: 0px;
+  font-weight: 600;
+  transition: width 0.5s var(--trans) 1s, font-size 1s var(--trans) 1.75s;
+}
+
+.preloader.outter-animation > div > p {
+  font-size: 30px;
+  width: 256px;
+}
+
+.preloader.outter-animation .logo-animation-first {
+  animation: logo-animation-first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
+}
+
+.preloader.outter-animation .logo-animation-second  {
+  animation: logo-animation-second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
+}
+
+.preloader.fast-animation svg {
+  opacity: 1;
+  transition: all 0.3s var(--trans);
+}
+.preloader.fast-animation {
+  transition: all 0.3s var(--trans) 0.2s;
+  opacity: 0;
+}
+.preloader.fast-animation .logo-animation-first {
+  animation: logo-animation-first 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.preloader.fast-animation .logo-animation-second  {
+  animation: logo-animation-second 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}

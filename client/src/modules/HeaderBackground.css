@@ -1,0 +1,11 @@
+.header-background {
+  z-index: 1;
+  top: -80px;
+  height: 80px;
+  width: 100vw;
+  left: 0%;
+  position: fixed;
+  display: flex;
+  background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
+  backdrop-filter: blur(15px);
+}

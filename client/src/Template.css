@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&display=swap');
+* {
+  font-family: 'Nunito', sans-serif;
+  color: var(--w);
+}
+body {
+  min-height: 100vh;
+  background: url(https://api.impactium.fun/backgrounds/topography-21.svg);
+  background-color: var(--c-16);
+  background-position: top;
+  background-size: cover;
+  background-repeat: repeat;
+  width: 100vw;
+  overflow-x: hidden;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  flex: 1;
+}
+.preloader {
+  background: var(--c-16);
+}

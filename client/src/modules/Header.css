@@ -1,0 +1,293 @@
+header {
+  height: 80px;
+  z-index: 2;
+  position: fixed;
+  top: 0px;
+  justify-content: space-between;
+  padding: 0 16px;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
+header-background {
+  z-index: 1;
+  top: -80px;
+  height: 80px;
+  width: 100vw;
+  left: 0%;
+  position: fixed;
+  display: flex;
+  background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
+  backdrop-filter: blur(15px);
+}
+.nav {
+  gap: 10px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav > button {
+  height: 100%;
+  position: relative;
+  font-weight: 500;
+  width: 120px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.nav button > img {
+  filter: invert(100%);
+  height: 15px;
+  width: 15px;
+  margin-left: 10px;
+  transition: all 0.2s var(--trans);
+}
+.nav button:hover > img {
+  transform: rotateZ(90deg);
+}
+.nav button bar {
+  position: absolute;
+  min-height: 80px;
+  background: var(--c-24);
+  backdrop-filter: blur(15px);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  flex-direction: column;
+  top: 80px;
+  width: 240px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+  transform: translateY(-16px);
+  overflow: hidden;
+  box-shadow: 0 1px 3px var(--c-48);
+  text-transform: initial;
+}
+.nav button:hover bar {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0px);
+}
+.nav button bar img {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+}
+.nav button bar h3 {
+  text-align: left;
+  font-weight: 600;
+  color: var(--w);
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+.nav button bar p {
+  text-align: left;
+  font-weight: 400;
+  color: var(--c-64);
+  height: 100%;
+}
+header line {
+  width: 1px;
+  background: white;
+  height: 15px;
+}
+header line:last-child {
+  display: none;
+}
+header > div > svg {
+  height: 40px;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.user-onlogin {
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  justify-content: flex-end;
+  grid-column: 3 / 4;
+}
+.login-wrapper {
+  grid-column: 3 / 4;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  color: var(--w);
+  font-weight: 500;
+  max-width: 128px;
+  width: 128px;
+  height: 48px;
+  padding: 6px;
+  border-radius: 17px;
+  background: var(--c-36);
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.user .avatar {
+  border-radius: 11px;
+  height: 38px;
+  width: 38px;
+  pointer-events: none;
+}
+.user p {
+  padding: 0 6px;
+  text-align: center;
+  height: 24px;
+  flex: 1;
+  line-height: 24px;
+  font-size: 16px;
+  text-shadow: 0px 2px 5px var(--c-36);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(128px - 32px - 16px - 12px);
+}
+header .logo {
+  height: 48px;
+}
+
+#arrow-icon path.default-path {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+#arrow-icon.hovered path {
+  d: path("M2 12H18M18 12L13 7M18 12L13 17");
+}
+.temp-button svg {
+  transform: translateX(-1px);
+}
+.temp-button:hover svg {
+  transform: translateX(10px);
+}
+.temp-button * {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  text-shadow: 0px 2px 5px var(--c-16);
+}
+.temp-button {
+  display: flex;
+  cursor: pointer;
+  color: var(--b);
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 128px;
+  height: 48px;
+}
+.temp-button .button-text {
+  position: absolute;
+  width: calc(100% - 48px);
+  right: 0px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.temp-button .circle {
+  position: absolute;
+  margin: 0;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  background: var(--c-36);
+  border-radius: 17px;
+}
+
+.temp-button:hover .circle {
+  width: 100%;
+}
+
+.temp-button:hover .button-text {
+  color: #fff;
+}
+@media (max-width: 767px) {
+header {
+  grid-template-columns: repeat(2, 1fr);
+}
+.nav {
+  display: none;
+}
+.login-wrapper {
+  grid-column: 2 / 3;
+}
+#logout {
+  display: none;
+}
+.nav button bar {
+  backdrop-filter: blur(0px);
+}
+}
+.plate .p-wrapper {
+  height: 42px;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+}
+.plate:hover .p-wrapper {
+  height: 0px;
+}
+.plate:hover h3 {
+  font-size: 16px;
+}
+.plate {
+  transition: all 0.2s ease;
+  padding: 12px;
+  gap: 12px;
+}
+.plate .text {
+  align-items: flex-start;
+  justify-content: center;
+}
+.guild-avatar {
+  height: 66px;
+  width: 66px;
+  min-width: 66px;
+  border-radius: 12px;
+  background: var(--c-48);
+}
+.plate:hover {
+  background: var(--c-36);
+}
+.verified {
+  height: 33px;
+  width: 33px;
+  border-radius: 11px;
+  background-color: var(--c-36);
+  cursor: pointer;
+}
+.verified .icon {
+  height: calc(100% / 3 * 2);
+  width: 25px;
+  pointer-events: none;
+}
+
+.logo.inner-animation {
+  animation: inner-logo-animation 0s linear 3.3s forwards;
+}
+.user .balance {
+  display: flex;
+  font-size: 10px;
+  line-height: 14px;
+  align-items: center;
+  height: 14px;
+  gap: 4px;
+  color: var(--w-2);
+}
+.user .balance::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: url(https://api.impactium.fun/ux/donate.svg) no-repeat center center;
+  display: block;
+  background-size: cover;
+}
+
+@keyframes inner-logo-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
