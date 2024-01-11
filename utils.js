@@ -332,6 +332,8 @@ class MinecraftPlayer {
     if (player) {
       Object.assign(this, player);
       this.achievements = new Achievements(this)
+      this.referal = new Referal(this.id)
+      await this.referal.fetch()
       this.isFetched = true;
     } else {
       await this.save()
@@ -409,7 +411,7 @@ class MinecraftPlayer {
     }
   }
 
-  async balance(number) {
+  async balance(number, save = true) {
     if (typeof this.balance === 'undefined' || isNaN(this.balance))
       this.balance = 0;
 
@@ -417,7 +419,8 @@ class MinecraftPlayer {
       return;
 
     this.balance += number;
-    await this.save()
+    if (save)
+      await this.save();
   }
 
   serialize() {
@@ -460,10 +463,12 @@ class MinecraftPlayer {
 
     if (player || this._id) {
       delete this.isFetched
+      delete this.referal
       await Players.updateOne({ _id: this._id }, { $set: this.serialize() });
       this.isFetched = true;
     } else if (this.id) {
       delete this.isFetched
+      delete this.referal
       await Players.insertOne(this.serialize());
       this.isFetched = true;
     }
@@ -480,33 +485,39 @@ class Achievements {
 
   async process() {
     if (this.player.achievements?.processed && Date.now() - this.player.achievements.processed < 1000 * 60 * 10) return;
-    if (!this.player.stats?.processed || Date.now() - this.player.stats?.processed > 1000 * 60 * 10) await this.fetch();
+    if (!this.player.stats?.processed || Date.now() - this.player.stats?.processed > 1000 * 60 * 10) this.fetch();
     
     this.getCasual()
     this.getKiller()
     this.getDefence()
+    await this.referalParentSetChildren()
 
-    if (this.playedHours() > 50) {
-      const player = new Referal(this.player.id);
-      await player.fetch();
-      if (player.parent) {
-        const parentReferal = new Referal(player.parent);
-        await parentReferal.fetch();
-        const isChildrenWasChanged = parentReferal.completeChildren(this.player.id);
-        if (isChildrenWasChanged) {
-          const parentAccount = new MinecraftPlayer(parentReferal.id)
-          await parentAccount.fetch();
-          parentAccount.achievements.getEvent(parentReferal.childrens.filter(c => c.isChanged).length, 1);
-          await parentReferal.save();
-          await parentAccount.save();
-        }
-      }
-    }
 
     await this.player.save();
   }
 
-  async fetch() {
+  async referalParentSetChildren() {
+    if (!this.player.achievements.eventProcessed && this.playedHours() > 50 && this.player.referal.parent) {
+      const parentReferal = new Referal(this.player.referal.parent);
+      await parentReferal.fetch();
+      const isChildrenWasChanged = parentReferal.completeChildren(this.player.id);
+      if (isChildrenWasChanged) {
+        const parentAccount = new MinecraftPlayer(parentReferal.id)
+        await parentAccount.fetch();
+        parentAccount.achievements.getEvent({
+          total: parentReferal.childrens.filter(c => c.isChanged).length,
+          confirmed: 1,
+          save: false
+        });
+
+        parentReferal.save();
+        parentAccount.save();
+      }
+      this.player.achievements.eventProcessed = true
+    }
+  }
+
+  fetch() {
     const mcs = new ImpactiumServer();
 
     const playerStatsFromServer = mcs.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
@@ -518,7 +529,6 @@ class Achievements {
         : null
 
     this.player.stats.processed = mcs.players.lastStatsFetch
-    await this.player.save()
   }
 
   playedHours() {
@@ -633,38 +643,38 @@ class Achievements {
     });
   }
 
-  async getEvent(totalReferals, confirmedReferals) {
-    await this.player.balance(50 * confirmedReferals);
+  async getEvent({ total, confirmed, save = true }) {
+    await this.player.balance(50 * confirmed, save);
     this.clear('event');
     
     this.set({
       type: 'event',
       stage: 'eventOne',
-      score: totalReferals,
+      score: total,
       limit: 1
     });
     this.set({
       type: 'event',
       stage: 'eventTwo',
-      score: totalReferals,
+      score: total,
       limit: 2
     });
     this.set({
       type: 'event',
       stage: 'eventThree',
-      score: totalReferals,
+      score: total,
       limit: 3
     });
     this.set({
       type: 'event',
       stage: 'eventFour',
-      score: totalReferals,
+      score: total,
       limit: 5
     });
     this.set({
       type: 'event',
       stage: 'eventFive',
-      score: totalReferals,
+      score: total,
       limit: 10
     });
   }
@@ -1108,33 +1118,23 @@ class ReferalFetcher {
 
     for (const referal of this.referals) {
       let confirmedChildrens = 0;
-    
-      for (const children of referal.childrens) {
+      
+      await Promise.all(referal.childrens.map(async (children) => {
         const processedChildren = await this.processChildren(children);
         if (processedChildren) {
           confirmedChildrens++;
         }
-      }
-    
+      }));
+      
       if (confirmedChildrens > 0) {
-        const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
-        referal.childrensConfirmed = referal.childrens.every(c => c.isConfirmed);
-    
-        await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
-    
-        const referalPlayer = new MinecraftPlayer(referal.id);
-        await referalPlayer.fetch();
-    
-        await referalPlayer.achievements.getEvent(totalConfirmedChildrens, confirmedChildrens);
-        await referalPlayer.save();
+        this.processParent(referal, confirmedChildrens);
       }
     }
   }
 
   async getReferals() {
     this.Referals = await getDatabase('referals');
-    this.referals = await Referals.find({}).toArray();
-    this.referals = this.referals.filter(referal => referal.childrens.length > 0 && !referal.childrensConfirmed);
+    this.referals = await this.Referals.find({ 'childrens': { $size: { $gt: 0 } }, 'childrensConfirmed': false }).toArray();
     return this.referals
   }
 
@@ -1143,18 +1143,31 @@ class ReferalFetcher {
       return false;
     const player = new MinecraftPlayer(children.id);
     await player.fetch();
-    await player.achievements.fetch();
-    const playedTicks = player.achievements.select('custom', 'play_time');
-    if (player.registered 
-      && player.nickname 
-      && typeof playedTicks === 'number' 
-      && !isNaN(playedTicks) 
-      && playedTicks / 20 / 60 / 60 > 50) {
-        children.isConfirmed = true;
-        return true
+    player.achievements.fetch();
+    if (player.achievements.playedHours() > 50) {
+      children.isConfirmed = true;
+      return true
     } else {
       return false;
     }
+  }
+
+  async processParent(referal, confirmedChildrens) {
+    const totalConfirmedChildrens = referal.childrens.filter(children => children.isConfirmed).length;
+    referal.childrensConfirmed = referal.childrens.every(c => c.isConfirmed);
+
+    await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
+
+    const referalPlayer = new MinecraftPlayer(referal.id);
+    await referalPlayer.fetch();
+
+    referalPlayer.achievements.getEvent({
+      total: totalConfirmedChildrens,
+      confirmed:  confirmedChildrens,
+      save: false
+    });
+
+    referalPlayer.save();
   }
 }
 
