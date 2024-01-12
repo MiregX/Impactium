@@ -23,7 +23,7 @@ def restart_node_server():
         except (psutil.NoSuchProcess, psutil.TimeoutExpired):
             pass
 
-    cmd_path = "C:\\Users\\Марк\\[КОД]\\Web\\Guild Menegment\\"
+    cmd_path = "C:\\Users\\Марк\\[КОД]\\Web\\server\\"
     subprocess.Popen(["node", "index.js"], cwd=cmd_path, shell=True)
 
 if __name__ == "__main__":
