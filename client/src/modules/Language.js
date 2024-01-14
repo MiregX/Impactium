@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './Language.css'; // Подключите стили для этого компонента
+import { useLanguage } from './Lang';
+import './Language.css'; // Import your styles
 
 function Language() {
+  const { toggleLanguage, getActiveLanguage } = useLanguage();
   const [isPanelActive, setPanelActive] = useState(false);
 
   const availableLanguages = ['en', 'uk', 'ru', 'it'];
@@ -14,9 +16,13 @@ function Language() {
     <div className={`language ${isPanelActive ? 'active' : ''}`}>
       <div className="list">
         {availableLanguages.map((langCode) => (
-          <a key={langCode} href={`/lang/${langCode}`}>
-            <img src={`https://api.impactium.fun/langs/${langCode}.png`} alt={`Language ${langCode}`} />
-          </a>
+          <div key={langCode} onClick={() => toggleLanguage(langCode)}>
+            <img
+              src={`https://api.impactium.fun/langs/${langCode}.png`}
+              alt={`Language ${langCode}`}
+              className={langCode === getActiveLanguage() ? 'active' : ''}
+            />
+          </div>
         ))}
       </div>
       <button className="toggler center" id="toggleLanguageChooseButton" onClick={toggleLanguageChoosePanel}>

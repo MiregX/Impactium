@@ -3,7 +3,7 @@
   position: fixed;
   bottom: 0px;
   transform: translateY(-50%);
-  left: -110px;
+  left: -145px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -21,10 +21,19 @@
   display: flex;
   flex-direction: row;
   gap: 5px;
-  width: 100px;
 }
 .language .list img {
-  height: 20px;
+  height: 30px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: var(--c-36);
+  border-radius: 5px;
+}
+.language .list img:hover {
+  background-color: var(--c-48);
+}
+.language .list img.active {
+  background-color: var(--c-48);
 }
 .language .toggler {
   height: 40px;
@@ -32,6 +41,13 @@
   cursor: pointer;
   transition: all 0.3s var(--trans);
   border: 1px solid transparent;
+  border-radius: 0px 20px 20px 0px;
+}
+.language.active .toggler {
+  border-radius: 5px 20px 20px 5px;
+}
+.language .toggler:hover {
+  background-color: var(--c-36);
 }
 .language .toggler img {
   height: 30px;

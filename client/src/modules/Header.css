@@ -148,6 +148,14 @@ header > div > svg {
 }
 header .logo {
   height: 48px;
+  gap: 16px;
+  opacity: 0;
+  text-decoration: none;
+}
+
+header .logo p {
+  font-size: 30px;
+  font-weight: 600;
 }
 
 #arrow-icon path.default-path {
