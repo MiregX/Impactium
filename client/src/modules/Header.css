@@ -10,17 +10,6 @@ header {
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
 }
-header-background {
-  z-index: 1;
-  top: -80px;
-  height: 80px;
-  width: 100vw;
-  left: 0%;
-  position: fixed;
-  display: flex;
-  background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
-  backdrop-filter: blur(15px);
-}
 .nav {
   gap: 10px;
   height: 100%;
@@ -109,6 +98,7 @@ header > div > svg {
 }
 .login-wrapper {
   grid-column: 3 / 4;
+  justify-content: flex-end;
 }
 
 .user {
@@ -156,6 +146,10 @@ header .logo {
 header .logo p {
   font-size: 30px;
   font-weight: 600;
+}
+
+header .logo img {
+  height: 48px;
 }
 
 #arrow-icon path.default-path {

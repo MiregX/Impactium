@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import './Header.css';
 import { useLanguage } from './Lang';
+import { useUser } from '../class/User';
 
-function Header({ user }) {
+function Header() {
   const { lang } = useLanguage();
+  const { user, logout, getUser } = useUser();
   useEffect(() => {
     const arrowIcon = document.querySelector('.temp-button');
 
@@ -29,14 +31,6 @@ function Header({ user }) {
     logo.classList.add('inner-animation');
   }, []);
 
-  const logout = () => {
-    window.location.href = "/logout";
-  }
-
-  const login = () => {
-    window.location.href = "/login";
-  }
-  
   const me = () => {
     window.location.href = "/me";
   }
@@ -44,11 +38,11 @@ function Header({ user }) {
   return (
     <header>
       <a href='/' className="logo flex flex-dir-row align-center">
-        <img src="https://api.impactium.fun/logo/impactium_v4.svg" style={{ height: '48px' }} alt="Impactium Logo" />
+        <img src="https://api.impactium.fun/logo/impactium_v4.svg" alt="Impactium Logo" />
         <p>Impactium</p>
       </a>
       {user && user.id ? (
-        <div className="user-onlogin" style={{ justifyContent: 'flex-end' }}>
+        <div className="user-onlogin">
           <button onClick={me} className="user flex">
             {user.avatar && <img src={user.avatar} className="avatar" alt="User Avatar" />}
             <div>
@@ -66,7 +60,7 @@ function Header({ user }) {
           </button>
         </div>
       ) : (
-        <div className="flex-dir-row gap login-wrapper" style={{ justifyContent: 'flex-end' }}>
+        <div className="flex-dir-row gap login-wrapper">
           <button onClick={login} className="login temp-button">
             <div className="circle">
               <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">

@@ -19,14 +19,12 @@ function HeaderBackground() {
   }, []);
 
   useEffect(() => {
-    const logo = document.querySelector('.logo');
+    const logo = document.querySelector('header .logo');
     logo.classList.add('inner-animation');
   }, []);
 
   return (
-    <div className="header-background" style={{ top: `${topValue}px` }}>
-      {/* Ваш JSX-код */}
-    </div>
+    <div className="header-background" style={{ top: `${topValue}px` }}></div>
   );
 }
 

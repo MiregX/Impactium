@@ -16,10 +16,9 @@ function Language() {
     <div className={`language ${isPanelActive ? 'active' : ''}`}>
       <div className="list">
         {availableLanguages.map((langCode) => (
-          <div key={langCode} onClick={() => toggleLanguage(langCode)}>
+          <div onClick={() => toggleLanguage(langCode)}>
             <img
               src={`https://api.impactium.fun/langs/${langCode}.png`}
-              alt={`Language ${langCode}`}
               className={langCode === getActiveLanguage() ? 'active' : ''}
             />
           </div>

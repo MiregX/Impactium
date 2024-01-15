@@ -31,6 +31,9 @@ global.logged = global.logged || new Map();
 
 const options = utils.getLicense();
 
+const api = require('./modules/api');
+app.use('/api', api);
+
 const mcs = new ImpactiumServer()
 const nav = {
   "partners": {
