@@ -405,9 +405,9 @@ class MinecraftPlayer {
   initAuthMe() {
     if (this.nickname && this.password) {
       const mcs = new ImpactiumServer();
-      mcs.updateWhitelist();
       mcs.command(`authme register ${this.nickname} ${this.password}`);
       mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
+      mcs.updateWhitelist();
     }
   }
 

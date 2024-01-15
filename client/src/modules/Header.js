@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 import { useLanguage } from './Lang';
 import { useUser } from '../class/User';
 
 function Header() {
   const { lang } = useLanguage();
-  const { user, logout, getUser } = useUser();
+  const { user, logout } = useUser();
   useEffect(() => {
     const arrowIcon = document.querySelector('.temp-button');
 
@@ -61,14 +62,14 @@ function Header() {
         </div>
       ) : (
         <div className="flex-dir-row gap login-wrapper">
-          <button onClick={login} className="login temp-button">
+          <Link to="/login" className="login temp-button">
             <div className="circle">
               <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                 <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <span className="button-text txt-sh">{lang.login}</span>
-          </button>
+          </Link>
         </div>
       )}
     </header>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './Preloader.css';
+import './Preloader.css'; // Import your styles
 
 function Preloader() {
-  const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
+  const [visitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
 
   useEffect(() => {
     const timeout = visitedBefore ? 500 : 4000;

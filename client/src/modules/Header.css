@@ -182,7 +182,7 @@ header .logo img {
 .temp-button .button-text {
   position: absolute;
   width: calc(100% - 48px);
-  right: 0px;
+  right: -8px;
   font-weight: 500;
   font-size: 16px;
 }

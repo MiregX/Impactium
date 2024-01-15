@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Template from './Template';
 import LanguageProvider from './modules/Lang';
-import User from './class/User';
+import UserProvider from './class/User';
 
 const rootElement = document.getElementById('root');
 
@@ -11,10 +11,10 @@ const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <User>
+    <UserProvider>
       <LanguageProvider>
         <Template />
       </LanguageProvider>
-    </User>
+    </UserProvider>
   </React.StrictMode>
 );
