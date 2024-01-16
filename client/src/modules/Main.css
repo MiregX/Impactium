@@ -13,7 +13,7 @@
   --donate-accent: #72E4F2;
 }
 .panel {
-  height: calc(100vh - 80px);
+  height: 100vh;
 }
 .panel.main {
   display: flex;

@@ -14,14 +14,14 @@ export const UserProvider = ({ children }) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token
+          'token': token
         }
       });
 
       if (response.ok) {
         const userData = await response.json();
-        console.log(response)
-        setUser({});
+        setUser(userData);
+        console.log(userData)
       } else {
         console.error('(User.js) Error updating user data');
       }

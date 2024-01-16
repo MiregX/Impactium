@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useCallback, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useLanguage } from './Lang';
 import { useUser } from '../class/User';
 import './Main.css'; // Import your styles
@@ -6,80 +6,51 @@ import './Main.css'; // Import your styles
 const Main = () => {
   const { lang } = useLanguage();
   const { user } = useUser();
-  const currentIndexRef = useRef(1);
-  const descriptionBlocksRef = useRef([]);
 
-  useLayoutEffect(() => {
-    // Update the descriptionBlocksRef when the component mounts or descriptionBlocks changes
-    descriptionBlocksRef.current = Array.from(document.querySelectorAll('.descriptions-wrapper .support-text'));
-  }, []); // Empty dependency array to run once on mount
+  useEffect(() => {
+    // Animation for header
+    const header = document.querySelector('header');
+    header.style.transform = 'translateY(0px)';
+    header.style.opacity = '1';
 
-  const applyStyle = useCallback(() => {
-    descriptionBlocksRef.current.forEach((block, index) => {
-      block.classList.remove('on-move', 'active');
+    // Animation for the right panel
+    const gl = document.querySelector('.right');
+    gl.style.transform = 'translateX(0px)';
+    gl.style.opacity = '1';
+
+    // Animation for about us main text
+    const aboutUsMainText = document.querySelector('.main-text');
+    aboutUsMainText.style.transform = 'translateX(0px)';
+    aboutUsMainText.style.opacity = '1';
+
+    // Animation for about us description text
+    const aboutUsDescriptionText = document.querySelector('.descriptions-wrapper');
+    aboutUsDescriptionText.style.transform = 'translateX(0px)';
+    aboutUsDescriptionText.style.opacity = '1';
+
+    // Animation for privileges list
+    const lis = document.querySelectorAll('.privileges li');
+    lis.forEach((li) => {
+      li.style.width = '100%';
     });
 
-    const currentBlock = descriptionBlocksRef.current[currentIndexRef.current];
-    const prevIndex = (currentIndexRef.current === 0) ? descriptionBlocksRef.current.length - 1 : currentIndexRef.current - 1;
-    const prevBlock = descriptionBlocksRef.current[prevIndex];
+    // Text description animation
+    const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
+    let currentIndex = 1;
+    console.log(descriptionBlocks)
+ 
+    descriptionBlocks.forEach((block, index) => {
+      block.classList.remove('on-move', 'active');
 
-    if (currentBlock) {
-      currentBlock.classList.add('active');
-    }
+      if (index === currentIndex) {
+        block.classList.add('active');
+      } else if (index === ((currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1)) {
+        block.classList.add('on-move');
+      }
+    });
 
-    if (prevBlock) {
-      prevBlock.classList.add('on-move');
-    }
-
-    currentIndexRef.current = (currentIndexRef.current + 1) % descriptionBlocksRef.current.length;
-
-    setTimeout(() => {
-      applyStyle();
-    }, 5000);
-  }, []);
-
-  useLayoutEffect(() => {
-    const header = document.querySelector('header');
-    if (header) {
-      header.style.transform = 'translateY(0px)';
-      header.style.opacity = '1';
-    }
-
-    const gl = document.querySelector('.right');
-    if (gl) {
-      gl.style.transform = 'translateX(0px)';
-      gl.style.opacity = '1';
-    }
-
-    const aboutUsMainText = document.querySelector('.main-text');
-    if (aboutUsMainText) {
-      aboutUsMainText.style.transform = 'translateX(0px)';
-      aboutUsMainText.style.opacity = '1';
-    }
-
-    const aboutUsDescriptionText = document.querySelector('.descriptions-wrapper');
-    if (aboutUsDescriptionText) {
-      aboutUsDescriptionText.style.transform = 'translateX(0px)';
-      aboutUsDescriptionText.style.opacity = '1';
-    }
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const lis = document.querySelectorAll('.privileges li');
-
-      lis.forEach((li, index) => {
-        setTimeout(() => {
-          li.classList.add('width-100');
-        }, (index + 1) * 250);
-      });
-    }, 800);
-  }, []);
-
-  useEffect(() => {
-    applyStyle();
-  }, [applyStyle]);
-
+    currentIndex = (currentIndex + 1) % descriptionBlocks.length;
+  }, []); // Run this effect only once on mount
   return (
     <div className="panel main">
       <div className="about-us">
@@ -99,12 +70,12 @@ const Main = () => {
         </div>
         <h2>{lang.playOnOurProject}</h2>
         <ul className="privileges">
-          <li>--hammer {lang.administrationNotIntervenes}<hr /></li>
-          <li>--casual {lang.openWorldWithoutPrivates}<hr /></li>
-          <li>--defence {lang.sendAthletesAgainstNonRP}<hr /></li>
-          <li>--killer {lang.uniqueRewardsSystem}<hr /></li>
-          <li>--event {lang.masterpieceRoleplayWithAdmins}<hr /></li>
-          <li>--donate {lang.donateAndGetUniqueSkin}<hr /></li>
+          <li hammer="">{lang.administrationNotIntervenes}<hr /></li>
+          <li casual="">{lang.openWorldWithoutPrivates}<hr /></li>
+          <li defence="">{lang.sendAthletesAgainstNonRP}<hr /></li>
+          <li killer="">{lang.uniqueRewardsSystem}<hr /></li>
+          <li event="">{lang.masterpieceRoleplayWithAdmins}<hr /></li>
+          <li donate="">{lang.donateAndGetUniqueSkin}<hr /></li>
         </ul>
         <a href="https://impactium.fun/me/minecraft">
           {user.id ? lang.myProfile : lang.register}
