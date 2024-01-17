@@ -206,6 +206,18 @@ const processHosting = async () => {
   }
 }
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Можно предпринять какие-то действия для продолжения работы приложения
+});
+
+// process.on('unhandledRejection', (reason, promise) => {
+//   console.error('Unhandled Rejection:', reason);
+//   mcs.telegramBot.connect
+//   mcs.launch();
+// });
+
+
 schedule('0 */6 * * *', async () => {
   await mcs.resourcePack.process();
 });

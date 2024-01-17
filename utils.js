@@ -745,6 +745,7 @@ class ImpactiumServer {
 
     this.resourcePack = new ResoursePackInstance(this);
     this.telegramBot = new TelegramBotHandler();
+    this.telegramBot.connect();
     this.referals = new ReferalFetcher();
     
     ImpactiumServer.instance = this;
@@ -787,6 +788,7 @@ class ImpactiumServer {
       const players = message.substring(9).split(', ');
       this.players.online.list = players.map(p => p.split(' ')[1]);
       this.players.online.count = players.length + 10
+      log(this.players.online, 'r')
       this.telegramBot.editMessage(this.players.online);
     }
 
@@ -1024,15 +1026,18 @@ class ResoursePackInstance {
 class TelegramBotHandler {
   constructor() {
     if (TelegramBotHandler.instance) return TelegramBotHandler.instance;
-    TelegramBotHandler.instance = this
     this.channelId = '-1001649611744'
     this.messageId = 676
-    this.basicMessage = `Сейчас на сервере:`
+    this.basicMessage = `Сейчас на сервере:\n`
+    this.bot = new Telegraf(telegramBotToken)
+    TelegramBotHandler.instance = this
+  }
+
+  async connect() {
     try {
-      this.bot = new Telegraf(telegramBotToken)
-      this.bot.telegram.getMe();
+      await this.bot.telegram.getMe();
     } catch (error) {
-      return new TelegramBotHandler();
+      return await this.connect();
     }
   }
 
@@ -1042,7 +1047,7 @@ class TelegramBotHandler {
         this.channelId,
         this.messageId,
         null,
-        this.basicMessage + online.list.sort().join("\n   "),
+        this.basicMessage + online.list.join("\n "),
         Markup.inlineKeyboard([
           Markup.button.callback(`Онлайн: ${online.count} / 50`, 'onlineButtonCallback'),
         ])

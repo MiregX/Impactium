@@ -8,23 +8,7 @@ function Header() {
   const { lang } = useLanguage();
   const { user, logout } = useUser();
   useEffect(() => {
-    const arrowIcon = document.querySelector('.temp-button');
 
-    const handleMouseEnter = () => {
-      document.getElementById('arrow-icon').classList.add('hovered');
-    };
-
-    const handleMouseLeave = () => {
-      document.getElementById('arrow-icon').classList.remove('hovered');
-    };
-
-    arrowIcon.addEventListener('mouseenter', handleMouseEnter);
-    arrowIcon.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      arrowIcon.removeEventListener('mouseenter', handleMouseEnter);
-      arrowIcon.removeEventListener('mouseleave', handleMouseLeave);
-    };
   }, []);
 
   useEffect(() => {
@@ -50,7 +34,7 @@ function Header() {
           <button id="logout" onClick={logout} className="temp-button">
             <div className="circle">
               <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <div className="button-text">{lang.logout}</div>

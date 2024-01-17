@@ -6,53 +6,51 @@ import './Main.css'; // Import your styles
 const Main = () => {
   const { lang } = useLanguage();
   const { user } = useUser();
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   useEffect(() => {
-    // Animation for header
     const header = document.querySelector('header');
-    header.style.transform = 'translateY(0px)';
-    header.style.opacity = '1';
-
-    // Animation for the right panel
     const gl = document.querySelector('.right');
-    gl.style.transform = 'translateX(0px)';
-    gl.style.opacity = '1';
-
-    // Animation for about us main text
     const aboutUsMainText = document.querySelector('.main-text');
-    aboutUsMainText.style.transform = 'translateX(0px)';
-    aboutUsMainText.style.opacity = '1';
-
-    // Animation for about us description text
     const aboutUsDescriptionText = document.querySelector('.descriptions-wrapper');
-    aboutUsDescriptionText.style.transform = 'translateX(0px)';
-    aboutUsDescriptionText.style.opacity = '1';
+    setTimeout(() => {
+      header.style.transform = 'translateY(0px)';
+      header.style.opacity = '1';
+      gl.style.transform = 'translateX(0px)';
+      gl.style.opacity = '1';
+      aboutUsMainText.style.transform = 'translateX(0px)';
+      aboutUsMainText.style.opacity = '1';
+      aboutUsDescriptionText.style.transform = 'translateX(0px)';
+      aboutUsDescriptionText.style.opacity = '1';
+    }, 800);
 
-    // Animation for privileges list
     const lis = document.querySelectorAll('.privileges li');
     lis.forEach((li, index) => {
       setTimeout(() => {
         li.classList.add('width-100');
       }, (index + 1) * 250);
     });
-
-    let currentIndex = 1;
-    (function d() {
+    
+    const descriptionBlocksAnimationInit = () => {
       const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
+
       descriptionBlocks.forEach((block, index) => {
         block.classList.remove('on-move', 'active');
-  
+
         if (index === currentIndex) {
           block.classList.add('active');
         } else if (index === ((currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1)) {
           block.classList.add('on-move');
         }
       });
-      currentIndex = (currentIndex + 1) % descriptionBlocks.length;
-      setTimeout(d, 4000)
-    }());
 
-  }, []); // Run this effect only once on mount
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % descriptionBlocks.length);
+    };
+
+    const animationInterval = setInterval(descriptionBlocksAnimationInit, 4000);
+
+    return () => clearInterval(animationInterval);
+  }, []);
   return (
     <div className="panel main">
       <div className="about-us">
