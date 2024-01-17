@@ -29,18 +29,17 @@ class User {
       this.isFetched = true;
       const user = Object.assign(userDatabase, userDatabase[userDatabase.lastLogin]);
       const { token, secure, discord, google, ...rest } = user;
-      this.private = userDatabase;
-      this.referal = new Referal(this.private._id);
-      await this.referal.fetch();
       Object.assign(this, rest);
+      this.referal = new Referal(this._id);
+      await this.referal.fetch();
     }
   }
 
-  setGuild(guildKey) {
-    if (this.lastLogin !== "discord") return
-    this.guild = this.guilds.find(guild =>
-      guild.name.toLowerCase() === guildKey.toLowerCase() || 
-      guild.id.toLowerCase() === guildKey.toLowerCase())
+  send() {
+    const user = {}
+    const { token, secure, discord, google, isFetched, ...rest } = this;
+    Object.assign(user, rest);
+    return user
   }
 
   async save() {
@@ -80,6 +79,7 @@ class Referal {
   }
 
   async create() {
+    console.log(this.code)
     if (this.code.length <= 8 || this._id)
       return
 

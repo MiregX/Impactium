@@ -13,7 +13,7 @@ function Language() {
   };
 
   return (
-    <div className={`language ${isPanelActive ? 'active' : ''}`}>
+    <div className={`language${isPanelActive ? ' active' : ''}`}>
       <div className="list">
         {availableLanguages.map((langCode) => (
           <div key={langCode} onClick={() => toggleLanguage(langCode)}>

@@ -8,25 +8,21 @@ function Preloader() {
     const timeout = visitedBefore ? 500 : 4000;
 
     const removePreloader = () => {
-      document.querySelector('.preloader').remove();
+      document.querySelector('.preloader')?.remove();
     };
 
-    if (visitedBefore) {
+    if (visitedBefore !== "true") {
       document.querySelector('header .logo').style.opacity = 1;
       document.querySelector('.preloader').classList.add('fast-animation');
     } else {
       document.querySelector('.preloader').classList.add('outter-animation');
-      setTimeout(removePreloader, timeout);
       localStorage.setItem("visitedBefore", "true");
     }
-
-    return () => {
-      document.removeEventListener('load', removePreloader);
-    };
+    setTimeout(removePreloader, timeout);
   }, [visitedBefore]);
 
   return (
-    <div className="preloader" style={{ zIndex: 9 }}>
+    <div className="preloader">
       <div className="flex flex-dir-row center" style={{ gap: 16 }}>
         <svg viewBox="-11.439 -11.421 403.213 522.815" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" stroke="#e8e8e8" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="15" strokeWidth="12" transform="matrix(3.130766, 0, 0, 3.130766, -102.465179, -42.383404)">

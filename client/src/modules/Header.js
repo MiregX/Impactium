@@ -32,10 +32,6 @@ function Header() {
     logo.classList.add('inner-animation');
   }, []);
 
-  const me = () => {
-    window.location.href = "/me";
-  }
-
   return (
     <header>
       <a href='/' className="logo flex flex-dir-row align-center">
@@ -44,13 +40,13 @@ function Header() {
       </a>
       {user && user.id ? (
         <div className="user-onlogin">
-          <button onClick={me} className="user flex">
+          <Link to="/me" className="user flex">
             {user.avatar && <img src={user.avatar} className="avatar" alt="User Avatar" />}
             <div>
               <p className="button-text">{user.displayName}</p>
               <p className="balance">{user.balance || 0}</p>
             </div>
-          </button>
+          </Link>
           <button id="logout" onClick={logout} className="temp-button">
             <div className="circle">
               <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">

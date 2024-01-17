@@ -167,23 +167,23 @@
 .privileges li.width-100 hr::after {
   width: 100%;
 }
-.privileges li[--hammer]::before { content: var(--hammer) }
-.privileges li[--hammer] hr::after { background-color: var(--hammer-accent) }
+.privileges li[hammer]::before { content: var(--hammer) }
+.privileges li[hammer] hr::after { background-color: var(--hammer-accent) }
 
-.privileges li[--casual]::before { content: var(--casual) }
-.privileges li[--casual] hr::after { background-color: var(--casual-accent) }
+.privileges li[casual]::before { content: var(--casual) }
+.privileges li[casual] hr::after { background-color: var(--casual-accent) }
 
-.privileges li[--defence]::before { content: var(--defence) }
-.privileges li[--defence] hr::after { background-color: var(--defence-accent) }
+.privileges li[defence]::before { content: var(--defence) }
+.privileges li[defence] hr::after { background-color: var(--defence-accent) }
 
-.privileges li[--killer]::before { content: var(--killer) }
-.privileges li[--killer] hr::after { background-color: var(--killer-accent) }
+.privileges li[killer]::before { content: var(--killer) }
+.privileges li[killer] hr::after { background-color: var(--killer-accent) }
 
-.privileges li[--event]::before { content: var(--event) }
-.privileges li[--event] hr::after { background-color: var(--event-accent) }
+.privileges li[event]::before { content: var(--event) }
+.privileges li[event] hr::after { background-color: var(--event-accent) }
 
-.privileges li[--donate]::before { content: var(--donate) }
-.privileges li[--donate] hr::after { background-color: var(--donate-accent) }
+.privileges li[donate]::before { content: var(--donate) }
+.privileges li[donate] hr::after { background-color: var(--donate-accent) }
 @media (max-width: 767px) {
   .about-us {
     width: 90vw;

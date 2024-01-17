@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useLanguage } from './Lang';
-import { useUser } from '../class/User';
+import { useLanguage } from './../Lang';
+import { useUser } from '../../class/User';
 import './Main.css'; // Import your styles
 
 const Main = () => {
@@ -30,26 +30,28 @@ const Main = () => {
 
     // Animation for privileges list
     const lis = document.querySelectorAll('.privileges li');
-    lis.forEach((li) => {
-      li.style.width = '100%';
+    lis.forEach((li, index) => {
+      setTimeout(() => {
+        li.classList.add('width-100');
+      }, (index + 1) * 250);
     });
 
-    // Text description animation
-    const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
     let currentIndex = 1;
-    console.log(descriptionBlocks)
- 
-    descriptionBlocks.forEach((block, index) => {
-      block.classList.remove('on-move', 'active');
+    (function d() {
+      const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
+      descriptionBlocks.forEach((block, index) => {
+        block.classList.remove('on-move', 'active');
+  
+        if (index === currentIndex) {
+          block.classList.add('active');
+        } else if (index === ((currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1)) {
+          block.classList.add('on-move');
+        }
+      });
+      currentIndex = (currentIndex + 1) % descriptionBlocks.length;
+      setTimeout(d, 4000)
+    }());
 
-      if (index === currentIndex) {
-        block.classList.add('active');
-      } else if (index === ((currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1)) {
-        block.classList.add('on-move');
-      }
-    });
-
-    currentIndex = (currentIndex + 1) % descriptionBlocks.length;
   }, []); // Run this effect only once on mount
   return (
     <div className="panel main">

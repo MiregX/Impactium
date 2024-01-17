@@ -5,7 +5,7 @@ import Preloader from './modules/Preloader';
 import Language from './modules/Language';
 import Header from './modules/Header';
 import HeaderBackground from './modules/HeaderBackground';
-import Main from './modules/Main';
+import Main from './modules/main/Main';
 
 function Template() {
   return (
