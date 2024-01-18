@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLanguage } from './../Lang';
-import { useUser } from '../../class/User';
 import './Main.css'; // Import your styles
 
 const Main = () => {
   const { lang } = useLanguage();
-  const { user } = useUser();
-  const [currentIndex, setCurrentIndex] = useState(1);
 
   useEffect(() => {
     const header = document.querySelector('header');
@@ -31,7 +28,7 @@ const Main = () => {
       }, (index + 1) * 250);
     });
     
-    const descriptionBlocksAnimationInit = () => {
+    const descriptionBlocksAnimationInit = (currentIndex) => {
       const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
 
       descriptionBlocks.forEach((block, index) => {
@@ -44,13 +41,12 @@ const Main = () => {
         }
       });
 
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % descriptionBlocks.length);
+      currentIndex = (currentIndex + 1) % descriptionBlocks.length;
+      setInterval(() => {
+        descriptionBlocksAnimationInit(currentIndex)
+      }, 4000);
     };
-
-    const animationInterval = setInterval(descriptionBlocksAnimationInit, 4000);
-    descriptionBlocksAnimationInit();
-
-    return () => clearInterval(animationInterval);
+    descriptionBlocksAnimationInit(1);
   }, []);
   return (
     <div className="panel main">
@@ -79,7 +75,7 @@ const Main = () => {
           <li donate="">{lang.donateAndGetUniqueSkin}<hr /></li>
         </ul>
         <a href="https://impactium.fun/me/minecraft">
-          {user.id ? lang.myProfile : lang.register}
+          {lang.myProfile}
         </a>
       </div>
     </div>

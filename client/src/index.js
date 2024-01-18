@@ -10,11 +10,9 @@ const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
-    <UserProvider>
-      <LanguageProvider>
-        <Template />
-      </LanguageProvider>
-    </UserProvider>
-  </React.StrictMode>
+  <UserProvider>
+    <LanguageProvider>
+      <Template />
+    </LanguageProvider>
+  </UserProvider>
 );

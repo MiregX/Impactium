@@ -10,25 +10,25 @@
 
 @keyframes logo-animation-first {
   0% {
-    stroke-dashoffset: 589.7821044921875px;
-    stroke-dasharray: 589.7821044921875px;
+    stroke-dashoffset: 589px;
+    stroke-dasharray: 589px;
   }
 
   100% {
-    stroke-dashoffset: 1179.564208984375px;
-    stroke-dasharray: 589.7821044921875px;
+    stroke-dashoffset: 1179px;
+    stroke-dasharray: 589px;
   }
 }
 
 @keyframes logo-animation-second {
   0% {
-    stroke-dashoffset: 110.46501922607422px;
-    stroke-dasharray: 110.46501922607422px;
+    stroke-dashoffset: 110px;
+    stroke-dasharray: 110px;
   }
 
   100% {
-    stroke-dashoffset: 220.93003845214844px;
-    stroke-dasharray: 110.46501922607422px;
+    stroke-dashoffset: 220px;
+    stroke-dasharray: 110px;
   }
 }
 
@@ -77,26 +77,20 @@
   width: 256px;
 }
 
-.preloader.outter-animation .logo-animation-first {
+.preloader.outter-animation .logo-animation-first,
+.preloader.outter-animation .logo-animation-second {
   animation: logo-animation-first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
-}
-
-.preloader.outter-animation .logo-animation-second  {
-  animation: logo-animation-second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
 
 .preloader.fast-animation svg {
   opacity: 1;
   transition: all 0.3s var(--trans);
 }
-.preloader.fast-animation {
-  transition: all 0.3s var(--trans) 0.2s;
+.preloader.remove {
+  transition: all 0.2s var(--trans);
   opacity: 0;
 }
-.preloader.fast-animation .logo-animation-first {
+.preloader.fast-animation .logo-animation-first,
+.preloader.fast-animation .logo-animation-second {
   animation: logo-animation-first 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.preloader.fast-animation .logo-animation-second  {
-  animation: logo-animation-second 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
