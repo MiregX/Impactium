@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Preloader.css';
 import { useUser } from '../class/User';
 
@@ -6,8 +6,18 @@ function Preloader() {
   const { user } = useUser();
   const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
   const self = useRef(null);
+  
+  const remove = useCallback((isFast = false) => {
+    if (isFast) {
+      document.querySelector('header .logo').style.opacity = 1;
+      self.current.classList.add('remove');
+      setTimeout(() => {
+        self.current.remove();
+      }, 200);
+    }
+  }, [self]);
 
-  const process = (isFast) => {
+  const process = useCallback((isFast) => {
     setVisitedBefore(true);
     if (isFast) {
       self.current.classList.add('fast-animation');
@@ -20,23 +30,16 @@ function Preloader() {
         remove(true)
       }, 3500);
     }
-  }
+  }, [setVisitedBefore, self, remove]);
+  
 
-  const remove = (isFast = false) => {
-    if (isFast) {
-      document.querySelector('header .logo').style.opacity = 1;
-      self.current.classList.add('remove');
-      setTimeout(() => {
-        self.current.remove();
-      }, 200);
-    }
-  }
-
+  
   useEffect(() => {
     if (typeof user === 'object') {
-      process(visitedBefore)
+      process(visitedBefore);
     }
-  }, [user]);
+  }, [user, visitedBefore, process]);
+  
 
   useEffect(() => {
     localStorage.setItem("visitedBefore", visitedBefore.toString());

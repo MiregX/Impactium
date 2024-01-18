@@ -32,7 +32,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [token, getUser]);
 
   return (
     <UserContext.Provider value={{ user }}>
