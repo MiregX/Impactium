@@ -139,6 +139,7 @@ header .logo {
   height: 48px;
   gap: 16px;
   opacity: 0;
+  width: min-content;
 }
 
 header .logo p {
