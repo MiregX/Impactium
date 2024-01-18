@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLanguage } from './../Lang';
 import { useUser } from '../../class/User';
 import './Main.css'; // Import your styles
@@ -22,7 +22,7 @@ const Main = () => {
       aboutUsMainText.style.opacity = '1';
       aboutUsDescriptionText.style.transform = 'translateX(0px)';
       aboutUsDescriptionText.style.opacity = '1';
-    }, 800);
+    }, 400);
 
     const lis = document.querySelectorAll('.privileges li');
     lis.forEach((li, index) => {
@@ -48,6 +48,7 @@ const Main = () => {
     };
 
     const animationInterval = setInterval(descriptionBlocksAnimationInit, 4000);
+    descriptionBlocksAnimationInit();
 
     return () => clearInterval(animationInterval);
   }, []);

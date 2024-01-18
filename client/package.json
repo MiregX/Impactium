@@ -12,9 +12,6 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^1.0.6"
-  },
   "scripts": {
     "start": "react-scripts start -open=false",
     "build": "react-scripts build",

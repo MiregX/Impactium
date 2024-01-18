@@ -3,29 +3,33 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 const locale = require('./locale.json');
 
 function getLanguagePack(languagePack = 'en') {
-  const languageProxy = new Proxy(locale, {
-    get(target, prop) {
-      if (Array.isArray(target[prop])) {
-        return target[prop].map((item) => item[languagePack]);
-      } else if (typeof target[prop] === 'string') {
-        return target[prop];
-      } else if (typeof target[prop]?.[languagePack] === 'string') {
-        return target[prop][languagePack];
-      } else {
-        const translations = {};
-        for (const key in target[prop]) {
-          if (target[prop]?.[key]?.[languagePack]) {
-            translations[key] = target[prop]?.[key]?.[languagePack];
-          }
-        }
-        return translations;
-      }
-    },
-  });
+  const translations = {};
+  if (languagePack === 'null') languagePack = 'en';
 
-  languageProxy.debugPath = __dirname;
-  return languageProxy;
+  for (const key in locale) {
+    const prop = locale[key];
+
+    if (Array.isArray(prop)) {
+      translations[key] = prop.map((item) => item[languagePack]);
+    } else if (typeof prop === 'string') {
+      translations[key] = prop;
+    } else if (typeof prop?.[languagePack] === 'string') {
+      translations[key] = prop[languagePack];
+    } else {
+      const nestedTranslations = {};
+      for (const nestedKey in prop) {
+        if (prop?.[nestedKey]?.[languagePack]) {
+          nestedTranslations[nestedKey] = prop[nestedKey][languagePack];
+        }
+      }
+      translations[key] = nestedTranslations;
+    }
+  }
+
+  translations.debugPath = __dirname;
+  return translations;
 }
+
 
 const LanguageContext = createContext();
 
