@@ -192,7 +192,7 @@ server.listen(80, async () => {
   processHosting();
 })
 : // Если ключ неправильный или не найден
-app.listen(3000, () => { 
+app.listen(3001, () => { 
   log(`Тестовый сервер запущен`);
 })
 

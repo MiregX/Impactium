@@ -6,6 +6,7 @@ import { useUser } from '../../class/User';
 function Login() {
   const [isNextStage, setNextStage] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [previousPage, setPreviousPage] = useState(false);
   const stageTwo = useRef(null);
   const password = useRef(null);
   const { lang } = useLanguage();
@@ -14,6 +15,12 @@ function Login() {
   useEffect(() => {
     setToken();
   }, [setToken]);
+
+  useEffect(() => {
+    if (document.referrer.startsWith('https://impactium.fun')) {
+      setPreviousPage(document.referrer);
+    }
+  }, []);
 
   useEffect(() => {
     isNextStage
