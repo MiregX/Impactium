@@ -1,0 +1,190 @@
+
+.stage img {
+  pointer-events: none;
+}
+a {
+  text-decoration: none;
+}
+body,
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+.base-button {
+  height: 52px;
+  border: 1px solid var(--c-36);
+  padding: 0 15px;
+  color: var(--w);
+  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.base-button p {
+  flex: 1;
+  text-align: center;
+}
+.base-button img {
+  width: 30px;
+}
+.stage {
+  background-color: var(--c-16);
+  border-radius: 25px;
+  min-width: 400px;
+  border: 1px solid var(--c-36);
+  padding: 20px 20px 15px 20px;
+}
+@media (max-width: 767px) {
+  header {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+  }
+  .stage {
+    min-width: 300px;
+  }
+}
+.stage.one {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.stage.two {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  gap: 15px;
+  transform: translateY(100%);
+  height: 100%;
+  transition: all 0.75s var(--trans);
+  border: none;
+}
+.stage.two.active {
+  transform: translateY(0%);
+}
+.stage.two .skull {
+  width: 40%;
+}
+.stage.two h2 {
+  font-size: 38px;
+  color: var(--w);
+  font-weight: 600;
+}
+.stage.two p {
+  color: var(--c-96);
+}
+.stage.two .base-button {
+  height: 60px;
+}
+.stage.one h1 {
+  width: 100%;
+  color: var(--w);
+  height: 50px;
+  text-align: center;
+  font-size: 38px;
+}
+.stage .form {
+  margin-top: 5px;
+  gap: 15px;
+  align-items: center;
+}
+.stage .input-group {
+  position: relative;
+  display: flex;
+}
+.stage .input-group .icon {
+  position: absolute;
+  right: 5px;
+  height: 100%;
+  width: 40px;
+  cursor: default;
+}
+.input-group .icon img {
+  position: absolute;
+  height: 25px;
+  filter: invert(100%) brightness(0.8);
+  transition: all 0.2s var(--trans);
+  opacity: 1;
+}
+.input-group .icon img.disactive {
+  opacity: 0;
+}
+.stage .form label {
+  position: absolute;
+  color: var(--w-1);
+  transform: translate(20px, -50%);
+  padding: 0 5px;
+  background: var(--c-16);
+}
+.stage .form input, .stage button.submit {
+  flex: 1;
+}
+.stage button.submit {
+  grid-row: 3 / 4;
+  height: 100%;
+}
+line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--c-36);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+.stage.one line::after {
+  content: "OR";
+  padding: 0 10px;
+  position: absolute;
+  background: var(--c-16);
+  color: var(--w-1);
+}
+.buttons-wrapper {
+  gap: 15px;
+}
+.discord-login {
+  background: #5865F2;
+  border: none;
+}
+.google-login p {
+  color: var(--c-16);
+}
+.google-login {
+  background: var(--w);
+  border: none;
+}
+.no-account {
+  gap: 5px;
+  width: 100%;
+  color: var(--c-96);
+  text-align: center;
+  height: 40px;
+}
+.no-account a {
+  color: var(--w);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.closeStage {
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transition: all 0.75s var(--trans) 0.75s;
+  transform: translateX(200%);
+}
+.stage.two.active .closeStage {
+  transform: translateX(0%);
+}
+.closeStage img {
+  height: 20px;
+  width: 20px;
+  filter: invert(100%);
+}

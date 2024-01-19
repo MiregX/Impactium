@@ -11,6 +11,42 @@
     "en": "Logout",
     "ru": "Выйти"
   },
+  "usernameOrEmail:": {
+    "uk": "Нікнейм або пошта:",
+    "it": "Nome utente o email:",
+    "en": "Username or email:",
+    "ru": "Никнейм или почта:"
+  },
+  "continueWithGoogle": {
+    "uk": "Увійти через Google",
+    "it": "Continua con Google",
+    "en": "Continue with Google",
+    "ru": "Войти используя Google"
+  },
+  "continueWithDiscord": {
+    "uk": "Увійти через Discord",
+    "it": "Continua con Discord",
+    "en": "Continue with Discord",
+    "ru": "Войти используя Discord"
+  },
+  "nuhuh": {
+    "uk": "Крінжик...",
+    "it": "No...",
+    "en": "Nuh uh...",
+    "ru": "Кринжовичёк..."
+  },
+  "dontHaveAnAccount": {
+    "uk": "Не маєте облікового запису?",
+    "it": "Non hai un account?",
+    "en": "Don't have an account?",
+    "ru": "Нет учетной записи?"
+  },
+  "justUseTheseTwo": {
+    "uk": "Козаче... Просто використай це:",
+    "it": "Usa semplicemente queste due:",
+    "en": "Just use these two:",
+    "ru": "Чел... Просто используй это:"
+  },
   "partners": {
     "uk": "Партнери",
     "it": "Partner",

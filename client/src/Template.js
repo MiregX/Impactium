@@ -6,6 +6,7 @@ import Language from './modules/Language';
 import Header from './modules/Header';
 import HeaderBackground from './modules/HeaderBackground';
 import Main from './modules/main/Main';
+import Login from './modules/auth/Login';
 
 function Template() {
   return (
@@ -16,6 +17,7 @@ function Template() {
       <HeaderBackground />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

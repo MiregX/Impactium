@@ -6,7 +6,7 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(false);
-  const [token] = useState(localStorage.getItem('token') || "c998d2bafe6b606df39fb1c07818a9e92ce8721433acb0b7ad20575efcd48113a515e3d19de1a9faf231f2211a64442427a1926c5c19b56b061ca20fe405627f");
+  const [token, setToken] = useState(localStorage.getItem('token' || false));
 
   const getUser = useCallback(async () => {
     if (!token)
@@ -34,8 +34,15 @@ export const UserProvider = ({ children }) => {
     getUser();
   }, [token, getUser]);
 
+  useEffect(() => {
+    if (typeof token === 'string') localStorage.setItem("token", token);
+    else {
+      localStorage.removeItem("token", token);
+    }
+  }, [token]);
+
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, setToken }}>
       {children}
     </UserContext.Provider>
   );
