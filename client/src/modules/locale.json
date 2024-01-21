@@ -11,11 +11,11 @@
     "en": "Logout",
     "ru": "Выйти"
   },
-  "usernameOrEmail:": {
-    "uk": "Нікнейм або пошта:",
-    "it": "Nome utente o email:",
-    "en": "Username or email:",
-    "ru": "Никнейм или почта:"
+  "usernameOrEmail": {
+    "uk": "Нікнейм або пошта",
+    "it": "Nome utente o email",
+    "en": "Username or email",
+    "ru": "Никнейм или почта"
   },
   "continueWithGoogle": {
     "uk": "Увійти через Google",
@@ -288,10 +288,10 @@
       "ru": "Изменить облик"
   },
   "playOnOurProject": {
-    "uk": "Грай на нашому проекті, чудіще єбліве",
-    "it": "Gioca sul nostro progetto, mostriciattolo dannato",
-    "en": "Play on our project, you stupid nigger",
-    "ru": "Играй на нашем проекте, чудище ебаное"
+    "uk": "Шість причин пограти на нашому сервері:",
+    "it": "Sei ragioni per giocare sul nostro server:",
+    "en": "Six reasons to play on our server:",
+    "ru": "Шесть причин поиграть на нашем сервере:"
   },
   "administrationNotIntervenes": {
     "uk": "Адміністрація не втручається в ігровий процес",
@@ -960,6 +960,10 @@
     }
   },
   "password": {
+    "uk": "Пароль",
+    "it": "Password",
+    "en": "Password",
+    "ru": "Пароль",
     "200": {
       "uk": "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
       "it": "La tua password è stata modificata con successo. Usa /l <password> per accedere.",

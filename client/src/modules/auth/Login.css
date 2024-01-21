@@ -1,17 +1,12 @@
-
+main {
+  justify-content: center;
+  align-items: center;
+}
 .stage img {
   pointer-events: none;
 }
 a {
   text-decoration: none;
-}
-body,
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 .base-button {
   height: 52px;
@@ -68,6 +63,7 @@ main {
 }
 .stage.two .skull {
   width: 40%;
+  aspect-ratio: 6 / 7;
 }
 .stage.two h2 {
   font-size: 38px;
@@ -126,8 +122,9 @@ main {
 .stage button.submit {
   grid-row: 3 / 4;
   height: 100%;
+  cursor: pointer;
 }
-line {
+.line {
   height: 1px;
   width: 100%;
   background-color: var(--c-36);
@@ -137,7 +134,7 @@ line {
   justify-content: center;
   margin: 20px 0;
 }
-.stage.one line::after {
+.stage.one .line::after {
   content: "OR";
   padding: 0 10px;
   position: absolute;
@@ -169,6 +166,9 @@ line {
   color: var(--w);
   font-weight: 600;
   text-decoration: underline;
+  cursor: pointer;
+}
+.no-account button {
   cursor: pointer;
 }
 .closeStage {

@@ -3,7 +3,7 @@ import { useLanguage } from './Lang';
 import './Language.css'; // Import your styles
 
 function Language() {
-  const { toggleLanguage, getActiveLanguage } = useLanguage();
+  const { setLanguage, getActiveLanguage } = useLanguage();
   const [isPanelActive, setPanelActive] = useState(false);
 
   const availableLanguages = ['en', 'uk', 'ru', 'it'];
@@ -16,7 +16,7 @@ function Language() {
     <div className={`language${isPanelActive ? ' active' : ''}`}>
       <div className="list">
         {availableLanguages.map((langCode) => (
-          <div key={langCode} onClick={() => toggleLanguage(langCode)}>
+          <div key={langCode} onClick={() => setLanguage(langCode)}>
             <img
               src={`https://api.impactium.fun/langs/${langCode}.png`}
               alt={`Language ${langCode}`}

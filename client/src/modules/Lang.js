@@ -38,22 +38,23 @@ export const useLanguage = () => useContext(LanguageContext);
 const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => localStorage.getItem('language'));
 
-  const toggleLanguage = (lang) => {
-    setLanguage(lang);
-  };
-
   const getActiveLanguage = () => {
     return language;
   };
 
   useEffect(() => {
-    localStorage.setItem('language', language);
+    const possibleLangs = ['uk', 'ru', 'en', 'it']
+    if (possibleLangs.includes(language)) {
+      localStorage.setItem('language', language);
+    } else {
+      setLanguage('en')
+    }
   }, [language]);
 
   const lang = getLanguagePack(language);
 
   return (
-    <LanguageContext.Provider value={{ lang, toggleLanguage, getActiveLanguage }}>
+    <LanguageContext.Provider value={{ lang, setLanguage, getActiveLanguage }}>
       {children}
     </LanguageContext.Provider>
   );

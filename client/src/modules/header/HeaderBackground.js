@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './HeaderBackground.css';
 
 function HeaderBackground() {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(false); // нужно передать в header
   const [topValue, setTopValue] = useState(0);
 
   const handleScroll = () => {
@@ -23,15 +23,10 @@ function HeaderBackground() {
     if (isHidden) {
       setTopValue(-80);
       window.removeEventListener('scroll', handleScroll);
+    } else {
+      window.addEventListener('scroll', handleScroll);
     }
   }, [isHidden]);
-
-  // Этот useEffect следит за изменениями isHidden и вызывает функцию обратного вызова, переданную извне
-  useEffect(() => {
-    if (setIsHidden) {
-      setIsHidden(isHidden);
-    }
-  }, [isHidden, setIsHidden]);
 
   return (
     <div className="header-background" style={{ top: `${topValue}px` }}></div>

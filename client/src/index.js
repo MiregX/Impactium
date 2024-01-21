@@ -1,18 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import Template from './Template';
-import LanguageProvider from './modules/Lang';
-import UserProvider from './class/User';
 
 const rootElement = document.getElementById('root');
 
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-  <UserProvider>
-    <LanguageProvider>
-      <Template />
-    </LanguageProvider>
-  </UserProvider>
+  <Template />
 );

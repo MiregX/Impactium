@@ -27,8 +27,6 @@ app.use('/static', express.static('static', { setHeaders: (response, path) => { 
 
 app.set('view engine', 'ejs');
 
-global.logged = global.logged || new Map();
-
 const options = utils.getLicense();
 
 const api = require('./modules/api');
@@ -139,12 +137,6 @@ app.get('/logout', (request, response) => {
   response.redirect('/');
 });
 
-app.get('/l', (request, response) => {
-  response.clearCookie('referal', { domain: '.impactium.fun' });
-  response.clearCookie('referal');
-  response.redirect('/');
-});
-
 app.get('/error', (request, response) => {
   response.render('error.ejs', { lang: request.lang })
 });
@@ -205,18 +197,6 @@ const processHosting = async () => {
     console.log(error);
   }
 }
-
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  // Можно предпринять какие-то действия для продолжения работы приложения
-});
-
-// process.on('unhandledRejection', (reason, promise) => {
-//   console.error('Unhandled Rejection:', reason);
-//   mcs.telegramBot.connect
-//   mcs.launch();
-// });
-
 
 schedule('0 */6 * * *', async () => {
   await mcs.resourcePack.process();

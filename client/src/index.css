@@ -1,3 +1,13 @@
+#root {
+  width: 100vw;
+}
+main {
+  height: 100vh;
+  padding: 80px 16px 0 16px;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,

@@ -2,45 +2,48 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Preloader.css';
 import { useUser } from '../class/User';
 
-function Preloader() {
-  const { user } = useUser();
+export default function Preloader() {
+  const { user, isUserLoaded } = useUser();
   const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
   const self = useRef(null);
-  
-  const remove = useCallback((isFast = false) => {
+
+  const show = useCallback((isFast) => {
+    console.log("show");
+    self.current.classList.remove('remove');
+    self.current.classList.remove('hide');
+    self.current.classList.remove('outter-animation');
+    self.current.classList.remove('fast-animation');
     if (isFast) {
-      document.querySelector('header .logo').style.opacity = 1;
-      self.current.classList.add('remove');
-      setTimeout(() => {
-        self.current.remove();
-      }, 200);
+      self.current.classList.add('fast-animation');
+    } else {
+      self.current.classList.add('outter-animation');
     }
   }, [self]);
 
-  const process = useCallback((isFast) => {
-    setVisitedBefore(true);
-    if (isFast) {
-      self.current.classList.add('fast-animation');
-      setTimeout(() => {
-        remove(true)
-      }, 300);
-    } else {
-      self.current.classList.add('outter-animation');
-      setTimeout(() => {
-        remove(true)
-      }, 3500);
-    }
-  }, [setVisitedBefore, self, remove]);
-  
+  const hide = () => {
+    if (!user || !isUserLoaded) return;
+    console.log("hide");
 
+    if (visitedBefore) document.querySelector('header .logo').style.opacity = 1;
+    setTimeout(() => {
+      self.current.classList.add('hide');
+      setTimeout(() => {
+        self.current.classList.add('remove');
+      }, 200);
+    }, 300);
+  };
+
+  useEffect(() => {
+    show(visitedBefore);
+    setVisitedBefore(true);
+  }, [isUserLoaded]);
   
   useEffect(() => {
-    if (typeof user === 'object') {
-      process(visitedBefore);
+    if (user && isUserLoaded) {
+      hide(visitedBefore);
     }
-  }, [user, visitedBefore, process]);
+  }, [user, visitedBefore, isUserLoaded]);
   
-
   useEffect(() => {
     localStorage.setItem("visitedBefore", visitedBefore.toString());
   }, [visitedBefore]);
@@ -67,5 +70,3 @@ function Preloader() {
     </div>
   );
 };
-
-export default Preloader;

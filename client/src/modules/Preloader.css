@@ -86,9 +86,12 @@
   opacity: 1;
   transition: all 0.3s var(--trans);
 }
-.preloader.remove {
+.preloader.hide {
   transition: all 0.2s var(--trans);
   opacity: 0;
+}
+.preloader.remove {
+  display: none;
 }
 .preloader.fast-animation .logo-animation-first,
 .preloader.fast-animation .logo-animation-second {

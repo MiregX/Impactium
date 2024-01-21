@@ -5,7 +5,7 @@ const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { getDatabase, generateToken, Referal } = require('../utils');
-const { discordClientID, discordRedirectUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = process.env
+const { discordClientID, discordRedirectUri, discordRedirectApiUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = process.env
 
 const router = express.Router();
 
@@ -65,7 +65,7 @@ router.get('/login/discord', (request, response) => {
 router.get('/callback/discord', (request, response) => {
   if (!request.query.code) return response.redirect('/');
   let requestPayload = {
-    redirect_uri: discordRedirectUri,
+    redirect_uri: discordRedirectApiUri,
     client_id: discordClientID,
     grant_type: "authorization_code",
     client_secret: discordClientSecret,
@@ -82,7 +82,11 @@ router.get('/callback/discord', (request, response) => {
           userAuthentication({data: data.body, from: "discord", referal: request.cookies.referal}).then(authResult => {
             response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-            response.redirect(request.cookies.previousPage || '/');
+            if (request.query.api) {
+              response.send(authResult);
+            } else {
+              response.redirect(request.cookies.previousPage || '/');
+            }
           });
         })
         .catch((error) => {

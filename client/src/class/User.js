@@ -4,45 +4,44 @@ const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children, setIsPreloaderHidden }) => {
   const [user, setUser] = useState(false);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token' || false));
 
-  const getUser = useCallback(async () => {
-    if (!token)
-      return setUser({});
+  useEffect(() => {
+    localStorage.setItem('token', token);
+    setIsUserLoaded(false);
 
-    try {
-      setUser(false)
-      fetch('https://impactium.fun/api/getUser', {
-        method: 'GET',
-        headers: {
-          'token': token
-        }
-      })
-        .then(response => response.json())
-        .then(userData => {
-          setUser(userData);
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://impactium.fun/api/getUser', {
+          method: 'GET',
+          headers: {
+            'token': token
+          }
         });
-      
-    } catch (error) {
-      setUser({});
-    }
+        const userData = await response.json();
+        setUser(userData);
+      } catch (error) {
+        setUser({});
+      }
+    };
+
+    fetchData();
   }, [token]);
 
   useEffect(() => {
-    getUser();
-  }, [token, getUser]);
-
-  useEffect(() => {
-    if (typeof token === 'string') localStorage.setItem("token", token);
-    else {
-      localStorage.removeItem("token", token);
-    }
   }, [token]);
 
+  useEffect(() => {
+    if (user) {
+      setIsUserLoaded(true);
+    }
+  }, [user]);
+  
   return (
-    <UserContext.Provider value={{ user, setToken }}>
+    <UserContext.Provider value={{ user, token, setToken, isUserLoaded, setIsUserLoaded }}>
       {children}
     </UserContext.Provider>
   );

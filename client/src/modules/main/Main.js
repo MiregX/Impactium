@@ -4,7 +4,6 @@ import './Main.css'; // Import your styles
 
 const Main = () => {
   const { lang } = useLanguage();
-
   useEffect(() => {
     const header = document.querySelector('header');
     const gl = document.querySelector('.right');
@@ -20,36 +19,41 @@ const Main = () => {
       aboutUsDescriptionText.style.transform = 'translateX(0px)';
       aboutUsDescriptionText.style.opacity = '1';
     }, 400);
-
+  
     const lis = document.querySelectorAll('.privileges li');
     lis.forEach((li, index) => {
       setTimeout(() => {
         li.classList.add('width-100');
       }, (index + 1) * 250);
     });
-    
+  
     const descriptionBlocksAnimationInit = (currentIndex) => {
       const descriptionBlocks = document.querySelectorAll('.descriptions-wrapper .support-text');
-
+  
       descriptionBlocks.forEach((block, index) => {
         block.classList.remove('on-move', 'active');
-
+  
         if (index === currentIndex) {
           block.classList.add('active');
         } else if (index === ((currentIndex === 0) ? descriptionBlocks.length - 1 : currentIndex - 1)) {
           block.classList.add('on-move');
         }
       });
-
+  
       currentIndex = (currentIndex + 1) % descriptionBlocks.length;
-      setInterval(() => {
-        descriptionBlocksAnimationInit(currentIndex)
+  
+      // Проверяем, завершилась ли анимация, прежде чем вызывать следующую
+      setTimeout(() => {
+        descriptionBlocksAnimationInit(currentIndex);
       }, 4000);
     };
+  
+    // Запускаем анимацию только один раз
     descriptionBlocksAnimationInit(1);
   }, []);
+  
   return (
-    <div className="panel main">
+    <div className="panel">
       <div className="about-us">
         <div className="center flex-dir-column">
           <p className="main-text">{lang.joinToUs}</p>
