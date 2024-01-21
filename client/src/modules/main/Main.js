@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { useLanguage } from './../Lang';
-import './Main.css'; // Import your styles
+import { useLanguage } from '../language/Lang';
+import { useHeaderContext } from '../header/HeaderContext';
+import './Main.css';
 
 const Main = () => {
+  const { setIsHeaderBackgroundHidden } = useHeaderContext();
   const { lang } = useLanguage();
+
   useEffect(() => {
     const header = document.querySelector('header');
     const gl = document.querySelector('.right');
@@ -51,6 +54,14 @@ const Main = () => {
     // Запускаем анимацию только один раз
     descriptionBlocksAnimationInit(1);
   }, []);
+
+  useEffect(() => {
+    setIsHeaderBackgroundHidden(true);
+
+    return () => {
+      setIsHeaderBackgroundHidden(false);
+    };
+  }, [setIsHeaderBackgroundHidden]);
   
   return (
     <div className="panel">

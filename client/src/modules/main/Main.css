@@ -127,7 +127,8 @@ main {
 .mireg.background {
   z-index: -1;
   height: 80%;
-  transform: translateX(20%);
+  transform: translateX(15%);
+  max-height: 350px;
 }
 .panel .right a {
   width: 50%;
@@ -140,6 +141,7 @@ main {
 }
 .privileges {
   width: 50%;
+  min-width: 350px;
 }
 .privileges li {
   line-height: 1.2;

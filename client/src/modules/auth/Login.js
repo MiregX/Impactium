@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Login.css';
-import { useLanguage } from '../Lang';
+import { useLanguage } from '../language/Lang';
 import { useUser } from '../../class/User';
 import { Outlet } from 'react-router-dom';
 
 function Login() {
   const [isNextStage, setNextStage] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const [previousPage, setPreviousPage] = useState(false);
+  const [previousPage, setPreviousPage] = useState(localStorage.getItem('previousPage') || false);
   const stageTwo = useRef(null);
   const password = useRef(null);
   const { lang } = useLanguage();
@@ -15,7 +15,7 @@ function Login() {
 
   useEffect(() => {
     if (token) {
-      setToken();
+      setToken(false);
     }
   }, [setToken]);
 
@@ -24,6 +24,10 @@ function Login() {
       setPreviousPage(document.referrer);
     }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('previousPage', previousPage);
+  }, [previousPage]);
 
   useEffect(() => {
     isNextStage

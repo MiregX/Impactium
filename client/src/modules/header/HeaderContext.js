@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const HeaderContext = createContext();
 
@@ -7,10 +7,10 @@ export const useHeaderContext = () => {
 };
 
 export const HeaderProvider = ({ children }) => {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState(false);
 
   return (
-    <HeaderContext.Provider value={{ isHidden, setIsHidden }}>
+    <HeaderContext.Provider value={{ isHeaderBackgroundHidden, setIsHeaderBackgroundHidden }}>
       {children}
     </HeaderContext.Provider>
   );

@@ -7,13 +7,12 @@ export default function Preloader() {
   const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
   const self = useRef(null);
 
-  const show = useCallback((isFast) => {
-    console.log("show");
+  const show = useCallback(() => {
     self.current.classList.remove('remove');
     self.current.classList.remove('hide');
     self.current.classList.remove('outter-animation');
     self.current.classList.remove('fast-animation');
-    if (isFast) {
+    if (visitedBefore) {
       self.current.classList.add('fast-animation');
     } else {
       self.current.classList.add('outter-animation');
@@ -21,9 +20,6 @@ export default function Preloader() {
   }, [self]);
 
   const hide = () => {
-    if (!user || !isUserLoaded) return;
-    console.log("hide");
-
     if (visitedBefore) document.querySelector('header .logo').style.opacity = 1;
     setTimeout(() => {
       self.current.classList.add('hide');
@@ -34,13 +30,11 @@ export default function Preloader() {
   };
 
   useEffect(() => {
-    show(visitedBefore);
     setVisitedBefore(true);
-  }, [isUserLoaded]);
-  
-  useEffect(() => {
     if (user && isUserLoaded) {
-      hide(visitedBefore);
+      hide();
+    } else {
+      show()
     }
   }, [user, visitedBefore, isUserLoaded]);
   

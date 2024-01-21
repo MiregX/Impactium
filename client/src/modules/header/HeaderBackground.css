@@ -7,5 +7,8 @@
   position: fixed;
   display: flex;
   background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
-  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  transition: all 0.3s var(--trans);
+  border-bottom: 1px solid var(--c-24);
 }

@@ -300,10 +300,10 @@
     "ru": "Администрация не вмешивается в игровой процесс"
   },
   "openWorldWithoutPrivates": {
-    "uk": "Відкритий світ без привату. Будуй і ламай де завгодно",
-    "it": "Mondo aperto senza privati. Costruisci e distruggi dove vuoi",
-    "en": "Open world without privates. Build and break wherever you want",
-    "ru": "Открытый мир без привата. Строй и ломай где хочешь"
+    "uk": "Відкритий світ без привату",
+    "it": "Mondo aperto senza privati",
+    "en": "Open world without privates",
+    "ru": "Открытый мир без привата"
   },
   "sendAthletesAgainstNonRP": {
     "uk": "Висилаємо спортиків проти нон-РП гриферів",
@@ -312,10 +312,10 @@
     "ru": "Высылаем спортиков против нон-РП гриферов"
   },
   "uniqueRewardsSystem": {
-    "uk": "Унікальна система заохочень. Заходь на сервер раз в добу і тоді файлик з папки mods не знесе тобі вінду",
-    "it": "Sistema di ricompense unico. Entra nel server una volta al giorno e allora il file dalla cartella mods non ti cancellerà Windows",
-    "en": "Unique rewards system. Log in to the server once a day and then the file from the mods folder won't wipe your Windows",
-    "ru": "Уникальная система поощрений. Заходи на сервер раз в сутки и тогда файлик с папки mods не снесёт тебе винду"
+    "uk": "Унікальна система заохочень",
+    "it": "Sistema di ricompense unico",
+    "en": "Unique rewards system",
+    "ru": "Уникальная система поощрений"
   },
   "masterpieceRoleplayWithAdmins": {
     "uk": "Шедевроролплей з адмінкою та кристалами",
@@ -324,10 +324,10 @@
     "ru": "Шедевроролплей с админкой и кристалами"
   },
   "donateAndGetUniqueSkin": {
-    "uk": "Задонать 15 гривень і отримай унікальний скин пісюна на меч",
-    "it": "Donare 15 grivne e ricevi una skin unica del pene sulla spada",
-    "en": "Donate 15 hryvnias and get a unique penis skin on the sword",
-    "ru": "Задонати 15 гривень і отримай унікальний скин пісюна на меч"
+    "uk": "Отримай унікальний скин пісюна на меч",
+    "it": "Ricevi una skin unica del pene sulla spada",
+    "en": "Get a unique penis skin on the sword",
+    "ru": "Отримай унікальний скин пісюна на меч"
   },
   "changePassword": {
       "uk": "Змінити пароль",

@@ -4,18 +4,22 @@ const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children, setIsPreloaderHidden }) => {
+export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(false);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [isUserLoaded, setIsUserLoaded] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token' || false));
 
   useEffect(() => {
+    if (!token && isUserLoaded) {
+      setUser({});
+      setIsUserLoaded(true);
+    }
+
     localStorage.setItem('token', token);
-    setIsUserLoaded(false);
 
     const fetchData = async () => {
       try {
-        const response = await fetch('https://impactium.fun/api/getUser', {
+        const response = await fetch('https://impactium.fun/api/user/get', {
           method: 'GET',
           headers: {
             'token': token
@@ -30,18 +34,9 @@ export const UserProvider = ({ children, setIsPreloaderHidden }) => {
 
     fetchData();
   }, [token]);
-
-  useEffect(() => {
-  }, [token]);
-
-  useEffect(() => {
-    if (user) {
-      setIsUserLoaded(true);
-    }
-  }, [user]);
   
   return (
-    <UserContext.Provider value={{ user, token, setToken, isUserLoaded, setIsUserLoaded }}>
+    <UserContext.Provider value={{ user, token, setUser, setToken, isUserLoaded, setIsUserLoaded }}>
       {children}
     </UserContext.Provider>
   );

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import { useLanguage } from '../Lang';
+import { useLanguage } from '../language/Lang';
 import { useUser } from '../../class/User';
+import Nav from './Nav'
 
 function Header() {
   const { lang } = useLanguage();
@@ -19,6 +20,7 @@ function Header() {
         <img src="https://api.impactium.fun/logo/impactium_v4.svg" alt="Impactium Logo" />
         <p>Impactium</p>
       </Link>
+      <Nav />
       {user && user.id ? (
         <div className="user-onlogin">
           <Link to="/me" className="user flex">

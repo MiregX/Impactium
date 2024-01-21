@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './HeaderBackground.css';
+import { useHeaderContext } from './HeaderContext';
 
 function HeaderBackground() {
-  const [isHidden, setIsHidden] = useState(false); // нужно передать в header
+  const { isHeaderBackgroundHidden } = useHeaderContext();
   const [topValue, setTopValue] = useState(0);
 
   const handleScroll = () => {
@@ -20,13 +21,14 @@ function HeaderBackground() {
   }, []);
 
   useEffect(() => {
-    if (isHidden) {
+    if (isHeaderBackgroundHidden) {
       setTopValue(-80);
       window.removeEventListener('scroll', handleScroll);
     } else {
+      setTopValue(0);
       window.addEventListener('scroll', handleScroll);
     }
-  }, [isHidden]);
+  }, [isHeaderBackgroundHidden]);
 
   return (
     <div className="header-background" style={{ top: `${topValue}px` }}></div>

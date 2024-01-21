@@ -1,0 +1,76 @@
+
+#messageWrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 16px;
+  gap: 14px;
+  right: 16px;
+}
+@keyframes message-animation {
+  0% {
+    transform: translateX(calc(100% + 16px));
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+#messageWrapper div {
+  padding: 0.75em 1em;
+  padding-top: calc(0.75em - 6px);
+  font-size: 16px;
+  font-weight: 600;
+  max-width: calc(15vw - 32px);
+  border-radius: 16px;
+  transition: opacity 0.5s var(--trans);
+  animation: message-animation 0.5s var(--trans) forwards;
+}
+#messageWrapper div p {
+  line-height: 24px;
+}
+#messageWrapper div p::before {
+  transform: translateY(6px);
+  display: inline-block;
+  margin-right: 6px;
+  height: 24px;
+}
+
+
+#messageWrapper div[type="success"] {
+  background: #d2fbd0;
+  border: 1px solid #0d5f07;
+}
+#messageWrapper div[type="success"] p {
+  color: #0d5f07;
+}
+#messageWrapper div[type="success"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-check.svg");
+}
+
+
+#messageWrapper div[type="warning"] {
+  background: #fbf8d0;
+  border: 1px solid #5f5907;
+}
+#messageWrapper div[type="warning"] p {
+  color: #5f5907;
+}
+#messageWrapper div[type="warning"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-minus.svg");
+}
+
+
+#messageWrapper div[type="attention"] {
+  background: #fbd0d0;
+  border: 1px solid #5f0707;
+}
+#messageWrapper div[type="attention"] p {
+  color: #5f0707;
+}
+#messageWrapper div[type="attention"] p::before {
+  content: url("https://api.impactium.fun/ux/circle-xmark.svg");
+}
+#messageWrapper div.toHide {
+  opacity: 0;
+}
