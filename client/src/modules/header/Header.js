@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 import { useLanguage } from '../language/Lang';
 import { useUser } from '../../class/User';
+import { useHeaderContext } from './HeaderContext';
 import Nav from './Nav'
 
 function Header() {
+  const { isFlattenHeader } = useHeaderContext();
   const { lang } = useLanguage();
   const { user, setToken } = useUser();
 
@@ -15,7 +17,7 @@ function Header() {
   }, []);
 
   return (
-    <header>
+    <header className={`${isFlattenHeader ? 'flatten' : ''}`} >
       <Link to='/' className="logo flex flex-dir-row align-center">
         <img src="https://api.impactium.fun/logo/impactium_v4.svg" alt="Impactium Logo" />
         <p>Impactium</p>

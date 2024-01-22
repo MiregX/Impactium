@@ -10,32 +10,66 @@ export const PlayerProvider = ({ children }) => {
   const [player, setPlayer] = useState(false);
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(true);
 
+  const setPassword = async (password) => {
+    try {
+      const response = await fetch('https://impactium.fun/api/player/set/password', {
+        method: 'POST',
+        headers: {
+          'token': token,
+          'password': password
+        }
+      });
+      const playerData = await response.json();
+      setPlayer(playerData);
+    } catch (error) {
+      setPlayer({});
+    }
+  };
+
+  const register = async () => {
+    if (player.registered)
+      return;
+
+    try {
+      const response = await fetch('https://impactium.fun/api/player/register', {
+        method: 'POST',
+        headers: {
+          'token': token
+        }
+      });
+      const playerData = await response.json();
+      setPlayer(playerData);
+    } catch (error) {
+      setPlayer({});
+    }
+  };
+
+  const getPlayer = async () => {
+    try {
+      const response = await fetch('https://impactium.fun/api/player/get', {
+        method: 'GET',
+        headers: {
+          'token': token
+        }
+      });
+      const playerData = await response.json();
+      setPlayer(playerData);
+    } catch (error) {
+      setPlayer({});
+    }
+  };
+
   useEffect(() => {
     if (!user && isUserLoaded) {
       setPlayer({});
       setIsPlayerLoaded(true);
     }
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://impactium.fun/api/player/get', {
-          method: 'GET',
-          headers: {
-            'token': token
-          }
-        });
-        const playerData = await response.json();
-        setPlayer(playerData);
-      } catch (error) {
-        setPlayer({});
-      }
-    };
-
-    fetchData();
+    getPlayer();
   }, [user]);
   
   return (
-    <PlayerContext.Provider value={{ player, setPlayer }}>
+    <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setPassword, register }}>
       {children}
     </PlayerContext.Provider>
   );

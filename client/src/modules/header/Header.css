@@ -1,5 +1,7 @@
 header {
+  transition: all 0.3s var(--trans);
   height: 80px;
+  max-width: 100%;
   z-index: 2;
   position: fixed;
   top: 0px;
@@ -10,7 +12,6 @@ header {
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
 }
-
 header > div > svg {
   height: 40px;
   -webkit-user-drag: none;
@@ -220,4 +221,7 @@ header {
   100% {
     opacity: 1;
   }
+}
+header.flatten {
+  max-width: 1344px;
 }

@@ -4,7 +4,7 @@ import { useLanguage } from '../language/Lang';
 
 const MessageContext = createContext();
 
-export const useMessageContext = () => {
+export const useMessage = () => {
   return useContext(MessageContext);
 };
 

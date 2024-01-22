@@ -8,9 +8,10 @@ export const useHeaderContext = () => {
 
 export const HeaderProvider = ({ children }) => {
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState(false);
+  const [isFlattenHeader, setIsFlattenHeader] = useState(false);
 
   return (
-    <HeaderContext.Provider value={{ isHeaderBackgroundHidden, setIsHeaderBackgroundHidden }}>
+    <HeaderContext.Provider value={{ isHeaderBackgroundHidden, setIsHeaderBackgroundHidden, isFlattenHeader, setIsFlattenHeader }}>
       {children}
     </HeaderContext.Provider>
   );

@@ -36,7 +36,7 @@ function Login() {
   }, [isNextStage]);
 
   return (
-    <div id="stageOne" className="stage one">
+    <div id="stageOne" className="stage one login">
       <h1 className="center">{lang.login}</h1>
       <div className="form grid columns-1 rows-3">
         <div className="input-group">

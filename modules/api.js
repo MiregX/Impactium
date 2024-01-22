@@ -14,17 +14,17 @@ router.get('/user/get', async (request, response) => {
 });
 
 router.get('/player/get', async (request, response) => {
-  count++;
   if (!request.headers.token || typeof request.headers.token !== 'string')
-    return response.sendStatus(403);
+    return response.sendStatus(401);
   
   const user = new User(request.headers.token)
-  if (!user.id)
-    return response.sendStatus(403);
+  await user.fetch();
+  if (!user._id)
+    return response.sendStatus(402);
 
-  const player = new MinecraftPlayer(user.id);
+  const player = new MinecraftPlayer(user._id);
   await player.fetch();
-  if (player._id)
+  if (!player._id)
     return response.sendStatus(403);
   
   response.status(200).send(player.serialize());

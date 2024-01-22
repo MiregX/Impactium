@@ -1,0 +1,182 @@
+
+.dynamic {
+  --hue: 0;
+  --saturation: 82.26%;
+  --lightness: 51.37%;
+}
+.dynamic.me {
+  --hue: 240;
+}
+.dynamic.setNickname {
+  --hue: 120;
+}
+.dynamic.setPassword {
+  --hue: 45;
+}
+.dynamic.setSkin {
+  --hue: 350;
+}
+.dynamic.achievements_module[achievement="casual"] {
+  --hue: 120;
+  --saturation: 82.26%;
+  --lightness: 51.37%;
+}
+.dynamic.achievements_module[achievement="defence"] {
+  --hue: 220;
+  --saturation: 82.26%;
+  --lightness: 51.37%;
+}
+.dynamic.achievements_module[achievement="killer"] {
+  --hue: 58;
+  --saturation: 82.26%;
+  --lightness: 51.37%;
+}
+.dynamic.achievements_module[achievement="event"] {
+  --hue: 290;
+}
+.dynamic.achievements_module[achievement="donate"] {
+  --hue: 187;
+}
+.dynamic.achievements_module[achievement="hammer"] {
+  --hue: 359;
+}
+.dynamic {
+  --hsl: var(--hue), var(--saturation), var(--lightness);
+}
+.panel [tooverlayview] {
+  position: relative;
+}
+.panel [tooverlayview]::before {
+  content: "";
+  height: calc(100% - 1px);
+  width: calc(100% - 1px);
+  z-index: 1;
+  border-radius: 10px;
+  background: #0d0d0d;
+  transform: translate(-0.7em, -0.7em);
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.panel [tooverlayview]::after {
+  content: url("https://api.impactium.fun/ux/loader24p.svg");
+  top: calc(50% - 12px);
+  left: calc(50% - 12px);
+  animation: rotateAnimation 2s linear infinite;
+  position: absolute;
+  height: 24px;
+  z-index: 2;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.panel [tooverlayview].wait::before,
+.panel [tooverlayview].wait::after {
+  opacity: 1;
+}
+.profile [tooverlayview] {
+  position: relative;
+}
+.profile [tooverlayview]::before {
+  content: "";
+  height: calc(100% - 1px);
+  width: calc(100% - 1px);
+  z-index: 1;
+  border-radius: 10px;
+  background: #0d0d0d;
+  transform: translate(-0.7em, -0.7em);
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.profile [tooverlayview]::after {
+  content: url("https://api.impactium.fun/ux/loader24p.svg");
+  top: calc(50% - 12px);
+  left: calc(50% - 12px);
+  animation: rotateAnimation 2s linear infinite;
+  position: absolute;
+  height: 24px;
+  z-index: 2;
+  opacity: 0;
+  transition: all 0.3s var(--trans);
+}
+.profile [tooverlayview].wait::before,
+.profile [tooverlayview].wait::after {
+  opacity: 1;
+}
+.overlay {
+  flex-direction: column;
+  height: fit-content;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--opacity, 0);
+  -webkit-mask: radial-gradient(
+    25rem 25rem at var(--x) var(--y),
+    #000 1%,
+    transparent 50%
+  );
+  mask: radial-gradient(
+    25rem 25rem at var(--x) var(--y),
+    #000 1%,
+    transparent 50%
+  );
+  transition: 400ms mask ease;
+  will-change: mask;
+}
+
+.overlay .dynamic {
+  background-color: hsla(var(--hsl), 0.15);
+  border-color: hsla(var(--hsl), 1);
+  box-shadow: 0 0 0 1px inset hsl(var(--hsl));
+}
+
+.overlay .change_profile {
+  display: block;
+  grid-row: -1;
+  width: 100%;
+  white-space: nowrap;
+  background-color: hsl(var(--hsl));
+  box-shadow: 0 0 0 1px hsl(var(--hsl));
+}
+
+:not(.overlay) > .dynamic {
+  transition: 400ms background ease;
+  will-change: background;
+}
+
+:not(.overlay) > .dynamic:hover {
+  --lightness: 95%;
+  background: hsla(var(--hsl), 0.1);
+}
+
+.overlay .controls {
+  height: unset !important;
+}
+.overlay .upload-button {
+  width: fit-content;
+}
+.overlay .default_panel_style {
+  display: flex;
+  justify-content: flex-end;
+}
+.overlay .save-button {
+  position: relative;
+  width: min-content;
+}
+.overlay .middle_line {
+  height: unset !important;
+  width: unset !important;
+}
+.overlay .server_info .default {
+  background: #0d0d0d;
+}
+.overlay .server_info .default > span {
+  color: var(--w);
+}
+.overlay .server_info .default > p {
+  color: var(--w);
+}
+.overlay .version {
+  opacity: 0;
+}
