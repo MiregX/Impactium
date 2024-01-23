@@ -341,6 +341,7 @@ class MinecraftPlayer {
   }
 
   async setNickname(newNickname) {
+    if (newNickname === 'undefined') return 401
     if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 403;
     if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 401;
     if (this.nickname?.toLowerCase() === (newNickname ?? '').toLowerCase()) return 405;
@@ -1047,7 +1048,7 @@ class TelegramBotHandler {
         this.channelId,
         this.messageId,
         null,
-        this.basicMessage + online.list.join("\n "),
+        this.basicMessage,
         Markup.inlineKeyboard([
           Markup.button.callback(`Онлайн: ${online.count} / 50`, 'onlineButtonCallback'),
         ])
@@ -1192,33 +1193,6 @@ async function databaseConnect() {
   } catch (error) {
     console.log(error)
   }
-}
-
-const locale = require(`./static/lang/locale.json`);
-
-function getLanguagePack(languagePack = "en") {
-  const languageProxy = new Proxy(locale, {
-    get(target, prop) {
-      if (Array.isArray(target[prop])) {
-        return target[prop].map(item => item[languagePack]);
-      } else if (typeof target[prop] === "string") {
-        return target[prop];
-      } else if (typeof target[prop]?.[languagePack] === "string") {
-        return target[prop][languagePack];
-      } else {
-        const translations = {};
-        for (const key in target[prop]) {
-          if (target[prop]?.[key]?.[languagePack]) {
-            translations[key] = target[prop]?.[key]?.[languagePack];
-          }
-        }
-        return translations;
-      }
-    },
-  });
-
-  languageProxy.debugPath = __dirname;
-  return languageProxy;
 }
 
 function generateToken(sumbolsLong) {
@@ -1519,7 +1493,6 @@ module.exports = {
   MinecraftPlayer,
   ImpactiumServer,
   saveBattleBoard,
-  getLanguagePack,
   databaseConnect,
   getBattleBoard,
   getMultiBoard,

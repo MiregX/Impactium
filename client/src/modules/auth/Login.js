@@ -36,7 +36,7 @@ function Login() {
   }, [isNextStage]);
 
   return (
-    <div id="stageOne" className="stage one login">
+    <div id="stageOne" className="login_block one login">
       <h1 className="center">{lang.login}</h1>
       <div className="form grid columns-1 rows-3">
         <div className="input-group">
@@ -63,13 +63,13 @@ function Login() {
           <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
           <p>{lang.continueWithGoogle}</p>
         </a>
-        <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback&scope=identify%20email" className="base-button discord-login">
+        <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className="base-button discord-login">
           <img src="https://api.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
           <p>{lang.continueWithDiscord}</p>
         </a>
       </div>
       <p className="no-account center">{lang.dontHaveAnAccount} <button onClick={() => {setNextStage(!isNextStage)}}>{lang.register}</button></p>
-      <div id="stageTwo" ref={stageTwo} className="stage two flex flex-dir-column align-center justify-center">
+      <div id="stageTwo" ref={stageTwo} className="login_block two flex flex-dir-column align-center justify-center">
         <img src="https://api.impactium.fun/ux/skull.png" className="skull" alt="skull-icon" />
         <h2>{lang.nuhuh}</h2>
         <p>{lang.justUseTheseTwo}</p>
@@ -77,7 +77,7 @@ function Login() {
           <a href="https://impactium.fun/api/oauth2/login/google" className="base-button google-login">
             <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
           </a>
-          <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback&scope=identify%20email" className="base-button discord-login">
+          <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className="base-button discord-login">
             <img src="https://api.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
           </a>
         </div>

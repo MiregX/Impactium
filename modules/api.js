@@ -2,42 +2,82 @@ const express = require('express');
 const { User, log, MinecraftPlayer } = require('../utils');
 const router = express.Router();
 
-let count = 0
-
-router.get('/user/get', async (request, response) => {
-  count++;
-  log(count, 'r')
-  const user = new User(request.headers.token);
-  await user.fetch();
-
-  response.status(200).send(user.send());
+router.get('/status', (request, response) => {
+  response.sendStatus(200);
 });
 
-router.get('/player/get', async (request, response) => {
-  if (!request.headers.token || typeof request.headers.token !== 'string')
+const userMiddleware = async (request, response, next) => {
+  if (!request.headers.token)
     return response.sendStatus(401);
-  
-  const user = new User(request.headers.token)
-  await user.fetch();
-  if (!user._id)
-    return response.sendStatus(402);
 
-  const player = new MinecraftPlayer(user._id);
-  await player.fetch();
-  if (!player._id)
-    return response.sendStatus(403);
-  
-  response.status(200).send(player.serialize());
+  try {
+    const user = new User(request.headers.token);
+    await user.fetch();
+
+    if (!user._id)
+      return response.sendStatus(401);
+
+    request.user = user.send();
+    request._user = user;
+    next();
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(500);
+  }
+};
+
+router.use('/*', userMiddleware);
+
+router.get('/user/get', async (request, response) => {
+  response.status(200).send(request.user);
+});
+
+const playerMiddleware = async (request, response, next) => {
+  try {
+    const player = new MinecraftPlayer(request.user._id);
+    await player.fetch();
+    
+    if (!player._id)
+      return response.sendStatus(401);
+    
+    request.player = player.serialize();
+    request._player = player;
+
+    next();
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(500);
+  }
+};
+
+router.use('/player', playerMiddleware);
+
+router.get('/player/get', async (request, response) => {
+  response.status(200).send(request.player);
+});
+
+router.post('/player/register', async (request, response) => {
+  response.status(200).send(request.player);
+});
+
+router.post('/player/set/nickname', async (request, response) => {
+  const status = await request._player.setNickname(request.headers.nickname);
+  response.status(status).send(request._player.serialize());
+});
+
+router.post('/player/set/password', async (request, response) => {
+  const status = await request._player.setPassword(request.headers.password);
+  response.status(status).send(request._player.serialize());
+});
+
+router.post('/player/set/skin', async (request, response) => {
+  response.status(200).send(request.player);
 });
 
 router.get('/player/achievements/get', async (request, response) => {
-  count++;
-  log(count, 'r')
-  const player = new MinecraftPlayer(request.headers.id);
-  await player.fetch();
-  await player.achievements.process();
+  await request._player.achievements.process();
 
-  response.status(200).send(player.serialize());
+  response.status(200).send(request._player.serialize());
 });
 
 module.exports = router;

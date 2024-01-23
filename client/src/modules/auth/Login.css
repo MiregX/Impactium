@@ -2,7 +2,7 @@ main {
   justify-content: center;
   align-items: center;
 }
-.stage img {
+.login_block img {
   pointer-events: none;
 }
 a {
@@ -25,7 +25,7 @@ a {
 .base-button img {
   width: 30px;
 }
-.stage {
+.login_block {
   background-color: var(--c-16);
   border-radius: 25px;
   min-width: 400px;
@@ -37,18 +37,18 @@ a {
     grid-template-columns: repeat(1, 1fr);
     justify-items: center;
   }
-  .stage {
+  .login_block {
     min-width: 300px;
   }
 }
-.stage.one {
+.login_block.one {
   display: flex;
   gap: 15px;
   flex-direction: column;
   position: relative;
   overflow: hidden;
 }
-.stage.two {
+.login_block.two {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -58,41 +58,41 @@ a {
   transition: all 0.75s var(--trans);
   border: none;
 }
-.stage.two.active {
+.login_block.two.active {
   transform: translateY(0%);
 }
-.stage.two .skull {
+.login_block.two .skull {
   width: 40%;
   aspect-ratio: 6 / 7;
 }
-.stage.two h2 {
+.login_block.two h2 {
   font-size: 38px;
   color: var(--w);
   font-weight: 600;
 }
-.stage.two p {
+.login_block.two p {
   color: var(--c-96);
 }
-.stage.two .base-button {
+.login_block.two .base-button {
   height: 60px;
 }
-.stage.one h1 {
+.login_block.one h1 {
   width: 100%;
   color: var(--w);
   height: 50px;
   text-align: center;
   font-size: 38px;
 }
-.stage .form {
+.login_block .form {
   margin-top: 5px;
   gap: 15px;
   align-items: center;
 }
-.stage .input-group {
+.login_block .input-group {
   position: relative;
   display: flex;
 }
-.stage .input-group .icon {
+.login_block .input-group .icon {
   position: absolute;
   right: 5px;
   height: 100%;
@@ -109,17 +109,17 @@ a {
 .input-group .icon img.disactive {
   opacity: 0;
 }
-.stage .form label {
+.login_block .form label {
   position: absolute;
   color: var(--w-1);
   transform: translate(20px, -50%);
   padding: 0 5px;
   background: var(--c-16);
 }
-.stage .form input, .stage button.submit {
+.login_block .form input, .login_block button.submit {
   flex: 1;
 }
-.stage button.submit {
+.login_block button.submit {
   grid-row: 3 / 4;
   height: 100%;
   cursor: pointer;
@@ -134,7 +134,7 @@ a {
   justify-content: center;
   margin: 20px 0;
 }
-.stage.one .line::after {
+.login_block.one .line::after {
   content: "OR";
   padding: 0 10px;
   position: absolute;
@@ -180,7 +180,7 @@ a {
   transition: all 0.75s var(--trans) 0.75s;
   transform: translateX(200%);
 }
-.stage.two.active .closeStage {
+.login_block.two.active .closeStage {
   transform: translateX(0%);
 }
 .closeStage img {

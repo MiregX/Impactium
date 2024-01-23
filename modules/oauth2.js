@@ -79,10 +79,11 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
-          userAuthentication({data: data.body, from: "discord", referal: request.cookies.referal}).then(authResult => {
+          userAuthentication({data: data.body, from: "discord", referal: request.query.referal}).then(authResult => {
             response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             if (request.query.api) {
+              console.log(authResult)
               response.send(authResult);
             } else {
               response.redirect(request.cookies.previousPage || '/');

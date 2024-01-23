@@ -37,44 +37,6 @@ const middleware = async (request, response, next) => {
 
 router.use('/', middleware);
 
-router.get('/', async (request, response) => {
-  try {
-    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), request.composed);
-    response.render('template.ejs', {
-      body,
-      user: request.user,
-      lang: request.lang
-    });
-  } catch (error) {
-    console.log(error)
-    response.redirect('/');
-  }
-});
-
-router.get('/minecraft', async (request, response) => {
-  response.setHeader('Cache-Control', 'no-store');
-
-  const minecraftTemplate = fs.readFileSync('views/personal/minecraft.ejs', 'utf8');
-  const body = ejs.render(minecraftTemplate, request.composed);
-
-  if (request.headers.accept === 'semipage') {
-    response.status(200).send(body);
-  } else {
-    const body = ejs.render(fs.readFileSync('views/personal/main.ejs', 'utf8'), {
-      user: request.user,
-      prerender: "minecraft",
-      player: request.player.serialize(),
-      lang: request.lang
-    });
-
-    response.render('template.ejs', {
-      body,
-      user: request.user,
-      lang: request.lang
-    });
-  }
-});
-
 router.get('/minecraft/*', async (request, response, next) => {
   if (typeof request.headers.accept !== 'undefined' && request.headers.accept !== 'panel') return next();
   if (typeof request.headers.accept === 'undefined') return response.redirect('/me/minecraft')

@@ -22,8 +22,6 @@ const SetNickname = () => {
         )}
       </div>
 
-      <p id="nicknameUpdateOnErrorMessageContainer"></p>
-
       <div className="flex panel-footer" style={{ gap: '8px' }}>
         <input
           ref={nicknameField}
@@ -32,11 +30,10 @@ const SetNickname = () => {
           value={player.nickname}
           placeholder={lang.enterNickname}
           className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
-          readOnly={isDisabledNicknameChange}
         />
 
         <div
-          onClick={() => setNickname()}
+          onClick={() => setNickname(nicknameField.current.value)}
           className={`change_profile save-button ${isDisabledNicknameChange ? 'no-pointers grayed' : ''}`}
           tooverlayview="true"
         >

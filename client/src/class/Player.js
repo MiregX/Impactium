@@ -10,6 +10,22 @@ export const PlayerProvider = ({ children }) => {
   const [player, setPlayer] = useState(false);
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(true);
 
+  const setNickname = async (nickname) => {
+    try {
+      const response = await fetch('https://impactium.fun/api/player/set/nickname', {
+        method: 'POST',
+        headers: {
+          'token': token,
+          'nickname': nickname
+        }
+      });
+      const playerData = await response.json();
+      setPlayer(playerData);
+    } catch (error) {
+      setPlayer({});
+    }
+  };
+
   const setPassword = async (password) => {
     try {
       const response = await fetch('https://impactium.fun/api/player/set/password', {
@@ -17,6 +33,22 @@ export const PlayerProvider = ({ children }) => {
         headers: {
           'token': token,
           'password': password
+        }
+      });
+      const playerData = await response.json();
+      setPlayer(playerData);
+    } catch (error) {
+      setPlayer({});
+    }
+  };
+
+  const setSkin = async (image) => {
+    try {
+      const response = await fetch('https://impactium.fun/api/player/set/skin', {
+        method: 'POST',
+        headers: {
+          'token': token,
+          'image': image
         }
       });
       const playerData = await response.json();
@@ -63,13 +95,14 @@ export const PlayerProvider = ({ children }) => {
     if (!user && isUserLoaded) {
       setPlayer({});
       setIsPlayerLoaded(true);
+      return
     }
 
     getPlayer();
   }, [user]);
   
   return (
-    <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setPassword, register }}>
+    <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setNickname, setPassword, setSkin, register }}>
       {children}
     </PlayerContext.Provider>
   );

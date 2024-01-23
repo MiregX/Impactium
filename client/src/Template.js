@@ -30,20 +30,20 @@ function Template() {
               <Header />
               <HeaderBackground />
               <main>
-                <Routes>
-                  <Route path="/" element={<Main />} />
-                  <Route path="login" element={<Login />}>
-                    <Route path="callback" element={<Callback />} />
-                  </Route>
-                  <Route
-                    path="me"
-                    element={
-                        <Suspense>
+                <Suspense fallback={<div>...</div>}>
+                  <Routes>
+                    <Route path="/" element={<Main />} />
+                    <Route path="login" element={<Login />}>
+                      <Route path="callback" element={<Callback />} />
+                    </Route>
+                    <Route
+                      path="me"
+                      element={
                           <Personal />
-                        </Suspense>
-                    }
-                  />
-                </Routes>
+                      }
+                    />
+                  </Routes>
+                </Suspense>
               </main>
             </HeaderProvider>
           </Router>

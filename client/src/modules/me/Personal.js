@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import './Personal.css';
 import Nav from './Nav';
-import Profile from './Profile'
 import { useHeaderContext } from '../header/HeaderContext';
+
+const Profile = React.lazy(() => import('./Profile'));
 
 const Personal = () => {
   const { setIsFlattenHeader } = useHeaderContext();
@@ -17,7 +18,9 @@ const Personal = () => {
   return (
     <div className='personal'>
       <Nav />
-      <Profile />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Profile />
+      </Suspense>
     </div>
   );
 };
