@@ -11,14 +11,12 @@ const userMiddleware = async (request, response, next) => {
     return response.sendStatus(401);
 
   try {
-    const user = new User(request.headers.token);
-    await user.fetch();
+    request.user = new User(request.headers.token);
+    await request.user.fetch();
 
-    if (!user._id)
+    if (!request.user._id)
       return response.sendStatus(401);
 
-    request.user = user.send();
-    request._user = user;
     next();
   } catch (error) {
     console.log(error);
@@ -29,19 +27,16 @@ const userMiddleware = async (request, response, next) => {
 router.use('/*', userMiddleware);
 
 router.get('/user/get', async (request, response) => {
-  response.status(200).send(request.user);
+  response.status(200).send(request.user.send());
 });
 
 const playerMiddleware = async (request, response, next) => {
   try {
-    const player = new MinecraftPlayer(request.user._id);
-    await player.fetch();
+    request.player = new MinecraftPlayer(request.user._id);
+    await request.player.fetch();
     
-    if (!player._id)
+    if (!request.player._id)
       return response.sendStatus(401);
-    
-    request.player = player.serialize();
-    request._player = player;
 
     next();
   } catch (error) {
@@ -53,31 +48,31 @@ const playerMiddleware = async (request, response, next) => {
 router.use('/player', playerMiddleware);
 
 router.get('/player/get', async (request, response) => {
-  response.status(200).send(request.player);
+  response.status(200).send(request.player.send());
 });
 
 router.post('/player/register', async (request, response) => {
-  response.status(200).send(request.player);
+  request.player.register();
+  response.status(200).send(request.player.send());
 });
 
 router.post('/player/set/nickname', async (request, response) => {
-  const status = await request._player.setNickname(request.headers.nickname);
-  response.status(status).send(request._player.serialize());
+  const status = await request.player.setNickname(request.headers.nickname);
+  response.status(status).send(request.player.send());
 });
 
 router.post('/player/set/password', async (request, response) => {
-  const status = await request._player.setPassword(request.headers.password);
-  response.status(status).send(request._player.serialize());
+  const status = await request.player.setPassword(request.headers.password);
+  response.status(status).send(request.player.send());
 });
 
 router.post('/player/set/skin', async (request, response) => {
-  response.status(200).send(request.player);
+  response.status(200).send(request.player.send());
 });
 
 router.get('/player/achievements/get', async (request, response) => {
-  await request._player.achievements.process();
-
-  response.status(200).send(request._player.serialize());
+  await request.player.achievements.process();
+  response.status(200).send(request.player.send());
 });
 
 module.exports = router;

@@ -26,7 +26,7 @@
   height: 30px;
   padding: 5px;
   cursor: pointer;
-  background-color: var(--c-36);
+  background-color: var(--c-32);
   border-radius: 5px;
 }
 .language .list img:hover {
@@ -47,7 +47,7 @@
   border-radius: 5px 20px 20px 5px;
 }
 .language .toggler:hover {
-  background-color: var(--c-36);
+  background-color: var(--c-32);
 }
 .language .toggler img {
   height: 30px;

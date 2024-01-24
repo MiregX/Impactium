@@ -30,7 +30,7 @@ function Template() {
               <Header />
               <HeaderBackground />
               <main>
-                <Suspense fallback={<div>...</div>}>
+                <Suspense fallback={null}>
                   <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="login" element={<Login />}>

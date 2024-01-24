@@ -6,7 +6,7 @@ import { useLanguage } from '../language/Lang';
 const Callback = ({ previousPage }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setToken, setIsUserLoaded, setUser } = useUser();
+  const { setToken, setIsUserLoaded, referal } = useUser();
   const { setLanguage } = useLanguage();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Callback = ({ previousPage }) => {
 
     if (!code) return navigate(previousPage || '/');
 
-    fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}&api=${true}`, {
+    fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
       method: 'GET'
     })
       .then(response => response.json())

@@ -26,9 +26,7 @@ function getLanguagePack(languagePack = 'en') {
       translations[key] = nestedTranslations;
     }
   }
-
-  translations.debugPath = __dirname;
-  console.log(translations)
+  
   return translations;
 }
 

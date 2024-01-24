@@ -1,11 +1,11 @@
-.nav {
+header .nav {
   gap: 10px;
   height: 100%;
   justify-content: center;
   align-items: center;
 }
 
-.nav > button {
+header .nav > button {
   height: 100%;
   position: relative;
   font-weight: 500;
@@ -13,17 +13,17 @@
   text-align: center;
   text-transform: uppercase;
 }
-.nav button > img {
+header .nav button > img {
   filter: invert(100%);
   height: 15px;
   width: 15px;
   margin-left: 10px;
   transition: all 0.2s var(--trans);
 }
-.nav button:hover > img {
+header .nav button:hover > img {
   transform: rotateZ(90deg);
 }
-.nav button .bar {
+header .nav button .bar {
   position: absolute;
   min-height: 80px;
   background: var(--c-24);
@@ -41,36 +41,36 @@
   box-shadow: 0 1px 3px var(--c-48);
   text-transform: initial;
 }
-.nav button:hover .bar {
+header .nav button:hover .bar {
   opacity: 1;
   visibility: visible;
   transform: translateY(0px);
 }
-.nav button > p {
+header .nav button > p {
   text-transform: uppercase;
 }
-.nav button .bar img {
+header .nav button .bar img {
   height: 40px;
   width: 40px;
   border-radius: 20px;
 }
-.nav button .bar h3 {
+header .nav button .bar h3 {
   text-align: left;
   font-weight: 600;
   color: var(--w);
   transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
 }
-.nav button .bar p {
+header .nav button .bar p {
   text-align: left;
   font-weight: 400;
   color: var(--c-64);
   height: 100%;
 }
-.nav .line {
+header .nav .line {
   width: 1px;
   background: white;
   height: 15px;
 }
-.nav .line:last-child {
+header .nav .line:last-child {
   display: none;
 }

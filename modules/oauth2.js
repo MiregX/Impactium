@@ -147,7 +147,7 @@ async function userAuthentication(p) {
       email: userPayload.email || undefined,
       avatar: avatar,
       displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
-      locale: userPayload.locale || "en"
+      locale: userPayload.locale.split('-')[0] || "en"
     }
 
     if (userDatabase) {

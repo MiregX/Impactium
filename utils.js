@@ -457,6 +457,17 @@ class MinecraftPlayer {
 
     return serializeObject(this);
   }
+
+  send() {
+    const player = this.serialize();
+    return {
+      nickname: player.nickname,
+      password: player.password,
+      skin: player.skin,
+      registered: player.registered,
+      achievements: playerthis.achievements
+    };
+  }
   
   async save() {
     const Players = await getDatabase("minecraftPlayers");
