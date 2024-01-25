@@ -5,11 +5,9 @@ const path = require('path');
 const crypto = require('crypto');
 const archiver = require('archiver');
 const { ObjectId } = require('mongodb');
-const { Telegraf, Markup } = require('telegraf');
 const { pterosocket } = require('pterosocket')
-const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { mongoLogin, sftpConfig, minecraftServerAPI, ftpConfig, telegramBotToken } = process.env;
+const { mongoLogin, minecraftServerAPI, ftpConfig } = process.env;
 
 const { TelegramBotHandler } = require('./class/TelegramBotHandler');
 const { SFTP } = require('./class/SFTP');
@@ -1028,6 +1026,28 @@ function log(...args) {
                + message
                + colors.o
               );
+}
+
+function formatDate(toDate = false, isPrevDay = false) {
+  const date = toDate ? new Date() : new Date(toDate);
+
+  if (isPrevDay)
+    date.setDate(date.getDate() - 1);
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear().toString();
+
+  return {
+    time: `${hours}:${minutes}:${seconds}`,
+    hour: `${hours}`,
+    shortTime: `${hours}:${minutes}`,
+    date: `${day}.${month}.${year}`,
+    shortDate: `${hours}:${minutes} ${day}.${month}`
+  };
 }
 
 function ftpUpload(filePathOnHost) {
