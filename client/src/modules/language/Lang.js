@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const locale = require('../locale.json');
+const locale = require('./locale.json');
 
 function getLanguagePack(languagePack = 'en') {
   const translations = {};
@@ -26,7 +26,7 @@ function getLanguagePack(languagePack = 'en') {
       translations[key] = nestedTranslations;
     }
   }
-  
+
   return translations;
 }
 

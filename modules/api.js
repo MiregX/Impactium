@@ -6,6 +6,14 @@ router.get('/status', (request, response) => {
   response.sendStatus(200);
 });
 
+router.get('/gianmarko', (request, response) => {
+  response.status(200).send({
+    nome: "Gianmarko",
+    age: 18,
+    cognome: "Bonuglia"
+  });
+});
+
 const userMiddleware = async (request, response, next) => {
   if (!request.headers.token)
     return response.sendStatus(401);
@@ -52,7 +60,12 @@ router.get('/player/get', async (request, response) => {
 });
 
 router.post('/player/register', async (request, response) => {
-  request.player.register();
+  const status = await request.player.register();
+  response.status(status).send(request.player.send());
+});
+
+router.post('/player/set/achievement', async (request, response) => {
+  const status = await request.player.achievements.use(request.headers.achievement);
   response.status(200).send(request.player.send());
 });
 

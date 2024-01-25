@@ -989,6 +989,32 @@
       "ru": "У тебя и так стоит этот пароль. Не клацай, а то клацну зубами по яйцам"
     }
   },
+  "achievements": {
+    "200": {
+      "uk": "Нагорода за досягнення активована. Якщо нагороди або еффекту немає - введіть у грі дебаг-команду \"/achievement\"",
+      "it": "Achievement reward activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
+      "en": "Achievement reward activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
+      "ru": "Награда за достижение активирована. Если нет наград или эффектов, введите в игре отладочную команду \"/achievement\""
+    },
+    "401": {
+      "uk": "Здається ви ще не розблокували це досягнення. Зачекайте 10 хвилин, або повідомте про це адміністратору.",
+      "it": "Sembra che tu non abbia ancora sbloccato questo obiettivo. Attendi 10 minuti o segnala l'errore all'amministratore.",
+      "en": "It seems you haven't unlocked this achievement yet. Wait for 10 minutes or report the issue to the administrator.",
+      "ru": "Похоже, вы еще не разблокировали это достижение. Подождите 10 минут или сообщите об ошибке администратору."
+    },
+    "402": {
+      "uk": "Це досягнення вже активоване. Якщо нагороди або еффекту немає - введіть у грі дебаг-команду \"/achievement\"",
+      "it": "Questo obiettivo è già attivato. Se non ci sono ricompense o effetti, inserisci il comando di debug nel gioco \"/achievement\"",
+      "en": "This achievement is already activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
+      "ru": "Это достижение уже активировано. Если нет наград или эффектов, введите в игре отладочную команду \"/achievement\""
+    },
+    "403": {
+      "uk": "Здається такого досягнення не існує. Якщо ви вважаєте, що це помилка - повідомте про це адміністратору.",
+      "it": "1k",
+      "en": "1k",
+      "ru": "Кажется этого достижения не существует. Если вы считаете, что это ошибка - сообщите об этом администратору."
+    }
+  },
   "code_500": {
     "uk": "Внутрішня помилка сервера",
     "it": "Errore interno del server",
