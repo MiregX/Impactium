@@ -1,5 +1,7 @@
 const express = require('express');
-const { User, log, MinecraftPlayer } = require('../utils');
+const { log } = require('../utils');
+const { User } = require('../class/User');
+const { Player } = require('../class/Player');
 const router = express.Router();
 
 router.get('/status', (request, response) => {
@@ -40,7 +42,7 @@ router.get('/user/get', async (request, response) => {
 
 const playerMiddleware = async (request, response, next) => {
   try {
-    request.player = new MinecraftPlayer(request.user._id);
+    request.player = new Player(request.user._id);
     await request.player.fetch();
     
     if (!request.player._id)

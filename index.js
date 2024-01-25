@@ -1,15 +1,12 @@
 require('dotenv').config();
-const fs = require('fs');
-const ejs = require('ejs');
 const cors = require('cors');
 const path = require('path');
 const https = require('https');
-const vhost = require('vhost');
-const utils = require('./utils');
 const express = require('express');
 const session = require('express-session');
 const { schedule } = require('node-cron');
-const { getLicense, ImpactiumServer, log } = require('./utils');
+const { getLicense, log } = require('./utils');
+const { ImpactiumServer } = require('./class/ImpactiumServer');
 
 const app = express();
 
@@ -20,7 +17,7 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-const mcs = new ImpactiumServer;
+const mcs = new ImpactiumServer();
 
 const middleware = async (request, response, next) => {
   console.log(request.url);

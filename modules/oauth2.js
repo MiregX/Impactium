@@ -1,11 +1,11 @@
 require('dotenv').config();
-const fs = require('fs');
 const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { getDatabase, generateToken, Referal } = require('../utils');
-const { discordClientID, discordRedirectUri, discordRedirectApiUri, discordClientSecret, googleClientID, googleRedirectUri, googleClientSecret } = process.env
+const { getDatabase, generateToken } = require('../utils');
+const { discordClientID, discordRedirectApiUri, discordClientSecret, googleClientID, googleClientSecret } = process.env
+const Referal = require('../class/Referal')
 
 const router = express.Router();
 
@@ -50,7 +50,7 @@ router.get('/callback/google', (request, response, next) => {
       userAuthentication({data: user._json, from: "discord", referal: request.cookies.referal}).then(authResult => {
         response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
         response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-        response.redirect(request.cookies.previousPage || '/');
+        response.status(200).send(authResult);
       });
     } catch (error) {
       next(error);
@@ -82,12 +82,7 @@ router.get('/callback/discord', (request, response) => {
           userAuthentication({data: data.body, from: "discord", referal: request.query.referal}).then(authResult => {
             response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
             response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-            if (request.query.api) {
-              console.log(authResult)
-              response.send(authResult);
-            } else {
-              response.redirect(request.cookies.previousPage || '/');
-            }
+            response.send(authResult);
           });
         })
         .catch((error) => {
