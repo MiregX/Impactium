@@ -5,7 +5,6 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { getDatabase, generateToken } = require('../utils');
 const { discordClientID, discordRedirectApiUri, discordClientSecret, googleClientID, googleClientSecret } = process.env
-const Referal = require('../class/Referal')
 
 const router = express.Router();
 

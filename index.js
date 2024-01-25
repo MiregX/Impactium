@@ -5,8 +5,7 @@ const https = require('https');
 const express = require('express');
 const session = require('express-session');
 const { schedule } = require('node-cron');
-const { getLicense, log } = require('./utils');
-const { ImpactiumServer } = require('./class/ImpactiumServer');
+const { getLicense, log, ImpactiumServer } = require('./utils');
 
 const app = express();
 

@@ -1,7 +1,5 @@
 const express = require('express');
-const { log } = require('../utils');
-const { User } = require('../class/User');
-const { Player } = require('../class/Player');
+const { log, Player, User } = require('../utils');
 const router = express.Router();
 
 router.get('/status', (request, response) => {

@@ -2,14 +2,10 @@ const fs = require('fs');
 const ftp = require('ftp');
 const Jimp = require('jimp');
 const path = require('path');
-const axios = require('axios');
 const crypto = require('crypto');
 const archiver = require('archiver');
-const { v4: uuidv4 } = require('uuid');
 const { ObjectId } = require('mongodb');
 const { Telegraf, Markup } = require('telegraf');
-const { spawn } = require('child_process');
-const Dropbox = require('dropbox').Dropbox;
 const { pterosocket } = require('pterosocket')
 const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -155,7 +151,7 @@ class Referal {
   }
 }
 
-class MinecraftPlayer {
+class Player {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
@@ -222,7 +218,7 @@ class MinecraftPlayer {
     if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 403;
     if (!this.skin) this.skin = {}
 
-    const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/minecraftPlayersSkins/";
+    const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/PlayersSkins/";
     this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
     this.skin.originalTitle = originalImageName;
@@ -311,7 +307,7 @@ class MinecraftPlayer {
       password: player.password,
       skin: player.skin,
       registered: player.registered,
-      achievements: playerthis.achievements
+      achievements: player.achievements
     };
   }
   
@@ -360,7 +356,7 @@ class Achievements {
       await parentReferal.fetch();
       const isChildrenWasChanged = parentReferal.completeChildren(this.player.id);
       if (isChildrenWasChanged) {
-        const parentAccount = new MinecraftPlayer(parentReferal.id)
+        const parentAccount = new Player(parentReferal.id)
         await parentAccount.fetch();
         parentAccount.achievements.getEvent({
           total: parentReferal.childrens.filter(c => c.isChanged).length,
@@ -609,7 +605,7 @@ class ImpactiumServer {
     ImpactiumServer.instance = this;
   }
 
-  launch() {
+  async launch() {
     this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
     
     this.server.on("start", () => {
@@ -619,11 +615,23 @@ class ImpactiumServer {
     this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
   }
 
-  command(command, isQuiet = false) {
-    if (!this.server) return false;
-    this.server.writeCommand(command);
-    if (!isQuiet) log(`[MC] -> ${command}`, 'g');
-    return true;
+  async connect() {
+    try {
+      await this.server.connect();
+    } catch (error) {
+      return await this.connect();
+    }
+  }
+
+  async command(command, isQuiet = false) {
+    try {
+      this.server.writeCommand(command);
+      if (!isQuiet) log(`[MC] -> ${command}`, 'g');
+      return true;
+    } catch (error) {
+      await this.connect();
+      return this.command(command, isQuiet);
+    }
   }
 
   output(message) {
@@ -732,7 +740,7 @@ class ImpactiumServer {
   }
 
   async applyAchievementEffect(nickname) {
-    const player = new MinecraftPlayer()
+    const player = new Player()
     await player.fetch(nickname);
     if (!player.achievements?.active)
       return
@@ -751,7 +759,7 @@ class ResoursePackInstance {
     }
     this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
     this.path.file.basic = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
-    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
+    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'PlayersSkins');
     this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
     this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
@@ -773,7 +781,7 @@ class ResoursePackInstance {
     const resultedJson = purge(this.path.file.basic);
 
     await Promise.all(this.mcs.players.whitelist.map(async (whitelistPlayer, index) => {
-      const player = new MinecraftPlayer()
+      const player = new Player()
       await player.fetch(whitelistPlayer.name);
       if (!(player?.skin?.iconLink)) return
 
@@ -1004,7 +1012,7 @@ class ReferalFetcher {
   async processChildren(children) {
     if (children.isConfirmed)
       return false;
-    const player = new MinecraftPlayer(children.id);
+    const player = new Player(children.id);
     await player.fetch();
     player.achievements.fetch();
     if (player.achievements.playedHours() > 50) {
@@ -1021,7 +1029,7 @@ class ReferalFetcher {
 
     await this.Referals.updateOne({ _id: referal._id }, { $set: referal });
 
-    const referalPlayer = new MinecraftPlayer(referal.id);
+    const referalPlayer = new Player(referal.id);
     await referalPlayer.fetch();
 
     referalPlayer.achievements.getEvent({
@@ -1345,9 +1353,8 @@ async function saveBattleBoard(data) {
 }
 
 module.exports = {
-  GuildStatisticsInstance,
   ResoursePackInstance,
-  MinecraftPlayer,
+  Player,
   ImpactiumServer,
   saveBattleBoard,
   databaseConnect,
@@ -1359,9 +1366,7 @@ module.exports = {
   formatDate,
   getLicense,
   ftpUpload,
-  Schedule,
   Referal,
-  Guild,
   SFTP,
   User,
   log,
