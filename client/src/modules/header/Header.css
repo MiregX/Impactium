@@ -40,7 +40,7 @@ header > div > svg {
   height: 48px;
   padding: 6px;
   border-radius: 17px;
-  background: var(--c-36);
+  background: var(--c-32);
   position: relative;
   cursor: pointer;
 }
@@ -58,7 +58,7 @@ header > div > svg {
   flex: 1;
   line-height: 24px;
   font-size: 16px;
-  text-shadow: 0px 2px 5px var(--c-36);
+  text-shadow: 0px 2px 5px var(--c-32);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -122,7 +122,7 @@ header .logo img {
   display: flex;
   align-items: center;
   height: 48px;
-  background: var(--c-36);
+  background: var(--c-32);
   border-radius: 17px;
 }
 
@@ -178,13 +178,13 @@ header {
   background: var(--c-48);
 }
 .plate:hover {
-  background: var(--c-36);
+  background: var(--c-32);
 }
 .verified {
   height: 33px;
   width: 33px;
   border-radius: 11px;
-  background-color: var(--c-36);
+  background-color: var(--c-32);
   cursor: pointer;
 }
 .verified .icon {
@@ -203,7 +203,7 @@ header {
   align-items: center;
   height: 14px;
   gap: 4px;
-  color: var(--w-2);
+  color: var(--w);
 }
 .user .balance::before {
   content: "";

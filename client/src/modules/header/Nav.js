@@ -53,7 +53,7 @@ export default function Nav() {
     <div className={`nav ${visibility}`}>
       {Object.keys(nav).map((category, index) => (
         <React.Fragment key={category}>
-          <div>
+          <div className='category'>
             <button className="flex-dir-row center">
               <p>{lang[category]}</p>
               <img src="https://api.impactium.fun/ux/to-left.svg" alt="arrow" />

@@ -24,7 +24,7 @@ def restart_node_server():
             pass
 
     cmd_path = "C:\\Users\\Марк\\[КОД]\\Web\\server\\"
-    subprocess.Popen(["npm", "start"], cwd=cmd_path, shell=True)
+    subprocess.Popen(["node", "."], cwd=cmd_path, shell=True)
 
 if __name__ == "__main__":
     restart_node_server();

@@ -10,7 +10,7 @@ a {
 }
 .base-button {
   height: 52px;
-  border: 1px solid var(--c-36);
+  border: 1px solid var(--c-32);
   padding: 0 15px;
   color: var(--w);
   border-radius: 50px;
@@ -29,7 +29,7 @@ a {
   background-color: var(--c-16);
   border-radius: 25px;
   min-width: 400px;
-  border: 1px solid var(--c-36);
+  border: 1px solid var(--c-32);
   padding: 20px 20px 15px 20px;
 }
 @media (max-width: 767px) {
@@ -127,7 +127,7 @@ a {
 .line {
   height: 1px;
   width: 100%;
-  background-color: var(--c-36);
+  background-color: var(--c-32);
   position: relative;
   display: flex;
   align-items: center;

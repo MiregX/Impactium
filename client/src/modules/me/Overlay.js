@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import './Overlay.css'; // Replace with your actual CSS file
 import { usePlayer } from '../../class/Player';
+import { useLanguage } from '../language/Lang';
 
 const Overlay = () => {
   const overlayRef = useRef(null);
-  const { player } = usePlayer(null);
+  const { player } = usePlayer();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     let panel;
@@ -119,7 +121,7 @@ const Overlay = () => {
       // Удалите все созданные блоки
       overlay.innerHTML = "";
     };
-  }, [player]);
+  }, [player, lang]);
 
   return (
     <div className="overlay flex" ref={overlayRef} style={{ gap: '32px' }}>

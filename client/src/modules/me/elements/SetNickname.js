@@ -23,15 +23,14 @@ const SetNickname = () => {
       </div>
 
       <div className="flex panel-footer" style={{ gap: '8px' }}>
-        <input
-          ref={nicknameField}
-          type="text"
-          id="nicknameField"
-          value={player.nickname}
-          placeholder={lang.enterNickname}
-          className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
-        />
-
+      <input
+        ref={nicknameField}
+        type="text"
+        id="nicknameField"
+        defaultValue={player.nickname}
+        placeholder={lang.enterNickname}
+        className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
+      />
         <div
           onClick={() => setNickname(nicknameField.current.value)}
           className={`change_profile save-button ${isDisabledNicknameChange ? 'no-pointers grayed' : ''}`}

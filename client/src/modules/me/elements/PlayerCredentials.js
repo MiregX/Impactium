@@ -41,7 +41,7 @@ const PlayerCredentials = () => {
           if (typeof ach !== 'object') return null;
 
           return (
-            <li key={`${achKey}-${ach.doneStages}`}>
+            <li className={`${achKey}, percentage-${ach.doneStages}0`} key={`${achKey}-${ach.doneStages}`}>
               {`${lang[`achievmentTitle_${achKey}`]} ${ach.symbol}`}
               <hr />
             </li>

@@ -5,7 +5,10 @@ header .nav {
   align-items: center;
 }
 
-header .nav > button {
+header .nav .category {
+  height: 100%;
+}
+header .nav button {
   height: 100%;
   position: relative;
   font-weight: 500;
