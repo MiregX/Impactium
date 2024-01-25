@@ -11,6 +11,9 @@ const SftpClient = require('ssh2-sftp-client');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { mongoLogin, sftpConfig, minecraftServerAPI, ftpConfig, telegramBotToken } = process.env;
 
+const { TelegramBotHandler } = require('./class/TelegramBotHandler');
+const { SFTP } = require('./class/SFTP');
+
 class User {
   constructor(token) {
     this.token = token;
@@ -750,8 +753,7 @@ class ImpactiumServer {
 
 class ResoursePackInstance {
   constructor(ImpactiumServer) {
-    this.mcs = ImpactiumServer;
-    this.sftp = new SFTP()
+    this.server = ImpactiumServer;
     this.ftp = new ftp();
     this.path = {
       folder: {},
@@ -778,7 +780,7 @@ class ResoursePackInstance {
 
   async putIcons() {
     await this.mcs.getWhitelistPlayers()
-    const resultedJson = purge(this.path.file.basic);
+    const resultedJson = JSON.parse(fs.readFileSync(this.path.file.basic, 'utf-8'));
 
     await Promise.all(this.mcs.players.whitelist.map(async (whitelistPlayer, index) => {
       const player = new Player()
@@ -807,7 +809,7 @@ class ResoursePackInstance {
   }
 
   async setIcons() {
-    const playersWithFetchedIcon = purge(this.path.file.resoursePackJson);
+    const playersWithFetchedIcon = JSON.parse(fs.readFileSync(this.path.file.resoursePackJson, 'utf-8'));
     playersWithFetchedIcon.providers.forEach(async (player, index) => {
       if (index < 12) return
       const playerNickname = player.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
@@ -873,9 +875,9 @@ class ResoursePackInstance {
   }
   
   async updateServerProperties() {
-    await this.sftp.connect();
+    await this.server.sftp.connect();
 
-    const serverProperties = await this.sftp.read('server.properties');
+    const serverProperties = await this.server.sftp.read('server.properties');
     const lines = serverProperties.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -884,93 +886,8 @@ class ResoursePackInstance {
       }
     }
 
-    await this.sftp.save('server.properties', lines.join('\n'));
-    await this.sftp.close();
-  }
-}
-
-class TelegramBotHandler {
-  constructor() {
-    if (TelegramBotHandler.instance) return TelegramBotHandler.instance;
-    this.channelId = '-1001649611744'
-    this.messageId = 676
-    this.basicMessage = `Сейчас на сервере:\n`
-    this.bot = new Telegraf(telegramBotToken)
-    TelegramBotHandler.instance = this
-  }
-
-  async connect() {
-    try {
-      await this.bot.telegram.getMe();
-    } catch (error) {
-      return await this.connect();
-    }
-  }
-
-  async editMessage(online) {
-    try {
-      await this.bot.telegram.editMessageText(
-        this.channelId,
-        this.messageId,
-        null,
-        this.basicMessage,
-        Markup.inlineKeyboard([
-          Markup.button.callback(`Онлайн: ${online.count} / 50`, 'onlineButtonCallback'),
-        ])
-      );
-    } catch (error) { }
-  } 
-}
-
-class SFTP {
-  constructor() {
-    if (!SFTP.instance) {
-      try {
-        this.sftp = new SftpClient();
-      } catch (error) {
-        console.log(error);
-      }
-      SFTP.instance = this;
-    }
-
-    return SFTP.instance;
-  }
-
-  async connect() {
-    if (!this.sftp.connected) {
-      try {
-        await this.sftp.connect(JSON.parse(sftpConfig));
-      } catch (error) { return await this.connect() }
-    }
-  }
-
-  async put(localFilePath, remoteFilePath) {
-    try {
-      const result = await this.sftp.put(localFilePath, remoteFilePath);
-      return result;
-    } catch (error) {return ''}
-  }
-
-  async get(remoteFilePath, localFilePath) {
-    try {
-      const result = await this.sftp.get(remoteFilePath, localFilePath);
-      return result;
-    } catch (error) {return ''}
-  }
-
-  async read(remoteFilePath) {
-    try {
-      const result = await this.sftp.get(remoteFilePath);
-      return result.toString();
-    } catch (error) {return ''}
-  }
-
-  async save(remoteFilePath, data) {
-    await this.sftp.put(Buffer.from(data), remoteFilePath);
-  }
-
-  async close() {
-    await this.sftp.end();
+    await this.server.sftp.save('server.properties', lines.join('\n'));
+    await this.server.sftp.close();
   }
 }
 
@@ -1052,9 +969,7 @@ const mongo = new MongoClient(mongoLogin, {
 
 async function databaseConnect() {
   try {
-    if (!mongo.isConnected) {
-      await mongo.connect();
-    }
+
   } catch (error) {
     console.log(error)
   }
@@ -1067,11 +982,13 @@ function generateToken(sumbolsLong) {
 async function getDatabase(collection) {
   if (!collection) return
   try {
-    await databaseConnect();
+    if (!mongo.isConnected) {
+      await mongo.connect();
+    }
     const Database = mongo.db().collection(collection);
     return Database;
   } catch (error) {
-    console.log(error);
+    return await getDatabase(collection);
   }
 }
 
@@ -1113,123 +1030,6 @@ function log(...args) {
               );
 }
 
-function formatDate(toDate = false, isPrevDay = false) {
-  let date = new Date();
-  if (toDate) {
-    date = new Date(toDate);
-  }
-
-  if (isPrevDay) {
-    date.setDate(date.getDate() - 1);
-  }
-
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString();
-
-  return {
-    time: `${hours}:${minutes}:${seconds}`,
-    hour: `${hours}`,
-    shortTime: `${hours}:${minutes}`,
-    date: `${day}.${month}.${year}`,
-    shortDate: `${hours}:${minutes} ${day}.${month}`
-  };
-}
-
-async function getMultiBoard(ids) {
-  const Battleboard = await getDatabase("battleboard");
-
-  const numericIds = ids.map(id => parseInt(id)).filter(numericId => !isNaN(numericId));
-
-  if (numericIds.length === 0) {
-    return false;
-  }
-
-  const filter = { "id": { $in: numericIds } };
-  const results = await Battleboard.sort({ id: -1 }).find(filter).toArray();
-
-  return results.length > 0 ? results : false;
-}
-
-function reportCounter(battleboard) {
-  const playersMap = new Map();
-  const killsCountMap = new Map();
-  const killFameMap = new Map();
-  let maxPlayers = 0;
-  let maxKills = 0;
-  let maxKillFame = 0;
-
-  const battleArray = Array.isArray(battleboard) ? battleboard : [battleboard];
-
-  battleArray.forEach(battle => {
-    for (const playerId in battle.players) {
-      const player = battle.players[playerId];
-      const guildName = player.guildName || player.name;
-      const allianceName = player.allianceName || player.guildName;
-      const guildKey = allianceName ? allianceName : guildName;
-
-      if (!playersMap.has(guildKey)) {
-        playersMap.set(guildKey, { guild: guildName, alliance: allianceName, players: 0 });
-      }
-
-      playersMap.get(guildKey).players++;
-      maxPlayers = Math.max(maxPlayers, playersMap.get(guildKey).players);
-
-      if (!killsCountMap.has(guildKey)) {
-        killsCountMap.set(guildKey, { guild: guildName, alliance: allianceName, kills: 0 });
-      }
-
-      killsCountMap.get(guildKey).kills += player.kills;
-      maxKills = Math.max(maxKills, killsCountMap.get(guildKey).kills);
-
-      if (!killFameMap.has(guildKey)) {
-        killFameMap.set(guildKey, { guild: guildName, alliance: allianceName, fame: 0 });
-      }
-
-      killFameMap.get(guildKey).fame += player.killFame;
-      maxKillFame = Math.max(maxKillFame, killFameMap.get(guildKey).fame);
-    }
-  });
-
-  const result = {
-    players: [],
-    killsCount: [],
-    killFame: []
-  };
-
-  for (const [key, data] of playersMap.entries()) {
-    const widthPercentage = Math.round((data.players / maxPlayers) * 80);
-    result.players.push({ width: `${widthPercentage}%`, players: data.players, guild: data.guild, alliance: data.alliance });
-  }
-
-  for (const [key, data] of killsCountMap.entries()) {
-    const killsWidthPercentage = Math.round((data.kills / maxKills) * 80);
-    result.killsCount.push({ width: `${killsWidthPercentage}%`, kills: data.kills, guild: data.guild, alliance: data.alliance });
-  }
-
-  for (const [key, data] of killFameMap.entries()) {
-    const fameWidthPercentage = Math.round((data.fame / maxKillFame) * 80);
-    result.killFame.push({ width: `${fameWidthPercentage}%`, fame: data.fame, guild: data.guild, alliance: data.alliance });
-  }
-
-  result.players = result.players
-    .sort((a, b) => b.players - a.players)
-    .slice(0, 4);
-
-  result.killsCount = result.killsCount
-    .sort((a, b) => b.kills - a.kills)
-    .slice(0, 4);
-
-  result.killFame = result.killFame
-    .sort((a, b) => b.fame - a.fame)
-    .slice(0, 4);
-
-  return result;
-}
-
 function ftpUpload(filePathOnHost) {
   const ftpClient = new ftp();
   const ftpConfig = {
@@ -1252,70 +1052,6 @@ function ftpUpload(filePathOnHost) {
   ftpClient.connect(ftpConfig);
 }
 
-function purge(sourse) {
-  return JSON.parse(fs.readFileSync(sourse, 'utf-8'));
-}
-
-async function getBattleBoard(params = false) {
-  const { battlesLimit = 50, minimumPlayers = 10, minimumGuildPlayers = 5 } = params.filters || {}
-  await databaseConnect();
-  const Battleboard = await getDatabase("battleboard");
-
-  try {
-    if (params) {
-      if (Array.isArray(params.base)) { // Массборд
-        return await getMultiBoard(params.base);
-      }
-
-      const id = parseInt(params.base);
-      if (typeof id === "number" && !isNaN(id)) { // Поиск по id
-        const battle = await Battleboard.findOne({ id });
-        return battle || false;
-      }      
-  
-      if (typeof params.base === "string") {
-        const normalizedName = params.base.toLowerCase();
-
-        const filter = {
-          $or: []
-        };
-        
-        const totalRecords = await Battleboard.countDocuments();
-
-        const cursor = Battleboard.find({}).skip(totalRecords - 5000);
-        
-        while (await cursor.hasNext()) {
-          const battle = await cursor.next();
-
-          const players = Object.values(battle.players);
-        
-          const isBattleValid = players.length >= minimumPlayers &&
-                                players.filter(player => (
-                                  player.guildName.toLowerCase() === normalizedName || 
-                                  player.allianceName.toLowerCase() === normalizedName
-                                )).length >= minimumGuildPlayers;
-          
-          if (isBattleValid) {
-            filter.$or.push({ "_id": battle._id });
-          }
-          
-          if (filter.$or.length >= battlesLimit) {
-            break;
-          }
-        }
-
-        const result = await Battleboard.find({ $or: filter.$or }).toArray();
-        return result;
-      }
-    }
-    const battleboard = await Battleboard.find({}).sort({ id: -1 }).limit(battlesLimit).toArray();
-    return battleboard;
-  } catch (error) {
-    console.log(error);
-    return []
-  }
-}
-
 function getLicense() {
   try {
     const path = 'C:\\Users\\Mark\\';
@@ -1329,38 +1065,11 @@ function getLicense() {
   }
 }
 
-async function deleteBattleRecords(limit) {
-  const Battleboard = await getDatabase("battleboard");
-
-  const records = await Battleboard.find().limit(limit).toArray();
-  const idArray = records.map(record => record.id);
-
-  await Battleboard.deleteMany({ id: { $in: idArray } });
-}
-
-async function saveBattleBoard(data) {
-  const Battleboard = await getDatabase("battleboard");
-  const existBattles = await Battleboard.find({ id: { $in: data.map(item => item.id) } }).toArray();
-
-  data = data.filter(battle => !existBattles.some(existingBattle => existingBattle.id === battle.id)); // Фильтрация по несуществующим ID
-
-  data = data.filter(battle => Object.keys(battle.players).length > 9); // Фильтрация по кол-ву игроков > 9
-
-  if (data.length > 0) {
-    await Battleboard.insertMany(data);
-    await deleteBattleRecords(data.length);
-  }
-}
-
 module.exports = {
   ResoursePackInstance,
   Player,
   ImpactiumServer,
-  saveBattleBoard,
   databaseConnect,
-  getBattleBoard,
-  getMultiBoard,
-  reportCounter,
   generateToken,
   getDatabase,
   formatDate,
