@@ -5,7 +5,7 @@ import { usePlayer } from '../../../class/Player';
 
 const AchievementsModule = () => {
   const { lang } = useLanguage();
-  const { player } = usePlayer();
+  const { player, setAchievement } = usePlayer();
 
   const allAchievements = {
     "casual": {
@@ -144,7 +144,7 @@ const AchievementsModule = () => {
                       <p>{lang[`${achKey}_reward`]}</p>
                     </div>
                   </div>
-                  <button className="activate">Активировать</button>
+                  <button onClick={() => setAchievement(achKey)} className="activate">Активировать</button>
                 </div>
                 <div className="line bottom">
                   <hr width={`${percentage[0] / percentage[1]}%`} />

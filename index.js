@@ -50,8 +50,6 @@ server.listen(80, async () => {
   log(`Основной сервер запущен`, 'g');
   try {
     mcs.launch();
-    await mcs.updateWhitelist();
-    await mcs.fetchStats();
   } catch (error) { log(error) }
 })
 : // Если ключ неправильный или не найден

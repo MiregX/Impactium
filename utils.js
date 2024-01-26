@@ -156,6 +156,7 @@ class Player {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
+    this.server = new ImpactiumServer();
   }
 
   get Achievements() {
@@ -248,10 +249,9 @@ class Player {
 
   initAuthMe() {
     if (this.nickname && this.password) {
-      const mcs = new ImpactiumServer();
-      mcs.command(`authme register ${this.nickname} ${this.password}`);
-      mcs.command(`authme changepassword ${this.nickname} ${this.password}`);
-      mcs.updateWhitelist();
+      this.server.command(`authme register ${this.nickname} ${this.password}`);
+      this.server.command(`authme changepassword ${this.nickname} ${this.password}`);
+      this.server.updateWhitelist();
     }
   }
 
@@ -373,9 +373,7 @@ class Achievements {
   }
 
   fetch() {
-    const mcs = new ImpactiumServer();
-
-    const playerStatsFromServer = mcs.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
+    const playerStatsFromServer = this.player.server.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats
@@ -383,7 +381,7 @@ class Achievements {
         ? this.player.stats = {}
         : null
 
-    this.player.stats.processed = mcs.players.lastStatsFetch
+    this.player.stats.processed = this.player.server.players.lastStatsFetch
   }
 
   playedHours() {
@@ -559,10 +557,34 @@ class Achievements {
     this.achievements.processed = Date.now();
   }
 
+  async use(achievement) {
+    if (!achievement)
+      return 404;
+
+    if (!['casual', 'defence', 'killer', 'event', 'donate', 'hammer'].includes(achievement))
+      return 403;
+
+    if (this.achievements?.[achievement]?.doneStages < 5)
+      return 401;
+
+    if (this.achievements.active === achievement)
+      return 402
+
+    this.player.server.applyEffect({
+      nickname: this.player.nickname,
+      achievement: achievement,
+      oldAchievement: this.achievements.active
+    });
+
+    this.achievements.active = achievement;
+    await this.player.save();
+    return 200;
+  }
+
   getRomanianNumber(number) {
     switch (number) {
       case 0:
-        return ''
+        return '0'
       case 1:
         return 'I'
       case 2:
@@ -595,10 +617,14 @@ class ImpactiumServer {
       online: {
         list: [],
         count: 0
-      }
+      },
+      whitelist: [],
+      database: [],
+      lastStatsFetch: 0,
+      stats: [],
     }
 
-    this.resourcePack = new ResoursePackInstance(this);
+    this.resourcePack = new ResoursePackInstance();
     this.telegramBot = new TelegramBotHandler();
     this.telegramBot.connect();
     this.referals = new ReferalFetcher();
@@ -606,12 +632,13 @@ class ImpactiumServer {
     ImpactiumServer.instance = this;
   }
 
-  async launch() {
+  launch() {
     this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
     
-    this.server.on("start", () => {
+    this.server.on("start", async () => {
       log("WS Соединение с панелью управления установлено!", 'y');
-      this.command('list', true);
+      await this.updateWhitelist();
+      await this.fetchStats();
     })
     this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
   }
@@ -663,22 +690,29 @@ class ImpactiumServer {
       applyAchievementEffect(message.split(" ")[0])
   }
 
-  restart() {
-    if (!this.server) return false;
-    this.command('title @a times 20 160 20');
-    this.command('title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
-    setTimeout(() => {
-      this.command('title @a title {"text":"Restart"}');
-    }, 500);
-    setTimeout(() => {
-      this.command('kickall');
+  async restart() {
+    try {
+      this.command('title @a times 20 160 20');
+      this.command('title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
       setTimeout(() => {
-        this.command('restart');
+        this.command('title @a title {"text":"Restart"}');
       }, 500);
-    }, 60000);
+      setTimeout(() => {
+        this.command('kickall');
+        setTimeout(() => {
+          this.command('restart');
+        }, 1000);
+      }, 60000);
+    } catch (error) {
+      await this.connect();
+      return await this.restart();
+    }
   }
   
   async getDatabasePlayers() {
+    // Для получения списка игроков с базы данных на сервере
+    // Результат возвращается масивом строк
+    // а также присваивается в **this.players.database**
     const Players = await getDatabase("minecraftPlayers");
     const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
     this.players.database = distinctNicknames.map(player => player.nickname).filter(n => n);
@@ -686,6 +720,10 @@ class ImpactiumServer {
   }
 
   async getWhitelistPlayers() {
+    // Для получения списка игроков с вайтлиста на сервере
+    // Использует SFTP для подключения к ноде, и выкачивает файл
+    // Результат возвращается масивом обьектов, где есть name и uuid
+    // а также присваивается в **this.players.whitelist**
     await this.sftp.connect();
     const players = await this.sftp.read('whitelist.json');
     await this.sftp.close();
@@ -694,64 +732,73 @@ class ImpactiumServer {
   }
 
   async updateWhitelist() {
+    // Синхронизирует список игроков MongoBD --> Whitelist
     await this.getDatabasePlayers();
     await this.getWhitelistPlayers() 
     let isChanged = false;
 
+    // Цикл для удаления игроков с вайтлиста, если игрок есть в вайтлисте но нет в бд
     this.players.whitelist.forEach(player => {
       if (this.players.database.find(nickname => nickname.toLowerCase() === player.name.toLowerCase())) return 
       this.command(`whitelist remove ${player.name}`);
       isChanged = true  
-    })
+    });
 
+    // Цикл для добавления игроков в вайтлист, если игрок есть в бд но нет в вайтлисте
     this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.name.toLowerCase() === nickname.toLowerCase())
       if (existPlayer) return 
       this.command(`whitelist add ${nickname}`);
       isChanged = true
     });
-
+    // Если был добавлен хоть один игрок - перезагружаем вайтлист
     if (isChanged) this.command('whitelist reload');
   }
 
   async fetchStats() {
-    if (this.players.lastStatsFetch && (Date.now() - this.players.lastStatsFetch) < 1000 * 60 * 10) return this.players.stats
+    // Обновляем обьект статистики по адресу **this.players.stats**
+    // используя SFTP соединение, и поиск каждого игрока по нику -> uuid -> файл
+    // Проверка осуществляется раз в 10 минут. Не раньше
+    if (Date.now() - this.players.lastStatsFetch < 1000 * 60 * 10) return this.players.stats
     try {
+      // Константим игроков, с серверного вайтлиста
       const players = await this.getWhitelistPlayers();
       const results = [];
   
+      // Дожидаемся подключения и начинаем цикл
       await this.sftp.connect()
       for (const player of players) {
         try {
+          // Пытаемся прочесть файл с ноды
           const result = await this.sftp.read(`world/stats/${player.uuid}.json`);
           const stats = JSON.parse(result).stats;
           if (!stats) continue;
           player.stats = stats;
           results.push(player);
         } catch (error) {
+          // Ошибка возникает когда файла нет
           continue;
         }
       }
       
+      // Закрываем соединение и присваиваем результат в адреса
       await this.sftp.close()
       this.players.stats = results;
       this.players.lastStatsFetch = Date.now(); 
       return results;
+      // В случае ошибки возвращаем пустой массив
     } catch (error) { return [] }
   }
 
-  async applyAchievementEffect(nickname) {
-    const player = new Player()
-    await player.fetch(nickname);
-    if (!player.achievements?.active)
-      return
-    this.command(`effect give ${player.nickname} minecraft:${player.achievements.active} infinite 1 true`)
+  async applyEffect({nickname, achievement, oldAchievement}) {
+    this.command(`effect clear ${nickname} minecraft:${oldAchievement}`);
+    this.command(`effect give ${nickname} minecraft:${achievement} infinite 1 true`);
   }
 }
 
 class ResoursePackInstance {
-  constructor(ImpactiumServer) {
-    this.server = ImpactiumServer;
+  constructor() {
+    this.server = new ImpactiumServer();
     this.ftp = new ftp();
     this.path = {
       folder: {},
@@ -773,14 +820,14 @@ class ResoursePackInstance {
     await this.updateServerProperties();
     await this.setIcons();
     
-    this.mcs.restart();
+    this.server.restart();
   }
 
   async putIcons() {
-    await this.mcs.getWhitelistPlayers()
+    await this.server.getWhitelistPlayers()
     const resultedJson = JSON.parse(fs.readFileSync(this.path.file.basic, 'utf-8'));
 
-    await Promise.all(this.mcs.players.whitelist.map(async (whitelistPlayer, index) => {
+    await Promise.all(this.server.players.whitelist.map(async (whitelistPlayer, index) => {
       const player = new Player()
       await player.fetch(whitelistPlayer.name);
       if (!(player?.skin?.iconLink)) return
@@ -811,7 +858,7 @@ class ResoursePackInstance {
     playersWithFetchedIcon.providers.forEach(async (player, index) => {
       if (index < 12) return
       const playerNickname = player.file.replace(/^minecraft:font\//, '').replace(/\.png$/, '')
-      this.mcs.command(`lp user ${playerNickname} meta setprefix 2 "${player.chars[0]} "`);
+      this.server.command(`lp user ${playerNickname} meta setprefix 2 "${player.chars[0]} "`);
     });
   }
 
@@ -890,15 +937,15 @@ class ResoursePackInstance {
 }
 
 class ReferalFetcher {
-  constructor (server) {
+  constructor () {
     if (ReferalFetcher.instance) return ReferalFetcher.instance;
-    this.mcs = server;
+    this.server = new ImpactiumServer();
     ReferalFetcher.instance = this
   }
 
   async init() {
-    if (!this.mcs.players.lastStatsFetch)
-      await this.mcs.fetchStats();
+    if (!this.server.players.lastStatsFetch)
+      await this.server.fetchStats();
 
     await this.getReferals();
 

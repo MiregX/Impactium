@@ -59,6 +59,15 @@ export const PlayerProvider = ({ children }) => {
     });
   };
 
+  const setAchievement = async (achievement) => {
+    await playerAPI({
+      path: 'get/achievements',
+      headers: {
+        achievement: achievement
+      }
+    });
+  };
+
   const playerAPI = async ({ path, headers }) => {
     try {
       const method = path.startsWith('get')
@@ -98,7 +107,7 @@ export const PlayerProvider = ({ children }) => {
   }, [user, isUserLoaded]);
   
   return (
-    <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setNickname, setPassword, setSkin, register }}>
+    <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setNickname, setPassword, setSkin, register, setAchievement }}>
       {children}
     </PlayerContext.Provider>
   );
