@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Preloader.css';
-import { useUser } from '../class/User';
+import { useUser } from '../../class/User';
 
 export default function Preloader() {
   const { user, isUserLoaded } = useUser();

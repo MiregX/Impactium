@@ -4,7 +4,7 @@ import { useLanguage } from '../../language/Lang';
 import './SetSkin.css';
 
 const SetSkin = () => {
-  const { player } = usePlayer();
+  const { player, setSkin } = usePlayer();
   const { lang } = useLanguage();
   const isDisabledSkinChange = Date.now() - player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000;
 

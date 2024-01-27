@@ -624,10 +624,10 @@ class ImpactiumServer {
       stats: [],
     }
 
-    this.resourcePack = new ResoursePackInstance();
-    this.telegramBot = new TelegramBotHandler();
+    this.resourcePack = new ResoursePackInstance(this);
+    this.telegramBot = new TelegramBotHandler(this);
     this.telegramBot.connect();
-    this.referals = new ReferalFetcher();
+    this.referals = new ReferalFetcher(this);
     
     ImpactiumServer.instance = this;
   }
@@ -797,8 +797,8 @@ class ImpactiumServer {
 }
 
 class ResoursePackInstance {
-  constructor() {
-    this.server = new ImpactiumServer();
+  constructor(ImpactiumServer) {
+    this.server = ImpactiumServer;
     this.ftp = new ftp();
     this.path = {
       folder: {},
@@ -937,9 +937,9 @@ class ResoursePackInstance {
 }
 
 class ReferalFetcher {
-  constructor () {
+  constructor (ImpactiumServer) {
     if (ReferalFetcher.instance) return ReferalFetcher.instance;
-    this.server = new ImpactiumServer();
+    this.server = ImpactiumServer;
     ReferalFetcher.instance = this
   }
 

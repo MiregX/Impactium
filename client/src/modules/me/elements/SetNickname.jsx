@@ -30,6 +30,7 @@ const SetNickname = () => {
         defaultValue={player.nickname}
         placeholder={lang.enterNickname}
         className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
+        autoComplete="off"
       />
         <div
           onClick={() => setNickname(nicknameField.current.value)}

@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense, memo } from 'react';
 import './Template.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Preloader from './modules/Preloader';
+import Preloader from './modules/preloader/Preloader';
 import Language from './modules/language/Language';
 import Header from './modules/header/Header';
 import HeaderBackground from './modules/header/HeaderBackground';

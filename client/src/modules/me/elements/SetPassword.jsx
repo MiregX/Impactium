@@ -23,6 +23,7 @@ const SetPassword = () => {
           id="passwordField"
           value={player.password}
           placeholder={lang.enterNewPassword}
+          autoComplete="off"
         />
 
         <div onClick={() => {setPassword(passwordField.current.value)}} className="change_profile save-button" tooverlayview="true">
