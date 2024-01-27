@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePlayer } from '../../../class/Player'
+import { usePlayer } from '../../../class/Player';
 import { useLanguage } from '../../language/Lang';
 import './SetSkin.css';
 
@@ -8,6 +8,14 @@ const SetSkin = () => {
   const { lang } = useLanguage();
   const isDisabledSkinChange = Date.now() - player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000;
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setSkin(file);
+    }
+  };
+
   return (
     <div className={`default_panel_style dynamic ${player.registered ? '' : 'blocked'} setSkin`}>
       <div className="flex panel-header align-center">
@@ -15,7 +23,7 @@ const SetSkin = () => {
 
         {isDisabledSkinChange && (
           <>
-            <img src="https://cdn.impactium.fun/ux/timer.svg" alt="Timer" />
+            <img src="https://api.impactium.fun/ux/timer.svg" alt="Timer" />
             <span id="skinTimer" timestamp={player.lastSkinChangeTimestamp}></span>
           </>
         )}
@@ -34,7 +42,12 @@ const SetSkin = () => {
           {player.skin?.originalTitle || lang.skinNotSettled}
         </p>
 
-        <input type="file" id="fileInput" style={{ display: 'none' }} />
+        <input
+          type="file"
+          id="fileInput"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}  // Обработчик изменения файла
+        />
         <label
           htmlFor="fileInput"
           className={`change_profile upload-button ${

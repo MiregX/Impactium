@@ -38,20 +38,21 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-const options = getLicense();
-const server = https.createServer(options, app);
-options.isSuccess
-? // Если ключ правильный и сертификат найден
-server.listen(80, async () => {
-  log(`Основной сервер запущен`, 'g');
-  try {
-    mcs.launch();
-  } catch (error) { log(error) }
-})
-: // Если ключ неправильный или не найден
-app.listen(3001, () => { 
-  log(`Тестовый сервер запущен`);
-})
+const options = getLicense()
+if (options.isSuccess) {
+  https.createServer(options, app)
+  .listen(80, async () => {
+    log(`Основной сервер запущен`, 'g');
+    try {
+      mcs.launch();
+    } catch (error) { log(error) }
+  })
+} else {
+  app.listen(3001, () => { 
+    log(`Тестовый сервер запущен`);
+  })
+
+}
 
 schedule('0 */6 * * *', async () => {
   await mcs.resourcePack.process();

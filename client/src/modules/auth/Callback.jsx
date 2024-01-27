@@ -13,6 +13,13 @@ const Callback = ({ previousPage }) => {
     setIsUserLoaded(false);
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code');
+    const token = queryParams.get('token');
+
+    if (token) {
+      setIsUserLoaded(true);
+      setToken(token)
+      return navigate(previousPage || '/');
+    }
 
     if (!code) return navigate(previousPage || '/');
 
@@ -27,7 +34,7 @@ const Callback = ({ previousPage }) => {
         setIsUserLoaded(true);
       })
       .catch(error => {
-        console.error('Error fetching user data:', error);
+        navigate(previousPage || '/');
       });
   }, [setIsUserLoaded]);
 

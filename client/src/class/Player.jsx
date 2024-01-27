@@ -69,6 +69,9 @@ export const PlayerProvider = ({ children }) => {
   };
 
   const playerAPI = async ({ path, headers }) => {
+    if (!token)
+      return;
+    
     try {
       const method = path.startsWith('get')
         ? 'GET'

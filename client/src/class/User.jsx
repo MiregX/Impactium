@@ -13,7 +13,10 @@ export const UserProvider = ({ children }) => {
     if (!token && isUserLoaded) {
       setUser({});
       setIsUserLoaded(true);
+      return
     }
+
+    console.log(token)
 
     localStorage.setItem('token', token);
 

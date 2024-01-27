@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AchievementsModule.css'; // Замените на фактический файл CSS
 import { useLanguage } from '../../language/Lang';
 import { usePlayer } from '../../../class/Player';
@@ -87,9 +87,16 @@ const AchievementsModule = () => {
   };
   
   const [activeAchievement, setActiveAchievement] = useState(Object.keys(allAchievements)[0]);
+
+  useEffect(() => {
+    const overlay = document.querySelector('.overlay');
+    const achievementModule = overlay.querySelector('.achievements_module')
+    achievementModule?.classList.remove(...['casual', 'defence', 'killer', 'event', 'donate', 'hammer'])
+    achievementModule?.classList.add(activeAchievement);
+  }, [activeAchievement]);
   
   return (
-<div className={`achievements_module default_panel_style dynamic ${player.registered ? '' : 'blocked'}`} achievement={activeAchievement}>
+    <div className={`achievements_module default_panel_style dynamic ${activeAchievement} ${player.registered ? '' : 'blocked'}`} achievement={activeAchievement}>
       <div className="selection_wrapper flex flex-dir-row" tooverlayview="true">
         {Object.keys(allAchievements).map((achKey, index) => (
           <button
@@ -106,7 +113,7 @@ const AchievementsModule = () => {
       </div>
       <div className="relative_panel flex flex-dir-row">
         {Object.keys(allAchievements).map((achKey, index) => {
-          const percentage = [0, 0];
+          let percentage = [0, 0];
           return (
             <React.Fragment key={index}>
               <div
@@ -115,6 +122,10 @@ const AchievementsModule = () => {
               >
                 {allAchievements[achKey].stages.map((stageKey, stageIndex) => {
                   const stage = player.achievements?.[achKey]?.stages[stageKey[0]];
+                  if (stage) {
+                    percentage[0] += stage.percentage || 0;
+                    percentage[1] += 1;
+                  }
                   return (
                     <>
                       <hr className="embed" />
@@ -144,7 +155,13 @@ const AchievementsModule = () => {
                       <p>{lang[`${achKey}_reward`]}</p>
                     </div>
                   </div>
-                  <button onClick={() => setAchievement(achKey)} className="activate">Активировать</button>
+                  {
+                    percentage[0] / percentage[1] >= 100 && (
+                      <button onClick={() => setAchievement(achKey)} className="activate">
+                        Активировать
+                      </button>
+                    )
+                  }
                 </div>
                 <div className="line bottom">
                   <hr width={`${percentage[0] / percentage[1]}%`} />

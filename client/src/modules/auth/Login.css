@@ -124,7 +124,7 @@ a {
   height: 100%;
   cursor: pointer;
 }
-.line {
+.login_block .line {
   height: 1px;
   width: 100%;
   background-color: var(--c-32);

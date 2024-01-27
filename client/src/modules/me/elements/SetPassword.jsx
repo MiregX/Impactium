@@ -21,7 +21,7 @@ const SetPassword = () => {
           ref={passwordField}
           type="password"
           id="passwordField"
-          value={player.password}
+          defaultValue={player.password}
           placeholder={lang.enterNewPassword}
           autoComplete="off"
         />

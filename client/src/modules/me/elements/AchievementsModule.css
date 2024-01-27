@@ -1,3 +1,4 @@
+
 .achievements_module {
   grid-row: 1 / 4;
   grid-column: 2 / 3;
@@ -72,9 +73,9 @@
   image-rendering: pixelated;
 }
 .stages .stage > .text {
+  flex: 1;
   padding: 2px;
   width: -webkit-fill-available;
-  max-width: calc(100% - 32px - 8px - 96px);
   gap: 2px;
   font-size: 14px;
 }

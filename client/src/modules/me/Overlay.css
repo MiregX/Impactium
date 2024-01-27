@@ -1,6 +1,5 @@
 
 .dynamic {
-  --hue: 0;
   --saturation: 82.26%;
   --lightness: 51.37%;
 }
@@ -16,28 +15,22 @@
 .dynamic.setSkin {
   --hue: 350;
 }
-.dynamic.achievements_module[achievement="casual"] {
+.achievements_module.casual {
   --hue: 120;
-  --saturation: 82.26%;
-  --lightness: 51.37%;
 }
-.dynamic.achievements_module[achievement="defence"] {
+.achievements_module.defence {
   --hue: 220;
-  --saturation: 82.26%;
-  --lightness: 51.37%;
 }
-.dynamic.achievements_module[achievement="killer"] {
+.achievements_module.killer {
   --hue: 58;
-  --saturation: 82.26%;
-  --lightness: 51.37%;
 }
-.dynamic.achievements_module[achievement="event"] {
+.achievements_module.event {
   --hue: 290;
 }
-.dynamic.achievements_module[achievement="donate"] {
+.achievements_module.donate {
   --hue: 187;
 }
-.dynamic.achievements_module[achievement="hammer"] {
+.achievements_module.hammer {
   --hue: 359;
 }
 .dynamic {

@@ -220,7 +220,7 @@ class Player {
     if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 403;
     if (!this.skin) this.skin = {}
 
-    const defaultPlayersSkinsFolderPath = "https://api.impactium.fun/PlayersSkins/";
+    const defaultPlayersSkinsFolderPath = "https://cdn.impactium.fun/PlayersSkins/";
     this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
     this.skin.originalTitle = originalImageName;
@@ -912,7 +912,7 @@ class ResoursePackInstance {
 
   async upload() {
     this.ftp.on('ready', () => {
-      this.ftp.put(this.path.file.resoursePackDestination, `/api.impactium.fun/htdocs/Impactium_RP.zip`, async (err) => {
+      this.ftp.put(this.path.file.resoursePackDestination, `/cdn.impactium.fun/htdocs/Impactium_RP.zip`, async (err) => {
         this.ftp.end();
         if (err) console.log(err);
         if (err) return await this.upload();
@@ -1080,10 +1080,19 @@ function log(...args) {
 }
 
 function formatDate(toDate = false, isPrevDay = false) {
-  const date = toDate ? new Date() : new Date(toDate);
+  let date;
 
-  if (isPrevDay)
-    date.setDate(date.getDate() - 1);
+  if (typeof toDate === 'number') {
+    date = new Date(toDate);
+  } else {
+    date = toDate ? new Date(toDate) : new Date();
+  }
+
+  if (isPrevDay) {
+    const prevDay = new Date(date);
+    prevDay.setDate(prevDay.getDate() - 1);
+    date = prevDay;
+  }
 
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -1112,7 +1121,7 @@ function ftpUpload(filePathOnHost) {
   const absoluteFilePath = path.join(__dirname, 'static/images/', filePathOnHost);
 
   ftpClient.on('ready', () => {
-    ftpClient.put(absoluteFilePath, `/api.impactium.fun/htdocs/${filePathOnHost}`, (err) => {
+    ftpClient.put(absoluteFilePath, `/cdn.impactium.fun/htdocs/${filePathOnHost}`, (err) => {
       if (err) {
         console.error('Ошибка при загрузке файла:', err);
       }
