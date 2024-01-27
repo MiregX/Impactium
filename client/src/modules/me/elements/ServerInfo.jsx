@@ -24,7 +24,7 @@ const ServerInfo = () => {
         tooverlayview="true"
       >
         <span className="center">{lang.downloadVoiceChat}</span>
-        <img src="https://api.impactium.fun/ux/mic.svg" alt="Voice Chat" />
+        <img src="https://cdn.impactium.fun/ux/mic.svg" alt="Voice Chat" />
       </div>
 
       <div
@@ -33,7 +33,7 @@ const ServerInfo = () => {
         tooverlayview="true"
       >
         <span className="center">{lang.playerChat}</span>
-        <img src="https://api.impactium.fun/ux/telegram-v1.svg" alt="Telegram" />
+        <img src="https://cdn.impactium.fun/ux/telegram-v1.svg" alt="Telegram" />
       </div>
 
       <div
@@ -43,7 +43,7 @@ const ServerInfo = () => {
         tooverlayview="true"
       >
         <span className="center">{lang.supportOurServer}</span>
-        <img src="https://api.impactium.fun/logo/impactium_v4.svg" alt="Support" />
+        <img src="https://cdn.impactium.fun/logo/impactium_v4.svg" alt="Support" />
       </div>
 
       <div className="default ip change_profile default_button_style" onClick={() => copy('play.impactium.fun')} tooverlayview="true">

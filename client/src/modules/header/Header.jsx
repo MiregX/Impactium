@@ -19,7 +19,7 @@ function Header() {
   return (
     <header className={`${isFlattenHeader ? 'flatten' : ''}`} >
       <Link to='/' className="logo flex flex-dir-row align-center">
-        <img src="https://api.impactium.fun/logo/impactium_v4.svg" alt="Impactium Logo" />
+        <img src="https://cdn.impactium.fun/logo/impactium_v4.svg" alt="Impactium Logo" />
         <p>Impactium</p>
       </Link>
       <Nav />

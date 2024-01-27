@@ -20,7 +20,7 @@ const PlayerCredentials = () => {
         {player.registered && player.skin?.iconLink ? (
           <img src={player.skin.iconLink} alt="Player Icon" />
         ) : (
-          <img src="https://api.impactium.fun/minecraftPlayersSkins/steve_icon.png" alt="Default Icon" />
+          <img src="https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png" alt="Default Icon" />
         )}
 
         {player.registered && player.nickname ? (

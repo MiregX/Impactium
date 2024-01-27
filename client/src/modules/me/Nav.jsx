@@ -12,14 +12,14 @@ const Nav = () => {
         className={selectedButton === 'myProfile' ? 'selected' : ''}
         onClick={() => setSelectedButton('myProfile')}
       >
-        <img src="https://api.impactium.fun/ux/casual.svg" alt="Casual" />
+        <img src="https://cdn.impactium.fun/ux/casual.svg" alt="Casual" />
         <p>{lang.myProfile}</p>
       </button>
       <button
         className={selectedButton === 'buySomeStuff' ? 'selected' : ''}
         onClick={() => setSelectedButton('buySomeStuff')}
       >
-        <img src="https://api.impactium.fun/ux/donate.svg" alt="Donate" />
+        <img src="https://cdn.impactium.fun/ux/donate.svg" alt="Donate" />
         <p>{lang.buySomeStuff}</p>
       </button>
     </nav>

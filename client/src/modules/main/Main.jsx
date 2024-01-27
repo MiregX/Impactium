@@ -77,8 +77,8 @@ const Main = () => {
       </div>
       <div className="right flex-dir-column">
         <div className="background-wrapper">
-          <img className="diamond background" src="https://api.impactium.fun/ui/diamond-full-pattern.svg" alt="Diamond" />
-          <img className="mireg background" src="https://api.impactium.fun/ui/mireg_with_shield.png" alt="Mireg" />
+          <img className="diamond background" src="https://cdn.impactium.fun/ui/diamond-full-pattern.svg" alt="Diamond" />
+          <img className="mireg background" src="https://cdn.impactium.fun/ui/mireg_with_shield.png" alt="Mireg" />
         </div>
         <h2>{lang.playOnOurProject}</h2>
         <ul className="privileges">

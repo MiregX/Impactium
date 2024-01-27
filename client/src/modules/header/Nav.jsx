@@ -25,13 +25,13 @@ export default function Nav() {
     "products": {
       "mcs": {
         "name": "Minecraft Server",
-        "logo": "https://api.impactium.fun/logo/impactium-tw.png",
+        "logo": "https://cdn.impactium.fun/logo/impactium-tw.png",
         "description": "Майнкрафт сервер.",
         "action": "https://impactium.fun/me"
       },
       "discord": {
         "name": "Impactium Bot",
-        "logo": "https://api.impactium.fun/logo/impactium-wb.png",
+        "logo": "https://cdn.impactium.fun/logo/impactium-wb.png",
         "description": "Автороли для альянса.",
         "action": "https://discord.com/oauth2/authorize?client_id=1123714909356687360&scope=bot&permissions=8"
       }
@@ -39,7 +39,7 @@ export default function Nav() {
     "contact": {
       "telegram": {
         "name": "Our Telegram",
-        "logo": "https://api.impactium.fun/logo/impactium-bw.png",
+        "logo": "https://cdn.impactium.fun/logo/impactium-bw.png",
         "description": "Impactium | Кошмаринг",
         "action": "https://t.me/impactium"
       }
@@ -56,7 +56,7 @@ export default function Nav() {
           <div className='category'>
             <button className="flex-dir-row center">
               <p>{lang[category]}</p>
-              <img src="https://api.impactium.fun/ux/to-left.svg" alt="arrow" />
+              <img src="https://cdn.impactium.fun/ux/to-left.svg" alt="arrow" />
               <div className='bar'>
                 {Object.values(nav[category]).map((obj, innerIndex) => (
                   <a key={innerIndex} className="plate flex-dir-row center-v" href={obj.action}>

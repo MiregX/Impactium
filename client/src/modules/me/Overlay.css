@@ -59,7 +59,7 @@
   transition: all 0.3s var(--trans);
 }
 .panel [tooverlayview]::after {
-  content: url("https://api.impactium.fun/ux/loader24p.svg");
+  content: url("https://cdn.impactium.fun/ux/loader24p.svg");
   top: calc(50% - 12px);
   left: calc(50% - 12px);
   animation: rotateAnimation 2s linear infinite;
@@ -89,7 +89,7 @@
   transition: all 0.3s var(--trans);
 }
 .profile [tooverlayview]::after {
-  content: url("https://api.impactium.fun/ux/loader24p.svg");
+  content: url("https://cdn.impactium.fun/ux/loader24p.svg");
   top: calc(50% - 12px);
   left: calc(50% - 12px);
   animation: rotateAnimation 2s linear infinite;

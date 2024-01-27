@@ -209,7 +209,7 @@ header {
   content: "";
   width: 14px;
   height: 14px;
-  background: url(https://api.impactium.fun/ux/donate.svg) no-repeat center center;
+  background: url(https://cdn.impactium.fun/ux/donate.svg) no-repeat center center;
   display: block;
   background-size: cover;
 }

@@ -679,11 +679,8 @@ class ImpactiumServer {
       this.telegramBot.editMessage(this.players.online)
 
     if (message.startsWith('Players:')) {
-      const players = message.substring(9).split(', ');
-      this.players.online.list = players.map(p => p.split(' ')[1]);
-      this.players.online.count = players.length + 10
-      log(this.players.online, 'r')
-      this.telegramBot.editMessage(this.players.online);
+      console.log(message);
+      this.checkOnline(message);
     }
 
     if (message.endsWith('issued server command: /x'))
@@ -707,6 +704,13 @@ class ImpactiumServer {
       await this.connect();
       return await this.restart();
     }
+  }
+
+  checkOnline(message) {
+    const players = message.substring(9).split(', ');
+    this.players.online.list = players.map(p => p.split(' ')[1]);
+    this.players.online.count = players.length;
+    this.telegramBot.editMessage(this.players.online);
   }
   
   async getDatabasePlayers() {

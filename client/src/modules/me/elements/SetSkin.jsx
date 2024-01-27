@@ -15,7 +15,7 @@ const SetSkin = () => {
 
         {isDisabledSkinChange && (
           <>
-            <img src="https://api.impactium.fun/ux/timer.svg" alt="Timer" />
+            <img src="https://cdn.impactium.fun/ux/timer.svg" alt="Timer" />
             <span id="skinTimer" timestamp={player.lastSkinChangeTimestamp}></span>
           </>
         )}
@@ -41,7 +41,7 @@ const SetSkin = () => {
             isDisabledSkinChange ? 'no-pointers greyed' : ''
           }`} tooverlayview="true"
         >
-          <img src="https://api.impactium.fun/ux/uploads.svg" alt="Upload" />
+          <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />
         </label>
       </div>
     </div>

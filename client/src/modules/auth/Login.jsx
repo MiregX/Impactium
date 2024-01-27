@@ -43,7 +43,7 @@ function Login() {
           <label htmlFor="emailOrUsername">{lang.usernameOrEmail}</label>
           <input type="text" id="emailOrUsername" name="emailOrUsername" className="base-button" placeholder="Some username" required />
           <button className="icon center">
-            <img src="https://api.impactium.fun/ux/circle-user.svg" alt="user-icon" />
+            <img src="https://cdn.impactium.fun/ux/circle-user.svg" alt="user-icon" />
           </button>
         </div>
   
@@ -51,8 +51,8 @@ function Login() {
           <label htmlFor="password">{lang.password}</label>
           <input type={passwordVisibility ? `text` : `password`} id="password" name="password" className="base-button" placeholder="Password" required />
           <button className="icon pointer center" onClick={() => { setPasswordVisibility(!passwordVisibility) }}>
-            <img className={passwordVisibility ? `disactive` : ""} src="https://api.impactium.fun/ux/eye-closed.svg" alt="closed-eye" />
-            <img className={!passwordVisibility ? `disactive` : ""} src="https://api.impactium.fun/ux/eye-open.svg" alt="open-eye" />
+            <img className={passwordVisibility ? `disactive` : ""} src="https://cdn.impactium.fun/ux/eye-closed.svg" alt="closed-eye" />
+            <img className={!passwordVisibility ? `disactive` : ""} src="https://cdn.impactium.fun/ux/eye-open.svg" alt="open-eye" />
           </button>
         </div>
         <button className="submit base-button center" onClick={() => { setNextStage(!isNextStage) }}>{lang.login}</button>
@@ -64,13 +64,13 @@ function Login() {
           <p>{lang.continueWithGoogle}</p>
         </a>
         <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className="base-button discord-login">
-          <img src="https://api.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
+          <img src="https://cdn.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
           <p>{lang.continueWithDiscord}</p>
         </a>
       </div>
       <p className="no-account center">{lang.dontHaveAnAccount} <button onClick={() => {setNextStage(!isNextStage)}}>{lang.register}</button></p>
       <div id="stageTwo" ref={stageTwo} className="login_block two flex flex-dir-column align-center justify-center">
-        <img src="https://api.impactium.fun/ux/skull.png" className="skull" alt="skull-icon" />
+        <img src="https://cdn.impactium.fun/ux/skull.png" className="skull" alt="skull-icon" />
         <h2>{lang.nuhuh}</h2>
         <p>{lang.justUseTheseTwo}</p>
         <div className="buttons-wrapper flex flex-dir-row">
@@ -78,11 +78,11 @@ function Login() {
             <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
           </a>
           <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className="base-button discord-login">
-            <img src="https://api.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
+            <img src="https://cdn.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
           </a>
         </div>
         <button className="closeStage center pointer" onClick={() => {setNextStage(!isNextStage)}}>
-          <img src="https://api.impactium.fun/ux/close.svg" alt="close-icon" />
+          <img src="https://cdn.impactium.fun/ux/close.svg" alt="close-icon" />
         </button>
       </div>
       <Outlet previousPage={previousPage} />

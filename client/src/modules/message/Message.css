@@ -47,7 +47,7 @@
   color: #0d5f07;
 }
 #messageWrapper div[type="success"] p::before {
-  content: url("https://api.impactium.fun/ux/circle-check.svg");
+  content: url("https://cdn.impactium.fun/ux/circle-check.svg");
 }
 
 
@@ -59,7 +59,7 @@
   color: #5f5907;
 }
 #messageWrapper div[type="warning"] p::before {
-  content: url("https://api.impactium.fun/ux/circle-minus.svg");
+  content: url("https://cdn.impactium.fun/ux/circle-minus.svg");
 }
 
 
@@ -71,7 +71,7 @@
   color: #5f0707;
 }
 #messageWrapper div[type="attention"] p::before {
-  content: url("https://api.impactium.fun/ux/circle-xmark.svg");
+  content: url("https://cdn.impactium.fun/ux/circle-xmark.svg");
 }
 #messageWrapper div.toHide {
   opacity: 0;

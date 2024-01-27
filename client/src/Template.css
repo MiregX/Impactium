@@ -5,7 +5,7 @@
 }
 body {
   min-height: 100vh;
-  background-image: url(https://api.impactium.fun/backgrounds/topography-21.svg) !important;
+  background-image: url(https://cdn.impactium.fun/backgrounds/topography-21.svg) !important;
   background-color: var(--c-16);
   background-position: top;
   background-size: cover;

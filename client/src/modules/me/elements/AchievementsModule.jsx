@@ -80,7 +80,7 @@ const AchievementsModule = () => {
         ['petition', 1]
       ],
       "reward": {
-        "icon": "https://api.impactium.fun/achievement/thunderBolt.png",
+        "icon": "https://cdn.impactium.fun/achievement/thunderBolt.png",
         "type": "ability"
       }
     }
@@ -97,11 +97,11 @@ const AchievementsModule = () => {
             className={`${achKey} ${achKey === activeAchievement ? 'selected' : ''}`}
             onClick={() => setActiveAchievement(achKey)}
           >
-            <img src={`https://api.impactium.fun/ux/${achKey}.svg`} alt={achKey} />
+            <img src={`https://cdn.impactium.fun/ux/${achKey}.svg`} alt={achKey} />
           </button>
         ))}
         <div className="align-center justify-end loader" style={{ flex: 1 }}>
-          <img src="https://api.impactium.fun/ux/loader24p.svg" alt="Loader" />
+          <img src="https://cdn.impactium.fun/ux/loader24p.svg" alt="Loader" />
         </div>
       </div>
       <div className="relative_panel flex flex-dir-row">
@@ -119,7 +119,7 @@ const AchievementsModule = () => {
                     <>
                       <hr className="embed" />
                       <div className="flex flex-dir-row align-center stage">
-                        <img src={`https://api.impactium.fun/achievement/${stageKey[0]}.png`} className="icon" alt={stageKey[0]} />
+                        <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} className="icon" alt={stageKey[0]} />
                         <div className="text flex flex-dir-column">
                           <p>{lang[`${stageKey[0]}_todo`].title}</p>
                           <p className="grayed">{lang[`${stageKey[0]}_todo`].description}</p>

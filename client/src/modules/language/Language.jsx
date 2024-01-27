@@ -18,7 +18,7 @@ function Language() {
         {availableLanguages.map((langCode) => (
           <div key={langCode} onClick={() => setLanguage(langCode)}>
             <img
-              src={`https://api.impactium.fun/langs/${langCode}.png`}
+              src={`https://cdn.impactium.fun/langs/${langCode}.png`}
               alt={`Language ${langCode}`}
               className={langCode === getActiveLanguage() ? 'active' : ''}
             />
@@ -26,7 +26,7 @@ function Language() {
         ))}
       </div>
       <button className="toggler center" id="toggleLanguageChooseButton" onClick={toggleLanguageChoosePanel}>
-        <img src="https://api.impactium.fun/svg/earth-globe.svg" alt="Toggle Language Choose Panel" />
+        <img src="https://cdn.impactium.fun/svg/earth-globe.svg" alt="Toggle Language Choose Panel" />
       </button>
     </div>
   );

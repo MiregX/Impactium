@@ -16,7 +16,7 @@ const SetNickname = () => {
 
         {isDisabledNicknameChange && (
           <>
-            <img src="https://api.impactium.fun/ux/timer.svg" alt="Timer" />
+            <img src="https://cdn.impactium.fun/ux/timer.svg" alt="Timer" />
             <span id="nicknameTimer" timestamp={player.nicknameLastChangeTimestamp}></span>
           </>
         )}

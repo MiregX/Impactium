@@ -80,17 +80,17 @@ table {
   --w: #e8e8e8;
   --trans: cubic-bezier(.21,.29,0,.94);
 
-  --hammer: url("https://api.impactium.fun/ux/hammer.svg");
+  --hammer: url("https://cdn.impactium.fun/ux/hammer.svg");
   --hammer-accent: #F14C50;
-  --casual: url("https://api.impactium.fun/ux/casual.svg");
+  --casual: url("https://cdn.impactium.fun/ux/casual.svg");
   --casual-accent: rgb(163, 255, 163);
-  --defence: url("https://api.impactium.fun/ux/defence.svg");
+  --defence: url("https://cdn.impactium.fun/ux/defence.svg");
   --defence-accent: #417FFD;
-  --killer: url("https://api.impactium.fun/ux/killer.svg");
+  --killer: url("https://cdn.impactium.fun/ux/killer.svg");
   --killer-accent: #F2DE4C;
-  --event: url("https://api.impactium.fun/ux/event.svg");
+  --event: url("https://cdn.impactium.fun/ux/event.svg");
   --event-accent: #E465FD;
-  --donate: url("https://api.impactium.fun/ux/donate.svg");
+  --donate: url("https://cdn.impactium.fun/ux/donate.svg");
   --donate-accent: #72E4F2;
 }
 .gap {
