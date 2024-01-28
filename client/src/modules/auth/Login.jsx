@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Login.css';
 import { useLanguage } from '../language/Lang';
-import { useUser } from '../../class/User';
 import { Outlet } from 'react-router-dom';
 
 function Login() {
@@ -11,13 +10,6 @@ function Login() {
   const stageTwo = useRef(null);
   const password = useRef(null);
   const { lang } = useLanguage();
-  const { token, setToken } = useUser();
-
-  useEffect(() => {
-    if (token) {
-      setToken(false);
-    }
-  }, [setToken]);
 
   useEffect(() => {
     if (document.referrer.startsWith('https://impactium.fun')) {
@@ -41,7 +33,14 @@ function Login() {
       <div className="form grid columns-1 rows-3">
         <div className="input-group">
           <label htmlFor="emailOrUsername">{lang.usernameOrEmail}</label>
-          <input type="text" id="emailOrUsername" name="emailOrUsername" className="base-button" placeholder="Some username" required />
+          <input
+            type="text"
+            id="emailOrUsername"
+            name="emailOrUsername"
+            className="base-button"
+            placeholder="Some username"
+            required
+            autoComplete='new-password' />
           <button className="icon center">
             <img src="https://cdn.impactium.fun/ux/circle-user.svg" alt="user-icon" />
           </button>
@@ -49,7 +48,14 @@ function Login() {
   
         <div className="input-group" ref={password}>
           <label htmlFor="password">{lang.password}</label>
-          <input type={passwordVisibility ? `text` : `password`} id="password" name="password" className="base-button" placeholder="Password" required />
+          <input
+            type={passwordVisibility ? `text` : `password`}
+            id="password"
+            name="password"
+            className="base-button"
+            placeholder="Password"
+            required
+            autoComplete='new-password' />
           <button className="icon pointer center" onClick={() => { setPasswordVisibility(!passwordVisibility) }}>
             <img className={passwordVisibility ? `disactive` : ""} src="https://cdn.impactium.fun/ux/eye-closed.svg" alt="closed-eye" />
             <img className={!passwordVisibility ? `disactive` : ""} src="https://cdn.impactium.fun/ux/eye-open.svg" alt="open-eye" />
@@ -59,7 +65,7 @@ function Login() {
       </div>
       <div className='line'/>
       <div className="buttons-wrapper flex flex-dir-column">
-        <a href="https://impactium.fun/api/oauth2/login/google" className="base-button google-login">
+        <a href="https://impactium.fun/oauth2/login/google" className="base-button google-login">
           <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
           <p>{lang.continueWithGoogle}</p>
         </a>
@@ -74,7 +80,7 @@ function Login() {
         <h2>{lang.nuhuh}</h2>
         <p>{lang.justUseTheseTwo}</p>
         <div className="buttons-wrapper flex flex-dir-row">
-          <a href="https://impactium.fun/api/oauth2/login/google" className="base-button google-login">
+          <a href="https://impactium.fun/oauth2/login/google" className="base-button google-login">
             <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
           </a>
           <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className="base-button discord-login">

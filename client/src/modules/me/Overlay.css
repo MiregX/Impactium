@@ -16,22 +16,22 @@
   --hue: 350;
 }
 .achievements_module.casual {
-  --hue: 120;
+  --hue: 120; --saturation: 100%; --lightness: 82%;
 }
 .achievements_module.defence {
-  --hue: 220;
+  --hue: 220; --saturation: 98%; --lightness: 62%;
 }
 .achievements_module.killer {
-  --hue: 58;
+  --hue: 58; --saturation: 100%; --lightness: 61%;
 }
 .achievements_module.event {
-  --hue: 290;
+  --hue: 290; --saturation: 97%; --lightness: 69%;
 }
 .achievements_module.donate {
-  --hue: 187;
+  --hue: 187; --saturation: 83%; --lightness: 70%;
 }
 .achievements_module.hammer {
-  --hue: 359;
+  --hue: 359; --saturation: 85%; --lightness: 62%;
 }
 .dynamic {
   --hsl: var(--hue), var(--saturation), var(--lightness);

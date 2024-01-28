@@ -608,7 +608,7 @@ class ImpactiumServer {
       folder: {},
       file: {}
     }
-    this.connect = {
+    this.origins = {
       origin: "https://mgr.hosting-minecraft.pro",
       api_key: minecraftServerAPI,
       server_no: "d9aa118c"
@@ -633,7 +633,7 @@ class ImpactiumServer {
   }
 
   launch() {
-    this.server = new pterosocket(this.connect.origin, this.connect.api_key, this.connect.server_no);
+    this.server = new pterosocket(this.origins.origin, this.origins.api_key, this.origins.server_no);
     
     this.server.on("start", async () => {
       log("WS Соединение с панелью управления установлено!", 'y');

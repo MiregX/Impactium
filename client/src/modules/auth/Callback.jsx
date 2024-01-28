@@ -6,23 +6,24 @@ import { useLanguage } from '../language/Lang';
 const Callback = ({ previousPage }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setToken, setIsUserLoaded, referal } = useUser();
+  const { setToken, referal } = useUser();
   const { setLanguage } = useLanguage();
 
   useEffect(() => {
-    setIsUserLoaded(false);
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code');
-    const token = queryParams.get('token');
+    const token = queryParams.get('token') || false;
+    const lang = queryParams.get('token') || false;
 
-    if (token) {
-      setIsUserLoaded(true);
-      setToken(token)
-      return navigate(previousPage || '/');
+    if (!code) {
+      if (token)
+        setToken(token);
+      if (lang)
+        setLanguage(lang);
+      
+      return navigate('/');
     }
-
-    if (!code) return navigate(previousPage || '/');
-
+  
     fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
       method: 'GET'
     })
@@ -30,13 +31,14 @@ const Callback = ({ previousPage }) => {
       .then(result => {
         setToken(result.token);
         setLanguage(result.locale);
-        navigate(previousPage || '/');
-        setIsUserLoaded(true);
+        navigate('/');
       })
       .catch(error => {
-        navigate(previousPage || '/');
+        setToken(false);
+        navigate('/');
       });
-  }, [setIsUserLoaded]);
+  }, []);
+  
 
   return null;
 };

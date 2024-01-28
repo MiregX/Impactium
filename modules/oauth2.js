@@ -41,24 +41,17 @@ router.get('/login/google', passport.authenticate('google'));
 router.get('/callback/google', (request, response, next) => {
   passport.authenticate('google', (err, user, info) => {
     if (err) {
-      request.session.error_description = "Нам не удалось прочитать ваш ключ. Try again."
-      return next(err);
+      return response.sendStatus(500);
     }
 
     try {
-      userAuthentication({data: user._json, from: "discord", referal: request.cookies.referal}).then(authResult => {
-        response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-        response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-        response.status(200).send(authResult);
+      userAuthentication({data: user._json, from: "google", referal: request.query.referal}).then(authResult => {
+        return response.redirect(`https://impactium.fun/login/callback?token=${authResult.token}&lang=${authResult.lang}`);
       });
     } catch (error) {
-      next(error);
+      return response.redirect('/');
     }
   })(request, response, next);
-});
-
-router.get('/login/discord', (request, response) => {
-  response.redirect('https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&redirect_uri=https%3A%2F%2Fimpactium.fun%2Foauth2%2Fcallback%2Fdiscord&response_type=code&scope=identify%20email');
 });
 
 router.get('/callback/discord', (request, response) => {
@@ -79,19 +72,17 @@ router.get('/callback/discord', (request, response) => {
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
           userAuthentication({data: data.body, from: "discord", referal: request.query.referal}).then(authResult => {
-            response.cookie('token', authResult.token, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-            response.cookie('lang', authResult.lang, { domain: '.impactium.fun', secure: true, maxAge: 31536000000 });
-            response.send(authResult);
+            return response.status(200).send(authResult);
           });
         })
         .catch((error) => {
           console.log(error);
-          response.redirect('/');
+          return response.sendStatus(500);
         });
     })
     .catch((error) => {
       console.log(error);
-      response.redirect('/');
+      return response.sendStatus(500);
     });
 });
 
@@ -123,13 +114,9 @@ async function userAuthentication(p) {
       });
     }
     
-    let avatar = undefined;
-
-    if (userPayload.picture) {
-      avatar = userPayload.picture
-    } else if (userPayload.avatar) {
-      avatar = `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`
-    }
+    const avatar = userPayload.picture
+      ? userPayload.picture
+      : `https://cdn.discordapp.com/avatars/${userPayload.id}/${userPayload.avatar}.png`;
 
     const userToSave = {
       lastLogin: loginSource,
@@ -140,7 +127,7 @@ async function userAuthentication(p) {
       id: userPayload.sub || userPayload.id,
       email: userPayload.email || undefined,
       avatar: avatar,
-      displayName: userPayload.name || userPayload.global_name.replace(/'/g, '`') || undefined,
+      displayName: userPayload.name || userPayload.global_name?.replace(/'/g, '`') || undefined,
       locale: userPayload.locale.split('-')[0] || "en"
     }
 

@@ -71,7 +71,7 @@ export const PlayerProvider = ({ children }) => {
   const playerAPI = async ({ path, headers }) => {
     if (!token)
       return;
-    
+
     try {
       const method = path.startsWith('get')
         ? 'GET'
@@ -100,14 +100,14 @@ export const PlayerProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if ((!user && isUserLoaded) || !user.id) {
+    if (!user || !user.id) {
       setPlayer({});
       setIsPlayerLoaded(true);
       return
     }
 
     getPlayer();
-  }, [user, isUserLoaded]);
+  }, [user, ]);
   
   return (
     <PlayerContext.Provider value={{ player, getPlayer, setPlayer, isPlayerLoaded, setNickname, setPassword, setSkin, register, setAchievement }}>

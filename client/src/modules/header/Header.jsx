@@ -9,7 +9,7 @@ import Nav from './Nav'
 function Header() {
   const { isFlattenHeader } = useHeaderContext();
   const { lang } = useLanguage();
-  const { user, setToken } = useUser();
+  const { user, logout } = useUser();
 
   useEffect(() => {
     const logo = document.querySelector('.logo');
@@ -32,7 +32,7 @@ function Header() {
               <p className="balance">{user.balance || 0}</p>
             </div>
           </Link>
-          <button id="logout" onClick={() => {setToken()}} className="temp-button">
+          <button id="logout" onClick={() => logout()} className="temp-button">
             <div className="circle">
               <svg id="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                 <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

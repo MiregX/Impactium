@@ -112,64 +112,60 @@ const AchievementsModule = () => {
         </div>
       </div>
       <div className="relative_panel flex flex-dir-row">
-        {Object.keys(allAchievements).map((achKey, index) => {
-          let percentage = [0, 0];
-          return (
-            <React.Fragment key={index}>
-              <div
-                key={index}
-                className={`${achKey} stages ${achKey === activeAchievement ? 'selected' : ''}`}
-              >
-                {allAchievements[achKey].stages.map((stageKey, stageIndex) => {
-                  const stage = player.achievements?.[achKey]?.stages[stageKey[0]];
-                  if (stage) {
-                    percentage[0] += stage.percentage || 0;
-                    percentage[1] += 1;
-                  }
-                  return (
-                    <>
-                      <hr className="embed" />
-                      <div className="flex flex-dir-row align-center stage">
-                        <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} className="icon" alt={stageKey[0]} />
-                        <div className="text flex flex-dir-column">
-                          <p>{lang[`${stageKey[0]}_todo`].title}</p>
-                          <p className="grayed">{lang[`${stageKey[0]}_todo`].description}</p>
-                        </div>
-                        <div className="counter flex flex-dir-column">
-                          <span>{stage ? (stage.isDone ? stage.limit : stage.score) : 0} / {stage ? stage.limit : stageKey[1]}</span>
-                          <div className='line top'>
-                            <hr style={{ width: stage ? `${stage.percentage}%` : '0%' }} />
-                          </div>
-                        </div>
+      {Object.keys(allAchievements).map((achKey, index) => {
+        let percentage = [0, 0];
+        return (
+          <div
+            key={index}
+            className={`${achKey} stages ${achKey === activeAchievement ? 'selected' : ''}`}
+          >
+            {allAchievements[achKey].stages.map((stageKey, stageIndex) => {
+              const stage = player.achievements?.[achKey]?.stages[stageKey[0]];
+              if (stage) {
+                percentage[0] += stage.percentage || 0;
+                percentage[1] += 1;
+              }
+              return (
+                <div key={stageIndex}>
+                  <hr className="embed" />
+                  <div className="flex flex-dir-row align-center stage">
+                    <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} className="icon" alt={stageKey[0]} />
+                    <div className="text flex flex-dir-column">
+                      <p>{lang[`${stageKey[0]}_todo`].title}</p>
+                      <p className="grayed">{lang[`${stageKey[0]}_todo`].description}</p>
+                    </div>
+                    <div className="counter flex flex-dir-column">
+                      <span>{stage ? (stage.isDone ? stage.limit : stage.score) : 0} / {stage ? stage.limit : stageKey[1]}</span>
+                      <div className='line top'>
+                        <hr style={{ width: stage ? `${stage.percentage}%` : '0%' }} />
                       </div>
-                    </>
-                  );
-                })}
-                <div className="reward flex flex-dir-row">
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <p className="title">
-                      {lang.reward}: <span>{lang[allAchievements[achKey].reward.type]}</span>
-                    </p>
-                    <div className="flex flex-dir-row align-center claim">
-                      <img src={allAchievements[achKey].reward.icon} alt="Reward Icon" />
-                      <p>{lang[`${achKey}_reward`]}</p>
                     </div>
                   </div>
-                  {
-                    percentage[0] / percentage[1] >= 100 && (
-                      <button onClick={() => setAchievement(achKey)} className="activate">
-                        Активировать
-                      </button>
-                    )
-                  }
                 </div>
-                <div className="line bottom">
-                  <hr width={`${percentage[0] / percentage[1]}%`} />
+              );
+            })}
+            <div className="reward flex flex-dir-row" key={`reward-${index}`}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <p className="title">
+                  {lang.reward}: <span>{lang[allAchievements[achKey].reward.type]}</span>
+                </p>
+                <div className="flex flex-dir-row align-center claim" key={`claim-${index}`}>
+                  <img src={allAchievements[achKey].reward.icon} alt="Reward Icon" />
+                  <p>{lang[`${achKey}_reward`]}</p>
                 </div>
               </div>
-            </React.Fragment>
-          );
-        })}
+              {percentage[0] / percentage[1] >= 100 && (
+                <button onClick={() => setAchievement(achKey)} className="activate" key={`button-${index}`}>
+                  Активировать
+                </button>
+              )}
+            </div>
+            <div className="line bottom" key={`line-${index}`}>
+              <hr width={`${percentage[0] / percentage[1]}%`} />
+            </div>
+          </div>
+        );
+      })}
       </div>
     </div>
   );

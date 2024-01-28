@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, memo, useContext } from 'react';
+import React, { lazy, Suspense, memo } from 'react';
 import './Template.css'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Preloader from './modules/preloader/Preloader';
@@ -15,7 +15,7 @@ const Login = lazy(() => import('./modules/auth/Login').then(module => ({ defaul
 const Callback = lazy(() => import('./modules/auth/Callback').then(module => ({ default: memo(module.default) })));
 
 function Template() {
-  const { user } = useUser();
+  const { token } = useUser();
 
   return (
     <Router>
@@ -25,18 +25,18 @@ function Template() {
         <Header />
         <HeaderBackground />
         <main>
-          <Suspense fallback={null}>
+          <Suspense fallback={<Main />}>
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="login" element={<Login />}>
                 <Route path="callback" element={<Callback />} />
               </Route>
-              {user ? (
-              <Route path="me" element={<Personal />} />
+              { token ? (
+                <Route path="me" element={<Personal />} />
               ) : (
-              <Route element={<Navigate to="/login" />} />
+                <Route path="me" element={<Navigate to="/login" />} />
               )}
-          </Routes>
+            </Routes>
           </Suspense>
         </main>
       </HeaderProvider>

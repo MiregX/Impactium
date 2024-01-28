@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Preloader.css';
 import { useUser } from '../../class/User';
+import { useLocation } from 'react-router-dom';
 
 export default function Preloader() {
-  const { user, isUserLoaded } = useUser();
+  const { user } = useUser();
+  const location = useLocation();
+  const blocker = location.pathname === '/login/callback';
+
   const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
   const self = useRef(null);
 
   const show = useCallback(() => {
+    console.log("ПОКАЗАЛИ ПРЕЛОАДЕР");
     self.current.classList.remove('remove');
     self.current.classList.remove('hide');
     self.current.classList.remove('outter-animation');
@@ -20,6 +25,7 @@ export default function Preloader() {
   }, [self]);
 
   const hide = () => {
+    console.log("СКРЫЛИ ПРЕЛОАДЕР");
     if (visitedBefore) document.querySelector('header .logo').style.opacity = 1;
     setTimeout(() => {
       self.current.classList.add('hide');
@@ -30,13 +36,14 @@ export default function Preloader() {
   };
 
   useEffect(() => {
+    console.log(blocker)
     setVisitedBefore(true);
-    if (user && isUserLoaded) {
+    if (user && !blocker) {
       hide();
     } else {
-      show()
+      show();
     }
-  }, [user, visitedBefore, isUserLoaded]);
+  }, [user, blocker]);
   
   useEffect(() => {
     localStorage.setItem("visitedBefore", visitedBefore.toString());
