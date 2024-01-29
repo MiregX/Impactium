@@ -8,7 +8,7 @@ export default function Preloader() {
   const location = useLocation();
   const blocker = location.pathname === '/login/callback';
 
-  const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") === "true");
+  const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") || false);
   const self = useRef(null);
 
   const show = useCallback(() => {
@@ -28,14 +28,13 @@ export default function Preloader() {
     setTimeout(() => {
       self.current.classList.add('hide');
       setTimeout(() => {
+        setVisitedBefore(true);
         self.current.classList.add('remove');
       }, 200);
     }, 300);
   }, [self, visitedBefore]);
 
   useEffect(() => {
-    console.log(blocker)
-    setVisitedBefore(true);
     if (user && !blocker) {
       hide();
     } else {
@@ -44,7 +43,10 @@ export default function Preloader() {
   }, [user, blocker, hide, show]);
   
   useEffect(() => {
-    localStorage.setItem("visitedBefore", visitedBefore.toString());
+    if (visitedBefore)
+      localStorage.setItem("visitedBefore", visitedBefore);
+    else
+      localStorage.removeItem("visitedBefore");
   }, [visitedBefore]);
 
   return (
