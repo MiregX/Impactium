@@ -72,7 +72,7 @@ router.get('/callback/discord', (request, response) => {
       unirest.get("https://discordapp.com/api/users/@me")
         .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
         .then((data) => {
-          userAuthentication({data: data.body, from: "discord", referal: request.query.referal}).then(authResult => {
+          userAuthentication({data: data.body, from: "discord", referal: request.query.ref}).then(authResult => {
             return response.status(200).send(authResult);
           });
         })

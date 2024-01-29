@@ -6,14 +6,15 @@ import { useLanguage } from '../language/Lang';
 const Callback = ({ previousPage }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setToken, referal } = useUser();
+  const referal = localStorage.getItem('ref');
+  const { setToken } = useUser();
   const { setLanguage } = useLanguage();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code');
     const token = queryParams.get('token') || false;
-    const lang = queryParams.get('token') || false;
+    const lang = queryParams.get('lang') || false;
 
     if (!code) {
       if (token)
