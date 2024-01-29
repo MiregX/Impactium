@@ -161,7 +161,7 @@ const AchievementsModule = () => {
               )}
             </div>
             <div className="line bottom" key={`line-${index}`}>
-              <hr width={`${percentage[0] / percentage[1]}%`} />
+              <hr width={`${percentage[1] !== 0 ? (percentage[0] / percentage[1]) : 0}%`} />
             </div>
           </div>
         );

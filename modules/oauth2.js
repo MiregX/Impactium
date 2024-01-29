@@ -28,6 +28,7 @@ passport.use(new GoogleStrategy({
   try {
     done(null, profile)
   } catch (error) {
+    console.log(error);
     done(error)
   }
 }));

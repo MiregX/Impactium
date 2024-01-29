@@ -35,8 +35,8 @@ header > div > svg {
   align-items: center;
   color: var(--w);
   font-weight: 500;
-  max-width: 128px;
-  width: 128px;
+  max-width: 256px;
+  min-width: 128px;
   height: 48px;
   padding: 6px;
   border-radius: 17px;
@@ -62,7 +62,7 @@ header > div > svg {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: calc(128px - 32px - 16px - 12px);
+  max-width: calc(256px - 32px - 16px - 12px);
 }
 header .logo {
   height: 48px;

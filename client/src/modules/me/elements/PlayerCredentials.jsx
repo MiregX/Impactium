@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './PlayerCredentials.css'; // Replace with your actual CSS file
 import { useLanguage } from '../../language/Lang'
 import { usePlayer } from '../../../class/Player';

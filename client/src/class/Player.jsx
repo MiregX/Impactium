@@ -8,7 +8,7 @@ const PlayerContext = createContext();
 export const usePlayer = () => useContext(PlayerContext);
 
 export const PlayerProvider = ({ children }) => {
-  const { user, isUserLoaded, token } = useUser();
+  const { user, token } = useUser();
   const { newMessage } = useMessage();
   const { lang } = useLanguage();
   const [player, setPlayer] = useState(false);

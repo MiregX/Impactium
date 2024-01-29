@@ -15,6 +15,9 @@
 .dynamic.setSkin {
   --hue: 350;
 }
+.dynamic.server_info {
+  --hue: 0; --saturation: 100%; --lightness: 100%;
+}
 .achievements_module.casual {
   --hue: 120; --saturation: 100%; --lightness: 82%;
 }

@@ -15,7 +15,7 @@ const ServerInfo = () => {
     <div className="server_info default_panel_style dynamic">
       <div className="default version change_profile default_button_style" tooverlayview="true">
         <span className="center">{lang.version}</span>
-        <p>1.20.2</p>
+        <p>Fabric 1.20.2</p>
       </div>
 
       <div

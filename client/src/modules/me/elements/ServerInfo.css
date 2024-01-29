@@ -33,3 +33,19 @@
 .server_info .donate {
   justify-content: space-around
 }
+@media (max-width: 767px) {
+  .server_info {
+    flex-direction: column;
+  }
+  .server_info .default {
+    width: -webkit-fill-available !important;
+    flex: 1;
+    justify-content: space-between !important;
+  }
+  .server_info .default span {
+    justify-content: space-between !important;
+  }
+  .server_info .default p {
+    flex: unset;
+  }
+}

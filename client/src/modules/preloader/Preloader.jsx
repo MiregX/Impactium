@@ -12,7 +12,6 @@ export default function Preloader() {
   const self = useRef(null);
 
   const show = useCallback(() => {
-    console.log("ПОКАЗАЛИ ПРЕЛОАДЕР");
     self.current.classList.remove('remove');
     self.current.classList.remove('hide');
     self.current.classList.remove('outter-animation');
@@ -24,8 +23,7 @@ export default function Preloader() {
     }
   }, [self]);
 
-  const hide = () => {
-    console.log("СКРЫЛИ ПРЕЛОАДЕР");
+  const hide = useCallback(() => {
     if (visitedBefore) document.querySelector('header .logo').style.opacity = 1;
     setTimeout(() => {
       self.current.classList.add('hide');
@@ -33,7 +31,7 @@ export default function Preloader() {
         self.current.classList.add('remove');
       }, 200);
     }, 300);
-  };
+  }, [self, visitedBefore]);
 
   useEffect(() => {
     console.log(blocker)
@@ -43,7 +41,7 @@ export default function Preloader() {
     } else {
       show();
     }
-  }, [user, blocker]);
+  }, [user, blocker, hide, show]);
   
   useEffect(() => {
     localStorage.setItem("visitedBefore", visitedBefore.toString());
