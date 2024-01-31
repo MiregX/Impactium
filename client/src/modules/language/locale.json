@@ -960,10 +960,6 @@
     }
   },
   "password": {
-    "uk": "Пароль",
-    "it": "Password",
-    "en": "Password",
-    "ru": "Пароль",
     "200": {
       "uk": "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
       "it": "La tua password è stata modificata con successo. Usa /l <password> per accedere.",

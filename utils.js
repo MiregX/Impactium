@@ -156,7 +156,6 @@ class Player {
   constructor(id) {
     this.id = id;
     this.isFetched = false;
-    this.server = new ImpactiumServer();
   }
 
   get Achievements() {
@@ -208,8 +207,8 @@ class Player {
     this.nicknameLastChangeTimestamp = Date.now()
     this.nickname = newNickname;
     await this.save()
-    this.initAuthMe()
-    return 200
+    const status = await this.initAuthMe();
+    return status;
   }
 
   async setSkin(originalImageName, imageBuffer) {
@@ -235,9 +234,9 @@ class Player {
     if (this.password === newPassword) return 403;
 
     this.password = newPassword;
-    await this.save()
-    this.initAuthMe()
-    return 200
+    await this.save();
+    const status = await this.initAuthMe();
+    return status;
   }
 
   async register() {
@@ -247,11 +246,19 @@ class Player {
     }
   }
 
-  initAuthMe() {
+  async initAuthMe() {
     if (this.nickname && this.password) {
-      this.server.command(`authme register ${this.nickname} ${this.password}`);
-      this.server.command(`authme changepassword ${this.nickname} ${this.password}`);
+      this.server = new ImpactiumServer();
+      const registered = await this.server.command(`authme register ${this.nickname} ${this.password}`);
+      const changed = await this.server.command(`authme changepassword ${this.nickname} ${this.password}`);
       this.server.updateWhitelist();
+      if (registered || changed) {
+        return 200
+      } else {
+        return 500
+      }
+    } else {
+      return 200
     }
   }
 
@@ -624,6 +631,8 @@ class ImpactiumServer {
       stats: [],
     }
 
+    this.messagesWaitlist = [];
+
     this.resourcePack = new ResoursePackInstance(this);
     this.telegramBot = new TelegramBotHandler(this);
     this.telegramBot.connect();
@@ -632,59 +641,75 @@ class ImpactiumServer {
     ImpactiumServer.instance = this;
   }
 
-  launch() {
-    this.server = new pterosocket(this.origins.origin, this.origins.api_key, this.origins.server_no);
-    
-    this.server.on("start", async () => {
-      log("WS Соединение с панелью управления установлено!", 'y');
-      await this.updateWhitelist();
-      await this.fetchStats();
-    })
-    this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
-  }
-
-  async connect() {
+  async launch() {
     try {
+      if (this.server) {
+        this.server?.close();
+      }
+  
+      this.server = new pterosocket(this.origins.origin, this.origins.api_key, this.origins.server_no, false);
       await this.server.connect();
+      
+      this.server.on("start", async () => {
+        log("WS Соединение с панелью управления установлено!", 'y');
+        await this.updateWhitelist();
+        await this.fetchStats();
+      })
+      this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
     } catch (error) {
-      return await this.connect();
+      console.log(error);
+      await this.launch();
     }
   }
 
   async command(command, isQuiet = false) {
     try {
+      if (!this.server.ws) {
+        throw 'Pterosocket lost his WebSocket. Creating new one.'
+      }
       this.server.writeCommand(command);
       if (!isQuiet) log(`[MC] -> ${command}`, 'g');
       return true;
     } catch (error) {
-      await this.connect();
-      return this.command(command, isQuiet);
+      await this.launch();
+      return await this.command(command, isQuiet);
     }
   }
 
   output(message) {
-    if (message.slice(0, 17).includes('WARN') || message.substring(17).startsWith('[Not Secure]'))
-      return
+    const messageHaveWarn = message.slice(0, 17).includes('WARN')
+    const messageHaveError = message.slice(0, 17).includes('ERROR');
+    const messageHaveInfo = !message.slice(0, 17).includes('INFO');
+    if (messageHaveWarn || messageHaveError || messageHaveInfo || message.substring(17).startsWith('[Not Secure]')) {
+      return;
+    }
 
     message = message.substring(17)
 
-    if (message.endsWith('joined the game'))
+    if (message.endsWith('joined the game')) {
       this.players.online.count++;
       this.players.online.list.push(message.split(' ')[0]);
       this.telegramBot.editMessage(this.players.online)
+    }
 
-    if (message.endsWith('left the game'))
+    if (message.endsWith('left the game')) {
       this.players.online.count--;
       this.players.online.list = this.players.online.list.filter(p => p !== message.split(' ')[0]);
-      this.telegramBot.editMessage(this.players.online)
+      this.telegramBot.editMessage(this.players.online);
+    }
 
     if (message.startsWith('Players:')) {
       console.log(message);
       this.checkOnline(message);
     }
 
-    if (message.endsWith('issued server command: /x'))
-      applyAchievementEffect(message.split(" ")[0])
+    if (message.endsWith('issued server command: /x')) {
+      applyAchievementEffect(message.split(" ")[0]);
+    }
+
+    if (message.startsWith('[AuthMe]') && this.messagesWaitlist.includes(message) ) {
+
+    }
   }
 
   async restart() {
@@ -701,7 +726,7 @@ class ImpactiumServer {
         }, 1000);
       }, 60000);
     } catch (error) {
-      await this.connect();
+      await this.launch();
       return await this.restart();
     }
   }

@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, memo, useEffect } from 'react';
-import './Template.css'
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import './Template.css';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Preloader from './modules/preloader/Preloader';
 import Language from './modules/language/Language';
 import Header from './modules/header/Header';
@@ -16,16 +16,14 @@ const Callback = lazy(() => import('./modules/auth/Callback').then(module => ({ 
 
 function Template() {
   const { token } = useUser();
-  
+
   useEffect(() => {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    const queryParams = new URLSearchParams(window.location.search);
     const referal = queryParams.get('ref');
     if (!referal) return
     localStorage.setItem('ref', referal);
     queryParams.delete('ref');
-  });
-
+  }, []);
 
   return (
     <Router>

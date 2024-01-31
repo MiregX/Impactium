@@ -91,7 +91,8 @@ export const PlayerProvider = ({ children }) => {
         throw new Error('Internal server error.')
       }
       if (!path.startsWith('get')) {
-        newMessage(response.status, `${lang[path.split('/').pop()][response.status]}`);
+        console.log(path.split('/').pop());
+        newMessage(response.status, lang[path.split('/').pop()][response.status.toString()]);
       }
     } catch (error) {
       setPlayer({});
