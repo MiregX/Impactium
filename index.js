@@ -44,8 +44,10 @@ if (options.isSuccess) {
   .listen(80, async () => {
     log(`Основной сервер запущен`, 'g');
     try {
-      mcs.launch();
-    } catch (error) { log(error) }
+      await mcs.launch();
+      await mcs.updateWhitelist();
+      await mcs.fetchStats();
+    } catch (error) { console.log(error) }
   })
 } else {
   app.listen(3001, () => { 

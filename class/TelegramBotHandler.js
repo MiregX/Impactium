@@ -19,7 +19,6 @@ class TelegramBotHandler {
     if (!this.connected) {
       try {
         await this.bot.telegram.getMe();
-        utils.log('TelegramBotHandler.connect() --> Success', 'g');
         this.connected = true;
       } catch (error) {
         utils.log('TelegramBotHandler.connect() --> Connection failed. New attempt...', 'r');

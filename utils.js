@@ -76,7 +76,6 @@ class Referal {
   }
 
   async create() {
-    console.log(this.code)
     if (this.code.length <= 8 || this._id)
       return
 
@@ -608,6 +607,7 @@ class Achievements {
 class ImpactiumServer {
   constructor() {
     if (ImpactiumServer.instance) return ImpactiumServer.instance;
+    ImpactiumServer.instance = this;
     
     this.sftp = new SFTP()
 
@@ -633,27 +633,23 @@ class ImpactiumServer {
 
     this.messagesWaitlist = [];
 
-    this.resourcePack = new ResoursePackInstance(this);
+    this.resourcePack = new ResoursePackInstance();
     this.telegramBot = new TelegramBotHandler(this);
     this.telegramBot.connect();
     this.referals = new ReferalFetcher(this);
     
-    ImpactiumServer.instance = this;
   }
 
   async launch() {
     try {
-      if (this.server) {
+      if (this.server?.ws) {
         this.server?.close();
       }
-  
       this.server = new pterosocket(this.origins.origin, this.origins.api_key, this.origins.server_no, false);
       await this.server.connect();
       
-      this.server.on("start", async () => {
+      this.server.on("start", () => {
         log("WS Соединение с панелью управления установлено!", 'y');
-        await this.updateWhitelist();
-        await this.fetchStats();
       })
       this.server.on("console_output", (packet) => { this.output(packet.replace(/\x1b\[\d+m/g, '')) })
     } catch (error) {
@@ -753,17 +749,22 @@ class ImpactiumServer {
     // Использует SFTP для подключения к ноде, и выкачивает файл
     // Результат возвращается масивом обьектов, где есть name и uuid
     // а также присваивается в **this.players.whitelist**
-    await this.sftp.connect();
-    const players = await this.sftp.read('whitelist.json');
-    await this.sftp.close();
-    this.players.whitelist = JSON.parse(players)
-    return this.players.whitelist;
+    try {
+      await this.sftp.connect();
+      const players = await this.sftp.read('whitelist.json');
+      await this.sftp.close();
+      this.players.whitelist = JSON.parse(players);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      return this.players.whitelist;
+    }
   }
 
   async updateWhitelist() {
     // Синхронизирует список игроков MongoBD --> Whitelist
     await this.getDatabasePlayers();
-    await this.getWhitelistPlayers() 
+    await this.getWhitelistPlayers();
     let isChanged = false;
 
     // Цикл для удаления игроков с вайтлиста, если игрок есть в вайтлисте но нет в бд
@@ -781,7 +782,10 @@ class ImpactiumServer {
       isChanged = true
     });
     // Если был добавлен хоть один игрок - перезагружаем вайтлист
-    if (isChanged) this.command('whitelist reload');
+    if (isChanged) {
+      this.command('whitelist reload');
+      await this.getWhitelistPlayers();
+    }
   }
 
   async fetchStats() {
@@ -826,8 +830,8 @@ class ImpactiumServer {
 }
 
 class ResoursePackInstance {
-  constructor(ImpactiumServer) {
-    this.server = ImpactiumServer;
+  constructor() {
+    this.server = new ImpactiumServer();
     this.ftp = new ftp();
     this.path = {
       folder: {},
@@ -835,29 +839,34 @@ class ResoursePackInstance {
     }
     this.path.folder.resoursePack = path.join(__dirname, 'resourse_pack');
     this.path.file.basic = path.join(__dirname, 'static', 'defaultRPIconsSourseFile.json');
-    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'PlayersSkins');
+    this.path.folder.icons = path.join(__dirname, 'static', 'images', 'minecraftPlayersSkins');
     this.path.file.resoursePackDestination = path.join(__dirname, 'static', 'Impactium RP.zip');
     this.path.folder.resoursePackIcons = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'textures', 'font');
     this.path.file.resoursePackJson = path.join(__dirname, 'resourse_pack', 'assets', 'minecraft', 'font', 'default.json');
   }
 
   async process() {
-    await this.putIcons();
-    await this.archive();
-    await this.hashsum();
-    await this.upload();
-    await this.updateServerProperties();
-    await this.setIcons();
-    
-    this.server.restart();
+    try {
+      await this.putIcons();
+      await this.archive();
+      await this.hashsum();
+      await this.upload();
+      await this.updateServerProperties();
+      await this.setIcons();
+      
+      this.server.restart();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async putIcons() {
-    await this.server.getWhitelistPlayers()
+    await this.server.getWhitelistPlayers();
+
     const resultedJson = JSON.parse(fs.readFileSync(this.path.file.basic, 'utf-8'));
 
     await Promise.all(this.server.players.whitelist.map(async (whitelistPlayer, index) => {
-      const player = new Player()
+      const player = new Player();
       await player.fetch(whitelistPlayer.name);
       if (!(player?.skin?.iconLink)) return
 
@@ -876,9 +885,11 @@ class ResoursePackInstance {
           height: 8,
           chars: [JSON.parse(`"${playerCode}"`)]
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }));
-  
+
     fs.writeFileSync(this.path.file.resoursePackJson, JSON.stringify(resultedJson, null, 2), 'utf-8');
   }
 
@@ -925,8 +936,8 @@ class ResoursePackInstance {
       });
 
       stream.on('end', () => {
-        this.hashsum = hash.digest('hex')
-        resolve(this.hashsum);
+        this._hashsum = hash.digest('hex')
+        resolve(this._hashsum);
       });
 
       stream.on('error', (err) => {
@@ -949,19 +960,23 @@ class ResoursePackInstance {
   }
   
   async updateServerProperties() {
-    await this.server.sftp.connect();
+    try {
+      await this.server.sftp.connect();
 
-    const serverProperties = await this.server.sftp.read('server.properties');
-    const lines = serverProperties.split('\n');
+      const serverProperties = await this.server.sftp.read('server.properties');
+      const lines = serverProperties.split('\n');
 
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('resource-pack-sha1=')) {
-        lines[i] = `resource-pack-sha1=${this.hashsum}`;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('resource-pack-sha1=')) {
+          lines[i] = `resource-pack-sha1=${this._hashsum}`;
+        }
       }
-    }
 
-    await this.server.sftp.save('server.properties', lines.join('\n'));
-    await this.server.sftp.close();
+      await this.server.sftp.save('server.properties', lines.join('\n'));
+      await this.server.sftp.close();
+    } catch (error) {
+      console.log(error); 
+    }
   }
 }
 
@@ -1040,14 +1055,6 @@ const mongo = new MongoClient(mongoLogin, {
     deprecationErrors: true,
   }
 });
-
-async function databaseConnect() {
-  try {
-
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 function generateToken(sumbolsLong) {
   return crypto.randomBytes(sumbolsLong).toString('hex');
@@ -1174,7 +1181,6 @@ module.exports = {
   ResoursePackInstance,
   Player,
   ImpactiumServer,
-  databaseConnect,
   generateToken,
   getDatabase,
   formatDate,

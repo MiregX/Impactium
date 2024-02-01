@@ -16,10 +16,16 @@ class SFTP {
   }
 
   async connect() {
-    if (!this.sftp.connected) {
-      try {
-        await this.sftp.connect(JSON.parse(sftpConfig));
-      } catch (error) { return await this.connect() }
+    try {
+      await this.close();
+    } catch (error) {
+      console.log(error)
+    }
+    try {
+      await this.sftp.connect(JSON.parse(sftpConfig));
+    } catch (error) {
+      console.log(error);
+      return await this.connect()
     }
   }
 
