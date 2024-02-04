@@ -825,8 +825,16 @@ class ImpactiumServer {
   }
 
   async applyEffect({nickname, achievement, oldAchievement}) {
-    this.command(`effect clear ${nickname} minecraft:${oldAchievement}`);
-    this.command(`effect give ${nickname} minecraft:${achievement} infinite 1 true`);
+    const achievementsMap = {
+      casual: 'haste',
+      defence: 'resistance',
+      killer: 'strength',
+      event: 'speed',
+      donate: 'speed',
+      hammer: 'speed'
+    }
+    this.command(`effect clear ${nickname} minecraft:${achievementsMap[oldAchievement]}`);
+    this.command(`effect give ${nickname} minecraft:${achievementsMap[achievement]} infinite 1 true`);
   }
 }
 
