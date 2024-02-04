@@ -997,7 +997,7 @@
       "ru": "У тебя и так стоит этот пароль. Не клацай, а то клацну зубами по яйцам"
     }
   },
-  "achievements": {
+  "achievement": {
     "200": {
       "uk": "Нагорода за досягнення активована. Якщо нагороди або еффекту немає - введіть у грі дебаг-команду \"/achievement\"",
       "it": "Achievement reward activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
