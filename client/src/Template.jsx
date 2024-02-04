@@ -42,7 +42,7 @@ function Template() {
               {token ? (
                 <Route path="me/*" element={<Personal />} />
               ) : (
-                <Route path="me" element={<Navigate to="/login" />} />
+                <Route path="me/*" element={<Navigate to="/login" />} />
               )}
             </Routes>
           </Suspense>

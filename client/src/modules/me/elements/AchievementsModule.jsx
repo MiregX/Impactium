@@ -5,7 +5,8 @@ import { usePlayer } from '../../../class/Player';
 
 const AchievementsModule = () => {
   const { lang } = useLanguage();
-  const { player, setAchievement, isPlayerLoaded } = usePlayer();
+  const { player, setAchievement, isPlayerLoaded, getAchievements } = usePlayer();
+  const [isAchievementsFetched, setIsAchievementsFetched] = useState(false);
 
   const allAchievements = {
     "casual": {
@@ -94,6 +95,16 @@ const AchievementsModule = () => {
     achievementModule?.classList.remove(...['casual', 'defence', 'killer', 'event', 'donate', 'hammer'])
     achievementModule?.classList.add(activeAchievement);
   }, [activeAchievement]);
+
+  useEffect(() => {
+    if (player.achievements && Date.now() - player.achievements.processed < 1000 * 60 * 10)
+      return;
+    
+    if (!isAchievementsFetched && player && isPlayerLoaded) {
+      setIsAchievementsFetched(true);
+      getAchievements();
+    }
+  }, [isAchievementsFetched, player])
   
   return (
     <div className={`achievements_module default_panel_style dynamic ${activeAchievement} ${isPlayerLoaded && !player.registered ? 'blocked' : ''}`} achievement={activeAchievement}>

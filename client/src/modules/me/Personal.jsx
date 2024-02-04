@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter as Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './Personal.css';
 import Nav from './Nav';
 import { useHeaderContext } from '../header/HeaderContext';
@@ -35,7 +35,7 @@ const Personal = () => {
         <Route path="account" element={<Profile />} />
 
         {user.isCreator ? (
-          <Route path="terminal" element={<Suspense fallback={null}><Terminal /></Suspense>}/>
+          <Route path="terminal" element={<Suspense fallback={null}><Terminal /></Suspense>} />
         ) : (
           <Route path="terminal" element={<Navigate to="/me/account" />} />
         )}

@@ -275,6 +275,3 @@ main {
     background-position: left;
   }
 }
-.me .change_profile {
-  width: calc(256px - 2em);
-}

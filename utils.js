@@ -380,7 +380,8 @@ class Achievements {
   }
 
   fetch() {
-    const playerStatsFromServer = this.player.server.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
+    const server = new ImpactiumServer();
+    const playerStatsFromServer = server.players.stats?.find(player => player.name.toLowerCase() === this.player.nickname?.toLowerCase())
 
     playerStatsFromServer
       ? this.player.stats = playerStatsFromServer.stats
@@ -388,7 +389,7 @@ class Achievements {
         ? this.player.stats = {}
         : null
 
-    this.player.stats.processed = this.player.server.players.lastStatsFetch
+    this.player.stats.processed = server.players.lastStatsFetch
   }
 
   playedHours() {
@@ -574,10 +575,11 @@ class Achievements {
     if (this.achievements?.[achievement]?.doneStages < 5)
       return 401;
 
-    if (this.achievements.active === achievement)
-      return 402
+    // if (this.achievements.active === achievement)
+    //   return 402
 
-    this.player.server.applyEffect({
+    const server = new ImpactiumServer();
+    server.applyEffect({
       nickname: this.player.nickname,
       achievement: achievement,
       oldAchievement: this.achievements.active

@@ -63,6 +63,11 @@ router.get('/player/get', async (request, response) => {
   response.status(200).send(request.player.send());
 });
 
+router.get('/player/get/achievements', async (request, response) => {
+  await request.player.achievements.process();
+  response.status(200).send(request.player.send());
+});
+
 router.post('/player/register', async (request, response) => {
   const status = await request.player.register();
   response.status(status).send(request.player.send());
@@ -144,10 +149,5 @@ async function saveSkinToLocalStorage(imageBuffer, filePath) {
 
   return fs.promises.writeFile(absolutePath, imageBuffer)
 }
-
-router.get('/player/achievements/get', async (request, response) => {
-  await request.player.achievements.process();
-  response.status(200).send(request.player.send());
-});
 
 module.exports = router;
