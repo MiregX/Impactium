@@ -5,12 +5,12 @@ import { usePlayer } from '../../../class/Player';
 
 const SetNickname = () => {
   const { lang } = useLanguage();
-  const { player, setNickname } = usePlayer();
+  const { player, setNickname, isPlayerLoaded } = usePlayer();
   const nicknameField = useRef(null);
   const isDisabledNicknameChange = Date.now() - player.nicknameLastChangeTimestamp < 60 * 60 * 1000;
 
   return (
-    <div className={`default_panel_style dynamic ${player.registered ? '' : 'blocked'} setNickname`}>
+    <div className={`default_panel_style dynamic ${isPlayerLoaded && !player.registered ? 'blocked' : ''} setNickname`}>
       <div className="flex panel-header align-center">
         <p>{lang.changeNickname}</p>
 
@@ -23,15 +23,17 @@ const SetNickname = () => {
       </div>
 
       <div className="flex panel-footer" style={{ gap: '8px' }}>
-      <input
-        ref={nicknameField}
-        type="text"
-        id="nicknameField"
-        defaultValue={player.nickname}
-        placeholder={lang.enterNickname}
-        className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
-        autoComplete="new-password"
-      />
+        <div className={isPlayerLoaded ? 'w-max': 'player_loader for_input'}>
+          <input
+            ref={nicknameField}
+            type="text"
+            id="nicknameField"
+            defaultValue={player.nickname}
+            placeholder={lang.enterNickname}
+            className={isDisabledNicknameChange ? 'no-pointers grayed' : ''}
+            autoComplete="new-password"
+          />
+        </div>
         <div
           onClick={() => setNickname(nicknameField.current.value)}
           className={`change_profile save-button ${isDisabledNicknameChange ? 'no-pointers grayed' : ''}`}

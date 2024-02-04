@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { usePlayer } from '../../class/Player';
+import React from 'react';
 import PlayerCredentials from './elements/PlayerCredentials'
 import SetNickname from './elements/SetNickname'
 import SetPassword from './elements/SetPassword'
@@ -9,14 +8,6 @@ import ServerInfo from './elements/ServerInfo'
 import Overlay from './Overlay'
 
 const Profile = () => {
-  const { player, getPlayer } = usePlayer();
-
-  useEffect(() => {
-    if (!player) {
-      getPlayer();
-    }
-  }, []);
-
   return (
     <div className='profile'>
       <div className="top_line flex-dir-row liner">

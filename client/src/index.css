@@ -170,6 +170,9 @@ table {
 .w-ful {
   width: 100vw;
 }
+.w-max {
+  width: 100%;
+}
 .h {
   height: 100vh;
 }

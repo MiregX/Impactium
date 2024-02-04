@@ -1,6 +1,10 @@
 const express = require('express');
-const { log, Player, User } = require('../utils');
+const { log, Player, User, ftpUpload } = require('../utils');
 const router = express.Router();
+const Jimp = require('jimp');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 router.get('/status', (request, response) => {
   response.sendStatus(200);
@@ -66,7 +70,7 @@ router.post('/player/register', async (request, response) => {
 
 router.post('/player/set/achievement', async (request, response) => {
   const status = await request.player.achievements.use(request.headers.achievement);
-  response.status(200).send(request.player.send());
+  response.status(status).send(request.player.send());
 });
 
 router.post('/player/set/nickname', async (request, response) => {
@@ -79,9 +83,67 @@ router.post('/player/set/password', async (request, response) => {
   response.status(status).send(request.player.send());
 });
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: (req, file, callback) => {
+    file.mimetype === 'image/png'
+      ? callback(null, true)
+      : callback(new Error('Неверный формат файла. Пожалуйста, загрузите PNG изображение.'));
+  }
+}).single('image');
+
 router.post('/player/set/skin', async (request, response) => {
-  response.status(200).send(request.player.send());
+  try {
+    upload(request, response, async (error) => {
+      if (!request.file || error) return response.status(401).send(request.player.send());
+      try {
+        const status = await request.player.setSkin(request.file.originalname, request.file.buffer);
+        if (status !== 200) return response.status(status).send(request.player.send())
+
+        await saveSkinToLocalStorage(request.file.buffer, `${request.player.id}.png`);
+        await cutSkinToPlayerIcon(request.file.buffer, request.player.id);
+
+        await ftpUpload(`minecraftPlayersSkins/${request.player.id}.png`);
+        await ftpUpload(`minecraftPlayersSkins/${request.player.id}_icon.png`);
+
+
+        response.status(status).send(request.player.send());
+      } catch (error) {
+        console.log(error)
+        response.status(500).send(request.player.send());
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send(request.lang.code_500);
+  }
 });
+
+async function cutSkinToPlayerIcon(imageBuffer, playerId) {
+  try {
+    const image = await Jimp.read(imageBuffer);
+    const skinFaceLayer1 = image.clone().crop(8, 8, 8, 8);
+    const skinFaceLayer2 = image.clone().crop(40, 8, 8, 8);
+
+    skinFaceLayer1.blit(skinFaceLayer2, 0, 0);
+
+    const iconBuffer = await skinFaceLayer1.getBufferAsync(Jimp.MIME_PNG);
+
+    await saveSkinToLocalStorage(iconBuffer, `${playerId}_icon.png`);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function saveSkinToLocalStorage(imageBuffer, filePath) {
+  const absolutePath = path.join(__dirname, '..', 'static', 'images', 'minecraftPlayersSkins', filePath);
+  const dirname = path.dirname(absolutePath);
+
+  if (!fs.existsSync(dirname)) fs.mkdirSync(dirname, { recursive: true });
+
+  return fs.promises.writeFile(absolutePath, imageBuffer)
+}
 
 router.get('/player/achievements/get', async (request, response) => {
   await request.player.achievements.process();

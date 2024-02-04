@@ -5,7 +5,7 @@ import { usePlayer } from '../../../class/Player';
 
 const AchievementsModule = () => {
   const { lang } = useLanguage();
-  const { player, setAchievement } = usePlayer();
+  const { player, setAchievement, isPlayerLoaded } = usePlayer();
 
   const allAchievements = {
     "casual": {
@@ -96,7 +96,7 @@ const AchievementsModule = () => {
   }, [activeAchievement]);
   
   return (
-    <div className={`achievements_module default_panel_style dynamic ${activeAchievement} ${player.registered ? '' : 'blocked'}`} achievement={activeAchievement}>
+    <div className={`achievements_module default_panel_style dynamic ${activeAchievement} ${isPlayerLoaded && !player.registered ? 'blocked' : ''}`} achievement={activeAchievement}>
       <div className="selection_wrapper flex flex-dir-row" tooverlayview="true">
         {Object.keys(allAchievements).map((achKey, index) => (
           <button

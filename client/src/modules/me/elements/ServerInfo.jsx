@@ -36,16 +36,6 @@ const ServerInfo = () => {
         <img src="https://cdn.impactium.fun/ux/telegram-v1.svg" alt="Telegram" />
       </div>
 
-      <div
-        className="default donate change_profile default_button_style"
-        style={{ flex: 1 }}
-        onClick={() => openLinkInNewTab('https://t.me/MiregX')}
-        tooverlayview="true"
-      >
-        <span className="center">{lang.supportOurServer}</span>
-        <img src="https://cdn.impactium.fun/logo/impactium_v4.svg" alt="Support" />
-      </div>
-
       <div className="default ip change_profile default_button_style" onClick={() => copy('play.impactium.fun')} tooverlayview="true">
         <span className="center">IP:</span>
         <p>play.impactium.fun</p>

@@ -6,7 +6,7 @@
   left: 0%;
   position: fixed;
   display: flex;
-  background: linear-gradient(180deg, rgb(22 22 22 / 30%) 0%, rgb(75 75 75 / 5%) 100%);
+  background: linear-gradient(180deg,#161616b0,#2d2d2d3d);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   transition: top 0.3s var(--trans);

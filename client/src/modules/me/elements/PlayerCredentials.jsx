@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './PlayerCredentials.css'; // Replace with your actual CSS file
 import { useLanguage } from '../../language/Lang'
 import { usePlayer } from '../../../class/Player';
@@ -9,29 +9,30 @@ const PlayerCredentials = () => {
   const { lang } = useLanguage();
   const { user } = useUser();
   const { copy } = useMessage();
-  const { player, register } = usePlayer();
+  const { player, register, isPlayerLoaded } = usePlayer();
   const allAchievements = ['casual', 'defence', 'killer', 'event', 'donate', 'hammer'];
+  const [playerSkinIconLink, setPlayerSkinIconLink] = useState(player?.skin?.iconLink || 'https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png');
+
+
+  useEffect(() => {
+    if (isPlayerLoaded && player.skin) {
+      setPlayerSkinIconLink(`${player.skin.iconLink}?timestamp=${Date.now()}`)
+    }
+  }, [player, isPlayerLoaded, setPlayerSkinIconLink]);
 
   return (
     <div className="dynamic default_panel_style me player_credentials">
       <h2 className="header">{lang.myProfile}</h2>
 
-      <p className="player">
-        {player.registered && player.skin?.iconLink ? (
-          <img src={player.skin.iconLink} alt="Player Icon" />
-        ) : (
-          <img src="https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png" alt="Default Icon" />
-        )}
+      <p className={`player ${isPlayerLoaded ? '' : 'player_loader'}`}>
+        <img src={playerSkinIconLink} alt="Player Icon" />
 
         {player.registered && player.nickname ? (
           player.nickname
         ) : (
-          <span>
-            {player.registered
-              ? lang.playerHasNoNickname
-              : lang.playerNotRegisteredYet
-            }
-          </span>
+          player.registered
+            ? lang.playerHasNoNickname
+            : lang.playerNotRegisteredYet
         )}
       </p>
 
@@ -58,7 +59,7 @@ const PlayerCredentials = () => {
         </a>
       ) : (
         <a className="change_profile" onClick={register} tooverlayview="true">
-          {lang.register}
+          {lang._register}
         </a>
       )}
     </div>

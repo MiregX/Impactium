@@ -39,8 +39,8 @@ function Template() {
               <Route path="login" element={<Login />}>
                 <Route path="callback" element={<Callback />} />
               </Route>
-              { token ? (
-                <Route path="me" element={<Personal />} />
+              {token ? (
+                <Route path="me/*" element={<Personal />} />
               ) : (
                 <Route path="me" element={<Navigate to="/login" />} />
               )}

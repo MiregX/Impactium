@@ -156,6 +156,10 @@
   display: flex;
   justify-content: flex-end;
 }
+.overlay .server_info.default_panel_style {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 .overlay .save-button {
   position: relative;
   width: min-content;

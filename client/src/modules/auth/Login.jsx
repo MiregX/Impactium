@@ -47,7 +47,7 @@ function Login() {
         </div>
   
         <div className="input-group" ref={password}>
-          <label htmlFor="password">{lang.password}</label>
+          <label htmlFor="password">{lang.passWord}</label>
           <input
             type={passwordVisibility ? `text` : `password`}
             id="password"
@@ -74,7 +74,7 @@ function Login() {
           <p>{lang.continueWithDiscord}</p>
         </a>
       </div>
-      <p className="no-account center">{lang.dontHaveAnAccount} <button onClick={() => {setNextStage(!isNextStage)}}>{lang.register}</button></p>
+      <p className="no-account center">{lang.dontHaveAnAccount} <button onClick={() => {setNextStage(!isNextStage)}}>{lang._register}</button></p>
       <div id="stageTwo" ref={stageTwo} className="login_block two flex flex-dir-column align-center justify-center">
         <img src="https://cdn.impactium.fun/ux/skull.png" className="skull" alt="skull-icon" />
         <h2>{lang.nuhuh}</h2>

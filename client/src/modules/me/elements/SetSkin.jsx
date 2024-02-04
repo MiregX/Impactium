@@ -4,7 +4,7 @@ import { useLanguage } from '../../language/Lang';
 import './SetSkin.css';
 
 const SetSkin = () => {
-  const { player, setSkin } = usePlayer();
+  const { player, setSkin, isPlayerLoaded } = usePlayer();
   const { lang } = useLanguage();
   const isDisabledSkinChange = Date.now() - player.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000;
 
@@ -17,7 +17,7 @@ const SetSkin = () => {
   };
 
   return (
-    <div className={`default_panel_style dynamic ${player.registered ? '' : 'blocked'} setSkin`}>
+    <div className={`default_panel_style dynamic ${isPlayerLoaded && !player.registered ? 'blocked' : ''} setSkin`}>
       <div className="flex panel-header align-center">
         <p>{lang.changeSkin}</p>
 
@@ -34,7 +34,7 @@ const SetSkin = () => {
       <div className="flex panel-footer" style={{ gap: '8px' }}>
         {/* Current skin name */}
         <p
-          className={`default_button_style ${
+          className={`default_button_style ${isPlayerLoaded ? 'w-max' : 'player_loader for_input'} ${
             isDisabledSkinChange || !player.skin?.originalTitle ? 'grayed' : ''
           }`}
           id="skinName"

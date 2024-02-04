@@ -4,8 +4,10 @@ const locale = require('./locale.json');
 
 function getLanguagePack(languagePack = 'en') {
   const translations = {};
-  if (!languagePack) languagePack = 'en';
-  if (!['en', 'uk', 'ru', 'it'].includes(languagePack)) languagePack = 'en';
+  const isLanguagePackValid = ['en', 'uk', 'ru', 'it'].includes(languagePack);
+
+  if (!languagePack || !isLanguagePackValid)
+    languagePack = 'en';
 
   for (const key in locale) {
     const prop = locale[key];
@@ -26,7 +28,6 @@ function getLanguagePack(languagePack = 'en') {
       translations[key] = nestedTranslations;
     }
   }
-
   return translations;
 }
 

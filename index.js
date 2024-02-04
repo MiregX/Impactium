@@ -5,7 +5,7 @@ const https = require('https');
 const express = require('express');
 const session = require('express-session');
 const { schedule } = require('node-cron');
-const { getLicense, log, ImpactiumServer } = require('./utils');
+const { getLicense, log, ImpactiumServer, User } = require('./utils');
 
 const app = express();
 
@@ -33,6 +33,23 @@ app.get('/', (req, res) => {
 
 app.use('/api', require('./modules/api'));
 app.use('/oauth2', require('./modules/oauth2'));
+app.use('/me/terminal', async (request, response, next) => {
+  if (!request.headers.token)
+    return response.redirect('/');
+
+  try {
+    request.user = new User(request.headers.token);
+    await request.user.fetch();
+
+    if (!request.user._id || !request.user.isCreator)
+      return response.redirect('/');
+
+    next();
+  } catch (error) {
+    console.log(error);
+    return response.redirect('/');
+  }
+});
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
@@ -52,8 +69,7 @@ if (options.isSuccess) {
 } else {
   app.listen(3001, () => { 
     log(`Тестовый сервер запущен`);
-  })
-
+  });
 }
 
 schedule('0 */6 * * *', async () => {

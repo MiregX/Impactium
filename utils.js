@@ -215,14 +215,12 @@ class Player {
     const { width, height } = image.bitmap;
 
     if (width !== 64 || height !== 64) return 402;
-    if (Date.now() - this.lastSkinChangeTimestamp < 24 * 60 * 60 * 1000) return 403;
     if (!this.skin) this.skin = {}
 
-    const defaultPlayersSkinsFolderPath = "https://cdn.impactium.fun/PlayersSkins/";
+    const defaultPlayersSkinsFolderPath = "https://cdn.impactium.fun/minecraftPlayersSkins/";
     this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
     this.skin.originalTitle = originalImageName;
-    this.lastSkinChangeTimestamp = Date.now();
     await this.save();
     return 200
   }
@@ -242,15 +240,18 @@ class Player {
     if (!this.registered) {
       this.registered = Date.now(); 
       await this.save();
+      return 200
+    } else {
+      return 403
     }
   }
 
   async initAuthMe() {
     if (this.nickname && this.password) {
-      this.server = new ImpactiumServer();
-      const registered = await this.server.command(`authme register ${this.nickname} ${this.password}`);
-      const changed = await this.server.command(`authme changepassword ${this.nickname} ${this.password}`);
-      this.server.updateWhitelist();
+      const server = new ImpactiumServer();
+      const registered = await server.command(`authme register ${this.nickname} ${this.password}`);
+      const changed = await server.command(`authme changepassword ${this.nickname} ${this.password}`);
+      server.updateWhitelist();
       if (registered || changed) {
         return 200
       } else {
@@ -1142,26 +1143,43 @@ function formatDate(toDate = false, isPrevDay = false) {
   };
 }
 
-function ftpUpload(filePathOnHost) {
-  const ftpClient = new ftp();
-  const ftpConfig = {
-    host: 'ftpupload.net',
-    user: 'b12_33593520',
-    password: 'requestUserPassword'
-  };
+async function ftpUpload(filePathOnHost) {
+  return new Promise((resolve, reject) => {
+    const ftpClient = new ftp();
+    const ftpConfig = {
+      host: 'ftpupload.net',
+      user: 'b12_33593520',
+      password: 'requestUserPassword'
+    };
 
-  const absoluteFilePath = path.join(__dirname, 'static/images/', filePathOnHost);
+    const absoluteFilePath = path.join(__dirname, 'static/images/', filePathOnHost);
 
-  ftpClient.on('ready', () => {
+    ftpClient.on('ready', async () => {
+      try {
+        await putFile(ftpClient, absoluteFilePath, filePathOnHost);
+        ftpClient.end();
+        resolve();
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        ftpClient.end();
+        reject(error);
+      }
+    });
+
+    ftpClient.connect(ftpConfig);
+  });
+}
+
+async function putFile(ftpClient, absoluteFilePath, filePathOnHost) {
+  return new Promise((resolve, reject) => {
     ftpClient.put(absoluteFilePath, `/cdn.impactium.fun/htdocs/${filePathOnHost}`, (err) => {
       if (err) {
-        console.error('Ошибка при загрузке файла:', err);
+        reject(err);
+      } else {
+        resolve();
       }
-      ftpClient.end();
     });
   });
-
-  ftpClient.connect(ftpConfig);
 }
 
 function getLicense() {

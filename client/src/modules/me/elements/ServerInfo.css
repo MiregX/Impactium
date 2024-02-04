@@ -3,6 +3,7 @@
   width: 100%;
   flex-direction: row;
   gap: 1em;
+  flex-wrap: wrap;
 }
 .server_info .default {
   width: fit-content !important;
@@ -29,9 +30,6 @@
 }
 .server_info .version {
   cursor: default;
-}
-.server_info .donate {
-  justify-content: space-around
 }
 @media (max-width: 767px) {
   .server_info {
