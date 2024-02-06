@@ -58,6 +58,7 @@ const playerMiddleware = async (request, response, next) => {
 };
 
 router.use('/player', playerMiddleware);
+router.use('/admin', require('./api/admin'));
 
 router.get('/player/get', async (request, response) => {
   response.status(200).send(request.player.send());

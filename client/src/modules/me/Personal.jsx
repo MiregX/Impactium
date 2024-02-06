@@ -37,7 +37,7 @@ const Personal = () => {
         {user.isCreator ? (
           <Route path="terminal" element={<Suspense fallback={null}><Terminal /></Suspense>} />
         ) : (
-          <Route path="terminal" element={<Navigate to="/me/account" />} />
+          <Route path="terminal" element={<Navigate to="/me/terminal" />} />
         )}
       </Routes>
     </div>

@@ -35,7 +35,7 @@ export const MessageProvider = ({ children }) => {
   const copy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      newMessage(200, `${text} "${lang.copiedMessage}"`);
+      newMessage(200, `${text} ${lang.copiedMessage}`);
     } catch (err) {
       newMessage(500, 'Error copying to clipboard');
     }

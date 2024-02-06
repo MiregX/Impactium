@@ -1,0 +1,9 @@
+.terminal {
+  display: flex;
+}
+
+.terminal .info {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}

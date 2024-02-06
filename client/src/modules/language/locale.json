@@ -35,6 +35,78 @@
     "en": "Nuh uh...",
     "ru": "Кринжовичёк..."
   },
+  "hours": {
+    "uk": "годин",
+    "it": "ore",
+    "en": "hours",
+    "ru": "часов"
+  },
+  "hour": {
+    "uk": "година",
+    "it": "ora",
+    "en": "hour",
+    "ru": "час"
+  },
+  "now": {
+    "uk": "зараз",
+    "it": "adesso",
+    "en": "now",
+    "ru": "сейчас"
+  },
+  "ago": {
+    "uk": "тому",
+    "it": "fa",
+    "en": "ago",
+    "ru": "назад"
+  },
+  "minutes": {
+    "uk": "хвилин",
+    "it": "minuti",
+    "en": "minutes",
+    "ru": "минут"
+  },
+  "minute": {
+    "uk": "хвилина",
+    "it": "minuto",
+    "en": "minute",
+    "ru": "минута"
+  },
+  "minutes_1": {
+    "uk": "хвилина",
+    "it": "minuto",
+    "en": "minute",
+    "ru": "минута"
+  },
+  "minutes_2_4": {
+    "uk": "хвилини",
+    "it": "minuti",
+    "en": "minutes",
+    "ru": "минуты"
+  },
+  "minutes_5": {
+    "uk": "хвилин",
+    "it": "minuti",
+    "en": "minutes",
+    "ru": "минут"
+  },
+  "hours_1": {
+    "uk": "година",
+    "it": "ora",
+    "en": "hour",
+    "ru": "час"
+  },
+  "hours_2_4": {
+    "uk": "години",
+    "it": "ore",
+    "en": "hours",
+    "ru": "часа"
+  },
+  "hours_5": {
+    "uk": "годин",
+    "it": "ore",
+    "en": "hours",
+    "ru": "часов"
+  },
   "dontHaveAnAccount": {
     "uk": "Не маєте облікового запису?",
     "it": "Non hai un account?",
@@ -418,6 +490,41 @@
     "it": "Mio link di referral",
     "en": "My referral link",
     "ru": "Моя реферальная ссылка"
+  },      "lastSkinFetch": {
+    "uk": "Ресурс-пак оновлено",
+    "it": "Ultimo aggiornamento pack",
+    "en": "Resource pack updated",
+    "ru": "Ресурс-пак обновлен"
+  },
+  "lastStatFetch": {
+    "uk": "Статистику оновлено",
+    "it": "Ultimo aggiornamento statistiche",
+    "en": "Statistics updated",
+    "ru": "Статистика обновлена"
+  },
+  "referalsAmount": {
+    "uk": "Кількість рефералів",
+    "it": "Numero di referral",
+    "en": "Referrals amount",
+    "ru": "Количество рефералов"
+  },
+  "mcsWsConnection": {
+    "uk": "З'єднання з терміналом",
+    "it": "Connessione a terminal",
+    "en": "Terminal connection",
+    "ru": "Соединение с терминалом"
+  },
+  "verifyUser": {
+    "uk": "Верифікувати користувача",
+    "it": "Verifica utente",
+    "en": "Verify user",
+    "ru": "Верификация пользователя"
+  },
+  "changeUserBalance": {
+    "uk": "Змінити баланс користувача",
+    "it": "Cambia saldo utente",
+    "en": "Change user balance",
+    "ru": "Изменить баланс пользователя"
   },
   "achievmentTitle_casual": {
       "uk": "Казуальність",

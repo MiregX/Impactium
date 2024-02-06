@@ -1,0 +1,57 @@
+.terminalPanel {
+    background-color: var(--c-24);
+    display: flex;
+    height: fit-content;
+    padding: 0.75em 1em;
+    border-radius: 16px;
+    height: 66px;
+    gap: 0.75em;
+}
+
+.terminalPanel > img {
+  height: 42px;
+  width: 42px;
+  padding: 4px;
+  border-radius: 8px;
+  filter: invert(100);
+  background-color: var(--c-96);
+}
+
+.terminalPanel > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+  flex: 1;
+}
+.terminalPanel > div > h6 {
+  font-size: 14px;
+  height: 14px;
+}
+.terminalPanel .bottomLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.terminalPanel .bottomLine p {
+  color: var(--c-48);
+  flex: 1;
+  font-size: 18px;
+  height: 18px;
+}
+.terminalPanel .bottomLine button {
+  background-color: var(--c-16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  width: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.terminalPanel .bottomLine button img {
+  pointer-events: none;
+  height: 16px;
+  width: 16px;
+}
