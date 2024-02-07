@@ -25,7 +25,12 @@ function Header() {
       <Nav />
       {user && user.id ? (
         <div className="user-onlogin">
-          <Link to="/me" className="user flex">
+          {user.isVerified ? (
+            <div className="verified">
+              <img src="https://cdn.impactium.fun/ux/verified.svg" />
+            </div>
+          ) : null}
+          <Link to="/me/account" className="user flex">
             {user.avatar && <img src={user.avatar} className="avatar" alt="User Avatar" />}
             <div>
               <p className="button-text">{user.displayName}</p>

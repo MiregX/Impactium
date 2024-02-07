@@ -1,7 +1,8 @@
 .terminalPanel {
-    background-color: var(--c-24);
+    background-color: #2b2b2b;
     display: flex;
     height: fit-content;
+    border: 1px solid #eceff133;
     padding: 0.75em 1em;
     border-radius: 16px;
     height: 66px;
@@ -9,12 +10,11 @@
 }
 
 .terminalPanel > img {
-  height: 42px;
-  width: 42px;
-  padding: 4px;
+  height: 40px;
+  width: 40px;
+  padding: 6px;
   border-radius: 8px;
-  filter: invert(100);
-  background-color: var(--c-96);
+  background-color: var(--c-48);
 }
 
 .terminalPanel > div {
@@ -35,19 +35,25 @@
   gap: 8px;
 }
 .terminalPanel .bottomLine p {
-  color: var(--c-48);
+  color: var(--w);
   flex: 1;
-  font-size: 18px;
-  height: 18px;
+  font-size: 12px;
+}
+.terminalPanel .bottomLine input {
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  flex: 1 1;
+  background-color: var(--c-0d);
 }
 .terminalPanel .bottomLine button {
-  background-color: var(--c-16);
+  background-color: var(--c-0d);
   display: flex;
   align-items: center;
   justify-content: center;
   height: 22px;
   width: 32px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
 }
 .terminalPanel .bottomLine button img {

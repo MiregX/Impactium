@@ -180,16 +180,16 @@ header {
 .plate:hover {
   background: var(--c-32);
 }
-.verified {
-  height: 33px;
-  width: 33px;
+.user-onlogin .verified {
+  height: 32px;
+  padding: 4px;
+  width: 32px;
   border-radius: 11px;
   background-color: var(--c-32);
   cursor: pointer;
 }
-.verified .icon {
-  height: calc(100% / 3 * 2);
-  width: 25px;
+.user-onlogin .verified img {
+  height: 24px;
   pointer-events: none;
 }
 

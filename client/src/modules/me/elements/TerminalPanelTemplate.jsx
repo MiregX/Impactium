@@ -6,40 +6,33 @@ const TerminalPanelTemplate = ({ index }) => {
   const terminalPanelTemplateMap = [
     {
       title: "lastSkinFetch",
-      timestamp: 1707196751,
-      image: "",
+      timestamp: 1705622952306,
+      icon: '',
       action: "someAction()"
     },
     {
       title: "lastStatFetch",
-      timestamp: 1707176723,
-      image: "",
+      timestamp: 1707330163379,
+      icon: "https://cdn.impactium.fun/ux/chart-simple-white.svg",
       action: "someAction()"
     },
     {
-      title: "referalsAmount",
-      timestamp: 1707176723,
-      image: ""
-    },
-    {
       title: "mcsWsConnection",
-      timestamp: 1707176723,
-      image: "",
+      status: 1707196751,
+      icon: "https://cdn.impactium.fun/ux/microchip-white.svg",
       action: "someAction()"
     },
     {
       title: "verifyUser",
-      timestamp: 1707176723,
-      image: "",
-      action: "someAction()",
-      inputsAmount: 1
+      inputs: ['nickname'],
+      icon: "https://cdn.impactium.fun/ux/verified.svg",
+      action: "someAction()"
     },
     {
       title: "changeUserBalance",
-      timestamp: 1707176723,
-      image: "",
-      action: "someAction()",
-      inputsAmount: 2
+      inputs: ['nickname', 'balance'],
+      icon: "",
+      action: "someAction()"
     }
   ]
   const { lang } = useLanguage();
@@ -78,7 +71,7 @@ const TerminalPanelTemplate = ({ index }) => {
   
       return `${minutes} ${minutesLabel} ${lang.ago}`;
     } else {
-      return `${lang.now} ${lang.ago}`;
+      return `${lang.right_now}`;
     }
   };
   useEffect(() => {
@@ -86,29 +79,55 @@ const TerminalPanelTemplate = ({ index }) => {
       // Уменьшаем временную метку на 1000 миллисекунд (1 секунда)
       setSelfObject((prevObject) => ({
         ...prevObject,
-        timestamp: prevObject.timestamp - 1000,
+        timestamp: prevObject.timestamp - 60000,
       }));
-    }, 1000);
+    }, 60000);
 
     // Очистка интервала при размонтировании компонента
     return () => clearInterval(intervalId);
   }, [setSelfObject]);
 
-  console.log(selfObject.timestamp);
   return (
     <div className='terminalPanel'>
-      <img src='https://www.svgrepo.com/show/10099/t-shirt.svg' />
+      <img src={selfObject.icon} alt="Icon" />
       <div>
         <h6>{lang[selfObject.title]}</h6>
         <div className='bottomLine'>
-          <p>{formatTimeAgo(selfObject.timestamp)}</p>
-          <button>
-            <img src='https://cdn.impactium.fun/ux/right-arrow-white.svg'/>
-          </button>
+          {selfObject.timestamp ? (
+            <>
+              <p>{formatTimeAgo(selfObject.timestamp)}</p>
+              <button>
+                <img src='https://cdn.impactium.fun/svg/refresh.svg' alt="Arrow" />
+              </button>
+            </>
+          ) : selfObject.inputs ? (
+            <>
+              {selfObject.inputs.map((input, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  id={`${input}Field`}
+                  placeholder={lang['_' + input]}
+                  autoComplete="new-password"
+                />
+              ))}
+              <button>
+                <img src='https://cdn.impactium.fun/ux/right-arrow-white.svg' alt="Arrow" />
+              </button>
+            </>
+          ) : (
+            <>
+              <p>{lang.serverStatus[selfObject.status]}</p>
+              <button>
+                <img src='https://cdn.impactium.fun/svg/refresh.svg' alt="Arrow" />
+              </button>
+            </>
+            )
+          }
         </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default TerminalPanelTemplate;

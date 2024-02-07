@@ -47,11 +47,11 @@
     "en": "hour",
     "ru": "час"
   },
-  "now": {
-    "uk": "зараз",
+  "right_now": {
+    "uk": "Тільки що",
     "it": "adesso",
-    "en": "now",
-    "ru": "сейчас"
+    "en": "Right now",
+    "ru": "Только что"
   },
   "ago": {
     "uk": "тому",
@@ -72,10 +72,10 @@
     "ru": "минута"
   },
   "minutes_1": {
-    "uk": "хвилина",
+    "uk": "хвилину",
     "it": "minuto",
     "en": "minute",
-    "ru": "минута"
+    "ru": "минуту"
   },
   "minutes_2_4": {
     "uk": "хвилини",
@@ -490,7 +490,8 @@
     "it": "Mio link di referral",
     "en": "My referral link",
     "ru": "Моя реферальная ссылка"
-  },      "lastSkinFetch": {
+  },
+  "lastSkinFetch": {
     "uk": "Ресурс-пак оновлено",
     "it": "Ultimo aggiornamento pack",
     "en": "Resource pack updated",
@@ -518,13 +519,33 @@
     "uk": "Верифікувати користувача",
     "it": "Verifica utente",
     "en": "Verify user",
-    "ru": "Верификация пользователя"
+    "ru": "Верифицировать пользователя"
   },
   "changeUserBalance": {
     "uk": "Змінити баланс користувача",
     "it": "Cambia saldo utente",
     "en": "Change user balance",
     "ru": "Изменить баланс пользователя"
+  },
+  "serverStatus": {
+    "200": {
+      "uk": "",
+      "it": "",
+      "en": "Connected",
+      "ru": ""
+    },
+    "201": {
+      "uk": "",
+      "it": "",
+      "en": "Reconnecting...",
+      "ru": ""
+    },
+    "500": {
+      "uk": "",
+      "it": "",
+      "en": "Failed",
+      "ru": ""
+    }
   },
   "achievmentTitle_casual": {
       "uk": "Казуальність",
@@ -1071,6 +1092,12 @@
       "en": "Password and nickname cannot match. Be more creative, dummy",
       "ru": "Пароль и никнейм не могут совпадать. Будь креативнее, чучело"
     }
+  },
+  "_nickname": {
+    "uk": "Нікнейм",
+    "it": "Nickname",
+    "en": "Nickname",
+    "ru": "Никнейм"
   },
   "passWord": {
     "uk": "Пароль",
