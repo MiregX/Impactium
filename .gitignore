@@ -1,6 +1,7 @@
 # Logs
 logs
 static/images/*
+static/**/*.zip
 node_modules
 *.log
 *.png
