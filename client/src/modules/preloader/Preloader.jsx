@@ -8,7 +8,7 @@ export default function Preloader() {
   const location = useLocation();
   const blocker = location.pathname === '/login/callback';
 
-  const [visitedBefore, setVisitedBefore] = useState(false);
+  const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") || false);
   const self = useRef(null);
 
   const show = useCallback(() => {
@@ -44,7 +44,6 @@ export default function Preloader() {
   }, [user, blocker, hide, show]);
   
   useEffect(() => {
-    console.log(visitedBefore)
     if (visitedBefore)
       localStorage.setItem("visitedBefore", visitedBefore);
     else
