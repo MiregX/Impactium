@@ -8,7 +8,7 @@ export default function Preloader() {
   const location = useLocation();
   const blocker = location.pathname === '/login/callback';
 
-  const [visitedBefore, setVisitedBefore] = useState(false);
+  const [visitedBefore, setVisitedBefore] = useState(localStorage.getItem("visitedBefore") || false);
   const self = useRef(null);
 
   const show = useCallback(() => {
@@ -21,19 +21,18 @@ export default function Preloader() {
     } else {
       self.current.classList.add('outter-animation');
     }
-  }, [visitedBefore]);
+  }, [self]);
 
   const hide = useCallback(() => {
-    const opacityDelay = visitedBefore ? 300 : 3000;
-  
+    if (visitedBefore) document.querySelector('header .logo').style.opacity = 1;
     setTimeout(() => {
       self.current.classList.add('hide');
       setTimeout(() => {
+        setVisitedBefore(true);
         self.current.classList.add('remove');
-        if (!visitedBefore) setVisitedBefore(true);
       }, 200);
-    }, opacityDelay);
-  }, [self, visitedBefore]);  
+    }, 300);
+  }, [self, visitedBefore]);
 
   useEffect(() => {
     if (user && !blocker) {
@@ -44,7 +43,6 @@ export default function Preloader() {
   }, [user, blocker, hide, show]);
   
   useEffect(() => {
-    console.log(visitedBefore)
     if (visitedBefore)
       localStorage.setItem("visitedBefore", visitedBefore);
     else

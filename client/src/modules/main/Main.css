@@ -192,7 +192,6 @@ main {
     width: 100%;
   }
   .panel {
-    overflow: hidden;
     flex-direction: column;
     justify-content: space-evenly
   }
