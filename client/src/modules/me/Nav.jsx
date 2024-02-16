@@ -37,22 +37,6 @@ const Nav = () => {
         <img src="https://cdn.impactium.fun/ux/casual.svg" alt="Casual" />
         <p>{lang.myProfile}</p>
       </button>
-      <button
-        className={selectedButton === 'buySomeStuff' ? 'selected' : ''}
-        onClick={() => handleNavigation('buySomeStuff')}
-      >
-        <img src="https://cdn.impactium.fun/ux/donate.svg" alt="Donate" />
-        <p>{lang.buySomeStuff}</p>
-      </button>
-      {user.isCreator && (
-        <button
-          className={selectedButton === 'terminal' ? 'selected' : ''}
-          onClick={() => handleNavigation('terminal')}
-        >
-          <img src="https://cdn.impactium.fun/ux/hammer.svg" alt="Hammer" />
-          <p>{lang.adminPanelButtonText}</p>
-        </button>
-      )}
     </nav>
   );
 };
