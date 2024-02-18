@@ -104,7 +104,7 @@ const AchievementsModule = () => {
       setIsAchievementsFetched(true);
       getAchievements();
     }
-  }, [isAchievementsFetched, player])
+  }, [getAchievements, isAchievementsFetched, isPlayerLoaded, player])
   
   return (
     <div className={`achievements_module default_panel_style dynamic ${activeAchievement} ${isPlayerLoaded && !player.registered ? 'blocked' : ''}`} achievement={activeAchievement}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Terminal.css'
 import TerminalPanelTemplate from './elements/TerminalPanelTemplate';
 

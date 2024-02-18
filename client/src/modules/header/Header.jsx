@@ -27,7 +27,7 @@ function Header() {
         <div className="user-onlogin">
           {user.isVerified ? (
             <div className="verified">
-              <img src="https://cdn.impactium.fun/ux/verified.svg" />
+              <img src="https://cdn.impactium.fun/ux/verified.svg" alt='' />
             </div>
           ) : null}
           <Link to="/me/account" className="user flex">

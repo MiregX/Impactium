@@ -36,7 +36,7 @@ const PlayerCredentials = () => {
         )}
       </p>
 
-      <ul role="list">
+      <ul>
         {allAchievements.map((achKey) => {
           const ach = player.achievements?.[achKey];
           if (typeof ach !== 'object') return null;
@@ -51,16 +51,16 @@ const PlayerCredentials = () => {
       </ul>
 
       {player.registered ? (
-        <a tooverlayview="true"
+        <button tooverlayview="true"
           className="change_profile"
           onClick={() => copy(`https://impactium.fun/?ref=${user.referal.code}`)}
         >
           {lang.copyMyReferalLink}
-        </a>
+        </button>
       ) : (
-        <a className="change_profile" onClick={register} tooverlayview="true">
+        <button className="change_profile" onClick={register} tooverlayview="true">
           {lang._register}
-        </a>
+        </button>
       )}
     </div>
   );
