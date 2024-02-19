@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
+:root {
+  --black: #000000;
+  --soft-white: #e8e8e8;
+  --soft-black: #0d0d0d;
+  --gray16: #161616;
+  --gray24: #242424;
+  --gray32: #323232;
+  --gray48: #484848;
+  --gray64: #646464;
+  --gray80: #808080;
+  --gray96: #929292;
+  --transition: cubic-bezier(.21,.29,0,.94);
+
+  --hammer: url("https://cdn.impactium.fun/ux/hammer.svg");
+  --hammer-accent: #F14C50;
+  --casual: url("https://cdn.impactium.fun/ux/casual.svg");
+  --casual-accent: rgb(163, 255, 163);
+  --defence: url("https://cdn.impactium.fun/ux/defence.svg");
+  --defence-accent: #417FFD;
+  --killer: url("https://cdn.impactium.fun/ux/killer.svg");
+  --killer-accent: #F2DE4C;
+  --event: url("https://cdn.impactium.fun/ux/event.svg");
+  --event-accent: #E465FD;
+  --donate: url("https://cdn.impactium.fun/ux/donate.svg");
+  --donate-accent: #72E4F2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: var(--soft-white);
+  font-family: 'Nunito', sans-serif;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+main {
+  min-height: 100vh;
+  padding: 80px 16px 80px 16px;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background-image: url(https://cdn.impactium.fun/backgrounds/topography-21.svg);
+  background-color: var(--gray16);
+  background-position: top;
+  background-size: cover;
+  background-repeat: repeat;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
