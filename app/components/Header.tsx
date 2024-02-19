@@ -4,10 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 
-function Header() {
+export default function Header() {
   const [user, setUser] = useState({});
   const [lang, setLang] = useState({});
   const logo = useRef(null);
+
   useEffect(() => {
     if (logo) {
       logo.current.classList.add('inner-animation');
@@ -17,7 +18,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <Link href='/' className={styles.logo}>
-        <Image ref={logo} src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={undefined} alt="Impactium" />
+        <Image ref={logo} src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>
       </Link>
       {user && user.id ? (
@@ -45,7 +46,7 @@ function Header() {
         </div>
       ) : (
         <div className={styles.loginWrapper}>
-          <Link href="/login" className={styles.login}>
+          <Link href="/login" className={styles.tempButton}>
             <div className={styles.circle}>
               <svg id="arrow-icon" className={styles.arrow} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                 <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -58,5 +59,3 @@ function Header() {
     </header>
   );
 }
-
-export default Header;

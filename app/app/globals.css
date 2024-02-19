@@ -37,6 +37,7 @@
   margin: 0;
   color: var(--soft-white);
   font-family: 'Nunito', sans-serif;
+  line-height: 1;
 }
 
 html,
@@ -47,7 +48,7 @@ body {
 
 main {
   min-height: 100vh;
-  padding: 80px 16px 80px 16px;
+  padding: 96px 16px 80px 16px;
   width: 100vw;
   display: flex;
   flex-direction: column;
