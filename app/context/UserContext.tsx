@@ -1,48 +1,50 @@
 "use client"
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from 'react';
 
-interface UserContextType {
-  user: any; // Adjust the type according to your user data structure
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-  token: string | null;
-  setToken: React.Dispatch<React.SetStateAction<string | null>>;
-  logout: () => void;
+interface IUser {
+  isVerified: boolean;
+  balance: number;
+  avatar: string;
+  id: string;
+  displayName: string;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+interface IUserContext {
+  user: IUser | false;
+  setUser: Dispatch<SetStateAction<IUser | false>>;
+  token: string | false;
+  setToken: Dispatch<SetStateAction<string | false>>;
+}
 
-export const useUser = (): UserContextType => {
+const UserContext = createContext<IUserContext | undefined>(undefined);
+
+export const useUser = (): IUserContext => {
   const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
+  if (!context)
+    throw new Error();
   return context;
 };
 
-interface UserProviderProps {
-  children: ReactNode;
-}
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any>(null); // Adjust the type according to your user data structure
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token') || null);
-
-  const logout = () => {
-    setToken(null);
-  };
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<IUser | false>(false);
+  const [token, setToken] = useState<string | false>(localStorage.getItem('token') || false);
 
   const getUser = async () => {
     try {
+      if (!token)
+        return;
+
       const response = await fetch('https://impactium.fun/api/user/get', {
         method: 'GET',
         headers: {
           'token': token || ''
         }
       });
-      const userData = await response.json();
-      setUser(userData);
+      const data = await response.json();
+      setUser(data);
     } catch (error) {
-      setToken(null);
+      setToken(false);
     }
   };
 
@@ -52,20 +54,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       getUser();
     } else {
       localStorage.removeItem('token');
-      setUser(null);
+      setUser(false);
     }
   }, [token]);
   
-  const contextValue: UserContextType = {
+  const props: IUserContext = {
     user,
     setUser,
     token,
     setToken,
-    logout,
   };
 
   return (
-    <UserContext.Provider value={contextValue}>
+    <UserContext.Provider value={props}>
       {children}
     </UserContext.Provider>
   );

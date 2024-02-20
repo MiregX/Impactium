@@ -1,12 +1,12 @@
 'use client'
 import locale from '@/public/locale';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 interface Translations {
   [key: string]: string | string[] | Record<string, string> | any;
 }
 
-function getLanguagePack(languagePack: string | null = 'us'): Translations {
+function getLanguagePack(languagePack: string = 'us'): Translations {
   const translations: Translations = {};
   const isLanguagePackValid = ['us', 'ua', 'ru', 'it'].includes(languagePack as string);
 
@@ -39,24 +39,26 @@ function getLanguagePack(languagePack: string | null = 'us'): Translations {
 interface LanguageContextProps {
   lang: Translations;
   setLanguage: (language: string) => void;
-  language: string | null;
+  language: string;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
+
+  if (!context)
+    throw new Error();
+  
   return context;
 };
 
 const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<string | null>(() => window.localStorage.getItem('language'));
+  const [language, setLanguage] = useState<string>(() => window.localStorage.getItem('language') || 'us');
+  
 
   useEffect(() => {
-    const possibleLangs = ['uk', 'ru', 'en', 'it'];
+    const possibleLangs = ['ua', 'ru', 'us', 'it'];
     if (possibleLangs.includes(language as string)) {
       window.localStorage.setItem('language', language as string);
     } else {
@@ -64,13 +66,13 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     }
   }, [language]);
 
-  const contextValue: LanguageContextProps = {
+  const props: LanguageContextProps = {
     lang: getLanguagePack(language),
     setLanguage,
     language,
   };
   return (
-    <LanguageContext.Provider value={contextValue}>
+    <LanguageContext.Provider value={props}>
       {children}
     </LanguageContext.Provider>
   );

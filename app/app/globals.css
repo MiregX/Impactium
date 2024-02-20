@@ -26,11 +26,6 @@
   --donate-accent: #72E4F2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-  }
-}
-
 * {
   box-sizing: border-box;
   padding: 0;

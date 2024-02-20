@@ -4,14 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 import DynamicBubbleButton from './DynamicBubbleButton';
+import { useLanguage } from '@/context/Language';
+import { useUser } from '@/context/UserContext';
 
 export default function Header() {
-  const [user, setUser] = useState({});
-  const [lang, setLang] = useState({});
-  const logo = useRef(null);
+  const { user } = useUser();
+  const { lang } = useLanguage();
+  const logo = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    if (logo) {
+    if (logo.current) {
       logo.current.classList.add('inner-animation');
     }
   }, [logo]);
@@ -32,7 +34,7 @@ export default function Header() {
           <Link href="/me/account" className={styles.user}>
             {user.avatar && <Image src={user.avatar} width={30} height={30} className={styles.avatar} alt="Avatar" />}
             <div>
-              <p className={styles.buttonText}>{user.displayName}</p>
+              <p>{user.displayName}</p>
               <p className={styles.balance}>{user.balance || 0}</p>
             </div>
           </Link>

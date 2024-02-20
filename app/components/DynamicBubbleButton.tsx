@@ -1,10 +1,13 @@
-import styles from '@/styles/Header.module.css'
-import { useLanguage } from '@/context/Language'
+import styles from '@/styles/Header.module.css';
+import { useLanguage } from '@/context/Language';
 
-export default function DynamicBubbleButton() {
-  //Property 'lang' does not exist on type 'LanguageContextProps | undefined'.ts(2339)
+interface IDynamicBubbleButton {
+  type: string;
+}
 
+export default function DynamicBubbleButton({ type }: IDynamicBubbleButton) {
   const { lang } = useLanguage();
+
   return (
     <button className={styles.dynamicBubbleButton}>
       <div className={styles.circle}>
@@ -12,7 +15,7 @@ export default function DynamicBubbleButton() {
           <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
-        <p className={styles.buttonText}>{lang.logout}</p>
+      <p className={styles.buttonText}>{lang.logout}</p>
     </button>
   );
 }

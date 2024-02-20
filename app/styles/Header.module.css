@@ -179,7 +179,7 @@
 .logo.inner-animation {
   animation: inner-logo-animation 0s linear 3.3s forwards;
 }
-.user .balance {
+.balance {
   display: flex;
   font-size: 10px;
   line-height: 14px;
@@ -188,7 +188,7 @@
   gap: 4px;
   color: var(--soft-white);
 }
-.user .balance::before {
+.balance::before {
   content: "";
   width: 14px;
   height: 14px;
