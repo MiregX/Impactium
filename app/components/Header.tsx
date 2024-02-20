@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
+import DynamicBubbleButton from './DynamicBubbleButton';
 
 export default function Header() {
   const [user, setUser] = useState({});
@@ -22,7 +23,7 @@ export default function Header() {
         <p>Impactium</p>
       </Link>
       {user && user.id ? (
-        <div className={styles.onLogin}>
+        <div className={styles.session}>
           {user.isVerified && (
             <div className={styles.verified}>
               <Image src="https://cdn.impactium.fun/ux/verified.svg" alt='' />
@@ -35,25 +36,11 @@ export default function Header() {
               <p className={styles.balance}>{user.balance || 0}</p>
             </div>
           </Link>
-          <button id="logout" className={styles.tempButton}>
-            <div className={styles.circle}>
-              <svg id="arrow-icon" className={styles.arrow} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <div className={styles.buttonText}>{lang.logout}</div>
-          </button>
+          <DynamicBubbleButton type='logout' />
         </div>
       ) : (
-        <div className={styles.loginWrapper}>
-          <Link href="/login" className={styles.tempButton}>
-            <div className={styles.circle}>
-              <svg id="arrow-icon" className={styles.arrow} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path d="M18 12H18M18 12L13 7M18 12L13 17" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <span className={styles.buttonText}>{lang.login}</span>
-          </Link>
+        <div className={styles.session}>
+          <DynamicBubbleButton type='login' />
         </div>
       )}
     </header>

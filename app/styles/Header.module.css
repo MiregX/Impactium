@@ -1,5 +1,5 @@
 .header {
-  transition: all 0.3s var(--trans);
+  transition: all 0.3s var(--transition);
   height: 80px;
   max-width: 100%;
   z-index: 2;
@@ -12,12 +12,22 @@
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
 }
-.header > div > svg {
-  height: 40px;
-  -webkit-user-drag: none;
-  user-select: none;
+.logo {
+  height: 48px;
+  gap: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: min-content;
 }
-.onLogin {
+.logo p {
+  font-size: 30px;
+  font-weight: 600;
+}
+.logo img {
+  height: 48px;
+}
+.session {
   gap: 16px;
   align-items: center;
   justify-content: center;
@@ -25,27 +35,34 @@
   justify-content: flex-end;
   grid-column: 3 / 4;
 }
-.loginWrapper {
-  grid-column: 3 / 4;
-  justify-content: flex-end;
+.verified {
+  height: 32px;
+  padding: 4px;
+  width: 32px;
+  border-radius: 11px;
+  background-color: var(--gray36);
+  cursor: pointer;
+}
+.verified img {
+  height: 24px;
+  pointer-events: none;
 }
 
 .user {
   display: flex;
   align-items: center;
-  color: var(--w);
+  color: var(--soft-white);
   font-weight: 500;
   max-width: 256px;
   min-width: 128px;
   height: 48px;
   padding: 6px;
   border-radius: 17px;
-  background: var(--c-32);
+  background: var(--gray32);
   position: relative;
   cursor: pointer;
 }
-
-.user .avatar {
+.avatar {
   border-radius: 11px;
   height: 38px;
   width: 38px;
@@ -58,48 +75,18 @@
   flex: 1;
   line-height: 24px;
   font-size: 16px;
-  text-shadow: 0px 2px 5px var(--c-32);
+  text-shadow: 0px 2px 5px var(--gray32);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: calc(256px - 32px - 16px - 12px);
 }
-.logo {
-  height: 48px;
-  gap: 16px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: min-content;
+.arrow {
+  height: 40px;
+  -webkit-user-drag: none;
+  user-select: none;
 }
-
-.logo p {
-  font-size: 30px;
-  font-weight: 600;
-}
-
-.logo img {
-  height: 48px;
-}
-
-.tempButton path.default-path {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-}
-
-.tempButton:hover path {
-  d: path("M2 12H18M18 12L13 7M18 12L13 17");
-}
-.tempButton svg {
-  transform: translateX(-1px);
-}
-.tempButton:hover svg {
-  transform: translateX(10px);
-}
-.tempButton * {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  text-shadow: 0px 2px 5px var(--c-16);
-}
-.tempButton {
+.dynamicBubbleButton {
   display: flex;
   cursor: pointer;
   color: var(--soft-white);
@@ -109,7 +96,20 @@
   width: 128px;
   height: 48px;
 }
-.tempButton .buttonText {
+.dynamicBubbleButton path {
+  transition: all 0.45s var(--transition);
+}
+.dynamicBubbleButton:hover path {
+  d: path("M2 12H18M18 12L13 7M18 12L13 17");
+}
+.dynamicBubbleButton svg {
+  transform: translateX(-1px);
+  transition: all 0.45s var(--transition);
+}
+.dynamicBubbleButton:hover svg {
+  transform: translateX(10px);
+}
+.dynamicBubbleButton p {
   position: absolute;
   width: calc(100% - 48px);
   right: 0;
@@ -117,7 +117,7 @@
   font-weight: 500;
   font-size: 16px;
 }
-.tempButton .circle {
+.dynamicBubbleButton .circle {
   position: absolute;
   margin: 0;
   width: 48px;
@@ -126,14 +126,10 @@
   height: 48px;
   background: var(--gray32);
   border-radius: 17px;
+  transition: all 0.45s var(--transition);
 }
-
-.tempButton:hover .circle {
+.dynamicBubbleButton:hover .circle {
   width: 100%;
-}
-
-.tempButton:hover .buttonText {
-  color: #fff;
 }
 @media (max-width: 767px) {
 .header {
@@ -141,9 +137,6 @@
 }
 .nav {
   display: none;
-}
-.loginWrapper {
-  grid-column: 2 / 3;
 }
 #logout {
   display: none;
@@ -155,7 +148,7 @@
 .plate .p-wrapper {
   height: 42px;
   overflow: hidden;
-  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+  transition: all 0.2s var(--transition) !important;
 }
 .plate:hover .p-wrapper {
   height: 0px;
@@ -180,19 +173,7 @@
   background: var(--gray48);
 }
 .plate:hover {
-  background: var(--gray36);
-}
-.onLogin .verified {
-  height: 32px;
-  padding: 4px;
-  width: 32px;
-  border-radius: 11px;
-  background-color: var(--gray36);
-  cursor: pointer;
-}
-.onLogin .verified img {
-  height: 24px;
-  pointer-events: none;
+  background: var(--gray32);
 }
 
 .logo.inner-animation {
