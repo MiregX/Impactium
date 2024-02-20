@@ -1,10 +1,12 @@
 export interface Locale {
   [key: string]: {
-    uk: string;
-    it: string;
-    us: string;
-    ru: string;
-  };
+    [key: string]: string | {
+      uk: string;
+      it: string;
+      us: string;
+      ru: string;
+    };
+  } | Record<string, any>[];
 }
 
 const locale: Locale = {
@@ -537,19 +539,19 @@ ourPartners: {
     ru: "Изменить баланс пользователя"
   },
   serverStatus: {
-  200: {
+  "200": {
       uk: "",
       it: "",
       us: "Connected",
       ru: ""
     },
-    201: {
+    "201": {
       uk: "",
       it: "",
       us: "Reconnecting...",
       ru: ""
     },
-    500: {
+    "500": {
       uk: "",
       it: "",
       us: "Failed",
@@ -1033,25 +1035,25 @@ ourPartners: {
     ru: "Вы не авторизированы"
   },
   skin: {
-  200: {
+  "200": {
       uk: "Зміна скіна пройшла успішно. Тепер ваш персонаж виглядає інакше. Зазвичай зміни вступають в силу протягом 6 годин.",
       it: "Il cambio di skin è avvenuto con successo. Ora il tuo personaggio ha un aspetto diverso. Di solito le modifiche diventano effettive entro 6 ore.",
       us: "Skin change was successful. Now your character looks different. Usually, changes take effect within 6 hours.",
       ru: "Изменение скина прошло успешно. Теперь ваш персонаж выглядит по-другому. Обычно изменения вступают в силу в течение 6 часов."
     },
-    401: {
+    "401": {
       uk: "Невірне розширення файлу",
       it: "Estensione del file non valida",
       us: "Invalid file extension",
       ru: "Неверное разширение файла"
     },
-    402: {
+    "402": {
       uk: "Скін повинен мати розмір 64 на 64 пікселі",
       it: "Lo skin deve essere di dimensioni 64 per 64 pixel",
       us: "Skin must be 64 by 64 pixels in size",
       ru: "Скин должен быть размером 64 на 64 пикселя"
     },
-    403: {
+    "403": {
       uk: "Зовнішній вигляд можна змінювати лише раз на 24 години",
       it: "L'aspetto può essere cambiato solo una volta ogni 24 ore",
       us: "Appearance can be changed only once in 24 hours",
@@ -1059,43 +1061,43 @@ ourPartners: {
     }
   },
   nickname: {
-  200: {
+  "200": {
       uk: "Ваш нікнейм успішно оновлено. Деякі досягнення та предмети можуть зникнути.",
       it: "Il tuo nickname è stato aggiornato con successo. Alcuni achievement e oggetti potrebbero scomparire.",
       us: "Your nickname has been successfully updated. Some achievements and  items may disappear.",
       ru: "Ваш никнейм успешно обновлен. Некоторые достижения и предметы могут исчезнуть."
     },
-    401: {
+    "401": {
       uk: "Невірний регістр. Дозволяються тільки a-z, 0-9, '_'",
       it: "Maiuscole non valide. Consentiti solo a-z, 0-9, '_'",
       us: "Invalid case. Only a-z, 0-9, '_' are allowed",
       ru: "Неверный регистр. Разрешаются только a-z, 0-9, '_'"
     },
-    402: {
+    "402": {
       uk: "Нікнейм повинен бути від 3 до 32 символів",
       it: "Il nickname deve essere lungo da 3 a 32 caratteri",
       us: "Nickname must be between 3 and 32 characters",
       ru: "Никнейм должен быть от 3 до 32 символов"
     },
-    403: {
+    "403": {
       uk: "Нікнейм можна змінювати лише раз на годину",
       it: "Il nickname può essere cambiato solo una volta all'ora",
       us: "Nickname can be changed only once per hour",
       ru: "Никнейм можно менять только раз час"
     },
-    404: {
+    "404": {
       uk: "Гравець з таким нікнеймом вже існує",
       it: "Giocatore con lo stesso nickname già esistente",
       us: "Player with such nickname already exists",
       ru: "Такой никнейм уже занят"
     },
-    405: {
+    "405": {
       uk: "Вибачте, але ви не можете встановити той же самий нікнейм, який ви вже маєте",
       it: "Spiacenti, non puoi impostare lo stesso nickname che hai già",
       us: "Sorry, but you cannot set the same nickname that you already have",
       ru: "Извините, но вы не можете установить тот же никнейм, который уже используете"
     },
-    406: {
+    "406": {
       uk: "Пароль і нікнейм не можуть збігатися. Будь креативніший, чучело",
       it: "La password e il nickname non possono coincidere. Sii più creativo, fantoccio",
       us: "Password and nickname cannot match. Be more creative, dummy",
@@ -1115,25 +1117,25 @@ ourPartners: {
     ru: "Пароль"
   },
   password: {
-  200: {
+  "200": {
       uk: "Пароль успішно змінено. Використовуйте /l <ваш пароль> для входу.",
       it: "La tua password è stata modificata con successo. Usa /l <password> per accedere.",
       us: "Password successfully changed. Use /l <your password> to log in.",
       ru: "Пароль успешно изменен. Используйте /l <ваш пароль> для входа."
     },
-    401: {
+    "401": {
       uk: "Пароль і нікнейм не можуть збігатися. Будь креативніше, чучело",
       it: "La password e il nickname non possono coincidere. Sii più creativo, fantoccio",
       us: "Password and nickname cannot match. Be more creative, dummy",
       ru: "Пароль и никнейм не могут совпадать. Будь креативнее, чучело"
     },
-    402: {
+    "402": {
       uk: "Завийобістий пароль. Спробуй щось простіше.",
       it: "Password troppo fottutamente fantastico. Prova qualcosa di più semplice.",
       us: "Password too fucking awesome. Try something simpler.",
       ru: "Пароль слишком ахуенен. Будь проще, придумай новый."
     },
-    403: {
+    "403": {
       uk: "В тебе вже стоїть цей пароль. Не клацай, а то клацну зубами по яйцях",
       it: "Hai già questa password. Non cliccare, altrimenti cliccherò con i denti sulle palle",
       us: "You already have this password. Don't click, or I'll click with my teeth on your balls",
@@ -1141,25 +1143,25 @@ ourPartners: {
     }
   },
   achievement: {
-  200: {
+  "200": {
       uk: "Нагорода за досягнення активована. Якщо нагороди або еффекту немає - введіть у грі дебаг-команду \"/achievement\"",
       it: "Achievement reward activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
       us: "Achievement reward activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
       ru: "Награда за достижение активирована. Если нет наград или эффектов, введите в игре отладочную команду \"/achievement\""
     },
-    401: {
+    "401": {
       uk: "Здається ви ще не розблокували це досягнення. Зачекайте 10 хвилин, або повідомте про це адміністратору.",
       it: "Sembra che tu non abbia ancora sbloccato questo obiettivo. Attendi 10 minuti o segnala l'errore all'amministratore.",
       us: "It seems you haven't unlocked this achievement yet. Wait for 10 minutes or report the issue to the administrator.",
       ru: "Похоже, вы еще не разблокировали это достижение. Подождите 10 минут или сообщите об ошибке администратору."
     },
-    402: {
+    "402": {
       uk: "Це досягнення вже активоване. Якщо нагороди або еффекту немає - введіть у грі дебаг-команду \"/achievement\"",
       it: "Questo obiettivo è già attivato. Se non ci sono ricompense o effetti, inserisci il comando di debug nel gioco \"/achievement\"",
       us: "This achievement is already activated. If there are no rewards or effects, enter the in-game debug command \"/achievement\"",
       ru: "Это достижение уже активировано. Если нет наград или эффектов, введите в игре отладочную команду \"/achievement\""
     },
-    403: {
+    "403": {
       uk: "Здається такого досягнення не існує. Якщо ви вважаєте, що це помилка - повідомте про це адміністратору.",
       it: "1k",
       us: "1k",
@@ -1167,13 +1169,13 @@ ourPartners: {
     }
   },
   register: {
-  200: {
+  "200": {
       uk: "Персонаж успішно створений",
       it: "",
       us: "",
       ru: ""
     },
-    403: {
+    "403": {
       uk: "Ви вже зареєстровані",
       it: "",
       us: "",

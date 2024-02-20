@@ -3,7 +3,7 @@ import locale from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface Translations {
-  [key: string]: string | string[] | Record<string, string>;
+  [key: string]: string | string[] | Record<string, string> | any;
 }
 
 function getLanguagePack(languagePack: string | null = 'us'): Translations {
@@ -45,7 +45,11 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const useLanguage = () => {
-  return useContext(LanguageContext);
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useLanguage must be used within a LanguageProvider");
+  }
+  return context;
 };
 
 const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -60,10 +64,13 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     }
   }, [language]);
 
-  const lang = getLanguagePack(language);
-
+  const contextValue: LanguageContextProps = {
+    lang: getLanguagePack(language),
+    setLanguage,
+    language,
+  };
   return (
-    <LanguageContext.Provider value={{ lang, setLanguage, language }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
