@@ -1,9 +1,13 @@
 'use client'
 import locale from '@/public/locale';
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface Translations {
-  [key: string]: string | string[] | Record<string, string> | any;
+  [key: string]:
+    | string
+    | string[]
+    | Record<string, string>
+    | any;
 }
 
 function getLanguagePack(languagePack: string = 'us'): Translations {
@@ -36,13 +40,13 @@ function getLanguagePack(languagePack: string = 'us'): Translations {
   return translations;
 }
 
-interface LanguageContextProps {
+interface ILanguageContext {
   lang: Translations;
   setLanguage: (language: string) => void;
   language: string;
 }
 
-const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
+const LanguageContext = createContext<ILanguageContext | undefined>(undefined);
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
@@ -66,7 +70,7 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     }
   }, [language]);
 
-  const props: LanguageContextProps = {
+  const props: ILanguageContext = {
     lang: getLanguagePack(language),
     setLanguage,
     language,

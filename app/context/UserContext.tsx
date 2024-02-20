@@ -16,7 +16,7 @@ interface IUserContext {
   setToken: Dispatch<SetStateAction<string | false>>;
 }
 
-const UserContext = createContext<IUserContext | undefined>(undefined);
+const UserContext = createContext<IUserContext | null>(null);
 
 export const useUser = (): IUserContext => {
   const context = useContext(UserContext);
@@ -28,7 +28,8 @@ export const useUser = (): IUserContext => {
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<IUser | false>(false);
-  const [token, setToken] = useState<string | false>(localStorage.getItem('token') || false);
+  const [token, setToken] = useState<string | false>(window?.localStorage?.getItem('token') || false);
+  const [local] = useState<string | false>(window?.localStorage?.getItem('token') || false);
 
   const getUser = async () => {
     try {
@@ -38,7 +39,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await fetch('https://impactium.fun/api/user/get', {
         method: 'GET',
         headers: {
-          'token': token || ''
+          'token': token
         }
       });
       const data = await response.json();
@@ -50,10 +51,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem('token', token);
+      window?.localStorage?.setItem('token', token);
       getUser();
     } else {
-      localStorage.removeItem('token');
       setUser(false);
     }
   }, [token]);
