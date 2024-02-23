@@ -1,8 +1,8 @@
-"use client"
+'use client'
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/Header.module.css';
 
-export default function HeaderBackground() {
+const HeaderBackground: React.FC = () => {
   const [topValue, setTopValue] = useState(0);
 
   const handleScroll = () => {
@@ -33,3 +33,5 @@ export default function HeaderBackground() {
     <div className={styles.headerBackground} style={{ top: `${topValue}px` }}></div>
   );
 }
+
+export default HeaderBackground;

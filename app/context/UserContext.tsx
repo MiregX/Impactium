@@ -1,5 +1,6 @@
 "use client"
 import React, { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from 'react';
+import cookie from './Cookie';
 
 interface IUser {
   isVerified: boolean;
@@ -28,8 +29,7 @@ export const useUser = (): IUserContext => {
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<IUser | false>(false);
-  const [token, setToken] = useState<string | false>(window?.localStorage?.getItem('token') || false);
-  const [local] = useState<string | false>(window?.localStorage?.getItem('token') || false);
+  const [token, setToken] = useState<string | false>(cookie.get('token') || false);
 
   const getUser = async () => {
     try {
@@ -51,7 +51,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (token) {
-      window?.localStorage?.setItem('token', token);
+      cookie.set('token', token)
       getUser();
     } else {
       setUser(false);

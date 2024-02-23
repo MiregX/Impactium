@@ -1,15 +1,13 @@
 "use client"
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 import DynamicBubbleButton from './DynamicBubbleButton';
-import { useLanguage } from '@/context/Language';
 import { useUser } from '@/context/UserContext';
 
 export default function Header() {
   const { user } = useUser();
-  const { lang } = useLanguage();
   const logo = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export default function Header() {
         <div className={styles.session}>
           {user.isVerified && (
             <div className={styles.verified}>
-              <Image src="https://cdn.impactium.fun/ux/verified.svg" alt='' />
+              <Image src="https://cdn.impactium.fun/ux/verified.svg" height={48} width={37} alt='' />
             </div>
           )}
           <Link href="/me/account" className={styles.user}>
