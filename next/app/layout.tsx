@@ -1,8 +1,10 @@
-import Header from '@/components/Header'
-import "./globals.css";
-import HeaderBackground from '@/components/HeaderBackground';
-import { UserProvider } from '../context/UserContext';
+import Header from '@/components/header/Header'
+import '@/styles/globals.css';
+import HeaderBackground from '@/components/header/HeaderBackground';
+import { UserProvider } from '../context/User';
 import { Metadata } from 'next'
+import LanguageProvider from '@/context/Language';
+import { MessageProvider } from '@/context/Message';
  
 export const metadata: Metadata = {
   title: {
@@ -26,15 +28,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html>
-      <UserProvider>
-        <body style={{ backgroundColor: '#242424' }}>
-          <Header />
-          <HeaderBackground />
-          <main>
-            {children}
-          </main>
-        </body>
-      </UserProvider>
+      <LanguageProvider>
+        <UserProvider>
+          <body style={{ backgroundColor: '#161616' }}>
+            <MessageProvider>
+              <Header />
+              <HeaderBackground />
+              <main>
+                {children}
+              </main>
+            </MessageProvider>
+          </body>
+        </UserProvider>
+      </LanguageProvider>
     </html>
   );
 }

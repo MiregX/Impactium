@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/Header.module.css';
 
-const HeaderBackground: React.FC = () => {
-  const [topValue, setTopValue] = useState(0);
+function HeaderBackground() {
+  const [topValue, setTopValue] = useState<number>(0);
+  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(false);  
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -12,6 +13,9 @@ const HeaderBackground: React.FC = () => {
   };
 
   useEffect(() => {
+    if (typeof window === 'undefined')
+      return;
+
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -20,17 +24,24 @@ const HeaderBackground: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (true) {
+    if (typeof window === 'undefined')
+      return;
+
+    if (!isHeaderBackgroundHidden) {
       setTopValue(-80);
       window.removeEventListener('scroll', handleScroll);
     } else {
       setTopValue(0);
       window.addEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, [isHeaderBackgroundHidden]);
 
   return (
-    <div className={styles.headerBackground} style={{ top: `${topValue}px` }}></div>
+    <div
+      className={styles.headerBackground}
+      style={{ top: `${topValue}px`, zIndex: 3 }}
+      onClick={() => setIsHeaderBackgroundHidden(!isHeaderBackgroundHidden)}>
+    </div>
   );
 }
 

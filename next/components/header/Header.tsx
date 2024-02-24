@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
-import DynamicBubbleButton from './DynamicBubbleButton';
-import { useUser } from '@/context/UserContext';
+import DynamicBubbleButton from '../DynamicBubbleButton';
+import { useUser } from '@/context/User';
 
 export default function Header() {
   const { user } = useUser();

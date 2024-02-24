@@ -1,8 +1,9 @@
+'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import './Message.css';
-import { useLanguage } from '../language/Lang';
+import styles from '@/styles/Message.module.css';
+import { useLanguage } from '@/context/Language';
 
-const MessageContext = createContext();
+const MessageContext = createContext(undefined);
 
 export const useMessage = () => {
   return useContext(MessageContext);
@@ -12,10 +13,11 @@ export const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const { lang } = useLanguage();
 
-  const newMessage = (code, text) => {
+  const newMessage = (code: number, text: string) => {
     const type = code < 400 ? 'success' : (code >= 400 && code < 500 ? 'warning' : 'attention');
+
     const message = {
-      id: new Date().getTime(), // Unique ID for each message
+      id: new Date().getTime(),
       type,
       text,
     };
@@ -32,7 +34,7 @@ export const MessageProvider = ({ children }) => {
     }, 5000);
   };
   
-  const copy = async (text) => {
+  const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       newMessage(200, `${text} ${lang.copiedMessage}`);
@@ -50,9 +52,9 @@ export const MessageProvider = ({ children }) => {
   return (
     <MessageContext.Provider value={{ newMessage, copy }}>
       {children}
-      <div id="messageWrapper">
+      <div className={styles.messageWrapper}>
         {messages.map((message) => (
-          <div key={message.id} type={message.type} className={`message${message.hidden ? ' toHide' : ''}`}>
+          <div key={message.id} itemType={message.type} className={`${styles.message} ${message.hidden && styles.toHide}`}>
             <p>{message.text}</p>
           </div>
         ))}
