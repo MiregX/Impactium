@@ -6,6 +6,7 @@
 .panel {
   min-height: calc(100vh - 176px);
   width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

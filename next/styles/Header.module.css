@@ -2,7 +2,7 @@
   transition: all 0.3s var(--transition);
   height: 80px;
   max-width: 100%;
-  z-index: 0;
+  z-index: 2;
   position: fixed;
   top: 0px;
   justify-content: space-between;

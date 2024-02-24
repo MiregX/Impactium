@@ -3,10 +3,8 @@ import { useRef, useEffect } from "react";
 import Link from "next/link";
 import styles from '@/styles/Index.module.css';
 import { useLanguage } from '@/context/Language'
-import { useMessage } from "@/context/Message";
 
 export default function Main() {
-  const { newMessage } = useMessage();
   const { lang } = useLanguage();
   const glRef = useRef<HTMLDivElement>(null);
   const aboutUsMainTextRef = useRef<HTMLParagraphElement>(null);
@@ -35,7 +33,9 @@ export default function Main() {
         li.classList.add(styles.maxWidth);
       }, (index + 1) * 250);
     });
+  }, []);
 
+  useEffect(() => {
     const descriptionBlocksAnimationInit = (currentIndex: number) => {
       const descriptionBlocks = aboutUsDescriptionTextRef.current?.querySelectorAll('p');
       descriptionBlocks?.forEach((block, index) => {
@@ -47,16 +47,22 @@ export default function Main() {
         }
       });
       currentIndex = (currentIndex + 1) % (descriptionBlocks?.length || 1);
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         descriptionBlocksAnimationInit(currentIndex);
       }, 4000);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     };
 
-    descriptionBlocksAnimationInit(1);
+    const animationInterval = setInterval(() => {
+      descriptionBlocksAnimationInit(1);
+    }, 4000);
 
-    setTimeout(() => {
-      newMessage(200, "хуйня")
-    }, 400);
+    return () => {
+      clearInterval(animationInterval);
+    };
   }, []);
 
   return (

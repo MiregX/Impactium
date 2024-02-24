@@ -5,6 +5,7 @@ import { UserProvider } from '../context/User';
 import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
+import { HeaderProvider } from '@/context/Header';
  
 export const metadata: Metadata = {
   title: {
@@ -31,13 +32,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <LanguageProvider>
         <UserProvider>
           <body style={{ backgroundColor: '#161616' }}>
-            <MessageProvider>
-              <Header />
-              <HeaderBackground />
-              <main>
-                {children}
-              </main>
-            </MessageProvider>
+            <HeaderProvider>
+              <MessageProvider>
+                <main>
+                  {children}
+                </main>
+              </MessageProvider>
+            </HeaderProvider>
           </body>
         </UserProvider>
       </LanguageProvider>

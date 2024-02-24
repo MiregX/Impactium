@@ -1,21 +1,22 @@
-'use client'
-import React, { useEffect, useState } from 'react';
+'use client';
+import React, { useEffect, useState, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import { useHeader } from '@/context/Header';
 import styles from '@/styles/Header.module.css';
 
 function HeaderBackground() {
-  const [topValue, setTopValue] = useState<number>(0);
-  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(false);  
+  const url = usePathname();
+  const self = useRef<HTMLDivElement>(null);
+  const { isLoading } = useHeader();
+  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url === '/');
+  const [topValue, setTopValue] = useState<number>(isHeaderBackgroundHidden ? 0 : -80);
 
   const handleScroll = () => {
-    const scrollY = window.scrollY;
-    const newTopValue = Math.max(-80, Math.min(0, -80 + scrollY));
+    const newTopValue = Math.max(-80, Math.min(0, -80 + window.scrollY));
     setTopValue(newTopValue);
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined')
-      return;
-
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -23,23 +24,28 @@ function HeaderBackground() {
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof window === 'undefined')
-      return;
+  interface Action {
+    value: number;
+    eventName: string;
+  }
 
-    if (!isHeaderBackgroundHidden) {
-      setTopValue(-80);
-      window.removeEventListener('scroll', handleScroll);
-    } else {
-      setTopValue(0);
-      window.addEventListener('scroll', handleScroll);
-    }
+  useEffect(() => {
+    self.current.classList[isLoading ? 'add' : 'remove'](styles.loading);
+  }, [isLoading])
+
+  useEffect(() => {
+    const action: Action = isHeaderBackgroundHidden ? { value: -80, eventName: 'removeEventListener' } : { value: 0, eventName: 'addEventListener' };
+    setTopValue(action.value);
+    window[action.eventName]('scroll', handleScroll);
   }, [isHeaderBackgroundHidden]);
+
+  useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])
 
   return (
     <div
+      ref={self}
       className={styles.headerBackground}
-      style={{ top: `${topValue}px`, zIndex: 3 }}
+      style={{ top: `${topValue}px` }}
       onClick={() => setIsHeaderBackgroundHidden(!isHeaderBackgroundHidden)}>
     </div>
   );
