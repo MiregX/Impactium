@@ -6,8 +6,8 @@ import styles from '@/styles/Header.module.css';
 
 function HeaderBackground() {
   const url = usePathname();
-  const self = useRef<HTMLDivElement>(null);
-  const { isLoading } = useHeader();
+  const self = useRef<HTMLHRElement | null>(null);
+  const { isLoading, setIsLoading } = useHeader();
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url === '/');
   const [topValue, setTopValue] = useState<number>(isHeaderBackgroundHidden ? 0 : -80);
 
@@ -30,24 +30,37 @@ function HeaderBackground() {
   }
 
   useEffect(() => {
-    self.current.classList[isLoading ? 'add' : 'remove'](styles.loading);
+    if (isLoading) {
+      self.current.classList.add(styles.onLoading);
+      self.current.classList.remove(styles.onLoaded);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 400);
+    } else {
+      self.current.classList.remove(styles.onLoading);
+      self.current.classList.add(styles.onLoaded);
+
+    }
   }, [isLoading])
 
   useEffect(() => {
     const action: Action = isHeaderBackgroundHidden ? { value: -80, eventName: 'removeEventListener' } : { value: 0, eventName: 'addEventListener' };
     setTopValue(action.value);
     window[action.eventName]('scroll', handleScroll);
+    setIsLoading(true)
   }, [isHeaderBackgroundHidden]);
 
   useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])
 
   return (
-    <div
-      ref={self}
-      className={styles.headerBackground}
-      style={{ top: `${topValue}px` }}
-      onClick={() => setIsHeaderBackgroundHidden(!isHeaderBackgroundHidden)}>
-    </div>
+    <>
+      <div
+        className={styles.headerBackground}
+        style={{ top: `${topValue}px` }}
+        onClick={() => setIsHeaderBackgroundHidden(!isHeaderBackgroundHidden)}>
+      </div>
+      <hr ref={self} className={`${styles.loader} ${styles.onLoaded}`} />
+    </>
   );
 }
 

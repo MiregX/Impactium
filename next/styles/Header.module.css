@@ -223,3 +223,42 @@
   transition: top 0.3s var(--transition);
   border-bottom: 1px solid var(--gray24);
 }
+.loader {
+  height: 4px;
+  width: 0px;
+  background-color: var(--soft-white);
+  position: absolute;
+  top: 80px;
+  border: none;
+  opacity: 0;
+}
+.onLoading {
+  opacity: 1;
+  animation: loader-inner 1s var(--transition) forwards;
+}
+.onLoaded {
+  animation: loader-outter 0.2s var(--transition) forwards;
+}
+@keyframes loader-inner {
+  0% {
+    opacity: 1;
+    width: 0vw;
+  }
+  100% {
+    opacity: 1;
+    width: 80vw;
+  }
+}
+@keyframes loader-outter {
+  0% {
+    opacity: 1;
+    width: 80vw;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    width: 100vw;
+  }
+}
