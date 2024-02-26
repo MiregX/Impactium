@@ -1,6 +1,4 @@
-import styles from "./page.module.css";
-
-export default function Account() {
+export function AccountPage() {
   return (
     <div>Хуй залупа</div>
   );

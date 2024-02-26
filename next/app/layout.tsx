@@ -1,12 +1,11 @@
-import Header from '@/components/header/Header'
+import { ReactNode } from 'react'
 import '@/styles/globals.css';
-import HeaderBackground from '@/components/header/HeaderBackground';
 import { UserProvider } from '../context/User';
 import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
- 
+import cookie from '@/context/Cookie';
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
@@ -26,7 +25,22 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const getUser = async () => {
+    try {
+      const response = await fetch('https://impactium.fun/api/user/get', {
+        method: 'GET',
+        headers: {
+          'token': "test"
+        }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  const user = await getUser();
   return (
     <html>
       <LanguageProvider>
@@ -35,6 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <HeaderProvider>
               <MessageProvider>
                 <main>
+                  <p>{user.email}</p>
                   {children}
                 </main>
               </MessageProvider>

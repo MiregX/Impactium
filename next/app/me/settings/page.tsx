@@ -1,4 +1,4 @@
-export default function Page() {
+export function SettingsPage() {
   return (
     <div>Пизда</div>
   );
