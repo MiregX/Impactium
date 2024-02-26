@@ -1,11 +1,10 @@
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import '@/styles/globals.css';
-import { UserProvider } from '../context/User';
 import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
-import cookie from '@/context/Cookie';
+import { getUser } from '@/context/User';
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
@@ -26,36 +25,19 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const getUser = async () => {
-    try {
-      const response = await fetch('https://impactium.fun/api/user/get', {
-        method: 'GET',
-        headers: {
-          'token': "test"
-        }
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error)
-    }
-  };
   const user = await getUser();
   return (
     <html>
-      <LanguageProvider>
-        <UserProvider>
-          <body style={{ backgroundColor: '#161616' }}>
-            <HeaderProvider>
-              <MessageProvider>
-                <main>
-                  <p>{user.email}</p>
-                  {children}
-                </main>
-              </MessageProvider>
-            </HeaderProvider>
-          </body>
-        </UserProvider>
+      <LanguageProvider prefetchedUser={user}>
+        <body style={{ backgroundColor: '#161616' }}>
+          <HeaderProvider>
+            <MessageProvider>
+              <main>
+                {React.isValidElement(children) && React.cloneElement(children, user)}
+              </main>
+            </MessageProvider>
+          </HeaderProvider>
+        </body>
       </LanguageProvider>
     </html>
   );

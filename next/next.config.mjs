@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+/** @type {import('next/types').NextConfig} */
 
 const nextConfig = {
   reactStrictMode: false,
@@ -6,9 +6,24 @@ const nextConfig = {
     disableReactStrictModeWarnings: true,
   },
   images: {
-    loader: 'imgix',
-    path: 'https://cdn.discordapp.com/',
-    domains: ['cdn.discordapp.com'],
+    loader: 'default',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.impactium.fun',
+        port: '',
+      }
+    ]
   },
 };
 

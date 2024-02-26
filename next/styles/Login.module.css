@@ -1,0 +1,194 @@
+.loginWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.loginBlock img {
+  pointer-events: none;
+}
+.baseButton {
+  height: 52px;
+  border: 1px solid var(--gray32);
+  padding: 0 15px;
+  color: var(--soft-white);
+  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.baseButton p {
+  flex: 1;
+  text-align: center;
+}
+.baseButton img {
+  width: 30px;
+}
+.loginBlock {
+  background-color: var(--gray16);
+  border-radius: 25px;
+  min-width: 400px;
+  border: 1px solid var(--gray32);
+  padding: 20px 20px 15px 20px;
+}
+.one {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.two {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  gap: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(100%);
+  height: 100%;
+  transition: all 0.75s var(--transition);
+  border: none;
+}
+.two.active {
+  transform: translateY(0%);
+}
+.two .skull {
+  width: 40%;
+  aspect-ratio: 6 / 7;
+}
+.two h2 {
+  font-size: 38px;
+  color: var(--soft-white);
+  font-weight: 600;
+}
+.two p {
+  color: var(--gray96);
+}
+.two .baseButton {
+  height: 60px;
+}
+.one h1 {
+  width: 100%;
+  color: var(--soft-white);
+  height: 50px;
+  text-align: center;
+  font-size: 38px;
+}
+.loginBlock .form {
+  margin-top: 5px;
+  gap: 15px;
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+.loginBlock .inputGroup {
+  position: relative;
+  display: flex;
+}
+.loginBlock .inputGroup .icon {
+  position: absolute;
+  right: 5px;
+  height: 100%;
+  width: 40px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+.inputGroup .icon img {
+  position: absolute;
+  height: 25px;
+  filter: invert(100%) brightness(0.8);
+  transition: all 0.2s var(--transition);
+  opacity: 1;
+}
+.inputGroup .icon img.disactive {
+  opacity: 0;
+}
+.loginBlock .form label {
+  position: absolute;
+  color: var(--soft-white);
+  transform: translate(20px, -50%);
+  padding: 0 5px;
+  background: var(--gray16);
+}
+.loginBlock .form input, .loginBlock button.submit {
+  flex: 1;
+  background-color: var(--gray16);
+}
+.loginBlock button.submit {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.loginBlock .line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--gray32);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+.one .line::after {
+  content: "OR";
+  padding: 0 10px;
+  position: absolute;
+  background: var(--gray16);
+  color: var(--soft-white);
+}
+.buttonsWrapper {
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.discordLogin {
+  background: #5865F2;
+  border: none;
+}
+.googleLogin {
+  background: var(--soft-white);
+  border: none;
+}
+.googleLogin p {
+  color: var(--gray16);
+}
+.noAccount {
+  gap: 5px;
+  width: 100%;
+  color: var(--gray96);
+  text-align: center;
+  height: 40px;
+}
+.noAccount a {
+  color: var(--soft-white);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.noAccount button {
+  cursor: pointer;
+}
+.closeStage {
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transition: all 0.75s var(--transition) 0.75s;
+  transform: translateX(200%);
+}
+.two.active .closeStage {
+  transform: translateX(0%);
+}
+.closeStage img {
+  height: 20px;
+  width: 20px;
+  filter: invert(100%);
+}

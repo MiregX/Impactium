@@ -1,14 +1,7 @@
-'use client'
- 
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
  
-export default function Page() {
+export default async function Page() {
   const router = useRouter()
- 
-  useEffect(() => {
-    router.push('/me/account');
-  });
-
+  router.push('/me/account');
   return null;
 }

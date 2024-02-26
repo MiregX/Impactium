@@ -58,8 +58,8 @@ function HeaderBackground() {
         className={styles.headerBackground}
         style={{ top: `${topValue}px` }}
         onClick={() => setIsHeaderBackgroundHidden(!isHeaderBackgroundHidden)}>
+        <hr ref={self} className={`${styles.loader} ${styles.onLoaded}`} />
       </div>
-      <hr ref={self} className={`${styles.loader} ${styles.onLoaded}`} />
     </>
   );
 }

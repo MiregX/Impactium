@@ -40,6 +40,9 @@
   user-select: none;
   text-decoration: none;
 }
+img {
+  pointer-events: none;
+}
 
 ul {
   list-style-type: none;

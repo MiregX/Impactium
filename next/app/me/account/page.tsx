@@ -1,4 +1,4 @@
-export function AccountPage() {
+export default function AccountPage() {
   return (
     <div>Хуй залупа</div>
   );

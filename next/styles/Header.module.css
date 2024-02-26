@@ -40,12 +40,8 @@
   padding: 4px;
   width: 32px;
   border-radius: 11px;
-  background-color: var(--gray36);
+  background-color: var(--gray32);
   cursor: pointer;
-}
-.verified img {
-  height: 24px;
-  pointer-events: none;
 }
 
 .user {
@@ -179,23 +175,6 @@
 .logo.inner-animation {
   animation: inner-logo-animation 0s linear 3.3s forwards;
 }
-.balance {
-  display: flex;
-  font-size: 10px;
-  line-height: 14px;
-  align-items: center;
-  height: 14px;
-  gap: 4px;
-  color: var(--soft-white);
-}
-.balance::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  background: url(https://cdn.impactium.fun/ux/donate.svg) no-repeat center center;
-  display: block;
-  background-size: cover;
-}
 
 @keyframes inner-logo-animation {
   0% {
@@ -218,10 +197,10 @@
   position: fixed;
   display: flex;
   background: linear-gradient(180deg,#161616b0,#2d2d2d3d);
+  border-bottom: 1px solid var(--gray24);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   transition: top 0.3s var(--transition);
-  border-bottom: 1px solid var(--gray24);
 }
 .loader {
   height: 4px;
@@ -261,4 +240,21 @@
     opacity: 0;
     width: 100vw;
   }
+}
+.user .balance {
+  display: flex;
+  font-size: 10px;
+  line-height: 14px;
+  align-items: center;
+  height: 14px;
+  gap: 4px;
+  color: var(--soft-white);
+}
+.user .balance::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: url(https://cdn.impactium.fun/ux/donate.svg) no-repeat center center;
+  display: block;
+  background-size: cover;
 }

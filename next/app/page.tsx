@@ -5,7 +5,7 @@ import styles from '@/styles/Index.module.css';
 import { useLanguage } from '@/context/Language'
 
 export default function Main() {
-  const { lang } = useLanguage();
+  const { lang, user } = useLanguage();
   const glRef = useRef<HTMLDivElement>(null);
   const aboutUsMainTextRef = useRef<HTMLParagraphElement>(null);
   const aboutUsDescriptionTextRef = useRef<HTMLDivElement>(null);

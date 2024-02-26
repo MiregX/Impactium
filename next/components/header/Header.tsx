@@ -4,10 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 import DynamicBubbleButton from '../DynamicBubbleButton';
-import { useUser } from '@/context/User';
+import { useLanguage } from '@/context/Language';
 
 export default function Header() {
-  const { user } = useUser();
+  const { user } = useLanguage();
   const logo = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Header() {
         <div className={styles.session}>
           {user.isVerified && (
             <div className={styles.verified}>
-              <Image src="https://cdn.impactium.fun/ux/verified.svg" height={48} width={37} alt='' />
+              <Image src="https://cdn.impactium.fun/ux/verified.svg" height={24} width={24} alt='' />
             </div>
           )}
           <Link href="/me/account" className={styles.user}>
