@@ -4,11 +4,9 @@ import { usePathname } from 'next/navigation';
 import { useHeader } from '@/context/Header';
 import styles from '@/styles/Header.module.css';
 
-function HeaderBackground() {
-  const url = usePathname();
+export function HeaderBackground() {
   const self = useRef<HTMLHRElement | null>(null);
-  const { isLoading, setIsLoading } = useHeader();
-  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url === '/');
+  const { isHeaderBackgroundHidden, setIsHeaderBackgroundHidden, isLoading, setIsLoading } = useHeader();
   const [topValue, setTopValue] = useState<number>(isHeaderBackgroundHidden ? 0 : -80);
 
   const handleScroll = () => {
@@ -50,8 +48,6 @@ function HeaderBackground() {
     setIsLoading(true)
   }, [isHeaderBackgroundHidden]);
 
-  useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])
-
   return (
     <>
       <div
@@ -63,5 +59,3 @@ function HeaderBackground() {
     </>
   );
 }
-
-export default HeaderBackground;

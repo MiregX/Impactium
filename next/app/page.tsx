@@ -47,12 +47,12 @@ export default function Main() {
         }
       });
       currentIndex = (currentIndex + 1) % (descriptionBlocks?.length || 1);
-      const timeoutId = setTimeout(() => {
+      const timeout = setTimeout(() => {
         descriptionBlocksAnimationInit(currentIndex);
       }, 4000);
 
       return () => {
-        clearTimeout(timeoutId);
+        clearTimeout(timeout);
       };
     };
 

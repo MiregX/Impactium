@@ -1,0 +1,57 @@
+.language {
+  z-index: 3;
+  position: fixed;
+  bottom: 0px;
+  transform: translateY(-50%);
+  left: -145px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s var(--transition);
+  background: var(--gray24);
+  border-radius: 0 20px 20px 0;
+}
+.active {
+  left: 0px;
+}
+.list {
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.list img {
+  height: 30px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: var(--gray32);
+  border-radius: 5px;
+}
+.list img:hover {
+  background-color: var(--gray48);
+}
+.list img.active {
+  background-color: var(--gray48);
+}
+.toggler {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  transition: all 0.3s var(--transition);
+  border: 1px solid transparent;
+  border-radius: 0px 20px 20px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.language.active .toggler {
+  border-radius: 5px 20px 20px 5px;
+}
+.toggler:hover {
+  background-color: var(--gray32);
+}
+.toggler img {
+  height: 30px;
+  width: 30px;
+}

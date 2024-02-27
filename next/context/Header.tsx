@@ -1,20 +1,22 @@
 'use client'
-import Header from '@/components/header/Header';
-import HeaderBackground from '@/components/header/HeaderBackground';
-import React, { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
+import { usePathname } from 'next/navigation';
+import { Language } from '@/components/LanguageChooser';
+import { Header } from '@/components/header/Header';
+import { HeaderBackground } from '@/components/header/HeaderBackground';
+import type { ReactNode, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface HeaderContextProps {
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  isHeaderBackgroundHidden: boolean;
+  setIsHeaderBackgroundHidden: Dispatch<SetStateAction<boolean>>;
 }
 
 const HeaderContext = createContext<HeaderContextProps | undefined>(undefined);
 
 export const useHeader = () => {
   const context = useContext(HeaderContext);
-  if (!context) {
-    throw new Error();
-  }
   return context;
 };
 
@@ -23,12 +25,17 @@ interface HeaderProviderProps {
 }
 
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
+  const url = usePathname();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url === '/');
+
+  useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])
 
   return (
-    <HeaderContext.Provider value={{ isLoading, setIsLoading }}>
+    <HeaderContext.Provider value={{ isLoading, setIsLoading, isHeaderBackgroundHidden, setIsHeaderBackgroundHidden }}>
       <Header />
       <HeaderBackground />
+      <Language />
       {children}
     </HeaderContext.Provider>
   );

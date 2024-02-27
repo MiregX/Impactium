@@ -6,7 +6,7 @@ interface IDynamicBubbleButton {
   type: "login" | "logout";
 }
 
-export default function DynamicBubbleButton({ type }: IDynamicBubbleButton) {
+export function DynamicBubbleButton({ type }: IDynamicBubbleButton) {
   const { lang } = useLanguage();
   return (
     <Link className={styles.dynamicBubbleButton} href={type}>

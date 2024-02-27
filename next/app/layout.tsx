@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <HeaderProvider>
             <MessageProvider>
               <main>
-                {React.isValidElement(children) && React.cloneElement(children, user)}
+                {children}
               </main>
             </MessageProvider>
           </HeaderProvider>

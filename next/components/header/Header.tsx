@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
-import DynamicBubbleButton from '../DynamicBubbleButton';
+import { DynamicBubbleButton } from '@/components/DynamicBubbleButton';
 import { useLanguage } from '@/context/Language';
 
-export default function Header() {
+export function Header() {
   const { user } = useLanguage();
   const logo = useRef<HTMLImageElement | null>(null);
 
