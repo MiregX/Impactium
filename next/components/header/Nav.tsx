@@ -58,7 +58,7 @@ export function Nav() {
               <p>{lang[category]}</p>
               <img src="https://cdn.impactium.fun/ux/to-left.svg" alt="arrow" />
               <div className='bar'>
-                {Object.values(nav[category]).map((obj, innerIndex) => (
+                {Object.values(nav[category]).map((obj: { action, name, description, logo }, innerIndex) => (
                   <a key={innerIndex} className="plate flex-dir-row center-v" href={obj.action}>
                     <div className="guild-avatar flex center">
                       <img src={obj.logo} alt="guild-logo" />

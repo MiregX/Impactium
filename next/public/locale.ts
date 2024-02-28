@@ -1,12 +1,15 @@
+export interface Translation {
+  ua: string;
+  it: string;
+  us: string;
+  ru: string;
+}
+
+
 export interface Locale {
   [key: string]: {
-    [key: string]: string | {
-      ua: string;
-      it: string;
-      us: string;
-      ru: string;
-    };
-  } | Record<string, any>[];
+    [key: string]: string | Translation;
+  } | Array<Translation>;
 }
 
 const locale: Locale = {
@@ -228,11 +231,17 @@ ourPartners: {
     us: "You have not set the skin",
     ru: "Вы не установили скин"
   },
-  myProfile: {
+  account: {
     ua: "Мій профіль",
     it: "Il mio profilo",
     us: "My profile",
     ru: "Мой профиль"
+  },
+  settings: {
+    ua: "Налаштування",
+    it: "Impostazioni",
+    us: "Settings",
+    ru: "Настройки"
   },
   buySomeStuff: {
     ua: "Купити ресурси",

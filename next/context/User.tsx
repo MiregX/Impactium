@@ -1,12 +1,13 @@
 import cookie from "./Cookie";
 
 export interface IUser {
-  isVerified: boolean;
-  balance: number;
-  avatar: string;
   id: string;
+  email: string;
   displayName: string;
-  email?: string;
+  avatar?: string;
+  balance?: number;
+  isVerified?: boolean;
+  referal?: any; 
 }
 
 export let user: IUser | null = null;

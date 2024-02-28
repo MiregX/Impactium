@@ -91,7 +91,7 @@ export default function Main() {
           <li itemType="event">{lang.masterpieceRoleplayWithAdmins}<hr /></li>
           <li itemType="donate">{lang.donateAndGetUniqueSkin}<hr /></li>
         </ul>
-        <Link href="https://impactium.fun/me/account">
+        <Link href="/me/account">
           {lang.myProfile}
         </Link>
       </div>

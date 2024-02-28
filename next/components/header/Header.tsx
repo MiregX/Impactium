@@ -5,9 +5,11 @@ import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 import { DynamicBubbleButton } from '@/components/DynamicBubbleButton';
 import { useLanguage } from '@/context/Language';
+import { useHeader } from '@/context/Header';
 
 export function Header() {
   const { user } = useLanguage();
+  const { isFlattenHeader } = useHeader();
   const logo = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export function Header() {
   }, [logo]);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isFlattenHeader && styles.flatten}`}>
       <Link href='/' className={styles.logo}>
         <Image ref={logo} src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>

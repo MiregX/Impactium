@@ -1,3 +1,46 @@
 .me {
-  padding: 0 15vw;
+  padding: 0 16px;
+  max-width: 1344px;
+  align-self: center;
+  flex: 1;
+  width: 100%;
+  gap: 32px;
+  flex-direction: row;
+  display: flex;
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 1080px) {
+  .nav {
+    align-items: flex-start;
+  }
+}
+@media (max-width: 767px) {
+  .nav {
+    align-items: flex-start;
+  }
+}
+.nav a {
+  background: var(--gray32);
+  padding: 8px;
+  min-height: 32px;
+  min-width: 192px;
+  gap: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+}
+.nav a:hover {
+  background: var(--gray48);
+}
+.nav a.selected {
+  background: var(--gray48);
+}
+.nav a p {
+  flex: 1;
+  text-align: left;
 }

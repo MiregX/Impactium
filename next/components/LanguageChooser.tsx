@@ -15,7 +15,7 @@ export function Language() {
             <img
               src={`https://cdn.impactium.fun/langs/${langCode}.png`}
               alt=''
-              className={langCode === language && s.active}
+              className={langCode === language  ? s.active : ''}
             />
           </div>
         ))}
