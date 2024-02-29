@@ -3,29 +3,18 @@ import { useRef, useEffect } from "react";
 import Link from "next/link";
 import styles from '@/styles/Index.module.css';
 import { useLanguage } from '@/context/Language'
+import { useRouter } from "next/navigation";
 
 export default function Main() {
-  const { lang, user } = useLanguage();
+  const { lang } = useLanguage();
+  const router = useRouter();
   const glRef = useRef<HTMLDivElement>(null);
   const aboutUsMainTextRef = useRef<HTMLParagraphElement>(null);
   const aboutUsDescriptionTextRef = useRef<HTMLDivElement>(null);
   const privilegesListRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    const gl = glRef.current;
-    const aboutUsMainText = aboutUsMainTextRef.current;
-    const aboutUsDescriptionText = aboutUsDescriptionTextRef.current;
-    
-    setTimeout(() => {
-      if (gl && aboutUsMainText && aboutUsDescriptionText) {
-        gl.style.transform = 'translateX(16px)';
-        gl.style.opacity = '1';
-        aboutUsMainText.style.transform = 'translateX(0px)';
-        aboutUsMainText.style.opacity = '1';
-        aboutUsDescriptionText.style.transform = 'translateX(0px)';
-        aboutUsDescriptionText.style.opacity = '1';
-      }
-    }, 400);
+    animation(false);
 
     const lis = privilegesListRef.current?.querySelectorAll('li');
     lis.forEach((li, index) => {
@@ -34,6 +23,25 @@ export default function Main() {
       }, (index + 1) * 250);
     });
   }, []);
+
+  function animation(isUnmount: boolean) {
+    const gl = glRef.current;
+    const aboutUsMainText = aboutUsMainTextRef.current;
+    const aboutUsDescriptionText = aboutUsDescriptionTextRef.current;
+    const timeout = isUnmount ? 0 : 400
+    setTimeout(() => {
+      if (!gl || !aboutUsMainText || !aboutUsDescriptionText) return;
+
+      const opacity = isUnmount ? '0' : '1'
+      const transition = isUnmount ? '' : ['translateX(16px)', 'translateX(0px)']
+      gl.style.transform = Array.isArray(transition) ? transition[0] : transition;
+      gl.style.opacity = opacity;
+      aboutUsMainText.style.transform = Array.isArray(transition) ? transition[1] : transition;
+      aboutUsMainText.style.opacity = opacity;
+      aboutUsDescriptionText.style.transform = Array.isArray(transition) ? transition[1] : transition;
+      aboutUsDescriptionText.style.opacity = opacity;
+    }, timeout);
+  }
 
   useEffect(() => {
     const descriptionBlocksAnimationInit = (currentIndex: number) => {
@@ -92,7 +100,7 @@ export default function Main() {
           <li itemType="donate">{lang.donateAndGetUniqueSkin}<hr /></li>
         </ul>
         <Link href="/me/account">
-          {lang.myProfile}
+          {lang.account}
         </Link>
       </div>
     </div>

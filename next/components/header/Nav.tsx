@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from './Nav.module.css';
+import s from '@/styles/Header.module.css';
 import { useHeader } from '@/context/Header';
 import { useLanguage } from '@/context/Language'
 
@@ -45,27 +45,24 @@ export function Nav() {
       }
     }
   }
-  useEffect(() => {
-    setVisibility(isHeaderBackgroundHidden ? 'flex' : 'none')
-  }, [isHeaderBackgroundHidden]);
 
   return (
-    <div className={`nav ${visibility}`}>
+    <div className={`${s.nav} ${!isHeaderBackgroundHidden && s.hidden}`}>
       {Object.keys(nav).map((category, index) => (
         <React.Fragment key={category}>
-          <div className='category'>
-            <button className="flex-dir-row center">
+          <div className={s.category}>
+            <button>
               <p>{lang[category]}</p>
-              <img src="https://cdn.impactium.fun/ux/to-left.svg" alt="arrow" />
-              <div className='bar'>
+              <img src="https://cdn.impactium.fun/ux/to-left.svg" alt="" />
+              <div className={s.bar}>
                 {Object.values(nav[category]).map((obj: { action, name, description, logo }, innerIndex) => (
-                  <a key={innerIndex} className="plate flex-dir-row center-v" href={obj.action}>
-                    <div className="guild-avatar flex center">
-                      <img src={obj.logo} alt="guild-logo" />
+                  <a key={innerIndex} className={s.plate} href={obj.action}>
+                    <div className={s.guildAvatar}>
+                      <img src={obj.logo} alt="" />
                     </div>
-                    <div className="text flex-dir-column">
+                    <div className={s.text}>
                       <h3>{obj.name}</h3>
-                      <div className="p-wrapper">
+                      <div className={s.description}>
                         <p>{obj.description}</p>
                       </div>
                     </div>
@@ -74,7 +71,7 @@ export function Nav() {
               </div>
             </button>
           </div>
-          {index < Object.keys(nav).length - 1 && <div className='line' />}
+          {index < Object.keys(nav).length - 1 && <div className={s.line} />}
         </React.Fragment>
       ))}
     </div>

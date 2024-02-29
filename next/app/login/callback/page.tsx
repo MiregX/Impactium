@@ -1,27 +1,37 @@
-import { redirect } from 'next/navigation'
+'use client'
+import { useRouter, useSearchParams } from 'next/navigation'
 import cookie from '@/context/Cookie';
-import { getUser, setToken } from '@/context/User';
+import { useUser } from '@/context/User';
+import { useEffect } from 'react';
 
 async function loginCallback(code: string, referal?: string | false) {
-  const res = await fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET' })
+  const res = await fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
   if (!res.ok) return undefined
   return res.json()
 }
 
-export default async function CallbackPage(request, response) {
+export default function CallbackPage() {
+  const { setToken } = useUser();
+  const router = useRouter();
   const referal = cookie.get('ref') || false;
  
-  const code = request.searchParams.code || false;
-  const token = request.searchParams.token || false;
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token')
+  const code = searchParams.get('code')
+  
+  useEffect(() => {
+    if (code) {
+      loginCallback(code, referal).then(authorizationResult => {
+        if (authorizationResult) {
+          setToken(authorizationResult.token || false);
+        }
+      });
+    } else if (token) {
+      setToken(token);
+    }
 
-  if (code) {
-    const authorizationResult = await loginCallback(code, referal);
-    setToken(authorizationResult.token || false);
-    const user = await getUser();
-  } else if (token) {
-    setToken(token);
-    const user = await getUser();
-  }
-
-  redirect('/');
+    router.push('/');
+  }, []);
+  
+  return null;
 };

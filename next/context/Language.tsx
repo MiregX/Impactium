@@ -1,6 +1,5 @@
 'use client';
 import locale from '@/public/locale';
-import { IUser } from './User';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import cookie from './Cookie';
 
@@ -16,8 +15,6 @@ interface ILanguageContext {
   lang: Translations;
   setLanguage: (language: string) => void;
   language: string;
-  user?: IUser;
-  setUser: (user: IUser) => void; // Fixed the export for setUser
 }
 
 const LanguageContext = createContext<ILanguageContext | undefined>(undefined);
@@ -30,9 +27,8 @@ export const useLanguage = () => {
   return context;
 };
 
-const LanguageProvider: React.FC<{ prefetchedUser: IUser; children: React.ReactNode }> = ({ prefetchedUser, children }) => {
+const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<string>(checkIsLanguageCodeIsValid(cookie.get('language')) || 'us');
-  const [user, setUser] = useState<IUser | null>(prefetchedUser || null);
 
   function checkIsLanguageCodeIsValid(languageCode: string) {
     const isLanguagePackValid = ['us', 'ua', 'ru', 'it'].includes(languageCode);
@@ -76,8 +72,6 @@ const LanguageProvider: React.FC<{ prefetchedUser: IUser; children: React.ReactN
     lang: getLanguagePack(language),
     setLanguage,
     language,
-    user,
-    setUser,
   };
   return (
     <LanguageContext.Provider value={props}>

@@ -1,11 +1,17 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language'
+import { useMessage } from '@/context/Message';
+import { useUser } from '@/context/User';
 
 export function PlayerCredentials() {
-  const { lang, user } = useLanguage();
+  const { lang } = useLanguage();
+  const { user } = useUser();
   const { copy } = useMessage();
-  const { player, register, isPlayerLoaded } = usePlayer();
+  const player = {}
+  const register = {}
+  const isPlayerLoaded = null
   const allAchievements = ['casual', 'defence', 'killer', 'event', 'donate', 'hammer'];
   const [playerSkinIconLink, setPlayerSkinIconLink] = useState(player?.skin?.iconLink || 'https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png');
 

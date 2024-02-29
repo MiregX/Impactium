@@ -67,7 +67,7 @@ export default function Login() {
               <img className={!passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ux/eye-open.svg" alt="open-eye" />
             </button>
           </div>
-          <button className={`${s.submit} ${s.baseButton} ${s.center}`} onClick={() => { setNextStage(true) }}>{lang.login}</button>
+          <button className={`${s.submit} ${s.baseButton} ${s.center}`} onClick={() => {setNextStage(true)}}>{lang.login}</button>
         </div>
         <div className={s.line} />
         <div className={`${s.buttonsWrapper}`}>
@@ -81,7 +81,7 @@ export default function Login() {
           </a>
         </div>
         <p className={`${s.noAccount} ${s.center}`}>{lang.dontHaveAnAccount} <button onClick={() => { setNextStage(!isNextStage) }}>{lang._register}</button></p>
-        <div id="stageTwo" ref={stageTwo} className={`${s.loginBlock} ${s.two}`}>
+        <div ref={stageTwo} className={`${s.loginBlock} ${s.two} ${isNextStage && s.active}`}>
           <img src="https://cdn.impactium.fun/ux/skull.png" className={s.skull} alt="skull-icon" />
           <h2>{lang.nuhuh}</h2>
           <p>{lang.justUseTheseTwo}</p>

@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
 import { DynamicBubbleButton } from '@/components/DynamicBubbleButton';
-import { useLanguage } from '@/context/Language';
+import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
+import { Nav } from '@/components/header/Nav';
 
 export function Header() {
-  const { user } = useLanguage();
-  const { isFlattenHeader } = useHeader();
+  const { user } = useUser();
+  const { isFlattenHeader, isLogoHiiden } = useHeader();
   const logo = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -20,10 +21,11 @@ export function Header() {
 
   return (
     <header className={`${styles.header} ${isFlattenHeader && styles.flatten}`}>
-      <Link href='/' className={styles.logo}>
+      <Link href='/' className={`${styles.logo} ${isLogoHiiden && styles.hidden}`}>
         <Image ref={logo} src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>
       </Link>
+      <Nav />
       {user && user.id ? (
         <div className={styles.session}>
           {user.isVerified && (

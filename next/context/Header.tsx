@@ -13,6 +13,8 @@ interface HeaderContextProps {
   setIsHeaderBackgroundHidden: Dispatch<SetStateAction<boolean>>;
   isFlattenHeader: boolean;
   setIsFlattenHeader: Dispatch<SetStateAction<boolean>>;
+  isLogoHiiden: boolean;
+  setIsLogoHiiden: Dispatch<SetStateAction<boolean>>;
 }
 
 const HeaderContext = createContext<HeaderContextProps | undefined>(undefined);
@@ -30,12 +32,24 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const url = usePathname();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url !== '/');
-  const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(url !== '/');
+  const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(false);
+  const [isLogoHiiden, setIsLogoHiiden] = useState<boolean>(false);
 
   useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])
 
+  const headerProps = {
+    isLoading,
+    setIsLoading,
+    isHeaderBackgroundHidden,
+    setIsHeaderBackgroundHidden,
+    isFlattenHeader,
+    setIsFlattenHeader,
+    isLogoHiiden,
+    setIsLogoHiiden
+  }
+
   return (
-    <HeaderContext.Provider value={{ isLoading, setIsLoading, isHeaderBackgroundHidden, setIsHeaderBackgroundHidden, isFlattenHeader, setIsFlattenHeader }}>
+    <HeaderContext.Provider value={headerProps}>
       <Header />
       <HeaderBackground />
       <Language />

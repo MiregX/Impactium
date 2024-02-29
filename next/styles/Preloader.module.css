@@ -1,0 +1,108 @@
+.preloader {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9;
+  height: 100vh;
+  width: 100vw;
+  background: var(--gray16);
+  transition: all 1.25s var(--transition) 1.5s;
+}
+
+@keyframes first {
+  0% {
+    stroke-dashoffset: 589px;
+    stroke-dasharray: 589px;
+  }
+
+  100% {
+    stroke-dashoffset: 1179px;
+    stroke-dasharray: 589px;
+  }
+}
+
+@keyframes second {
+  0% {
+    stroke-dashoffset: 110px;
+    stroke-dasharray: 110px;
+  }
+
+  100% {
+    stroke-dashoffset: 220px;
+    stroke-dasharray: 110px;
+  }
+}
+
+@keyframes out {
+  0% {
+  }
+  100% {
+    left: 16px;
+    transform: translate(0%, -50%);
+    top: 40px;
+  }
+}
+.preloader .container {
+  display: flex; 
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.preloader.slow {
+  background: transparent;
+}
+.preloader.slow .container {
+  animation: out 1s var(--transition) 1.75s forwards;
+}
+.preloader svg {
+  height: 72px;
+  opacity: 0;
+  transition: height 1s var(--transition) 1.75s, opacity 0s linear;
+}
+
+.preloader.slow svg {
+  height: 48px;
+  opacity: 1;
+}
+
+.preloader .container p {
+  font-size: 48px;
+  overflow: hidden;
+  width: 0px;
+  font-weight: 600;
+  transition: width 0.5s var(--transition) 1s, font-size 1s var(--transition) 1.75s;
+}
+
+.preloader.slow .container p {
+  font-size: 30px;
+  width: 256px;
+}
+
+.preloader.slow .first {
+  animation: first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
+}
+.preloader.slow .second {
+  animation: second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
+}
+
+.preloader.fast svg {
+  opacity: 1;
+  transition: all 0.3s var(--transition);
+}
+.preloader.hide {
+  transition: all 0.2s var(--transition);
+  opacity: 0;
+}
+.preloader.remove {
+  display: none;
+}
+.preloader.fast .first {
+  animation: first 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.preloader.fast .second {
+  animation: second 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}

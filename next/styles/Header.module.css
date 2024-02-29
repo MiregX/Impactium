@@ -19,6 +19,10 @@
   flex-direction: row;
   align-items: center;
   width: min-content;
+  opacity: 1;
+}
+.logo.hidden {
+  opacity: 0;
 }
 .logo p {
   font-size: 30px;
@@ -131,45 +135,6 @@
 .header {
   grid-template-columns: repeat(2, 1fr);
 }
-.nav {
-  display: none;
-}
-#logout {
-  display: none;
-}
-.nav button bar {
-  backdrop-filter: blur(0px);
-}
-}
-.plate .p-wrapper {
-  height: 42px;
-  overflow: hidden;
-  transition: all 0.2s var(--transition) !important;
-}
-.plate:hover .p-wrapper {
-  height: 0px;
-}
-.plate:hover h3 {
-  font-size: 16px;
-}
-.plate {
-  transition: all 0.2s ease;
-  padding: 12px;
-  gap: 12px;
-}
-.plate .text {
-  align-items: flex-start;
-  justify-content: center;
-}
-.guild-avatar {
-  height: 66px;
-  width: 66px;
-  min-width: 66px;
-  border-radius: 12px;
-  background: var(--gray48);
-}
-.plate:hover {
-  background: var(--gray32);
 }
 
 .logo.inner-animation {
@@ -203,9 +168,9 @@
   transition: top 0.3s var(--transition);
 }
 .loader {
-  height: 4px;
+  height: 2px;
   width: 0px;
-  background-color: var(--soft-white);
+  background-color: var(--gray96);
   position: absolute;
   top: 80px;
   border: none;
@@ -257,4 +222,134 @@
   background: url(https://cdn.impactium.fun/ux/donate.svg) no-repeat center center;
   display: block;
   background-size: cover;
+}
+.nav {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s var(--transition);
+  transform: translateY(0px);
+}
+.nav.hidden {
+  transform: translateY(-80px);
+}
+.nav .category {
+  height: 100%;
+}
+.nav .category button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.nav button {
+  height: 100%;
+  position: relative;
+  font-weight: 500;
+  width: 120px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 100%;
+}
+.nav button > img {
+  filter: invert(100%);
+  height: 16px;
+  width: 16px;
+  margin-left: 8px;
+  transition: all 0.2s var(--transition);
+}
+.nav button:hover > img {
+  transform: rotateZ(90deg);
+}
+.nav button .bar {
+  position: absolute;
+  min-height: 80px;
+  background: #6464640d;
+  border: var(--blured-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(5px);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  flex-direction: column;
+  top: 80px;
+  width: 240px;
+  border-radius: 14px;
+  transition: all 0.2s var(--transition);
+  transform: translateY(-16px);
+  overflow: hidden;
+  text-transform: initial;
+}
+.nav button:hover .bar {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0px);
+}
+.nav button > p {
+  text-transform: uppercase;
+  font-size: 100%;
+}
+.nav button .bar img {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+}
+.nav button .bar h3 {
+  text-align: left;
+  font-weight: 600;
+  color: var(--soft-white);
+  transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
+  font-size: 18px;
+}
+.nav .line {
+  width: 1px;
+  background: var(--soft-white);
+  height: 16px;
+}
+.nav .line:last-child {
+  display: none;
+}
+.guildAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray48);
+  border-radius: 12px;
+  height: 66px;
+  min-width: 66px;
+  width: 66px;
+}
+.plate p {
+  height: 16px;
+  margin-top: 8px;
+  overflow: hidden;
+  transition: all 0.2s var(--transition) !important;
+  text-align: left;
+  font-weight: 400;
+  color: var(--gray64);
+}
+.plate:hover .text div p {
+  height: 0px;
+  margin-top: 0px;
+}
+.plate:hover h3 {
+  font-size: 16px;
+}
+.plate {
+  transition: all 0.2s var(--transition);
+  padding: 12px;
+  gap: 12px;
+  display: flex;
+  align-items: center;
+}
+.plate .text {
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+}
+.plate:hover {
+  background: #56565636;
 }

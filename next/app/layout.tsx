@@ -4,7 +4,9 @@ import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
-import { getUser } from '@/context/User';
+import { UserProvider } from '@/context/User';
+import { getUser } from '@/preset/User';
+import { Preloader } from '@/context/Preloader';
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
@@ -28,16 +30,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const user = await getUser();
   return (
     <html>
-      <LanguageProvider prefetchedUser={user}>
-        <body style={{ backgroundColor: '#161616' }}>
-          <HeaderProvider>
-            <MessageProvider>
-              <main>
-                {children}
-              </main>
-            </MessageProvider>
-          </HeaderProvider>
-        </body>
+      <LanguageProvider>
+        <UserProvider prefetchedUser={user}>
+          <body style={{ backgroundColor: '#161616' }}>
+            <HeaderProvider>
+              <Preloader />
+              <MessageProvider>
+                <main>
+                  {children}
+                </main>
+              </MessageProvider>
+            </HeaderProvider>
+          </body>
+        </UserProvider>
       </LanguageProvider>
     </html>
   );
