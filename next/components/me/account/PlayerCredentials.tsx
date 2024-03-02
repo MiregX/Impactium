@@ -4,17 +4,15 @@ import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language'
 import { useMessage } from '@/context/Message';
 import { useUser } from '@/context/User';
+import { usePlayer } from '@/context/Player';
 
 export function PlayerCredentials() {
   const { lang } = useLanguage();
   const { user } = useUser();
+  const { player, register, isPlayerLoaded } = usePlayer();
   const { copy } = useMessage();
-  const player = {}
-  const register = {}
-  const isPlayerLoaded = null
   const allAchievements = ['casual', 'defence', 'killer', 'event', 'donate', 'hammer'];
   const [playerSkinIconLink, setPlayerSkinIconLink] = useState(player?.skin?.iconLink || 'https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png');
-
 
   useEffect(() => {
     if (isPlayerLoaded && player.skin) {
@@ -23,10 +21,10 @@ export function PlayerCredentials() {
   }, [player, isPlayerLoaded, setPlayerSkinIconLink]);
 
   return (
-    <div className="dynamic default_panel_style me player_credentials">
-      <h2 className="header">{lang.myProfile}</h2>
+    <div className={`${s.panel} ${s.playerCredentials}`} itemType='dynamic'>
+      <h2>{lang.account}</h2>
 
-      <p className={`player ${isPlayerLoaded ? '' : 'player_loader'}`}>
+      <p className={s.player}>
         <img src={playerSkinIconLink} alt="Player Icon" />
 
         {player.registered && player.nickname ? (
@@ -38,13 +36,13 @@ export function PlayerCredentials() {
         )}
       </p>
 
-      <ul>
+      <ul className={s.ul}>
         {allAchievements.map((achKey) => {
           const ach = player.achievements?.[achKey];
           if (typeof ach !== 'object') return null;
 
           return (
-            <li className={`${achKey}, percentage-${ach.doneStages}0`} key={`${achKey}-${ach.doneStages}`}>
+            <li className={`${s[achKey]}, ${s['percentage' + ach.doneStages]}`} key={`${achKey}-${ach.doneStages}`}>
               {`${lang[`achievmentTitle_${achKey}`]} ${ach.symbol}`}
               <hr />
             </li>
@@ -53,14 +51,13 @@ export function PlayerCredentials() {
       </ul>
 
       {player.registered ? (
-        <button tooverlayview="true"
-          className="change_profile"
-          onClick={() => copy(`https://impactium.fun/?ref=${user.referal.code}`)}
-        >
+        <button
+          className={s.button}
+          onClick={() => copy(`https://impactium.fun/?ref=${user.referal.code}`)}>
           {lang.copyMyReferalLink}
         </button>
       ) : (
-        <button className="change_profile" onClick={register} tooverlayview="true">
+        <button className={s.button} onClick={register}>
           {lang._register}
         </button>
       )}

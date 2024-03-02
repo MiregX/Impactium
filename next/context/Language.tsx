@@ -1,7 +1,7 @@
 'use client';
 import locale from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import cookie from './Cookie';
+import Cookies from 'universal-cookie';
 
 interface Translations {
   [key: string]:
@@ -28,6 +28,7 @@ export const useLanguage = () => {
 };
 
 const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const cookie = new Cookies();
   const [language, setLanguage] = useState<string>(checkIsLanguageCodeIsValid(cookie.get('language')) || 'us');
 
   function checkIsLanguageCodeIsValid(languageCode: string) {

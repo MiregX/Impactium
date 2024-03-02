@@ -2,7 +2,7 @@
 import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from './Header';
-import cookie from "./Cookie";
+import Cookies from 'universal-cookie';
 import {
     useCallback,
     useEffect,
@@ -12,6 +12,7 @@ import {
 import { usePathname } from 'next/navigation';
 
 export const Preloader = () => {
+  const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
   const url = usePathname();

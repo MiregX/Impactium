@@ -1,21 +1,19 @@
 import { ReactNode } from 'react';
-import { Nav } from '@/components/Nav'
 import { getPlayer } from '@/preset/Player';
 import { redirect } from 'next/navigation'
-import cookie from '@/context/Cookie';
 import { PlayerProvider } from '@/context/Player';
+import { cookies } from 'next/headers';
 
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
-	console.log(cookie.get('token'))
-	if (!cookie.get('token')) {
+	const token = cookies().get('token').value
+	if (!token) {
 		redirect('/login');
 	}
 
-	const player = await getPlayer();
+	const player = await getPlayer(token);
 
 	return (
 		<PlayerProvider prefetchedPlayer={player}>
-			<Nav />
 			{children}
 		</PlayerProvider>
 	);

@@ -32,7 +32,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const url = usePathname();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url !== '/');
-  const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(false);
+  const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(url.startsWith('/me'));
   const [isLogoHiiden, setIsLogoHiiden] = useState<boolean>(false);
 
   useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url])

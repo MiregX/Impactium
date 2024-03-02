@@ -230,10 +230,10 @@
   justify-content: center;
   align-items: center;
   transition: all 0.3s var(--transition);
-  transform: translateY(0px);
+  transform: translateY(-80px);
 }
 .nav.hidden {
-  transform: translateY(-80px);
+  transform: translateY(0px);
 }
 .nav .category {
   height: 100%;

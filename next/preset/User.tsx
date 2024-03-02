@@ -1,4 +1,5 @@
-import cookie from "@/context/Cookie";
+import Cookies from "universal-cookie";
+import { cookies } from "next/headers";
 
 export interface IUser {
   id: string;
@@ -10,11 +11,10 @@ export interface IUser {
   referal?: any; 
 }
 
-export const getUser = async (token?: string): Promise<IUser> => {
-  token = token || cookie.get('token');
-  console.log(cookie.get('token'))
-  if (!token)
+export const getUser = async (token: string): Promise<IUser> => {
+  if (!token) {
     return null;
+  }
 
   try {
     const response = await fetch('https://impactium.fun/api/user/get', {
@@ -25,13 +25,12 @@ export const getUser = async (token?: string): Promise<IUser> => {
     });
   
     if (!response.ok) {
-      cookie.remove('token');
       return undefined;
     }
 
     return await response.json();
   } catch (error) {
-    cookie.remove('token');
+    console.error(error);
     return undefined;
   }
 };

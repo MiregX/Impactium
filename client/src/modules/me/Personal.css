@@ -80,87 +80,7 @@ main {
 .privileges > * + * {
   margin-top: var(--flow-space, 1.25em);
 }
-.change_profile,
-.default_panel_style input {
-  display: block;
-  text-wrap: nowrap;
-  cursor: pointer;
-  align-self: end;
-  margin: 1em 0 0.5em 0;
-  text-align: center;
-  text-decoration: none;
-  color: #fff;
-  background-color: #0d0d0d;
-  padding: 0.7em;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  grid-row: -1;
-}
-.default_panel_style input {
-  cursor: text;
-  z-index: 1;
-}
-.default_panel_style p {
-  flex: 1;
-}
-.default_panel_style span {
-  font-size: 12px;
-}
-.default_panel_style .profile-header > img {
-  margin-right: 4px;
-  height: 12px;
-}
-.top_line {
-  height: min-content;
-  gap: 32px;
-  width: 100% !important;
-}
-.controls {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 32px;
-}
-.default_panel_style {
-  position: relative;
-  overflow: hidden;
-  padding: 0.75em 1em;
-  border-radius: 16px;
-  color: #eceff1;
-  background-color: #2b2b2b;
-  border: 1px solid #eceff133;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.default_panel_style input {
-  text-align: left;
-  padding: 0.44em;
-  width: 100%;
-  border: 1px solid #0d0d0d;
-  flex: 1;
-}
-.default_button_style {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-align: left;
-  border: 1px solid #0d0d0d;
-  flex: 1;
-  margin: 1em 0 0.5em 0;
-  text-decoration: none;
-  color: #fff;
-  background-color: #0d0d0d;
-  line-height: normal;
-  padding: 0.44em;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  grid-row: -1;
-  z-index: 1;
-}
+
 
 .controls .default_panel_style.blocked::after {
   content: url(https://cdn.impactium.fun/ux/lock24p.svg);
@@ -195,16 +115,6 @@ main {
 .upload-button img.rotate {
   animation: rotateAnimation 2s linear infinite;
 }
-#skinUploadOnErrorMessageContainer,
-#nicknameUpdateOnErrorMessageContainer {
-  color: var(--c-96);
-  font-size: 12px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 100%;
-  text-wrap: nowrap;
-  transform: translateY(calc(0.5em + 50%));
-}
 .grayed {
   color: var(--c-96) !important;
   z-index: 0 !important;
@@ -212,9 +122,6 @@ main {
 .greyed {
   filter: brightness(0.55) !important;
   z-index: 0;
-}
-.me p {
-  flex: unset;
 }
 @media (max-width: 767px) {
   .personal {

@@ -1,6 +1,6 @@
 'use client'
 import { IUser, getUser } from "@/preset/User";
-import cookie from "./Cookie";
+import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 
 const UserContext = createContext(undefined);
@@ -20,16 +20,15 @@ export const UserProvider = ({
     prefetchedUser: IUser | null,
     children: any
   }) => {
-  const [token, setToken] = useState<string | boolean>((cookie.get('token')) || false);
+  const cookie = new Cookies();
+  const [token, setToken] = useState<string | false>((cookie.get('token')) || false);
   const [user, setUser] = useState<IUser | null>(prefetchedUser);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(prefetchedUser ? true : false);
 
   useEffect(() => {
-    console.log("Effected token: ", cookie.get('token'))
     if (token) {
-      cookie.set('token', token);
       setIsUserLoaded(false);
-      getUser().then((user) => {
+      getUser(token).then((user) => {
         setUser(user);
       }).catch((error) => {
         setUser(user || null);

@@ -24,6 +24,7 @@ export function Nav() {
     <nav className={s.nav}>
       {['account', 'settings'].map((title, index) => (
         <Link
+          key={index}
           className={(index === selectedButton && s.selected) || ''}
           onClick={() => {router.push('account'); setSelectedButton(index)}}
           href={`/me/${title}`}

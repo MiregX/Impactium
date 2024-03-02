@@ -10,6 +10,7 @@
 .line {
   display: flex;
   flex-direction: row;
+  gap: 32px;
 }
 .controls {
   flex: 1;
@@ -17,4 +18,155 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 32px;
+}
+.panel {
+  position: relative;
+  overflow: hidden;
+  padding: 0.75em 1em;
+  border-radius: 16px;
+  color: #eceff1;
+  background-color: #2b2b2b;
+  border: 1px solid #eceff133;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.panel input {
+  display: block;
+  text-wrap: nowrap;
+  cursor: pointer;
+  align-self: end;
+  margin: 1em 0 0.5em 0;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0d0d0d;
+  padding: 0.7em;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  grid-row: -1;
+  cursor: text;
+  z-index: 1;
+  text-align: left;
+  padding: 0.44em;
+  width: 100%;
+  border: 1px solid #0d0d0d;
+  flex: 1;
+}
+.panel p {
+  flex: 1;
+}
+.panel span {
+  font-size: 12px;
+}
+.panel .profile-header > img {
+  margin-right: 4px;
+  height: 12px;
+}
+.button {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  border: 1px solid #0d0d0d;
+  flex: 1;
+  margin: 1em 0 0.5em 0;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0d0d0d;
+  line-height: normal;
+  padding: 0.44em;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  grid-row: -1;
+  z-index: 1;
+}
+
+.playerCredentials {
+  --flow-space: 0.5em;
+  padding: 1.5em 2em !important;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-columns: 1fr; 
+  align-items: start;
+  gap: 1.25em;
+  min-width: 256px;
+}
+.playerCredentials .ul {
+  width: 100%;
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.playerCredentials .ul li::before {
+  display: inline-block;
+  transform: translateY(0.3ch);
+  margin-right: 1ch;
+}
+.playerCredentials .ul hr {
+  height: 4px;
+  width: 100%;
+  margin-top: 2px;
+  background: var(--gray48);
+  border-radius: 2px;
+  display: flex;
+  border: none;
+}
+.playerCredentials .ul hr::after {
+  content: "";
+  min-width: 20px;
+  border-radius: 2px;
+}
+.playerCredentials .ul .hammer:before { content: var(--hammer) }
+.playerCredentials .ul .hammer hr::after { background-color: var(--hammer-accent) }
+.playerCredentials .ul .casual:before { content: var(--casual) }
+.playerCredentials .ul .casual hr:after { background-color: var(--casual-accent) }
+.playerCredentials .ul .defence:before { content: var(--defence) }
+.playerCredentials .ul .defence hr:after { background-color: var(--defence-accent) }
+.playerCredentials .ul .killer:before { content: var(--killer) }
+.playerCredentials .ul .killer hr:after { background-color: var(--killer-accent) }
+.playerCredentials .ul .event:before { content: var(--event) }
+.playerCredentials .ul .event hr:after { background-color: var(--event-accent) }
+.playerCredentials .ul .donate:before { content: var(--donate) }
+.playerCredentials .ul .donate hr:after { background-color: var(--donate-accent) }
+.playerCredentials .ul .percentage0 hr::after { width: 0%; background-color: var(--donate-accent) }
+.playerCredentials .ul .percentage1 hr::after { width: 20%; }
+.playerCredentials .ul .percentage2 hr::after { width: 40%; }
+.playerCredentials .ul .percentage3 hr::after { width: 60%; }
+.playerCredentials .ul .percentage4 hr::after { width: 80%; }
+.playerCredentials .ul .percentage5 hr::after { width: 100%; }
+
+.playerCredentials .header {
+  font-size: 1.05em;
+  font-weight: 600;
+}
+.playerCredentials h2 {
+  font-size: 1.05em;
+  font-weight: 600;
+}
+.playerCredentials .player {
+  font-size: 1.75em;
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  position: relative;
+}
+.playerCredentials .player img {
+  image-rendering: pixelated;
+  height: 24px;
+  width: 24px;
+  image-rendering: optimizeSpeed;
+  background: var(--gray48);
+}
+@media (max-width: 767px) {
+  .playerCredentials {
+    justify-content: unset;
+  }
+  .playerCredentials .change_profile {
+    width: 100%;
+  }
 }

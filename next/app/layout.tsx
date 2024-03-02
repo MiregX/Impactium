@@ -1,17 +1,22 @@
 import React, { ReactNode } from 'react'
 import '@/styles/globals.css';
-import { Metadata } from 'next'
+import { Metadata, NextApiResponse, NextApiRequest } from 'next'
+import {  } from 'next/server';
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
 import { Preloader } from '@/context/Preloader';
-import cookie from '@/context/Cookie';
+import { cookies } from 'next/headers';
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
     default: 'Impactium',
+  },
+  icons: {
+    icon: 'https://cdn.impactium.fun/logo/impactium_te8pad.png'
   },
   generator: 'Next.js',
   applicationName: 'Impactium',
@@ -28,9 +33,8 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  console.log('Token: ', cookie.getAll())
-  const user = await getUser();
-  console.log('Prefetched User: ', user)
+  const token = cookies().get('token').value
+  const user = await getUser(token);
   return (
     <html>
       <LanguageProvider>

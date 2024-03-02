@@ -1,7 +1,7 @@
 'use client'
 import { IPlayer, getPlayer } from "@/preset/Player";
 import s from '@/styles/Me.module.css'
-import cookie from "./Cookie";
+import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { useUser } from "./User";
 import { Nav } from "@/components/Nav";
@@ -23,6 +23,7 @@ export const PlayerProvider = ({
     children: any,
     prefetchedPlayer?: IPlayer | null | undefined
   }) => {
+  const cookie = new Cookies();
   const isPlayerPrefetched = typeof prefetchedPlayer !== 'undefined';
   const { token } = useUser();
   const [player, setPlayer] = useState<IPlayer | null>(prefetchedPlayer);
@@ -30,7 +31,7 @@ export const PlayerProvider = ({
 
   useEffect(() => {
     if (!isPlayerPrefetched) {
-      getPlayer().then((player) => {
+      getPlayer(token).then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);
@@ -44,7 +45,7 @@ export const PlayerProvider = ({
     if (token) {
       cookie.set('token', token);
       setIsPlayerLoaded(false);
-      getPlayer().then((player) => {
+      getPlayer(token).then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);

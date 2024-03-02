@@ -1,6 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import cookie from '@/context/Cookie';
+import Cookies from 'universal-cookie';
 import { useUser } from '@/context/User';
 import { useEffect } from 'react';
 
@@ -10,9 +10,10 @@ async function loginCallback(code: string, referal?: string | false) {
   return res.json()
 }
 
-export default function CallbackPage() {
+export default function CallbackPage(request, response) {
   const { setToken } = useUser();
   const router = useRouter();
+  const cookie = new Cookies(request.headers.cookie);
   const referal = cookie.get('ref') || false;
  
   const searchParams = useSearchParams();

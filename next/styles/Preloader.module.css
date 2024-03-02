@@ -6,7 +6,6 @@
   width: 100vw;
   background: var(--gray16);
   transition: all 1.25s var(--transition) 1.5s;
-  display: none;
 }
 
 @keyframes first {

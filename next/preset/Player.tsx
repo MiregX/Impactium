@@ -1,4 +1,4 @@
-import cookie from "@/context/Cookie";
+import { cookies } from 'next/headers';
 
 interface IPlayerSkin {
   iconLink: string;
@@ -14,9 +14,7 @@ export interface IPlayer {
   achievements?: any;
 }
 
-export const getPlayer = async (token?: string): Promise<IPlayer> => {
-  token = token || cookie.get('token')
-
+export const getPlayer = async (token: string): Promise<IPlayer> => {
   if (!token)
     return null;
 
@@ -29,13 +27,11 @@ export const getPlayer = async (token?: string): Promise<IPlayer> => {
     })
 
     if (!response.ok) {
-      cookie.remove('token');
       return undefined;
     }
 
     return await response.json();
   } catch (error) {
-    cookie.remove('token');
     return undefined;
   }
 }

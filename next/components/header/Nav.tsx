@@ -5,7 +5,6 @@ import { useLanguage } from '@/context/Language'
 
 export function Nav() {
   const { isHeaderBackgroundHidden } = useHeader();
-  const [visibility, setVisibility]= useState('none');
   const { lang } = useLanguage()
   const nav = {
     "partners": {
@@ -46,8 +45,12 @@ export function Nav() {
     }
   }
 
+  useEffect(() => {
+    console.log(isHeaderBackgroundHidden)
+  }, [isHeaderBackgroundHidden])
+
   return (
-    <div className={`${s.nav} ${!isHeaderBackgroundHidden && s.hidden}`}>
+    <div className={`${s.nav} ${isHeaderBackgroundHidden && s.hidden}`}>
       {Object.keys(nav).map((category, index) => (
         <React.Fragment key={category}>
           <div className={s.category}>
