@@ -1,27 +1,22 @@
 import { ReactNode } from 'react';
 import { Nav } from '@/components/Nav'
-import s from '@/styles/Me.module.css'
+import { getPlayer } from '@/preset/Player';
+import { redirect } from 'next/navigation'
 import cookie from '@/context/Cookie';
-import { useUser } from '@/context/User';
-import { useRouter } from 'next/navigation'
+import { PlayerProvider } from '@/context/Player';
 
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const router = useRouter();
-	const { user, token } = useUser();
-	if (!token || !user) {
-		router.push('/login');
+	console.log(cookie.get('token'))
+	if (!cookie.get('token')) {
+		redirect('/login');
 	}
-	const player = fetch('https://impactium.fun/api/player/get', {
-		method: 'GET',
-		headers: {
-			'token': cookie.get('token')
-		}
-	}).then((data) => { return data.json() })
+
+	const player = await getPlayer();
 
 	return (
-		<div className={s.me}>
+		<PlayerProvider prefetchedPlayer={player}>
 			<Nav />
 			{children}
-		</div>
+		</PlayerProvider>
 	);
 };

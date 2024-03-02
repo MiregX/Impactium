@@ -2,12 +2,12 @@
 import { useRef, useEffect } from "react";
 import Link from "next/link";
 import styles from '@/styles/Index.module.css';
-import { useLanguage } from '@/context/Language'
-import { useRouter } from "next/navigation";
+import { useLanguage } from '@/context/Language';
+import { useUser } from "@/context/User";
 
 export default function Main() {
   const { lang } = useLanguage();
-  const router = useRouter();
+  const { user } = useUser();
   const glRef = useRef<HTMLDivElement>(null);
   const aboutUsMainTextRef = useRef<HTMLParagraphElement>(null);
   const aboutUsDescriptionTextRef = useRef<HTMLDivElement>(null);
@@ -99,7 +99,7 @@ export default function Main() {
           <li itemType="event">{lang.masterpieceRoleplayWithAdmins}<hr /></li>
           <li itemType="donate">{lang.donateAndGetUniqueSkin}<hr /></li>
         </ul>
-        <Link href="/me/account">
+        <Link href={user ? '/me/account' : '/me/account'}>
           {lang.account}
         </Link>
       </div>

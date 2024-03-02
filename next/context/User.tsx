@@ -3,8 +3,6 @@ import { IUser, getUser } from "@/preset/User";
 import cookie from "./Cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 
-
-
 const UserContext = createContext(undefined);
 
 export const useUser = () => {
@@ -27,6 +25,7 @@ export const UserProvider = ({
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(prefetchedUser ? true : false);
 
   useEffect(() => {
+    console.log("Effected token: ", cookie.get('token'))
     if (token) {
       cookie.set('token', token);
       setIsUserLoaded(false);
@@ -46,6 +45,7 @@ export const UserProvider = ({
   const userProps = {
     user,
     setUser,
+    getUser,
     token,
     setToken,
     isUserLoaded,

@@ -10,9 +10,9 @@ export interface IUser {
   referal?: any; 
 }
 
-export const getUser = async (): Promise<IUser> => {
-  const token: string | false = cookie.get('token') || false;
-
+export const getUser = async (token?: string): Promise<IUser> => {
+  token = token || cookie.get('token');
+  console.log(cookie.get('token'))
   if (!token)
     return null;
 
@@ -21,16 +21,17 @@ export const getUser = async (): Promise<IUser> => {
       method: 'GET',
       headers: {
         token: token
-      },
-      cache: 'no-store'
+      }
     });
   
-
-    if (!response.ok)
-       return null;
+    if (!response.ok) {
+      cookie.remove('token');
+      return undefined;
+    }
 
     return await response.json();
   } catch (error) {
-    return null;
+    cookie.remove('token');
+    return undefined;
   }
 };

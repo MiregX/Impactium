@@ -7,6 +7,7 @@ import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
 import { Preloader } from '@/context/Preloader';
+import cookie from '@/context/Cookie';
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
@@ -27,7 +28,9 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  console.log('Token: ', cookie.getAll())
   const user = await getUser();
+  console.log('Prefetched User: ', user)
   return (
     <html>
       <LanguageProvider>

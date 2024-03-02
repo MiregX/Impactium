@@ -3,9 +3,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import s from '@/styles/Login.module.css';
 import { useLanguage } from '@/context/Language';
 import cookie from '@/context/Cookie';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/User';
 
 export default function Login() {
   const { lang } = useLanguage();
+  const { user, token } = useUser();
+  const router = useRouter();
   const [isNextStage, setNextStage] = useState<boolean>(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
   const [previousPage, setPreviousPage] = useState<string | boolean>(cookie.get('previousPage') || false);
@@ -17,6 +21,10 @@ export default function Login() {
       setPreviousPage(document.referrer);
     }
   }, []);
+  
+  useEffect(() => {
+    console.log(user, token)
+  }, [user, token]);
 
   useEffect(() => {
     if (previousPage) {
