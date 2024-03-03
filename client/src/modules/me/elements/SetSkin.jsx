@@ -48,14 +48,7 @@ const SetSkin = () => {
           style={{ display: 'none' }}
           onChange={handleFileChange}  // Обработчик изменения файла
         />
-        <label
-          htmlFor="fileInput"
-          className={`change_profile upload-button ${
-            isDisabledSkinChange ? 'no-pointers greyed' : ''
-          }`} tooverlayview="true"
-        >
-          <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />
-        </label>
+
       </div>
     </div>
   );

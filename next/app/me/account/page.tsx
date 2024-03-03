@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import s from '@/styles/me/Account.module.css'
 import { PlayerCredentials } from '@/components/me/account/PlayerCredentials'
-import { SetNickname } from '@/components/me/account/SetNickname'
+import { PersonalizationPanel } from '@/components/me/account/PersonalizationPanel'
 import { SetPassword } from '@/components/me/account/SetPassword'
 import { SetSkin } from '@/components/me/account/SetSkin'
 import { AchievementsModule } from '@/components/me/account/AchievementsModule'
@@ -18,9 +18,9 @@ export default function AccountPage() {
       <div className={s.line}>
         <PlayerCredentials />
         <div className={s.controls}>
-          <SetNickname />
-          <SetPassword />
-          <SetSkin />
+          <PersonalizationPanel type='nickname' />
+          <PersonalizationPanel type='password' />
+          <PersonalizationPanel type='skin' />
           <AchievementsModule />
         </div>  
       </div>

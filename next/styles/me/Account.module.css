@@ -5,7 +5,6 @@
   flex: 1;
   justify-content: flex-start;
   gap: 32px;
-  width: 0%;
 }
 .line {
   display: flex;
@@ -30,13 +29,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 8px;
 }
 .panel input {
   display: block;
   text-wrap: nowrap;
   cursor: pointer;
   align-self: end;
-  margin: 1em 0 0.5em 0;
   text-align: center;
   text-decoration: none;
   color: #fff;
@@ -51,8 +50,8 @@
   text-align: left;
   padding: 0.44em;
   width: 100%;
-  border: 1px solid #0d0d0d;
   flex: 1;
+  border: 1px solid #0d0d0d;
 }
 .panel p {
   flex: 1;
@@ -70,10 +69,9 @@
   text-overflow: ellipsis;
   text-align: center;
   border: 1px solid #0d0d0d;
-  flex: 1;
-  margin: 1em 0 0.5em 0;
   text-decoration: none;
   color: #fff;
+  width: min-content;
   background-color: #0d0d0d;
   line-height: normal;
   padding: 0.44em;
@@ -82,6 +80,12 @@
   font-weight: 600;
   grid-row: -1;
   z-index: 1;
+}
+
+.panel .body {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
 }
 
 .playerCredentials {
@@ -162,11 +166,11 @@
   image-rendering: optimizeSpeed;
   background: var(--gray48);
 }
+.playerCredentials .button {
+  width: 100%;
+}
 @media (max-width: 767px) {
   .playerCredentials {
     justify-content: unset;
-  }
-  .playerCredentials .change_profile {
-    width: 100%;
   }
 }

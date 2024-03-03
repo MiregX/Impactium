@@ -1,5 +1,4 @@
 .me {
-  padding: 0 16px;
   max-width: 1344px;
   align-self: center;
   flex: 1;
@@ -17,6 +16,9 @@
 @media (max-width: 1080px) {
   .nav {
     align-items: flex-start;
+  }
+  .me {
+    flex-direction: column;
   }
 }
 @media (max-width: 767px) {
