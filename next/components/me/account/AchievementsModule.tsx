@@ -81,9 +81,12 @@ export function AchievementsModule() {
 
   useEffect(() => {
     const overlay = document.querySelector(`.${s.overlay}`);
-    const achievementModule = overlay.querySelector(`.${s.achievementsModule}`)
-    achievementModule?.classList.remove(...['casual', 'defence', 'killer', 'event', 'donate', 'hammer'])
-    achievementModule?.classList.add(activeAchievement);
+    console.log(overlay)
+    const overlayAchievementModule = overlay.querySelector(`.${s.achievementsModule}`);
+    console.log(overlayAchievementModule)
+    if(!overlayAchievementModule) return;
+    overlayAchievementModule.classList.remove(s.casual, s.defence, s.kills, s.event, s.donate)
+    overlayAchievementModule.classList.add(s[activeAchievement]);
   }, [activeAchievement]);
 
   useEffect(() => {

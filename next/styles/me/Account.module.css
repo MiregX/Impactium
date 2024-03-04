@@ -80,9 +80,6 @@
 .dynamic.setSkin {
   --hue: 350;
 }
-.dynamic.achievementsModule {
-  --hue: 120; --saturation: 100%; --lightness: 82%;
-}
 .dynamic.achievementsModule.casual {
   --hue: 120; --saturation: 100%; --lightness: 82%;
 }
@@ -97,9 +94,6 @@
 }
 .dynamic.achievementsModule.donate {
   --hue: 187; --saturation: 83%; --lightness: 70%;
-}
-.dynamic.achievementsModule.hammer {
-  --hue: 359; --saturation: 85%; --lightness: 62%;
 }
 .dynamic {
   --hsl: var(--hue), var(--saturation), var(--lightness);
@@ -481,4 +475,59 @@
 .achievementsModule .selectionWrapper::before,
 .achievementsModule .selectionWrapper::after {
   display: none;
+}
+.serverInfo {
+  --lightness: 100%;
+  width: 100%;
+  flex-direction: row;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.serverInfo .button {
+  width: fit-content !important;
+  flex: unset;
+  flex-direction: row;
+  align-items: center;
+  display: flex !important;
+  margin: 0;
+  padding: 0.44em 0.88em;
+  gap: 0.44em;
+  border: none !important;
+}
+.serverInfo .button span {
+  color: var(--gray96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  font-size: 16px;
+}
+.serverInfo .button p {
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.serverInfo .button img {
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 767px) {
+  .serverInfo {
+    flex-direction: column;
+  }
+  .serverInfo .button {
+    width: -webkit-fill-available !important;
+    flex: 1;
+    justify-content: space-between !important;
+  }
+  .serverInfo .button span {
+    justify-content: space-between !important;
+  }
+  .serverInfo .button p {
+    flex: unset;
+  }
 }
