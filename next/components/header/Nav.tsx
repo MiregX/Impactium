@@ -45,10 +45,6 @@ export function Nav() {
     }
   }
 
-  useEffect(() => {
-    console.log(isHeaderBackgroundHidden)
-  }, [isHeaderBackgroundHidden])
-
   return (
     <div className={`${s.nav} ${isHeaderBackgroundHidden && s.hidden}`}>
       {Object.keys(nav).map((category, index) => (

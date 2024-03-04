@@ -22,10 +22,8 @@ export const Preloader = () => {
   const self = useRef(null);
 
   const show = useCallback(() => {
-    self.current.classList.remove(s.remove);
-    self.current.classList.remove(s.hide);
-    self.current.classList.remove(s.slow);
-    self.current.classList.remove(s.fast);
+    self.current.classList.remove(s.remove, s.hide, s.slow, s.fast);
+
     if (visitedBefore) {
       self.current.classList.add(s.fast);
     } else {
@@ -36,7 +34,7 @@ export const Preloader = () => {
 
   const hide = useCallback(() => {
     const opacityDelay = visitedBefore ? 300 : 3000;
-  
+
     setTimeout(() => {
       self.current.classList.add(s.hide);
       setIsLogoHiiden(false);
@@ -54,6 +52,8 @@ export const Preloader = () => {
       show();
     }
   }, [isUserLoaded, blocker, hide, show]);
+
+  useEffect(() => show(), []);
 
   useEffect(() => {
     if (visitedBefore) {

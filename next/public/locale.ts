@@ -597,7 +597,7 @@ ourPartners: {
       ru: "Добыть 4 древних обломка"
     }
   },
-    usdStone_todo: {
+  endStone_todo: {
     title: {
       ua: "Велике розчищення",
       it: "La grande pulizia",

@@ -1,8 +1,10 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Cookies from 'universal-cookie';
 import { useUser } from '@/context/User';
 import { useEffect } from 'react';
+import { cookies } from 'next/headers';
+import Cookies from 'universal-cookie';
+
 
 async function loginCallback(code: string, referal?: string | false) {
   const res = await fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
@@ -10,10 +12,10 @@ async function loginCallback(code: string, referal?: string | false) {
   return res.json()
 }
 
-export default function CallbackPage(request, response) {
+export default function CallbackPage() {
   const { setToken } = useUser();
   const router = useRouter();
-  const cookie = new Cookies(request.headers.cookie);
+  const cookie = new Cookies();
   const referal = cookie.get('ref') || false;
  
   const searchParams = useSearchParams();

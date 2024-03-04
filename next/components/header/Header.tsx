@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Header.module.css';
@@ -11,18 +11,11 @@ import { Nav } from '@/components/header/Nav';
 export function Header() {
   const { user } = useUser();
   const { isFlattenHeader, isLogoHiiden } = useHeader();
-  const logo = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    if (logo.current) {
-      logo.current.classList.add('inner-animation');
-    }
-  }, [logo]);
 
   return (
     <header className={`${styles.header} ${isFlattenHeader && styles.flatten}`}>
       <Link href='/' className={`${styles.logo} ${isLogoHiiden && styles.hidden}`}>
-        <Image ref={logo} src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={37} alt="Impactium" />
+        <Image src="https://cdn.impactium.fun/logo/impactium_v4.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>
       </Link>
       <Nav />

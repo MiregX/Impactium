@@ -14,19 +14,21 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({
-    prefetchedUser = null,
+    prefetchedUser = undefined,
     children
   } : {
     prefetchedUser: IUser | null,
     children: any
   }) => {
   const cookie = new Cookies();
+  const isUserPrefetched = typeof prefetchedUser !== 'undefined';
   const [token, setToken] = useState<string | false>((cookie.get('token')) || false);
   const [user, setUser] = useState<IUser | null>(prefetchedUser);
-  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(prefetchedUser ? true : false);
+  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(isUserPrefetched ? true : false);
 
   useEffect(() => {
     if (token) {
+      cookie.set('token', token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
       setIsUserLoaded(false);
       getUser(token).then((user) => {
         setUser(user);

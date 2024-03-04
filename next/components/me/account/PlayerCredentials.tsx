@@ -21,7 +21,7 @@ export function PlayerCredentials() {
   }, [player, isPlayerLoaded, setPlayerSkinIconLink]);
 
   return (
-    <div className={`${s.panel} ${s.playerCredentials}`} itemType='dynamic'>
+    <div className={`${s.panel} ${s.playerCredentials} ${s.dynamic}`} itemType='dynamic'>
       <h2>{lang.account}</h2>
 
       <p className={s.player}>

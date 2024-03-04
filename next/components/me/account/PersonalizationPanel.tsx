@@ -67,8 +67,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
 
   return (
     <div
-      className={`${s.panel} ${isPlayerLoaded && !player.registered && s.blocked} ${reference.key}`}
-      itemType='dynamic'>
+      className={`${s.panel} ${s.dynamic} ${isPlayerLoaded && !player.registered && s.blocked} ${reference.key}`}>
       <p>{reference.heading}</p>
 
       <div className={s.body}>
@@ -88,12 +87,19 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
             {reference.button.title}
           </div>
         ) : (
-          <label
-            htmlFor={type}
-            className={`${s.button} ${s.uploadButton}`}
-            onChange={reference.action}>
-            <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />
-          </label>
+          <>
+            <p
+              className={`${s.button} ${!player.skin?.originalTitle
+              }`}>
+              {player.skin?.originalTitle || lang.skinNotSettled}
+            </p>
+            <label
+              htmlFor={type}
+              className={`${s.button} ${s.uploadButton}`}
+              onChange={reference.action}>
+              <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />
+            </label>
+          </>
         )}
       </div>
     </div>
