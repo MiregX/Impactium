@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function AccountPage() {
   return (
     <div className={s.account}>
-      <div className={s.line}>
+      <div className={`${s.line} one`}>
         <PlayerCredentials />
         <div className={s.controls}>
           <PersonalizationPanel type='nickname' />
@@ -22,7 +22,7 @@ export default function AccountPage() {
           <AchievementsModule />
         </div>  
       </div>
-      <div className={s.line}>
+      <div className={`${s.line} two`}>
         <ServerInfo />
       </div>
       <Overlay />

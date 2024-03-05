@@ -42,7 +42,7 @@ export function PlayerCredentials() {
           if (typeof ach !== 'object') return null;
 
           return (
-            <li className={`${s[achKey]}, ${s['percentage' + ach.doneStages]}`} key={`${achKey}-${ach.doneStages}`}>
+            <li className={`${s[achKey]}, ${s['percentage' + ach.doneStages]}`} itemType={achKey} key={`${achKey}-${ach.doneStages}`}>
               {`${lang[`achievmentTitle_${achKey}`]} ${ach.symbol}`}
               <hr />
             </li>
@@ -53,11 +53,12 @@ export function PlayerCredentials() {
       {player.registered ? (
         <button
           className={s.button}
+          data-overlayed={true}
           onClick={() => copy(`https://impactium.fun/?ref=${user.referal.code}`)}>
           {lang.copyMyReferalLink}
         </button>
       ) : (
-        <button className={s.button} onClick={register}>
+        <button className={s.button} data-overlayed={true} onClick={register}>
           {lang._register}
         </button>
       )}

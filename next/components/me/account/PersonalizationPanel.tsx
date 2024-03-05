@@ -82,6 +82,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
         {reference.button ? (
           <div
             onClick={reference.action}
+            data-overlayed={true}
             className={`${s.button} ${reference.button.style}`}
             itemType='view'>
             {reference.button.title}
@@ -95,6 +96,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
             </p>
             <label
               htmlFor={type}
+              data-overlayed={true}
               className={`${s.button} ${s.uploadButton}`}
               onChange={reference.action}>
               <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />

@@ -81,7 +81,9 @@ main {
   display: flex;
   flex-direction: column;
 }
-
+[data-nextjs-dialog-overlay] {
+  user-select: all;
+}
 hr {
   border: none;
   height: 1px;

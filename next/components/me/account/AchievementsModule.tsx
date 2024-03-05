@@ -102,9 +102,9 @@ export function AchievementsModule() {
   return (
     <div className={`${s.achievementsModule} ${s.dynamic} ${s.panel} ${s[activeAchievement]} ${!player.registered && s.blocked}`}>
       <div className={s.selectionWrapper}>
-        {Object.keys(allAchievements).map((achKey, index: number) => (
+        {Object.keys(allAchievements).map((achKey) => (
           <button
-            key={`${index}_button`}
+            key={`${achKey}_button`}
             className={`${s[achKey]} ${achKey === activeAchievement && s.selected}`}
             onClick={() => setActiveAchievement(achKey)}>
             <img src={`https://cdn.impactium.fun/ux/${achKey}.svg`} alt='' />
@@ -112,55 +112,55 @@ export function AchievementsModule() {
         ))}
       </div>
       <div className={s.relativePanel}>
-      {Object.keys(allAchievements).map((achKey, index) => {
-        let percentage = [0, 0];
-        return (
-          <div
-          key={`${index}_panel`}
-            className={`${s[achKey]} ${s.stages} ${achKey === activeAchievement && s.selected}`}>
-            {allAchievements[achKey].stages.map((stageKey: string, stageIndex: number) => {
-              const stage = player.achievements?.[achKey]?.stages[stageKey[0]];
-              if (stage) {
-                percentage[0] += stage.percentage || 0;
-                percentage[1] += 1;
-              }
-              return (
-                <>
-                  <hr datatype='horizontal' className={s.stageSplitter} key={`${index}_${stageIndex}_hr`} />
-                  <div className={s.stage} key={`${index}_${stageIndex}_stage`}>
-                    <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} alt={stageKey[0]} />
-                    <div className={s.text}>
-                      <p>{lang[`${stageKey[0]}_todo`]?.title}</p>
-                      <p>{lang[`${stageKey[0]}_todo`]?.description}</p>
+        {Object.keys(allAchievements).map((achKey) => {
+          let percentage = [0, 0];
+          return (
+            <div key={`${achKey}_panel`} className={`${s[achKey]} ${s.stages} ${achKey === activeAchievement && s.selected}`}>
+              {allAchievements[achKey].stages.map((stageKey: string, stageIndex: number) => {
+                const stage = player.achievements?.[achKey]?.stages[stageKey[0]];
+                if (stage) {
+                  percentage[0] += stage.percentage || 0;
+                  percentage[1] += 1;
+                }
+                return (
+                  <React.Fragment key={`${achKey}_${stageKey}`}>
+                    <hr datatype='horizontal' className={s.stageSplitter} />
+                    <div>
+                      <div className={s.stage}>
+                        <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} alt={stageKey[0]} />
+                        <div className={s.text}>
+                          <p>{lang[`${stageKey[0]}_todo`]?.title}</p>
+                          <p>{lang[`${stageKey[0]}_todo`]?.description}</p>
+                        </div>
+                        <div className={s.counter}>
+                          <span>{stage ? (stage.isDone ? stage.limit : stage.score) : 0} / {stage ? stage.limit : stageKey[1]}</span>
+                          <hr style={{ width: stage ? `${stage.percentage}%` : '0%' }} />
+                        </div>
+                      </div>
                     </div>
-                    <div className={s.counter}>
-                      <span>{stage ? (stage.isDone ? stage.limit : stage.score) : 0} / {stage ? stage.limit : stageKey[1]}</span>
-                      <hr style={{ width: stage ? `${stage.percentage}%` : '0%' }} />
-                    </div>
+                  </React.Fragment>
+                );
+              })}
+              <div className={s.reward}>
+                <div className={s.about}>
+                  <div className={s.claim}>
+                    <img src={allAchievements[achKey].reward.icon} alt='' />
+                    <p>{lang.account}</p>
                   </div>
-                </>
-              );
-            })}
-            <div className={s.reward} key={`reward-${index}`}>
-              <div className={s.about}>
-                <div className={s.claim} key={`claim-${index}`}>
-                  <img src={allAchievements[achKey].reward.icon} alt='' />
-                  <p>{lang.account}</p>
                 </div>
+                {percentage[0] / percentage[1] >= 100 && (
+                  <button onClick={() => setAchievement(achKey)} className={s.activate}>
+                    Активировать
+                  </button>
+                )}
               </div>
-              {percentage[0] / percentage[1] >= 100 && (
-                <button onClick={() => setAchievement(achKey)} className={s.activate} key={`button-${index}`}>
-                  Активировать
-                </button>
-              )}
+              <div className={s.percentage}>
+                <hr style={{ width: percentage[1] !== 0 ? (percentage[0] / percentage[1]) : 0 }} />
+              </div>
             </div>
-            <div className={s.percentage} key={`line-${index}`}>
-              <hr style={{ width: percentage[1] !== 0 ? (percentage[0] / percentage[1]) : 0 }} />
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
       </div>
     </div>
-  );
+  );  
 };

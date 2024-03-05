@@ -60,7 +60,7 @@ export function Overlay() {
     const createCard = (cardElement) => {
       const overlayCard = document.createElement("div");
       overlayCard.classList.add(...cardElement.classList);
-      const toOverlayViewElement = cardElement.querySelectorAll('[tooverlayview]');
+      const toOverlayViewElement = cardElement.querySelectorAll('[data-overlayed]');
       if (toOverlayViewElement) {
         toOverlayViewElement.forEach(element => {
           createOverlayCta(overlayCard, element);
@@ -101,14 +101,14 @@ export function Overlay() {
       const y = window.innerHeight * 0.5 + window.scrollY;
 
       overlay.style.setProperty("--opacity", "1");
-      overlay.style.setProperty("--x", `${Math.round(x)}px`);
-      overlay.style.setProperty("--y", `${Math.round(y)}px`);
+      overlay.style.setProperty("--x", `${x}px`);
+      overlay.style.setProperty("--y", `${y}px`);
     };
 
     const applyOverlayMask = (e) => {
       const overlayEl = e.currentTarget;
-      const x = e.pageX - Math.round(panel.offsetLeft);
-      const y = e.pageY - Math.round(panel.offsetTop);
+      const x = e.pageX - panel.offsetLeft;
+      const y = e.pageY - panel.offsetTop;
       overlayEl.style = `--opacity: 1; --x: ${x}px; --y:${y}px;`;
     };
 

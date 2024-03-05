@@ -46,7 +46,7 @@
   font-weight: 600;
   grid-row: -1;
   cursor: text;
-  z-index: 1;
+  z-index: 2;
   text-align: left;
   padding: 0.44em;
   width: 100%;
@@ -80,6 +80,11 @@
 .dynamic.setSkin {
   --hue: 350;
 }
+.dynamic.serverInfo {
+  --hue: 0;
+  --saturation: 100%;
+  --lightness: 100%;
+}
 .dynamic.achievementsModule.casual {
   --hue: 120; --saturation: 100%; --lightness: 82%;
 }
@@ -105,6 +110,7 @@
   display: flex;
   gap: 32px;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
   user-select: none;
   opacity: var(--opacity, 0);
@@ -126,15 +132,18 @@
   background-color: hsla(var(--hsl), 0.15);
   border-color: hsla(var(--hsl), 1);
   box-shadow: 0 0 0 1px inset hsl(var(--hsl));
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .overlay .button {
   display: block;
-  grid-row: -1;
   width: 100%;
   white-space: nowrap;
   background-color: hsl(var(--hsl));
   box-shadow: 0 0 0 1px hsl(var(--hsl));
+  border: 1px solid transparent;
 }
 
 :not(.overlay) > .dynamic {
@@ -168,6 +177,9 @@
 .overlay .achievementsModule {
   justify-content: flex-start !important;
 }
+.overlay .serverInfo {
+  justify-content: space-between;
+}
 .button {
   overflow: hidden;
   white-space: nowrap;
@@ -192,6 +204,7 @@
 }
 .setSkin p.button {
   cursor: default;
+  z-index: 2;
 }
 .setSkin label.button {
   height: calc(24px + 0.88em);
@@ -211,7 +224,7 @@
   --flow-space: 0.5em;
   padding: 1.5em 2em !important;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-columns: 1fr; 
   align-items: start;
   gap: 1.25em;
@@ -232,7 +245,7 @@
 .playerCredentials .ul hr {
   height: 4px;
   width: 100%;
-  margin-top: 2px;
+  margin-top: 4px;
   background: var(--gray48);
   border-radius: 2px;
   display: flex;
@@ -243,24 +256,24 @@
   min-width: 20px;
   border-radius: 2px;
 }
-.playerCredentials .ul .hammer:before { content: var(--hammer) }
-.playerCredentials .ul .hammer hr::after { background-color: var(--hammer-accent) }
-.playerCredentials .ul .casual:before { content: var(--casual) }
-.playerCredentials .ul .casual hr:after { background-color: var(--casual-accent) }
-.playerCredentials .ul .defence:before { content: var(--defence) }
-.playerCredentials .ul .defence hr:after { background-color: var(--defence-accent) }
-.playerCredentials .ul .killer:before { content: var(--killer) }
-.playerCredentials .ul .killer hr:after { background-color: var(--killer-accent) }
-.playerCredentials .ul .event:before { content: var(--event) }
-.playerCredentials .ul .event hr:after { background-color: var(--event-accent) }
-.playerCredentials .ul .donate:before { content: var(--donate) }
-.playerCredentials .ul .donate hr:after { background-color: var(--donate-accent) }
-.playerCredentials .ul .percentage0 hr::after { width: 0%; background-color: var(--donate-accent) }
-.playerCredentials .ul .percentage1 hr::after { width: 20%; }
-.playerCredentials .ul .percentage2 hr::after { width: 40%; }
-.playerCredentials .ul .percentage3 hr::after { width: 60%; }
-.playerCredentials .ul .percentage4 hr::after { width: 80%; }
-.playerCredentials .ul .percentage5 hr::after { width: 100%; }
+.playerCredentials [itemType='hammer']:before { content: var(--hammer) }
+.playerCredentials [itemType='hammer'] hr::after { background-color: var(--hammer-accent) }
+.playerCredentials [itemType='casual']:before { content: var(--casual) }
+.playerCredentials [itemType='casual'] hr:after { background-color: var(--casual-accent) }
+.playerCredentials [itemType='defence']:before { content: var(--defence) }
+.playerCredentials [itemType='defence'] hr:after { background-color: var(--defence-accent) }
+.playerCredentials [itemType='killer']:before { content: var(--killer) }
+.playerCredentials [itemType='killer'] hr:after { background-color: var(--killer-accent) }
+.playerCredentials [itemType='event']:before { content: var(--event) }
+.playerCredentials [itemType='event'] hr:after { background-color: var(--event-accent) }
+.playerCredentials [itemType='donate']:before { content: var(--donate) }
+.playerCredentials [itemType='donate'] hr:after { background-color: var(--donate-accent) }
+.playerCredentials .percentage0 hr::after { width: 0%; }
+.playerCredentials .percentage1 hr::after { width: 20%; }
+.playerCredentials .percentage2 hr::after { width: 40%; }
+.playerCredentials .percentage3 hr::after { width: 60%; }
+.playerCredentials .percentage4 hr::after { width: 80%; }
+.playerCredentials .percentage5 hr::after { width: 100%; }
 
 .playerCredentials .header {
   font-size: 1.05em;
@@ -298,7 +311,7 @@
   grid-row: 1 / 4;
   grid-column: 2 / 3;
   gap: 16px;
-  z-index: 1;
+  z-index: 2;
 }
 .selectionWrapper {
   gap: 8px;
@@ -391,6 +404,7 @@
   width: 100%;
   bottom: 0;
   left: 0;
+  background-color: var(--gray48);
 }
 .percentage hr {
   height: 100%;
@@ -492,6 +506,7 @@
   margin: 0;
   padding: 0.44em 0.88em;
   gap: 0.44em;
+  z-index: 2;
   border: none !important;
 }
 .serverInfo .button span {
