@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
 
 
-async function loginCallback(code: string, referal?: string | false) {
+async function loginCallback(code: string, referal?: string) {
   const res = await fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
   if (!res.ok) return undefined
   return res.json()
@@ -14,8 +14,6 @@ async function loginCallback(code: string, referal?: string | false) {
 export default function CallbackPage() {
   const { setToken } = useUser();
   const router = useRouter();
-  const cookie = new Cookies();
-  const referal = cookie.get('ref') || false;
  
   const searchParams = useSearchParams();
   const token = searchParams.get('token')
@@ -23,7 +21,7 @@ export default function CallbackPage() {
   
   useEffect(() => {
     if (code) {
-      loginCallback(code, referal).then(authorizationResult => {
+      loginCallback(code).then(authorizationResult => {
         if (authorizationResult) {
           setToken(authorizationResult.token || false);
         }
