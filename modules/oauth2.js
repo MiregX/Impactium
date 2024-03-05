@@ -1,11 +1,7 @@
-require('dotenv').config();
-const unirest = require('unirest');
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { getDatabase, generateToken, Referal} = require('../utils');
-const { discordClientID, discordRedirectApiUri, discordClientSecret, googleClientID, googleClientSecret } = process.env
-
 const router = express.Router();
 
 router.use(passport.initialize());
@@ -20,8 +16,8 @@ passport.deserializeUser(function(user, done) {
 });
 
 passport.use(new GoogleStrategy({
-  clientID: googleClientID,
-  clientSecret: googleClientSecret,
+  clientID: process.env.GOOGLE_ID,
+  clientSecret: process.env.GOOGLE_SECRET,
   callbackURL: `https://impactium.fun/oauth2/callback/google`,
   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
 }, async (accessToken, refreshToken, profile, done) => {
@@ -58,10 +54,10 @@ router.get('/callback/google', (request, response, next) => {
 router.get('/callback/discord', (request, response) => {
   if (!request.query.code) return response.redirect('/');
   let requestPayload = {
-    redirect_uri: discordRedirectApiUri,
-    client_id: discordClientID,
+    redirect_uri: process.env.DISCORD_CALLBACK,
+    client_id: process.env.DISCORD_ID,
     grant_type: "authorization_code",
-    client_secret: discordClientSecret,
+    client_secret: process.env.DISCORD_SECRET,
     code: request.query.code
   };
 

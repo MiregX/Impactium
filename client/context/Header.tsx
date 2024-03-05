@@ -5,7 +5,6 @@ import { Header } from '@/components/header/Header';
 import { HeaderBackground } from '@/components/header/HeaderBackground';
 import type { ReactNode, Dispatch, SetStateAction } from 'react';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import Cookies from 'universal-cookie';
 
 interface HeaderContextProps {
   isLoading: boolean;
@@ -31,7 +30,6 @@ interface HeaderProviderProps {
 
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const url = usePathname();
-  const cookie = new Cookies();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url !== '/');
   const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(url.startsWith('/me'));

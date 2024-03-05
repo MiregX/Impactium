@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-router.get('/status', (request, response) => {
+router.get('/', (request, response) => {
   response.sendStatus(200);
 });
 

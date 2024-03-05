@@ -1,5 +1,4 @@
 const { Telegraf, Markup } = require('telegraf');
-const { telegramBotToken } = process.env;
 var utils
 
 class TelegramBotHandler {
@@ -11,7 +10,7 @@ class TelegramBotHandler {
     this.channelId = '-1001649611744'
     this.messageId = 676
     this.basicMessage = `Сейчас на сервере:\n`
-    this.bot = new Telegraf(telegramBotToken)
+    this.bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
     TelegramBotHandler.instance = this
   }
 
@@ -21,7 +20,10 @@ class TelegramBotHandler {
         await this.bot.telegram.getMe();
         this.connected = true;
       } catch (error) {
-        console.log(error)
+        if (error.response.error_code === 401) {
+          utils.log('TelegramBotHandler.connect() --> Connection failed. Empty token', 'r');
+          return
+        } 
         utils.log('TelegramBotHandler.connect() --> Connection failed. New attempt...', 'r');
         await this.connect();
       }

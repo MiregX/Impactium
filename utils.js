@@ -7,7 +7,6 @@ const archiver = require('archiver');
 const { ObjectId } = require('mongodb');
 const { pterosocket } = require('pterosocket')
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { mongoLogin, minecraftServerAPI, ftpConfig } = process.env;
 
 const { TelegramBotHandler } = require('./class/TelegramBotHandler');
 const { SFTP } = require('./class/SFTP');
@@ -620,7 +619,7 @@ class ImpactiumServer {
     }
     this.origins = {
       origin: "https://mgr.hosting-minecraft.pro",
-      api_key: minecraftServerAPI,
+      api_key: process.env.MINECAFT_SERVER_API,
       server_no: "d9aa118c"
     }
     this.players = {
@@ -967,7 +966,7 @@ class ResoursePackInstance {
       });
     });
 
-    this.ftp.connect(JSON.parse(ftpConfig));
+    this.ftp.connect(JSON.parse(process.env.FTP));
   }
   
   async updateServerProperties() {
@@ -1059,11 +1058,10 @@ class ReferalFetcher {
   }
 }
 
-const mongo = new MongoClient(mongoLogin, {
+const mongo = new MongoClient(process.env.MONGO_LOGIN, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+    strict: true
   }
 });
 
@@ -1195,7 +1193,6 @@ async function putFile(ftpClient, absoluteFilePath, filePathOnHost) {
 function getLicense() {
   try {
     const path = 'C:\\Users\\Mark\\';
-
     const cert = fs.readFileSync(path + 'cert.pem', 'utf8');
     const key = fs.readFileSync(path + 'key.pem', 'utf8');
 
@@ -1207,14 +1204,14 @@ function getLicense() {
 
 module.exports = {
   ResoursePackInstance,
-  Player,
   ImpactiumServer,
   generateToken,
   getDatabase,
-  formatDate,
   getLicense,
+  formatDate,
   ftpUpload,
   Referal,
+  Player,
   SFTP,
   User,
   log,

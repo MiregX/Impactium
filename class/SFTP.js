@@ -1,5 +1,4 @@
 const SftpClient = require('ssh2-sftp-client');
-const { sftpConfig } = process.env;
 
 class SFTP {
   constructor() {
@@ -22,7 +21,7 @@ class SFTP {
       console.log(error)
     }
     try {
-      await this.sftp.connect(JSON.parse(sftpConfig));
+      await this.sftp.connect(JSON.parse(process.env.SFTP));
     } catch (error) {
       console.log(error);
       return await this.connect()
