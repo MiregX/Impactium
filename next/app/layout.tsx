@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import '@/styles/globals.css';
-import { Metadata, NextApiResponse, NextApiRequest } from 'next'
+import { Metadata } from 'next'
 import {  } from 'next/server';
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';

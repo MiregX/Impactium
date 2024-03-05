@@ -65,7 +65,9 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
   useEffect(() => {
     const l = checkIsLanguageCodeIsValid(language);
-    cookie.set('language', l);
+    cookie.set('language', l, {
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    });
     setLanguage(l);
   }, [language]);
 

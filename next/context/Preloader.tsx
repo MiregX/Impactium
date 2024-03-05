@@ -57,7 +57,10 @@ export const Preloader = () => {
 
   useEffect(() => {
     if (visitedBefore) {
-      cookie.set('visitedBefore', 'true');
+      cookie.set('visitedBefore', true, {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        path: '/'
+      });
     } else {
       cookie.remove('visitedBefore');
     }

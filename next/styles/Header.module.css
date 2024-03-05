@@ -225,8 +225,10 @@
   align-items: center;
   transition: all 0.3s var(--transition);
   transform: translateY(-80px);
+  pointer-events: none;
 }
-.nav.hidden {
+.nav.visible {
+  pointer-events: all;
   transform: translateY(0px);
 }
 .nav .category {

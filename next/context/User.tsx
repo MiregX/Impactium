@@ -26,9 +26,15 @@ export const UserProvider = ({
   const [user, setUser] = useState<IUser | null>(prefetchedUser);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(isUserPrefetched ? true : false);
 
+  const logout = () => {
+    setToken(false)
+  };
+  
   useEffect(() => {
     if (token) {
-      cookie.set('token', token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+      cookie.set('token', token, {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      });
       setIsUserLoaded(false);
       getUser(token).then((user) => {
         setUser(user);
@@ -46,6 +52,7 @@ export const UserProvider = ({
   const userProps = {
     user,
     setUser,
+    logout,
     getUser,
     token,
     setToken,

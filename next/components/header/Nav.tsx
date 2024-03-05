@@ -46,7 +46,7 @@ export function Nav() {
   }
 
   return (
-    <div className={`${s.nav} ${isHeaderBackgroundHidden && s.hidden}`}>
+    <div className={`${s.nav} ${isHeaderBackgroundHidden && s.visible}`}>
       {Object.keys(nav).map((category, index) => (
         <React.Fragment key={category}>
           <div className={s.category}>

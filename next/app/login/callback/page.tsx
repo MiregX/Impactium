@@ -2,7 +2,6 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useEffect } from 'react';
-import { cookies } from 'next/headers';
 import Cookies from 'universal-cookie';
 
 
