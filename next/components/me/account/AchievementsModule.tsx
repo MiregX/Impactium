@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
+import { getAchievements } from '@/preset/Player';
 
 export function AchievementsModule() {
   const { lang } = useLanguage();
-  const { player, setAchievement, isPlayerLoaded, getAchievements } = usePlayer();
+  const { token, player, setPlayer, isPlayerLoaded } = usePlayer();
   const [isAchievementsFetched, setIsAchievementsFetched] = useState(false);
 
   const allAchievements = {
@@ -90,12 +91,11 @@ export function AchievementsModule() {
   }, [activeAchievement]);
 
   useEffect(() => {
-    if (player.achievements && Date.now() - player.achievements.processed < 1000 * 60 * 10)
-      return;
-    
     if (!isAchievementsFetched && player && isPlayerLoaded) {
-      setIsAchievementsFetched(true);
-      // getAchievements();
+      getAchievements({ token }).then((player) => {
+        setPlayer(player);
+        setIsAchievementsFetched(true);
+      });
     }
   }, [getAchievements, isAchievementsFetched, isPlayerLoaded, player])
   
@@ -149,7 +149,7 @@ export function AchievementsModule() {
                   </div>
                 </div>
                 {percentage[0] / percentage[1] >= 100 && (
-                  <button onClick={() => setAchievement(achKey)} className={s.activate}>
+                  <button className={s.activate}>
                     Активировать
                   </button>
                 )}

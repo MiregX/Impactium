@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
+import { setSkin, setPassword, setNickname } from '@/preset/Player';
 
 interface IPersonalizationPanel {
   type: 'nickname' | 'password' | 'skin'
@@ -10,15 +11,27 @@ interface IPersonalizationPanel {
 
 export function PersonalizationPanel({ type }: IPersonalizationPanel) {
   const { lang } = useLanguage();
-  const { player, setNickname, setPassword, setSkin, isPlayerLoaded } = usePlayer();
+  const { token, player, setPlayer, isPlayerLoaded } = usePlayer();
   const self = useRef(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
-      setSkin(file);
+      setSkin({ token, image: file });
     }
+  };
+
+  const handleNicknameChange = () => {
+    setNickname({ token, nickname: self.current.value }).then(player => {
+      setPlayer(player);
+    })
+  };
+
+  const handlePasswordChange = () => {
+    setPassword({ token, password: self.current.value }).then(player => {
+      setPlayer(player);
+    })
   };
 
   const referencesMap = {
@@ -30,7 +43,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
         default: player.nickname,
         placeholder: lang.enterNickname
       },
-      action: () => setNickname(self.current.value),
+      action: handleNicknameChange,
       button: {
         style: s.saveButton,
         title: lang.apply
@@ -44,7 +57,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
         default: player.password,
         placeholder: lang.enterNewPassword
       },
-      action: () => setPassword(self.current.value),
+      action: handlePasswordChange,
       button: {
         style: s.saveButton,
         title: lang.confirm

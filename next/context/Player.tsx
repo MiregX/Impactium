@@ -1,5 +1,5 @@
 'use client'
-import { IPlayer, getPlayer } from "@/preset/Player";
+import { IPlayer, getPlayer, getAchievements, setAchievement, setNickname, setSkin, setPassword, register } from "@/preset/Player";
 import s from '@/styles/Me.module.css'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
@@ -18,20 +18,19 @@ export const usePlayer = () => {
 
 export const PlayerProvider = ({
     children,
-    prefetchedPlayer = undefined
+    prefetchedPlayer
   } : {
     children: any,
-    prefetchedPlayer?: IPlayer | null | undefined
+    prefetchedPlayer: IPlayer | null | undefined
   }) => {
   const cookie = new Cookies();
-  const isPlayerPrefetched = typeof prefetchedPlayer !== 'undefined';
   const { token } = useUser();
-  const [player, setPlayer] = useState<IPlayer | null>(prefetchedPlayer);
-  const [isPlayerLoaded, setIsPlayerLoaded] = useState<boolean>(isPlayerPrefetched ? true : false);
+  const [player, setPlayer] = useState<IPlayer | null>(prefetchedPlayer || {});
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState<boolean>(prefetchedPlayer ? true : false);
 
   useEffect(() => {
-    if (!isPlayerPrefetched) {
-      getPlayer(token).then((player) => {
+    if (!isPlayerLoaded) {
+      getPlayer({token}).then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);
@@ -39,13 +38,12 @@ export const PlayerProvider = ({
         setIsPlayerLoaded(true);
       });
     }
-  }, [isPlayerPrefetched]);
+  }, [isPlayerLoaded]);
   
   useEffect(() => {
     if (token) {
-      cookie.set('token', token);
       setIsPlayerLoaded(false);
-      getPlayer(token).then((player) => {
+      getPlayer({ token }).then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);
@@ -53,18 +51,23 @@ export const PlayerProvider = ({
         setIsPlayerLoaded(true);
       });
     } else {
-      cookie.remove('token');
       setPlayer(null);
     }
   }, [token]);
 
+  useEffect(() => {
+    if (!player) {
+      setPlayer({});
+      setIsPlayerLoaded(false);
+    }
+  }, [player])
+
   const playerProps = {
+    token,
     player,
     setPlayer,
-    getPlayer,
     isPlayerLoaded,
-    setIsPlayerLoaded,
-    isPlayerPrefetched
+    setIsPlayerLoaded
   };
   return (
     <PlayerContext.Provider value={playerProps}>
