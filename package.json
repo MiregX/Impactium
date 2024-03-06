@@ -20,5 +20,13 @@
     "unirest": "^0.6.0",
     "vhost": "^3.0.2",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.63",
+    "typescript": "5.3.3"
+  },
+  "scripts": {
+    "dev": "set NODE_ENV=development&&node .",
+    "start": "set NODE_ENV=production&&node ."
   }
 }

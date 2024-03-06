@@ -10,14 +10,6 @@ router.get('/', (request, response) => {
   response.sendStatus(200);
 });
 
-router.get('/gianmarko', (request, response) => {
-  response.status(200).send({
-    nome: "Gianmarko",
-    age: 18,
-    cognome: "Bonuglia"
-  });
-});
-
 const userMiddleware = async (request, response, next) => {
   if (!request.headers.token)
     return response.sendStatus(401);

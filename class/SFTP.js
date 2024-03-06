@@ -21,9 +21,11 @@ class SFTP {
       console.log(error)
     }
     try {
-      await this.sftp.connect(JSON.parse(process.env.SFTP));
+      const origin = JSON.parse(process.env.SFTP)
+      if (origin) {
+        await this.sftp.connect(origin);
+      }
     } catch (error) {
-      console.log(error);
       return await this.connect()
     }
   }

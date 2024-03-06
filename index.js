@@ -21,7 +21,6 @@ const handle = server.getRequestHandler();
 
 const options = getLicense();
 const mcs = new ImpactiumServer();
-
 server.prepare().then(async () => {
   const app = express();
   
@@ -34,39 +33,38 @@ server.prepare().then(async () => {
   }));
 
   app.use('/api', require('./modules/api'));
+
   app.use('/oauth2', require('./modules/oauth2'));
 
   app.all('*', (req, res) => {
     handle(req, res)
   });
 
-  if (options.isSuccess) {
+  if (options.isSuccess && process.env.NODE_ENV === 'production') {
     https.createServer(options, app).listen(process.env.PORT, () => {
       log(`Основной сервер запущен`, 'g');
     });
+    try {
+      await mcs.launch();
+      await mcs.updateWhitelist();
+      await mcs.fetchStats();
+    } catch (error) { console.log(error) }
+    schedule('0 */6 * * *', async () => {
+      await mcs.resourcePack.process();
+    });
+    
+    schedule('0 0 * * *', async () => {
+      await mcs.resourcePack.process();
+      await mcs.referals.init();
+    });
+    
+    schedule('*/10 * * * *', async () => {
+      mcs.command('list', true);
+      await mcs.fetchStats();
+    });
   } else {
-    server.listen(process.env.PORT, () => { 
+    app.listen(process.env.PORT, () => { 
       log(`Тестовый сервер запущен`);
     });
   }
-
-  try {
-    await mcs.launch();
-    await mcs.updateWhitelist();
-    await mcs.fetchStats();
-  } catch (error) { console.log(error) }
-});
-
-schedule('0 */6 * * *', async () => {
-  await mcs.resourcePack.process();
-});
-
-schedule('0 0 * * *', async () => {
-  await mcs.resourcePack.process();
-  await mcs.referals.init();
-});
-
-schedule('*/10 * * * *', async () => {
-  mcs.command('list', true);
-  await mcs.fetchStats();
 });

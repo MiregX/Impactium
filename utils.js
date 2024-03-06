@@ -610,9 +610,9 @@ class ImpactiumServer {
   constructor() {
     if (ImpactiumServer.instance) return ImpactiumServer.instance;
     ImpactiumServer.instance = this;
-    
-    this.sftp = new SFTP()
 
+    this.sftp = new SFTP()
+    
     this.path = {
       folder: {},
       file: {}
@@ -637,13 +637,15 @@ class ImpactiumServer {
 
     this.resourcePack = new ResoursePackInstance();
     this.telegramBot = new TelegramBotHandler(this);
-    this.telegramBot.connect();
     this.referals = new ReferalFetcher(this);
     
   }
 
   async launch() {
+    if (process.env.NODE_ENV === "development")
+      return;
     try {
+      await this.telegramBot.connect();
       if (this.server?.ws) {
         this.server?.close();
       }

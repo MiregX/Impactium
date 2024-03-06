@@ -5,7 +5,7 @@ import psutil
 
 def check_status():
     try:
-        response = requests.get("https://impactium.fun/api/status", timeout=10)
+        response = requests.get("https://impactium.fun/api", timeout=10)
         if response.status_code != 200:
             restart_node_server()
     except requests.exceptions.RequestException:
