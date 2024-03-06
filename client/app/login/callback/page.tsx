@@ -2,11 +2,9 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useEffect } from 'react';
-import Cookies from 'universal-cookie';
-
 
 async function loginCallback(code: string, referal?: string) {
-  const res = await fetch(`https://impactium.fun/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
+  const res = await fetch(`${process.env.DOMAIN}/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
   if (!res.ok) return undefined
   return res.json()
 }

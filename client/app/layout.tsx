@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import '@/styles/globals.css';
 import { Metadata } from 'next'
-import {  } from 'next/server';
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
@@ -9,6 +8,8 @@ import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
 import { Preloader } from '@/context/Preloader';
 import { cookies } from 'next/headers';
+import { loadEnv } from '@/preset/dotenv'
+loadEnv(process.env.NODE_ENV);
 
 export const metadata: Metadata = {
   title: {

@@ -1,6 +1,3 @@
-import Cookies from "universal-cookie";
-import { cookies } from "next/headers";
-
 export interface IUser {
   id: string;
   email: string;
@@ -8,7 +5,7 @@ export interface IUser {
   avatar?: string;
   balance?: number;
   isVerified?: boolean;
-  referal?: any; 
+  referal?: any;
 }
 
 export const getUser = async (token: string): Promise<IUser> => {
@@ -24,13 +21,12 @@ export const getUser = async (token: string): Promise<IUser> => {
       }
     });
   
-    if (!response.ok) {
+    if (response.status === 401) {
       return undefined;
     }
 
     return await response.json();
   } catch (error) {
-    console.error(error);
     return undefined;
   }
 };

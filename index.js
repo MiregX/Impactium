@@ -34,6 +34,7 @@ server.prepare().then(async () => {
   }));
 
   app.use('/api', require('./modules/api'));
+  app.use('/oauth2', require('./modules/oauth2'));
 
   app.all('*', (req, res) => {
     handle(req, res)
