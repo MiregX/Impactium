@@ -11,7 +11,7 @@ const next = require('next');
 const path = require('path');
 
 const server = next({
-  dir: path.join(__dirname, 'client'),
+  dir: path.join(__dirname, '..', 'client'),
   port: process.env.PORT,
   dev: process.env.NODE_ENV !== 'production',
   hostname: process.env.HOSTNAME
