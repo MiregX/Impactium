@@ -3,20 +3,20 @@ const { connect } = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 let channel;
 
 const createChannel = async () => {
-    const connection = await connect('amqp://localhost');
-    channel = await connection.createChannel();
+  const connection = await connect('amqp://localhost:5672');
+  channel = await connection.createChannel();
 };
 
 createChannel();
 
 const rabbitMiddleware = async (req, res, next) => {
   try {
-    const correlationId = req.headers['correlation-id'] || uuidv4();
     const replyQueue = await channel.assertQueue('', { exclusive: true });
 
     channel.publish(
@@ -27,15 +27,14 @@ const rabbitMiddleware = async (req, res, next) => {
         headers: req.headers,
         body: req.body,
       })),
-      { replyTo: replyQueue.queue, correlationId: correlationId }
+      { replyTo: replyQueue.queue,
+        correlationId: req.headers['correlation-id'] || uuidv4() }
     );
 
-    channel.consume(replyQueue.queue, (message) => {
-      res.send(message.content.toString());
-      channel.close();
+    await channel.consume(replyQueue.queue, (message) => {
+      const responseData = JSON.parse(message.content.toString());
+      res.json(responseData); // Отправляем JSON вместо текста
     }, { noAck: true });
-
-    next();
   } catch (error) {
     console.error('Error in rabbitMiddleware:', error);
     res.status(500).send('Internal Server Error');

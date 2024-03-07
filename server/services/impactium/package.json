@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/Mireg-V/Impactium/issues"
   },
-  "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme"
+  "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme",
+  "dependencies": {
+    "amqplib": "^0.10.3"
+  }
 }

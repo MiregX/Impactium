@@ -9,31 +9,34 @@ class McsHandler {
   handleRequest(message) {
     try {
       const parsedMessage = JSON.parse(message.content.toString());
-      console.log('Handling MCS request:');
       console.log(parsedMessage);
 
-      // Обрабатываем запрос в зависимости от пути
-      if (parsedMessage.path === '/status') {
-        this.handleStatusRequest(message.properties.replyTo, message.properties.correlationId);
-      } else if (parsedMessage.path === '/info') {
-        this.handleInfoRequest(message.properties.replyTo, message.properties.correlationId);
-      } else {
-        console.error('Unknown path:', parsedMessage.path);
+      switch (parsedMessage.path) {
+        case 'status':
+          this.handleStatusRequest(message.properties);
+          break;
+          
+        case 'info':
+          this.handleInfoRequest(message.properties);
+          break;
+        
+        default:
+          this.channel.sendToQueue(message.properties.replyTo, Buffer.from('500'), { correlationId: message.properties.correlationId });
+          break;
       }
     } catch (error) {
-      console.error('Error handling MCS request:', error);
+      this.channel.sendToQueue(message.properties.replyTo, Buffer.from('500'), { correlationId: message.properties.correlationId });
     }
   }
 
-  handleStatusRequest(replyQueue, correlationId) {
-    // Отправляем ответ с кодом 200
-    this.channel.sendToQueue(replyQueue, Buffer.from('Status: OK'), { correlationId });
+  handleStatusRequest({ replyTo, correlationId }) {
+    const responseData = { status: 200 };
+    this.channel.sendToQueue(replyTo, Buffer.from(JSON.stringify(responseData)), { correlationId });
   }
 
-  handleInfoRequest(replyQueue, correlationId) {
-    // Отправляем ответ с объектом информации
+  handleInfoRequest({ replyTo, correlationId }) {
     const infoObject = { key: 'value', anotherKey: 'anotherValue' };
-    this.channel.sendToQueue(replyQueue, Buffer.from(JSON.stringify(infoObject)), { correlationId });
+    this.channel.sendToQueue(replyTo, Buffer.from(JSON.stringify(infoObject)), { correlationId });
   }
 }
 
@@ -48,10 +51,7 @@ const runMcsService = async () => {
     const queue = await channel.assertQueue('mcs_queue', { durable: true });
     channel.bindQueue(queue.queue, 'impactium', '*');
 
-    // Обрабатываем входящие сообщения
     channel.consume(queue.queue, mcsHandler.handleRequest.bind(mcsHandler), { noAck: true });
-
-    console.log('MCS service is running.');
   } catch (error) {
     console.error('Error creating MCS service:', error);
   }
