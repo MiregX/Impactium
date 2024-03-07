@@ -1,7 +1,7 @@
 require('dotenv').config({
   path: process.env.NODE_ENV !== 'production' ? './.env.dev' : './.env.prod'
 });
-const { getLicense, log, ImpactiumServer } = require('./utils');
+const { getLicense, log, ImpactiumServer } = require('../utils');
 const session = require('express-session');
 const { schedule } = require('node-cron');
 const express = require('express');

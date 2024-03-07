@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { getDatabase, generateToken, Referal} = require('../utils');
+const { getDatabase, generateToken, Referal} = require('../../utils');
 const router = express.Router();
 
 router.use(passport.initialize());

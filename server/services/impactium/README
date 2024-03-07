@@ -1,0 +1,57 @@
+MCS is a server-side module designed to manage and coordinate various aspects of a Minecraft server through a WebSocket Secure (WSS) connection. It facilitates communication between the server and external systems, allowing for dynamic control and real-time updates.
+
+## Features
+
+### WebSocket Connection
+- Establishes a secure WebSocket connection with the server control panel.
+
+### Command Execution
+- Sends commands to the Minecraft server, allowing for real-time interactions and control.
+
+### Player Management
+- Tracks online players, updates player lists, and manages whitelisted and database players.
+
+### Event Handling
+- Monitors server console output for relevant events, such as player joins, leaves, and issued commands.
+
+### Telegram Integration
+- Integrates with Telegram to provide notifications and updates about server activities.
+
+### Restart Mechanism
+- Implements a restart mechanism, displaying countdown messages to players before server restart.
+
+### Whitelist Management
+- Synchronizes the whitelist with the MongoDB database, ensuring consistency between database and server whitelists.
+
+### Statistics Fetching
+- Periodically fetches and updates player statistics from the server, enhancing data-driven insights.
+
+### Achievement Effects
+- Applies Minecraft effects based on player achievements, enhancing the gameplay experience.
+
+## Usage
+
+1. **Launch**: Initiates the WebSocket connection and sets up necessary components.
+
+2. **Command Execution**: Sends commands to the Minecraft server for execution.
+
+3. **Output Handling**: Monitors and processes server console output for relevant information.
+
+4. **Restart**: Triggers a server restart with a customizable countdown message.
+
+5. **Player Management**: Manages online players, whitelists, and player statistics.
+
+6. **Whitelist Update**: Keeps the server whitelist synchronized with the MongoDB database.
+
+7. **Statistics Fetching**: Retrieves and updates player statistics from the server periodically.
+
+8. **Achievement Effects**: Applies Minecraft effects based on player achievements.
+
+## Notes
+- Designed for seamless integration with Minecraft servers using WebSocket technology.
+- Provides robust player and server management functionalities.
+- Ideal for enhancing server administration and improving player experience.
+
+Feel free to customize and extend the functionality based on your specific server requirements.
+
+**Disclaimer**: Ensure proper configuration and testing before deploying in a production environment.

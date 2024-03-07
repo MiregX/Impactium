@@ -1,0 +1,30 @@
+{
+  "name": "impactium",
+  "version": "1.0.0",
+  "description": "Impactium MCS (Minecraft Coordinator Server) - is a server-side module designed to manage and coordinate various aspects of a Minecraft server through a WebSocket (WSS) connection with pterosocket library. It facilitates communication between the server and external systems, allowing for dynamic control and real-time updates.",
+  "main": "impactium.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mireg-V/Impactium.git#master"
+  },
+  "keywords": [
+    "pterosocket",
+    "nodejs",
+    "node",
+    "rabbitmq",
+    "redis",
+    "websocket",
+    "ws",
+    "wss",
+    "telegram"
+  ],
+  "author": "Mark (Mireg)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mireg-V/Impactium/issues"
+  },
+  "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme"
+}

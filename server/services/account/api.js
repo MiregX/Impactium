@@ -1,5 +1,5 @@
 const express = require('express');
-const { log, Player, User, ftpUpload } = require('../utils');
+const { log, Player, User, ftpUpload } = require('../../utils');
 const router = express.Router();
 const Jimp = require('jimp');
 const multer = require('multer');
@@ -50,7 +50,7 @@ const playerMiddleware = async (request, response, next) => {
 };
 
 router.use('/player', playerMiddleware);
-router.use('/admin', require('./api/admin'));
+router.use('/admin', require('../admin'));
 
 router.get('/player/get', async (request, response) => {
   response.status(200).send(request.player.send());
