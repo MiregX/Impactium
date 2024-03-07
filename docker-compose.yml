@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:latest"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+
+  fruits-service:
+    build:
+      context: .
+      dockerfile: ./server/services/impactium/Dockerfile
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ./server/gateway/Dockerfile
+    depends_on:
+      - rabbitmq
+    ports:
+      - "80:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
