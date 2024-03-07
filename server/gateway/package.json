@@ -1,0 +1,33 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "The Gateway module serves as a central entry point to a microservices architecture, facilitating communication and coordination between various services. Acting as a bridge between external clients and the internal service network, the Gateway module efficiently handles incoming requests, routes them to the appropriate microservices, and manages the corresponding responses.",
+  "main": "gateway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mireg-V/Impactium.git#master"
+  },
+  "keywords": [
+    "rabbitmq",
+    "node",
+    "nest",
+    "js",
+    "javascript",
+    "gateway",
+    "express"
+  ],
+  "author": "Mark Herasymchuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mireg-V/Impactium/issues"
+  },
+  "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "express": "^4.18.3",
+    "uuid": "^9.0.1"
+  }
+}
