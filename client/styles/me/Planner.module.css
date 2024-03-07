@@ -12,7 +12,7 @@
   flex-direction: row;
   justify-content: flex-end; 
   position: relative;
-  z-index: 1;
+  z-index: 0;
   min-height: 32px;
   background-color: #484848;
   border-radius: 12px;
@@ -42,6 +42,18 @@
   max-width: 32px; 
   cursor: pointer;
 }
+.description{
+  position: absolute;
+  left: -310px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  right: 0px;
+  width: 220px;
+  height: 30px;
+  background-color: #242424;
+  border-radius: 12px;
+}
 
 .hoverTask{
   position: absolute;
@@ -60,4 +72,20 @@
   width: 100%;
   padding: 10px;
   cursor: pointer;
+}
+.addtasks{
+  position: absolute;
+  top: 100px;
+  right: 10px;
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
+}
+.removetask{
+  position: absolute;
+  top: 300px;
+  right: 10px;
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
 }
