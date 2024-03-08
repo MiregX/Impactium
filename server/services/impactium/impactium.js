@@ -1,60 +1,46 @@
-// mcs.js
-const { connect } = require('amqplib');
+const amqplib = require('amqplib');
 
-class McsHandler {
-  constructor(channel) {
-    this.channel = channel;
-  }
+(async () => {
+  const queue = 'tasks';
+  const conn = await amqplib.connect('amqp://localhost');
 
-  handleRequest(message) {
-    try {
-      const parsedMessage = JSON.parse(message.content.toString());
-      console.log(parsedMessage);
+  const ch1 = await conn.createChannel();
+  await ch1.assertQueue(queue);
 
-      switch (parsedMessage.path) {
-        case 'status':
-          this.handleStatusRequest(message.properties);
-          break;
-          
-        case 'info':
-          this.handleInfoRequest(message.properties);
-          break;
-        
-        default:
-          this.channel.sendToQueue(message.properties.replyTo, Buffer.from('500'), { correlationId: message.properties.correlationId });
-          break;
+  ch1.consume(queue, async (msg) => {
+    if (msg !== null) {
+      console.log('Received:', msg.content.toString());
+
+      // Process the message and generate a response
+      const response = processMessage(msg.content.toString());
+
+      // Check if replyTo queue is present in the message properties
+      if (msg.properties.replyTo) {
+        try {
+          // Send the response to the replyTo queue
+          await ch1.sendToQueue(
+            msg.properties.replyTo,
+            Buffer.from(JSON.stringify(response)),
+            { correlationId: msg.properties.correlationId }
+          );
+          console.log('Sent response:', response);
+        } catch (error) {
+          console.error('Error sending response:', error);
+        }
+      } else {
+        console.warn('ReplyTo queue not found in message properties');
       }
-    } catch (error) {
-      this.channel.sendToQueue(message.properties.replyTo, Buffer.from('500'), { correlationId: message.properties.correlationId });
+
+      ch1.ack(msg);
+    } else {
+      console.log('Consumer cancelled by server');
     }
-  }
+  });
+})();
 
-  handleStatusRequest({ replyTo, correlationId }) {
-    const responseData = { status: 200 };
-    this.channel.sendToQueue(replyTo, Buffer.from(JSON.stringify(responseData)), { correlationId });
-  }
-
-  handleInfoRequest({ replyTo, correlationId }) {
-    const infoObject = { key: 'value', anotherKey: 'anotherValue' };
-    this.channel.sendToQueue(replyTo, Buffer.from(JSON.stringify(infoObject)), { correlationId });
-  }
+// Replace this function with your actual message processing logic
+function processMessage(message) {
+  // Implement your processing logic here
+  // This function should return the response data
+  return { processedData: message };
 }
-
-const runMcsService = async () => {
-  try {
-    const connection = await connect('amqp://localhost');
-    const channel = await connection.createChannel();
-    const mcsHandler = new McsHandler(channel);
-
-    // Объявляем обменник и создаем очередь для MCS
-    await channel.assertExchange('impactium', 'topic', { durable: true });
-    const queue = await channel.assertQueue('mcs_queue', { durable: true });
-    channel.bindQueue(queue.queue, 'impactium', '*');
-
-    channel.consume(queue.queue, mcsHandler.handleRequest.bind(mcsHandler), { noAck: true });
-  } catch (error) {
-    console.error('Error creating MCS service:', error);
-  }
-};
-
-runMcsService();

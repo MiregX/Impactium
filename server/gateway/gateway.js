@@ -6,56 +6,79 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-let channel;
+class Gateway {
+  constructor() {
+    this.channel = null;
+    this.replyQueue = ''; // Add a property to store the reply queue name
+  }
 
-const createChannel = async () => {
-  const connection = await connect('amqp://localhost:5672');
-  channel = await connection.createChannel();
-};
+  async init() {
+    this.queue = 'tasks';
+    const conn = await connect('amqp://localhost');
+    this.ch = await conn.createChannel();
 
-createChannel();
+    // Create a temporary exclusive queue for receiving responses
+    const { queue: replyQueue } = await this.ch.assertQueue('', { exclusive: true });
+    this.replyQueue = replyQueue;
+  }
 
-const rabbitMiddleware = async (req, res, next) => {
-  try {
-    const replyQueue = await channel.assertQueue('', { exclusive: true });
+  async handler(req, res, next) {
+    const correlationId = uuidv4();
 
-    channel.publish(
-      req.rabbitExchange,
-      '*',
-      Buffer.from(JSON.stringify({
+    try {
+      const data = JSON.stringify({
         path: req.params[0],
         headers: req.headers,
         body: req.body,
-      })),
-      { replyTo: replyQueue.queue,
-        correlationId: req.headers['correlation-id'] || uuidv4() }
-    );
+        correlationId,
+      });
 
-    await channel.consume(replyQueue.queue, (message) => {
-      const responseData = JSON.parse(message.content.toString());
-      res.json(responseData); // Отправляем JSON вместо текста
-    }, { noAck: true });
-  } catch (error) {
-    console.error('Error in rabbitMiddleware:', error);
-    res.status(500).send('Internal Server Error');
+      this.ch.sendToQueue(
+        this.queue,
+        Buffer.from(data),
+        { replyTo: this.replyQueue, correlationId }
+      );
+
+      this.ch.consume(this.replyQueue, (msg) => {
+        if (msg !== null) {
+          console.log('Received response:', msg.content.toString());
+          // Send the response to the client (replace with your logic)
+          res.json(JSON.parse(msg.content.toString()));
+          ch1.ack(msg);
+        }
+      });
+
+      // Wait for a response within a timeout (optional)
+      const timeout = setTimeout(() => {
+        res.status(500).send('Timeout waiting for response');
+      }, 5000);
+
+      res.on('finish', () => clearTimeout(timeout));
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
-};
+}
 
-app.use('/api/mcs/*', (req, res, next) => {
-  req.rabbitExchange = 'impactium';
-  next();
-}, rabbitMiddleware);
-
-app.use(['/api/user', '/app/player'], (req, res, next) => {
-  req.rabbitExchange = 'account';
-  next();
-}, rabbitMiddleware);
-
-app.use('/api/oauth2', (req, res, next) => {
-  req.rabbitExchange = 'oauth2';
-  next();
-}, rabbitMiddleware);
-
-app.listen(PORT, () => {
-  console.log(`Gateway is running on port ${PORT}`);
+const gateway = new Gateway();
+gateway.init().then(() => {
+  app.use('/api/mcs/*', (req, res, next) => {
+    console.log("Пришёл новый запрос на путь: ", '/api/mcs/');
+    next();
+  }, gateway.handler.bind(gateway));
+  
+  app.use(['/api/user', '/app/player'], (req, res, next) => {
+    req.rabbitExchange = 'account';
+    next();
+  }, gateway.handler.bind(gateway));
+  
+  app.use('/api/oauth2', (req, res, next) => {
+    req.rabbitExchange = 'oauth2';
+    next();
+  }, gateway.handler.bind(gateway));
+  
+  app.listen(PORT, () => {
+    console.log(`Gateway is running on port ${PORT}`);
+  });
 });
