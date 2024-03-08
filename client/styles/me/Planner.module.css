@@ -43,7 +43,7 @@
   cursor: pointer;
 }
 .description{
-  position: absolute;
+  position: relative;
   left: -310px;
   display: flex;
   align-items: center;
@@ -88,4 +88,8 @@
   width: 100px;
   height: 100px;
   background-color: aqua;
+}
+.color{
+  position: absolute;
+  left: 200px;
 }
