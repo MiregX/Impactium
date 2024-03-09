@@ -5,6 +5,7 @@ import styles from '@/styles/me/Planner.module.css';
 
 export default function PlannerPage() {
   
+<<<<<<< Updated upstream
   const tasksMap = [
     {
       title: 'Таска один',
@@ -24,6 +25,13 @@ export default function PlannerPage() {
   ]
 
   const taskDescription = [1,2,3,4,5,6,7,8,9,10];
+=======
+  const taskDescription = ['taska','taska',3,4,5,6,7,8,9,10];
+  const [hoverPanelDisplays, setHoverPanelDisplays] = useState(Array(10).fill("none"));
+  const [selectedStatuses, setSelectedStatuses] = useState(Array(10).fill('')); 
+  const [statusPositions, setStatusPositions] = useState(Array(10).fill(0));
+  const [colorStatus, setColorStatus] = useState(Array(10).fill('white')); 
+>>>>>>> Stashed changes
   const [tasks, setTasks] = useState(() => {
     const storedTasks = localStorage.getItem('tasks');
     return storedTasks ? JSON.parse(storedTasks) : tasksMap;

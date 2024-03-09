@@ -32,7 +32,19 @@ export function Nav() {
           <img src="https://cdn.impactium.fun/ux/casual.svg" alt='' />
           <p>{lang[title]}</p>
         </Link>
+        
       ))}
+      <div className={s.taskbtn}>
+        <Link href='/me/planner'>
+        <img src="https://cdn.impactium.fun/ux/casual.svg" alt='' />
+          <span>Task</span>
+        </Link>
+      </div>
     </nav>
   )
 }
+/*<div className={styles.taskbtn}>
+<Link href='/me/planner'>
+<span>Task</span>
+</Link>
+</div>*/
