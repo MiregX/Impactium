@@ -9,13 +9,10 @@ export default async function MeLayout({ children }: Readonly<{ children: ReactN
 
 	console.log(token);
 
-<<<<<<< Updated upstream
 	if (!token) {
 		redirect('/login');
 	}
 
-=======
->>>>>>> Stashed changes
 	const player = null;
 
 	return (
