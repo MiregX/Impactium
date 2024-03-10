@@ -3,6 +3,9 @@ import styles from "@/styles/me/Planner.module.css";
 
 export function Task({task, active, index, setActive}) {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const handleClosePanel = () => {
+    setActive(false);
+  };
 
   useEffect(() => console.log(isActive), [isActive])
 
@@ -24,9 +27,11 @@ export function Task({task, active, index, setActive}) {
           <div className={styles.color}>•</div> 
         </div>
         <button onClick={() => setActive(index)}>
+          <div className={styles.pointer}>
           <img src="https://www.svgrepo.com/show/532954/grip-dots-vertical.svg" alt="" />
+          </div>
           <div className={`${styles.hoverTask} ${active === index && styles.active}`}>
-            <div className={styles.selectStatus}>
+            <div className={styles.selectStatus} onClick={handleClosePanel}>
               <p>Закрыть</p>
             </div>
             <div className={styles.selectStatus}>

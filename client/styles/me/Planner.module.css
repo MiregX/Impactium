@@ -82,3 +82,6 @@
 .removetask{
   top: 300px;
 }
+.pointer{
+  cursor: pointer;
+}
