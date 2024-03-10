@@ -1,22 +1,17 @@
 const amqplib = require('amqplib');
 
-(async () => {
-  const queue = 'tasks';
-  const conn = await amqplib.connect('amqp://localhost');
+class ImpactiumServerConsumer {
+  constructor() {}
 
-  const ch = await conn.createChannel();
-  await ch.assertQueue(queue);
+  async init() {
+    const conn = await amqplib.connect('amqp://localhost');
+    this.ch = await conn.createChannel();
+    await this.ch.assertQueue('mcs');
 
-  ch.consume(queue, async (msg) => {
-    if (msg !== null) {
-      console.log('Received new req');
-
-      const response = msg.content.toString();
-
-      if (!msg.properties.replyTo) return;
-      
+    
+    this.ch.consume('mcs', async (msg) => {
       try {
-        ch.sendToQueue(
+        this.ch.sendToQueue(
           msg.properties.replyTo,
           Buffer.from(JSON.stringify({
             status: 200,
@@ -24,14 +19,14 @@ const amqplib = require('amqplib');
           })),
           { correlationId: msg.properties.correlationId }
         );
-        console.log('Sent back');
       } catch (error) {
-        console.error('Error sending response:', error);
+        console.error(error);
       }
 
-      ch.ack(msg);
-    } else {
-      console.log('Consumer cancelled by server');
-    }
-  });
-})();
+      this.ch.ack(msg);
+    });
+  }
+}
+
+const mcs = new ImpactiumServerConsumer();
+mcs.init();

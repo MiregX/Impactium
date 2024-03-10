@@ -9,63 +9,74 @@ const PORT = process.env.PORT || 3000;
 // gateway
 class Gateway {
   constructor() {
-    this.channel = null;
+    this.pendingRequests = new Map();
   }
 
   async init() {
-    this.queue = 'tasks';
     const conn = await connect('amqp://localhost');
     this.ch = await conn.createChannel();
+    this.replyQueue = await this.ch.assertQueue('', { exclusive: true });
+
+    this.ch.consume(this.replyQueue.queue, (msg) => {
+      const correlationId = msg.properties.correlationId;
+      if (this.pendingRequests.has(correlationId)) {
+        const { resolve, timer } = this.pendingRequests.get(correlationId);
+        clearTimeout(timer);
+        this.ch.ack(msg);
+        resolve(msg.content.toString());
+        this.pendingRequests.delete(correlationId);
+      } else {
+        console.log('Unexpected message received');
+      }
+    });
   }
 
   async handler(req, res) {
     try {
+      const consumer = req.params[0].split('/')[0];
+      console.log(consumer);
+
       const correlationId = uuidv4();
+      const { headers, body } = req;
       const data = JSON.stringify({
-        path: req.params[0],
-        headers: req.headers,
-        body: req.body,
+        headers,
+        body,
         correlationId,
       });
 
-      const { queue: replyQueue } = await this.ch.assertQueue('', { exclusive: true });
-
+      const timeout = 15000;
       const responsePromise = new Promise((resolve, reject) => {
-        this.ch.consume(replyQueue, (msg) => {
-          if (msg !== null && msg.properties.correlationId === correlationId) {
-            console.log('Received response:', msg.content.toString());
-            this.ch.ack(msg);
-            resolve(msg.content.toString());
-          }
-        }, { noAck: false });
+        const timer = setTimeout(() => {
+          this.pendingRequests.delete(correlationId);
+          reject(new Error('Response timeout'));
+        }, timeout);
+
+        this.pendingRequests.set(correlationId, { resolve, timer });
       });
 
-      this.ch.sendToQueue(this.queue, Buffer.from(data), {
-        replyTo: replyQueue,
+      this.ch.sendToQueue(consumer, Buffer.from(data), {
+        replyTo: this.replyQueue.queue,
         correlationId,
       });
 
       const responseData = await responsePromise;
-
-      res.send(JSON.parse(responseData));
+      try {
+        res.send(JSON.parse(responseData));
+      } catch (error) {
+        res.send(responseData)
+      }
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
   }
 }
+
 const gateway = new Gateway();
 gateway.init().then(() => {
-  app.use('/api/mcs/*', async (req, res) => {
-    const data = await gateway.handler(req, res);
-    console.log(data);
+  app.use('/api/*', async (req, res) => {
+    await gateway.handler(req, res);
   });
 
   app.listen(PORT, () => console.log(`Gateway is running on port ${PORT}`));
 });
-
-
-
-// app.use(['/api/user', '/app/player'], logRequest, gateway.handler.bind(gateway));
-  
-// app.use('/api/oauth2', logRequest, gateway.handler.bind(gateway));
