@@ -9,12 +9,30 @@ services:
     networks:
       - app-network
 
-  fruits-service:
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  account-service:
+    build:
+      context: .
+      dockerfile: ./server/services/account/Dockerfile
+    depends_on:
+      - rabbitmq
+      - redis
+    networks:
+      - app-network
+  
+  mcs-service:
     build:
       context: .
       dockerfile: ./server/services/impactium/Dockerfile
     depends_on:
       - rabbitmq
+      - redis
     networks:
       - app-network
 
@@ -24,6 +42,7 @@ services:
       dockerfile: ./server/gateway/Dockerfile
     depends_on:
       - rabbitmq
+      - redis
     ports:
       - "80:3000"
     networks:

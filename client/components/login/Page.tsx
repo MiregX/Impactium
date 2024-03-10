@@ -8,10 +8,18 @@ export function LoginPage() {
   const [isNextStage, setNextStage] = useState<boolean>(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
 
+  const x = () => {
+    fetch('http://localhost:3000/api/player/achievements/get', {
+      headers: {
+        token: 'fb69a96fe7ed2317ede5261fd99359e23652a48ee22c9124d9e4edd53371a59913f1e86dd4d55eeb037c36ce0fefc6169e7a83d76e81cec08208817f037e3613'
+      }
+    }).then((data) => data.json().then(response => console.log(response)).catch(error => console.error(error)));
+  }
+
   return (
     <div className={s.loginWrapper}>
       <div className={`${s.loginBlock} ${s.one} ${s.login}`}>
-        <h1 className={s.center}>{lang.login}</h1>
+        <h1 onClick={x} className={s.center}>{lang.login}</h1>
         <div className={`${s.form} ${s.grid} ${s.columns1} ${s.rows3}`}>
           <div className={s.inputGroup}>
             <label htmlFor="emailOrUsername">{lang.usernameOrEmail}</label>

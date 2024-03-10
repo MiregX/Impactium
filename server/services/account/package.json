@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme",
   "dependencies": {
-    "amqplib": "^0.10.3"
+    "amqplib": "^0.10.3",
+    "redis": "^4.6.13"
   }
 }

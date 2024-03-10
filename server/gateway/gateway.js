@@ -1,82 +1,138 @@
+require('dotenv').config({
+  path: process.env.NODE_ENV !== 'production' ? '../.env.dev' : '../.env.prod'
+});
 const express = require('express');
-const { connect } = require('amqplib');
+const amqplib = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
+const cors = require('cors');
+const next = require('next');
+const path = require('path');
+
+const https = require('https');
+
+
 
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
 
-// gateway
 class Gateway {
   constructor() {
     this.pendingRequests = new Map();
+    this.exchanges = ['mcs', 'player', 'player.achievements', 'user', 'user.set'];
   }
 
   async init() {
-    const conn = await connect('amqp://localhost');
+    const conn = await amqplib.connect('amqp://localhost');
     this.ch = await conn.createChannel();
     this.replyQueue = await this.ch.assertQueue('', { exclusive: true });
 
     this.ch.consume(this.replyQueue.queue, (msg) => {
       const correlationId = msg.properties.correlationId;
-      if (this.pendingRequests.has(correlationId)) {
-        const { resolve, timer } = this.pendingRequests.get(correlationId);
-        clearTimeout(timer);
-        this.ch.ack(msg);
-        resolve(msg.content.toString());
-        this.pendingRequests.delete(correlationId);
-      } else {
-        console.log('Unexpected message received');
-      }
+      const { resolve, timer } = this.pendingRequests.get(correlationId);
+      clearTimeout(timer);
+      this.ch.ack(msg);
+      resolve(msg.content.toString());
+      this.pendingRequests.delete(correlationId);
     });
+
+    for (let exchange of this.exchanges) {
+      this.ch.assertExchange(exchange, 'topic');
+      this.ch.assertQueue(`${exchange}`);
+      this.ch.bindQueue(`${exchange}`, exchange, '#');
+    }
   }
 
   async handler(req, res) {
     try {
-      const consumer = req.params[0].split('/')[0];
-      console.log(consumer);
-
+      const path = req.params[0].split('/');
+      let consumer = this.exchanges.find(exchange => path[0].startsWith(exchange.split('.')[0]));
+      if (consumer) {
+        path.shift();
+      } else {
+        consumer = path.shift();
+      }
       const correlationId = uuidv4();
-      const { headers, body } = req;
       const data = JSON.stringify({
-        headers,
-        body,
-        correlationId,
+        headers: req.headers,
+        body: req.body,
+        correlationId
       });
 
-      const timeout = 15000;
-      const responsePromise = new Promise((resolve, reject) => {
-        const timer = setTimeout(() => {
+      this.pendingRequests.set(correlationId, {
+        resolve: null,
+        timer: setTimeout(() => {
           this.pendingRequests.delete(correlationId);
-          reject(new Error('Response timeout'));
-        }, timeout);
-
-        this.pendingRequests.set(correlationId, { resolve, timer });
+          res.sendStatus(408);
+        }, 5000),
       });
 
-      this.ch.sendToQueue(consumer, Buffer.from(data), {
+      this.ch.publish(consumer, path.join('.'), Buffer.from(data), {
         replyTo: this.replyQueue.queue,
         correlationId,
       });
 
-      const responseData = await responsePromise;
+      const responseData = await new Promise((resolve) => {
+        this.pendingRequests.get(correlationId).resolve = resolve;
+      });
+
       try {
-        res.send(JSON.parse(responseData));
+        const data = JSON.parse(responseData);
+        data.error ? res.sendStatus(data.error) : res.send(data);
       } catch (error) {
-        res.send(responseData)
+        res.send(responseData);
       }
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.sendStatus(500);
     }
   }
 }
 
-const gateway = new Gateway();
-gateway.init().then(() => {
+function getLicense() {
+  try {
+    const path = 'C:\\Users\\Mark\\';
+    const cert = fs.readFileSync(path + 'cert.pem', 'utf8');
+    const key = fs.readFileSync(path + 'key.pem', 'utf8');
+
+    return { isSuccess: true, cert, key };
+  } catch (error) {
+    return { isSuccess: false };
+  }
+}
+
+const options = getLicense();
+
+const server = next({
+  dir: path.join(__dirname, '..', '..', 'client'),
+  port: process.env.PORT,
+  dev: process.env.NODE_ENV !== 'production',
+  hostname: process.env.HOSTNAME
+});
+const handle = server.getRequestHandler();
+server.prepare().then(async () => {
+
+  const gateway = new Gateway();
+  await gateway.init();
+
+  const app = express();
+  app.use(cors());
+
   app.use('/api/*', async (req, res) => {
     await gateway.handler(req, res);
   });
+  
+  app.all('*', (req, res) => {
+    handle(req, res)
+  });
 
-  app.listen(PORT, () => console.log(`Gateway is running on port ${PORT}`));
+  if (options.isSuccess && process.env.NODE_ENV === 'production') {
+    https.createServer(options, app).listen(process.env.PORT, () => {
+      console.log(`Основной сервер запущен`, 'g');
+    });
+
+  } else {
+    app.listen(process.env.PORT, () => { 
+      console.log(`Тестовый сервер запущен`);
+    });
+
+  }
 });

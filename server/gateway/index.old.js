@@ -2,7 +2,6 @@ require('dotenv').config({
   path: process.env.NODE_ENV !== 'production' ? './.env.dev' : './.env.prod'
 });
 const { getLicense, log, ImpactiumServer } = require('../utils');
-const session = require('express-session');
 const { schedule } = require('node-cron');
 const express = require('express');
 const https = require('https');
@@ -26,11 +25,6 @@ server.prepare().then(async () => {
   
   app.use(cors());
 
-  app.use(session({
-    secret: process.env.DISCORD_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  }));
 
   app.use('/api', require('./modules/api'));
 
