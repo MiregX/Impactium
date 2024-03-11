@@ -18,24 +18,22 @@ class Request {
 class Consumer {
   constructor() {
     this.exchanges = ['user', 'player', 'player.set', 'player.achievements'];
+    this.player = new Player();
+    this.user = new User();
     this.handlers = {
       user: {
-        get: async () => {
-          const user = new User();
-          await user.fetch();
-          return user.send();
-        }
+        get: () => this.user.send
       },
       player: {
-        get: () => 'Какой то пользователь',
+        get: () => this.player.send,
         set: {
-          password: () => "setPassword()",
-          nickname: () => "setNickname()",
-          skin: () => "setSkin()",
+          password: () => this.player.setPassword,
+          nickname: () => this.player.setNickname,
+          skin: () => this.player.setSkin,
         },
         achievements: {
-          get: () => 'Какие-то ачивки',
-          set: () => 'Поставили ачивку'
+          get: () => this.player.achievements.process,
+          set: () => this.player.achievements.set
         }
       }
     };
@@ -63,22 +61,25 @@ class Consumer {
   consumer(queue) {
     this.ch.consume(queue, async (msg) => {
       const req = new Request(msg);
-  
-      let handler = this.handlers;
-      for (let key of [...req.fields.exchange.split('.'), ...req.fields.routingKey.split('.')]) {
-        handler = handler[key];
-        if (!handler) {
-          break;
-        }
+
+      if (!req.content.headers.token) {
+        return this.send(req, { error: 401 })
       }
-      
+
+      const { handler, account } = this.getHandler(req.fields);
+      if (!account) {
+        return this.send(req, { error: 400 })
+      }
+
+      await account.fetch(req.content.headers.token);
+
       const data = typeof handler === 'undefined'
-        ? {error: 400}
+        ? { error: 400 }
         : (typeof handler === 'function'
           ? handler()
           : handler.x()
       );
-      this.send(req, data);
+      this.send(req, await data);
     });
   }
 
@@ -89,6 +90,24 @@ class Consumer {
       { correlationId: msg.properties.correlationId }
     );
     this.ch.ack(msg);
+  }
+
+  getHandler(fields) {
+    let handler = this.handlers;
+    const path = [...fields.exchange.split('.'), ...fields.routingKey.split('.')];
+    const account = path[0] === 'user'
+      ? this.user
+      : (path[0] === 'player'
+        ? this.player
+        : null);
+
+    for (let key of path) {
+      handler = handler[key];
+      if (!handler) {
+        break;
+      }
+    }
+    return { handler, account };
   }
 }
 

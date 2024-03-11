@@ -14,7 +14,7 @@ interface IPlayer {
 }
 
 export class Player implements IPlayer {
-  achievements: any;
+  achievements: Achievements;
   id: any;
   isFetched?: boolean;
   referal: any;
