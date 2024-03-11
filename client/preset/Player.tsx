@@ -103,7 +103,7 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       ? 'GET'
       : 'POST';
 
-    const response = await fetch('https://impactium.fun/api/player/' + path, {
+    const response = await fetch(`${process.env.DOMAIN || 'http://localhost:3000'}/api/player/` + path, {
       method,
       headers: {
         ...headers

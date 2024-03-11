@@ -1,32 +1,11 @@
 const express = require('express');
-const { log, Player, User, ftpUpload } = require('../../utils');
 const router = express.Router();
 const Jimp = require('jimp');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-router.get('/', (request, response) => {
-  response.sendStatus(200);
-});
 
-const userMiddleware = async (request, response, next) => {
-  if (!request.headers.token)
-    return response.sendStatus(401);
-
-  try {
-    request.user = new User(request.headers.token);
-    await request.user.fetch();
-
-    if (!request.user._id)
-      return response.sendStatus(401);
-
-    next();
-  } catch (error) {
-    console.log(error);
-    response.sendStatus(500);
-  }
-};
 
 router.use('/*', userMiddleware);
 

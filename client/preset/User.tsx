@@ -8,25 +8,32 @@ export interface IUser {
   referal?: any;
 }
 
-export const getUser = async (token: string): Promise<IUser> => {
+export const getUser = async (token: string) => {
   if (!token) {
     return null;
   }
 
   try {
-    const response = await fetch('https://impactium.fun/api/user/get', {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000);
+
+    const response = await fetch(`${process.env.DOMAIN || 'http://localhost:3000'}/api/user/get`, {
       method: 'GET',
       headers: {
         token: token
-      }
+      },
+      signal: controller.signal
     });
-  
+
+    clearTimeout(timeout);
+
     if (response.status === 401) {
       return undefined;
     }
 
     return await response.json();
   } catch (error) {
+    console.log(error)
     return undefined;
   }
 };

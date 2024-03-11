@@ -1,6 +1,6 @@
-const SftpClient = require('ssh2-sftp-client');
+import SftpClient from 'ssh2-sftp-client';
 
-class SFTP {
+export class SFTP {
   constructor() {
     if (!SFTP.instance) {
       try {
@@ -59,5 +59,3 @@ class SFTP {
     await this.sftp.end();
   }
 }
-
-exports.SFTP = SFTP;

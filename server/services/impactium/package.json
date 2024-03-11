@@ -28,6 +28,11 @@
   },
   "homepage": "https://github.com/Mireg-V/Impactium/tree/master#readme",
   "dependencies": {
-    "amqplib": "^0.10.3"
+    "amqplib": "^0.10.3",
+    "ftp": "^0.3.10",
+    "pterosocket": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/ftp": "^0.3.36"
   }
 }

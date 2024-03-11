@@ -18,7 +18,7 @@ app.use(express.json());
 class Gateway {
   constructor() {
     this.pendingRequests = new Map();
-    this.exchanges = ['mcs', 'player', 'player.achievements', 'user', 'user.set'];
+    this.exchanges = ['mcs', 'player', 'player.set', 'player.achievements', 'user'];
   }
 
   async init() {
@@ -44,7 +44,7 @@ class Gateway {
 
   async handler(req, res) {
     try {
-      const path = req.params[0].split('/');
+      const path = req.path.slice(1).split('/');
       let consumer = this.exchanges.find(exchange => path[0].startsWith(exchange.split('.')[0]));
       if (consumer) {
         path.shift();
@@ -82,6 +82,7 @@ class Gateway {
         res.send(responseData);
       }
     } catch (error) {
+      console.log(error)
       res.sendStatus(500);
     }
   }
@@ -107,16 +108,17 @@ const server = next({
   dev: process.env.NODE_ENV !== 'production',
   hostname: process.env.HOSTNAME
 });
-const handle = server.getRequestHandler();
-server.prepare().then(async () => {
 
+const handle = server.getRequestHandler();
+
+server.prepare().then(async () => {
   const gateway = new Gateway();
   await gateway.init();
 
   const app = express();
   app.use(cors());
 
-  app.use('/api/*', async (req, res) => {
+  app.use(['/api', '/api/*'], async (req, res) => {
     await gateway.handler(req, res);
   });
   

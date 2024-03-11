@@ -62,11 +62,11 @@ body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: url(https://cdn.impactium.fun/backgrounds/topography-21.svg);
-  background-color: var(--gray16);
-  background-position: top;
-  background-size: cover;
-  background-repeat: repeat;
+  background-image: url(https://cdn.impactium.fun/backgrounds/topography-21.svg) !important;
+  background-color: var(--gray16) !important;
+  background-position: top !important;
+  background-size: cover !important;
+  background-repeat: repeat !important;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,7 +1,7 @@
 const { Telegraf, Markup } = require('telegraf');
 var utils
 
-class TelegramBotHandler {
+export class TelegramBotHandler {
   constructor() {
     if (TelegramBotHandler.instance) return TelegramBotHandler.instance;
     utils = require('../utils');

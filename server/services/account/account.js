@@ -1,5 +1,7 @@
 const amqplib = require('amqplib');
 const { createClient } = require('redis');
+const { User } = require('./class/User');
+const { Player } = require('./class/Player');
 
 class Request {
   constructor(m) {
@@ -18,7 +20,11 @@ class Consumer {
     this.exchanges = ['user', 'player', 'player.set', 'player.achievements'];
     this.handlers = {
       user: {
-        get: () => 'Игрок база'
+        get: async () => {
+          const user = new User();
+          await user.fetch();
+          return user.send();
+        }
       },
       player: {
         get: () => 'Какой то пользователь',
@@ -47,8 +53,8 @@ class Consumer {
     }
 
     this.consumer('user.*');
-    this.consumer('user.set.*');
     this.consumer('player.*');
+    this.consumer('player.set.*');
     this.consumer('player.achievements.*');
 
     await this.redis.connect();
@@ -59,11 +65,8 @@ class Consumer {
       const req = new Request(msg);
   
       let handler = this.handlers;
-      console.log([...req.fields.exchange.split('.'), ...req.fields.routingKey.split('.')])
       for (let key of [...req.fields.exchange.split('.'), ...req.fields.routingKey.split('.')]) {
-        console.log(key);
         handler = handler[key];
-        console.log('Handler: ', handler);
         if (!handler) {
           break;
         }
@@ -75,9 +78,7 @@ class Consumer {
           ? handler()
           : handler.x()
       );
-      this.send(msg, data);
-  
-      this.ch.ack(msg);
+      this.send(req, data);
     });
   }
 
@@ -87,6 +88,7 @@ class Consumer {
       Buffer.from(JSON.stringify(data)),
       { correlationId: msg.properties.correlationId }
     );
+    this.ch.ack(msg);
   }
 }
 

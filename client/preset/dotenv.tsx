@@ -9,14 +9,14 @@ export const loadEnv = async (mode) => {
     : '';
   
   const projectDir = process.cwd();
-  loadEnvConfig(projectDir);
-  
   const env = path.join(
     projectDir,
     '..',
     process.env.IS_DEV
       ? '.env.dev'
       : '.env.prod'
-    );
+  );
+  loadEnvConfig(env);
   dotenv.config(fs.existsSync(env) ? { path: env } : null);
+  console.log(process.env.DOMAIN)
 };
