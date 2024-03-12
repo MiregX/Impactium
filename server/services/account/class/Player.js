@@ -1,34 +1,11 @@
-import { Condition, ObjectId } from 'mongodb';
-import { getDatabase } from './utils';
-const Jimp = require('jimp');
-import { Achievements } from './Achievements';
-import { Referal } from './Referal';
+import mongodb from 'mongodb';
+import { MongoDB } from '../../ulits/MongoDB.js';
+import Jimp from 'jimp';
+import { Achievements } from './Achievements.js';
+import { Referal } from './Referal.js';
 
-interface IPlayer {
-  achievements: any;
-  skin: any;
-  registered: any;
-  password: any;
-  nickname: any;
-  _id: Condition<ObjectId>;
-}
-
-export class Player implements IPlayer {
-  achievements: Achievements;
-  id: any;
-  isFetched?: boolean;
-  referal: any;
-  nicknameLastChangeTimestamp: number;
-  nickname: any;
-  password: any;
-  oldNicknames: any;
-  skin: any;
-  registered: any;
-  balance: number;
-  _id: Condition<ObjectId>;
-
-  constructor(id: string) {
-    this.id = id;
+export class Player {
+  constructor() {
     this.isFetched = false;
   }
 
@@ -36,16 +13,12 @@ export class Player implements IPlayer {
     return this.achievements;
   }
 
-  async fetch(id: string = this.id) {
-    const Players = await getDatabase('players');
-    const player = await Players.findOne({
-      $or: [
-        { id },
-        { discordId: id },
-        { nickname: { $regex: new RegExp(`^${id}$`, 'i') } }
-      ]
-    });
+  async fetch(id = this.id) {
+    console.log(id);
+    const Players = await new MongoDB().getDatabase('players');
+    const player = await Players.findOne({ id });
 
+    console.log({player})
     if (player) {
       Object.assign(this, player);
       this.achievements = new Achievements(this)
@@ -57,16 +30,13 @@ export class Player implements IPlayer {
     }
   }
 
-  async setNickname(newNickname) {
-    if (newNickname === 'undefined') return 401
-    if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 403;
-    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newNickname)) return 401;
-    if (this.nickname?.toLowerCase() === (newNickname ?? '').toLowerCase()) return 405;
-    if (typeof this.nickname !== 'undefined' && this.nickname?.toLowerCase() === this.password?.toLowerCase()) return 406;
+  async setNickname({ nickname }) {
+    const error = this.validateNickname({ nickname });
+    if (error) return error;
 
-    const Players = await getDatabase("minecraftPlayers");
+    const Players = await new MongoDB().getDatabase('players');
     const possiblePlayerWithSameNickname = await Players.findOne({
-      nickname: new RegExp('^' + newNickname + '$', 'i')
+      nickname: new RegExp('^' + nickname + '$', 'i')
     });    
 
     if (possiblePlayerWithSameNickname) return 404;
@@ -79,14 +49,22 @@ export class Player implements IPlayer {
     }
 
     this.nicknameLastChangeTimestamp = Date.now()
-    this.nickname = newNickname;
+    this.nickname = nickname;
     await this.save()
     const status = await this.initAuthMe();
     return status;
   }
 
-  async setSkin(originalImageName, imageBuffer) {
-    const image = await Jimp.read(imageBuffer);
+  validateNickname({ nickname }) {
+    if (nickname === 'undefined') return 401
+    if (Date.now() - this.nicknameLastChangeTimestamp < 60 * 60 * 1000 && this.nickname) return 403;
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(nickname)) return 401;
+    if (this.nickname?.toLowerCase() === (nickname ?? '').toLowerCase()) return 405;
+    if (typeof this.nickname !== 'undefined' && this.nickname?.toLowerCase() === this.password?.toLowerCase()) return 406;
+  }
+
+  async setSkin({ title, buffer }) {
+    const image = await Jimp.read(buffer);
     const { width, height } = image.bitmap;
 
     if (width !== 64 || height !== 64) return 402;
@@ -95,17 +73,17 @@ export class Player implements IPlayer {
     const defaultPlayersSkinsFolderPath = "https://cdn.impactium.fun/minecraftPlayersSkins/";
     this.skin.iconLink = `${defaultPlayersSkinsFolderPath}${this.id}_icon.png`;
     this.skin.charlink = `${defaultPlayersSkinsFolderPath}${this.id}.png`;
-    this.skin.originalTitle = originalImageName;
+    this.skin.originalTitle = title;
     await this.save();
     return 200
   }
 
-  async setPassword(newPassword) {
-    if (!/^[a-zA-Z0-9_]{3,32}$/.test(newPassword)) return 402;
-    if (this.nickname?.toLowerCase() === newPassword.toLowerCase()) return 401;
-    if (this.password === newPassword) return 403;
+  async setPassword({ password }) {
+    if (this.nickname?.toLowerCase() === password.toLowerCase()) return 401;
+    if (!/^[a-zA-Z0-9_]{3,32}$/.test(password)) return 402;
+    if (this.password === password) return 403;
 
-    this.password = newPassword;
+    this.password = password;
     await this.save();
     const status = await this.initAuthMe();
     return status;
@@ -134,6 +112,9 @@ export class Player implements IPlayer {
     // } else {
     //   return 200
     // }
+    
+    // TODO:
+    // Переписать на взаимодействие между mcs и acc 
   }
 
   async _balance(number, save = true) {
@@ -148,10 +129,10 @@ export class Player implements IPlayer {
       await this.save();
   }
 
-  serialize(): IPlayer {
+  serialize() {
     const visited = new Set();
   
-    function serializeObject(obj): any {
+    function serializeObject(obj) {
       if (visited.has(obj)) {
         return {};
       }
@@ -159,7 +140,7 @@ export class Player implements IPlayer {
   
       return Object.keys(obj).reduce((acc, key) => {
         if (key === 'id' || key === '_id') {
-          acc[key] = new ObjectId(obj[key]);
+          acc[key] = new mongodb.ObjectId(obj[key]);
         } else if (key === 'player') {
         } else if (typeof obj[key] === 'object' && obj[key] !== null) {
           if (Array.isArray(obj[key])) {
@@ -194,7 +175,7 @@ export class Player implements IPlayer {
   }
   
   async save() {
-    const Players = await getDatabase("minecraftPlayers");
+    const Players = await new MongoDB().getDatabase("players");
     const player = await Players.findOne({ _id: this._id });
 
     if (player || this._id) {

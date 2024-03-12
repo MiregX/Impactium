@@ -1,20 +1,13 @@
-import { Condition, ObjectId } from "mongodb";
-import { generateToken, getDatabase } from "./utils";
+import { generateToken, MongoDB } from "../../ulits/MongoDB.js";
 
 export class Referal {
-  childrens: any;
-  id: string;
-  code: string;
-  _id: Condition<ObjectId> | undefined;
-  childrensConfirmed: any;
-  parent: any;
-  constructor(key: string) {
+  constructor(key) {
     this.code = key
   }
 
   async fetch(key = this.code) {
     this.code = key
-    const Referals = await getDatabase('referals');
+    const Referals = await new MongoDB().getDatabase('referals');
     const referal = await Referals.findOne({
       $or: [
         { id: this.code },
@@ -41,14 +34,14 @@ export class Referal {
       childrensConfirmed: true
     });
     
-    const Referals = await getDatabase('referals');
+    const Referals = await new MongoDB().getDatabase('referals');
     await Referals.insertOne(this);
     await this.fetch()
   }
 
   async newCode() {
     const code = generateToken(4);
-    const Referals = await getDatabase('referals');
+    const Referals = await new MongoDB().getDatabase('referals');
     const referal = await Referals.findOne({ code });
     if (referal) {
       return await this.newCode();
@@ -96,7 +89,7 @@ export class Referal {
   }
 
   async save() {
-    const Referals = await getDatabase('referals');
+    const Referals = await new MongoDB().getDatabase('referals');
     const referal = await Referals.findOne({ _id: this._id });
 
     if (referal) {

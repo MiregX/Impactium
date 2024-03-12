@@ -1,8 +1,7 @@
-import { Player } from './Player'
+import { MongoDB } from '../../ulits/MongoDB.js'
+import { Referal } from './Referal.js';
 
 export class Achievements {
-  achievements: any;
-  player: any;
   constructor(player) {
     this.achievements = player.achievements
     if (player.achievements)
@@ -29,7 +28,8 @@ export class Achievements {
       await parentReferal.fetch();
       const isChildrenWasChanged = parentReferal.completeChildren(this.player.id);
       if (isChildrenWasChanged) {
-        const parentAccount = new Player(parentReferal.id)
+        const Players = await new MongoDB().getDatabase('players');
+        const parentAccount = Players.findOne({ id: parentReferal.id })
         await parentAccount.fetch();
         parentAccount.achievements.getEvent({
           total: parentReferal.childrens.filter(c => c.isChanged).length,
@@ -171,7 +171,7 @@ export class Achievements {
   }
 
   async getEvent({ total, confirmed, save = true }) {
-    await this.player.balance(50 * confirmed, save);
+    await this.player._balance(50 * confirmed, save);
     this.clear('event');
     
     this.set({
@@ -231,7 +231,7 @@ export class Achievements {
     this.achievements.processed = Date.now();
   }
 
-  async use(achievement) {
+  async use({ achievement }) {
     if (!achievement)
       return 404;
 

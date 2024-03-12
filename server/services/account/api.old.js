@@ -5,32 +5,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-
-
-router.use('/*', userMiddleware);
-
-router.get('/user/get', async (request, response) => {
-  response.status(200).send(request.user.send());
-});
-
-const playerMiddleware = async (request, response, next) => {
-  try {
-    request.player = new Player(request.user._id);
-    await request.player.fetch();
-    
-    if (!request.player._id)
-      return response.sendStatus(401);
-
-    next();
-  } catch (error) {
-    console.log(error);
-    response.sendStatus(500);
-  }
-};
-
-router.use('/player', playerMiddleware);
-router.use('/admin', require('../admin'));
-
 router.get('/player/get', async (request, response) => {
   response.status(200).send(request.player.send());
 });

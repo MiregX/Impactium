@@ -52,7 +52,7 @@ class Gateway {
         consumer = path.shift();
       }
       const correlationId = uuidv4();
-      const data = JSON.stringify({
+      const content = JSON.stringify({
         headers: req.headers,
         body: req.body,
         correlationId
@@ -66,7 +66,7 @@ class Gateway {
         }, 5000),
       });
 
-      this.ch.publish(consumer, path.join('.'), Buffer.from(data), {
+      this.ch.publish(consumer, path.join('.'), Buffer.from(content), {
         replyTo: this.replyQueue.queue,
         correlationId,
       });
@@ -75,12 +75,9 @@ class Gateway {
         this.pendingRequests.get(correlationId).resolve = resolve;
       });
 
-      try {
-        const data = JSON.parse(responseData);
-        data.error ? res.sendStatus(data.error) : res.send(data);
-      } catch (error) {
-        res.send(responseData);
-      }
+      const { status, data } = JSON.parse(responseData);
+      res.status(status).send(data);
+
     } catch (error) {
       console.log(error)
       res.sendStatus(500);
