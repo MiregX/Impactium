@@ -52,35 +52,7 @@ router.get('/callback/google', (request, response, next) => {
 });
 
 router.get('/callback/discord', (request, response) => {
-  if (!request.query.code) return response.redirect('/');
-  let requestPayload = {
-    redirect_uri: process.env.DISCORD_CALLBACK,
-    client_id: process.env.DISCORD_ID,
-    grant_type: "authorization_code",
-    client_secret: process.env.DISCORD_SECRET,
-    code: request.query.code
-  };
-
-  unirest.post("https://discordapp.com/api/oauth2/token")
-    .send(requestPayload)
-    .headers({ "Content-Type": 'application/x-www-form-urlencoded', "User-Agent": 'DiscordBot' })
-    .then((data) => {
-      unirest.get("https://discordapp.com/api/users/@me")
-        .headers({ "Authorization": `${data.body.token_type} ${data.body.access_token}` })
-        .then((data) => {
-          userAuthentication({data: data.body, from: "discord", referal: request.query.ref}).then(authResult => {
-            return response.status(200).send(authResult);
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          return response.sendStatus(500);
-        });
-    })
-    .catch((error) => {
-      console.log(error);
-      return response.sendStatus(500);
-    });
+  
 });
 
 async function userAuthentication(p) {
