@@ -4,59 +4,44 @@ import { Task } from '@/components/me/planner/Task'
 import styles from '@/styles/me/Planner.module.css';
 
 export default function PlannerPage() {
-  
-  const tasksMap = [
-    {
-      title: 'Таска один',
-      desription: "Залупа",
-      status: 200
-    }, 
-    {
-      title: 'Таска два',
-      desription: "Пенис",
-      status: 400
-    },
-    {
-      title: 'Таска три',
-      desription: "Хер",
-      status: 500
-    }
-  ]
-
-  const taskDescription = [1,2,3,4,5,6,7,8,9,10];
-  const [tasks, setTasks] = useState(() => {
-    const storedTasks = localStorage.getItem('tasks');
-    return storedTasks ? JSON.parse(storedTasks) : tasksMap;
-  });
-
-  const [active, setActive] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  function addTask() {
-    const newTask = { id: tasks.length, status: '', description: taskDescription[tasks.length % taskDescription.length] };
-    const newTasks = [...tasks, newTask];
-    setTasks(newTasks);
+  const tasksFromLocalStorage = localStorage.getItem('tasks');
+  if (typeof tasksFromLocalStorage === 'number') {
+    localStorage.removeItem('tasks');
   }
+  const [tasks, setTasks] = useState(tasksFromLocalStorage ? JSON.parse(tasksFromLocalStorage) : []);
+  const [active, setActive] = useState(null);
+  console.log(tasks);
+
+  useEffect(() => localStorage.setItem('tasks', JSON.stringify(tasks)), [tasks])
+
+  const addTask = () => {
+    const newTask = {
+      id: tasks.length + 1,
+      status: 200,
+      title: 'SOMETHING'
+    };
+  
+    setTasks((oldTasks) => [...oldTasks, newTask]);
+  };
 
   function removeLastTask() {
-    if (tasks.length > 0) {
-      const newTasks = [...tasks];
-      newTasks.pop(); 
-      setTasks(newTasks);
-    }
+    setTasks((oldTasks) => {
+      const updatedTasks = oldTasks.slice(0, -1);
+      return updatedTasks;
+    });
   }
   
   return (
     <div className={styles.planner}>
       {tasks.map((task, index) => (
         <Task
+          tasks={tasks}
           active={active}
           setActive={setActive}
           task={task}
-          index={index} />
+          setTasks={setTasks}
+          index={index}
+          />
       ))}
 
       <button className={styles.addtasks} onClick={addTask}>Добавить задачу</button>
