@@ -6,7 +6,8 @@
   width: 100vw;
   background: var(--gray16);
   transition: all 1.25s var(--transition) 1.5s;
-  display: none;
+  display: flex;
+  align-items: center;
 }
 
 @keyframes first {
@@ -23,8 +24,7 @@
 
 @keyframes second {
   0% {
-    stroke-dashoffset: 110px;
-    stroke-dasharray: 110px;
+    stroke-dashoffset: 110px;    stroke-dasharray: 110px;
   }
 
   100% {
@@ -48,10 +48,9 @@
   gap: 16px;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: relative;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
 }
 .preloader.slow {
   background: transparent;
@@ -68,9 +67,14 @@
 .preloader.slow svg {
   height: 48px;
   opacity: 1;
+
+}
+.preloader.dev svg {
+  opacity: 1;
 }
 
-.preloader .container p {
+.preloader .container > p,
+.preloader.dev > p {
   font-size: 48px;
   overflow: hidden;
   width: 0px;
@@ -78,15 +82,20 @@
   transition: width 0.5s var(--transition) 1s, font-size 1s var(--transition) 1.75s;
 }
 
-.preloader.slow .container p {
+.preloader.slow .container > p {
   font-size: 30px;
   width: 256px;
 }
+.preloader.dev .container > p {
+  width: 229px;
+}
 
-.preloader.slow .first {
+.preloader.slow .first,
+.preloader.dev .first {
   animation: first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
-.preloader.slow .second {
+.preloader.slow .second,
+.preloader.dev .second {
   animation: second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
 
@@ -106,4 +115,36 @@
 }
 .preloader.fast .second {
   animation: second 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.building {
+  opacity: 0;
+  display: flex;
+  position: absolute;
+  filter: blur(3px);
+  transform: translateY(0);
+  gap: 0.75em;
+  background: var(--gray24);
+  padding: 0.75em 1em;
+  border-radius: 1.2em;
+  bottom: 0;
+}
+.building p {
+  white-space: nowrap;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.building img {
+  height: 28px;
+}
+.dev .building {
+  filter: none;
+  opacity: 1;
+  transform: translateY(calc(100% + 1.2em));
+  transition: all 0.5s var(--transition) 1.8s;
+}
+.dev .building {
+  animation: building-onchange 0.3s var(--transition);
 }

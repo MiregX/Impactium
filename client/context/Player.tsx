@@ -23,7 +23,6 @@ export const PlayerProvider = ({
     children: any,
     prefetchedPlayer: IPlayer | null | undefined
   }) => {
-  const cookie = new Cookies();
   const { token } = useUser();
   const [player, setPlayer] = useState<IPlayer | null>(prefetchedPlayer || {});
   const [isPlayerLoaded, setIsPlayerLoaded] = useState<boolean>(prefetchedPlayer ? true : false);

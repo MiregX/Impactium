@@ -12,17 +12,23 @@ import {
 import { usePathname } from 'next/navigation';
 
 export const Preloader = () => {
+  const building = useRef(null);
   const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
   const url = usePathname();
-  const blocker = url === '/login/callback';
+  const blocker = url === '/login/callback' || true;
 
   const [visitedBefore, setVisitedBefore] = useState(cookie.get('visitedBefore') || false);
   const self = useRef(null);
 
   const show = useCallback(() => {
     self.current.classList.remove(s.remove, s.hide, s.slow, s.fast);
+
+    if (true) {
+      self.current.classList.add(s.dev);
+      return
+    }
 
     if (visitedBefore) {
       self.current.classList.add(s.fast);
@@ -65,6 +71,25 @@ export const Preloader = () => {
       cookie.remove('visitedBefore');
     }
   }, [visitedBefore]);
+  
+  const buildingMap = [
+    {
+      icon: '',
+      text: 'Поднимаем кластеры'
+    },
+    {
+      icon: '',
+      text: 'Редизайним сайт'
+    },
+    {
+      icon: '',
+      text: 'Редизайним сайт'
+    },
+  ]
+
+  useEffect(() => {
+    building.current
+  }, [blocker])
 
   return (
     <div className={s.preloader} ref={self}>
@@ -84,6 +109,10 @@ export const Preloader = () => {
           </g>
         </svg>
         <p>Impactium</p>
+        <div className={s.building} ref={building}>
+          <img src='https://em-content.zobj.net/thumbs/60/apple/391/ring-buoy_1f6df.webp' alt=''/>
+          <p>Поднимаем кластеры...</p>
+        </div>
       </div>
     </div>
   );

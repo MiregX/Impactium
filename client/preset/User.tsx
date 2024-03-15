@@ -33,7 +33,6 @@ export const getUser = async (token: string) => {
 
     return await response.json();
   } catch (error) {
-    console.log(error)
     return undefined;
   }
 };
