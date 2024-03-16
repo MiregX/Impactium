@@ -117,3 +117,7 @@
   transition: all 0.3s var(--transition);
   opacity: 0;
 }
+.dynamicText{
+  position: absolute;
+  top: 50%;
+}
