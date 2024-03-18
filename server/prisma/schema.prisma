@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+enum LoginType {
+  discord
+  google
+}
+
+model User {
+  id        String   @id @default(cuid())
+  lastLogin LoginType
+  register  DateTime @default(now())
+  email     String?  @unique
+  logins    Login[]
+  player    Player?
+}
+
+model Login {
+  id          String     @id @default(cuid())
+  type        LoginType
+  avatar      String?
+  displayName String
+  locale      String
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String     @unique
+}
+
+model Player {
+  id           String         @id @default(cuid())
+  nickname     String?        @unique
+  password     String?
+  register     DateTime       @default(now())
+  skin         Skin?          @relation(fields: [skinId], references: [id])
+  skinId       String?        @unique
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String         @unique
+  oldNicknames OldNicknames[]
+}
+
+model OldNicknames {
+  id       String @id @default(cuid())
+  nickname String
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId String
+}
+
+model Skin {
+  id     String   @id @default(cuid())
+  title  String
+  icon   String
+  source String
+  player Player?
+}
