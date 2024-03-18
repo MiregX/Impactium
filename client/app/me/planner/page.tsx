@@ -14,7 +14,7 @@ export default function PlannerPage() {
     'Хочу сказать, что ТимЛид ЛОХ!!!'
   ];
   const interval = 100;
-  let changeInterval = 1000; 
+  let changeInterval = 1000;
 
   useEffect(() => {
     let index = 0;
@@ -26,11 +26,20 @@ export default function PlannerPage() {
         index++;
       } else {
         clearInterval(displayTextInterval);
-        // Здесь устанавливаем новый интервал после появления динамического текста
+
         const changeTextTimeout = setTimeout(() => {
-          setTextIndex((prevIndex) => (prevIndex + 1) % textsToIterate.length);
-          setDisplayText(''); 
-          changeInterval = 1000; 
+          let removeIndex = textLength - 1;
+          const removeTextInterval = setInterval(() => {
+            if (removeIndex >= 0) {
+              setDisplayText((prevText) => prevText.slice(0, -1));
+              removeIndex--;
+            } else {
+              clearInterval(removeTextInterval);
+              setTextIndex((prevIndex) => (prevIndex + 1) % textsToIterate.length);
+              setDisplayText('');
+              changeInterval = 1000;
+            }
+          }, interval);
         }, changeInterval);
       }
     }, interval);
@@ -89,7 +98,14 @@ export default function PlannerPage() {
         Убрать последнюю задачу
       </button>
 
-      <div className={styles.dynamicText}>{displayText}</div>
+    <div className={styles.panelTextIcon}>
+      <div className={styles.icon}>
+          icon
+        </div>
+      <div className={styles.dynamicText}>   
+          {displayText}
+      </div>
     </div>
+  </div>
   );
 }

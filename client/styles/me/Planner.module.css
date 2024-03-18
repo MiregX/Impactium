@@ -117,7 +117,23 @@
   transition: all 0.3s var(--transition);
   opacity: 0;
 }
-.dynamicText{
+.panelTextIcon{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  width: 15%;
+  height: 60px;
+  background-color:var(--gray24);
   position: absolute;
   top: 50%;
+  border-radius: 10px;
+}
+.icon{
+  position: relative;
+  top: 1px;
+  display: flex;
+}
+.dynamicText{
+  display: flex;
 }
