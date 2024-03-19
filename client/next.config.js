@@ -1,5 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+
+/** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
   serverRuntimeConfig: {
@@ -28,21 +30,13 @@ module.exports = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.css$/,
-      exclude: /\.module\.css$/,
       use: [MiniCssExtractPlugin.loader, 'css-loader'],
     });
 
-    config.module.rules.push({
-      test: /\.module\.css$/,
-      use: [MiniCssExtractPlugin.loader, {
-        loader: 'css-loader',
-        options: {
-          modules: true,
-        },
-      }],
-    });
-
-    config.plugins.push(new MiniCssExtractPlugin());
+    config.plugins.push(new MiniCssExtractPlugin({
+      filename: 'static/chunks/[name].css',
+      chunkFilename: 'static/chunks/[id].css',
+    }));
 
     return config;
   },
