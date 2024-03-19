@@ -40,4 +40,7 @@ module.exports = {
 
     return config;
   },
+  env: {
+    ENFORCED_PRELOADER: 1,
+  },
 };

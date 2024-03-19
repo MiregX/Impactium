@@ -5,9 +5,7 @@
   height: 100vh;
   width: 100vw;
   background: var(--gray16);
-  transition: all 1.25s var(--transition) 1.5s;
-  display: flex;
-  align-items: center;
+  transition: background 1.25s var(--transition) 1.5s;
 }
 
 @keyframes first {
@@ -42,39 +40,43 @@
     top: 40px;
   }
 }
-.preloader .container {
-  display: flex; 
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+ .container {
+  position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translate(-50%, -50%);
 }
-.preloader.slow {
+.slow {
   background: transparent;
 }
-.preloader.slow .container {
+.slow .container {
   animation: out 1s var(--transition) 1.75s forwards;
 }
-.preloader svg {
+svg {
   height: 72px;
   opacity: 0;
   transition: height 1s var(--transition) 1.75s, opacity 0s linear;
 }
 
-.preloader.slow svg {
+.slow svg {
   height: 48px;
   opacity: 1;
 
 }
-.preloader.dev svg {
+.dev {
+  pointer-events: all;
+}
+.dev svg {
   opacity: 1;
 }
-
-.preloader .container > p,
-.preloader.dev > p {
+.main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.main p {
   font-size: 48px;
   overflow: hidden;
   width: 0px;
@@ -82,38 +84,38 @@
   transition: width 0.5s var(--transition) 1s, font-size 1s var(--transition) 1.75s;
 }
 
-.preloader.slow .container > p {
+.slow .main p {
   font-size: 30px;
   width: 256px;
 }
-.preloader.dev .container > p {
+.dev .main p {
   width: 229px;
 }
 
-.preloader.slow .first,
-.preloader.dev .first {
+.slow .first,
+.dev .first {
   animation: first 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
-.preloader.slow .second,
-.preloader.dev .second {
+.slow .second,
+.dev .second {
   animation: second 1s cubic-bezier(0.23, 1, 0.32, 1) 0s both;
 }
 
-.preloader.fast svg {
+.fast svg {
   opacity: 1;
   transition: all 0.3s var(--transition);
 }
-.preloader.hide {
+.hide {
   transition: all 0.2s var(--transition);
   opacity: 0;
 }
-.preloader.remove {
+.remove {
   display: none;
 }
-.preloader.fast .first {
+.fast .first {
   animation: first 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.preloader.fast .second {
+.fast .second {
   animation: second 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -144,7 +146,5 @@
   opacity: 1;
   transform: translateY(calc(100% + 1.2em));
   transition: all 0.5s var(--transition) 1.8s;
-}
-.dev .building {
   animation: building-onchange 0.3s var(--transition);
 }

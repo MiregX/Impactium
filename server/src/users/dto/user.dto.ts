@@ -34,3 +34,6 @@ export class CreateLoginDto implements Prisma.LoginCreateInput {
   locale: string;
   user: Prisma.UserCreateNestedOneWithoutLoginsInput;
 }
+
+// 20616
+// vrhcXPK

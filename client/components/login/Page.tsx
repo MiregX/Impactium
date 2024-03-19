@@ -2,11 +2,16 @@
 import s from '@/styles/Login.module.css';
 import { useLanguage } from "@/context/Language";
 import { useState } from "react";
+import { redirect } from 'next/navigation';
 
 export function LoginPage() {
   const { lang } = useLanguage();
   const [isNextStage, setNextStage] = useState<boolean>(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
+
+  const handleDiscordLoginAuthRedirect = () => {
+    redirect('/api/oauth2/login/discord');
+  }
 
   return (
     <div className={s.loginWrapper}>
@@ -53,7 +58,7 @@ export function LoginPage() {
             <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
             <p>{lang.continueWithGoogle}</p>
           </a>
-          <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className={`${s.baseButton} ${s.discordLogin}`}>
+          <a href='/api/oauth2/login/discord' className={`${s.baseButton} ${s.discordLogin}`}>
             <img src="https://cdn.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
             <p>{lang.continueWithDiscord}</p>
           </a>
@@ -67,7 +72,7 @@ export function LoginPage() {
             <a href="https://impactium.fun/oauth2/login/google" className={`${s.baseButton} ${s.googleLogin}`}>
               <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="google-icon" />
             </a>
-            <a href="https://discord.com/api/oauth2/authorize?client_id=1123714909356687360&response_type=code&redirect_uri=https%3A%2F%2Fimpactium.fun%2Flogin%2Fcallback&scope=identify+email" className={`${s.baseButton} ${s.discordLogin}`}>
+            <a href="/api/oauth2/login/discord" className={`${s.baseButton} ${s.discordLogin}`}>
               <img src="https://cdn.impactium.fun/ux/discord-mark-white.svg" alt="discord-icon" />
             </a>
           </div>

@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@zeit/next-css": "^1.0.1",
     "css-loader": "^6.10.0",
     "dotenv": "^16.4.5",
     "ignore-loader": "^0.1.2",

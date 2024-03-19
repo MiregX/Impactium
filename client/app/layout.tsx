@@ -6,7 +6,7 @@ import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
-import { Preloader } from '@/context/Preloader';
+import { Preloader } from '@/components/header/Preloader';
 import { cookies } from 'next/headers';
 import { loadEnv } from '@/preset/dotenv'
 loadEnv(process.env.NODE_ENV);
