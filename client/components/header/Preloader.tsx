@@ -11,14 +11,12 @@ import {
   } from "react";
 import { usePathname } from 'next/navigation';
 
-export const Preloader = () => {
-  const building = useRef(null);
+export async function Preloader({ applicationInfo }) {
+  const building = useRef(null); 
   const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
-  const url = usePathname();
-  const isEnforced = process.env.ENFORCED_PRELOADER
-  console.log(isEnforced)
+  const url = usePathname(); 
   const blocker = url === '/login/callback' || true;
 
   const [visitedBefore, setVisitedBefore] = useState(cookie.get('visitedBefore') || false);
@@ -49,7 +47,7 @@ export const Preloader = () => {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
-    if (isEnforced) return;
+    if (applicationInfo) return;
     if (isUserLoaded && !blocker) {
       hide();
     } else {
@@ -90,7 +88,7 @@ export const Preloader = () => {
   }, [blocker])
 
   return (
-    <div className={`${s.preloader} ${isEnforced && s.dev}`} ref={self}>
+    <div className={`${s.preloader} ${applicationInfo.isEnforcedPreloader && s.dev}`} ref={self}>
       <div className={s.container}>
         <div className={s.main}>
           <svg viewBox="-11.439 -11.421 403.213 522.815" xmlns="http://www.w3.org/2000/svg">

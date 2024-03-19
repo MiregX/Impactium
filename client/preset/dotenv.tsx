@@ -18,3 +18,19 @@ export const loadEnv = async (mode) => {
   loadEnvConfig(env);
   dotenv.config(fs.existsSync(env) ? { path: env } : null);
 };
+
+export async function requestApplicationInfoFromServer() {
+  try {
+    const response = await fetch('/api/application/info');
+    const info = await response.json()
+    return info.isPreloaderEnforced
+  } catch (_) {
+    return true
+  }
+}
+
+interface _ApplicationInfo {
+  [key: string]: any
+}
+
+export type ApplicationInfo = _ApplicationInfo | any

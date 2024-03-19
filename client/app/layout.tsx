@@ -8,7 +8,7 @@ import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
 import { Preloader } from '@/components/header/Preloader';
 import { cookies } from 'next/headers';
-import { loadEnv } from '@/preset/dotenv'
+import { loadEnv, requestApplicationInfoFromServer } from '@/preset/dotenv'
 loadEnv(process.env.NODE_ENV);
 
 export const metadata: Metadata = {
@@ -36,6 +36,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const token = cookies().get('token');
 
+  const applicationInfo = requestApplicationInfoFromServer();
+
   const user = token
     ? await getUser(token.value)
     : null
@@ -46,7 +48,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <UserProvider prefetchedUser={user}>
           <body style={{ backgroundColor: '#161616' }}>
             <HeaderProvider>
-              <Preloader />
+              <Preloader applicationInfo={applicationInfo} />
               <MessageProvider>
                 <main>
                   {children}
