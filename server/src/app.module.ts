@@ -1,12 +1,11 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-// import { DatabaseModule } from './database/database.module';
-// import { AuthResolver } from './auth/auth.resolver';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -17,6 +16,9 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    ConfigModule.forRoot({
+      envFilePath: '.development.env',
+    })
   ],
   controllers: [
     AppController

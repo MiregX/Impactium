@@ -16,6 +16,7 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
+.http
 /coverage
 /.nyc_output
 
@@ -38,6 +39,8 @@ lerna-debug.log*
 # dotenv environment variable files
 .env
 .env.development.local
+.development.env
+.production.env
 .env.test.local
 .env.production.local
 .env.local

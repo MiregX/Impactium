@@ -14,7 +14,7 @@ async function run() {
   
   const nextApp = next({
     dev: true,
-    dir: path.resolve('C:\\Users\\Марк\\[КОД]\\Web\\Impactium\\client')
+    dir: path.resolve(__dirname, '..\\..\\client')
   });
   const handle = nextApp.getRequestHandler();
   await nextApp.prepare();
@@ -30,4 +30,3 @@ async function run() {
   await app.listen(process.env.PORT || 3000);
 }
 run();
- 

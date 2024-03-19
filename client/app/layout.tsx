@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   applicationName: 'Impactium',
   referrer: 'origin-when-cross-origin',
   keywords: ['Minecraft', 'MinecraftServer', 'Український сервер майнкрафт', 'Сервер майнкрафт', 'войсчат сервер майнкрафт'],
-  authors: [{ name: 'Mireg' }, { name: 'ChatGPT & Gemini' }, { name: 'Herasymchuk Mark', url: 'https://impactium.fun/' }],
+  authors: [{ name: 'Mireg' }, { name: 'Herasymchuk Mark', url: 'https://impactium.fun/' }],
   creator: 'Herasymchuk Mark',
   publisher: 'Herasymchuk Mark',
   formatDetection: {

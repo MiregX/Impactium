@@ -31,3 +31,4 @@ node_modules/
 
 # Nuxt.js build / generate output
 .nuxt
+.code-workspace
