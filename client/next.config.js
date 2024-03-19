@@ -41,6 +41,6 @@ module.exports = {
     return config;
   },
   env: {
-    ENFORCED_PRELOADER: 1,
+    ENFORCED_PRELOADER: 'da',
   },
 };

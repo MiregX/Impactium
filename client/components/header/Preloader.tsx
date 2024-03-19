@@ -11,7 +11,7 @@ import {
   } from "react";
 import { usePathname } from 'next/navigation';
 
-export async function Preloader({ applicationInfo }) {
+export function Preloader({ applicationInfo }) {
   const building = useRef(null); 
   const cookie = new Cookies();
   const { isUserLoaded } = useUser();
@@ -55,8 +55,6 @@ export async function Preloader({ applicationInfo }) {
     }
   }, [isUserLoaded, blocker, hide, show]);
 
-  useEffect(() => show(), []);
-
   useEffect(() => {
     if (visitedBefore) {
       cookie.set('visitedBefore', true, {
@@ -67,28 +65,58 @@ export async function Preloader({ applicationInfo }) {
       cookie.remove('visitedBefore');
     }
   }, [visitedBefore]);
-  
+
   const buildingMap = [
     {
-      icon: '',
-      text: 'Поднимаем кластеры'
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/whale_1f40b.webp',
+      text: 'Собираем Dockerfile'
     },
     {
-      icon: '',
-      text: 'Редизайним сайт'
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/eggplant_1f346.webp',
+      text: 'Держим ритм ниже пояса'
     },
     {
-      icon: '',
-      text: 'Редизайним сайт'
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bottle-with-popping-cork_1f37e.webp',
+      text: 'Празднуем перемогу'
     },
-  ]
+    {
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/brick_1f9f1.webp',
+      text: 'Верстаем сайт'
+    },
+    {
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/satellite_1f6f0-fe0f.webp',
+      text: 'Синхронизируем данные'
+    },
+    {
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/magnifying-glass-tilted-left_1f50d.webp',
+      text: 'Ищем уязвимости'
+    },
+    {
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bookmark-tabs_1f4d1.webp',
+      text: 'Проверяем договора'
+    },
+    {
+      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/light-bulb_1f4a1.webp',
+      text: 'Вдохновляемся идями'
+    }
+  ];
 
   useEffect(() => {
-    building.current
-  }, [blocker])
+    if (applicationInfo.isEnforcedPreloader)
+      self.current.classList.add(s.dev);
+  }, [self])
 
+  const [currentSection, setCurrentSection] = useState(0);
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentSection(prevSection => (prevSection + 1) % buildingMap.length);
+    }, 2500);
+  
+    return () => clearInterval(intervalId);
+  }, []);
   return (
-    <div className={`${s.preloader} ${applicationInfo.isEnforcedPreloader && s.dev}`} ref={self}>
+    <div className={s.preloader} ref={self}>
       <div className={s.container}>
         <div className={s.main}>
           <svg viewBox="-11.439 -11.421 403.213 522.815" xmlns="http://www.w3.org/2000/svg">
@@ -107,11 +135,19 @@ export async function Preloader({ applicationInfo }) {
           </svg>
           <p>Impactium</p>
         </div>
-        <div className={s.building} ref={building}>
-          <img src='https://em-content.zobj.net/thumbs/60/apple/391/ring-buoy_1f6df.webp' alt=''/>
-          <p>Поднимаем кластеры...</p>
-        </div>
+        <div className={s.building}>
+          {buildingMap.map((section, index) => {
+            const position = (index - currentSection + buildingMap.length) % buildingMap.length + 1;
+            return (
+              <section key={index} className={s[`p${position}`]}>
+                <img src={section.icon} alt="" />
+                <p>{section.text}</p>
+              </section>
+            );
+          })}
+      </div>
       </div>
     </div>
   );
 };
+

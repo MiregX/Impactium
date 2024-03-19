@@ -23,9 +23,11 @@ export async function requestApplicationInfoFromServer() {
   try {
     const response = await fetch('/api/application/info');
     const info = await response.json()
-    return info.isPreloaderEnforced
+    return info
   } catch (_) {
-    return true
+    return {
+      isEnforcedPreloader: 1
+    }
   }
 }
 
