@@ -10,14 +10,14 @@ interface GoogleAuthParams {
 }
 
 export interface DiscordAuthPayload extends DiscordOauth2.User {
-  lastLogin: "discord"
+  type: 'discord'
 }
 
 export interface GoogleAuthPayload extends GoogleAuthParams {
-  lastLogin: "google";
+  type: 'google'
 }
 
-export type LoginPayload = DiscordAuthPayload | GoogleAuthPayload;
+export type AuthPayload = DiscordAuthPayload | GoogleAuthPayload;
 
 export class CreateUserDto implements Prisma.UserCreateInput {
   lastLogin: $Enums.LoginType;
@@ -26,10 +26,14 @@ export class CreateUserDto implements Prisma.UserCreateInput {
   player?: Prisma.PlayerCreateNestedOneWithoutUserInput;
 }
 
-export class CreateLoginDto implements Prisma.LoginCreateInput {
-  id?: string;
+export class UpdateUserDto implements Prisma.UserUpdateInput {
+  lastLogin?: Prisma.EnumLoginTypeFieldUpdateOperationsInput | $Enums.LoginType;
+}
+
+export class LoginDto implements Prisma.LoginCreateInput {
+  id: string;
   type: $Enums.LoginType;
-  avatar?: string;
+  avatar: string;
   displayName: string;
   locale: string;
   user: Prisma.UserCreateNestedOneWithoutLoginsInput;

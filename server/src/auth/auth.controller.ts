@@ -15,8 +15,8 @@ export class AuthController {
   googleLoginCallback(@Req() req, @Res() res) {
     passport.authenticate('google', { failureRedirect: '/login' });
     const jwt: string = req.user.jwt;
-    if (jwt) res.redirect('http://localhost/login/callback?token=' + jwt);
-    else res.redirect('http://localhost');
+    if (jwt) res.redirect(`${process.env.DOMAIN || 'http:localhost'}/login/callback?token=` + jwt);
+    else res.redirect(process.env.DOMAIN || 'http:localhost');
   }
 
   @Get('callback/discord')

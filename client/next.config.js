@@ -41,6 +41,11 @@ module.exports = {
     return config;
   },
   env: {
-    ENFORCED_PRELOADER: 'da',
+    ENFORCED_PRELOADER: 'true',
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    }
+  }
 };
