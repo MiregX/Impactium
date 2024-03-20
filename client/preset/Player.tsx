@@ -96,6 +96,7 @@ export const setAchievement = async ({ token, achievement }: IPlayerRequestHeade
 };
 
 const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlayer> => {
+  console.log('qweewq')
   try {
     if (!headers.token) return undefined;
 
@@ -115,6 +116,7 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       return null;
     }
 
+    console.log('aassa')
     return await response.json();
   } catch (error) {
     return undefined

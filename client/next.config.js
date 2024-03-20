@@ -28,20 +28,32 @@ module.exports = {
     ]
   },
   webpack: (config) => {
+    // Настройка правил для загрузки CSS файлов
     config.module.rules.push({
       test: /\.css$/,
-      use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      use: [
+        MiniCssExtractPlugin.loader,
+        {
+          loader: 'css-loader',
+          options: {
+            modules: {
+              localIdentName: '[name]_[local]_[hash:base64:5]',
+            },
+          },
+        },
+      ],
     });
-
-    config.plugins.push(new MiniCssExtractPlugin({
-      filename: 'static/chunks/[name].css',
-      chunkFilename: 'static/chunks/[id].css',
-    }));
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: 'static/chunks/[name].css',
+        chunkFilename: 'static/chunks/[id].css',
+      })
+    );
 
     return config;
   },
   env: {
-    ENFORCED_PRELOADER: 'true',
+    // ENFORCED_PRELOADER: 'true',
   },
   logging: {
     fetches: {

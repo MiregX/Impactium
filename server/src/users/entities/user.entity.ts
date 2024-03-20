@@ -1,11 +1,10 @@
 import { $Enums, Prisma } from "@prisma/client";
-import { CreateUserDto } from "../dto/user.dto";
 
-export class UserEntity implements CreateUserDto {
+export class UserEntity {
   id: string
+  email: string;
   lastLogin: $Enums.LoginType;
-  email?: string;
-  logins: Prisma.LoginCreateNestedManyWithoutUserInput;
   register: string | Date;
+  logins?: Prisma.LoginCreateNestedManyWithoutUserInput;
   player?: Prisma.PlayerCreateNestedOneWithoutUserInput;
 }

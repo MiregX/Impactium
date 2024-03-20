@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UsersService } from 'src/users/users.service';
 import passport = require('passport');
 import { Strategy } from 'passport-google-oauth2';
-import { AuthPayload, LoginDto, LoginPayload } from 'src/users/dto/user.dto';
-
+import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
+import { CreateLoginDto } from 'src/users/dto/login.dto';
+import { CreateUserDto } from 'src/users/dto/user.dto';
+import { LoginEntity } from 'src/users/entities/login.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 // passport.initialize()
 // passport.session()
 
@@ -35,7 +38,10 @@ export class AuthService {
   oauth: DiscordOauth2;
   strategy: Strategy;
 
-  constructor(private userService: UsersService) {
+  constructor(
+    private readonly userService: UsersService, 
+    private readonly prisma: PrismaService,
+  ) {
     this.oauth = new DiscordOauth2({
       clientId: "1123714909356687360",
       clientSecret: "NUOXvdx47wOb59vMEm0h8UQBu6S9PLOo",
@@ -69,37 +75,65 @@ export class AuthService {
   }
 
   async discordCallback(code: string) {
-    const type = "discord";
     const token: DiscordOauth2.TokenRequestResult = await this.oauth.tokenRequest({
       code: code,
       grantType: 'authorization_code',
       scope: ['identify', 'guilds']
-    })
-    const fetchedUser = await this.oauth.getUser(token.access_token);
-  
-    const user = this.userService.findUniqueOrCreate(fetchedUser);
-  
-    const payload: LoginDto = {
-      type: 'discord',
-      displayName: fetchedUser.global_name || fetchedUser.username + fetchedUser.discriminator,
-      locale: fetchedUser.locale || "en",
-      id: '',
-      avatar: '',
-      user: {
-        connect: { id: user.id } // Привязываем логин к пользователю
-      }
-    }
-  
-    const jwtoken = this.userService.create({
-      ...payload,
-      lastLogin: type
     });
-    return jwtoken;
+
+    const discordUser = await this.oauth.getUser(token.access_token);
+
+    const login = await this.prisma.login.upsert({
+      where: { id: discordUser.id },
+      update: {
+        avatar: discordUser.avatar
+          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+          : '',
+        displayName: discordUser.global_name || discordUser.username + '#' + discordUser.discriminator,
+        locale: discordUser.locale || 'us',
+        user: {
+          connectOrCreate: {
+            where: { email: discordUser.email },
+            create: {
+              email: discordUser.email,
+              lastLogin: 'discord',
+            },
+          },
+        },
+      },
+      create: {
+        id: discordUser.id,
+        type: 'discord',
+        avatar: discordUser.avatar
+          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+          : '',
+        displayName: discordUser.global_name || discordUser.username + '#' + discordUser.discriminator,
+        locale: discordUser.locale || 'us',
+        user: {
+          connectOrCreate: {
+            where: { email: discordUser.email },
+            create: {
+              email: discordUser.email,
+              lastLogin: 'discord',
+            },
+          },
+        },
+      },
+    });    
+
+    const user = await this.userService.find({
+      id: login.userId
+    });
+
+    console.log(user)
+    
+    return HttpCode(200);
   }
 
   getDiscordAuthUrl(): string {
     return this.oauth.generateAuthUrl({
-      scope: ['identify', 'guilds']
+      scope: ['identify', 'guilds'],
+      redirectUri: process.env.DISCORD_CALLBACK
     });
   }
 }

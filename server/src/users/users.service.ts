@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserDto, AuthPayload } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,16 +11,23 @@ export class UsersService {
     private readonly jwtService: JwtService,
   ) {}
   
-  async findUniqueOrCreate(payload: AuthPayload): Promise<CreateUserDto> {
+  async findUniqueOrCreate(payload: CreateUserDto): Promise<UserEntity> {
+    try {
+      return await this.prisma.user.findUnique({
+        where: { email: payload.email },
+      }) ?? await this.prisma.user.create({
+        data: payload,
+      });
+    } catch(_) {
+      throw new RequestTimeoutException();
+    }
+  }
+
+  async find(x) {
     return await this.prisma.user.findUnique({
-      where: { email: payload.email },
-    }) ?? await this.prisma.user.create({
-      data: {
-        lastLogin: payload.type,
-        email: payload.email,
-      },
+      where: x
     });
-  }  
+  }
 }
 
 // const jwt = this.jwtService.sign({
