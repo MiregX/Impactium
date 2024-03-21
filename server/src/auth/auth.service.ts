@@ -1,13 +1,15 @@
-import { HttpCode, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/user/user.service';
 import passport = require('passport');
 import { Strategy } from 'passport-google-oauth2';
 import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
-import { CreateLoginDto } from 'src/users/dto/login.dto';
-import { CreateUserDto } from 'src/users/dto/user.dto';
-import { LoginEntity } from 'src/users/entities/login.entity';
+import { CreateLoginDto } from 'src/user/dto/login.dto';
+import { CreateUserDto } from 'src/user/dto/user.dto';
+import { LoginEntity } from 'src/user/entities/login.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { UserEntity } from 'src/user/entities/user.entity';
 // passport.initialize()
 // passport.session()
 
@@ -41,6 +43,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService, 
     private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
   ) {
     this.oauth = new DiscordOauth2({
       clientId: "1123714909356687360",
@@ -121,8 +124,12 @@ export class AuthService {
       },
     });    
 
-    const user = await this.userService.compareUserWithLogin(login.userId);
-    const jwt = await this.userService.jwt(user);
+    const jwt = this.jwtService.sign({
+      id: login.userId,
+      email: discordUser.email,
+    },{
+      secret: 'secret'      
+    });
     
     return jwt;
   }
@@ -132,6 +139,18 @@ export class AuthService {
       scope: ['identify', 'guilds'],
       redirectUri: process.env.DISCORD_CALLBACK
     });
+  }
+
+  async login({email, id}): Promise<UserEntity> {
+    if (email) {
+      return await this.userService.findOneByEmail(email);
+    }
+    else if (id) {
+      return await this.userService.findOneById(id);
+    }
+    else {
+      throw new NotFoundException()
+    }
   }
 }
 
