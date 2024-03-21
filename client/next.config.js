@@ -28,7 +28,6 @@ module.exports = {
     ]
   },
   webpack: (config) => {
-    // Настройка правил для загрузки CSS файлов
     config.module.rules.push({
       test: /\.css$/,
       use: [

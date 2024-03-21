@@ -121,13 +121,10 @@ export class AuthService {
       },
     });    
 
-    const user = await this.userService.find({
-      id: login.userId
-    });
-
-    console.log(user)
+    const user = await this.userService.compareUserWithLogin(login.userId);
+    const jwt = await this.userService.jwt(user);
     
-    return HttpCode(200);
+    return jwt;
   }
 
   getDiscordAuthUrl(): string {

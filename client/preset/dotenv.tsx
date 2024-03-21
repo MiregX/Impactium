@@ -31,7 +31,7 @@ export async function requestApplicationInfoFromServer() {
     return info
   } catch (_) {
     return {
-      isEnforcedPreloader: process.env.ENFORCED_PRELOADER
+      isEnforcedPreloader: false
     }
   }
 }

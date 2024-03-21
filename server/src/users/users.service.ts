@@ -1,6 +1,6 @@
-import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity, UserFulfilledEntity } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/user.dto';
 
@@ -10,28 +10,34 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
-  
-  async findUniqueOrCreate(payload: CreateUserDto): Promise<UserEntity> {
-    try {
-      return await this.prisma.user.findUnique({
-        where: { email: payload.email },
-      }) ?? await this.prisma.user.create({
-        data: payload,
-      });
-    } catch(_) {
-      throw new RequestTimeoutException();
-    }
-  }
 
-  async find(x) {
+  async findOneByEmail(email: string): Promise<UserEntity> {
     return await this.prisma.user.findUnique({
-      where: x
+      where: { email }
     });
   }
-}
 
-// const jwt = this.jwtService.sign({
-//   createdUser: createdUser.id,
-//   email: createdUser.email
-// });
-// return jwt;
+  async findOneById(id: string): Promise<UserEntity> {
+    return await this.prisma.user.findUnique({
+      where: { id }
+    });
+  }
+
+  async compareUserWithLogin(id: string): Promise<UserFulfilledEntity> {
+    const user = await this.findOneById(id);
+    const login = await this.prisma.login.findUnique({
+      where: {
+        userId: user.id,
+        type: user.lastLogin
+      }
+    });
+    return UserFulfilledEntity.compare({
+      user,
+      login
+    });
+  }
+
+  async jwt(user: UserFulfilledEntity) {
+    return this.jwtService.sign(user);
+  }
+}
