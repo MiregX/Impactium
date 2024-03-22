@@ -1,39 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from 'src/user/user.service';
 import passport = require('passport');
 import { Strategy } from 'passport-google-oauth2';
-import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
-import { CreateLoginDto } from 'src/user/dto/login.dto';
-import { CreateUserDto } from 'src/user/dto/user.dto';
-import { LoginEntity } from 'src/user/entities/login.entity';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from 'src/user/entities/user.entity';
-// passport.initialize()
-// passport.session()
-
-// passport.serializeUser(function(user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function(user, done) {
-//   done(null, user);
-// });
-
-// passport.use(new Strategy({
-//   clientID: process.env.GOOGLE_ID,
-//   clientSecret: process.env.GOOGLE_SECRET,
-//   callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/api/oauth2/callback/google',
-//   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-// }, async (accessToken, refreshToken, profile, done) => {
-//   try {
-//     done(null, profile)
-//   } catch (error) {
-//     console.log(error);
-//     done(error)
-//   }
-// }));
+import { DiscordAuthPayload } from './entities/auth.entity';
+import { LoginService } from 'src/user/login.service';
 
 @Injectable()
 export class AuthService {
@@ -41,24 +13,22 @@ export class AuthService {
   strategy: Strategy;
 
   constructor(
-    private readonly userService: UserService, 
-    private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly loginService: LoginService,
   ) {
     this.oauth = new DiscordOauth2({
-      clientId: "1123714909356687360",
-      clientSecret: "NUOXvdx47wOb59vMEm0h8UQBu6S9PLOo",
-      redirectUri: "http://localhost:3000/api/oauth2/callback/discord",
+      clientId: process.env.DISCORD_ID,
+      clientSecret: process.env.DISCORD_SECRET,
+      redirectUri: process.env.DISCORD_CALLBACK,
     });
 
     this.strategy = new Strategy({
       clientID: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/api/oauth2/callback/google',
+      callbackURL: process.env.GOOGLE_CALLBACK,
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
     }, async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log(profile);
         done(null, profile)
       } catch (error) {
         console.log(error);
@@ -84,54 +54,46 @@ export class AuthService {
       scope: ['identify', 'guilds']
     });
 
-    const discordUser = await this.oauth.getUser(token.access_token);
+    const {
+      id,
+      email,
+      avatar,
+      locale,
+      username,
+      global_name,
+      discriminator,
+      type = 'discord',
+    }: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
+    .then(data => {
+      return {
+        ...data,
+        type: 'discord'
+      }
+    })
+    .catch(_ => { throw new BadRequestException()}) as DiscordAuthPayload;
 
-    const login = await this.prisma.login.upsert({
-      where: { id: discordUser.id },
-      update: {
-        avatar: discordUser.avatar
-          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
-          : '',
-        displayName: discordUser.global_name || discordUser.username + '#' + discordUser.discriminator,
-        locale: discordUser.locale || 'us',
-        user: {
-          connectOrCreate: {
-            where: { email: discordUser.email },
-            create: {
-              email: discordUser.email,
-              lastLogin: 'discord',
-            },
+    const login = await this.loginService.findUniqueOrCreate({
+      id,
+      type,
+      avatar: avatar
+        ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+        : '',
+      displayName: global_name || username + '#' + discriminator,
+      locale,
+      user: {
+        connectOrCreate: {
+          where: {
+            email: email
           },
-        },
-      },
-      create: {
-        id: discordUser.id,
-        type: 'discord',
-        avatar: discordUser.avatar
-          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
-          : '',
-        displayName: discordUser.global_name || discordUser.username + '#' + discordUser.discriminator,
-        locale: discordUser.locale || 'us',
-        user: {
-          connectOrCreate: {
-            where: { email: discordUser.email },
-            create: {
-              email: discordUser.email,
-              lastLogin: 'discord',
-            },
-          },
-        },
-      },
-    });    
-
-    const jwt = this.jwtService.sign({
-      id: login.userId,
-      email: discordUser.email,
-    },{
-      secret: 'secret'      
+          create: {
+            email: email,
+            lastLogin: type
+          }
+        }
+      }
     });
     
-    return jwt;
+    return this.userService.signJWT(login.userId, email);
   }
 
   getDiscordAuthUrl(): string {
