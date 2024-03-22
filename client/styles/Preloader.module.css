@@ -40,7 +40,7 @@
     top: 40px;
   }
 }
- .container {
+.container {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -51,6 +51,10 @@
 }
 .slow .container {
   animation: out 1s var(--transition) 1.75s forwards;
+}
+.fast {
+  opacity: 0;
+  transition: all .3s var(--transition) 0.5s;
 }
 svg {
   height: 72px;

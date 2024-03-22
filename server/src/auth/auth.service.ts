@@ -1,54 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import passport = require('passport');
 import { Strategy } from 'passport-google-oauth2';
-
-// passport.initialize()
-// passport.session()
-
-// passport.serializeUser(function(user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function(user, done) {
-//   done(null, user);
-// });
-
-// passport.use(new Strategy({
-//   clientID: process.env.GOOGLE_ID,
-//   clientSecret: process.env.GOOGLE_SECRET,
-//   callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/api/oauth2/callback/google',
-//   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-// }, async (accessToken, refreshToken, profile, done) => {
-//   try {
-//     done(null, profile)
-//   } catch (error) {
-//     console.log(error);
-//     done(error)
-//   }
-// }));
+import { UserEntity } from 'src/user/entities/user.entity';
+import { DiscordAuthPayload } from './entities/auth.entity';
+import { LoginService } from 'src/user/login.service';
 
 @Injectable()
 export class AuthService {
   oauth: DiscordOauth2;
   strategy: Strategy;
 
-  constructor(private userService: UsersService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly loginService: LoginService,
+  ) {
     this.oauth = new DiscordOauth2({
-      clientId: "1123714909356687360",
-      clientSecret: "NUOXvdx47wOb59vMEm0h8UQBu6S9PLOo",
-      redirectUri: "http://localhost:3000/api/oauth2/callback/discord",
+      clientId: process.env.DISCORD_ID,
+      clientSecret: process.env.DISCORD_SECRET,
+      redirectUri: process.env.DISCORD_CALLBACK,
     });
 
     this.strategy = new Strategy({
       clientID: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/api/oauth2/callback/google',
+      callbackURL: process.env.GOOGLE_CALLBACK,
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
     }, async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log(profile);
         done(null, profile)
       } catch (error) {
         console.log(error);
@@ -59,65 +39,98 @@ export class AuthService {
     passport.use(this.strategy);
   }
 
-  async discordAuth(code: string) {
-    const type = "discord";
+  async getGoogleAuthUrl() {
+    
+  }
+
+  async googleCallback() {
+
+  }
+
+  async discordCallback(code: string) {
     const token: DiscordOauth2.TokenRequestResult = await this.oauth.tokenRequest({
       code: code,
       grantType: 'authorization_code',
       scope: ['identify', 'guilds']
-    })
-    const user = await this.oauth.getUser(token.access_token);
-    // User {
-    //   "id": "502511293798940673",
-    //   "username": "mireg",
-    //   "avatar": "c57298e36a702cccd7337341d19c1be5",
-    //   "discriminator": "0",
-    //   "public_flags": 128,
-    //   "premium_type": 0,
-    //   "flags": 128,
-    //   "banner": null,
-    //   "accent_color": 65793,
-    //   "global_name": "Mireg",
-    //   "avatar_decoration_data": null,
-    //   "banner_color": "#010101",
-    //   "mfa_enabled": true,
-    //   "locale": "uk",
-    //   "email": "markgerasimchuk8@gmail.com",
-    //   "verified": true
-    // }
-
-    const jwtoken = this.userService.create({
-      ...user,
-      lastLogin: type
     });
-    return jwtoken;
+
+    const {
+      id,
+      email,
+      avatar,
+      locale,
+      username,
+      global_name,
+      discriminator,
+      type = 'discord',
+    }: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
+    .then(data => {
+      return {
+        ...data,
+        type: 'discord'
+      }
+    })
+    .catch(_ => { throw new BadRequestException()}) as DiscordAuthPayload;
+
+    const login = await this.loginService.findUniqueOrCreate({
+      id,
+      type,
+      avatar: avatar
+        ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+        : '',
+      displayName: global_name || username + '#' + discriminator,
+      locale,
+      user: {
+        connectOrCreate: {
+          where: {
+            email: email
+          },
+          create: {
+            email: email,
+            lastLogin: type
+          }
+        }
+      }
+    });
+    
+    return this.userService.signJWT(login.userId, email);
   }
 
   getDiscordAuthUrl(): string {
     return this.oauth.generateAuthUrl({
-      scope: ['identify', 'guilds']
+      scope: ['identify', 'guilds'],
+      redirectUri: process.env.DISCORD_CALLBACK
     });
+  }
+
+  async login({email, id}): Promise<UserEntity> {
+    if (email) {
+      return await this.userService.findOneByEmail(email);
+    }
+    else if (id) {
+      return await this.userService.findOneById(id);
+    }
+    else {
+      throw new NotFoundException()
+    }
   }
 }
 
-// // router.use((err, req, res, next) => {
-// //   res.redirect('https://impactium.fun/error');
-// // });
-
-// router.get('/login/google', passport.authenticate('google'));
-
-// router.get('/callback/google', (request, response, next) => {
-//   passport.authenticate('google', (err, user, info) => {
-//     if (err) {
-//       return response.sendStatus(500);
-//     }
-
-//     try {
-//       userAuthentication({data: user._json, from: "google", referal: request.query.referal}).then(authResult => {
-//         return response.redirect(`https://impactium.fun/login/callback?token=${authResult.token}&lang=${authResult.lang}`);
-//       });
-//     } catch (error) {
-//       return response.redirect('/');
-//     }
-//   })(request, response, next);
-// });
+// DiscordCallbackLoginPayload {
+//   "id": "502511293798940673",
+//   "username": "mireg",
+//   "avatar": "c57298e36a702cccd7337341d19c1be5",
+//   "discriminator": "0",
+//   "public_flags": 128,
+//   "premium_type": 0,
+//   "flags": 128,
+//   "banner": null,
+//   "accent_color": 65793,
+//   "global_name": "Mireg",
+//   "avatar_decoration_data": null,
+//   "banner_color": "#010101",
+//   "mfa_enabled": true,
+//   "locale": "uk",
+//   "email": "markgerasimchuk8@gmail.com",
+//   "verified": true
+// }

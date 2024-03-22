@@ -9,6 +9,7 @@ export interface IUser {
 }
 
 export const getUser = async (token: string) => {
+  console.log('ddsad')
   if (!token) {
     return null;
   }
@@ -31,6 +32,7 @@ export const getUser = async (token: string) => {
       return undefined;
     }
 
+    console.log('ffdfasf')
     return await response.json();
   } catch (error) {
     return undefined;

@@ -1,5 +1,5 @@
 import { PrismaModule } from './prisma/prisma.module';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
@@ -10,14 +10,14 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [
     AuthModule,
-    UsersModule,
+    UserModule,
     PrismaModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: "bfhoibfieapfeihafiohea",
       signOptions: { expiresIn: '7d' },
     }),
     ConfigModule.forRoot({
-      envFilePath: '.development.env',
+      envFilePath: `.${process.env.NODE_ENV}.env`,
     })
   ],
   controllers: [

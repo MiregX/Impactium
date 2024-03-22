@@ -21,18 +21,23 @@ export const loadEnv = async (mode) => {
 
 export async function requestApplicationInfoFromServer() {
   try {
-    const response = await fetch('/api/application/info');
+    const response = await fetch('/api/application/info', {
+      cache: "force-cache",
+      next: {
+        revalidate: 60 * 60 * 6 // 6 hours
+      }
+    });
     const info = await response.json()
     return info
   } catch (_) {
     return {
-      isEnforcedPreloader: 1
+      isEnforcedPreloader: false
     }
   }
 }
 
 interface _ApplicationInfo {
-  [key: string]: any
+  readonly isEnforcedPreloader: number | boolean | string | undefined
 }
 
-export type ApplicationInfo = _ApplicationInfo | any
+export type ApplicationInfo = _ApplicationInfo

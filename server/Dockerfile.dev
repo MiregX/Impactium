@@ -1,0 +1,8 @@
+FROM node:latest As development
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node . .
+
+RUN npm install
+RUN npm run start:dev

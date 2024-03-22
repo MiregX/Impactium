@@ -12,7 +12,6 @@ import {
 import { usePathname } from 'next/navigation';
 
 export function Preloader({ applicationInfo }) {
-  const building = useRef(null); 
   const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
@@ -47,7 +46,8 @@ export function Preloader({ applicationInfo }) {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
-    if (applicationInfo) return;
+    console.log(applicationInfo)
+    if (applicationInfo.isEnforcedPreloader) return;
     if (isUserLoaded && !blocker) {
       hide();
     } else {

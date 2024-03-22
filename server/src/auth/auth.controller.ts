@@ -13,15 +13,17 @@ export class AuthController {
 
   @Get('callback/google')
   googleLoginCallback(@Req() req, @Res() res) {
-    passport.authenticate('google', { failureRedirect: '/login' });
-    const jwt: string = req.user.jwt;
-    if (jwt) res.redirect('http://localhost/login/callback?token=' + jwt);
-    else res.redirect('http://localhost');
+    // passport.authenticate('google', { failureRedirect: '/login' });
+    // const jwt: string = req.user.jwt;
+    // if (jwt) res.redirect(`${process.env.DOMAIN || 'http:localhost'}/login/callback?token=` + jwt);
+    // else res.redirect(process.env.DOMAIN || 'http:localhost');
   }
 
   @Get('callback/discord')
-  discordAuth(@Query('code') code: string) {
-    return this.authService.discordAuth(code);
+  @Redirect()
+  async discordCallback(@Query('code') code: string) {
+    const token = await this.authService.discordCallback(code)
+    return { url: process.env.DOMAIN + '/login/callback?token=' + token };
   }
 
   @Get('login/discord')

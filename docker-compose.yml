@@ -1,13 +1,16 @@
 version: '3'
 
 services:
-  rabbitmq:
-    image: "rabbitmq:3.9-management"
+  cockroachdb:
+    container_name: api-cockroachdb
+    image: cockroachdb/cockroach:v23.1.13
+    restart: on-failure
     ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - app-network
+      - 26257
+      - ${API_COCKROACHDB_ADMIN_PORT}:${API_COCKROACHDB_ADMIN_PORT}
+    volumes:
+      - './cockroach-data/cockroachdb:/cockroach/cockroach-data'
+    command: start-single-node --insecure --http-port ${API_COCKROACHDB_ADMIN_PORT}
 
   redis:
     image: "redis:latest"
@@ -16,32 +19,12 @@ services:
     networks:
       - app-network
 
-  account-service:
+  main:
     build:
       context: .
-      dockerfile: ./server/services/account/Dockerfile
+      dockerfile: ./server/Dockerfile
     depends_on:
-      - rabbitmq
-      - redis
-    networks:
-      - app-network
-  
-  mcs-service:
-    build:
-      context: .
-      dockerfile: ./server/services/impactium/Dockerfile
-    depends_on:
-      - rabbitmq
-      - redis
-    networks:
-      - app-network
-
-  gateway:
-    build:
-      context: .
-      dockerfile: ./server/gateway/Dockerfile
-    depends_on:
-      - rabbitmq
+      - cockroachdb
       - redis
     ports:
       - "80:3000"
