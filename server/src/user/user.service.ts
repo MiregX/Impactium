@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserEntity, UserFulfilledEntity } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     private readonly prisma: PrismaService,
   ) {}

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { UsersService } from 'src/user/user.service';
+import { UserService } from 'src/user/user.service';
 import passport = require('passport');
 import { Strategy } from 'passport-google-oauth2';
 import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
@@ -41,7 +41,7 @@ export class AuthService {
   strategy: Strategy;
 
   constructor(
-    private readonly userService: UsersService, 
+    private readonly userService: UserService, 
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {
