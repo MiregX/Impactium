@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
-
+import { PlayerModule } from './player/player.module';
 @Module({
   imports: [
     AuthModule,
@@ -18,7 +18,8 @@ import { Module } from '@nestjs/common';
     }),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
-    })
+    }),
+    PlayerModule
   ],
   controllers: [
     AppController
