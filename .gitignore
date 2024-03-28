@@ -8,6 +8,9 @@ npm-debug.log*
 *.webp
 *.jpg
 *.jpeg
+*/cockroach-data/*
+cockroach-data/*
+*/cockroach-data
 
 
 # required build files

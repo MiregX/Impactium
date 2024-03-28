@@ -1,0 +1,9 @@
+FROM node:latest As development
+
+WORKDIR /
+
+COPY . .
+
+RUN npm install
+
+CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,55 @@
+version: '0.1'
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: production
+    restart: on-failure
+    depends_on:
+      - cockroachdb
+    env_file: .production.env
+    volumes:
+      - .:/usr/src/app
+      - ./secrets:/etc/secrets
+      - /usr/src/app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      - PORT=${PORT}
+    command: npm run start:debug
+
+  cockroachdb:
+    container_name: cockroachdb
+    image: cockroachdb/cockroach:v23.1.13
+    restart: on-failure
+    ports:
+      - 26257
+      - 1488:1488
+    volumes:
+      - './cockroach-data/cockroachdb:/cockroach/cockroach-data'
+    command: start-single-node --insecure --http-port 1488
+
+  prisma:
+    container_name: prisma
+    image: node:20-alpine
+    restart: on-failure
+    working_dir: '/usr/src/app'
+    depends_on:
+      - cockroachdb
+    ports:
+      - 5445:5445
+    volumes:
+      - ./prisma:/usr/src/app/prisma
+    env_file: .production.env
+    command: npx prisma studio --port 5445
+
+  redis:
+    container_name: redis
+    image: "redis:latest"
+    restart: on-failure
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data

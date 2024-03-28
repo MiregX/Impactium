@@ -1,0 +1,8 @@
+# Client file of docker ignoring
+Dockerfile
+Dockerfile.dev
+Dockerfile.prod
+.dockerignore
+node_modules
+dist
+npm-debug.log

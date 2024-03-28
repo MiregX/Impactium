@@ -1,0 +1,7 @@
+# API file for Docker ingoring files 
+Dockerfile
+.dockerignore
+node_modules
+cockroach-data
+npm-debug.log
+dist

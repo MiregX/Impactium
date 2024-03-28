@@ -1,6 +1,0 @@
-POST http://localhost:3000/api/create
-Content-Type: application/json
-
-{
-  "num": 16
-}

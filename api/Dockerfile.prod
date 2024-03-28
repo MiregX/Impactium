@@ -1,0 +1,19 @@
+FROM node:latest AS production
+
+# Копируем файлы из root/server в папку /app нашего образа
+COPY . /app
+
+# Устанавливаем рабочую директорию для сборки серверной части
+WORKDIR /app/server
+
+# Устанавливаем зависимости для серверной части
+RUN npm install
+
+# Собираем серверную часть
+RUN npm run build
+
+# Копируем файлы из root/client в папку app/client внутри контейнера
+COPY ../client /app/client
+
+# Запускаем серверную часть
+CMD ["npm", "run", "start:prod"]
