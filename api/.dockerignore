@@ -1,7 +1,9 @@
 # API file for Docker ingoring files 
 Dockerfile
 .dockerignore
-node_modules
+node_modules/prisma
+node_modules/@prisma
+node_modules/.prisma
 cockroach-data
 npm-debug.log
 dist

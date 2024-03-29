@@ -46,7 +46,6 @@ export function Preloader({ applicationInfo }) {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
-    console.log(applicationInfo)
     if (applicationInfo.isEnforcedPreloader) return;
     if (isUserLoaded && !blocker) {
       hide();

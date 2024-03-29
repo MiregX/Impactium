@@ -30,9 +30,8 @@ export class AuthService {
     }, async (accessToken, refreshToken, profile, done) => {
       try {
         done(null, profile)
-      } catch (error) {
-        console.log(error);
-        done(error)
+      } catch (_) {
+        done(_)
       }
     });
 

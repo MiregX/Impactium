@@ -39,7 +39,6 @@ export const UserProvider = ({
       getUser(token).then((user) => {
         setUser(user);
       }).catch((error) => {
-        console.log("XXX", error)
         setUser(user || null);
       }).finally(() => {
         setIsUserLoaded(true);

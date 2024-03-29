@@ -18,26 +18,35 @@ services:
     networks:
       - main
 
+  api:
+    extends:
+      file: ./api/docker-compose.yml
+      service: api
+    networks:
+      - main
+
+  cockroachdb:
+    extends:
+      file: ./api/docker-compose.yml
+      service: cockroachdb
+    networks:
+      - main
+
+  prisma:
+    extends:
+      file: ./api/docker-compose.yml
+      service: prisma
+    depends_on:
+      - cockroachdb
+    networks:
+      - main
+
+  redis:
+    extends:
+      file: ./api/docker-compose.yml
+      service: redis
+    networks:
+      - main
+
 networks:
   main:
-
-  
-  # api:
-  #   extends:
-  #     file: ./api/docker-compose.yml
-  #     service: api
-
-  # cockroachdb:
-  #   extends:
-  #     file: ./api/docker-compose.yml
-  #     service: cockroachdb
-
-  # prisma:
-  #   extends:
-  #     file: ./api/docker-compose.yml
-  #     service: prisma
-
-  # redis:
-  #   extends:
-  #     file: ./api/docker-compose.yml
-  #     service: redis

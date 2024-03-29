@@ -7,8 +7,6 @@ import { cookies } from 'next/headers';
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
 	const token = cookies().get('token');
 
-	console.log(token);
-
 	if (!token) {
 		redirect('/login');
 	}

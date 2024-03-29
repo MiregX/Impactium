@@ -2,21 +2,20 @@ version: '3.0'
 services:
   api:
     container_name: api
-    image: node:20-alpine
     build:
-      context: ..
-      dockerfile: api/Dockerfile.prod
+      context: .
+      dockerfile: ./Dockerfile.prod
       target: production
     restart: on-failure
-    depends_on:
-      - cockroachdb
     ports:
-      - ${API_PORT}:${API_PORT}
+      - 3001:3001
       - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
     environment:
-      - PORT=${API_PORT}
+      - PORT=3001
       - DEBUG_PORT=${API_DEBUG_PORT}
-    env_file: .env
+    env_file: ../.env
+    networks:
+      - main
     command: npm run start:prod
 
   cockroachdb:
@@ -28,21 +27,23 @@ services:
       - 1488:1488
     volumes:
       - './cockroach-data/cockroachdb:/cockroach/cockroach-data'
+    networks:
+      - main
     command: start-single-node --insecure --http-port 1488
 
   prisma:
     container_name: prisma
     image: node:20-alpine
     restart: on-failure
-    working_dir: '/app/api'
-    depends_on:
-      - cockroachdb
+    working_dir: /
     ports:
-      - 5445:5445
+      - ${API_PRISMA_STUDIO_PORT}:${API_PRISMA_STUDIO_PORT}
     volumes:
-      - ./prisma:/usr/src/app/prisma
-    env_file: .env
-    command: npx prisma studio --port 5445
+      - ./prisma:/prisma
+    env_file: ../.env
+    networks:
+      - main
+    command: npx prisma studio --port ${API_PRISMA_STUDIO_PORT}
 
   redis:
     container_name: redis
@@ -52,3 +53,5 @@ services:
       - "6379:6379"
     volumes:
       - ./redis-data:/data
+    networks:
+      - main
