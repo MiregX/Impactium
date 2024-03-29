@@ -5,3 +5,4 @@ node_modules
 cockroach-data
 npm-debug.log
 dist
+redis-data

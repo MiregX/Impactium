@@ -4,7 +4,7 @@ import { useUser } from '@/context/User';
 import { useEffect } from 'react';
 
 async function loginCallback(code: string, referal?: string) {
-  const res = await fetch(`${process.env.DOMAIN}/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
+  const res = await fetch(`localhost:3001/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
   if (!res.ok) return undefined
   return res.json()
 }

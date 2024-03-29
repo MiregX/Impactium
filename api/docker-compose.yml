@@ -1,24 +1,23 @@
-version: '0.1'
+version: '3.0'
 services:
   api:
     container_name: api
+    image: node:20-alpine
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: api/Dockerfile.prod
       target: production
     restart: on-failure
     depends_on:
       - cockroachdb
-    env_file: .production.env
-    volumes:
-      - .:/usr/src/app
-      - ./secrets:/etc/secrets
-      - /usr/src/app/node_modules
     ports:
-      - ${PORT}:${PORT}
+      - ${API_PORT}:${API_PORT}
+      - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
     environment:
-      - PORT=${PORT}
-    command: npm run start:debug
+      - PORT=${API_PORT}
+      - DEBUG_PORT=${API_DEBUG_PORT}
+    env_file: .env
+    command: npm run start:prod
 
   cockroachdb:
     container_name: cockroachdb
@@ -35,14 +34,14 @@ services:
     container_name: prisma
     image: node:20-alpine
     restart: on-failure
-    working_dir: '/usr/src/app'
+    working_dir: '/app/api'
     depends_on:
       - cockroachdb
     ports:
       - 5445:5445
     volumes:
       - ./prisma:/usr/src/app/prisma
-    env_file: .production.env
+    env_file: .env
     command: npx prisma studio --port 5445
 
   redis:

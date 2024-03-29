@@ -56,7 +56,7 @@
   opacity: 0;
   transition: all .3s var(--transition) 0.5s;
 }
-svg {
+.preloader svg {
   height: 72px;
   opacity: 0;
   transition: height 1s var(--transition) 1.75s, opacity 0s linear;

@@ -11,21 +11,24 @@ else ifeq ($(OS),MINGW64_NT)
   SLEEP_CMD := timeout /t 30
 endif
 
-up: docker post-up
+up: docker
 docker:
-	@echo λ Starting with Docker Compose...
-	@docker-compose -f docker-compose.yml up -d
+	@echo Starting with Docker Compose...
+	@docker-compose --env-file .env -f docker-compose.yml up --abort-on-container-exit
 
 down:
-	@docker-compose down --dry-run
+	@docker-compose down
 
 post-up:
-	@echo λ Waiting for stabilize...
+	@echo Waiting for stabilize...
 	@$(SLEEP_CMD)
 
-	@echo λ Running post-up API
+	@echo Running post-up API
 	@cd ./api && $(MAKE) api/prisma/deploy
 	@cd ./api && $(MAKE) api/prisma/generate
 	@cd ./api && $(MAKE) api/prisma/seed
+
+purge:
+	@docker system prune --all --force
 
 .PHONY: pre-up post-up docker-up down restart

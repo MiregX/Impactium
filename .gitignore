@@ -11,6 +11,8 @@ npm-debug.log*
 */cockroach-data/*
 cockroach-data/*
 */cockroach-data
+redis-data
+*.pem
 
 
 # required build files

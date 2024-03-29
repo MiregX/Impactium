@@ -8,8 +8,7 @@ import { UserProvider } from '@/context/User';
 import { getUser } from '@/preset/User';
 import { Preloader } from '@/components/header/Preloader';
 import { cookies } from 'next/headers';
-import { loadEnv, requestApplicationInfoFromServer } from '@/preset/dotenv'
-loadEnv(process.env.NODE_ENV);
+import { requestApplicationInfoFromServer } from '@/preset/dotenv'
 
 export const metadata: Metadata = {
   title: {
