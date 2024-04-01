@@ -1,9 +1,6 @@
-# Logs
 logs
 *.log
 npm-debug.log*
-
-# LImages
 *.png
 *.webp
 *.jpg
@@ -13,27 +10,16 @@ cockroach-data/*
 */cockroach-data
 redis-data
 *.pem
-
-
-# required build files
 server/resourse_pack/*
 node_modules/
 */node_modules/*
 */node_modules
 *.zip
-
-# basic node cache files
 .npm
 .eslintcache
-
-# dotenv environment variable files
 .env
 .env.prod
 .env.dev
-
-# Next.js build output
 .next
-
-# Nuxt.js build / generate output
 .nuxt
 .code-workspace
