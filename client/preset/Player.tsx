@@ -1,3 +1,5 @@
+import { getLink } from "./dotenv";
+
 interface IPlayerSkin {
   iconLink: string;
   charlink: string;
@@ -96,7 +98,6 @@ export const setAchievement = async ({ token, achievement }: IPlayerRequestHeade
 };
 
 const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlayer> => {
-  console.log('qweewq')
   try {
     if (!headers.token) return undefined;
 
@@ -104,7 +105,7 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       ? 'GET'
       : 'POST';
 
-    const response = await fetch(`http://localhost:3001/api/player/` + path, {
+    const response = await fetch(`${getLink()}/api/player/` + path, {
       method,
       headers: {
         ...headers
@@ -116,7 +117,6 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       return null;
     }
 
-    console.log('aassa')
     return await response.json();
   } catch (error) {
     return undefined

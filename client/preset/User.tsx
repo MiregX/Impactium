@@ -1,3 +1,5 @@
+import { getLink } from "./dotenv";
+
 export interface IUser {
   id: string;
   email: string;
@@ -9,7 +11,6 @@ export interface IUser {
 }
 
 export const getUser = async (token: string) => {
-  console.log('ddsad')
   if (!token) {
     return null;
   }
@@ -18,7 +19,7 @@ export const getUser = async (token: string) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 2000);
 
-    const response = await fetch(`${process.env.DOMAIN || 'http://localhost:3000'}/api/user/get`, {
+    const response = await fetch(`${getLink()}/api/user/get`, {
       method: 'GET',
       headers: {
         token: token
@@ -32,7 +33,6 @@ export const getUser = async (token: string) => {
       return undefined;
     }
 
-    console.log('ffdfasf')
     return await response.json();
   } catch (error) {
     return undefined;

@@ -2,10 +2,17 @@
   "configurations": [
     {
       "type": "node-terminal",
-      "name": "Run Script: start:debug",
+      "name": "Start API",
       "request": "launch",
       "command": "npm run start:debug",
-      "cwd": "${workspaceFolder}/server"
+      "cwd": "${workspaceFolder}/api"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Start CLIENT",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/client"
     },
   ]
 }

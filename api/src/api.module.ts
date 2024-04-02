@@ -7,6 +7,7 @@ import { ApiService } from './api.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PlayerModule } from './player/player.module';
+import { ApplicationModule } from './application/application.module';
 @Module({
   imports: [
     AuthModule,
@@ -14,12 +15,13 @@ import { PlayerModule } from './player/player.module';
     PrismaModule,
     PlayerModule,
     ConfigModule.forRoot({
-      envFilePath: `../.env`,
+      envFilePath: '../.env',
     }),
     JwtModule.register({
       secret: process.env.SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    ApplicationModule,
   ],
   controllers: [
     ApiController

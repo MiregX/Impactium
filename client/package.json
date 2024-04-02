@@ -12,6 +12,7 @@
     "css-loader": "^6.10.0",
     "dotenv": "^16.4.5",
     "ignore-loader": "^0.1.2",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.8.1",
     "next": "^14.1.1",
     "react": "^18",
@@ -22,6 +23,7 @@
     "universal-cookie": "^7.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

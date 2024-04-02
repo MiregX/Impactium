@@ -46,7 +46,7 @@ export function Preloader({ applicationInfo }) {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
-    if (applicationInfo.isEnforcedPreloader) return;
+    if (applicationInfo.enforced_preloader) return;
     if (isUserLoaded && !blocker) {
       hide();
     } else {
@@ -101,7 +101,7 @@ export function Preloader({ applicationInfo }) {
   ];
 
   useEffect(() => {
-    if (applicationInfo.isEnforcedPreloader)
+    if (applicationInfo.enforced_preloader)
       self.current.classList.add(s.dev);
   }, [self])
 

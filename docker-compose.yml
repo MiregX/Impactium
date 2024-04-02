@@ -11,8 +11,9 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
+    restart: on-failure
     ports:
-      - "80:80"
+      - 80:80
     volumes:
       - .nginx:/etc/nginx
     networks:

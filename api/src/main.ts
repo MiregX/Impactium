@@ -10,6 +10,5 @@ async function run() {
 
   api.setGlobalPrefix('api');
   api.listen(process.env.API_PORT, '0.0.0.0');
-  console.log(process.env.API_PORT);
 }
 run();
