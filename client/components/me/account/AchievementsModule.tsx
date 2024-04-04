@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
-import { getAchievements } from '@/preset/Player';
+import { getAchievements } from '@/dto/Player';
 
 export function AchievementsModule() {
   const { lang } = useLanguage();

@@ -1,4 +1,4 @@
-import { getLink } from "./dotenv";
+import { getLink } from "./master";
 
 interface IPlayerSkin {
   iconLink: string;

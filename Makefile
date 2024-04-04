@@ -12,6 +12,7 @@ else ifeq ($(OS),MINGW64_NT)
 endif
 
 up: docker
+
 docker:
 	@echo Starting with Docker Compose...
 	@docker-compose --env-file .env -f docker-compose.yml up --abort-on-container-exit

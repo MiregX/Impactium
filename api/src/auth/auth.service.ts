@@ -6,6 +6,7 @@ import { Strategy } from 'passport-google-oauth2';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { DiscordAuthPayload } from './entities/auth.entity';
 import { LoginService } from 'src/user/login.service';
+import { ApplicationService } from 'src/application/application.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly loginService: LoginService,
+    private readonly applicationService: ApplicationService,
   ) {
     this.oauth = new DiscordOauth2({
       clientId: process.env.DISCORD_ID,
@@ -98,7 +100,7 @@ export class AuthService {
   getDiscordAuthUrl(): string {
     return this.oauth.generateAuthUrl({
       scope: ['identify', 'guilds'],
-      redirectUri: process.env.DISCORD_CALLBACK
+      redirectUri: this.applicationService.getClientLink() + '/login/callback'
     });
   }
 

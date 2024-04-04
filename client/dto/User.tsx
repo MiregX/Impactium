@@ -1,4 +1,4 @@
-import { getLink } from "./dotenv";
+import { getLink } from "./master";
 
 export interface IUser {
   id: string;

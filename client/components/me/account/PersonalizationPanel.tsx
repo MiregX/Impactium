@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
-import { setSkin, setPassword, setNickname } from '@/preset/Player';
+import { setSkin, setPassword, setNickname } from '@/dto/Player';
 
 interface IPersonalizationPanel {
   type: 'nickname' | 'password' | 'skin'

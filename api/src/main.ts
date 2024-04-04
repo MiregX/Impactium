@@ -9,7 +9,7 @@ async function run() {
   );
 
   api.setGlobalPrefix('api');
-  api.enableCors(); // Включаем CORS
+  api.enableCors();
   api.listen(process.env.API_PORT, '0.0.0.0');
 }
 run();

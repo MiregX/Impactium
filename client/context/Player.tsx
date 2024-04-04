@@ -1,5 +1,5 @@
 'use client'
-import { IPlayer, getPlayer, getAchievements, setAchievement, setNickname, setSkin, setPassword, register } from "@/preset/Player";
+import { IPlayer, getPlayer, getAchievements, setAchievement, setNickname, setSkin, setPassword, register } from "@/dto/Player";
 import s from '@/styles/Me.module.css'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";

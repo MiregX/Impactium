@@ -5,10 +5,10 @@ import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
-import { getUser } from '@/preset/User';
+import { getUser } from '@/dto/User';
 import { Preloader } from '@/components/header/Preloader';
 import { cookies } from 'next/headers';
-import { requestApplicationInfoFromServer } from '@/preset/dotenv'
+import { requestApplicationInfoFromServer } from '@/dto/master'
 
 export const metadata: Metadata = {
   title: {

@@ -16,7 +16,7 @@ export class ApplicationService {
     return {
       loaded: this.isEnvironmentLoaded(),
       path: process.env.X_PATH,
-      mode: this.getEnvironmentMode(),
+      mode: this.getMode(),
       message: process.env.X_MESSAGE,
     }
   }
@@ -25,9 +25,25 @@ export class ApplicationService {
     return typeof process.env.X === 'string';
   }
 
-  getEnvironmentMode(): EnvironmentModes {
+  isProductionMode(): boolean {
     return parseInt(process.env.X) > 0
+  }
+
+  getMode(): EnvironmentModes {
+    return this.isProductionMode()
       ? 'production'
       : 'development'
+  }
+
+  getLink() {
+    return this.isProductionMode()
+      ? process.env.DOMAIN
+      : process.env.API_LOCALHOST
+  }
+
+  getClientLink() {
+    return this.isProductionMode()
+      ? process.env.DOMAIN
+      : process.env.APP_LOCALHOST
   }
 }

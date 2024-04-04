@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { getPlayer } from '@/preset/Player';
+import { getPlayer } from '@/dto/Player';
 import { redirect } from 'next/navigation'
 import { PlayerProvider } from '@/context/Player';
 import { cookies } from 'next/headers';

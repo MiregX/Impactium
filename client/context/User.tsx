@@ -1,5 +1,5 @@
 'use client'
-import { IUser, getUser } from "@/preset/User";
+import { IUser, getUser } from "@/dto/User";
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 

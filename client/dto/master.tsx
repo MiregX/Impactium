@@ -16,27 +16,32 @@ export async function requestApplicationInfoFromServer() {
   }
 }
 
-let isLocalServerReacheble: boolean = true;
+let isLocalServerReachable: boolean = true;
 const checkServerAvailability = debounce(async () => {
   try {
-    const response = await fetch('http://localhost:3001/api/application/info', {
-      cache: 'no-cache'
-    });
-    const data = await response.json();
-    isLocalServerReacheble = !!data.status;
-  } catch (_) {
-    isLocalServerReacheble = false;
-  } finally {
-    return isLocalServerReacheble;
-  }
-}, 1000);
+    const response = await Promise.race([
+      fetch(`http://localhost:3001/api/application/info`, {
+        cache: 'no-cache',
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), 300),
+      )
+    ]) as Response;
 
+    const data = await response.json();
+    isLocalServerReachable = !!data.status;
+  } catch (_) {
+    isLocalServerReachable = false;
+  } finally {
+    return isLocalServerReachable;
+  }
+}, 300000);
 
 export function getLink() {
   checkServerAvailability();
-  return isLocalServerReacheble
+  return isLocalServerReachable || parseInt(process.env.X) === 0 
     ? 'http://localhost:3001'
-    : 'https://impactium.fun';
+    : 'https://impactium.fun'
 }
 
 interface _ApplicationInfo {

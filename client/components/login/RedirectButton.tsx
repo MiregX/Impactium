@@ -2,7 +2,7 @@
 import s from '@/styles/Login.module.css';
 import type { LoginMethod } from './Page';
 import { useRouter } from 'next/navigation';
-import { getLink } from '@/preset/dotenv';
+import { getLink } from '@/dto/master';
 import { useLanguage } from '@/context/Language';
 
 export function RedirectButton({ type }: { type: LoginMethod }) {
