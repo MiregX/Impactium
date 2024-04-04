@@ -9,7 +9,6 @@
 }
 .baseButton {
   height: 52px;
-  border: 1px solid var(--gray32);
   padding: 0 15px;
   color: var(--soft-white);
   border-radius: 50px;
@@ -152,16 +151,17 @@
 .two .buttonsWrapper {
   flex-direction: row;
 }
-.discordLogin {
+.baseButton[accessKey='discord'] {
   background: #5865F2;
-  border: none;
 }
-.googleLogin {
+.baseButton[accessKey='google'] {
   background: var(--soft-white);
-  border: none;
 }
-.googleLogin p {
+.baseButton[accessKey='google'] p {
   color: var(--gray16);
+}
+.two .baseButton p {
+  display: none;
 }
 .noAccount {
   gap: 5px;

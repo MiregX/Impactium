@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 export async function requestApplicationInfoFromServer() {
   try {
     const response = await fetch(`${getLink()}/api/application/info`, {
-      cache: "force-cache",
+      cache: 'no-cache',
       next: {
         revalidate: 60 * 60 * 6
       }
@@ -19,7 +19,9 @@ export async function requestApplicationInfoFromServer() {
 let isLocalServerReacheble: boolean = true;
 const checkServerAvailability = debounce(async () => {
   try {
-    const response = await fetch('http://localhost:3001/api/application/info');
+    const response = await fetch('http://localhost:3001/api/application/info', {
+      cache: 'no-cache'
+    });
     const data = await response.json();
     isLocalServerReacheble = !!data.status;
   } catch (_) {

@@ -31,13 +31,13 @@ const locale: Locale = {
     us: "Username or email",
     ru: "Никнейм или почта"
   },
-  continueWithGoogle: {
+  continueWithgoogle: {
     ua: "Увійти через Google",
     it: "Continua con Google",
     us: "Continue with Google",
     ru: "Войти используя Google"
   },
-  continueWithDiscord: {
+  continueWithdiscord: {
     ua: "Увійти через Discord",
     it: "Continua con Discord",
     us: "Continue with Discord",

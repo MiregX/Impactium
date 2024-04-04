@@ -15,7 +15,7 @@ import { ApplicationModule } from './application/application.module';
     PrismaModule,
     PlayerModule,
     ConfigModule.forRoot({
-      envFilePath: '../.env',
+      envFilePath: `../${!process.env.X && 'dev'}.env`,
     }),
     JwtModule.register({
       secret: process.env.SECRET,

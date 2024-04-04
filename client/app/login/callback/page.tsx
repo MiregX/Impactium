@@ -2,9 +2,10 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useEffect } from 'react';
+import { getLink } from '@/preset/dotenv';
 
 async function loginCallback(code: string, referal?: string) {
-  const res = await fetch(`localhost:3001/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, { method: 'GET', cache: 'no-store' })
+  const res = await fetch(`${getLink()}/api/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`)
   if (!res.ok) return undefined
   return res.json()
 }

@@ -4,8 +4,6 @@ COPY . ./api
 
 WORKDIR /api
 
-RUN npm install
-
 RUN npm run build
 
 EXPOSE 3001

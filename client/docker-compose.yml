@@ -7,9 +7,6 @@ services:
       dockerfile: ./Dockerfile.prod
       target: production
     restart: on-failure
-    ports:
-      - ${APP_PORT}:${APP_PORT}
-      - ${APP_DEBUG_PORT}:${APP_DEBUG_PORT}
     environment:
       - PORT=${APP_PORT}
       - DEBUG_PORT=${APP_DEBUG_PORT}
