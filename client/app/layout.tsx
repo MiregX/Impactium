@@ -33,13 +33,10 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const token = cookies().get('token');
-
+  const token = cookies().get('Authorization');
   const applicationInfo = await requestApplicationInfoFromServer();
 
-  const user = token
-    ? await getUser(token.value)
-    : null
+  const user = await getUser(token.value);
 
   return (
     <html>

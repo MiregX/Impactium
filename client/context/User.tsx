@@ -32,7 +32,7 @@ export const UserProvider = ({
   
   useEffect(() => {
     if (token) {
-      cookie.set('token', token, {
+      cookie.set('Authorization', `Bearer ${token}`, {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
       });
       setIsUserLoaded(false);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserEntity, UserFulfilledEntity } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -44,5 +44,10 @@ export class UserService {
     }, {
       secret: process.env.JWT_SECRET || 'secret'
     });
+  }
+
+  decodeJWT(token: string) {
+    const data = this.jwt.decode(token);
+    return data || new NotFoundException();
   }
 }

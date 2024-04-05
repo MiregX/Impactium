@@ -1,6 +1,7 @@
-import { Controller, Get, Query, Redirect, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import passport from 'passport';
+import { Configuration } from '@impactium/config';
 
 @Controller('oauth2')
 export class AuthController {
@@ -21,9 +22,15 @@ export class AuthController {
 
   @Get('callback/discord')
   @Redirect()
-  async discordCallback(@Query('code') code: string) {
+  async discordGetCallback(@Query('code') code: string) {
     const token = await this.authService.discordCallback(code)
-    return { url: process.env.DOMAIN + '/login/callback?token=' + token };
+    return { url: Configuration.getClientLink() + '/login/callback?token=' + token };
+  }
+
+  @Post('callback/discord')
+  async discordPostCallback(@Query('code') code: string) {
+    const token = await this.authService.discordCallback(code)
+    return Configuration.getClientLink() + '/login/callback?token=' + token;
   }
 
   @Get('login/discord')

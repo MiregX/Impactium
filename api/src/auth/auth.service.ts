@@ -22,7 +22,7 @@ export class AuthService {
     this.oauth = new DiscordOauth2({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
-      redirectUri: process.env.DISCORD_CALLBACK,
+      redirectUri: Configuration.getClientLink() + '/login/callback',
     });
 
     this.strategy = new Strategy({
@@ -66,13 +66,7 @@ export class AuthService {
       discriminator,
       type = 'discord',
     }: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
-    .then(data => {
-      return {
-        ...data,
-        type: 'discord'
-      }
-    })
-    .catch(_ => { throw new BadRequestException()}) as DiscordAuthPayload;
+    .catch(_ => { console.log(_); throw new BadRequestException()}) as DiscordAuthPayload;
 
     const login = await this.loginService.findUniqueOrCreate({
       id,
@@ -105,7 +99,8 @@ export class AuthService {
     });
   }
 
-  async login({email, id}): Promise<UserEntity> {
+  async login(token: string): Promise<UserEntity> {
+    const { email, id } = this.userService.decodeJWT(token);
     if (email) {
       return await this.userService.findOneByEmail(email);
     }

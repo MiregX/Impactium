@@ -1,4 +1,4 @@
-import { getLink } from "./master";
+import { getServerLink } from "./master";
 
 export interface IUser {
   id: string;
@@ -16,25 +16,15 @@ export const getUser = async (token: string) => {
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000);
-
-    const response = await fetch(`${getLink()}/api/user/get`, {
+    const response = await fetch(`${getServerLink()}/api/user/get`, {
+      cache: 'no-cache',
       method: 'GET',
-      headers: {
-        token: token
-      },
-      signal: controller.signal
     });
 
-    clearTimeout(timeout);
-
-    if (response.status === 401) {
-      return undefined;
-    }
+    console.log(response);
 
     return await response.json();
-  } catch (error) {
+  } catch (_) {
     return undefined;
   }
 };

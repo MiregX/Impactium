@@ -1,8 +1,9 @@
 import { debounce } from 'lodash';
+import { Configuration } from '@impactium/config';
 
 export async function requestApplicationInfoFromServer() {
   try {
-    const response = await fetch(`${getLink()}/api/application/info`, {
+    const response = await fetch(`${getServerLink()}/api/application/info`, {
       cache: 'no-cache',
       next: {
         revalidate: 60 * 60 * 6
@@ -37,9 +38,9 @@ const checkServerAvailability = debounce(async () => {
   }
 }, 300000);
 
-export function getLink() {
+export function getServerLink() {
   checkServerAvailability();
-  return isLocalServerReachable || parseInt(process.env.X) === 0 
+  return isLocalServerReachable || !Configuration.isProductionMode() 
     ? 'http://localhost:3001'
     : 'https://impactium.fun'
 }
