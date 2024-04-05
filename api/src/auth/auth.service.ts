@@ -7,6 +7,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { DiscordAuthPayload } from './entities/auth.entity';
 import { LoginService } from 'src/user/login.service';
 import { ApplicationService } from 'src/application/application.service';
+import { Configuration } from '@impactium/config';
 
 @Injectable()
 export class AuthService {
@@ -100,7 +101,7 @@ export class AuthService {
   getDiscordAuthUrl(): string {
     return this.oauth.generateAuthUrl({
       scope: ['identify', 'guilds'],
-      redirectUri: this.applicationService.getClientLink() + '/login/callback'
+      redirectUri: Configuration.getClientLink() + '/login/callback'
     });
   }
 

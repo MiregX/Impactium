@@ -3,7 +3,8 @@ type status = 0 | 200
 export interface Info {
   status: status,
   environment: Environment,
-  enforced_preloader: boolean
+  enforced_preloader: boolean,
+  localhost: string
 }
 
 export interface Environment {

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Environment, EnvironmentModes, Info } from './application.entity';
+import { Configuration } from '@impactium/config';
 
 @Injectable()
 export class ApplicationService {
@@ -7,43 +8,18 @@ export class ApplicationService {
     const info: Info = {
       status: 200,
       environment: this.getEnvironment(),
-      enforced_preloader: !!process.env.ENFORCED_PRELOADER
+      enforced_preloader: !!process.env.ENFORCED_PRELOADER,
+      localhost: process.env.API_LOCALHOST
     }
     return info
   }
 
   private getEnvironment(): Environment {
     return {
-      loaded: this.isEnvironmentLoaded(),
+      loaded: Configuration.isEnvironmentLoaded(),
       path: process.env.X_PATH,
-      mode: this.getMode(),
+      mode: Configuration.getMode(),
       message: process.env.X_MESSAGE,
     }
-  }
-
-  isEnvironmentLoaded(): boolean {
-    return typeof process.env.X === 'string';
-  }
-
-  isProductionMode(): boolean {
-    return parseInt(process.env.X) > 0
-  }
-
-  getMode(): EnvironmentModes {
-    return this.isProductionMode()
-      ? 'production'
-      : 'development'
-  }
-
-  getLink() {
-    return this.isProductionMode()
-      ? process.env.DOMAIN
-      : process.env.API_LOCALHOST
-  }
-
-  getClientLink() {
-    return this.isProductionMode()
-      ? process.env.DOMAIN
-      : process.env.APP_LOCALHOST
   }
 }
