@@ -2,6 +2,7 @@ import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common
 import { AuthService } from './auth.service';
 import passport from 'passport';
 import { Configuration } from '@impactium/config';
+import { FastifyReply } from 'fastify';
 
 @Controller('oauth2')
 export class AuthController {
@@ -28,9 +29,17 @@ export class AuthController {
   }
 
   @Post('callback/discord')
-  async discordPostCallback(@Query('code') code: string) {
-    const token = await this.authService.discordCallback(code)
-    return Configuration.getClientLink() + '/login/callback?token=' + token;
+  async discordPostCallback(
+      @Query('code') code: string,
+      @Res({ passthrough: true }) response: FastifyReply
+    ) {
+    const token = await this.authService.discordCallback(code);
+    response.setCookie('Authorization', token, {
+      domain: Configuration.getServerLink(),
+      path: '/',
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+    response.send({token});
   }
 
   @Get('login/discord')

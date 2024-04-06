@@ -56,40 +56,36 @@ export class AuthService {
       scope: ['identify', 'guilds']
     });
 
-    const {
-      id,
-      email,
-      avatar,
-      locale,
-      username,
-      global_name,
-      discriminator,
-      type = 'discord',
-    }: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
+    const payload: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
+    .then(payload => {
+      return {
+        ...payload,
+        type: 'discord',
+      }
+    })
     .catch(_ => { console.log(_); throw new BadRequestException()}) as DiscordAuthPayload;
 
-    const login = await this.loginService.findUniqueOrCreate({
-      id,
-      type,
-      avatar: avatar
-        ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
-        : '',
-      displayName: global_name || username + '#' + discriminator,
-      locale,
-      user: {
-        connectOrCreate: {
-          where: {
-            email: email
-          },
-          create: {
-            email: email,
-            lastLogin: type
-          }
-        }
+    const user = payload.email ? {
+      connectOrCreate: {
+        where: { email: payload.email },
+        create: { email: payload.email, lastLogin: payload.type }
       }
-    });
+    } : {
+      create: { lastLogin: payload.type }
+    };
     
-    return this.userService.signJWT(login.userId, email);
+    const login = await this.loginService.findUniqueOrCreate({
+      id: payload.id,
+      type: payload.type,
+      avatar: payload.avatar
+        ? `https://cdn.discordapp.com/avatars/${payload.id}/${payload.avatar}.png`
+        : '',
+      displayName: payload.global_name || payload.username + '#' + payload.discriminator,
+      locale: payload.locale,
+      user: user
+    });
+
+    return `Bearer ${this.userService.signJWT(login.uid, payload.email)}`;
   }
 
   getDiscordAuthUrl(): string {
@@ -108,26 +104,7 @@ export class AuthService {
       return await this.userService.findOneById(id);
     }
     else {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
   }
 }
-
-// DiscordCallbackLoginPayload {
-//   "id": "502511293798940673",
-//   "username": "mireg",
-//   "avatar": "c57298e36a702cccd7337341d19c1be5",
-//   "discriminator": "0",
-//   "public_flags": 128,
-//   "premium_type": 0,
-//   "flags": 128,
-//   "banner": null,
-//   "accent_color": 65793,
-//   "global_name": "Mireg",
-//   "avatar_decoration_data": null,
-//   "banner_color": "#010101",
-//   "mfa_enabled": true,
-//   "locale": "uk",
-//   "email": "markgerasimchuk8@gmail.com",
-//   "verified": true
-// }

@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "cockroachdb"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://dev:P2oHVZjuw-JCxT5nvOQQrg@impactium-5488.6zw.aws-eu-west-1.cockroachlabs.cloud:26257/development?sslmode=verify-full" //env("DATABASE_URL")
 }
 
 enum LoginType {
@@ -23,24 +23,24 @@ model User {
 }
 
 model Login {
-  id          String     @id @default(cuid())
+  id          String      @id @default(cuid())
   type        LoginType
   avatar      String?
   displayName String
   locale      String
-  user        User       @relation(fields: [userId], references: [id])
-  userId      String     @unique
+  user        User        @relation(fields: [uid], references: [id])
+  uid      String         @unique
 }
 
 model Player {
   id           String         @id @default(cuid())
+  user         User           @relation(fields: [uid], references: [id])
+  uid          String         @unique
   nickname     String?        @unique
   password     String?
   register     DateTime       @default(now())
   skin         Skin?          @relation(fields: [skinId], references: [id])
   skinId       String?        @unique
-  user         User           @relation(fields: [userId], references: [id])
-  userId       String         @unique
   oldNicknames OldNicknames[]
 }
 

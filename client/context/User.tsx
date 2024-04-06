@@ -1,7 +1,8 @@
 'use client'
-import { IUser, getUser } from "@/dto/User";
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
+import { FulfilledUser } from "@impactium/types";
+import { getUser } from "@/dto/User";
 
 const UserContext = createContext(undefined);
 
@@ -14,17 +15,14 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({
-    prefetchedUser = undefined,
+    prefetchedUser,
     children
-  } : {
-    prefetchedUser: IUser | null,
-    children: any
   }) => {
   const cookie = new Cookies();
-  const isUserPrefetched = typeof prefetchedUser !== 'undefined';
-  const [token, setToken] = useState<string | false>((cookie.get('token')) || false);
-  const [user, setUser] = useState<IUser | null>(prefetchedUser);
-  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(isUserPrefetched ? true : false);
+  const [isUserFetched, setIsUserFetched] = useState(typeof prefetchedUser !== 'undefined');
+  const [token, setToken] = useState<string | false>((cookie.get('Authorization')) || false);
+  const [user, setUser] = useState<FulfilledUser | null>(prefetchedUser);
+  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(typeof prefetchedUser !== 'undefined');
 
   const logout = () => {
     setToken(false)
@@ -32,19 +30,22 @@ export const UserProvider = ({
   
   useEffect(() => {
     if (token) {
-      cookie.set('Authorization', `Bearer ${token}`, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      if (isUserFetched) return;
+      cookie.set('Authorization', token, {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        path: '/',
       });
       setIsUserLoaded(false);
       getUser(token).then((user) => {
         setUser(user);
-      }).catch((error) => {
-        setUser(user || null);
+      }).catch((_) => {
+        setUser(null);
       }).finally(() => {
+        setIsUserFetched(true);
         setIsUserLoaded(true);
       });
     } else {
-      cookie.remove('token');
+      cookie.remove('Authorization');
       setUser(null);
     }
   }, [token]);

@@ -4,7 +4,6 @@ import { Configuration } from '@impactium/config';
 export async function requestApplicationInfoFromServer() {
   try {
     const response = await fetch(`${getServerLink()}/api/application/info`, {
-      cache: 'no-cache',
       next: {
         revalidate: 60 * 60 * 6
       }

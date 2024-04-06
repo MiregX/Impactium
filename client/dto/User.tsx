@@ -1,17 +1,8 @@
 import { getServerLink } from "./master";
+import type { FulfilledUser } from "@impactium/types";
 
-export interface IUser {
-  id: string;
-  email: string;
-  displayName: string;
-  avatar?: string;
-  balance?: number;
-  isVerified?: boolean;
-  referal?: any;
-}
-
-export const getUser = async (token: string) => {
-  if (!token) {
+export async function getUser(authorization: string): Promise<FulfilledUser> {
+  if (!authorization) {
     return null;
   }
 
@@ -19,9 +10,12 @@ export const getUser = async (token: string) => {
     const response = await fetch(`${getServerLink()}/api/user/get`, {
       cache: 'no-cache',
       method: 'GET',
+      headers: {
+        authorization: `Bearer ${authorization}`
+      }
     });
 
-    console.log(response);
+    if (!response.ok) throw Error();
 
     return await response.json();
   } catch (_) {

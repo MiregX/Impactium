@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserEntity, UserFulfilledEntity } from './entities/user.entity';
+import { UserComposedEntity, UserEntity,  } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { FulfilledUser } from '@impactium/types';
 
 @Injectable()
 export class UserService {
@@ -23,15 +24,15 @@ export class UserService {
     });
   }
 
-  async compareUserWithLogin(id: string): Promise<UserFulfilledEntity> {
+  async compareUserWithLogin(id: string): Promise<FulfilledUser> {
     const user = await this.findOneById(id);
     const login = await this.prisma.login.findUnique({
       where: {
-        userId: user.id,
+        uid: user.id,
         type: user.lastLogin
       }
     });
-    return UserFulfilledEntity.compare({
+    return UserComposedEntity.compose({
       user,
       login
     });
@@ -40,9 +41,10 @@ export class UserService {
   signJWT(id: string, email: string): string {
     return this.jwt.sign({
       id,
-      email
+      email,
     }, {
-      secret: process.env.JWT_SECRET || 'secret'
+      secret: process.env.JWT_SECRET || 'secret',
+      expiresIn: '7d'
     });
   }
 

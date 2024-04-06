@@ -14,5 +14,13 @@
       "command": "npm run dev",
       "cwd": "${workspaceFolder}/client"
     },
+    {
+      "type": "node-terminal",
+      "name": "Start PRISMA",
+      "request": "launch",
+      "command": "npx prisma studio",
+      "cwd": "${workspaceFolder}/api",
+      "envFile": "${workspaceFolder}/dev.env"
+    }
   ]
 }

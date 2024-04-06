@@ -1,5 +1,6 @@
-import { $Enums, Login, Prisma, User } from "@prisma/client";
+import { $Enums, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
+import type { FulfilledUser } from '@impactium/types'
 
 interface UserEntityInput extends User {
 
@@ -17,9 +18,10 @@ export class UserEntity implements UserEntityInput {
   }
 }
 
-type UserFulfilledEntityInput = UserEntity & LoginEntity 
+type UserComposedEntityInput = UserEntity & LoginEntity
 
-export class UserFulfilledEntity implements UserFulfilledEntityInput {
+export class UserComposedEntity implements UserComposedEntityInput {
+  uid: string;
   id: string;
   register: Date;
   email: string;
@@ -28,9 +30,19 @@ export class UserFulfilledEntity implements UserFulfilledEntityInput {
   avatar: string;
   displayName: string;
   locale: string;
-  userId: string;
 
-  static compare({user, login}: {user: UserEntity, login: LoginEntity}): UserFulfilledEntity {
-    return Object.assign(user, login)
+  static compose({user, login}: {user: UserEntity, login: LoginEntity}): FulfilledUser {
+    const fulfilledUser: FulfilledUser = {
+      id: login.id,
+      uid: user.id,
+      lastLogin: login.type,
+      register: user.register,
+      email: user.email,
+      avatar: login.avatar,
+      displayName: login.displayName,
+      locale: login.locale
+    }
+    
+    return fulfilledUser
   }
 }

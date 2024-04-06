@@ -9,7 +9,7 @@ async function loginCallback(code: string, referal?: string) {
     method: 'POST'
   });
   if (!res.ok) return undefined
-  return res.json()
+  return await res.json();
 }
 
 export default function CallbackPage() {
@@ -24,6 +24,7 @@ export default function CallbackPage() {
     if (code) {
       loginCallback(code).then(authorizationResult => {
         if (authorizationResult) {
+          console.log(authorizationResult);
           setToken(authorizationResult.token || false);
         }
       });
