@@ -5,8 +5,6 @@ services:
     extends:
       file: ./client/docker-compose.yml
       service: client
-    networks:
-      - main
 
   nginx:
     container_name: nginx
@@ -16,22 +14,16 @@ services:
       - 80:80
     volumes:
       - .nginx:/etc/nginx
-    networks:
-      - main
 
   api:
     extends:
       file: ./api/docker-compose.yml
       service: api
-    networks:
-      - main
 
   cockroachdb:
     extends:
       file: ./api/docker-compose.yml
       service: cockroachdb
-    networks:
-      - main
 
   prisma:
     extends:
@@ -39,15 +31,11 @@ services:
       service: prisma
     depends_on:
       - cockroachdb
-    networks:
-      - main
 
   redis:
     extends:
       file: ./api/docker-compose.yml
       service: redis
-    networks:
-      - main
 
 networks:
   main:

@@ -84,8 +84,11 @@ export class AuthService {
       locale: payload.locale,
       user: user
     });
-
-    return this.parseToken(this.userService.signJWT(login.uid, payload.email));
+    
+    return {
+      authorization: this.parseToken(this.userService.signJWT(login.uid, payload.email)),
+      language: payload.locale,
+    }
   }
 
   getDiscordAuthUrl(): string {

@@ -30,11 +30,12 @@ export class AuthController {
 
   @Post('callback/discord')
   async discordPostCallback(
-      @Query('code') code: string,
-      @Res({ passthrough: true }) response: FastifyReply
-    ) {
-    const authorization = await this.authService.discordCallback(code);
-    return { authorization };
+    @Query('code') code: string,
+    @Res({ passthrough: true }) response: FastifyReply
+  ) {
+    const { authorization, language } = await this.authService.discordCallback(code);
+    response.setCookie('Authorization', authorization);
+    response.setCookie('_language', language);
   }
 
   @Get('login/discord')

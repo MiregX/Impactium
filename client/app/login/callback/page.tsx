@@ -11,6 +11,7 @@ async function loginCallback(code: string, referal?: string) {
     method: 'POST',
     credentials: 'include'
   });
+  console.log(res);
   if (!res.ok) return undefined;
   return await res.json();
 }
