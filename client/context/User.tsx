@@ -27,6 +27,10 @@ export const UserProvider = ({
   const logout = () => {
     setToken(false)
   };
+
+  const reloadUser = () => {
+    setToken(cookie.get('Authorization'))
+  };
   
   useEffect(() => {
     if (token) {
@@ -51,6 +55,7 @@ export const UserProvider = ({
     setUser,
     logout,
     getUser,
+    reloadUser,
     token,
     setToken,
     isUserLoaded,

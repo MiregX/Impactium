@@ -34,8 +34,13 @@ export class AuthController {
     @Res({ passthrough: true }) response: FastifyReply
   ) {
     const { authorization, language } = await this.authService.discordCallback(code);
-    response.setCookie('Authorization', authorization);
-    response.setCookie('_language', language);
+    const settings = {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      path: '/'
+    }
+
+    response.setCookie('Authorization', authorization, settings);
+    response.setCookie('_language', language, settings);
   }
 
   @Get('login/discord')
