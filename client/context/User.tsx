@@ -31,10 +31,6 @@ export const UserProvider = ({
   useEffect(() => {
     if (token) {
       if (isUserFetched) return;
-      cookie.set('Authorization', token, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        path: '/',
-      });
       setIsUserLoaded(false);
       getUser(token).then((user) => {
         setUser(user);

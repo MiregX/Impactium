@@ -11,11 +11,14 @@ else ifeq ($(OS),MINGW64_NT)
   SLEEP_CMD := timeout /t 30
 endif
 
-up: docker
-
-docker:
+up: 
 	@echo Starting with Docker Compose...
 	@docker-compose --env-file .env -f docker-compose.yml up --abort-on-container-exit
+	post-up
+
+setup:
+	@cd ./api && npm install
+	@cd ./client && npm install
 
 down:
 	@docker-compose down

@@ -85,7 +85,7 @@ export class AuthService {
       user: user
     });
 
-    return `Bearer ${this.userService.signJWT(login.uid, payload.email)}`;
+    return this.parseToken(this.userService.signJWT(login.uid, payload.email));
   }
 
   getDiscordAuthUrl(): string {
@@ -106,5 +106,9 @@ export class AuthService {
     else {
       throw new NotFoundException();
     }
+  }
+
+  parseToken (token: string): string {
+    return token.startsWith('Bearer') ? token : `Bearer ${token}`
   }
 }

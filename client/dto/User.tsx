@@ -10,9 +10,7 @@ export async function getUser(authorization: string): Promise<FulfilledUser> {
     const response = await fetch(`${getServerLink()}/api/user/get`, {
       cache: 'no-cache',
       method: 'GET',
-      headers: {
-        authorization: `Bearer ${authorization}`
-      }
+      credentials: 'include',
     });
 
     if (!response.ok) throw Error();

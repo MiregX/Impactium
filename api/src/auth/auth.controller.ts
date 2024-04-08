@@ -33,13 +33,8 @@ export class AuthController {
       @Query('code') code: string,
       @Res({ passthrough: true }) response: FastifyReply
     ) {
-    const token = await this.authService.discordCallback(code);
-    response.setCookie('Authorization', token, {
-      domain: Configuration.getServerLink(),
-      path: '/',
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    });
-    response.send({token});
+    const authorization = await this.authService.discordCallback(code);
+    return { authorization };
   }
 
   @Get('login/discord')
