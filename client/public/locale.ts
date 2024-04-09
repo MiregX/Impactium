@@ -1084,7 +1084,57 @@ ourPartners: {
     it: "Errore interno del server",
     us: "Internal server error",
     ru: "Внутренняя ошибка сервера"
+  },
+  enforsedPreloader:{
+  "401":{
+    ua: "Збираємо Dockerfile",
+    it: "Costruendo Dockerfile",
+    us: "Building Dockerfile",
+    ru: "Собираем Dockerfile"
+  },
+  "402":{
+    ua: "Тримаємо ритм нижче пояса",
+    it: "Tenendo il ritmo sotto la cintura",
+    us: "Keeping the rhythm below the belt",
+    ru: "Держим ритм ниже пояса"
+  },
+  "403":{
+    ua: "Відзначаємо перемогу",
+    it: "Celebrando la vittoria",
+    us: "Celebrating victory",
+    ru: "Празднуем перемогу"
+  },
+  "404":{
+    ua: "Верстаємо сайт",
+    it: "Costruendo il sito web",
+    us: "Building the website",
+    ru: "Верстаем сайт"
+  },
+  "405":{
+    ua: "Синхронізуємо дані",
+    it: "Sincronizzazione dei dati",
+    us: "Synchronize data",
+    ru: "Синхронизируем данные"
+  },
+  "406":{
+    ua: "Шукаємо вразливості",
+    it: "Cercando vulnerabilità",
+    us: "Looking for vulnerabilities",
+    ru: "Ищем уязвимости"
+  },
+  "407":{
+    ua: "Перевіряємо угоди",
+    it: "Controllando i contratti",
+    us: "We check deals",
+    ru: "Проверяем договора"
+  },
+  "408":{
+    ua: "Надихаємося ідеями",
+    it: "Ispirandosi alle idee",
+    us: "We are inspired by ideas",
+    ru: "Вдохновляемся идями"
   }
+}
 }
 
 export default locale;
