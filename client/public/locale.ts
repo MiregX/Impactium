@@ -1085,7 +1085,7 @@ ourPartners: {
     us: "Internal server error",
     ru: "Внутренняя ошибка сервера"
   },
-  enforsedPreloader:{
+enforsedPreloader:{
   "401":{
     ua: "Збираємо Dockerfile",
     it: "Costruendo Dockerfile",
@@ -1136,5 +1136,4 @@ ourPartners: {
   }
 }
 }
-
 export default locale;

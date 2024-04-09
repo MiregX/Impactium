@@ -2,8 +2,8 @@
 import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '../../context/Header';
-import Cookies from 'universal-cookie';
 import { useLanguage } from '@/context/Language';
+import Cookies from 'universal-cookie';
 import {
     useCallback,
     useEffect,
@@ -70,35 +70,35 @@ export function Preloader({ applicationInfo }) {
   const buildingMap = [
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/whale_1f40b.webp',
-      phrase: 'key1'
+      phrase: '401'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/eggplant_1f346.webp',
-      phrase: 'key2'
+      phrase: '402'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bottle-with-popping-cork_1f37e.webp',
-      phrase: 'key3'
+      phrase: '403'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/brick_1f9f1.webp',
-      phrase: 'key4'
+      phrase: '404'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/satellite_1f6f0-fe0f.webp',
-      phrase: 'key5'
+      phrase: '405'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/magnifying-glass-tilted-left_1f50d.webp',
-      phrase: 'key6'
+      phrase: '406'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bookmark-tabs_1f4d1.webp',
-      phrase: 'key7'
+      phrase: '407'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/light-bulb_1f4a1.webp',
-      phrase: 'key8'
+      phrase: '408'
     }
   ];
 
@@ -149,3 +149,4 @@ export function Preloader({ applicationInfo }) {
     </div>
   );
 };
+
