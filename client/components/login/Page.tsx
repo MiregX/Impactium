@@ -11,7 +11,6 @@ export function LoginPage() {
   const { lang } = useLanguage();
   const [isNextStage, setNextStage] = useState<boolean>(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
-  
 
   return (
     <div className={s.loginWrapper}>
