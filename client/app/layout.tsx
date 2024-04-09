@@ -33,17 +33,16 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const token = cookies().get('Authorization')?.value;
+  const authorization = cookies().get('Authorization')?.value;
   const applicationInfo = await requestApplicationInfoFromServer();
 
-  const user = await getUser(token);
-  console.log({user});
+  const user = await getUser(authorization);
 
   return (
     <html>
       <LanguageProvider>
         <UserProvider prefetchedUser={user}>
-          <body style={{ backgroundColor: '#161616' }}>
+          <body style={{ backgroundColor: '#000000' }}>
             <HeaderProvider>
               <Preloader applicationInfo={applicationInfo} />
               <MessageProvider>

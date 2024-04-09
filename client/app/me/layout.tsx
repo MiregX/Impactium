@@ -11,7 +11,7 @@ export default async function MeLayout({ children }: Readonly<{ children: ReactN
 		redirect('/login');
 	}
 
-	const player = null;
+	const player = await getPlayer({ token: token.value });
 
 	return (
 		<PlayerProvider prefetchedPlayer={player}>

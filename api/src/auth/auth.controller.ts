@@ -8,19 +8,6 @@ import { FastifyReply } from 'fastify';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('login/google')
-  googleLogin() {
-    passport.authenticate('google', { scope: ['profile'] });
-  }
-
-  @Get('callback/google')
-  googleLoginCallback(@Req() req, @Res() res) {
-    // passport.authenticate('google', { failureRedirect: '/login' });
-    // const jwt: string = req.user.jwt;
-    // if (jwt) res.redirect(`${process.env.DOMAIN || 'http:localhost'}/login/callback?token=` + jwt);
-    // else res.redirect(process.env.DOMAIN || 'http:localhost');
-  }
-
   @Get('callback/discord')
   @Redirect()
   async discordGetCallback(@Query('code') code: string) {

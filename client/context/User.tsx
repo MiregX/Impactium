@@ -10,8 +10,8 @@ interface IUserContext {
   user: FulfilledUser,
   setUser: (user: FulfilledUser) => void,
   logout: () => void,
-  getUser: () => FulfilledUser,
-  reloadUser: () => void,
+  getUser: (authorization?: string) => FulfilledUser | Promise<FulfilledUser>,
+  refreshUser: () => void,
   token: string,
   setToken: (token: string) => void,
   isUserLoaded: boolean,
@@ -32,15 +32,17 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(typeof prefetchedUser !== 'undefined');
-  const [token, setToken] = useState<string | false>((cookie.get('Authorization')) || false);
+  const [token, setToken] = useState<string>((cookie.get('Authorization')));
   const [user, setUser] = useState<FulfilledUser | null>(prefetchedUser);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(typeof prefetchedUser !== 'undefined');
 
   const logout = () => {
-    setToken(false)
+    setToken('')
+    cookie.remove('Authorization');
+    cookie.remove('_language');
   };
 
-  const reloadUser = () => {
+  const refreshUser = () => {
     setToken(cookie.get('Authorization'))
   };
   
@@ -67,7 +69,7 @@ export const UserProvider = ({
     setUser,
     logout,
     getUser,
-    reloadUser,
+    refreshUser,
     token,
     setToken,
     isUserLoaded,

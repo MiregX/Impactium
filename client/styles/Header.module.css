@@ -149,14 +149,14 @@
 
 .headerBackground {
   z-index: 1;
-  top: -80px;
+  top: 0px;
   height: 80px;
   width: 100vw;
   left: 0%;
   position: fixed;
   display: flex;
-  background: linear-gradient(180deg,#161616b0,#2d2d2d3d);
-  border-bottom: 1px solid var(--gray24);
+  background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
+  border-bottom: 1px solid hsla(0,0%,100%,.07);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   transition: top 0.3s var(--transition);

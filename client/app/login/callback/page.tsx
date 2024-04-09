@@ -15,15 +15,16 @@ export default function CallbackPage() {
   const code = searchParams.get('code');
   
   async function loginCallback(code: string, referal?: string) {
-    if (!code) return router.push('/');
     await fetch(`${getServerLink()}/api/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
       method: 'POST',
+      credentials: 'include'
     });
   }
 
   useEffect(() => {
-    if (token)
-      return setToken(token); 
+    if (!token && !code) {
+      return token ? setToken(token) : router.push('/'); 
+    }
 
     loginCallback(code).then(() => {
       refreshUser();

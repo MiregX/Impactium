@@ -2,23 +2,24 @@ import { getServerLink } from "./master";
 import type { FulfilledUser } from "@impactium/types";
 import Cookies from "universal-cookie";
 
-export async function getUser(authorization?: string): Promise<FulfilledUser> {
-  const _authorization = new Cookies().get('Authorization') || authorization;
+export async function getUser(_authorization?: string): Promise<FulfilledUser> {
+  const authorization = new Cookies().get('Authorization') || _authorization;
 
-  if (!_authorization)
+  if (!authorization)
     return null;
 
   try {
     const response = await fetch(`${getServerLink()}/api/user/get`, {
-      cache: 'no-cache',
       method: 'GET',
       credentials: 'include',
+      headers: { authorization }
     });
 
     if (!response.ok) throw Error();
 
     return await response.json();
   } catch (_) {
+    console.log(_)
     return undefined;
   }
 };

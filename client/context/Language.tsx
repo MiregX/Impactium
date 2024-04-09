@@ -30,7 +30,7 @@ export const useLanguage = () => {
 
 const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const cookie = new Cookies();
-  const [language, setLanguage] = useState<string>(checkIsLanguageCodeIsValid(cookie.get('language')) || 'us');
+  const [language, setLanguage] = useState<string>(checkIsLanguageCodeIsValid(cookie.get('_language')) || 'us');
 
   function checkIsLanguageCodeIsValid(languageCode: string) {
     const isLanguagePackValid = ['us', 'ua', 'ru', 'it'].includes(languageCode);
@@ -70,8 +70,10 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
   useEffect(() => {
     const l = checkIsLanguageCodeIsValid(language);
-    cookie.set('language', l, {
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    cookie.remove('_language');
+    cookie.set('_language', l, {
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      path: '/'
     });
     setLanguage(l);
   }, [language]);

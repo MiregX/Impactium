@@ -18,6 +18,12 @@ export class Configuration {
       : process.env.APP_LOCALHOST
   }
 
+  static getLink() {
+    return this.isProductionMode()
+      ? process.env.DOMAIN
+      : process.env.LOCALHOST
+  }
+
   static isEnvironmentLoaded(): boolean {
     return typeof process.env.X === 'string';
   }
