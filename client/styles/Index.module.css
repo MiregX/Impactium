@@ -72,12 +72,8 @@
   33% {
     opacity: 0;
   }
-  99.99% {
-    transform: translateY(-50%);
-    opacity: 0;
-  }
   100% {
-    transform: translateY(50%);
+    transform: translateY(-50%);
     opacity: 0;
   }
 }

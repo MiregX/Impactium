@@ -33,6 +33,12 @@ export function Nav() {
           <p>{lang[title]}</p>
         </Link>
       ))}
+      <div>
+        <Link href='/me/planner'>
+        <img src="https://cdn.impactium.fun/ux/casual.svg" alt='' />
+          <span>Task</span>
+        </Link>
+      </div>
     </nav>
   )
 }
