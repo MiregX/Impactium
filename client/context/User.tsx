@@ -6,6 +6,18 @@ import { getUser } from "@/dto/User";
 
 const UserContext = createContext(undefined);
 
+interface IUserContext {
+  user: FulfilledUser,
+  setUser: (user: FulfilledUser) => void,
+  logout: () => void,
+  getUser: () => FulfilledUser,
+  reloadUser: () => void,
+  token: string,
+  setToken: (token: string) => void,
+  isUserLoaded: boolean,
+  setIsUserLoaded: (value: boolean) => void,
+}
+
 export const useUser = () => {
   const context = useContext(UserContext);
 
@@ -50,7 +62,7 @@ export const UserProvider = ({
     }
   }, [token]);
 
-  const userProps = {
+  const userProps: IUserContext = {
     user,
     setUser,
     logout,

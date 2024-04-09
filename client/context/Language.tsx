@@ -15,6 +15,7 @@ interface ILanguageContext {
   lang: Translations;
   setLanguage: (language: string) => void;
   language: string;
+  refreshLanguage: () => void;
 }
 
 const LanguageContext = createContext<ILanguageContext | undefined>(undefined);
@@ -35,6 +36,10 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     const isLanguagePackValid = ['us', 'ua', 'ru', 'it'].includes(languageCode);
 
     return !languageCode || !isLanguagePackValid ? 'us' : languageCode;
+  }
+
+  async function refreshLanguage() {
+    setLanguage(cookie.get('_language'));
   }
 
   function getLanguagePack(languageCode: string = 'us'): Translations {
@@ -74,6 +79,7 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
   const props: ILanguageContext = {
     lang: getLanguagePack(language),
     setLanguage,
+    refreshLanguage,
     language,
   };
   return (
