@@ -23,10 +23,5 @@ module.exports = {
         port: '',
       }
     ]
-  },
-  logging: {
-    fetches: {
-      fullUrl: false,
-    }
   }
 };

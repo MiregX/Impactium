@@ -24,6 +24,12 @@
   flex-direction: column;
 }
 
+.cloud {
+  filter: contrast(1.05);
+  width: 50vw;
+  max-height: 50vh;
+}
+
 .left {
   display: flex;
   flex-direction: column;

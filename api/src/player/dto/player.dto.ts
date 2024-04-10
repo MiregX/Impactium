@@ -19,3 +19,13 @@ export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {
 export class PlayerRequestDto {
   nickname?: string
 }
+
+export class FindOnePlayerByNicknameDto {
+  nickname: string
+}
+
+export class FindManyPlayersByNicknamesDto {
+  nickname: string[]
+}
+
+export type FindPlayers = FindOnePlayerByNicknameDto | FindManyPlayersByNicknamesDto

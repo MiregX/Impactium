@@ -1,4 +1,5 @@
 import DiscordOauth2 = require('discord-oauth2');
+import { CreateLoginDto } from 'src/user/dto/login.dto';
 
 interface GoogleAuthParams {
   locale: string;
@@ -16,4 +17,8 @@ export interface GoogleAuthPayload extends GoogleAuthParams {
   type: 'google'
 }
 
-export type AuthPayload = DiscordAuthPayload | GoogleAuthPayload;
+export type _AuthPayload = DiscordAuthPayload | GoogleAuthPayload;
+
+export interface AuthPayload extends CreateLoginDto {
+  email: string,
+}

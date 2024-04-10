@@ -1,12 +1,11 @@
 import { Prisma, $Enums } from "@prisma/client";
 
-export class CreateLoginDto implements Prisma.LoginCreateInput {
-  id: string;
+export class CreateLoginDto implements Prisma.LoginCreateWithoutUserInput {
+  id?: string;
   type: $Enums.LoginType;
-  avatar: string;
+  avatar?: string;
   displayName: string;
   locale: string;
-  user: Prisma.UserCreateNestedOneWithoutLoginsInput;
 }
 
 export class UpdateLoginDto implements Prisma.LoginUpdateInput {

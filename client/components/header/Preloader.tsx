@@ -16,14 +16,13 @@ export function Preloader({ applicationInfo }) {
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
   const url = usePathname(); 
-  const blocker = url === '/login/callback' || true;
+  const blocker = url === '/login/callback';
 
-  const [visitedBefore, setVisitedBefore] = useState(cookie.get('visitedBefore') || false);
+  const [visitedBefore, setVisitedBefore] = useState<boolean>(typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
   const self = useRef(null);
 
   const show = useCallback(() => {
     self.current.classList.remove(s.remove, s.hide, s.slow, s.fast);
-
     if (visitedBefore) {
       self.current.classList.add(s.fast);
     } else {
@@ -46,7 +45,9 @@ export function Preloader({ applicationInfo }) {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
+    show();
     if (applicationInfo.enforced_preloader) return;
+    console.log(isUserLoaded, !blocker)
     if (isUserLoaded && !blocker) {
       hide();
     } else {
@@ -55,13 +56,8 @@ export function Preloader({ applicationInfo }) {
   }, [isUserLoaded, blocker, hide, show]);
 
   useEffect(() => {
-    if (visitedBefore) {
-      cookie.set('visitedBefore', true, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        path: '/'
-      });
-    } else {
-      cookie.remove('visitedBefore');
+    if (!visitedBefore) {
+      window.localStorage.setItem('visitedBefore', String(true));
     }
   }, [visitedBefore]);
 

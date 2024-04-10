@@ -13,6 +13,6 @@ export class AuthGuard implements CanActivate {
       return false;
 
     request.user = await this.authService.login(token.split(' ')[1]);
-    return true;
+    return !!request.user;
   }
 }

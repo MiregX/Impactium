@@ -1,95 +1,61 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from 'src/user/user.service';
-import passport = require('passport');
-import { Strategy } from 'passport-google-oauth2';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { DiscordAuthPayload } from './entities/auth.entity';
+import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
 import { LoginService } from 'src/user/login.service';
 import { ApplicationService } from 'src/application/application.service';
 import { Configuration } from '@impactium/config';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   oauth: DiscordOauth2;
-  strategy: Strategy;
 
   constructor(
     private readonly userService: UserService,
     private readonly loginService: LoginService,
     private readonly applicationService: ApplicationService,
+    private readonly prisma: PrismaService,
   ) {
     this.oauth = new DiscordOauth2({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
       redirectUri: Configuration.getClientLink() + '/login/callback',
     });
-
-    this.strategy = new Strategy({
-      clientID: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK,
-      scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-    }, async (accessToken, refreshToken, profile, done) => {
-      try {
-        done(null, profile)
-      } catch (_) {
-        done(_)
-      }
-    });
-
-    passport.use(this.strategy);
-  }
-
-  async getGoogleAuthUrl() {
-    
-  }
-
-  async googleCallback() {
-
   }
 
   async discordCallback(code: string) {
-    const token: DiscordOauth2.TokenRequestResult = await this.oauth.tokenRequest({
-      code: code,
-      grantType: 'authorization_code',
-      scope: ['identify', 'guilds']
-    });
-
-    const payload: DiscordAuthPayload = await this.oauth.getUser(token.access_token)
-    .then(payload => {
-      return {
-        ...payload,
-        type: 'discord',
-      }
-    })
-    .catch(_ => { console.log(_); throw new BadRequestException()}) as DiscordAuthPayload;
-
-    const user = payload.email ? {
-      connectOrCreate: {
-        where: { email: payload.email },
-        create: { email: payload.email, lastLogin: payload.type }
-      }
-    } : {
-      create: { lastLogin: payload.type }
-    };
-    
-    const login = await this.loginService.findUniqueOrCreate({
-      id: payload.id,
-      type: payload.type,
-      avatar: payload.avatar
-        ? `https://cdn.discordapp.com/avatars/${payload.id}/${payload.avatar}.png`
-        : '',
-      displayName: payload.global_name || payload.username + '#' + payload.discriminator,
-      locale: payload.locale,
-      user: user
-    });
-    
-    return {
-      authorization: this.parseToken(this.userService.signJWT(login.uid, payload.email)),
-      language: payload.locale,
+    let token: DiscordOauth2.TokenRequestResult
+    try {
+      token = await this.oauth.tokenRequest({
+        code: code,
+        grantType: 'authorization_code',
+        scope: ['identify', 'guilds']
+      });
+    } catch (_) {
+      throw new BadRequestException()
     }
+  
+    const payload: AuthPayload = await this.oauth.getUser(token.access_token)
+      .then(payload => {
+        return {
+          id: payload.id,
+          avatar: payload.avatar
+            ? `https://cdn.discordapp.com/avatars/${payload.id}/${payload.avatar}.png`
+            : '',
+          email: payload.email,
+          displayName: payload.global_name || payload.username + '#' + payload.discriminator,
+          locale: payload.locale,
+          type: 'discord' as $Enums.LoginType
+        }
+      })
+      .catch(_ => { throw new BadRequestException() });
+  
+    return this.register(payload)
   }
+  
 
   getDiscordAuthUrl(): string {
     return this.oauth.generateAuthUrl({
@@ -109,6 +75,52 @@ export class AuthService {
     else {
       throw new NotFoundException();
     }
+  }
+
+  async register({ id, type, avatar, displayName, locale, email }: AuthPayload) {
+    let login = await this.prisma.login.findUnique({
+      where: { id, type },
+    });
+  
+    if (login) {
+      login = await this.prisma.login.update({
+        where: { id, type },
+        data: { avatar, displayName, locale, user: {
+          update: {
+            where: { id: login.uid },
+            data: { lastLogin: type },
+          }
+        } },
+      });
+      await this.prisma.user.update({
+        where: { id: login.uid },
+        data: { lastLogin: type },
+      });
+    } else {
+      const user = email
+        ? await this.prisma.user.upsert({
+            where: { email },
+            update: { lastLogin: type },
+            create: { email: email ? email : '', lastLogin: type },
+          })
+        : await this.prisma.user.create({ data: { lastLogin: type } });
+  
+      login = await this.prisma.login.create({
+        data: {
+          id,
+          type,
+          avatar,
+          displayName,
+          locale,
+          user: { connect: { id: user.id } },
+        },
+      });
+    }
+  
+    return {
+      authorization: this.parseToken(this.userService.signJWT(login.uid, email)),
+      language: locale,
+    };
   }
 
   parseToken (token: string): string {

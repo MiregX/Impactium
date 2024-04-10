@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "cockroachdb"
-  url      = "postgresql://dev:P2oHVZjuw-JCxT5nvOQQrg@impactium-5488.6zw.aws-eu-west-1.cockroachlabs.cloud:26257/development?sslmode=verify-full" //env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum LoginType {

@@ -38,17 +38,25 @@ export const UserProvider = ({
 
   const logout = () => {
     setToken('')
-    cookie.remove('Authorization');
-    cookie.remove('_language');
+    cookie.set('Authorization', '_');
   };
 
-  const refreshUser = () => {
-    setToken(cookie.get('Authorization'))
+  const refreshUser = async () => {
+    const token = cookie.get('Authorization');
+    await getUser(token).then((user) => {
+      setUser(user);
+    }).catch((_) => {
+      setUser(null);
+    }).finally(() => {
+      setIsUserFetched(true);
+      setIsUserLoaded(true);
+    });
+    setToken(token)
   };
   
   useEffect(() => {
     if (token) {
-      if (isUserFetched) return;
+      if (isUserFetched && isUserLoaded) return console.log('ss');
       setIsUserLoaded(false);
       getUser(token).then((user) => {
         setUser(user);

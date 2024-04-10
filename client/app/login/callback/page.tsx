@@ -2,16 +2,16 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useLanguage } from '@/context/Language';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { getServerLink } from '@/dto/master';
 
 export default function CallbackPage() {
-  const { setToken, refreshUser, user } = useUser();
+  const { token, setToken, refreshUser, user, setIsUserLoaded } = useUser();
   const { refreshLanguage } = useLanguage();
   const router = useRouter(); 
   const searchParams = useSearchParams();
 
-  const token = searchParams.get('token');
+  const _token = searchParams.get('token');
   const code = searchParams.get('code');
   
   async function loginCallback(code: string, referal?: string) {
@@ -22,17 +22,20 @@ export default function CallbackPage() {
   }
 
   useEffect(() => {
-    if (!token && !code) {
-      return token ? setToken(token) : router.push('/'); 
+    if (!code) {
+      setIsUserLoaded(false);
+      if (!token) {
+        setToken(_token);
+      }
+      return router.push('/');
     }
 
-    loginCallback(code).then(() => {
-      refreshUser();
+    loginCallback(code).then(async () => {
+      await refreshUser();
       refreshLanguage();
+      router.push('/');
     });
   }, []);
-
-  useEffect(() => router.push('/'), [user])
 
   return null;
 };
