@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserComposedEntity, UserEntity,  } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';

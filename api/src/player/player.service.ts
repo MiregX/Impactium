@@ -8,26 +8,23 @@ export class PlayerService {
   constructor(
     private readonly prisma: PrismaService,
   ) {}
-  findOneByUserId(id: string) {
-    this.prisma
-  }
-  create(createPlayerDto: CreatePlayerDto) {
-    return 'This action adds a new player';
+
+  findOneByIdOrCreate(uid: string) {
+    return this.prisma.player.findUnique({
+      where: {
+        uid: uid
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all player`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} player`;
-  }
-
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} player`;
+  register(uid: string) {
+    return this.prisma.player.update({
+      where: {
+        uid,
+      },
+      data: {
+        register: Date.UTC.toString()
+      }
+    })
   }
 }

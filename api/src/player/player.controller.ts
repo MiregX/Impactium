@@ -1,38 +1,29 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { PlayerService } from './player.service';
-import { CreatePlayerDto, UpdatePlayerDto } from './dto/player.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { User } from 'src/user/user.decorator';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { Player } from './player.decorator';
+import { PlayerEntity } from './entities/player.entity';
 
 @Controller('player')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
   
-  @Get()
+  @Get('get')
+  async findOneByNickname(@Player() player: PlayerEntity) {
+    const requestedPlayer = await this.playerService.findOneByNickname(player.id);
+    return requestedPlayer
+  }
+  
+  @Get('get')
   @UseGuards(AuthGuard)
-  findOneByUserId(@User() user: UserEntity) {
-    return this.playerService.findOneByUserId(user.id)
+  findOneById(@Player() player: PlayerEntity) {
+    return this.playerService.findOneById(player.id);
   }
 
-  @Post()
-  create(@Body() createPlayerDto: CreatePlayerDto) {
-    return this.playerService.create(createPlayerDto);
+  @Post('register')
+  @UseGuards(AuthGuard)
+  register(@Player() player: PlayerEntity) {
+    return this.playerService.register(player.id);
   }
 
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playerService.update(+id, updatePlayerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playerService.remove(+id);
-  }
 }

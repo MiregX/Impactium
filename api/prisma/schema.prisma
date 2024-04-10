@@ -29,32 +29,29 @@ model Login {
   displayName String
   locale      String
   user        User        @relation(fields: [uid], references: [id])
-  uid      String         @unique
+  uid         String      @unique
 }
 
 model Player {
-  id           String         @id @default(cuid())
   user         User           @relation(fields: [uid], references: [id])
   uid          String         @unique
   nickname     String?        @unique
   password     String?
-  register     DateTime       @default(now())
-  skin         Skin?          @relation(fields: [skinId], references: [id])
-  skinId       String?        @unique
+  register     DateTime?
+  skin         Skin?
   oldNicknames OldNicknames[]
 }
 
 model OldNicknames {
-  id       String @id @default(cuid())
   nickname String
-  player   Player @relation(fields: [playerId], references: [id])
-  playerId String
+  player   Player             @relation(fields: [uid], references: [uid])
+  uid      String             @unique
 }
 
 model Skin {
-  id     String   @id @default(cuid())
-  title  String
-  icon   String
-  source String
-  player Player?
+  title       String
+  icon        String
+  source      String
+  player      Player          @relation(fields: [uid], references: [uid])
+  uid         String          @unique
 }
