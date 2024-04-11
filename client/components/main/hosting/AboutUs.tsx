@@ -3,7 +3,7 @@ import styles from '@/styles/Index.module.css';
 import { useLanguage } from '@/context/Language';
 
 
-const AboutUsTextBlock = () => {
+export function AboutUs() {
   const { lang } = useLanguage();  
   const aboutUsMainTextRef = useRef<HTMLParagraphElement>(null);
   const aboutUsDescriptionTextRef = useRef<HTMLDivElement>(null);
@@ -59,15 +59,15 @@ const AboutUsTextBlock = () => {
   }, []);
 
   return (
-    <div className={styles.left}>
-      <p ref={aboutUsMainTextRef} className={styles.mainText}>{lang.joinToUs}</p>
-      <div ref={aboutUsDescriptionTextRef} className={`${styles.descriptionsWrapper} flex flex-dir-column align-center`}>
-        { lang.joinToUsDescription.map((text, index) => (
-          <p key={index} className={`${styles.supportText} ${styles.active} ${styles.onMove}`}>{text}</p>
-        ))}
+    <div className={styles.aboutUs}>
+      <div className={styles.left}>
+        <p ref={aboutUsMainTextRef} className={styles.mainText}>{lang.joinToUs}</p>
+        <div ref={aboutUsDescriptionTextRef} className={`${styles.descriptionsWrapper} flex flex-dir-column align-center`}>
+          { lang.joinToUsDescription.map((text, index) => (
+            <p key={index} className={`${styles.supportText} ${styles.active} ${styles.onMove}`}>{text}</p>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
-
-export default AboutUsTextBlock;
