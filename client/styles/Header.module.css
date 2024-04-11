@@ -360,3 +360,21 @@
     grid-column: 2 / 3;
   }
 }
+
+.cookies {
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--soft-white);
+  background: var(--soft-black);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  max-width: 600px;
+  box-shadow: var(--element-shadow);
+  bottom: 16px;
+  left: 16px;
+  z-index: 3;
+  position: fixed;
+}

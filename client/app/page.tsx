@@ -1,16 +1,14 @@
 'use client'
-import styles from '@/styles/Index.module.css';
-import { AboutUs } from '@/components/main/hosting/AboutUs';
 import { Cloud } from '@/components/main/hosting/Cloud';
 import { Challenge } from '@/components/main/hosting/Challenge';
+import { PanelTemplate } from '@/components/main/PanelTempate';
 
 export default function Main() {
  
   return (
-    <div className={styles.panel}>
-      {/* <AboutUs /> */}
+    <PanelTemplate>
       <Challenge />
       <Cloud />
-    </div>
+    </PanelTemplate>
   );
 };

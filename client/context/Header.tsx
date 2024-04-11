@@ -5,6 +5,7 @@ import { Header } from '@/components/header/Header';
 import { HeaderBackground } from '@/components/header/HeaderBackground';
 import type { ReactNode, Dispatch, SetStateAction } from 'react';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Cookies } from '@/components/header/Cookies';
 
 interface HeaderContextProps {
   isLoading: boolean;
@@ -53,6 +54,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
       <Header />
       <HeaderBackground />
       <Language />
+      <Cookies />
       {children}
     </HeaderContext.Provider>
   );
