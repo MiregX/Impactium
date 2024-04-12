@@ -29,7 +29,7 @@ export function LoginPage() {
               autoComplete='new-password'
             />
             <button className={`${s.icon} ${s.center}`}>
-              <img src="https://cdn.impactium.fun/ux/circle-user.svg" alt="user-icon" />
+              <img src="https://cdn.impactium.fun/ui/user/user.svg" alt="user-icon" />
             </button>
           </div>
 
@@ -45,8 +45,8 @@ export function LoginPage() {
               autoComplete='new-password'
             />
             <button className={`${s.icon} ${s.pointer} ${s.center}`} onClick={() => { setPasswordVisibility(!passwordVisibility) }}>
-              <img className={passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ux/eye-closed.svg" alt="closed-eye" />
-              <img className={!passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ux/eye-open.svg" alt="open-eye" />
+              <img className={passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ui/action/hide.svg" alt='' />
+              <img className={!passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ui/action/show.svg" alt='' />
             </button>
           </div>
           <button className={`${s.submit} ${s.baseButton} ${s.center}`} onClick={() => {setNextStage(true)}}>{lang.login}</button>
@@ -58,7 +58,7 @@ export function LoginPage() {
         </div>
         <p className={`${s.noAccount} ${s.center}`}>{lang.dontHaveAnAccount} <button onClick={() => { setNextStage(!isNextStage) }}>{lang._register}</button></p>
         <div className={`${s.loginBlock} ${s.two} ${isNextStage && s.active}`}>
-          <img src="https://cdn.impactium.fun/ux/skull.png" className={s.skull} alt="skull-icon" />
+          <img src="https://cdn.impactium.fun/el/skull.png" className={s.skull} alt="skull-icon" />
           <h2>{lang.nuhuh}</h2>
           <p>{lang.justUseTheseTwo}</p>
           <div className={`${s.buttonsWrapper}`}>
@@ -66,7 +66,7 @@ export function LoginPage() {
             <RedirectButton type='discord' />
           </div>
           <button className={`${s.closeStage}`} onClick={() => { setNextStage(!isNextStage) }}>
-            <img src="https://cdn.impactium.fun/ux/close.svg" alt="close-icon" />
+            <img src="https://cdn.impactium.fun/el/close.svg" alt="close-icon" />
           </button>
         </div>
       </div>

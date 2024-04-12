@@ -6,22 +6,27 @@ export function Language() {
   const { setLanguage, language } = useLanguage();
   const [isPanelActive, setPanelActive] = useState<boolean>(false);
 
-  const availableLanguages = ['us', 'ua', 'ru', 'it'];
+  const availableLanguages = {
+    us:'english',
+    ua: 'ucraine',
+    ru: 'russia',
+    it: 'italy'
+  };
   return (
     <div className={`${s.language} ${isPanelActive && s.active}`}>
       <div className={s.list}>
-        {availableLanguages.map((langCode) => (
-          <div key={langCode} onClick={() => setLanguage(langCode)}>
+        {Object.values(availableLanguages).map((langKey) => (
+          <div key={langKey} onClick={() => setLanguage(langKey)}>
             <img
-              src={`https://cdn.impactium.fun/langs/${langCode}.png`}
+              src={`https://cdn.impactium.fun/lang/${availableLanguages[langKey]}.png`}
               alt=''
-              className={langCode === language  ? s.active : ''}
+              className={langKey === language  ? s.active : ''}
             />
           </div>
         ))}
       </div>
       <button className={s.toggler} onClick={() => setPanelActive(!isPanelActive)}>
-        <img src="https://cdn.impactium.fun/svg/earth-globe.svg" alt="" />
+        <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt='' />
       </button>
     </div>
   );

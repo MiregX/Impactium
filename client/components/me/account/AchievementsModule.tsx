@@ -105,7 +105,7 @@ export function AchievementsModule() {
             key={`${achKey}_button`}
             className={`${s[achKey]} ${achKey === activeAchievement && s.selected}`}
             onClick={() => setActiveAchievement(achKey)}>
-            <img src={`https://cdn.impactium.fun/ux/${achKey}.svg`} alt='' />
+            <img src={`https://cdn.impactium.fun/custom/${achKey}.svg`} alt='' />
           </button>
         ))}
       </div>
@@ -125,7 +125,7 @@ export function AchievementsModule() {
                     <hr datatype='horizontal' className={s.stageSplitter} />
                     <div>
                       <div className={s.stage}>
-                        <img src={`https://cdn.impactium.fun/achievement/${stageKey[0]}.png`} alt={stageKey[0]} />
+                        <img src={``} alt={stageKey[0]} />
                         <div className={s.text}>
                           <p>{lang[`${stageKey[0]}_todo`]?.title}</p>
                           <p>{lang[`${stageKey[0]}_todo`]?.description}</p>

@@ -24,21 +24,15 @@ export function Nav() {
     "products": {
       "mcs": {
         "name": "Minecraft Server",
-        "logo": "https://cdn.impactium.fun/logo/impactium-tw.png",
+        "logo": "https://cdn.impactium.fun/logo/minecraft.png",
         "description": "Майнкрафт сервер.",
         "action": "https://impactium.fun/me"
-      },
-      "discord": {
-        "name": "Impactium Bot",
-        "logo": "https://cdn.impactium.fun/logo/impactium-wb.png",
-        "description": "Автороли для альянса.",
-        "action": "https://discord.com/oauth2/authorize?client_id=1123714909356687360&scope=bot&permissions=8"
       }
     },
     "contact": {
       "telegram": {
         "name": "Our Telegram",
-        "logo": "https://cdn.impactium.fun/logo/impactium-bw.png",
+        "logo": "https://cdn.impactium.fun/logo/telegram.png",
         "description": "Impactium | Кошмаринг",
         "action": "https://t.me/impactium"
       }
@@ -52,7 +46,7 @@ export function Nav() {
           <div className={s.category}>
             <button>
               <p>{lang[category]}</p>
-              <img src="https://cdn.impactium.fun/ux/to-left.svg" alt="" />
+              <img src="https://cdn.impactium.fun/ui/caret/down-md.svg" alt="" />
               <div className={s.bar}>
                 {Object.values(nav[category]).map((obj: { action, name, description, logo }, innerIndex) => (
                   <a key={innerIndex} className={s.plate} href={obj.action}>

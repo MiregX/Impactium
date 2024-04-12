@@ -5,7 +5,7 @@ import { Badge, BadgeTypes } from "@/ui/Badge";
 export function Cookies() {
   return (
     <div className={s.cookies}>
-      <Badge title='cookies' type={BadgeTypes.cookies} />
+      <Badge title='cookies' color='#d17724' icon={BadgeTypes.cookies} />
       <p></p>
       <div className={s.node}>
         <button className={s.default}>Consent settings</button>

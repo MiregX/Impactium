@@ -20,6 +20,15 @@ export function Nav() {
     }
   }, []);
 
+  const map = {
+    account: {
+      image: 'https://cdn.impactium.fun/ui/user/user.svg'
+    },
+    settings: {
+      image: 'https://cdn.impactium.fun/ui/actions/settings.svg'
+    }
+  }
+
   return (
     <nav className={s.nav}>
       {['account', 'settings'].map((title, index) => (
@@ -29,7 +38,7 @@ export function Nav() {
           onClick={() => {router.push('account'); setSelectedButton(index)}}
           href={`/me/${title}`}
         >
-          <img src="https://cdn.impactium.fun/ux/casual.svg" alt='' />
+          <img src={map[title].image} alt='' />
           <p>{lang[title]}</p>
         </Link>
       ))}

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     default: 'Impactium',
   },
   icons: {
-    icon: 'https://cdn.impactium.fun/logo/impactium_te8pad.png'
+    icon: 'https://cdn.impactium.fun/logo/impactium.png'
   },
   generator: 'Next.js',
   applicationName: 'Impactium',

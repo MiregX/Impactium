@@ -112,7 +112,7 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
               data-overlayed={true}
               className={`${s.button} ${s.uploadButton}`}
               onChange={reference.action}>
-              <img src="https://cdn.impactium.fun/ux/uploads.svg" alt="Upload" />
+              <img src="https://cdn.impactium.fun/ui/file/upload.svg" alt="Upload" />
             </label>
           </>
         )}
