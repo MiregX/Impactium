@@ -70,35 +70,35 @@ export function Preloader({ applicationInfo }) {
   const buildingMap = [
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/whale_1f40b.webp',
-      phrase: '401'
+      phrase: 'enforsedPhrase1'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/eggplant_1f346.webp',
-      phrase: '402'
+      phrase: 'enforsedPhrase2'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bottle-with-popping-cork_1f37e.webp',
-      phrase: '403'
+      phrase: 'enforsedPhrase3'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/brick_1f9f1.webp',
-      phrase: '404'
+      phrase: 'enforsedPhrase4'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/satellite_1f6f0-fe0f.webp',
-      phrase: '405'
+      phrase: 'enforsedPhrase5'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/magnifying-glass-tilted-left_1f50d.webp',
-      phrase: '406'
+      phrase: 'enforsedPhrase6'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bookmark-tabs_1f4d1.webp',
-      phrase: '407'
+      phrase: 'enforsedPhrase7'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/light-bulb_1f4a1.webp',
-      phrase: '408'
+      phrase: 'enforsedPhrase8'
     }
   ];
 
