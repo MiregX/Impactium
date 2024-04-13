@@ -8,10 +8,10 @@
   pointer-events: none;
 }
 .baseButton {
-  height: 52px;
-  padding: 0 15px;
+  height: 56px;
+  padding: 0 16px;
   color: var(--soft-white);
-  border-radius: 50px;
+  border-radius: var(--border-max);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -25,15 +25,15 @@
   width: 30px;
 }
 .loginBlock {
-  background-color: var(--gray16);
-  border-radius: 25px;
+  background: var(--geist-background);
+  border-radius: 24px;
   min-width: 400px;
-  border: 1px solid var(--gray32);
-  padding: 20px 20px 15px 20px;
+  border: 1px solid var(--accent-2);
+  padding: 1.1em 1.2em;
 }
 .one {
   display: flex;
-  gap: 15px;
+  gap: 16px;
   flex-direction: column;
   position: relative;
   overflow: hidden;
@@ -42,12 +42,13 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  gap: 15px;
+  gap: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   transform: translateY(100%);
+  background: var(--soft-black);
   height: 100%;
   transition: all 0.75s var(--transition);
   border: none;
@@ -60,8 +61,7 @@
   aspect-ratio: 6 / 7;
 }
 .two h2 {
-  font-size: 38px;
-  color: var(--soft-white);
+  font-size: 36px;
   font-weight: 600;
 }
 .two p {
@@ -71,15 +71,14 @@
   height: 60px;
 }
 .one h1 {
-  width: 100%;
-  color: var(--soft-white);
-  height: 50px;
-  text-align: center;
-  font-size: 38px;
+  height: 56px;
+  display: flex;
+  font-size: 36px;
+  align-items: center;
+  justify-content: center;
 }
 .loginBlock .form {
-  margin-top: 5px;
-  gap: 15px;
+  gap: 16px;
   align-items: center;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -91,19 +90,18 @@
 }
 .loginBlock .inputGroup .icon {
   position: absolute;
-  right: 5px;
+  right: 0px;
   height: 100%;
-  width: 40px;
+  width: 56px;
   cursor: default;
   display: flex;
   align-items: center;
-  justify-self: center;
+  justify-content: center;
 }
 .inputGroup .icon img {
   position: absolute;
-  height: 25px;
-  filter: invert(100%) brightness(0.8);
-  transition: all 0.2s var(--transition);
+  height: 24px;
+  transition: all 0.1s var(--transition);
   opacity: 1;
 }
 .inputGroup .icon img.disactive {
@@ -117,8 +115,9 @@
   background: var(--gray16);
 }
 .loginBlock .form input, .loginBlock button.submit {
-  flex: 1;
-  background-color: var(--gray16);
+  flex: 1 1;
+  border: 1px solid var(--accent-2);
+  background-color: var(--accent-1);
 }
 .loginBlock button.submit {
   cursor: pointer;
@@ -130,22 +129,20 @@
 .loginBlock .line {
   height: 1px;
   width: 100%;
-  background-color: var(--gray32);
+  background-color: var(--accent-2);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin: 28px 0;
 }
 .one .line::after {
   content: "OR";
-  padding: 0 10px;
-  position: absolute;
-  background: var(--gray16);
-  color: var(--soft-white);
+  padding: 0 8px;
+  background: var(--accent-1);
 }
 .buttonsWrapper {
-  gap: 15px;
+  gap: 16px;
   display: flex;
   flex-direction: column;
 }
@@ -159,26 +156,27 @@
   background: var(--soft-white);
 }
 .baseButton[accessKey='google'] p {
+  font-weight: 700;
   color: var(--gray16);
 }
 .two .baseButton p {
   display: none;
 }
 .noAccount {
-  gap: 5px;
-  width: 100%;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--gray96);
-  text-align: center;
-  height: 40px;
+  height: 56px;
+  font-size: 14px;
 }
-.noAccount a {
+.noAccount button {
   color: var(--soft-white);
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
-}
-.noAccount button {
-  cursor: pointer;
+  font-size: 14px;
 }
 .closeStage {
   height: 60px;
@@ -193,7 +191,6 @@
   transform: translateX(0%);
 }
 .closeStage img {
-  height: 20px;
-  width: 20px;
-  filter: invert(100%);
+  height: 24px;
+  width: 24px;
 }

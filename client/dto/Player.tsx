@@ -1,4 +1,4 @@
-import { getServerLink } from "./master";
+import { Configuration } from "@impactium/config";
 
 interface IPlayerSkin {
   iconLink: string;
@@ -16,7 +16,7 @@ export interface IPlayer {
 
 interface IPlayerRequest {
   path: string;
-  headers: IPlayerRequestHeaders,
+  headers?: IPlayerRequestHeaders,
   body?: any
 }
 
@@ -69,12 +69,9 @@ export const register = async ({ token }: IPlayerRequestHeaders): Promise<IPlaye
   });
 };
 
-export const getPlayer = async ({ token }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const getPlayer = async (): Promise<IPlayer> => {
   return await playerAPI({
-    path: 'get',
-    headers: {
-      token
-    }
+    path: 'get'
   });
 };
 
@@ -99,19 +96,20 @@ export const setAchievement = async ({ token, achievement }: IPlayerRequestHeade
 
 const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlayer> => {
   try {
-    if (!headers.token) return undefined;
-
     const method = path.startsWith('get')
       ? 'GET'
       : 'POST';
 
-    const response = await fetch(`${getServerLink()}/api/player/` + path, {
+    const response = await fetch(`${Configuration.getServerLink()}/api/player/` + path, {
       method,
       headers: {
         ...headers
       },
+      credentials: 'include',
       body
     });
+
+    console.log(response)
 
     if (!response.ok) {
       return null;

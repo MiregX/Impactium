@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PlayerModule } from './player/player.module';
 import { ApplicationModule } from './application/application.module';
-import { Configuration as conf } from '@impactium/config';
+import { Configuration } from '@impactium/config';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { Configuration as conf } from '@impactium/config';
     PlayerModule,
     ConfigModule.forRoot({
       envFilePath: `../${!process.env.X ? 'dev' : ''}.env`,
-      load: [() => conf.processEnvVariables()],
+      load: [() => Configuration.processEnvVariables()],
     }),
     JwtModule.register({
       secret: process.env.SECRET,

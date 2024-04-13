@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from '@/styles/Header.module.css';
+import s from '@/styles/header/Header.module.css';
 import { DynamicBubbleButton } from '@/components/DynamicBubbleButton';
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
@@ -13,30 +13,29 @@ export function Header() {
   const { isFlattenHeader, isLogoHiiden } = useHeader();
 
   return (
-    <header className={`${styles.header} ${isFlattenHeader && styles.flatten}`}>
-      <Link href='/' className={`${styles.logo} ${isLogoHiiden && styles.hidden}`}>
+    <header className={`${s.header} ${isFlattenHeader && s.flatten}`}>
+      <Link href='/' className={`${s.logo} ${isLogoHiiden && s.hidden}`}>
         <Image src="https://cdn.impactium.fun/logo/impactium.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>
       </Link>
       <Nav />
       {user && user.id ? (
-        <div className={styles.session}>
+        <div className={s.session}>
           {user.isVerified && (
-            <div className={styles.verified}>
+            <div className={s.verified}>
               <Image src="https://cdn.impactium.fun/ui/wavy/check.svg" height={24} width={24} alt='' />
             </div>
           )}
-          <Link href="/me/account" className={styles.user}>
-            {user.avatar && <Image src={user.avatar} width={30} height={30} className={styles.avatar} alt="Avatar" />}
-            <div>
-              <p>{user.displayName}</p>
-              <p className={styles.balance}>{user.balance || 0}</p>
+          <Link href="/me/account" className={s.user}>
+            <div className={s.avatar}>
+              <Image src={user.avatar} width={30} height={30} alt="Avatar" />
             </div>
+            <p>{user.displayName}</p>
           </Link>
           <DynamicBubbleButton type='logout' />
         </div>
       ) : (
-        <div className={styles.session}>
+        <div className={s.session}>
           <DynamicBubbleButton type='login' />
         </div>
       )}

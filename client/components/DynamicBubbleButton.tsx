@@ -1,4 +1,4 @@
-import styles from '@/styles/Header.module.css';
+import styles from '@/styles/header/Header.module.css';
 import { useLanguage } from '@/context/Language';
 import Link from 'next/link';
 import React from 'react';

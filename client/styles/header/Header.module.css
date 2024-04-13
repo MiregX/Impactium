@@ -55,17 +55,24 @@
   font-weight: 500;
   max-width: 256px;
   min-width: 128px;
+  border-radius: 100px;
   height: 48px;
-  padding: 6px;
-  border-radius: 17px;
-  background: var(--gray32);
   position: relative;
   cursor: pointer;
+  border: var(--geist-border);
 }
 .avatar {
-  border-radius: 11px;
-  height: 38px;
-  width: 38px;
+  border: 2px solid var(--soft-white);
+  padding: 3px;
+  height: 44px;
+  width: 44px;
+  border-radius: 100px;
+}
+.avatar img {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 100px;
   pointer-events: none;
 }
 .user p {
@@ -124,9 +131,9 @@
   display: flex;
   align-items: center;
   height: 48px;
-  background: var(--gray32);
-  border-radius: 17px;
+  border-radius: 100px;
   transition: all 0.45s var(--transition);
+  border: var(--geist-border);
 }
 .dynamicBubbleButton:hover .circle {
   width: 100%;
@@ -155,8 +162,8 @@
   left: 0%;
   position: fixed;
   display: flex;
-  background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
-  border-bottom: 1px solid hsla(0,0%,100%,.07);
+  background: var(--geist-background);
+  border-bottom: var(--geist-border);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   transition: top 0.3s var(--transition);
@@ -200,23 +207,6 @@
     width: 100vw;
   }
 }
-.user .balance {
-  display: flex;
-  font-size: 10px;
-  line-height: 14px;
-  align-items: center;
-  height: 14px;
-  gap: 4px;
-  color: var(--soft-white);
-}
-.user .balance::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  background: url(https://cdn.impactium.fun/custom/donate.svg) no-repeat center center;
-  display: block;
-  background-size: cover;
-}
 .nav {
   display: flex;
   gap: 16px;
@@ -250,14 +240,12 @@
   font-size: 100%;
 }
 .nav button > img {
-  filter: invert(100%);
-  height: 16px;
-  width: 16px;
-  margin-left: 8px;
+  margin: -2px 0 0 8px;
+  transform: rotateZ(-90deg);
   transition: all 0.2s var(--transition);
 }
 .nav button:hover > img {
-  transform: rotateZ(90deg);
+  transform: rotateZ(0deg);
 }
 .nav button .bar {
   position: absolute;
@@ -359,22 +347,4 @@
   .session {
     grid-column: 2 / 3;
   }
-}
-
-.cookies {
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 150%;
-  color: var(--soft-white);
-  background: var(--soft-black);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  max-width: 600px;
-  box-shadow: var(--element-shadow);
-  bottom: 16px;
-  left: 16px;
-  z-index: 3;
-  position: fixed;
 }

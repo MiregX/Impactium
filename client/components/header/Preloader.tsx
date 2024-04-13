@@ -1,7 +1,7 @@
 'use client'
 import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
-import { useHeader } from '../../context/Header';
+import { useHeader } from '@/context/Header';
 import Cookies from 'universal-cookie';
 import {
     useCallback,

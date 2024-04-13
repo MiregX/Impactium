@@ -18,7 +18,7 @@ export function RedirectButton({ type }: { type: LoginMethod }) {
       icon: 'https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg'
     },
     discord: {
-      icon: 'https://cdn.impactium.fun/logo/discord.svg'
+      icon: 'https://cdn.impactium.fun/custom/discord.svg'
     }
   };
 

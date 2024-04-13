@@ -3,15 +3,24 @@ import { getPlayer } from '@/dto/Player';
 import { redirect } from 'next/navigation'
 import { PlayerProvider } from '@/context/Player';
 import { cookies } from 'next/headers';
+import { getServerLink } from '@/dto/master';
 
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
-	const token = cookies().get('token');
+	const cookie = cookies();
+	console.log(cookie.getAll());
+	console.log(getServerLink());
+	
+	const player = await getPlayer();
+	const response = await fetch(`${getServerLink()}/api/player/get`, {
+		method: 'GET',
+		credentials: 'include',
+	});
 
-	if (!token) {
-		redirect('/login');
+	console.log(response);
+
+	if (!player) {
+		redirect('/login')
 	}
-
-	const player = await getPlayer({ token: token.value });
 
 	return (
 		<PlayerProvider prefetchedPlayer={player}>

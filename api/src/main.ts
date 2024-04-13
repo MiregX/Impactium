@@ -16,7 +16,7 @@ async function run() {
     credentials: true
   });
   await api.register(fastifyCookie, {
-    secret: 'my-secret',
+    secret: process.env.JWT_SECRET,
   });
   api.listen(process.env.API_PORT, '0.0.0.0');
 }

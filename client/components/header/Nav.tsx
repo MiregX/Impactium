@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '@/styles/Header.module.css';
+import s from '@/styles/header/Header.module.css';
 import { useHeader } from '@/context/Header';
 import { useLanguage } from '@/context/Language'
 

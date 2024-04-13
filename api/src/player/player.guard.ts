@@ -29,7 +29,8 @@ export class GetPlayerGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    if (request.body.nickname || request.body.nicknames) {
+    const { nickname, nicknames } = request.body || {};
+    if (nicknames || nickname) {
       return true;
     }
     return this.playerGuard.canActivate(context);

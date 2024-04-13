@@ -4,7 +4,7 @@
   z-index: 9;
   height: 100vh;
   width: 100vw;
-  background: var(--gray16);
+  background: var(--black);
   transition: background 1.25s var(--transition) 1.5s;
 }
 

@@ -1,11 +1,11 @@
 import React from "react";
-import s from '@/styles/Header.module.css'
+import s from '@/styles/header/Cookies.module.css'
 import { Badge, BadgeTypes } from "@/ui/Badge";
 
 export function Cookies() {
   return (
     <div className={s.cookies}>
-      <Badge title='cookies' color='#d17724' icon={BadgeTypes.cookies} />
+      <Badge title='Cookies' color='#d17724' icon={BadgeTypes.cookies} />
       <p></p>
       <div className={s.node}>
         <button className={s.default}>Consent settings</button>

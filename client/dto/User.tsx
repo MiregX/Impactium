@@ -1,4 +1,4 @@
-import { getServerLink } from "./master";
+import { getServerLink } from "@/dto/master";
 import type { FulfilledUser } from "@impactium/types";
 import Cookies from "universal-cookie";
 

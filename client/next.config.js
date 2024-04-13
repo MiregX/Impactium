@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+const { parsed: env } = dotenv.config({ path: `../${!process.env.X ? 'dev' : ''}.env` });
+
 module.exports = {
   reactStrictMode: false,
   serverRuntimeConfig: {
@@ -23,5 +28,5 @@ module.exports = {
         port: '',
       }
     ]
-  }
+  },
 };

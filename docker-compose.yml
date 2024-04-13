@@ -32,10 +32,10 @@ services:
     depends_on:
       - cockroachdb
 
-  redis:
-    extends:
-      file: ./api/docker-compose.yml
-      service: redis
+  # redis:
+  #   extends:
+  #     file: ./api/docker-compose.yml
+  #     service: redis
 
 networks:
   main:

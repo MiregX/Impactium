@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { useHeader } from '@/context/Header';
-import styles from '@/styles/Header.module.css';
+import styles from '@/styles/header/Header.module.css';
 
 export function HeaderBackground() {
   const self = useRef<HTMLHRElement | null>(null);

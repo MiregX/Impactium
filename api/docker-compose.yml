@@ -42,13 +42,13 @@ services:
       - main
     command: npx prisma studio --port ${API_PRISMA_STUDIO_PORT}
 
-  redis:
-    container_name: redis
-    image: "redis:latest"
-    restart: on-failure
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./redis-data:/data
-    networks:
-      - main
+  # redis:
+  #   container_name: redis
+  #   image: "redis:latest"
+  #   restart: on-failure
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - ./redis-data:/data
+  #   networks:
+  #     - main

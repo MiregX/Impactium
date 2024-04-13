@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import styles from '@/styles/Index.module.css';
+import styles from '@/styles/Main.module.css';
 import { useLanguage } from '@/context/Language';
 
 

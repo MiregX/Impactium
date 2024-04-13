@@ -6,9 +6,15 @@ import { PanelTemplate } from '@/components/main/PanelTempate';
 export default function Main() {
  
   return (
-    <PanelTemplate>
-      <Challenge />
-      <Cloud />
-    </PanelTemplate>
+    <>
+      <PanelTemplate splitter={true}>
+        <Challenge />
+        <Cloud />
+      </PanelTemplate>
+      <PanelTemplate>
+        <Challenge />
+        <Cloud />
+      </PanelTemplate>
+    </>
   );
 };

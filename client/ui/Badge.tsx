@@ -54,7 +54,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
 
   const { title, icon, direction, color } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
   return (
-    <div className={s.badge} data-color={color} style={{background: color + '15', color}} data-direction={direction}>
+    <div className={s.badge} data-color={color} style={{background: color + '18', color}} data-direction={direction}>
       {icon && (<img src={icon.startsWith('http') ? icon : `https://cdn.impactium.fun/custom-ui/${icon}.svg`} alt='' />)}
       {options.title || title}
     </div>

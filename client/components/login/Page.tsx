@@ -1,16 +1,25 @@
 'use client'
 import s from '@/styles/Login.module.css';
 import { useLanguage } from "@/context/Language";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RedirectButton } from './RedirectButton';
+import { useUser } from '@/context/User';
+import { redirect } from 'next/navigation';
 
 export type LoginMethod = 'google' | 'discord';
 
 
 export function LoginPage() {
+  const { user } = useUser();
   const { lang } = useLanguage();
   const [isNextStage, setNextStage] = useState<boolean>(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user) {
+      redirect('/');
+    }
+  }, [user]);
 
   return (
     <div className={s.loginWrapper}>
@@ -66,7 +75,7 @@ export function LoginPage() {
             <RedirectButton type='discord' />
           </div>
           <button className={`${s.closeStage}`} onClick={() => { setNextStage(!isNextStage) }}>
-            <img src="https://cdn.impactium.fun/el/close.svg" alt="close-icon" />
+            <img src="https://cdn.impactium.fun/ui/close/sm.svg" alt="close-icon" />
           </button>
         </div>
       </div>
