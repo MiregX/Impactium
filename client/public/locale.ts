@@ -1084,7 +1084,56 @@ ourPartners: {
     it: "Errore interno del server",
     us: "Internal server error",
     ru: "Внутренняя ошибка сервера"
+  },
+enforsedPreloader:{
+  "enforsedPhrase1":{
+    ua: "Збираємо Dockerfile",
+    it: "Costruendo Dockerfile",
+    us: "Building Dockerfile",
+    ru: "Собираем Dockerfile"
+  },
+  "enforsedPhrase2":{
+    ua: "Тримаємо ритм нижче пояса",
+    it: "Tenendo il ritmo sotto la cintura",
+    us: "Keeping the rhythm below the belt",
+    ru: "Держим ритм ниже пояса"
+  },
+  "enforsedPhrase3":{
+    ua: "Відзначаємо перемогу",
+    it: "Celebrando la vittoria",
+    us: "Celebrating victory",
+    ru: "Празднуем перемогу"
+  },
+  "enforsedPhrase4":{
+    ua: "Верстаємо сайт",
+    it: "Costruendo il sito web",
+    us: "Building the website",
+    ru: "Верстаем сайт"
+  },
+  "enforsedPhrase5":{
+    ua: "Синхронізуємо дані",
+    it: "Sincronizzazione dei dati",
+    us: "Synchronize data",
+    ru: "Синхронизируем данные"
+  },
+  "enforsedPhrase6":{
+    ua: "Шукаємо вразливості",
+    it: "Cercando vulnerabilità",
+    us: "Looking for vulnerabilities",
+    ru: "Ищем уязвимости"
+  },
+  "enforsedPhrase7":{
+    ua: "Перевіряємо угоди",
+    it: "Controllando i contratti",
+    us: "We check deals",
+    ru: "Проверяем договора"
+  },
+  "enforsedPhrase8":{
+    ua: "Надихаємося ідеями",
+    it: "Ispirandosi alle idee",
+    us: "We are inspired by ideas",
+    ru: "Вдохновляемся идями"
   }
 }
-
+}
 export default locale;

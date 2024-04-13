@@ -2,6 +2,7 @@
 import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '../../context/Header';
+import { useLanguage } from '@/context/Language';
 import Cookies from 'universal-cookie';
 import {
     useCallback,
@@ -15,6 +16,7 @@ export function Preloader({ applicationInfo }) {
   const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
+  const { lang } = useLanguage();
   const url = usePathname(); 
   const blocker = url === '/login/callback';
 
@@ -64,35 +66,35 @@ export function Preloader({ applicationInfo }) {
   const buildingMap = [
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/whale_1f40b.webp',
-      text: 'Собираем Dockerfile'
+      phrase: 'enforsedPhrase1'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/eggplant_1f346.webp',
-      text: 'Держим ритм ниже пояса'
+      phrase: 'enforsedPhrase2'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bottle-with-popping-cork_1f37e.webp',
-      text: 'Празднуем перемогу'
+      phrase: 'enforsedPhrase3'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/brick_1f9f1.webp',
-      text: 'Верстаем сайт'
+      phrase: 'enforsedPhrase4'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/satellite_1f6f0-fe0f.webp',
-      text: 'Синхронизируем данные'
+      phrase: 'enforsedPhrase5'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/magnifying-glass-tilted-left_1f50d.webp',
-      text: 'Ищем уязвимости'
+      phrase: 'enforsedPhrase6'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bookmark-tabs_1f4d1.webp',
-      text: 'Проверяем договора'
+      phrase: 'enforsedPhrase7'
     },
     {
       icon: 'https://em-content.zobj.net/thumbs/60/apple/391/light-bulb_1f4a1.webp',
-      text: 'Вдохновляемся идями'
+      phrase: 'enforsedPhrase8'
     }
   ];
 
@@ -134,7 +136,7 @@ export function Preloader({ applicationInfo }) {
             return (
               <section key={index} className={s[`p${position}`]}>
                 <img src={section.icon} alt="" />
-                <p>{section.text}</p>
+                <p>{lang.enforsedPreloader[section.phrase]}</p>
               </section>
             );
           })}
