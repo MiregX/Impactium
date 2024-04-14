@@ -4,7 +4,7 @@ services:
     container_name: client
     build:
       context: .
-      dockerfile: ./Dockerfile.prod
+      dockerfile: ./Dockerfile
       target: production
     restart: on-failure
     environment:

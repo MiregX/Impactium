@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { UserService } from 'src/user/user.service';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { UserService } from '@api/main/user/user.service';
+import { UserEntity } from '@api/main/user/entities/user.entity';
 import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
-import { LoginService } from 'src/user/login.service';
-import { ApplicationService } from 'src/application/application.service';
+import { LoginService } from '@api/main/user/login.service';
+import { ApplicationService } from '@api/main/application/application.service';
 import { Configuration } from '@impactium/config';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@api/main/prisma/prisma.service';
 import { $Enums } from '@prisma/client';
 
 @Injectable()

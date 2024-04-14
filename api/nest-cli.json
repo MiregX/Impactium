@@ -5,5 +5,34 @@
   "compilerOptions": {
     "deleteOutDir": true
   },
-  "entryFile": "api/src/main"
+  "entryFile": "api/src/main",
+  "projects": {
+    "main": {
+      "type": "library",
+      "root": "libs/main",
+      "entryFile": "index",
+      "sourceRoot": "libs/main/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/main/tsconfig.lib.json"
+      }
+    },
+    "mcs": {
+      "type": "library",
+      "root": "libs/mcs",
+      "entryFile": "index",
+      "sourceRoot": "libs/mcs/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/mcs/tsconfig.lib.json"
+      }
+    },
+    "seed": {
+      "type": "library",
+      "root": "libs/seed",
+      "entryFile": "index",
+      "sourceRoot": "libs/seed/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/seed/tsconfig.lib.json"
+      }
+    }
+  }
 }

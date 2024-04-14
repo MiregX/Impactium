@@ -4,6 +4,7 @@ COPY . ./client
 
 WORKDIR /client
 
+RUN npm install
 RUN npm run build
 
 EXPOSE 3000

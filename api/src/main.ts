@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import { ApiModule } from './api.module';
+import { ApiModule } from '@api/main';
 import fastifyCookie from '@fastify/cookie';
 import { Configuration } from '@impactium/config';
 

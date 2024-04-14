@@ -1,5 +1,5 @@
 import DiscordOauth2 = require('discord-oauth2');
-import { CreateLoginDto } from 'src/user/dto/login.dto';
+import { CreateLoginDto } from '@api/main/user/dto/login.dto';
 
 interface GoogleAuthParams {
   locale: string;

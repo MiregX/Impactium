@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import passport from 'passport';
 import { Configuration } from '@impactium/config';
 import { FastifyReply } from 'fastify';
 

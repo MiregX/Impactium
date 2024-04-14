@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserComposedEntity, UserEntity,  } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { FulfilledUser } from '@impactium/types';

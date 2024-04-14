@@ -18,7 +18,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@impactium/*": ["../lib/*"]
+      "@impactium/*": ["../lib/*"],
+      "@prisma/*": ["./.prisma/*"],
+      "@api/main": ["libs/main/src"],
+      "@api/main/*": ["libs/main/src/*"],
+      "@api/mcs/*": ["libs/mcs/src/*"],
+      "@api/mcs": ["libs/mcs/src"],
+      "@seed": ["libs/seed/src"],
+      "@seed/*": ["libs/seed/src/*"]
     }
   }
 }
