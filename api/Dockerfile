@@ -36,9 +36,9 @@ ENV NODE_ENV production
 
 RUN cd api && npm run build
 
-#######################
+###################
 # STAGE 3: Deploy #
-#######################
+###################
 
 FROM node:20-alpine AS production
 

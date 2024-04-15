@@ -24,7 +24,7 @@ RUN ls
 RUN npm run build
 
 #######################
-# STAGE 1: Production #
+# STAGE 2: Production #
 #######################
 
 FROM node:20-alpine AS production
