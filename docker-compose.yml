@@ -3,7 +3,7 @@ version: '3.0'
 services:
   client:
     extends:
-      file: ./client/docker-compose.yml
+      file: ./client/compose-service.yml
       service: client
 
   nginx:
@@ -15,27 +15,19 @@ services:
     volumes:
       - .nginx:/etc/nginx
 
-  api:
-    extends:
-      file: ./api/docker-compose.yml
-      service: api
-
-  cockroachdb:
-    extends:
-      file: ./api/docker-compose.yml
-      service: cockroachdb
-
-  prisma:
-    extends:
-      file: ./api/docker-compose.yml
-      service: prisma
-    depends_on:
-      - cockroachdb
-
-  # redis:
-  #   extends:
-  #     file: ./api/docker-compose.yml
-  #     service: redis
-
-networks:
   main:
+    extends:
+      file: ./api/compose-service.yml
+      service: main
+
+  main-cockroachdb:
+    extends:
+      file: ./api/compose-service.yml
+      service: main-cockroachdb
+
+  main-prisma:
+    extends:
+      file: ./api/compose-service.yml
+      service: main-prisma
+    depends_on:
+      - main-cockroachdb

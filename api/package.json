@@ -6,18 +6,27 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prisma:generate": "prisma generate",
-    "prisma:deploy": "prisma migrate deploy",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:rollback": "prisma migrate resolve --rolled-back",
+    "prisma:generate": "npm run prisma:generate:main",
+    "prisma:generate:main": "prisma generate --schema ./libs/main/prisma/schema.prisma",
+
+    "prisma:migrate": "npm run prisma:migrate:main",
+    "prisma:migrate:main": "prisma migrate dev --schema ./libs/main/prisma/schema.prisma",
+    
+    "prisma:deploy": "npm run prisma:deploy:main",
+    "prisma:deploy:main": "prisma migrate deploy --schema ./libs/main/prisma/schema.prisma",
+    
+    "prisma:format": "npm run prisma:format:main",
+    "prisma:format:main": "prisma format --schema ./libs/main/prisma/schema.prisma",
+    
     "prisma:seed": "prisma db seed",
+    "prisma:rollback:main": "prisma migrate resolve --rolled-back --schema ./libs/main/prisma/schema.prisma",
+    
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "set NODE_ENV=development&&nest start --watch",
-    "dev": "set NODE_ENV=development&&nest start --watch",
-    "start:debug": "set NODE_ENV=development&&nest start --debug --watch",
-    "start:prod": "set NODE_ENV=production&&node dist/main",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/src/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

@@ -11,6 +11,4 @@ services:
       - PORT=${APP_PORT}
       - DEBUG_PORT=${APP_DEBUG_PORT}
     env_file: ../.env
-    networks:
-      - main
     command: npm run start

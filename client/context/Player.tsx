@@ -1,7 +1,6 @@
 'use client'
-import { IPlayer, getPlayer, getAchievements, setAchievement, setNickname, setSkin, setPassword, register } from "@/dto/Player";
+import { IPlayer, getPlayer } from "@/dto/Player";
 import s from '@/styles/Me.module.css'
-import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { useUser } from "./User";
 import { Nav } from "@/components/Nav";
@@ -29,7 +28,7 @@ export const PlayerProvider = ({
 
   useEffect(() => {
     if (!isPlayerLoaded) {
-      getPlayer({token}).then((player) => {
+      getPlayer().then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);
@@ -42,7 +41,7 @@ export const PlayerProvider = ({
   useEffect(() => {
     if (token) {
       setIsPlayerLoaded(false);
-      getPlayer({ token }).then((player) => {
+      getPlayer().then((player) => {
         setPlayer(player);
       }).catch((error) => {
         setPlayer(player || null);

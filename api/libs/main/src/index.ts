@@ -1,2 +1,2 @@
-export * from './api.module';
-export * from './api.service';
+export * from './main.module';
+export * from './main.service';

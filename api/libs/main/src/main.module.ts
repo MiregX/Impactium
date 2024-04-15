@@ -1,9 +1,9 @@
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
-import { ApiController } from './api.controller';
+import { MainController } from './main.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { ApiService } from './api.service';
+import { MainService } from './main.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PlayerModule } from './player/player.module';
@@ -27,10 +27,10 @@ import { Configuration } from '@impactium/config';
     ApplicationModule,
   ],
   controllers: [
-    ApiController
+    MainController
   ],
   providers: [
-    ApiService
+    MainService
   ],
 })
-export class ApiModule {}
+export class MainModule {}

@@ -1,5 +1,4 @@
 import { debounce } from 'lodash';
-import { Configuration } from '@impactium/config';
 
 export async function requestApplicationInfoFromServer() {
   try {
@@ -39,7 +38,7 @@ const checkServerAvailability = debounce(async () => {
 
 export function getServerLink() {
   checkServerAvailability();
-  return isLocalServerReachable || !Configuration.isProductionMode() 
+  return isLocalServerReachable
     ? 'http://localhost:3001'
     : 'https://impactium.fun'
 }

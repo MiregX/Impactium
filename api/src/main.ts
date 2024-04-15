@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import { ApiModule } from '@api/main';
+import { MainModule } from '@api/main';
 import fastifyCookie from '@fastify/cookie';
 import { Configuration } from '@impactium/config';
 
 async function run() {
   const api = await NestFactory.create<NestFastifyApplication>(
-    ApiModule,
+    MainModule,
     new FastifyAdapter(),
   );
 

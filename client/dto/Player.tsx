@@ -1,4 +1,4 @@
-import { Configuration } from "@impactium/config";
+import { getServerLink } from "./master";
 
 interface IPlayerSkin {
   iconLink: string;
@@ -100,7 +100,7 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       ? 'GET'
       : 'POST';
 
-    const response = await fetch(`${Configuration.getServerLink()}/api/player/` + path, {
+    const response = await fetch(`${getServerLink()}/api/player/` + path, {
       method,
       headers: {
         ...headers

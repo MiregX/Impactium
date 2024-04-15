@@ -1,4 +1,3 @@
-import arrow from '@/public/chevron-right-md.svg'
 import s from '@/styles/main/Hosting.module.css'
 
 export function Service({ type }) {
@@ -27,7 +26,7 @@ export function Service({ type }) {
         </h4>
         <hr />
         <p>{desc}</p>
-        <button className={s.process}>Приобрести<img src={arrow.src} /></button>
+        <button className={s.process}>Приобрести<img src={'https://cdn.impactium.fun/ui/chevron/right-md.svg'} /></button>
       </div>
     </div>
   );
