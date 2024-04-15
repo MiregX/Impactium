@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+############ DATABASE ############
+  api-cockroachdb:
+    container_name: api-cockroachdb
+    image: cockroachdb/cockroach:v23.1.13
+    restart: on-failure
+    ports:
+      - 26257
+      - ${API_COCKROACHDB_ADMIN_PORT}:${API_COCKROACHDB_ADMIN_PORT}
+    volumes:
+      - ../../cockroach-data/api:/cockroach/cockroach-data
+    command: start-single-node --insecure --http-port ${API_COCKROACHDB_ADMIN_PORT}
+
+
+############ PRISMA ############
+  api-prisma:
+    container_name: api-prisma
+    image: node:20-alpine
+    restart: on-failure
+    working_dir: '/app/api'
+    ports:
+      - ${API_PRISMA_STUDIO_PORT}:${API_PRISMA_STUDIO_PORT}
+    volumes:
+      - ./prisma:/app/api/prisma
+    environment:
+      - API_COCKROACH_URL=postgresql://root@api-cockroachdb:26257/defaultdb?sslmode=disable
+    env_file: ../../../.env
+    command: npx prisma studio --port ${API_PRISMA_STUDIO_PORT}

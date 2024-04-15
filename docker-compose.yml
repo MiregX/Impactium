@@ -2,9 +2,17 @@ version: '3.0'
 
 services:
   client:
-    extends:
-      file: ./client/compose-service.yml
-      service: client
+    container_name: client
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+      target: production
+    restart: on-failure
+    environment:
+      - PORT=${APP_PORT}
+      - DEBUG_PORT=${APP_DEBUG_PORT}
+    env_file: .env
+    command: npm run start
 
   nginx:
     container_name: nginx
@@ -15,19 +23,30 @@ services:
     volumes:
       - .nginx:/etc/nginx
 
-  main:
-    extends:
-      file: ./api/compose-service.yml
-      service: main
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: production
+    restart: on-failure
+    ports:
+      - ${API_PORT}:${API_PORT}
+      - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
+    environment:
+      - PORT=${API_PORT}
+      - DEBUG_PORT=${API_DEBUG_PORT}
+    env_file: .env
+    command: npm run start
 
-  main-cockroachdb:
+  api-cockroachdb:
     extends:
-      file: ./api/compose-service.yml
-      service: main-cockroachdb
+      file: ./api/libs/api/compose-service.yml
+      service: api-cockroachdb
 
-  main-prisma:
+  api-prisma:
     extends:
-      file: ./api/compose-service.yml
-      service: main-prisma
+      file: ./api/libs/api/compose-service.yml
+      service: api-prisma
     depends_on:
-      - main-cockroachdb
+      - api-cockroachdb

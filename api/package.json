@@ -6,20 +6,20 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prisma:generate": "npm run prisma:generate:main",
-    "prisma:generate:main": "prisma generate --schema ./libs/main/prisma/schema.prisma",
+    "prisma:generate": "npm run prisma:generate:api",
+    "prisma:generate:api": "prisma generate --schema ./libs/api/prisma/schema.prisma",
 
-    "prisma:migrate": "npm run prisma:migrate:main",
-    "prisma:migrate:main": "prisma migrate dev --schema ./libs/main/prisma/schema.prisma",
+    "prisma:migrate": "npm run prisma:migrate:api",
+    "prisma:migrate:api": "prisma migrate dev --schema ./libs/api/prisma/schema.prisma",
     
-    "prisma:deploy": "npm run prisma:deploy:main",
-    "prisma:deploy:main": "prisma migrate deploy --schema ./libs/main/prisma/schema.prisma",
+    "prisma:deploy": "npm run prisma:deploy:api",
+    "prisma:deploy:api": "prisma migrate deploy --schema ./libs/api/prisma/schema.prisma",
     
-    "prisma:format": "npm run prisma:format:main",
-    "prisma:format:main": "prisma format --schema ./libs/main/prisma/schema.prisma",
+    "prisma:format": "npm run prisma:format:api",
+    "prisma:format:api": "prisma format --schema ./libs/api/prisma/schema.prisma",
     
     "prisma:seed": "prisma db seed",
-    "prisma:rollback:main": "prisma migrate resolve --rolled-back --schema ./libs/main/prisma/schema.prisma",
+    "prisma:rollback:api": "prisma migrate resolve --rolled-back --schema ./libs/api/prisma/schema.prisma",
     
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",

@@ -1,6 +1,5 @@
 import { $Enums, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
-import type { FulfilledUser } from '@impactium/types'
 
 interface UserEntityInput extends User {
 
@@ -31,8 +30,8 @@ export class UserComposedEntity implements UserComposedEntityInput {
   displayName: string;
   locale: string;
 
-  static compose({user, login}: {user: UserEntity, login: LoginEntity}): FulfilledUser {
-    const fulfilledUser: FulfilledUser = {
+  static compose({user, login}: {user: UserEntity, login: LoginEntity}): any {
+    const fulfilledUser: any = {
       id: login.id,
       uid: user.id,
       lastLogin: login.type,

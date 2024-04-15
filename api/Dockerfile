@@ -1,41 +1,53 @@
-
-###################
-# STAGE 2: Build for development
-###################
+##################
+# STAGE 1: Build #
+##################
 
 FROM node:20-alpine AS development
 
-WORKDIR /api
+USER node
 
-# Копируем папку api
-COPY . .
+WORKDIR /app/lib
+COPY --chown=node:node ./lib .
+
+WORKDIR /app/api
+COPY --chown=node:node ./api/package*.json .
+COPY --chown=node:node ./api/nest-cli.json .
+COPY --chown=node:node ./api/tsconfig*.json .
+COPY --chown=node:node ./api/src ./src
+COPY --chown=node:node ./api/libs ./libs
 
 RUN npm ci
 
+RUN ls
+
 RUN npm run prisma:generate
 
-USER node
+#######################
+# STAGE 2: Production #
+#######################
 
-###################
-# STAGE 3: Build for production
-###################
+FROM node:20-alpine As build
 
-FROM development AS build
+WORKDIR /app
 
-RUN npm run build
+COPY --chown=node:node --from=development /app .
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN cd api && npm run build
 
-###################
-# STAGE 4: Production
-###################
+#######################
+# STAGE 3: Deploy #
+#######################
 
 FROM node:20-alpine AS production
 
-WORKDIR /api
+WORKDIR /app
 
-COPY --from=build /api ./
+COPY --from=build /app .
 
-CMD [ "node", "dist/src/main.js" ]
+WORKDIR /app/api
+
+RUN ls
+
+CMD [ "npm", "run", "start" ];

@@ -8,19 +8,19 @@ export class Configuration {
 
   static getServerLink() {
     return this.isProductionMode()
-      ? process.env.DOMAIN
+      ? process.env.HOST
       : process.env.API_LOCALHOST
   }
 
   static getClientLink() {
     return this.isProductionMode()
-      ? process.env.DOMAIN
+      ? process.env.HOST
       : process.env.APP_LOCALHOST
   }
 
   static getLink() {
     return this.isProductionMode()
-      ? process.env.DOMAIN
+      ? process.env.HOST
       : process.env.LOCALHOST
   }
 

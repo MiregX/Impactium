@@ -1,0 +1,7 @@
+Dockerfile
+.dockerignore
+.prisma
+node_modules
+cockroach-data
+npm-debug.log
+dist

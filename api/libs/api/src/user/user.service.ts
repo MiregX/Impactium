@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserComposedEntity, UserEntity,  } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { FulfilledUser } from '@impactium/types';
 
 @Injectable()
 export class UserService {
@@ -24,7 +23,7 @@ export class UserService {
     });
   }
 
-  async compareUserWithLogin(id: string): Promise<FulfilledUser> {
+  async compareUserWithLogin(id: string): Promise<any> {
     const user = await this.findOneById(id);
     const login = await this.prisma.login.findUnique({
       where: {

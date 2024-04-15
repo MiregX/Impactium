@@ -1,8 +1,7 @@
 import { getServerLink } from "@/dto/master";
-import type { FulfilledUser } from "@impactium/types";
 import Cookies from "universal-cookie";
 
-export async function getUser(_authorization?: string): Promise<FulfilledUser> {
+export async function getUser(_authorization?: string): Promise<any> {
   const authorization = new Cookies().get('Authorization') || _authorization;
 
   if (!authorization)
