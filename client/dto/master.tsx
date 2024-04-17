@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { Configuration } from '@impactium/config';
 
 export async function requestApplicationInfoFromServer() {
   try {
@@ -15,32 +15,10 @@ export async function requestApplicationInfoFromServer() {
   }
 }
 
-let isLocalServerReachable: boolean = true;
-const checkServerAvailability = debounce(async () => {
-  try {
-    const response = await Promise.race([
-      fetch(`http://localhost:3001/api/application/info`, {
-        cache: 'no-cache',
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('timeout')), 300),
-      )
-    ]) as Response;
-
-    const data = await response.json();
-    isLocalServerReachable = !!data.status;
-  } catch (_) {
-    isLocalServerReachable = false;
-  } finally {
-    return isLocalServerReachable;
-  }
-}, 300000);
-
 export function getServerLink() {
-  checkServerAvailability();
-  return isLocalServerReachable
-    ? 'http://localhost:3001'
-    : 'https://impactium.fun'
+  return Configuration.isProductionMode()
+    ? 'https://impactium.fun'
+    : 'http://localhost:3001'
 }
 
 interface _ApplicationInfo {

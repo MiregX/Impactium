@@ -6,7 +6,17 @@
       "request": "launch",
       "command": "npm run start:debug",
       "cwd": "${workspaceFolder}/api",
-      "envFile": "${workspaceFolder}/dev.env"
+      "envFile": "${workspaceFolder}/.env",
+      "preLaunchTask": "up",
+      "postDebugTask": "down"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Start DOCKER",
+      "request": "launch",
+      "command": "docker compose --profile debug up -d",
+      "cwd": "${workspaceFolder}/",
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "node-terminal",
@@ -14,7 +24,7 @@
       "request": "launch",
       "command": "npm run dev",
       "cwd": "${workspaceFolder}/client",
-      "envFile": "${workspaceFolder}/dev.env"
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "node-terminal",
@@ -22,7 +32,7 @@
       "request": "launch",
       "command": "npx prisma studio",
       "cwd": "${workspaceFolder}/api",
-      "envFile": "${workspaceFolder}/dev.env"
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

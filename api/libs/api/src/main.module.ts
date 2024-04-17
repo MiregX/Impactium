@@ -17,7 +17,7 @@ import { Configuration } from '@impactium/config';
     PrismaModule,
     PlayerModule,
     ConfigModule.forRoot({
-      envFilePath: `../${!process.env.X ? 'dev' : ''}.env`,
+      envFilePath: `../${Configuration.isProductionMode() ? '' : 'dev'}.env`,
       load: [() => Configuration.processEnvVariables()],
     }),
     JwtModule.register({

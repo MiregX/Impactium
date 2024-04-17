@@ -1,6 +1,6 @@
-##################
-# STAGE 1: Build #
-##################
+####################
+# STAGE 1: Prepare #
+####################
 
 FROM node:20-alpine AS development
 USER node
@@ -18,11 +18,14 @@ COPY --chown=node:node ./api/libs ./libs
 COPY --chown=node:node ./.env .
 
 RUN npm ci
+
 RUN npm run prisma:generate
 
-#######################
-# STAGE 2: Production #
-#######################
+CMD [ "npm", "run", "start:debug" ]
+
+##################
+# STAGE 2: Build #
+##################
 
 FROM node:20-alpine As build
 
@@ -34,6 +37,8 @@ WORKDIR /app/api
 
 RUN npm run build
 
+CMD [ "npm", "run", "start" ]
+
 ###################
 # STAGE 3: Deploy #
 ###################
@@ -44,6 +49,4 @@ COPY --from=build /app /app
 
 WORKDIR /app/api
 
-RUN npm run prisma:deploy
-
-CMD [ "node", "dist/api/src/main.js" ]
+CMD [ "npm", "run", "start:prod" ]

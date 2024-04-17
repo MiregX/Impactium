@@ -1,4 +1,5 @@
 {
   "css.validate": false,
-  "files.autoSave": "off"
+  "files.autoSave": "off",
+  "workbench.startupEditor": "terminal"
 }

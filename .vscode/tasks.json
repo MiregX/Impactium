@@ -4,13 +4,13 @@
     {
       "label": "up",
       "type": "shell",
-      "command": "npm run prisma:generate && npm run prisma:deploy",
-      "dependsOn": "docker compose up -d"
+      "command": "copy .env api/.env; cd api; npm run prisma:generate; npm run prisma:deploy",
+      "dependsOn": "recreate",
     },
     {
-      "label": "docker compose up -d",
+      "label": "recreate",
       "type": "shell",
-      "command": "docker compose up -d"
+      "command": "docker compose --profile development up -d"
     },
     {
       "label": "down",

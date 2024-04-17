@@ -1,6 +1,54 @@
-version: '3.0'
+version: '3.9'
 
 services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: on-failure
+    ports:
+      - 80:80
+    volumes:
+      - .nginx:/etc/nginx
+    profiles:
+      - debug
+      - production
+
+  api-cockroachdb:
+    extends:
+      file: ./api/libs/api/compose-service.yml
+      service: api-cockroachdb
+    profiles:
+      - development
+      - debug
+      - production
+
+  api-prisma:
+    extends:
+      file: ./api/libs/api/compose-service.yml
+      service: api-prisma
+    depends_on:
+      - api-cockroachdb
+    profiles:
+      - development
+      - debug
+      - production
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: production
+    restart: on-failure
+    ports:
+      - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
+    environment:
+      - DEBUG_PORT=${API_DEBUG_PORT}
+    env_file: .env
+    profiles:
+      - debug
+      - production
+
   client:
     container_name: client
     build:
@@ -13,40 +61,6 @@ services:
       - DEBUG_PORT=${APP_DEBUG_PORT}
     env_file: .env
     command: npm run start
-
-  nginx:
-    container_name: nginx
-    image: nginx:latest
-    restart: on-failure
-    ports:
-      - 80:80
-    volumes:
-      - .nginx:/etc/nginx
-
-  api:
-    container_name: api
-    build:
-      context: .
-      dockerfile: ./api/Dockerfile
-      target: production
-    restart: on-failure
-    ports:
-      - ${API_PORT}:${API_PORT}
-      - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
-    environment:
-      - PORT=${API_PORT}
-      - DEBUG_PORT=${API_DEBUG_PORT}
-    env_file: .env
-    command: npm run start
-
-  api-cockroachdb:
-    extends:
-      file: ./api/libs/api/compose-service.yml
-      service: api-cockroachdb
-
-  api-prisma:
-    extends:
-      file: ./api/libs/api/compose-service.yml
-      service: api-prisma
-    depends_on:
-      - api-cockroachdb
+    profiles:
+      - debug
+      - production
