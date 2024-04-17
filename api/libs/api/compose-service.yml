@@ -7,7 +7,7 @@ services:
     image: cockroachdb/cockroach:v23.1.13
     restart: on-failure
     ports:
-      - 26257
+      - ${API_COCKROACHDB_PORT}:26257
       - ${API_COCKROACHDB_ADMIN_PORT}:${API_COCKROACHDB_ADMIN_PORT}
     volumes:
       - ../../cockroach-data/api:/cockroach/cockroach-data

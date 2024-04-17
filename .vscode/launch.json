@@ -5,14 +5,16 @@
       "name": "Start API",
       "request": "launch",
       "command": "npm run start:debug",
-      "cwd": "${workspaceFolder}/api"
+      "cwd": "${workspaceFolder}/api",
+      "envFile": "${workspaceFolder}/dev.env"
     },
     {
       "type": "node-terminal",
       "name": "Start CLIENT",
       "request": "launch",
       "command": "npm run dev",
-      "cwd": "${workspaceFolder}/client"
+      "cwd": "${workspaceFolder}/client",
+      "envFile": "${workspaceFolder}/dev.env"
     },
     {
       "type": "node-terminal",

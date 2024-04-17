@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "up",
+      "type": "shell",
+      "command": "npm run prisma:generate && npm run prisma:deploy",
+      "dependsOn": "docker compose up -d"
+    },
+    {
+      "label": "docker compose up -d",
+      "type": "shell",
+      "command": "docker compose up -d"
+    },
+    {
+      "label": "down",
+      "type": "shell",
+      "command": "docker compose down"
+    }
+  ]
+}

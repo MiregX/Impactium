@@ -3,14 +3,7 @@
 ################## 
 
 FROM node:20-alpine AS build
-
 USER node
-
-WORKDIR /app/client
-
-COPY --chown=node:node ./client/package*.json .
-
-RUN npm ci
 
 WORKDIR /app
 
@@ -19,7 +12,7 @@ COPY --chown=node:node ./lib ./lib
 
 WORKDIR /app/client
 
-RUN ls
+RUN npm ci
 
 RUN npm run build
 
@@ -39,4 +32,4 @@ COPY --chown=node:node ./client/.next ./.next
 COPY --chown=node:node ./client/package*.json .
 COPY --chown=node:node /client/public ./public
 
-RUN cd .. && ls
+CMD [ "npm", "run", "start" ]
