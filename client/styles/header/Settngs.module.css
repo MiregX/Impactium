@@ -1,0 +1,83 @@
+.settings_background {
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: #00000050;
+  backdrop-filter: blur(5px);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.settings {
+  width: 40%;
+  background-color: #000;
+  border-radius: 10px;
+  padding: 25px;
+  border: 1px solid #2b2b2b;
+}
+
+.settings__top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings__title {
+  font-size: 32px;
+  font-weight: 500;
+
+}
+
+.settings__list {
+  background-color: #0f0f0f;
+  border-radius: 10px;
+}
+
+.settings__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #2b2b2b;
+}
+.settings__item:first-child {
+  border-radius: 10px 10px 0 0;
+}
+.settings__item:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.settings__item_toggle {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #2b2b2b;
+  border-radius: 100px;
+  position: relative;
+  background-color: #ffffff30;
+  cursor: pointer;
+  display: flex;
+  transition: .4s;
+}
+
+.blocked {
+  justify-content: end;
+  background-color: #ffffff10;
+  cursor: auto;
+}
+
+.blocked .settings__item_toggle_ball {
+  background-color: #6d6d6d;
+}
+
+.settings__item_toggle_ball {
+  width: 29px;
+  height: 29px;
+  background-color: #ebebeb;
+  border-radius: 50%;
+  transition: .4s !important;
+  position: absolute;
+}
