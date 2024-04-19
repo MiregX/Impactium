@@ -22,8 +22,8 @@
       "@prisma/*": ["./.prisma/*"],
       "@api/main": ["libs/api/src"],
       "@api/main/*": ["libs/api/src/*"],
-      // "@api/mcs/*": ["libs/mcs/src/*"],
-      // "@api/mcs": ["libs/mcs/src"],
+      "@api/mcs/*": ["libs/mcs/src/*"],
+      "@api/mcs": ["libs/mcs/src"],
       "@seed": ["libs/seed/src"],
       "@seed/*": ["libs/seed/src/*"]
     }
