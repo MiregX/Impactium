@@ -2,10 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "up",
+      "label": "start-engine",
       "type": "shell",
-      "command": "copy .env api/.env; cd api; npm run prisma:generate; npm run prisma:deploy",
-      "dependsOn": "recreate",
+      "command": "copy .env api/.env; cd api; npm run prisma:generate; npm run prisma:deploy; rm .env",
     },
     {
       "label": "recreate",
@@ -13,7 +12,7 @@
       "command": "docker compose --profile development up -d"
     },
     {
-      "label": "down",
+      "label": "stop-engine",
       "type": "shell",
       "command": "docker compose down"
     }

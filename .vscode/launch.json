@@ -7,16 +7,15 @@
       "command": "npm run start:debug",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env",
-      "preLaunchTask": "up",
-      "postDebugTask": "down"
+      "preLaunchTask": "start-engine",
+      "postDebugTask": "stop-engine"
     },
     {
       "type": "node-terminal",
       "name": "Start DOCKER",
       "request": "launch",
-      "command": "docker compose --profile debug up -d",
-      "cwd": "${workspaceFolder}/",
-      "envFile": "${workspaceFolder}/.env"
+      "command": "docker compose --profile production up -d",
+      "cwd": "${workspaceFolder}/"
     },
     {
       "type": "node-terminal",
