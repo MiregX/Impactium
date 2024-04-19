@@ -1,9 +1,12 @@
+import { ConsoleModule } from '@api/mcs/console/console.module';
 import { McsController } from './mcs.controller';
 import { McsService } from './mcs.service';
 import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [],
+  imports: [
+    ConsoleModule
+  ],
   controllers: [
     McsController
   ],

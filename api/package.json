@@ -6,17 +6,12 @@
   "scripts": {
     "prisma:generate": "npm run prisma:generate:api",
     "prisma:generate:api": "prisma generate --schema ./libs/api/prisma/schema.prisma",
-
     "prisma:migrate:api": "prisma migrate dev --schema ./libs/api/prisma/schema.prisma",
-
     "prisma:deploy": "npm run prisma:deploy:api",
     "prisma:deploy:api": "prisma migrate deploy --schema ./libs/api/prisma/schema.prisma",
-
     "prisma:push": "npm run prisma:push:api",
     "prisma:push:api": "prisma db push --schema ./libs/api/prisma/schema.prisma",
-    
     "prisma:seed": "prisma db seed",
-
     "build": "nest build",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/api/src/main.js",
@@ -45,8 +40,10 @@
     "discord-oauth2": "^2.12.1",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
+    "pterosocket": "^1.0.6",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
