@@ -1,90 +1,89 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { pterosocket } from 'pterosocket';
+import { TelegramService } from '../telegram/telegram.service';
+import type { Online, Statistics } from './console.dto'
+
+interface Players {
+  online: Online
+  whitelist: string[],
+  database: string[],
+  lastStatsFetch: Date,
+  stats: Statistics[]
+}
 
 @Injectable()
-export class ConsoleService {
+export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   private server: pterosocket;
+  players: Players;
 
-  constructor() {
-    this.launch();
+  constructor(
+    private readonly telegramService: TelegramService
+  ) {
+    this.server = new pterosocket(
+      process.env.MINECAFT_SERVER_ORIGIN,
+      process.env.MINECAFT_SERVER_TOKEN,
+      process.env.MINECAFT_SERVER_ID,
+      false // Отключаем автосоединение
+    );
   }
 
-  async launch() {
-    try {
-      if (this.server?.ws) {
-        this.server?.close();
-      }
-      
-      this.server = new pterosocket(
-        process.env.MINECAFT_SERVER_ORIGIN,
-        process.env.MINECAFT_SERVER_TOKEN,
-        process.env.MINECAFT_SERVER_ID,
-        false
-      );
-  
-      await this.server.connect(); 
-      
-      this.server.on("start", () => {
-        console.log("WS Соединение с панелью управления установлено!");
-        this.command('list');
-      });
+  async onModuleInit() {
+    await this.connect();
+  }
 
-      // this.server.on("console_output", (msg: string) => { this.output(msg.replace(/\x1b\[\d+m/g, '')) })
-    } catch (error) {
-      console.log(error);
-      await this.launch();
+  async onModuleDestroy() {
+    await this.server.disconnect();
+  }
+
+  async connect() {
+    await this.server.connect(); 
+    
+    this.server.on("start", () => {
+      this.command('list');
+    });
+
+    this.server.on("console_output", (msg: string) => {
+      this.output(msg.replace(/\x1b\[\d+m/g, ''))
+    });
+  }
+
+  async disconnect() {
+    if (!this.server.ws) {
+      throw 'Pterosocket lost his WebSocket. Creating new one.'
     }
+
   }
 
-  async command(command, isQuiet = false) {
+  async command(command: string) {
     try {
-      if (!this.server.ws) {
-        throw 'Pterosocket lost his WebSocket. Creating new one.'
-      }
       this.server.writeCommand(command);
-      // if (!isQuiet) log(`[MC] -> ${command}`, 'g');
+      console.log(`[MC] -> ${command}`);
       return true;
     } catch (error) {
-      await this.launch();
-      return await this.command(command, isQuiet);
+      await this.connect();
+      return await this.command(command);
     }
   }
 
-  // output(message) {
-  //   const messageHaveWarn = message.slice(0, 17).includes('WARN')
-  //   const messageHaveError = message.slice(0, 17).includes('ERROR');
-  //   const messageHaveInfo = !message.slice(0, 17).includes('INFO');
-  //   if (messageHaveWarn || messageHaveError || messageHaveInfo || message.substring(17).startsWith('[Not Secure]')) {
-  //     return;
-  //   }
+  output(message: string) {
+    if (message.substring(17).startsWith('[Not Secure]')) return
 
-  //   message = message.substring(17)
+    message = message.substring(17)
 
-  //   if (message.endsWith('joined the game')) {
-  //     this.players.online.count++;
-  //     this.players.online.list.push(message.split(' ')[0]);
-  //     this.telegramBot.editMessage(this.players.online)
-  //   }
+    if (message.endsWith('joined the game')) {
+      this.players.online.count++;
+      this.telegramService.editPinnedMessage(this.players.online)
+    }
 
-  //   if (message.endsWith('left the game')) {
-  //     this.players.online.count--;
-  //     this.players.online.list = this.players.online.list.filter(p => p !== message.split(' ')[0]);
-  //     this.telegramBot.editMessage(this.players.online);
-  //   }
+    if (message.endsWith('left the game')) {
+      this.players.online.count--;
+      this.telegramService.editPinnedMessage(this.players.online);
+    }
 
-  //   if (message.startsWith('Players:')) {
-  //     console.log(message);
-  //     this.checkOnline(message);
-  //   }
-
-  //   if (message.endsWith('issued server command: /x')) {
-  //     applyAchievementEffect(message.split(" ")[0]);
-  //   }
-
-  //   if (message.startsWith('[AuthMe]') && this.messagesWaitlist.includes(message) ) {
-
-  //   }
-  // }
+    if (message.startsWith('Players:')) {
+      this.telegramService.editPinnedMessage(this.count(message));
+    }
+  }
 
   // async restart() {
   //   try {
@@ -105,12 +104,12 @@ export class ConsoleService {
   //   }
   // }
 
-  // checkOnline(message) {
-  //   const players = message.substring(9).split(', ');
-  //   this.players.online.list = players.map(p => p.split(' ')[1]);
-  //   this.players.online.count = players.length;
-  //   this.telegramBot.editMessage(this.players.online);
-  // }
+  count(message: string): Online {
+    const players = message.substring(9).split(', ');
+    this.players.online.list = players.map(p => p.split(' ')[1]);
+    this.players.online.count = players.length;
+    return this.players.online
+  }
   
   // async getDatabasePlayers() {
   //   // Для получения списка игроков с базы данных на сервере
