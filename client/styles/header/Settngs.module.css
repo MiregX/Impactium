@@ -1,15 +1,16 @@
-.settings_background {
-  z-index: 3;
+.background {
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
   background-color: #00000050;
-  backdrop-filter: blur(5px);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+}
+
+.visible {
+  opacity: 1;
 }
 
 .settings {
@@ -20,38 +21,38 @@
   border: 1px solid #2b2b2b;
 }
 
-.settings__top {
+.top {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.settings__title {
+.title {
   font-size: 32px;
   font-weight: 500;
 
 }
 
-.settings__list {
+.list {
   background-color: #0f0f0f;
   border-radius: 10px;
 }
 
-.settings__item {
+.item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   border: 1px solid #2b2b2b;
 }
-.settings__item:first-child {
+.item:first-child {
   border-radius: 10px 10px 0 0;
 }
-.settings__item:last-child {
+.item:last-child {
   border-radius: 0 0 10px 10px;
 }
 
-.settings__item_toggle {
+.toggle {
   width: 50px;
   height: 30px;
   border: 1px solid #2b2b2b;
@@ -69,11 +70,11 @@
   cursor: auto;
 }
 
-.blocked .settings__item_toggle_ball {
+.blocked .toggle_ball {
   background-color: #6d6d6d;
 }
 
-.settings__item_toggle_ball {
+.toggle_ball {
   width: 29px;
   height: 29px;
   background-color: #ebebeb;

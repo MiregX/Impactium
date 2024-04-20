@@ -16,16 +16,17 @@
   position: fixed;
 }
 
-.acceptBtn {
-  padding: 5px;
+.hide {
+  display: none;
+}
+
+.accept {
+  padding: 6px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
-.acceptBtn:hover {
+.accept:hover,
+.accept:active {
   background-color: #ffffff50;
-}
-
-.acceptBtn:active {
-  background-color: #ffffff60;
 }
