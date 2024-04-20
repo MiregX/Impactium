@@ -36,15 +36,20 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   }
 
   async connect() {
-    await this.server.connect(); 
-    
-    this.server.on("start", () => {
-      this.command('list');
-    });
-
-    this.server.on("console_output", (msg: string) => {
-      this.output(msg.replace(/\x1b\[\d+m/g, ''))
-    });
+    try {
+      await this.server.connect(); 
+      
+      this.server.on("start", () => {
+        this.command('list');
+      });
+  
+      this.server.on("console_output", (msg: string) => {
+        this.output(msg.replace(/\x1b\[\d+m/g, ''))
+      });
+    } catch (_) {
+      console.log(_)
+      
+    }
   }
 
   async disconnect() {
@@ -105,11 +110,12 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   // }
 
   count(message: string): Online {
+    console.log(message)
     const players = message.substring(9).split(', ');
     this.players.online.list = players.map(p => p.split(' ')[1]);
     this.players.online.count = players.length;
     return this.players.online
-  }
+  } 
   
   // async getDatabasePlayers() {
   //   // Для получения списка игроков с базы данных на сервере

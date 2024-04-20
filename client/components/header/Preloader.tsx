@@ -3,7 +3,6 @@ import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { useLanguage } from '@/context/Language';
-import Cookies from 'universal-cookie';
 import {
     useCallback,
     useEffect,
@@ -13,7 +12,6 @@ import {
 import { usePathname } from 'next/navigation';
 
 export function Preloader({ applicationInfo }) {
-  const cookie = new Cookies();
   const { isUserLoaded } = useUser();
   const { setIsLogoHiiden } = useHeader();
   const { lang } = useLanguage();
@@ -49,7 +47,6 @@ export function Preloader({ applicationInfo }) {
   useEffect(() => {
     show();
     if (applicationInfo.enforced_preloader) return;
-    console.log(isUserLoaded, !blocker)
     if (isUserLoaded && !blocker) {
       hide();
     } else {

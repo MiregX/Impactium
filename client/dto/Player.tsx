@@ -109,8 +109,6 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
       body
     });
 
-    console.log(response)
-
     if (!response.ok) {
       return null;
     }

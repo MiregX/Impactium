@@ -35,6 +35,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const authorization = cookies().get('Authorization')?.value;
   const applicationInfo = await requestApplicationInfoFromServer();
+  
+  console.log(applicationInfo);
 
   const user = await getUser(authorization);
 

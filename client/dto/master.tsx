@@ -1,11 +1,7 @@
-import { Configuration } from '@impactium/config';
-
 export async function requestApplicationInfoFromServer() {
   try {
     const response = await fetch(`${getServerLink()}/api/application/info`, {
-      next: {
-        revalidate: 60 * 60 * 6
-      }
+      cache: 'no-cache'
     });
     return await response.json();
   } catch (_) {
@@ -16,7 +12,7 @@ export async function requestApplicationInfoFromServer() {
 }
 
 export function getServerLink() {
-  return Configuration.isProductionMode()
+  return process.env.NODE_ENV === 'production'
     ? 'https://impactium.fun'
     : 'http://localhost:3001'
 }

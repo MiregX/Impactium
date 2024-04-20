@@ -20,7 +20,7 @@
     "react-transition-group": "^4.4.5",
     "sharp": "^0.33.2",
     "style-loader": "^3.3.4",
-    "universal-cookie": "^7.1.0"
+    "universal-cookie": "^7.1.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.0",

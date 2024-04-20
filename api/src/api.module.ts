@@ -4,6 +4,7 @@ import { MainModule } from '@api/main';
 import { McsModule } from '@api/mcs';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { Module } from '@nestjs/common';
       secret: process.env.SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    ScheduleModule.forRoot(),
     MainModule,
     McsModule,
   ],
