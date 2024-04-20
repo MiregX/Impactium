@@ -15,3 +15,18 @@
   z-index: 3;
   position: fixed;
 }
+
+.hide {
+  display: none;
+}
+
+.accept {
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.accept:hover,
+.accept:active {
+  background-color: #ffffff50;
+}
