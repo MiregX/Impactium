@@ -3,6 +3,7 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { ApiModule } from './api.module';
 import fastifyCookie from '@fastify/cookie';
 import { Configuration } from '@impactium/config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function run() {
   const api = await NestFactory.create<NestFastifyApplication>(
@@ -15,6 +16,9 @@ async function run() {
     origin: Configuration.getClientLink() || 'http://localhost:3001',
     credentials: true
   });
+  api.useGlobalPipes(new ValidationPipe({
+    forbidNonWhitelisted: true
+  }))
   await api.register(fastifyCookie, {
     secret: process.env.JWT_SECRET,
   });

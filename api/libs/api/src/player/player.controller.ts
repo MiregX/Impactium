@@ -1,40 +1,45 @@
-import { Controller, Get, Post, Body, UseGuards, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, ValidationPipe } from '@nestjs/common';
 import { PlayerService } from './player.service';
 import { Player } from './player.decorator';
 import { PlayerEntity } from './entities/player.entity';
-import { GetPlayerGuard, PlayerGuard } from './player.guard';
-import { FindPlayers } from './dto/player.dto';
-import { AuthGuard } from '@api/main/auth/auth.guard';
+import { PlayerGuard } from './player.guard';
+import { FindPlayersDto, PlayerAlreadyExists, PlayerHaveSameNickname, SetNicknameDto, SetPasswordDto } from './dto/player.dto';
 
 @Controller('player')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
   
   @Get('get')
-  @UseGuards(AuthGuard, GetPlayerGuard)
-  find(@Body() body: FindPlayers, @Player() player: PlayerEntity) {
-    console.log('Прилетел запрос')
-    if (!body.nickname) {
-      return player;
-    }
-  
-    if (typeof body.nickname === 'string' || (Array.isArray(body.nickname) && body.nickname.length === 1)) {
-      return this.playerService.findOneByNickname(
-        Array.isArray(body.nickname)
-          ? body.nickname[0]
-          : body.nickname);
-    }
-  
-    if (Array.isArray(body.nickname)) {
-      return this.playerService.findManyByNicknames(body.nickname);
-    }
-  
-    throw new BadRequestException();
+  @UseGuards(PlayerGuard)
+  get(@Player() player: PlayerEntity) {
+    return player;
   }
 
+  @Get('find')
+  find(@Body() body: FindPlayersDto) {
+    if ('nickname' in body) {
+      return this.playerService.findOneByNickname(body.nickname);
+    } else if ('nicknames' in body) {
+      return this.playerService.findManyByNicknames(body.nicknames);
+    }
+  }
+  
   @Post('register')
   @UseGuards(PlayerGuard)
   register(@Player() player: PlayerEntity) {
     return player.register ? player : this.playerService.register(player.uid);
+  }
+
+  @Post('set/nickname')
+  @UseGuards(PlayerGuard)
+  setNickname(@Body() body: SetNicknameDto, @Player() player: PlayerEntity) {
+    if (player.nickname === body.nickname) throw new PlayerHaveSameNickname;
+    return this.playerService.setNickname(player.uid, body.nickname);
+  }
+
+  @Post('set/password')
+  @UseGuards(PlayerGuard)
+  setPassword(@Body() body: SetPasswordDto, @Player() player: PlayerEntity) {
+    return this.playerService.setPassword(player.uid, body.password);
   }
 }

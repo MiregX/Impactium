@@ -13,26 +13,10 @@ export class PlayerGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     if (!request.user) {
-      const isAuth = await this.authGuard.canActivate(context);
-      if (!isAuth)
-        return false;
+      await this.authGuard.canActivate(context);
     }
 
     request.player = await this.playerService.findOneByIdOrCreate(request.user.id);
     return true;
-  }
-}
-
-@Injectable()
-export class GetPlayerGuard implements CanActivate {
-  constructor(private readonly playerGuard: PlayerGuard) {}
-
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const { nickname, nicknames } = request.body || {};
-    if (nicknames || nickname) {
-      return true;
-    }
-    return this.playerGuard.canActivate(context);
   }
 }

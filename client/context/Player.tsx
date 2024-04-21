@@ -29,6 +29,16 @@ export interface IPlayer {
   achievements?: any;
 }
 
+interface APIErrorResponse {
+  statusCode: number,
+  message: string
+}
+
+interface APIPlayerResponse {
+  player: IPlayer | APIErrorResponse,
+  response: Response
+}
+
 interface IPlayerRequest {
   path: string;
   headers?: IPlayerRequestHeaders,
@@ -36,80 +46,67 @@ interface IPlayerRequest {
 }
 
 interface IPlayerRequestHeaders {
-  token: string;
   nickname?: string;
   password?: string;
   achievement?: string;
 }
 
-export const setNickname = async ({ token, nickname }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const setNickname = async ({ nickname }: IPlayerRequestHeaders): Promise<APIPlayerResponse> => {
   return await playerAPI({
     path: 'set/nickname',
-    headers: {
-      token,
+    body: {
       nickname
     }
   });
 };
 
-export const setPassword = async ({ token, password }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const setPassword = async ({ password }: IPlayerRequestHeaders): Promise<APIPlayerResponse> => {
   return await playerAPI({
     path: 'set/password',
-    headers: {
-      token,
+    body: {
       password
     }
   });
 };
 
-export const setSkin = async ({ token, image }: { token: string, image: Blob }): Promise<IPlayer> => {
+export const setSkin = async ( { image }: { image: Blob }): Promise<APIPlayerResponse> => {
   const formData = new FormData();
   formData.append('image', image);
 
   return await playerAPI({
     path: 'set/skin',
-    headers: {
-      token
-    },
     body: formData,
   });
 };
 
-export const register = async ({ token }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const register = async (): Promise<APIPlayerResponse> => {
   return await playerAPI({
-    path: 'register',
-    headers: {
-      token
-    }
+    path: 'register'
   });
 };
 
-export const getPlayer = async (token?: string): Promise<IPlayer> => {
+export const getPlayer = async (token?: string): Promise<APIPlayerResponse> => {
   return await playerAPI({
     path: 'get'
   });
 };
 
-export const getAchievements = async ({ token }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const getAchievements = async (): Promise<APIPlayerResponse> => {
   return await playerAPI({
-    path: 'get/achievements',
-    headers: {
-      token
-    }
+    path: 'get/achievements'
   });
 };
 
-export const setAchievement = async ({ token, achievement }: IPlayerRequestHeaders): Promise<IPlayer> => {
+export const setAchievement = async ({ achievement }: IPlayerRequestHeaders): Promise<APIPlayerResponse> => {
   return await playerAPI({
     path: 'set/achievement',
-    headers: {
-      token,
+    body: {
       achievement: achievement
     }
   });
 };
 
-const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlayer> => {
+const playerAPI = async ({ path, headers, body = {} }: IPlayerRequest): Promise<APIPlayerResponse> => {
   try {
     const method = path.startsWith('get')
       ? 'GET'
@@ -118,17 +115,16 @@ const playerAPI = async ({ path, headers, body }: IPlayerRequest): Promise<IPlay
     const response = await fetch(`${getServerLink()}/api/player/` + path, {
       method,
       headers: {
-        ...headers
+        ...headers,
+        'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body
+      body: JSON.stringify(body)
     });
 
-    if (!response.ok) {
-      return null;
-    }
+    const player = await response.json();
 
-    return await response.json();
+    return { player, response };
   } catch (error) {
     return undefined
   }
@@ -141,18 +137,15 @@ export const PlayerProvider = ({
     prefetched: IPlayer
     children: any
   }) => {
-  const [player, setPlayer] = useState<IPlayer>(null);
-  const [isPlayerLoaded, setIsPlayerLoaded] = useState<boolean>(false);
-  const [isPlayerFetched, setIsPlayerFetched] = useState<boolean>(false);
+  const [player, setPlayer] = useState<IPlayer>(prefetched);
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState<boolean>(!!prefetched);
+  const [isPlayerFetched, setIsPlayerFetched] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
     if (!isPlayerFetched) {
       (async () => {
         const player = await getPlayer();
-        if (!player) {
-          throw new Error('Разрабы пидорасы');
-        }
-        setPlayer(player);
+        setPlayer(player as IPlayer);
         setIsPlayerFetched(true);
         setIsPlayerLoaded(true);
       })();
@@ -175,7 +168,7 @@ export const PlayerProvider = ({
   };
   return (
     <PlayerContext.Provider value={playerProps}>
-      <div className={s.me}>
+      <div className={`${s.me} ${isPlayerLoaded && s.geist}`}>
         <Nav />
         {children}
       </div>

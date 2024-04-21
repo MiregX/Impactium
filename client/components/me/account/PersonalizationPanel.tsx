@@ -3,7 +3,8 @@ import React, { useRef } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
-import { setSkin, setPassword, setNickname } from '@/dto/Player';
+import { setSkin, setPassword, setNickname } from '@/context/Player';
+import { useMessage } from '@/context/Message';
 
 interface IPersonalizationPanel {
   type: 'nickname' | 'password' | 'skin'
@@ -11,25 +12,28 @@ interface IPersonalizationPanel {
 
 export function PersonalizationPanel({ type }: IPersonalizationPanel) {
   const { lang } = useLanguage();
-  const { token, player, setPlayer, isPlayerLoaded } = usePlayer();
+  const { newMessage } = useMessage();
+  const { player, setPlayer, isPlayerLoaded } = usePlayer();
   const self = useRef(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
-      setSkin({ token, image: file });
+      setSkin({ image: file });
     }
   };
 
-  const handleNicknameChange = () => {
-    setNickname({ token, nickname: self.current.value }).then(player => {
+  const handleNicknameChange = async () => {
+    const { player, response } = await setNickname({ nickname: self.current.value });
+    newMessage(response.status, lang[type]?.[response.ok ? response.status.toString() : ('message' in player ? player.message : 'unknown' )]);
+    if (response.ok) {
       setPlayer(player);
-    })
+    }
   };
 
   const handlePasswordChange = () => {
-    setPassword({ token, password: self.current.value }).then(player => {
+    setPassword({ password: self.current.value }).then(player => {
       setPlayer(player);
     })
   };
@@ -47,7 +51,8 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
       button: {
         style: s.saveButton,
         title: lang.apply
-      }
+      },
+      accent: '#1DE41D'
     },
     password: {
       key: s.setPassword,
@@ -61,7 +66,8 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
       button: {
         style: s.saveButton,
         title: lang.confirm
-      }
+      },
+      accent: '#E6B31C'
     },
     skin: {
       key: s.setSkin,
@@ -72,7 +78,8 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
         placeholder: ''
       },
       action: handleFileChange,
-      button: undefined
+      button: undefined,
+      accent: '#1E1EBE'
     }
   }
 
@@ -81,7 +88,10 @@ export function PersonalizationPanel({ type }: IPersonalizationPanel) {
   return (
     <div
       className={`${s.panel} ${s.dynamic} ${isPlayerLoaded && !player.registered && s.blocked} ${reference.key}`}>
-      <p>{reference.heading}</p>
+      <div className={s.head}>
+        <p>{reference.heading}</p>
+        <div className={s.circle} style={{backgroundColor: reference.accent}} />
+      </div>
 
       <div className={s.body}>
         <input

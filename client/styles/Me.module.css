@@ -1,13 +1,36 @@
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .me {
   max-width: 1344px;
   align-self: center;
   flex: 1;
   width: 100%;
   gap: 32px;
+  margin: 32px 0;
   flex-direction: row;
   display: flex;
 }
+.me::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.me.geist::before {
+  background: radial-gradient(50% 50% at 50% 50%, #121212 0, #000 100%);
+  opacity: 0;
+  animation: fadeInBackground 1.4s var(--transition) 1.2s forwards;
+}
 .nav {
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -27,7 +50,9 @@
   }
 }
 .nav a {
-  background: var(--gray32);
+  background: var(--soft-black);
+  box-shadow: inset 0px 0px 3px 0px var(--accent-2);
+  border: var(--geist-border);
   padding: 8px;
   min-height: 32px;
   min-width: 192px;
@@ -36,11 +61,10 @@
   display: flex;
   align-items: center;
 }
-.nav a:hover {
-  background: var(--gray48);
-}
+.nav a:hover,
 .nav a.selected {
-  background: var(--gray48);
+  background: var(--accent-2);
+  box-shadow: inset 0px 0px 3px 0px var(--accent-2), 0px 0px 3px 0px var(--accent-2);
 }
 .nav a p {
   flex: 1;

@@ -1,5 +1,7 @@
+import { BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { PartialType } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreatePlayerDto implements Prisma.PlayerCreateInput {
   uid?: string;
@@ -16,16 +18,37 @@ export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {
   skin?: Prisma.SkinCreateNestedOneWithoutPlayerInput;
 }
 
-export class PlayerRequestDto {
-  nickname?: string
+export class FindManyPlayersByNicknamesDto {
+  @IsNotEmpty()
+  @IsString({ each: true })
+  nicknames: string[];
 }
+
+export type FindPlayersDto = FindOnePlayerByNicknameDto | FindManyPlayersByNicknamesDto
 
 export class FindOnePlayerByNicknameDto {
-  nickname: string
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(32)
+  nickname: string;
 }
 
-export class FindManyPlayersByNicknamesDto {
-  nickname: string[]
+export type SetNicknameDto = FindOnePlayerByNicknameDto
+
+export class SetPasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }
 
-export type FindPlayers = FindOnePlayerByNicknameDto | FindManyPlayersByNicknamesDto
+export class PlayerAlreadyExists extends HttpException {
+  constructor() {
+    super('exists', HttpStatus.CONFLICT);
+  }
+}
+export class PlayerHaveSameNickname extends HttpException {
+  constructor() {
+    super('in_use', HttpStatus.CONFLICT);
+  }
+}

@@ -4,7 +4,6 @@ import { ReducedSkinEntity, SkinEntity } from "./skin.entity";
 export class ReducedPlayerEntity {
   selectFields() {
     return {
-      uid: true,
       nickname: true,
       password: true,
       register: true,

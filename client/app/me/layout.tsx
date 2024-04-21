@@ -2,9 +2,7 @@ import { ReactNode } from 'react';
 import { redirect } from 'next/navigation'
 import { PlayerProvider } from '@/context/Player';
 import { cookies } from 'next/headers';
-import { getPlayer } from '@/context/Player';
 import { getServerLink } from '@/dto/master';
-import { error } from 'console';
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
 	const authorization = cookies().get('Authorization');
 
@@ -20,15 +18,15 @@ export default async function MeLayout({ children }: Readonly<{ children: ReactN
 		}
 	})
 	.then(async (res) => {
+		if (!res.ok) throw new Error();
 		return await res.json();
 	})
-	.catch(error => {
+	.catch(_ => {
 		redirect('/')
 	});
-	
-	console.log(player);
+
 	return (
-		<PlayerProvider>
+		<PlayerProvider prefetched={player}>
 			{children}
 		</PlayerProvider>
 	);

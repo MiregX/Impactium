@@ -25,4 +25,9 @@ module.exports = {
       }
     ]
   },
+  logging: {
+    fetches: {
+      fullUrl: false,
+    }
+  }
 };

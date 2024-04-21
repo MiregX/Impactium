@@ -24,12 +24,22 @@
   padding: 0.75em 1em;
   border-radius: 16px;
   color: #eceff1;
-  background-color: #2b2b2b;
-  border: 1px solid #eceff133;
+  background: #4b4b4b17;
+  border: 1px solid var(--accent-2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 8px;
+}
+.panel .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.circle {
+  height: 12px;
+  width: 12px;
+  border-radius: var(--border-max);
 }
 .panel input {
   display: block;
@@ -39,7 +49,8 @@
   text-align: center;
   text-decoration: none;
   color: #fff;
-  background-color: #0d0d0d;
+  background-color: var(--soft-black);
+  border: 1px solid var(--accent-2);
   padding: 0.7em;
   border-radius: 10px;
   font-size: 1rem;
@@ -51,7 +62,6 @@
   padding: 0.44em;
   width: 100%;
   flex: 1;
-  border: 1px solid #0d0d0d;
 }
 .panel p {
   flex: 1;
@@ -69,7 +79,7 @@
   --lightness: 51.37%;
 }
 .dynamic.playerCredentials {
-  --hue: 240;
+  --hue: 350;
 }
 .dynamic.setNickname {
   --hue: 120;
@@ -78,7 +88,7 @@
   --hue: 45;
 }
 .dynamic.setSkin {
-  --hue: 350;
+  --hue: 240;
 }
 .dynamic.serverInfo {
   --hue: 0;
@@ -131,7 +141,7 @@
 .overlay .dynamic {
   background-color: hsla(var(--hsl), 0.15);
   border-color: hsla(var(--hsl), 1);
-  box-shadow: 0 0 0 1px inset hsl(var(--hsl));
+  /* box-shadow: 0 0 0 1px inset hsl(var(--hsl)); */
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -153,7 +163,6 @@
 
 :not(.overlay) > .dynamic:hover {
   --lightness: 95%;
-  background: hsla(var(--hsl), 0.1);
 }
 
 .overlay .controls {
@@ -185,18 +194,19 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   text-align: center;
-  border: 1px solid #0d0d0d;
+  border: var(--geist-border);
+  background: var(--soft-black);
   text-decoration: none;
-  color: #fff;
+  color: var(--soft-white);
+  font-weight: 700;
   width: min-content;
   background-color: #0d0d0d;
   line-height: normal;
   padding: 0.44em;
   border-radius: 10px;
   font-size: 1rem;
-  font-weight: 600;
   grid-row: -1;
-  z-index: 1;
+  z-index: 2;
   cursor: pointer;
 }
 .setSkin input {
@@ -227,6 +237,7 @@
   grid-template-rows: auto auto 1fr;
   grid-template-columns: 1fr; 
   align-items: start;
+  background: var(--geist-background);
   gap: 1.25em;
   min-width: 256px;
 }
@@ -300,6 +311,8 @@
 }
 .playerCredentials .button {
   width: 100%;
+  background-color: var(--soft-white);
+  color: var(--black);
 }
 @media (max-width: 767px) {
   .playerCredentials {

@@ -25,7 +25,7 @@ export function Nav() {
       image: 'https://cdn.impactium.fun/ui/user/user.svg'
     },
     settings: {
-      image: 'https://cdn.impactium.fun/ui/actions/settings.svg'
+      image: 'https://cdn.impactium.fun/ui/action/settings.svg'
     }
   }
 

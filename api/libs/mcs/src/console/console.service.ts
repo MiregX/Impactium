@@ -47,8 +47,8 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
         this.output(msg.replace(/\x1b\[\d+m/g, ''))
       });
     } catch (_) {
-      console.log(_)
-      
+      console.log(_);
+      await this.connect();
     }
   }
 

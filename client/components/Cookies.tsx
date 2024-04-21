@@ -25,7 +25,7 @@ export function CookiesConsemption() {
   }
 
   return (
-    <div className={`${s.cookies} ${!isAccepted && acceptTimer > 0 && s.hide}`}>
+    <div className={`${s.cookies} ${!isAccepted && s.hide}`}>
       <Badge title='Cookies' color='#d17724' icon={BadgeTypes.cookies} />
       <p></p>
       <div className={s.node}>

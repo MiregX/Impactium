@@ -958,7 +958,7 @@ ourPartners: {
     }
   },
   nickname: {
-      "200": {
+      "201": {
       ua: "Ваш нікнейм успішно оновлено. Деякі досягнення та предмети можуть зникнути.",
       it: "Il tuo nickname è stato aggiornato con successo. Alcuni achievement e oggetti potrebbero scomparire.",
       us: "Your nickname has been successfully updated. Some achievements and  items may disappear.",
@@ -982,13 +982,13 @@ ourPartners: {
       us: "Nickname can be changed only once per hour",
       ru: "Никнейм можно менять только раз час"
     },
-    "404": {
+    "already_exists": {
       ua: "Гравець з таким нікнеймом вже існує",
       it: "Giocatore con lo stesso nickname già esistente",
       us: "Player with such nickname already exists",
       ru: "Такой никнейм уже занят"
     },
-    "405": {
+    "in_use": {
       ua: "Вибачте, але ви не можете встановити той же самий нікнейм, який ви вже маєте",
       it: "Spiacenti, non puoi impostare lo stesso nickname che hai già",
       us: "Sorry, but you cannot set the same nickname that you already have",
