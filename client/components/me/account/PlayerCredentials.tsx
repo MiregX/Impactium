@@ -9,7 +9,7 @@ import { usePlayer } from '@/context/Player';
 export function PlayerCredentials() {
   const { lang } = useLanguage();
   const { user } = useUser();
-  const { player, register, isPlayerLoaded } = usePlayer();
+  const { player, isPlayerLoaded } = usePlayer();
   const { copy } = useMessage();
   const allAchievements = ['casual', 'defence', 'killer', 'event', 'donate', 'hammer'];
   const [playerSkinIconLink, setPlayerSkinIconLink] = useState(player?.skin?.iconLink || 'https://cdn.impactium.fun/minecraftPlayersSkins/steve_icon.png');
@@ -58,7 +58,7 @@ export function PlayerCredentials() {
           {lang.copyMyReferalLink}
         </button>
       ) : (
-        <button className={s.button} data-overlayed={true} onClick={register}>
+        <button className={s.button} data-overlayed={true}>
           {lang._register}
         </button>
       )}

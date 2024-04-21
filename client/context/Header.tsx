@@ -12,11 +12,13 @@ interface HeaderContextProps {
   setIsHeaderBackgroundHidden: Dispatch<SetStateAction<boolean>>;
   isFlattenHeader: boolean;
   setIsFlattenHeader: Dispatch<SetStateAction<boolean>>;
-  isLogoHiiden: boolean;
-  setIsLogoHiiden: Dispatch<SetStateAction<boolean>>;
+  isLogoHidden: boolean;
+  setIsLogoHidden: Dispatch<SetStateAction<boolean>>;
+  isSettingsVisible: boolean;
+  setIsSettingsVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-const HeaderContext = createContext<HeaderContextProps | undefined>(undefined);
+const HeaderContext = createContext<HeaderContextProps>(undefined);
 
 export const useHeader = () => {
   const context = useContext(HeaderContext);
@@ -32,19 +34,22 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url !== '/');
   const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(url.startsWith('/me'));
-  const [isLogoHiiden, setIsLogoHiiden] = useState<boolean>(false);
+  const [isLogoHidden, setIsLogoHidden] = useState<boolean>(false);
+  const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 
   useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url]);
 
-  const headerProps = {
+  const headerProps: HeaderContextProps = {
     isLoading,
     setIsLoading,
     isHeaderBackgroundHidden,
     setIsHeaderBackgroundHidden,
     isFlattenHeader,
     setIsFlattenHeader,
-    isLogoHiiden,
-    setIsLogoHiiden
+    isLogoHidden,
+    setIsLogoHidden,
+    isSettingsVisible,
+    setIsSettingsVisible
   }
 
   return (

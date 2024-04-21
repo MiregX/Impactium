@@ -36,26 +36,11 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const applicationInfo = await requestApplicationInfoFromServer();
 
-  const user = async () => {
-    const response = await fetch(`${getServerLink()}/api/user/get`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-
-    if (!response.ok) return undefined;
-
-    return await response.json();
-  };
-
-  const x = await user()
-
-  console.log(x)
-
   return (
     <html>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider>
-          <UserProvider prefetchedUser={x}>
+          <UserProvider>
               <HeaderProvider>
                 <Preloader applicationInfo={applicationInfo} />
                 <MessageProvider>

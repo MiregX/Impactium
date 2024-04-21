@@ -28,7 +28,7 @@
       "type": "node-terminal",
       "name": "Start PRISMA",
       "request": "launch",
-      "command": "npx prisma studio",
+      "command": "npx prisma studio --schema libs/api/prisma/schema.prisma",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
     }

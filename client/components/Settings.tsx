@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import s from '@/styles/header/Settngs.module.css';
 import Cookies from 'universal-cookie';
+import { useHeader } from '@/context/Header';
 
 const Settings = () => {
   const cookie = new Cookies();
+  const { isSettingsVisible, setIsSettingsVisible } = useHeader();
   const [cookies, setCookies] = useState(cookie.get("_cookies_consent"));
-  const [visible, setVisible] = useState<boolean>(false);
 
   return (
-    <div className={`${s.background} ${visible && s.visible}`} onClick={() => { setVisible(false) }}>
+    <div className={`${s.background} ${isSettingsVisible && s.visible}`} onClick={() => { setIsSettingsVisible(false) }}>
       <div className={s.settings} onClick={e => e.stopPropagation()}>
         <div className={s.top}>
           <div className={s.title}>

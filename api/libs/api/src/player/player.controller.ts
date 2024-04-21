@@ -4,14 +4,16 @@ import { Player } from './player.decorator';
 import { PlayerEntity } from './entities/player.entity';
 import { GetPlayerGuard, PlayerGuard } from './player.guard';
 import { FindPlayers } from './dto/player.dto';
+import { AuthGuard } from '@api/main/auth/auth.guard';
 
 @Controller('player')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
   
   @Get('get')
-  @UseGuards(GetPlayerGuard)
+  @UseGuards(AuthGuard, GetPlayerGuard)
   find(@Body() body: FindPlayers, @Player() player: PlayerEntity) {
+    console.log('Прилетел запрос')
     if (!body.nickname) {
       return player;
     }

@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 
 export function Preloader({ applicationInfo }) {
   const { isUserLoaded } = useUser();
-  const { setIsLogoHiiden } = useHeader();
+  const { setIsLogoHidden } = useHeader();
   const { lang } = useLanguage();
   const url = usePathname(); 
   const blocker = url === '/login/callback';
@@ -26,7 +26,7 @@ export function Preloader({ applicationInfo }) {
     if (visitedBefore) {
       self.current.classList.add(s.fast);
     } else {
-      setIsLogoHiiden(true);
+      setIsLogoHidden(true);
       self.current.classList.add(s.slow);
     }
   }, [self, visitedBefore]);
@@ -36,7 +36,7 @@ export function Preloader({ applicationInfo }) {
 
     setTimeout(() => {
       self.current.classList.add(s.hide);
-      setIsLogoHiiden(false);
+      setIsLogoHidden(false);
       setTimeout(() => {
         self.current.classList.add(s.remove);
         if (!visitedBefore) setVisitedBefore(true);

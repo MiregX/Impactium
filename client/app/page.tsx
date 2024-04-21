@@ -12,8 +12,7 @@ export default function Main() {
         <Cloud />
       </PanelTemplate>
       <PanelTemplate>
-        <Challenge />
-        <Cloud />
+        {null}
       </PanelTemplate>
     </>
   );

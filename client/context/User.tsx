@@ -25,13 +25,12 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({
-    prefetchedUser,
     children
   }) => {
   const cookie = new Cookies();
-  const [isUserFetched, setIsUserFetched] = useState(typeof prefetchedUser !== 'undefined');
-  const [user, setUser] = useState<FulfilledUser | null>(prefetchedUser);
-  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(typeof prefetchedUser !== 'undefined');
+  const [isUserFetched, setIsUserFetched] = useState(false);
+  const [user, setUser] = useState<FulfilledUser | null>(null);
+  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (!isUserFetched) {

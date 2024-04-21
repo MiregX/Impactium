@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import s from '@/styles/me/Account.module.css';
 import { useLanguage } from '@/context/Language';
 import { usePlayer } from '@/context/Player';
-import { getAchievements } from '@/dto/Player';
+// import { getAchievements } from '@/dto/Player';
 
 export function AchievementsModule() {
   const { lang } = useLanguage();
@@ -88,14 +88,14 @@ export function AchievementsModule() {
     overlayAchievementModule.classList.add(s[activeAchievement]);
   }, [activeAchievement]);
 
-  useEffect(() => {
-    if (!isAchievementsFetched && player && isPlayerLoaded) {
-      getAchievements({ token }).then((player) => {
-        setPlayer(player);
-        setIsAchievementsFetched(true);
-      });
-    }
-  }, [getAchievements, isAchievementsFetched, isPlayerLoaded, player])
+  // useEffect(() => {
+  //   if (!isAchievementsFetched && player && isPlayerLoaded) {
+  //     getAchievements({ token }).then((player) => {
+  //       setPlayer(player);
+  //       setIsAchievementsFetched(true);
+  //     });
+  //   }
+  // }, [getAchievements, isAchievementsFetched, isPlayerLoaded, player])
   
   return (
     <div className={`${s.achievementsModule} ${s.dynamic} ${s.panel} ${s[activeAchievement]} ${!player.registered && s.blocked}`}>
