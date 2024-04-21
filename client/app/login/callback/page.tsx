@@ -2,16 +2,18 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useLanguage } from '@/context/Language';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { getServerLink } from '@/dto/master';
+import Cookies from 'universal-cookie';
 
 export default function CallbackPage() {
-  const { token, setToken, refreshUser, user, setIsUserLoaded } = useUser();
+  const { refreshUser, setIsUserLoaded } = useUser();
   const { refreshLanguage } = useLanguage();
-  const router = useRouter(); 
+  const router = useRouter();
+  const cookies = new Cookies();
   const searchParams = useSearchParams();
 
-  const _token = searchParams.get('token');
+  const token = searchParams.get('token');
   const code = searchParams.get('code');
   
   async function loginCallback(code: string, referal?: string) {
@@ -22,19 +24,17 @@ export default function CallbackPage() {
   }
 
   useEffect(() => {
-    if (!code) {
-      setIsUserLoaded(false);
-      if (!token) {
-        setToken(_token);
+    setIsUserLoaded(false);
+    (async () => {
+      if (token) {
+        cookies.set('Authorisation', token)
+      } else if (code) {
+        await loginCallback(code)
       }
-      return router.push('/');
-    }
-
-    loginCallback(code).then(async () => {
-      await refreshUser();
+      refreshUser();
       refreshLanguage();
-      router.push('/');
-    });
+      return router.push('/');
+    })();
   }, []);
 
   return null;

@@ -11,6 +11,8 @@ export default async function MeLayout({ children }: Readonly<{ children: ReactN
 		credentials: 'include',
 	});
 
+	console.log(response)
+
 	if (!player) {
 		redirect('/login')
 	}

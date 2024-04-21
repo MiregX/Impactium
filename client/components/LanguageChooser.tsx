@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '@/context/Language';
 import s from '@/styles/Language.module.css';
 
-export function Language() {
+export function LanguageChooser() {
   const { setLanguage, language } = useLanguage();
   const [isPanelActive, setPanelActive] = useState<boolean>(false);
 

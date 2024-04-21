@@ -1,6 +1,6 @@
 'use client'
 import s from '@/styles/Login.module.css';
-import type { LoginMethod } from './Page';
+import type { LoginMethod } from '@/app/login/page';
 import { useRouter } from 'next/navigation';
 import { getServerLink } from '@/dto/master';
 import { useLanguage } from '@/context/Language';

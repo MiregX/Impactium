@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import s from '@/styles/header/Cookies.module.css'
 import { Badge, BadgeTypes } from "@/ui/Badge";
@@ -9,7 +10,6 @@ export function CookiesConsemption() {
   const [isAccepted, setIsAccepted] = useState<boolean>(!!cookie.get("_cookies_consent"));
 
   useEffect(() => {
-    console.log(isAccepted);
     if (!isAccepted && acceptTimer > 0) {
       setTimeout(() => {
         setAcceptTimer(acceptTimer - 1);
@@ -20,7 +20,7 @@ export function CookiesConsemption() {
   }, [acceptTimer]);
 
   function acceptCookies() {
-    cookie.set('_cookies_consent', 'true');
+    cookie.set('_cookies_consent', '_');
     setIsAccepted(true);
   }
 

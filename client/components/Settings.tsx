@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import s from '@/styles/header/Settngs.module.css';
 import Cookies from 'universal-cookie';

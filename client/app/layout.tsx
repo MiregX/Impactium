@@ -5,10 +5,11 @@ import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
-import { getUser } from '@/dto/User';
-import { Preloader } from '@/components/header/Preloader';
-import { cookies } from 'next/headers';
-import { requestApplicationInfoFromServer } from '@/dto/master'
+import { Preloader } from '@/components/Preloader';
+import { getServerLink, requestApplicationInfoFromServer } from '@/dto/master'
+import Settings from '@/components/Settings';
+import { CookiesConsemption } from '@/components/Cookies';
+import { LanguageChooser } from '@/components/LanguageChooser';
 
 export const metadata: Metadata = {
   title: {
@@ -33,29 +34,41 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const authorization = cookies().get('Authorization')?.value;
   const applicationInfo = await requestApplicationInfoFromServer();
-  
-  console.log(applicationInfo);
 
-  const user = await getUser(authorization);
+  const user = async () => {
+    const response = await fetch(`${getServerLink()}/api/user/get`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (!response.ok) return undefined;
+
+    return await response.json();
+  };
+
+  const x = await user()
+
+  console.log(x)
 
   return (
     <html>
-      <LanguageProvider>
-        <UserProvider prefetchedUser={user}>
-          <body style={{ backgroundColor: '#000000' }}>
-            <HeaderProvider>
-              <Preloader applicationInfo={applicationInfo} />
-              <MessageProvider>
-                <main>
-                  {children}
-                </main>
-              </MessageProvider>
-            </HeaderProvider>
-          </body>
-        </UserProvider>
-      </LanguageProvider>
+      <body style={{ backgroundColor: '#000000' }}>
+        <LanguageProvider>
+          <UserProvider prefetchedUser={x}>
+              <HeaderProvider>
+                <Preloader applicationInfo={applicationInfo} />
+                <MessageProvider>
+                  <main>
+                    {children}
+                  </main>
+                </MessageProvider>
+                <CookiesConsemption />
+                <Settings />
+              </HeaderProvider>
+          </UserProvider>
+        </LanguageProvider>
+      </body>
     </html>
   );
 }

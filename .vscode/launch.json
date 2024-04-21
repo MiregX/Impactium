@@ -6,13 +6,12 @@
       "request": "launch",
       "command": "npm run start:debug",
       "cwd": "${workspaceFolder}/api",
-      "envFile": "${workspaceFolder}/.env",
       "preLaunchTask": "start-engine",
       "postDebugTask": "stop-engine"
     },
     {
       "type": "node-terminal",
-      "name": "Start DOCKER",
+      "name": "Build PRODUCTION",
       "request": "launch",
       "command": "docker compose --profile production up -d",
       "cwd": "${workspaceFolder}/"

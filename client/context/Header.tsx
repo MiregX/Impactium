@@ -1,12 +1,9 @@
 'use client'
 import { usePathname } from 'next/navigation';
-import { Language } from '@/components/LanguageChooser';
 import { Header } from '@/components/header/Header';
 import { HeaderBackground } from '@/components/header/HeaderBackground';
 import type { ReactNode, Dispatch, SetStateAction } from 'react';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CookiesConsemption } from '@/components/header/Cookies';
-import Settings from '@/components/header/Settings';
 
 interface HeaderContextProps {
   isLoading: boolean;
@@ -54,9 +51,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     <HeaderContext.Provider value={headerProps}>
       <Header />
       <HeaderBackground />
-      <Language />
-      <CookiesConsemption />
-      <Settings />
       {children}
     </HeaderContext.Provider>
   );

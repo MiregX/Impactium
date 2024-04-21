@@ -2,7 +2,7 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { FulfilledUser } from "@impactium/types";
-import { getUser } from "@/dto/User";
+import { getServerLink } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
@@ -12,8 +12,6 @@ interface IUserContext {
   logout: () => void,
   getUser: (authorization?: string) => FulfilledUser | Promise<FulfilledUser>,
   refreshUser: () => void,
-  token: string,
-  setToken: (token: string) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
 }
@@ -32,45 +30,47 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(typeof prefetchedUser !== 'undefined');
-  const [token, setToken] = useState<string>((cookie.get('Authorization')));
   const [user, setUser] = useState<FulfilledUser | null>(prefetchedUser);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(typeof prefetchedUser !== 'undefined');
 
-  const logout = () => {
-    setToken('')
-    cookie.set('Authorization', '_');
+  useEffect(() => {
+    if (!isUserFetched) {
+      refreshUser();
+    }
+  }, [isUserFetched, isUserLoaded]);
+
+  const getUser = async () => {
+    try {
+      const response = await fetch(`${getServerLink()}/api/user/get`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+  
+      if (!response.ok) throw Error();
+  
+      return await response.json();
+    } catch (_) {
+      console.log(_)
+      return undefined;
+    }    
   };
 
-  const refreshUser = async () => {
-    const token = cookie.get('Authorization');
-    await getUser(token).then((user) => {
-      setUser(user);
-    }).catch((_) => {
-      setUser(null);
-    }).finally(() => {
-      setIsUserFetched(true);
-      setIsUserLoaded(true);
-    });
-    setToken(token)
+  const logout = () => {
+    cookie.remove('Authorization');
+    refreshUser();
   };
-  
-  useEffect(() => {
-    if (token) {
-      if (isUserFetched && isUserLoaded) return console.log('ss');
-      setIsUserLoaded(false);
-      getUser(token).then((user) => {
-        setUser(user);
-      }).catch((_) => {
-        setUser(null);
-      }).finally(() => {
-        setIsUserFetched(true);
-        setIsUserLoaded(true);
-      });
-    } else {
-      cookie.remove('Authorization');
-      setUser(null);
-    }
-  }, [token]);
+
+  const login = (authorization: string) => {
+    cookie.set('Authorization', authorization);
+    refreshUser();
+  }
+
+  const refreshUser = async () => {
+    const user = await getUser();
+    setUser(user);
+    setIsUserFetched(true);
+    setIsUserLoaded(true);
+  };
 
   const userProps: IUserContext = {
     user,
@@ -78,8 +78,6 @@ export const UserProvider = ({
     logout,
     getUser,
     refreshUser,
-    token,
-    setToken,
     isUserLoaded,
     setIsUserLoaded
   };

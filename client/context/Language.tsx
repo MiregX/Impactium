@@ -1,4 +1,5 @@
 'use client';
+import { LanguageChooser } from '@/components/LanguageChooser';
 import locale from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
@@ -87,6 +88,7 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
   return (
     <LanguageContext.Provider value={props}>
       {children}
+      <LanguageChooser />
     </LanguageContext.Provider>
   );
 };
