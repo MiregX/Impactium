@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
 :root {
   --black: #000000;
-  --border-max: 999px;
   --soft-white: #e8e8e8;
   --soft-black: #0d0d0d;
+  
   --gray16: #161616;
   --gray24: #242424;
   --gray32: #323232;
@@ -11,14 +11,28 @@
   --gray64: #646464;
   --gray80: #808080;
   --gray96: #929292;
+
+  --header-height: 64px;
+  
+  --transition: cubic-bezier(.21,.29,0,.94);
+  --round: 100px;
+
   --geist-background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
   --geist-border: 1px solid hsla(0,0%,100%,.07);
+  --shadow-border: 0 0 0 1px hsla(0, 0%, 100%, .145);
   --geist-weak-shadow: 0 0 0 1px hsla(0,0%,100%,.145) ,0px 1px 1px rgba(0,0,0,.02),0px 4px 8px -4px rgba(0,0,0,.04),0px 16px 24px -8px rgba(0,0,0,.06);
-  --transition: cubic-bezier(.21,.29,0,.94);
+  --geist-right-radial-gradient: radial-gradient(50% 50% at 50% 50%, #121212 0, #000 100%);
+
+  --shadow-menu: var(--shadow-border),0px 1px 1px rgba(0,0,0,.02),0px 4px 8px -4px rgba(0,0,0,.04),0px 16px 24px -8px rgba(0,0,0,.06);
 
   --accent-1: #111;
   --accent-2: #222;
   --accent-3: #333;
+  --accent-4: #444;
+  --accent-5: #555;
+  --accent-6: #666;
+  --accent-7: #777;
+  --accent-8: #888;
 
   --hammer: url("https://cdn.impactium.fun/custom/hammer.svg");
   --hammer-accent: #F14C50;
@@ -32,9 +46,6 @@
   --event-accent: #E465FD;
   --donate: url("https://cdn.impactium.fun/custom/donate.svg");
   --donate-accent: #72E4F2;
-
-  --blured-gradient: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
-  --blured-border: 1px solid hsla(0,0%,100%,.07);
 }
 
 * {
@@ -80,8 +91,8 @@ body {
 }
 
 main {
-  min-height: calc(100vh - 80px);
-  margin-top: 80px;
+  min-height: calc(100vh - var(--header-height));
+  margin-top: var(--header-height);
   width: 100%;
   max-width: 100vw;
   display: flex;

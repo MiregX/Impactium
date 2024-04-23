@@ -1,15 +1,16 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useLanguage } from '@/context/Language';
-import { Suspense, useEffect } from 'react';
+import { ReactNode, Suspense, useEffect } from 'react';
 import { getServerLink } from '@/dto/master';
 import Cookies from 'universal-cookie';
 
 function CallbackComponent() {
-  const { refreshUser, setIsUserLoaded } = useUser();
+  const { refreshUser, setIsUserLoaded, login } = useUser();
   const { refreshLanguage } = useLanguage();
   const cookies = new Cookies();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const token = searchParams.get('token');
@@ -26,16 +27,17 @@ function CallbackComponent() {
     setIsUserLoaded(false);
     (async () => {
       if (token) {
-        cookies.set('Authorisation', token)
+        login(token);
       } else if (code) {
-        await loginCallback(code)
+        await loginCallback(code);
+        refreshUser();
       }
-      refreshUser();
       refreshLanguage();
     })();
   }, []);
 
-  return null;
+  router.push('/');
+  return null 
 };
 
 export default function CallbackPage() {

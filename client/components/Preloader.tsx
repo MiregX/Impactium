@@ -3,6 +3,7 @@ import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { useLanguage } from '@/context/Language';
+import { Configuration } from '@impactium/config';
 import {
     useCallback,
     useEffect,

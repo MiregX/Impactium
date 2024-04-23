@@ -7,10 +7,6 @@ export default function Main() {
  
   return (
     <>
-      <PanelTemplate splitter={true}>
-        <Challenge />
-        <Cloud />
-      </PanelTemplate>
       <PanelTemplate>
         {null}
       </PanelTemplate>
