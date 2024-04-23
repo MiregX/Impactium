@@ -10,11 +10,11 @@ import { Nav } from '@/components/header/Nav';
 
 export function Header() {
   const { user } = useUser();
-  const { isFlattenHeader, isLogoHiiden } = useHeader();
+  const { isFlattenHeader, isLogoHidden } = useHeader();
 
   return (
     <header className={`${s.header} ${isFlattenHeader && s.flatten}`}>
-      <Link href='/' className={`${s.logo} ${isLogoHiiden && s.hidden}`}>
+      <Link href='/' className={`${s.logo} ${isLogoHidden && s.hidden}`}>
         <Image src="https://cdn.impactium.fun/logo/impactium.svg" height={48} width={37} alt="Impactium" />
         <p>Impactium</p>
       </Link>

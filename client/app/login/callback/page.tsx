@@ -1,15 +1,14 @@
 'use client'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useLanguage } from '@/context/Language';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { getServerLink } from '@/dto/master';
 import Cookies from 'universal-cookie';
 
-export default function CallbackPage() {
+function CallbackComponent() {
   const { refreshUser, setIsUserLoaded } = useUser();
   const { refreshLanguage } = useLanguage();
-  const router = useRouter();
   const cookies = new Cookies();
   const searchParams = useSearchParams();
 
@@ -33,9 +32,16 @@ export default function CallbackPage() {
       }
       refreshUser();
       refreshLanguage();
-      return router.push('/');
     })();
   }, []);
 
   return null;
 };
+
+export default function CallbackPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CallbackComponent />
+    </Suspense>
+  );
+}
