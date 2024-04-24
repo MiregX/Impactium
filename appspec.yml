@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /impactium
+hooks:
+  ApplicationStop:
+    - location: lib/scripts/stop.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: lib/scripts/build.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: lib/scripts/start.sh
+      timeout: 300
+      runas: root

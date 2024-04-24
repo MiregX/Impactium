@@ -25,13 +25,11 @@ CMD [ "npm", "run", "dev" ]
 FROM development AS production
 
 WORKDIR /app/lib
-COPY --chown=node:node --from=development ./app/lib .
+COPY --from=development ./app/lib .
 
 WORKDIR /app/client
-COPY --chown=node:node --from=development ./app/client/.next ./.next
-COPY --chown=node:node --from=development ./app/client/node_modules ./node_modules
-COPY --chown=node:node --from=development ./app/client/public ./public
-COPY --chown=node:node --from=development ./app/client/package*.json .
-COPY --chown=node:node --from=development ./app/client/next.config.js .
+COPY --from=development ./app/client/.next ./.next
+COPY --from=development ./app/client/package*.json .
+COPY --from=development ./app/client/next.config.js .
 
 CMD [ "npm", "run", "start" ]

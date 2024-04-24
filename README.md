@@ -78,6 +78,20 @@ $ npm run prisma:generate
 $ npm run prisma:format
 ```
 
+## AWS Deploying
+
+```bash
+$ aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 905418431500.dkr.ecr.eu-north-1.amazonaws.com
+
+$ docker tag impactium-client:latest 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-client:latest
+
+$ docker push 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-client:latest
+
+$ docker tag impactium-api:latest 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-api:latest
+
+$ docker push 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-api:latest
+
+```
 ## Support
 
 For questions or support, contact at `admin@impactium.fun`.

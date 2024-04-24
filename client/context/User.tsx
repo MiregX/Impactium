@@ -1,16 +1,15 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { FulfilledUser } from "@impactium/types";
 import { getServerLink } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
 interface IUserContext {
-  user: FulfilledUser,
-  setUser: (user: FulfilledUser) => void,
+  user: any,
+  setUser: (user: any) => void,
   logout: () => void,
-  getUser: (authorization?: string) => FulfilledUser | Promise<FulfilledUser>,
+  getUser: (authorization?: string) => any | Promise<any>,
   refreshUser: () => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -29,7 +28,7 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(false);
-  const [user, setUser] = useState<FulfilledUser | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false);
 
   useEffect(() => {
