@@ -32,7 +32,9 @@ export const UserProvider = ({
   const [user, setUser] = useState<UserComposedEntity | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false);
 
-  useEffect(() => !isUserFetched && refreshUser(), [isUserFetched]);
+  useEffect(() => {
+    !isUserFetched && refreshUser()
+  }, [isUserFetched]);
 
   const getUser = async (): Promise<UserComposedEntity> => {
     const res = await fetch(`${getServerLink()}/api/user/get`, {

@@ -7,9 +7,9 @@ import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
 import { requestApplicationInfoFromServer } from '@/dto/master'
-import Settings from '@/components/Settings';
-import { CookiesConsemption } from '@/components/Cookies';
+import { CookiesConsemption } from '@/components/cookies/Cookies';
 import { Configuration } from '@impactium/config';
+import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
   title: {
@@ -35,11 +35,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const applicationInfo = await requestApplicationInfoFromServer();
+  const cookie = cookies();
 
   return (
     <html>
       <body style={{ backgroundColor: '#000000' }}>
-        <LanguageProvider>
+        <LanguageProvider predefinedLanguage={cookies().get('_language')?.value}>
           <UserProvider>
               <HeaderProvider>
                 {Configuration.isProductionMode() && <Preloader applicationInfo={applicationInfo} />}
@@ -48,8 +49,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     {children}
                   </main>
                 </MessageProvider>
-                <CookiesConsemption />
-                <Settings />
+                <CookiesConsemption consemption={!!cookie.get('_cookies_consemption')} />
               </HeaderProvider>
           </UserProvider>
         </LanguageProvider>

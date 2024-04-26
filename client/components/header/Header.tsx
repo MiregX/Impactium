@@ -2,13 +2,15 @@
 import React from 'react';
 import Link from 'next/link';
 import s from '@/components/header/Header.module.css';
-import { LoginButton } from '@/ui/LoginButton';
+import { BaseButton, BaseButtonTypes } from '@/ui/BaseButton';
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { UserComponent } from './User';
+import { useLanguage } from '@/context/Language';
 
 export function Header() {
   const { user } = useUser();
+  const { lang } = useLanguage();
   const { isFlattenHeader, isLogoHidden } = useHeader();
 
   return (
@@ -20,7 +22,7 @@ export function Header() {
       {user?.id ? (
         <UserComponent />
       ) : (
-        <LoginButton />
+        <BaseButton type={BaseButtonTypes.link} text={lang._login} href='/login' />
       )}
     </header>
   );

@@ -137,7 +137,7 @@
   margin: 28px 0;
 }
 .one .line::after {
-  content: "OR";
+  content: attr(data-split);
   padding: 0 8px;
   background: var(--accent-1);
 }
@@ -152,10 +152,10 @@
 .baseButton[accessKey='discord'] {
   background: #5865F2;
 }
-.baseButton[accessKey='google'] {
+.baseButton[accessKey='github'] {
   background: var(--soft-white);
 }
-.baseButton[accessKey='google'] p {
+.baseButton[accessKey='github'] p {
   font-weight: 700;
   color: var(--gray16);
 }

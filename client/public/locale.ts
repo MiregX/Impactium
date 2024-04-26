@@ -13,11 +13,23 @@ export interface Locale {
 }
 
 const locale: Locale = {
-  login: {
+  _login: {
     ua: "Увійти",
     it: "Accesso",
-    us: "Login",
+    us: "Sign in",
     ru: "Войти"
+  },
+  _or: {
+    ua: "Або",
+    it: "O",
+    us: "Or",
+    ru: "Или"
+  },
+  _save: {
+    ua: "Зберегти",
+    it: "Salva",
+    us: "Save",
+    ru: "Сохранить"
   },
   logout: {
     ua: "Вийти",
@@ -25,194 +37,66 @@ const locale: Locale = {
     us: "Logout",
     ru: "Выйти"
   },
-   usernameOrEmail: {
-    ua: "Нікнейм або пошта",
-    it: "Nome utente o email",
-    us: "Username or email",
-    ru: "Никнейм или почта"
+  found_a_translation_error: {
+    ua: "Знайшли помилку в перекладі?",
+    it: "Hai trovato un errore di traduzione?",
+    us: "Found an error in translation?",
+    ru: "Выйти"
   },
-  continueWithgoogle: {
-    ua: "Увійти через Google",
-    it: "Continua con Google",
-    us: "Continue with Google",
-    ru: "Войти используя Google"
+  _translationWarning: {
+    ua: "Переклад був виконаний за допомогою нейромереж, і може містити помилки",
+    it: "La traduzione è stata effettuata con IA e può contenere errori.",
+    us: "The translation was performed using AI and may contain errors",
+    ru: "Перевод был выполнен при помощи нейросетей, и может содержать ошибки"
   },
-  continueWithdiscord: {
-    ua: "Увійти через Discord",
-    it: "Continua con Discord",
-    us: "Continue with Discord",
-    ru: "Войти используя Discord"
-  },
-  nuhuh: {
-    ua: "Крінжик...",
-    it: "No...",
-    us: "Nuh uh...",
-    ru: "Кринжовичёк..."
-  },
-  hours: {
-    ua: "годин",
-    it: "ore",
-    us: "hours",
-    ru: "часов"
-  },
-  hour: {
-    ua: "година",
-    it: "ora",
-    us: "hour",
-    ru: "час"
-  },
-  right_now: {
-    ua: "Тільки що",
-    it: "adesso",
-    us: "Right now",
-    ru: "Только что"
-  },
-  ago: {
-    ua: "тому",
-    it: "fa",
-    us: "ago",
-    ru: "назад"
-  },
-  minutes: {
-    ua: "хвилин",
-    it: "minuti",
-    us: "minutes",
-    ru: "минут"
-  },
-  minute: {
-    ua: "хвилина",
-    it: "minuto",
-    us: "minute",
-    ru: "минута"
-  },
-  minutes_1: {
-    ua: "хвилину",
-    it: "minuto",
-    us: "minute",
-    ru: "минуту"
-  },
-  minutes_2_4: {
-    ua: "хвилини",
-    it: "minuti",
-    us: "minutes",
-    ru: "минуты"
-  },
-  minutes_5: {
-    ua: "хвилин",
-    it: "minuti",
-    us: "minutes",
-    ru: "минут"
-  },
-  hours_1: {
-    ua: "година",
-    it: "ora",
-    us: "hour",
-    ru: "час"
-  },
-  hours_2_4: {
-    ua: "години",
-    it: "ore",
-    us: "hours",
-    ru: "часа"
-  },
-  hours_5: {
-    ua: "годин",
-    it: "ore",
-    us: "hours",
-    ru: "часов"
-  },
-  dontHaveAnAccount: {
-    ua: "Не маєте облікового запису?",
-    it: "Non hai un account?",
-    us: "Don't have an account?",
-    ru: "Нет учетной записи?"
-  },
-  justUseTheseTwo: {
-    ua: "Козаче... Просто використай це:",
-    it: "Usa semplicemente queste due:",
-    us: "Just  use these two:",
-    ru: "Чел... Просто используй это:"
-  },
-  partners: {
-    ua: "Партнери",
-    it: "Partner",
-    us: "Partners",
-    ru: "Партнёры"
-  },
-  products: {
-    ua: "Сервіси",
-    it: "Servizzi",
-    us: "Services",
-    ru: "Сервисы"
-  },
-  cont: {
-    ua: "Сервіси",
-    it: "Servizzi",
-    us: "Services",
-    ru: "Сервисы"
-  },
-  joinToUs: {
-    ua: "Приєднуйтесь до нас",
-    it: "Unisciti a noi",
-    us: "Join Our Community",
-    ru: "Присоединяйтесь к нам"
-  },
-  joinToUsDescription: [
-    {
-      ua: "Використання голосового чату не обов'язкове, але бажане. Без нього тебе засруть інші гравці.",
-      it: "L'uso della chat vocale non è obbligatorio, ma consigliato. Senza di essa, gli altri giocatori ti infastidiranno.",
-      us: "The  use of voice chat is not mandatory, but recommended. Without  it, other players may spam you.",
-      ru: "Использование войс-чата не обязательно, но желательно. Без него тебя засрут другие игроки."
+
+
+
+
+
+  login: {
+    username_or_email: {
+      ua: "Нікнейм або пошта",
+      it: "Nome utente o email",
+      us: "Username or email",
+      ru: "Никнейм или почта"
     },
-      {
-      ua: "Будь готовий знайти на своїй базі величезну обсидіанову свастику. І немає жодних гарантій, що це не зробив адмін )",
-      it: "Sii pronto a scoprire una grande svastica di ossidiana nella tua base. E non ci sono garanzie che non l'abbia fatta l'amministratore )",
-      us: "Be prepared to discover a huge obsidian swastika at your base. And there are no guarantees that the admin didn't create  it )",
-      ru: "Будь готов обнаружить у себя на базе огромную обсидиановую свастику. И нет никаких гарантий, что это сделал не админ )"
+    continue_with_github: {
+      ua: "Увійти через GitHub",
+      it: "Continua con GitHub",
+      us: "Continue with GitHub",
+      ru: "Войти используя GitHub"
     },
-      {
-      ua: "Перше правило лісу - завжди ховай шалкера в ендер-скрині. Друге правило лісу: за гриф - сват і дудос",
-      it: "La prima regola del bosco - nascondi sempre lo shulker nell'ender chest. La seconda regola del bosco: per il grief - DDoS",
-      us: "The first  rule of the forest - always hide the shulker in the ender chest. The second  rule of the forest: for grief - DDoS",
-      ru: "Первое правило леса - всегда прячь шалкера в эндер-чест. Второе правило леса: за гриф - сват и дудос"
+    continue_with_discord: {
+      ua: "Увійти через Discord",
+      it: "Continua con Discord",
+      us: "Continue with Discord",
+      ru: "Войти используя Discord"
     },
-      {
-      ua: "Незважаючи на рофельність проекту, адмін цілком адекватна людина. Якщо є проблеми - пиши в тг @MiregX",
-      it: "Nonostante la natura scherzosa del progetto, l'amministratore è una persona del tutto ragionevole. Se ci sono problemi, scrivi su Telegram a @MiregX",
-      us: "Despite the project's humorous nature, the admin is quite reasonable. If you have issues, contact on Telegram @MiregX",
-      ru: "Не смотря на рофельность проекта, админ вполне вменяемый человек. Если есть проблемы - пиши в тг @MiregX"
+    dontHaveAnAccount: {
+      ua: "Не маєте облікового запису?",
+      it: "Non hai un account?",
+      us: "Don't have an account?",
+      ru: "Нет учетной записи?"
     },
-      {
-      ua: "Ходять чутки, що за виконання всіх досягнень на сайті можна отримати бан.",
-      it: "Circolano voci che eseguire tutti gli obiettivi sul sito può portare al ban.",
-      us: "Rumors are circulating that completing all achievements on the site may result in a ban.",
-      ru: "Ходят слухи, что за выполнение всех достижений на сайте можно получить бан."
-    }
-  ],
-ourPartners: {
-    ua: "Наші партнери",
-    it: "I nostri partner",
-    us: "Our Partners",
-    ru: "Наши партнеры"
+    nuhuh: {
+      ua: "Крінжик...",
+      it: "No...",
+      us: "Nuh uh...",
+      ru: "Кринжовичёк..."
+    },
+    just_use_these_two: {
+      ua: "Козаче... Просто використай це:",
+      it: "Usa semplicemente queste due:",
+      us: "Just use these two:",
+      ru: "Чел... Просто используй это:"
+    },
   },
-  contact: {
-    ua: "Контакти",
-    it: "Contatti",
-    us: "Contacts",
-    ru: "Контакты"
-  },
-  backToMain: {
-    ua: "Повернутися на головну",
-    it: "Torna alla pagina principale",
-    us: "Back to main",
-    ru: "Вернуться на главную"
-  },
-  playerNotRegisteredYet: {
-    ua: "Немає акаунту",
-    it: "",
-    us: "No account",
-    ru: "Нет аккаунта"
-  },
+
+
+
+
+
   playerHasNoNickname: {
     ua: "Немає ігрового імені",
     it: "",
@@ -1007,7 +891,7 @@ ourPartners: {
     us: "Nickname",
     ru: "Никнейм"
   },
-  passWord: {
+  _password: {
     ua: "Пароль",
     it: "Password",
     us: "Password",
@@ -1086,10 +970,10 @@ ourPartners: {
     ru: "Внутренняя ошибка сервера"
   },
   chooseLanguages: {
-    ua: "",
-    it: "",
+    ua: "Мова сайту",
+    it: "Lingua del sito",
     us: "Язык сайта",
-    ru: ""
+    ru: "Site language"
   },
   enforsedPreloader:{
     enforsedPhrase1: {
@@ -1140,6 +1024,12 @@ ourPartners: {
       us: "We are inspired by ideas",
       ru: "Вдохновляемся идями"
     }
+  },
+  _selected: {
+    ua: "Обраний",
+    it: "Selezionato",
+    us: "Selected",
+    ru: "Выбраный"
   }
 }
 export default locale;

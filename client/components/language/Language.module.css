@@ -1,8 +1,11 @@
 ._ {
   display: flex;
-  padding: 0 24px;
-  gap: 4px;
+  margin: 0 24px;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+  background: var(--soft-black);
   flex-direction: column;
+  overflow: hidden;
 }
 
 ._ div {
@@ -10,11 +13,23 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  padding: 4px 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--accent-3);
+  transition: all .3s var(--transition);
 }
 
+._ span {
+  color: var(--green-accent);
+  font-size: var(--text-small);
+}
+
+._ div:last-child {
+  border: unset;
+}
+
+._ div:hover,
 .active {
-  background: var(--soft-black);
+  background: var(--black);
 }
 
 ._ img {
@@ -23,4 +38,5 @@
 
 ._ p {
   font-size: 18px;
+  flex: 1;
 }

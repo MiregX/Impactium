@@ -1,13 +1,13 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import s from '@/styles/header/Cookies.module.css'
+import s from './Cookies.module.css'
 import { Badge, BadgeTypes } from "@/ui/Badge";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
-export function CookiesConsemption() {
-  const cookie = new Cookies();
+export function CookiesConsemption({ consemption }) {
+  const cookie = new Cookies()
   const [acceptTimer, setAcceptTimer] = useState(7);
-  const [isAccepted, setIsAccepted] = useState<boolean>(!!cookie.get("_cookies_consent"));
+  const [isAccepted, setIsAccepted] = useState<boolean>(consemption);
 
   useEffect(() => {
     if (!isAccepted && acceptTimer > 0) {
@@ -25,7 +25,7 @@ export function CookiesConsemption() {
   }
 
   return (
-    <div className={`${s.cookies} ${!isAccepted && s.hide}`}>
+    <div className={`${s.cookies} ${isAccepted && s.hide}`}>
       <Badge title='Cookies' color='#d17724' icon={BadgeTypes.cookies} />
       <p></p>
       <div className={s.node}>

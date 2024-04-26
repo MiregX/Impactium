@@ -31,13 +31,14 @@ export function UserComponent() {
           <img src='https://cdn.impactium.fun/ui/action/settings-future.svg' alt=''/>
         </Link>
         <hr />
-        <button onClick={logout}>
-          {lang.logout}
-          <img src='https://cdn.impactium.fun/ui/action/log-out.svg' alt=''/>
-        </button>
         <button onClick={toggleIsLanguageChooserVisible}>
           {lang.chooseLanguages}
           <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>
+        </button>
+        <hr />
+        <button onClick={logout}>
+          {lang.logout}
+          <img src='https://cdn.impactium.fun/ui/action/log-out.svg' alt=''/>
         </button>
       </nav>
     </div>

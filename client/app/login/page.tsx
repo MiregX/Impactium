@@ -6,8 +6,10 @@ import { RedirectButton } from '@/components/RedirectButton';
 import { useUser } from '@/context/User';
 import { redirect } from 'next/navigation';
 
-export type LoginMethod = 'google' | 'discord';
-
+export enum LoginMethod {
+  github = 'github',
+  discord = 'discord'
+}
 
 export default function LoginPage() {
   const { user } = useUser();
@@ -24,10 +26,10 @@ export default function LoginPage() {
   return (
     <div className={s.loginWrapper}>
       <div className={`${s.loginBlock} ${s.one} ${s.login}`}>
-        <h1 className={s.center}>{lang.login}</h1>
+        <h1 className={s.center}>{lang._login}</h1>
         <div className={`${s.form} ${s.grid} ${s.columns1} ${s.rows3}`}>
           <div className={s.inputGroup}>
-            <label htmlFor="emailOrUsername">{lang.usernameOrEmail}</label>
+            <label htmlFor="emailOrUsername">{lang.login.username_or_email}</label>
             <input
               type="text"
               id="emailOrUsername"
@@ -43,7 +45,7 @@ export default function LoginPage() {
           </div>
 
           <div className={s.inputGroup}>
-            <label htmlFor="password">{lang.passWord}</label>
+            <label htmlFor="password">{lang._password}</label>
             <input
               type={passwordVisibility ? 'text' : 'password'}
               id="password"
@@ -58,21 +60,21 @@ export default function LoginPage() {
               <img className={!passwordVisibility ? s.disactive : ''} src="https://cdn.impactium.fun/ui/action/show.svg" alt='' />
             </button>
           </div>
-          <button className={`${s.submit} ${s.baseButton} ${s.center}`} onClick={() => {setNextStage(true)}}>{lang.login}</button>
+          <button className={`${s.submit} ${s.baseButton} ${s.center}`} onClick={() => {setNextStage(true)}}>{lang._login}</button>
         </div>
-        <div className={s.line} />
+        <div className={s.line} data-split={lang._or.toUpperCase()} />
         <div className={`${s.buttonsWrapper}`}>
-          <RedirectButton type='google' />
-          <RedirectButton type='discord' />
+          <RedirectButton type={LoginMethod.github} />
+          <RedirectButton type={LoginMethod.discord} />
         </div>
-        <p className={`${s.noAccount} ${s.center}`}>{lang.dontHaveAnAccount} <button onClick={() => { setNextStage(!isNextStage) }}>{lang._register}</button></p>
+        <p className={`${s.noAccount} ${s.center}`}>{lang.login.dont_have_an_account} <button onClick={() => { setNextStage(!isNextStage) }}>{lang._register}</button></p>
         <div className={`${s.loginBlock} ${s.two} ${isNextStage && s.active}`}>
           <img src="https://cdn.impactium.fun/el/skull.png" className={s.skull} alt="skull-icon" />
-          <h2>{lang.nuhuh}</h2>
-          <p>{lang.justUseTheseTwo}</p>
+          <h2>{lang.login.nuhuh}</h2>
+          <p>{lang.login.just_use_these_two}</p>
           <div className={`${s.buttonsWrapper}`}>
-            <RedirectButton type='google' />
-            <RedirectButton type='discord' />
+            <RedirectButton type={LoginMethod.github} />
+            <RedirectButton type={LoginMethod.discord} />
           </div>
           <button className={`${s.closeStage}`} onClick={() => { setNextStage(!isNextStage) }}>
             <img src="https://cdn.impactium.fun/ui/close/sm.svg" alt="close-icon" />

@@ -34,12 +34,12 @@ function validate(languageCode: string) {
   return !languageCode || !['us', 'ua', 'ru', 'it'].includes(languageCode) ? 'us' : languageCode;
 }
 
-const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage: string }> = ({ children, predefinedLanguage }) => {
   const cookie = new Cookies();
-  const [language, setLanguage] = useState<string>(validate(cookie.get('_language')) || 'us');
+  const [language, setLanguage] = useState<string>(validate(predefinedLanguage));
   const [isLanguageChooserVisible, setIsLanguageChooserVisible] = useState<boolean>(false);
 
-  const refreshLanguage = () => setLanguage(cookie.get('_language'));
+  const refreshLanguage = () => { setLanguage(cookie.get('_language')) };
 
   const toggleIsLanguageChooserVisible = () => setIsLanguageChooserVisible(!isLanguageChooserVisible);
 
@@ -68,16 +68,6 @@ const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children })
     }
     return translations;
   }
-
-  useEffect(() => {
-    const _language = validate(language);
-    cookie.remove('_language');
-    cookie.set('_language', _language, {
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      path: '/'
-    });
-    setLanguage(_language);
-  }, [language]);
 
   const props: ILanguageContext = {
     lang: getLanguagePack(language),

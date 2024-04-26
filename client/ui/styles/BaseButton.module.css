@@ -1,0 +1,34 @@
+._ {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: flex-end;
+  background: var(--soft-black);
+  padding: 8px 12px;
+  border-radius: var(--border-s);
+  border: 1px solid var(--accent-2);
+  color: var(--text-dimmed);
+  transition: all .3s var(--transition);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+._:hover {
+  color: var(--text-white);
+}
+
+.focus {
+  background: var(--soft-white);
+  color: var(--soft-black);
+  font-weight: 700;
+}
+
+.focus:hover {
+  color: var(--black);
+}
+
+.min {
+  font-weight: 300;
+  background: none;
+  border: none;
+}

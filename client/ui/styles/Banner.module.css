@@ -13,14 +13,13 @@
 ._ {
   width: var(--width-limit);
   box-shadow: var(--shadow-menu);
-  max-width: calc(var(--width-limit) / 2);
+  max-width: 600px;
   height: min-content;
   border-radius: var(--border-l);
   min-height: 30vh;
   background: var(--black);
   display: flex;
   flex-direction: column;
-  gap: 16px;
   overflow: hidden;
   position: relative;
 }
@@ -40,8 +39,39 @@
   background: var(--soft-black);
   height: 48px;
   display: flex;
+  justify-content: space-between;
   font-size: var(--text-small);
   align-items: center;
   padding: 0 24px;
   width: 100%;
+}
+.description {
+  padding: 0 4px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex: 1;
+}
+.warning {
+  border-left: 4px solid #ff2a00;
+  background: linear-gradient(to right, #ff2a00, #00000000);
+}
+.tip {
+  border-left: 4px solid #ffff00;
+  background: linear-gradient(to right, #ffff0010, #00000000);
+}
+.note {
+
+}
+
+.left,
+.right {
+  display: flex;
+  gap: 4px;
+}
+.right {
+  flex: 1;
+  justify-content: flex-end;
 }

@@ -14,14 +14,14 @@ export function RedirectButton({ type }: { type: LoginMethod }) {
   }
 
   const map = {
-    github: 'https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg',
+    github: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
     discord: 'https://cdn.impactium.fun/custom/discord.svg'
   };
 
   return (
     <button onClick={() => login(type)} className={s.baseButton} accessKey={type}>
       <img src={map[type]} alt={`${type}-icon`} />
-      <p>{`${lang[`continueWith${type}`]}`}</p>
+      <p>{`${lang.login[`continue_with_${type}`]}`}</p>
     </button>
   );
 }

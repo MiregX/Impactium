@@ -4,17 +4,6 @@ import s from '@/styles/Privacy.module.css'
 import React, { useEffect } from 'react';
 
 export default function PrivacyPolicyPage() {
-  const { setIsFlattenHeader } = useHeader();
-
-  useEffect(() => {
-    setIsFlattenHeader(true)
-    return () => {
-      setIsFlattenHeader(false);
-    }
-  }, []);
-
-
-
   return (
     <div className={s.main}>
       <h1>Privacy Policy</h1>

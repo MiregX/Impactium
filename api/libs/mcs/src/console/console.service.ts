@@ -5,10 +5,10 @@ import type { Online, Statistics } from './console.dto'
 
 interface Players {
   online: Online
-  whitelist: string[],
-  database: string[],
-  lastStatsFetch: Date,
-  stats: Statistics[]
+  whitelist?: string[],
+  database?: string[],
+  lastStatsFetch?: Date,
+  stats?: Statistics[]
 }
 
 @Injectable()
@@ -25,6 +25,13 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
       process.env.MINECAFT_SERVER_ID,
       false // Отключаем автосоединение
     );
+
+    this.players = {
+      online: {
+        list: [],
+        count: 0
+      }
+    }
   }
 
   async onModuleInit() {
