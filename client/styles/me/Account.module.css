@@ -39,7 +39,7 @@
 .circle {
   height: 12px;
   width: 12px;
-  border-radius: var(--border-max);
+  border-radius: var(--round);
 }
 .panel input {
   display: block;

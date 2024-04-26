@@ -11,7 +11,7 @@
   height: 56px;
   padding: 0 16px;
   color: var(--soft-white);
-  border-radius: var(--border-max);
+  border-radius: var(--round);
   display: flex;
   flex-direction: row;
   align-items: center;

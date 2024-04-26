@@ -1,0 +1,11 @@
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: flex-end;
+  background: var(--soft-black);
+  padding: 8px 12px;
+  border-radius: var(--border-s);
+  border: 1px solid var(--accent-2);
+  color: var(--text-dimmed);
+}

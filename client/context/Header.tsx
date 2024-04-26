@@ -1,9 +1,9 @@
 'use client'
 import { usePathname } from 'next/navigation';
 import { Header } from '@/components/header/Header';
-import { HeaderBackground } from '@/components/header/HeaderBackground';
 import type { ReactNode, Dispatch, SetStateAction } from 'react';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Nav } from '@/components/header/Nav';
 
 interface HeaderContextProps {
   isLoading: boolean;
@@ -55,7 +55,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   return (
     <HeaderContext.Provider value={headerProps}>
       <Header />
-      <HeaderBackground />
+      <Nav />
       {children}
     </HeaderContext.Provider>
   );

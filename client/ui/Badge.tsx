@@ -1,4 +1,4 @@
-import s from '@/styles/ui/Badge.module.css'
+import s from '@/ui/styles/Badge.module.css'
 
 enum _BadgeDirections {
   default = 'default',

@@ -3,28 +3,27 @@
   height: var(--header-height);
   max-width: 1488px;
   width: 100%;
-  z-index: 2;
+  z-index: 3;
   position: fixed;
   top: 0px;
   justify-content: space-between;
   padding: 0 16px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
 }
-.headerBackground {
+.header * {
   z-index: 1;
-  top: 0px;
+}
+.header::before {
+  content: "";
+  z-index: 0;
+  left: 0;
   height: 64px;
   width: 100vw;
-  left: 0%;
-  position: fixed;
-  display: flex;
-  background: var(--geist-background);
+  background-color: var(--soft-black);
   border-bottom: var(--geist-border);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
-  transition: top 0.3s var(--transition);
+  position: fixed;
 }
 .logo {
   gap: 16px;
@@ -39,7 +38,7 @@
 }
 .logo p {
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 600;
 }
 .logo img {
   height: 32px;
@@ -56,51 +55,6 @@
   height: 40px;
   -webkit-user-drag: none;
   user-select: none;
-}
-.dynamicBubbleButton {
-  display: flex;
-  cursor: pointer;
-  color: var(--soft-white);
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  width: 128px;
-  height: 48px;
-}
-.dynamicBubbleButton path {
-  transition: all 0.45s var(--transition);
-}
-.dynamicBubbleButton:hover path {
-  d: path("M2 12H18M18 12L13 7M18 12L13 17");
-}
-.dynamicBubbleButton svg {
-  transform: translateX(-1px);
-  transition: all 0.45s var(--transition);
-}
-.dynamicBubbleButton:hover svg {
-  transform: translateX(10px);
-}
-.dynamicBubbleButton p {
-  position: absolute;
-  width: calc(100% - 48px);
-  right: 0;
-  text-align: center;
-  font-weight: 500;
-  font-size: 16px;
-}
-.dynamicBubbleButton .circle {
-  position: absolute;
-  margin: 0;
-  width: 48px;
-  display: flex;
-  align-items: center;
-  height: 48px;
-  border-radius: 100px;
-  transition: all 0.45s var(--transition);
-  border: var(--geist-border);
-}
-.dynamicBubbleButton:hover .circle {
-  width: 100%;
 }
 .logo.inner-animation {
   animation: first 0s linear 3.3s forwards;
@@ -198,18 +152,18 @@
 }
 .nav button .bar {
   position: absolute;
-  min-height: 80px;
-  background: #6464640d;
-  border: var(--blured-border);
+  background: var(--soft-black);
+  box-shadow: var(--shadow-menu);
   -webkit-backdrop-filter: blur(16px);
+  pointer-events: none;
   backdrop-filter: blur(5px);
   display: flex;
   opacity: 0;
   visibility: hidden;
   flex-direction: column;
-  top: 80px;
+  top: 56px;
   width: 240px;
-  border-radius: 14px;
+  border-radius: 12px;
   transition: all 0.2s var(--transition);
   transform: translateY(-16px);
   overflow: hidden;
@@ -217,6 +171,7 @@
 }
 .nav button:hover .bar {
   opacity: 1;
+  pointer-events: all;
   visibility: visible;
   transform: translateY(0px);
 }

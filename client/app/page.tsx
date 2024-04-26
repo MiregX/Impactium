@@ -1,15 +1,14 @@
 'use client'
-import { Cloud } from '@/components/main/hosting/Cloud';
-import { Challenge } from '@/components/main/hosting/Challenge';
 import { PanelTemplate } from '@/components/main/PanelTempate';
+import React from 'react';
 
 export default function Main() {
  
   return (
-    <>
+    <React.Fragment>
       <PanelTemplate>
         {null}
       </PanelTemplate>
-    </>
+    </React.Fragment>
   );
 };

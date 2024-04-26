@@ -1,15 +1,16 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
+import { UserComposedEntity } from '@api/main/user/entities/user.entity'
 import { getServerLink } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
 interface IUserContext {
-  user: any,
-  setUser: (user: any) => void,
+  user: UserComposedEntity,
+  setUser: (user: UserComposedEntity) => void,
   logout: () => void,
-  getUser: (authorization?: string) => any | Promise<any>,
+  getUser: (authorization?: string) => Promise<UserComposedEntity>,
   refreshUser: () => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -28,29 +29,18 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(false);
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<UserComposedEntity | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!isUserFetched) {
-      refreshUser();
-    }
-  }, [isUserFetched, isUserLoaded]);
+  useEffect(() => !isUserFetched && refreshUser(), [isUserFetched]);
 
-  const getUser = async () => {
-    try {
-      const response = await fetch(`${getServerLink()}/api/user/get`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-  
-      if (!response.ok) throw Error();
-  
-      return await response.json();
-    } catch (_) {
-      console.log(_)
-      return undefined;
-    }    
+  const getUser = async (): Promise<UserComposedEntity> => {
+    const res = await fetch(`${getServerLink()}/api/user/get`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    return res.ok ? await res.json() : undefined;
   };
 
   const logout = () => {
@@ -58,16 +48,12 @@ export const UserProvider = ({
     refreshUser();
   };
 
-  const login = (authorization: string) => {
-    cookie.set('Authorization', authorization);
-    refreshUser();
-  }
-
-  const refreshUser = async () => {
-    const user = await getUser();
-    setUser(user);
-    setIsUserFetched(true);
-    setIsUserLoaded(true);
+  const refreshUser = () => {
+    getUser().then(user => {
+      setUser(user);
+      setIsUserFetched(true);
+      setIsUserLoaded(true);
+    });
   };
 
   const userProps: IUserContext = {

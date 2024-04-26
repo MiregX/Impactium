@@ -1,0 +1,26 @@
+._ {
+  display: flex;
+  padding: 0 24px;
+  gap: 4px;
+  flex-direction: column;
+}
+
+._ div {
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 12px;
+}
+
+.active {
+  background: var(--soft-black);
+}
+
+._ img {
+  height: 32px;
+}
+
+._ p {
+  font-size: 18px;
+}
