@@ -15,6 +15,11 @@ export function UserComponent() {
     setActive(!active);
   }
 
+  const handle = (func: Function) => {
+    toggle();
+    func();
+  }
+
   return (
     <div className={_user.user}>
       <div onClick={toggle}>
@@ -22,21 +27,21 @@ export function UserComponent() {
       </div>
       <nav className={`${_user.menu} ${active && _user.active}`}>
         <p className={_user.name}>{user.email || '@' + user.displayName.toLowerCase()}</p>
-        <Link href='/me/account'>
+        <Link href='/me/account' onClick={toggle}>
           {lang.account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>
         </Link>
-        <Link href='/me/account'>
+        <Link href='/me/settings' onClick={toggle}>
           {lang.settings}
           <img src='https://cdn.impactium.fun/ui/action/settings-future.svg' alt=''/>
         </Link>
         <hr />
-        <button onClick={toggleIsLanguageChooserVisible}>
+        <button onClick={() => handle(toggleIsLanguageChooserVisible)}>
           {lang.chooseLanguages}
           <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>
         </button>
         <hr />
-        <button onClick={logout}>
+        <button onClick={() => handle(logout)}>
           {lang.logout}
           <img src='https://cdn.impactium.fun/ui/action/log-out.svg' alt=''/>
         </button>
