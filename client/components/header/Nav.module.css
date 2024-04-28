@@ -1,0 +1,15 @@
+._ {
+  position: sticky;
+  width: 100vw;
+  max-width: 1488px;
+  top: var(--header-height);
+}
+.backgroud {
+  background-color: var(--soft-black);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  display: block;
+  height: 46px;
+}

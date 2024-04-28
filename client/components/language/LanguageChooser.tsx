@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
-import { BaseButton, BaseButtonTypes } from '@/ui/BaseButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 
 export function LanguageChooser() {
   const { lang, language, setLanguage, toggleIsLanguageChooserVisible } = useLanguage();
@@ -35,21 +35,22 @@ export function LanguageChooser() {
   const footer = {
     left: [
       {
-        type: BaseButtonTypes.link,
-        outline: false,
+        type: GeistButtonTypes.Link,
+        minimized: true,
         text: lang.found_a_translation_error,
         href: 'https://t.me/impactium'
-      }
+      } as GeistButton
     ],
     right: [
       {
-        type: BaseButtonTypes.button,
+        type: GeistButtonTypes.Button,
         text: lang._save,
         action: () => toggleIsLanguageChooserVisible(),
         focused: true
-      }
+      } as GeistButton
     ]
   };
+  
 
   return (
     <Banner title={lang.chooseLanguages} footer={footer}>
@@ -58,12 +59,10 @@ export function LanguageChooser() {
           <div
             className={key === language ? _language.active : undefined}
             key={key}
-            onClick={() => setLanguage(key)}
-          >
+            onClick={() => setLanguage(key)}>
             <img
               src={`https://cdn.impactium.fun/lang/${availableLanguages[key].code}.webp`}
-              alt=''
-            />
+              alt=''/>
             <p>{availableLanguages[key].target}</p>
             {key === language && <span>{lang._selected}</span>}
           </div>

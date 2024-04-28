@@ -169,7 +169,6 @@ export const PlayerProvider = ({
   return (
     <PlayerContext.Provider value={playerProps}>
       <div className={`${s.me} ${isPlayerLoaded && s.geist}`}>
-        <Nav />
         {children}
       </div>
     </PlayerContext.Provider>

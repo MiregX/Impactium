@@ -2,6 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { pterosocket } from 'pterosocket';
 import { TelegramService } from '../telegram/telegram.service';
 import type { Online, Statistics } from './console.dto'
+import { PlayerService } from '@api/main/player/player.service';
 
 interface Players {
   online: Online
@@ -15,9 +16,10 @@ interface Players {
 export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   private server: pterosocket;
   players: Players;
-
+  
   constructor(
-    private readonly telegramService: TelegramService
+    private readonly telegramService: TelegramService,
+    private readonly playerService: PlayerService,
   ) {
     this.server = new pterosocket(
       process.env.MINECAFT_SERVER_ORIGIN,
@@ -25,7 +27,7 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
       process.env.MINECAFT_SERVER_ID,
       false // Отключаем автосоединение
     );
-
+    
     this.players = {
       online: {
         list: [],
@@ -33,15 +35,15 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
       }
     }
   }
-
+  
   async onModuleInit() {
     await this.connect();
   }
-
+  
   async onModuleDestroy() {
     await this.server.disconnect();
   }
-
+  
   async connect() {
     try {
       await this.server.connect(); 
@@ -49,9 +51,9 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
       this.server.on("start", () => {
         this.command('list');
       });
-  
+      
       this.server.on("console_output", (msg: string) => {
-        this.output(msg.replace(/\x1b\[\d+m/g, ''))
+        this.output(msg)
       });
     } catch (_) {
       console.log(_);
@@ -59,39 +61,50 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async disconnect() {
-    if (!this.server.ws) {
-      throw 'Pterosocket lost his WebSocket. Creating new one.'
-    }
-
-  }
-
-  async command(command: string) {
+  async command(command: string, expect?: number): Promise<string | string[]> {
     try {
       this.server.writeCommand(command);
-      console.log(`[MC] -> ${command}`);
-      return true;
+      return new Promise((resolve) => {
+        const messages: string[] = [];
+  
+        const handleOutput = (msg: string) => {
+          const cleanedMsg = msg.replace(/\x1b\[\d+m/g, '');
+          if (!expect) {
+            resolve(cleanedMsg);
+          }
+
+          messages.push(cleanedMsg);
+          if (messages.length === expect) {
+            resolve(messages);
+          }
+        };
+  
+        this.server.on("console_output", handleOutput);
+      });
     } catch (error) {
       await this.connect();
-      return await this.command(command);
+      return await this.command(command, expect);
     }
+  }  
+  
+  output(message: string) {
+    message = message.replace(/\x1b\[\d+m/g, '').substring(17);
+    if (message.startsWith('[Not Secure]')) return
+
+    this.handlePlayerActivity(message);
   }
 
-  output(message: string) {
-    if (message.substring(17).startsWith('[Not Secure]')) return
-
-    message = message.substring(17)
-
+  handlePlayerActivity(message) {
     if (message.endsWith('joined the game')) {
       this.players.online.count++;
       this.telegramService.editPinnedMessage(this.players.online)
     }
-
+    
     if (message.endsWith('left the game')) {
       this.players.online.count--;
       this.telegramService.editPinnedMessage(this.players.online);
     }
-
+    
     if (message.startsWith('Players:')) {
       this.telegramService.editPinnedMessage(this.count(message));
     }
@@ -124,59 +137,44 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
     return this.players.online
   } 
   
-  // async getDatabasePlayers() {
-  //   // Для получения списка игроков с базы данных на сервере
-  //   // Результат возвращается масивом строк
-  //   // а также присваивается в **this.players.database**
-  //   const Players = await getDatabase("minecraftPlayers");
-  //   const distinctNicknames = await Players.find({}, { _id: 0, nickname: 1 }).toArray();
-  //   this.players.database = distinctNicknames.map(player => player.nickname).filter(n => n);
-  //   return this.players.database;
-  // }
+  async getDatabasePlayers() {
+    return this.players.database = await this.playerService.getAllPlayersNicknames()
+  }
 
-  // async getWhitelistPlayers() {
-  //   // Для получения списка игроков с вайтлиста на сервере
-  //   // Использует SFTP для подключения к ноде, и выкачивает файл
-  //   // Результат возвращается масивом обьектов, где есть name и uuid
-  //   // а также присваивается в **this.players.whitelist**
-  //   try {
-  //     await this.sftp.connect();
-  //     const players = await this.sftp.read('whitelist.json');
-  //     await this.sftp.close();
-  //     this.players.whitelist = JSON.parse(players);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     return this.players.whitelist;
-  //   }
-  // }
+  async getWhitelistPlayers(): Promise<string[]> {
+    const players: string[] = await this.command('whitelist list').then((message: string) => {
+      return message.replace(/^[^:]+: /, "").split(', ');
+    });
+    return this.players.whitelist = players;
+  }
 
-  // async updateWhitelist() {
-  //   // Синхронизирует список игроков MongoBD --> Whitelist
-  //   await this.getDatabasePlayers();
-  //   await this.getWhitelistPlayers();
-  //   let isChanged = false;
+  async syncWhitelist() {
+    // Синхронизирует список игроков MongoBD --> Whitelist
+    await this.getDatabasePlayers();
+    await this.getWhitelistPlayers();
+    let isChanged = false;
 
-  //   // Цикл для удаления игроков с вайтлиста, если игрок есть в вайтлисте но нет в бд
-  //   this.players.whitelist.forEach(player => {
-  //     if (this.players.database.find(nickname => nickname.toLowerCase() === player.name.toLowerCase())) return 
-  //     this.command(`whitelist remove ${player.name}`);
-  //     isChanged = true  
-  //   });
+    // Цикл для удаления игроков с вайтлиста, если игрок есть в вайтлисте но нет в бд
+    this.players.whitelist.forEach(player => {
+      if (this.players.database.find(nickname => nickname.toLowerCase() === player.toLowerCase())) return 
+      this.command(`whitelist remove ${player}`);
+      isChanged = true
+    });
 
-  //   // Цикл для добавления игроков в вайтлист, если игрок есть в бд но нет в вайтлисте
-  //   this.players.database.forEach(nickname => {
-  //     const existPlayer = this.players.whitelist.find(player => player.name.toLowerCase() === nickname.toLowerCase())
-  //     if (existPlayer) return 
-  //     this.command(`whitelist add ${nickname}`);
-  //     isChanged = true
-  //   });
-  //   // Если был добавлен хоть один игрок - перезагружаем вайтлист
-  //   if (isChanged) {
-  //     this.command('whitelist reload');
-  //     await this.getWhitelistPlayers();
-  //   }
-  // }
+    // Цикл для добавления игроков в вайтлист, если игрок есть в бд но нет в вайтлисте
+    this.players.database.forEach(nickname => {
+      const existPlayer = this.players.whitelist.find(player => player.toLowerCase() === nickname.toLowerCase())
+      if (!existPlayer) {
+        this.command(`whitelist add ${nickname}`);
+        isChanged = true
+      }
+    });
+    
+    if (isChanged) {
+      this.command('whitelist reload');
+      await this.getWhitelistPlayers();
+    }
+  }
 
   // async fetchStats() {
   //   // Обновляем обьект статистики по адресу **this.players.stats**

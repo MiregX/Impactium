@@ -4,8 +4,18 @@
   justify-content: flex-end;
   position: relative;
 }
-.user > div {
+.wrapper {
   cursor: pointer;
+  z-index: 3;
+}
+.active .action_lock {
+  content: "";
+  cursor: default;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
 }
 .picture {
   box-shadow: var(--shadow-border);
@@ -14,15 +24,11 @@
   border-radius: var(--round);
   overflow: hidden;
 }
-.picture img {
-  height: 100%;
-  width: 100%;
-}
 .menu {
+  display: flex;
   position: absolute;
   top: 48px;
   padding: 12px 0px;
-  display: flex;
   flex-direction: column;
   background: var(--soft-black);
   box-shadow: var(--shadow-menu);
@@ -32,7 +38,7 @@
   pointer-events: none;
   transition: all 0.2s var(--transition);
 }
-.menu.active {
+.active .menu {
   top: 40px;
   opacity: 1;
   pointer-events: all;

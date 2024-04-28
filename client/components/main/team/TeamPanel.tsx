@@ -3,15 +3,18 @@ import { List } from './List'
 import React from 'react';
 import { BadgeTypes } from '@/ui/Badge';
 
-type TeamMemberRole = BadgeTypes | {
+interface Role {
   icon: string;
   lang: string;
   color: string;
 }
 
-interface TeamMember {
+type TeamMemberRole = BadgeTypes | Role
+
+export interface TeamMember {
   name: string;
   avatar: string;
+  keyrole: Role;
   roles: TeamMemberRole[]
 }
 
@@ -21,6 +24,11 @@ export function TeamPanel() {
     {
       name: 'Герасимчук Марк',
       avatar: 'https://avatars.githubusercontent.com/u/57992178?v=4',
+      keyrole: {
+        icon: 'https://cdn.impactium.fun/custom-ui/tip.svg',
+        lang: 'mireg_sto',
+        color: '#ffff00'
+      },
       roles: [
         {
           icon: 'https://cdn.impactium.fun/custom-ui/tip.svg',

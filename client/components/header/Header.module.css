@@ -68,9 +68,6 @@
     opacity: 1;
   }
 }
-.header.flatten {
-  max-width: 1344px;
-}
 .loader {
   height: 2px;
   width: 0px;

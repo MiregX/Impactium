@@ -1,4 +1,4 @@
-import { Badge, BadgeTypes } from '@/ui/Badge';
+import { TeamMember } from './TeamPanel';
 import s from './TeamPanel.module.css'
 import star from '@/public/star.svg'
 
@@ -6,8 +6,8 @@ export function List({ members }) {
   console.log(star)
   return (
     <div className={s.list}>
-      {members.map(member => (
-        <div className={s.wrapper}>
+      {members.map((member: TeamMember, index: number) => (
+        <div className={s.wrapper} key={index}>
           <img
             className={s.avatar}
             key={member.name}
@@ -16,7 +16,7 @@ export function List({ members }) {
           <img
             src={star.src}
             className={s.role}
-            style={{backgroundColor: `${member.roles[0].color}50`}} />
+            style={{backgroundColor: `${member.keyrole.color}50`}} />
         </div>
       ))}
     </div>

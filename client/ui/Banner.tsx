@@ -1,6 +1,6 @@
 import banner from '@/ui/styles/Banner.module.css';
 import React from 'react';
-import { BaseButton, BaseButtonTypes, BaseButtonOptions } from './BaseButton';
+import { GeistButton } from './GeistButton';
 
 export enum WarnerTypes {
   note,
@@ -18,7 +18,10 @@ export interface Warner {
 interface BannerProps {
   title: string;
   children: React.ReactNode;
-  footer?: any;
+  footer?: Warner | {
+    left?: GeistButton[],
+    right: GeistButton[],
+  };
 }
 
 export function Banner({ title, children, footer }: BannerProps) {
@@ -43,33 +46,15 @@ export function Banner({ title, children, footer }: BannerProps) {
               <React.Fragment>
                 {footer.left && (
                   <div className={banner.left}>
-                    {footer.left.map((action: BaseButtonOptions) =>
-                      action.type === BaseButtonTypes.link ? (
-                        <BaseButton key={action.text} type={action.type} href={action.href} text={action.text} />
-                      ) : (
-                        <BaseButton key={action.text} type={action.type} action={action.action} text={action.text} />
-                      )
+                    {footer.left.map((action: GeistButton) =>
+                      <GeistButton options={action} key={action.text} />
                     )}
                   </div>
                 )}
                 {footer.right && (
                   <div className={banner.right}>
-                    {footer.right.map((action: BaseButtonOptions) =>
-                      action.type === BaseButtonTypes.link ? (
-                        <BaseButton
-                          key={action.text}
-                          type={action.type}
-                          href={action.href}
-                          outline={action.outline}
-                          text={action.text} />
-                      ) : (
-                        <BaseButton
-                          key={action.text}
-                          type={action.type}
-                          action={action.action}
-                          text={action.text}
-                          focused={action.focused} />
-                      )
+                    {footer.right.map((action: GeistButton) =>
+                      <GeistButton options={action} key={action.text} />
                     )}
                   </div>
                 )}

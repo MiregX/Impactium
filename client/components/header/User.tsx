@@ -1,7 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language';
 import { useUser } from '@/context/User';
-import _user from '@/components/header/User.module.css'
+import _user from './User.module.css'
 import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
@@ -21,11 +21,12 @@ export function UserComponent() {
   }
 
   return (
-    <div className={_user.user}>
-      <div onClick={toggle}>
+    <div className={`${_user.user} ${active && _user.active}`}>
+      <div className={_user.action_lock} onClick={toggle} />
+      <div className={_user.wrapper} onClick={toggle}>
         <Image className={_user.picture} src={user.avatar} width={30} height={30} alt="Avatar" />
       </div>
-      <nav className={`${_user.menu} ${active && _user.active}`}>
+      <nav className={_user.menu}>
         <p className={_user.name}>{user.email || '@' + user.displayName.toLowerCase()}</p>
         <Link href='/me/account' onClick={toggle}>
           {lang.account}

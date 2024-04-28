@@ -5,13 +5,13 @@ import { TelegramModule } from '../telegram/telegram.module';
 
 @Module({
   imports: [
-    TelegramModule
+    TelegramModule,
   ],
   controllers: [
     ConsoleController
   ],
   providers: [
-    ConsoleService
+    ConsoleService,
   ],
 })
 export class ConsoleModule {}

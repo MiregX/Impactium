@@ -7,18 +7,9 @@ import { useLanguage } from '@/context/Language';
 import Link from 'next/link';
 
 export function Nav() {
-  const { setIsFlattenHeader } = useHeader();
   const { lang } = useLanguage();
   const [selectedButton, setSelectedButton] = useState<number>(0);
-  const router = useRouter();
- 
-  useEffect(() => {
-    setIsFlattenHeader(true);
-
-    return () => {
-      setIsFlattenHeader(false)
-    }
-  }, []);
+  const router = useRouter()
 
   const map = {
     account: {

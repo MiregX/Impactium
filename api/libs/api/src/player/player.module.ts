@@ -6,8 +6,16 @@ import { AuthModule } from '@api/main/auth/auth.module';
 import { PlayerGuard } from './player.guard';
 
 @Module({
-  controllers: [PlayerController],
-  imports: [PrismaModule, AuthModule],
-  providers: [PlayerService, PlayerGuard],
+  controllers: [
+    PlayerController
+  ],
+  imports: [
+    PrismaModule,
+    AuthModule,
+  ],
+  providers: [
+    PlayerService,
+    PlayerGuard
+  ],
 })
 export class PlayerModule {}

@@ -8,7 +8,8 @@ export default function Main() {
   return (
     <React.Fragment>
       <PanelTemplate>
-        <TeamPanel />
+        {null}
+        {/* <TeamPanel /> */}
       </PanelTemplate>
     </React.Fragment>
   );

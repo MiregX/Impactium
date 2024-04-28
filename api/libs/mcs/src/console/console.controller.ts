@@ -10,4 +10,9 @@ export class ConsoleController {
   _() {
     this.consoleService.command('list');
   }
+
+  @Get()
+  __() {
+    return this.consoleService.command('whitelist list')
+  }
 }

@@ -1,21 +1,13 @@
 'use client'
-import { usePathname } from 'next/navigation';
 import { Header } from '@/components/header/Header';
-import type { ReactNode, Dispatch, SetStateAction } from 'react';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Nav } from '@/components/header/Nav';
 
 interface HeaderContextProps {
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-  isHeaderBackgroundHidden: boolean;
-  setIsHeaderBackgroundHidden: Dispatch<SetStateAction<boolean>>;
-  isFlattenHeader: boolean;
-  setIsFlattenHeader: Dispatch<SetStateAction<boolean>>;
   isLogoHidden: boolean;
-  setIsLogoHidden: Dispatch<SetStateAction<boolean>>;
+  setIsLogoHidden: (value: boolean) => void;
   isSettingsVisible: boolean;
-  setIsSettingsVisible: Dispatch<SetStateAction<boolean>>;
+  setIsSettingsVisible: (value: boolean) => void;
 }
 
 const HeaderContext = createContext<HeaderContextProps>(undefined);
@@ -25,27 +17,11 @@ export const useHeader = () => {
   return context;
 };
 
-interface HeaderProviderProps {
-  children: ReactNode;
-}
-
-export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
-  const url = usePathname();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isHeaderBackgroundHidden, setIsHeaderBackgroundHidden] = useState<boolean>(url !== '/');
-  const [isFlattenHeader, setIsFlattenHeader] = useState<boolean>(url.startsWith('/me'));
+export const HeaderProvider = ({ children }: { children: React.ReactNode}) => {
   const [isLogoHidden, setIsLogoHidden] = useState<boolean>(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 
-  useEffect(() => setIsHeaderBackgroundHidden(url === '/'), [url]);
-
   const headerProps: HeaderContextProps = {
-    isLoading,
-    setIsLoading,
-    isHeaderBackgroundHidden,
-    setIsHeaderBackgroundHidden,
-    isFlattenHeader,
-    setIsFlattenHeader,
     isLogoHidden,
     setIsLogoHidden,
     isSettingsVisible,
@@ -55,7 +31,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   return (
     <HeaderContext.Provider value={headerProps}>
       <Header />
-      <Nav />
       {children}
     </HeaderContext.Provider>
   );
