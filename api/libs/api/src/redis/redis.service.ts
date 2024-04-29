@@ -8,8 +8,10 @@ export class RedisService
   {
   constructor() {
     super(
-      parseInt(process.env.MCS_REDIS_PORT),
-      process.env.MCS_REDIS_HOST,
+      parseInt(process.env.API_REDIS_PORT),
+      process.env.API_REDIS_HOST, {
+        lazyConnect: true,
+      }
     )
   }
 

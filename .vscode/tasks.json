@@ -5,6 +5,7 @@
       "label": "start-engine",
       "type": "shell",
       "command": "copy .env api/.env; cd api; npm run prisma:generate; npm run prisma:deploy; rm .env",
+      "dependsOn": "recreate"
     },
     {
       "label": "recreate",

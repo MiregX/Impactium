@@ -25,6 +25,6 @@ services:
     volumes:
       - ./prisma:/app/api/prisma
     environment:
-      - API_COCKROACH_URL=postgresql://root@api-cockroachdb:26257/defaultdb?sslmode=disable
+      - API_COCKROACH_URL=postgresql://root@api-cockroachdb:26357/defaultdb?sslmode=disable
     env_file: ../../../.env
     command: npx prisma studio --port ${API_PRISMA_STUDIO_PORT}

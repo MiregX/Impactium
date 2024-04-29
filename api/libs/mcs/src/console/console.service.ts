@@ -77,11 +77,14 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   
         const output = (message: string) => {
           if (!skipped) return skipped = true;
-
-          if (!expect) resolve(message);
-  
           messages.push(message);
-          if (messages.length === expect) resolve(messages);
+
+          if (!expect) {
+            resolve(message);
+          } else if (messages.length === expect) {
+            resolve(messages);
+          }
+          this.server.off("console_output");
         };
   
         this.server.on("console_output", (message: string) => output(this.fixMessage(message)));
@@ -93,6 +96,7 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   }
   
   output(message: string) {
+    console.log({message})
     if (message.startsWith('[Not Secure]')) return
 
     this.handlePlayerActivity(message);
