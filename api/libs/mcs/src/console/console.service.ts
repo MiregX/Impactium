@@ -1,8 +1,15 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  OnModuleDestroy,
+  OnModuleInit,
+  forwardRef,
+} from '@nestjs/common';
 import { pterosocket } from 'pterosocket';
 import { TelegramService } from '../telegram/telegram.service';
 import type { Online, Statistics } from './console.dto'
 import { PlayerService } from '@api/main/player/player.service';
+import { RedisService } from '@api/main/redis/redis.service';
 
 interface Players {
   online: Online
@@ -19,7 +26,9 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   
   constructor(
     private readonly telegramService: TelegramService,
+    @Inject(forwardRef(() => PlayerService))
     private readonly playerService: PlayerService,
+    private readonly redisService: RedisService,
   ) {
     this.server = new pterosocket(
       process.env.MINECAFT_SERVER_ORIGIN,
@@ -52,9 +61,7 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
         this.command('list');
       });
       
-      this.server.on("console_output", (msg: string) => {
-        this.output(msg)
-      });
+      this.server.on("console_output", (message: string) => this.output(this.fixMessage(message)));
     } catch (_) {
       console.log(_);
       await this.connect();
@@ -66,78 +73,39 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
       this.server.writeCommand(command);
       return new Promise((resolve) => {
         const messages: string[] = [];
+        let skipped: boolean = false;
   
-        const handleOutput = (msg: string) => {
-          const cleanedMsg = msg.replace(/\x1b\[\d+m/g, '');
-          if (!expect) {
-            resolve(cleanedMsg);
-          }
+        const output = (message: string) => {
+          if (!skipped) return skipped = true;
 
-          messages.push(cleanedMsg);
-          if (messages.length === expect) {
-            resolve(messages);
-          }
+          if (!expect) resolve(message);
+  
+          messages.push(message);
+          if (messages.length === expect) resolve(messages);
         };
   
-        this.server.on("console_output", handleOutput);
+        this.server.on("console_output", (message: string) => output(this.fixMessage(message)));
       });
-    } catch (error) {
+    } catch (_) {
       await this.connect();
       return await this.command(command, expect);
     }
-  }  
+  }
   
   output(message: string) {
-    message = message.replace(/\x1b\[\d+m/g, '').substring(17);
     if (message.startsWith('[Not Secure]')) return
 
     this.handlePlayerActivity(message);
   }
 
-  handlePlayerActivity(message) {
-    if (message.endsWith('joined the game')) {
-      this.players.online.count++;
-      this.telegramService.editPinnedMessage(this.players.online)
-    }
-    
-    if (message.endsWith('left the game')) {
-      this.players.online.count--;
-      this.telegramService.editPinnedMessage(this.players.online);
-    }
-    
-    if (message.startsWith('Players:')) {
-      this.telegramService.editPinnedMessage(this.count(message));
-    }
-  }
-
-  // async restart() {
-  //   try {
-  //     this.command('title @a times 20 160 20');
-  //     this.command('title @a subtitle {"text":"\u0421\u0435\u0440\u0432\u0435\u0440 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u0447\u0435\u0440\u0435\u0437 1 \u043c\u0438\u043d\u0443\u0442\u0443"}');
-  //     setTimeout(() => {
-  //       this.command('title @a title {"text":"Restart"}');
-  //     }, 500);
-  //     setTimeout(() => {
-  //       this.command('kickall');
-  //       setTimeout(() => {
-  //         this.command('restart');
-  //       }, 1000);
-  //     }, 60000);
-  //   } catch (error) {
-  //     await this.launch();
-  //     return await this.restart();
-  //   }
-  // }
-
   count(message: string): Online {
-    console.log(message)
     const players = message.substring(9).split(', ');
     this.players.online.list = players.map(p => p.split(' ')[1]);
     this.players.online.count = players.length;
     return this.players.online
-  } 
+  }
   
-  async getDatabasePlayers() {
+  async getDatabasePlayers(): Promise<string[]> {
     return this.players.database = await this.playerService.getAllPlayersNicknames()
   }
 
@@ -149,19 +117,18 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   }
 
   async syncWhitelist() {
-    // Синхронизирует список игроков MongoBD --> Whitelist
     await this.getDatabasePlayers();
     await this.getWhitelistPlayers();
     let isChanged = false;
 
-    // Цикл для удаления игроков с вайтлиста, если игрок есть в вайтлисте но нет в бд
     this.players.whitelist.forEach(player => {
-      if (this.players.database.find(nickname => nickname.toLowerCase() === player.toLowerCase())) return 
-      this.command(`whitelist remove ${player}`);
-      isChanged = true
+      const existPlayer = this.players.database.find(nickname => nickname.toLowerCase() === player.toLowerCase())
+      if (!existPlayer) {
+        this.command(`whitelist remove ${player}`);
+        isChanged = true
+      }
     });
 
-    // Цикл для добавления игроков в вайтлист, если игрок есть в бд но нет в вайтлисте
     this.players.database.forEach(nickname => {
       const existPlayer = this.players.whitelist.find(player => player.toLowerCase() === nickname.toLowerCase())
       if (!existPlayer) {
@@ -211,16 +178,23 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   //   } catch (error) { return [] }
   // }
 
-  // async applyEffect({nickname, achievement, oldAchievement}) {
-  //   const achievementsMap = {
-  //     casual: 'haste',
-  //     defence: 'resistance',
-  //     killer: 'strength',
-  //     event: 'speed',
-  //     donate: 'speed',
-  //     hammer: 'speed'
-  //   }
-  //   this.command(`effect clear ${nickname} minecraft:${achievementsMap[oldAchievement]}`);
-  //   this.command(`effect give ${nickname} minecraft:${achievementsMap[achievement]} infinite 1 true`);
-  // }
+  private handlePlayerActivity(message: string) {
+    if (message.endsWith('joined the game')) {
+      this.players.online.count++;
+      this.telegramService.editPinnedMessage(this.players.online)
+    }
+    
+    if (message.endsWith('left the game')) {
+      this.players.online.count--;
+      this.telegramService.editPinnedMessage(this.players.online);
+    }
+    
+    if (message.startsWith('Players:')) {
+      this.telegramService.editPinnedMessage(this.count(message));
+    }
+  }
+
+  private fixMessage(message: string): string {
+    return message.replace(/\x1b\[\d+m/g, '').substring(17)
+  }
 }

@@ -62,3 +62,13 @@ services:
     profiles:
       - development
       - production
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: on-failure
+    ports:
+      - 6379:6379
+    profiles:
+      - development
+      - production

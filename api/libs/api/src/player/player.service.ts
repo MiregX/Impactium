@@ -61,8 +61,6 @@ export class PlayerService {
   
     return players.map(player => player.nickname);
   }
-  
-  
 
   async setNickname(uid: string, nickname: string) {
     const isExists = await this.findOneByNickname(nickname);
@@ -108,6 +106,7 @@ export class PlayerService {
     if (!!nickname && !!password) {
       this.consoleService.command(`authme register ${nickname} ${password}`)
       this.consoleService.command(`authme changepassword ${nickname} ${password}`)
+      this.consoleService.syncWhitelist();
     }
   }
 }
