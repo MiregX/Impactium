@@ -12,17 +12,19 @@ export type GeistButton = {
   action: () => void;
   text: string;
   focused?: boolean;
+  style?: string[];
 } | {
   type: GeistButtonTypes.Link;
   href: string;
   text: string;
   minimized?: boolean;
+  style?: string[];
 };
 
 export function GeistButton({ options }: { options: GeistButton }) {
   return (
     options.type === GeistButtonTypes.Link ? (
-      <Link className={`${button._} ${options.minimized && button.min}`} href={options.href}>
+      <Link className={`${button._} ${options.minimized && button.min} ${options.style?.join(' ')}`} href={options.href}>
         {options.text}
       </Link>
     ) : (

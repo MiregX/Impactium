@@ -17,29 +17,32 @@ export class UserService {
     });
   }
 
-  async findOneById(id: string): Promise<UserEntity> {
+  async findOneById(uid: string): Promise<UserEntity> {
     return await this.prisma.user.findUnique({
-      where: { id }
+      where: { uid }
     });
   }
 
-  async compareUserWithLogin(id: string): Promise<any> {
-    const user = await this.findOneById(id);
-    const login = await this.prisma.login.findUnique({
+  async compareUserWithLogin(uid: string): Promise<any> {
+    const user = await this.findOneById(uid);
+    const login = await this.prisma.login.findFirst({
       where: {
-        uid: user.id,
-        type: user.lastLogin
-      }
+        uid: user.uid,
+      },
+      orderBy: {
+        on: 'desc',
+      },
     });
+    
     return UserComposedEntity.compose({
       user,
       login
     });
   }
   
-  signJWT(id: string, email: string): string {
+  signJWT(uid: string, email: string): string {
     return this.jwt.sign({
-      id,
+      uid,
       email,
     }, {
       secret: process.env.JWT_SECRET || 'secret',

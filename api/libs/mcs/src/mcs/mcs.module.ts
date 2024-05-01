@@ -7,7 +7,6 @@ import { SFTPModule } from '@api/mcs/sftp/sftp.module';
 
 @Module({
   imports: [
-    ConsoleModule,
     TelegramModule,
     SFTPModule
   ],

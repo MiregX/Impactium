@@ -5,10 +5,11 @@ interface LoginEntityInput extends Login {
 }
 
 export class LoginEntity implements LoginEntityInput {
-  uid: string;
   id: string;
+  lang: string;
+  uid: string;
   type: $Enums.LoginType;
   avatar: string;
   displayName: string;
-  locale: string;
+  on: Date;
 }

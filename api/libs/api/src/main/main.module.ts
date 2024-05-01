@@ -6,6 +6,7 @@ import { AuthModule } from '@api/main/auth/auth.module';
 import { MainController } from './main.controller';
 import { MainService } from './main.service';
 import { Module } from '@nestjs/common';
+import { TeamModule } from '@api/main/team/team.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Module } from '@nestjs/common';
     UserModule,
     PrismaModule,
     PlayerModule,
+    TeamModule,
     ApplicationModule,
   ],
   controllers: [

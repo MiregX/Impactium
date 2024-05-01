@@ -16,7 +16,7 @@ export class PlayerGuard implements CanActivate {
       await this.authGuard.canActivate(context);
     }
 
-    request.player = await this.playerService.findOneByIdOrCreate(request.user.id);
+    request.player = await this.playerService.findOneById(request.user.id);
     return true;
   }
 }

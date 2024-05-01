@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -11,47 +11,92 @@ datasource db {
 enum LoginType {
   discord
   google
+  github
+  telegram
+  steam
 }
 
 model User {
-  id        String   @id @default(cuid())
-  lastLogin LoginType
-  register  DateTime @default(now())
-  email     String?  @unique
-  logins    Login[]
-  player    Player?
+  uid         String       @id @default(cuid())
+  register    DateTime     @default(now())
+  email       String?      @unique
+  logins      Login[]
+  player      Player?
+  teams       Team[]
+  tournaments Tournament[]
 }
 
 model Login {
-  id          String      @id @default(cuid())
+  uid         String
+  id          String    @unique
+  user        User      @relation(fields: [uid], references: [uid])
   type        LoginType
+  on          DateTime  @default(now())
   avatar      String?
   displayName String
-  locale      String
-  user        User        @relation(fields: [uid], references: [id])
-  uid         String      @unique
+  lang        String
 }
 
 model Player {
-  user         User           @relation(fields: [uid], references: [id])
-  uid          String         @unique
-  nickname     String?        @unique
-  password     String?
-  register     DateTime?
-  skin         Skin?
-  oldNicknames OldNicknames[]
+  uid       String      @unique
+  user      User        @relation(fields: [uid], references: [uid])
+  steamId   String?     @unique
+  nickname  String
+  role      Roles
+  dotabuff  String?     @unique
+  teamsMember TeamMember[]
 }
 
-model OldNicknames {
-  nickname String
-  player   Player             @relation(fields: [uid], references: [uid])
-  uid      String             @unique
+model Team {
+  id           String       @id @default(cuid())
+  banner       String
+  title        String       @unique
+  ownerId      String
+  owner        User         @relation(fields: [ownerId], references: [uid])
+  tournamentId String
+  tournament   Tournament   @relation(fields: [tournamentId], references: [id])
+  members      TeamMember[]
+  battles      Battle[]
 }
 
-model Skin {
+enum Roles {
+  carry
+  mid
+  offlane
+  semisupport
+  fullsupport
+  rotation
+  coach
+}
+
+model TeamMember {
+  id     String  @id @default(cuid())
+  roles  Roles[]
+  uid    String
+  player Player    @relation(fields: [uid], references: [uid])
+  teamId String
+  team   Team    @relation(fields: [teamId], references: [id])
+}
+
+model Tournament {
+  id          String   @id @default(cuid())
+  banner      String
   title       String
-  icon        String
-  source      String
-  player      Player          @relation(fields: [uid], references: [uid])
-  uid         String          @unique
+  start       DateTime
+  end         DateTime
+  description Json
+  code        String   @unique
+  rules       Json
+  ownerId String
+  owner   User     @relation(fields: [ownerId], references: [uid])
+  teams   Team[]
+  battles Battle[]
+}
+
+model Battle {
+  id            String     @id @unique
+  team          Team[]     
+  winnerId      String
+  tournamentId  String
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
 }

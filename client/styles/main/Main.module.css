@@ -9,7 +9,7 @@
   
   padding: 16px;
   gap: 16px;
-  background: var(--geist-right-radial-gradient);
+  background: var(--black);
   position: relative;
 }
 .panel[data-splitter] > img {

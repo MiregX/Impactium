@@ -1,27 +1,9 @@
-import { Player, Skin } from "@prisma/client";
-import { ReducedSkinEntity, SkinEntity } from "./skin.entity";
-
-export class ReducedPlayerEntity {
-  selectFields() {
-    return {
-      nickname: true,
-      password: true,
-      register: true,
-      skin: {
-        select: {
-          title: true,
-          icon: true,
-          source: true
-        }
-      }
-    };
-  }
-}
+import { $Enums, Player } from "@prisma/client";
 
 export class PlayerEntity implements Player {
   uid: string;
+  steamId: string;
   nickname: string;
-  password: string;
-  register: Date;
-  skin: SkinEntity
+  role: $Enums.Roles;
+  dotabuff: string;
 }

@@ -2,9 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/entities/user.entity';
-import { AuthPayload, DiscordAuthPayload } from './entities/auth.entity';
-import { LoginService } from '@api/main/user/login.service';
-import { ApplicationService } from '@api/main/application/application.service';
+import { AuthPayload } from './entities/auth.entity';
 import { Configuration } from '@impactium/config';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { $Enums } from '@prisma/client';
@@ -15,8 +13,6 @@ export class AuthService {
 
   constructor(
     private readonly userService: UserService,
-    private readonly loginService: LoginService,
-    private readonly applicationService: ApplicationService,
     private readonly prisma: PrismaService,
   ) {
     this.oauth = new DiscordOauth2({
@@ -47,7 +43,7 @@ export class AuthService {
             : '',
           email: payload.email,
           displayName: payload.global_name || payload.username + '#' + payload.discriminator,
-          locale: payload.locale,
+          lang: payload.locale,
           type: 'discord' as $Enums.LoginType
         }
       })
@@ -65,19 +61,19 @@ export class AuthService {
   }
 
   async login(token: string): Promise<UserEntity> {
-    const { email, id } = this.userService.decodeJWT(token);
+    const { email, uid } = this.userService.decodeJWT(token);
     if (email) {
       return await this.userService.findOneByEmail(email);
     }
-    else if (id) {
-      return await this.userService.findOneById(id);
+    else if (uid) {
+      return await this.userService.findOneById(uid);
     }
     else {
       throw new NotFoundException();
     }
   }
 
-  async register({ id, type, avatar, displayName, locale, email }: AuthPayload) {
+  async register({ id, type, avatar, displayName, lang, email }: AuthPayload) {
     let login = await this.prisma.login.findUnique({
       where: { id, type },
     });
@@ -85,25 +81,16 @@ export class AuthService {
     if (login) {
       login = await this.prisma.login.update({
         where: { id, type },
-        data: { avatar, displayName, locale, user: {
-          update: {
-            where: { id: login.uid },
-            data: { lastLogin: type },
-          }
-        } },
-      });
-      await this.prisma.user.update({
-        where: { id: login.uid },
-        data: { lastLogin: type },
+        data: { avatar, displayName, lang, on: new Date() },
       });
     } else {
       const user = email
         ? await this.prisma.user.upsert({
             where: { email },
-            update: { lastLogin: type },
-            create: { email: email ? email : '', lastLogin: type },
+            update: { email },
+            create: { email: email ? email : '' },
           })
-        : await this.prisma.user.create({ data: { lastLogin: type } });
+        : await this.prisma.user.create({ data: { email } });
   
       login = await this.prisma.login.create({
         data: {
@@ -111,15 +98,15 @@ export class AuthService {
           type,
           avatar,
           displayName,
-          locale,
-          user: { connect: { id: user.id } },
+          lang,
+          user: { connect: { uid: user.uid } },
         },
       });
     }
   
     return {
       authorization: this.parseToken(this.userService.signJWT(login.uid, email)),
-      language: locale,
+      language: lang,
     };
   }
 

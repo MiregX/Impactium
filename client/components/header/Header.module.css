@@ -36,7 +36,7 @@
 .logo.hidden {
   opacity: 0;
 }
-.logo p {
+.logo h1 {
   font-size: 24px;
   font-weight: 600;
 }

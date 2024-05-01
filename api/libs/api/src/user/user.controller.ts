@@ -11,6 +11,6 @@ export class UserController {
   @Get('get')
   @UseGuards(AuthGuard)
   getUserById(@User() user: UserEntity) {
-    return this.userService.compareUserWithLogin(user.id);
+    return this.userService.compareUserWithLogin(user.uid);
   }
 }

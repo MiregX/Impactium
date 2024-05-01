@@ -17,7 +17,7 @@ export function Header() {
     <header className={s.header}>
       <Link href='/' className={`${s.logo} ${isLogoHidden && s.hidden}`}>
         <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
-        <p>Impactium</p>
+        <h1>Impactium</h1>
       </Link>
       {user?.id ? (
         <UserComponent />

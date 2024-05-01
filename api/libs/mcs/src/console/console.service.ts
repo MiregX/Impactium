@@ -79,12 +79,10 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
           if (!skipped) return skipped = true;
           messages.push(message);
 
-          if (!expect) {
-            resolve(message);
-          } else if (messages.length === expect) {
-            resolve(messages);
+          if (!expect || messages.length === expect) {
+            resolve(messages.length === 1 ? messages[0] : messages);
+            this.server.off("console_output", (message: string) => output(this.fixMessage(message)));
           }
-          this.server.off("console_output");
         };
   
         this.server.on("console_output", (message: string) => output(this.fixMessage(message)));
@@ -108,10 +106,6 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
     this.players.online.count = players.length;
     return this.players.online
   }
-  
-  async getDatabasePlayers(): Promise<string[]> {
-    return this.players.database = await this.playerService.getAllPlayersNicknames()
-  }
 
   async getWhitelistPlayers(): Promise<string[]> {
     const players: string[] = await this.command('whitelist list').then((message: string) => {
@@ -121,7 +115,6 @@ export class ConsoleService implements OnModuleInit, OnModuleDestroy {
   }
 
   async syncWhitelist() {
-    await this.getDatabasePlayers();
     await this.getWhitelistPlayers();
     let isChanged = false;
 

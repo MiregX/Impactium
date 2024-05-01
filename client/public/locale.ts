@@ -73,7 +73,7 @@ const locale: Locale = {
       us: "Continue with Discord",
       ru: "Войти используя Discord"
     },
-    dontHaveAnAccount: {
+    dont_have_an_account: {
       ua: "Не маєте облікового запису?",
       it: "Non hai un account?",
       us: "Don't have an account?",

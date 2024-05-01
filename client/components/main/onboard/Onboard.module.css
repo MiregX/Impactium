@@ -1,0 +1,62 @@
+.arcana {
+  position: relative;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arcana img {
+  max-height: 100%;
+}
+
+.onboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.onboard h3 {
+  font-size: var(--text-larger);
+}
+
+.onboard h4 {
+  margin-top: 24px;
+  font-size: var(--text-large);
+}
+
+.onboard img {
+  height: 32px;
+  transform: translateY(8px);
+}
+
+.onboard span {
+  background: linear-gradient(to right,#63E8DB, #39C4F5);
+  font-weight: 900;
+  font-family: 'Nunito', sans-serif;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.onboard p {
+  color: var(--text-dimmed);
+  max-width: 800px;
+  margin-bottom: 8px;
+  line-height: normal;
+}
+
+.onboard .group {
+  display: flex;
+  margin-bottom: 32px;
+}
+
+.button {
+  padding: 1em;
+  background: var(--soft-white);
+  color: var(--black);
+  font-weight: 500;
+}
+
+.button:hover {
+  color: var(--black);
+}

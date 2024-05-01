@@ -1,16 +1,12 @@
 'use client'
-import { PanelTemplate } from '@/components/main/PanelTempate';
-import { TeamPanel } from '@/components/main/team/TeamPanel';
+import { Onboard } from '@/components/main/onboard/Onboard';
 import React from 'react';
 
 export default function Main() {
  
   return (
     <React.Fragment>
-      <PanelTemplate>
-        {null}
-        {/* <TeamPanel /> */}
-      </PanelTemplate>
+      <Onboard />
     </React.Fragment>
   );
 };
