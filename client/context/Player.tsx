@@ -1,6 +1,6 @@
 'use client'
 import s from '@/styles/Me.module.css'
-import { getServerLink } from "@/dto/master";
+import { _server } from "@/dto/master";
 import { useState, useEffect, createContext, useContext } from "react";
 import { Nav } from "@/components/Nav";
 import { redirect } from 'next/navigation';
@@ -112,7 +112,7 @@ const playerAPI = async ({ path, headers, body = {} }: IPlayerRequest): Promise<
       ? 'GET'
       : 'POST';
 
-    const response = await fetch(`${getServerLink()}/api/player/` + path, {
+    const response = await fetch(`${_server()}/api/player/` + path, {
       method,
       headers: {
         ...headers,

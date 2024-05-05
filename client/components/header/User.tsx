@@ -5,10 +5,13 @@ import _user from './User.module.css'
 import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
+import { useMessage } from '@/context/Message';
+import { LanguageChooser } from '../../banners/language/LanguageChooser';
 
 export function UserComponent() {
   const { user, logout } = useUser();
-  const { lang, toggleIsLanguageChooserVisible } = useLanguage();
+  const { spawnBanner } = useMessage();
+  const { lang } = useLanguage();
   const [active, setActive] = useState<boolean>(false);
 
   const toggle = () => {
@@ -37,7 +40,7 @@ export function UserComponent() {
           <img src='https://cdn.impactium.fun/ui/action/settings-future.svg' alt=''/>
         </Link>
         <hr />
-        <button onClick={() => handle(toggleIsLanguageChooserVisible)}>
+        <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.chooseLanguages}
           <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>
         </button>

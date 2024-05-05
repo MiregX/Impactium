@@ -1,6 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@api/main/prisma/prisma.service';
+import { CreateTeamDto, TeamAlreadyExist } from './team.dto';
 
 @Injectable()
 export class TeamService {
-  constructor() {}
+  constructor(
+    private readonly prisma: PrismaService
+  ) {}
+
+  async create(uid: string, { 
+    indent,
+    banner,
+    title
+  }: CreateTeamDto) {
+    const isExist = await this.prisma.team.findUnique({
+      where: {
+        indent
+      }
+    });
+
+    if (isExist) throw new TeamAlreadyExist();
+
+    return this.prisma.team.create({
+      data: {
+        title,
+        indent,
+        banner,
+        owner: {
+          connect: {
+            uid
+          }
+        }
+      }
+    })
+  }
+
+  pagination(limit: number = 20, skip: number = 0) {
+    return this.prisma.team.findMany({
+      take: limit,
+      skip: skip,
+    });
+  }
 }

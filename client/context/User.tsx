@@ -2,7 +2,7 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { UserComposedEntity } from '@api/main/user/entities/user.entity'
-import { getServerLink } from "@/dto/master";
+import { _server } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
@@ -25,19 +25,20 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({
-    children
+    children,
+    prefetched
   }) => {
   const cookie = new Cookies();
-  const [isUserFetched, setIsUserFetched] = useState(false);
-  const [user, setUser] = useState<UserComposedEntity | null>(null);
-  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false);
+  const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
+  const [user, setUser] = useState<UserComposedEntity | null>(prefetched);
+  const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
   const getUser = async (): Promise<UserComposedEntity> => {
-    const res = await fetch(`${getServerLink()}/api/user/get`, {
+    const res = await fetch(`${_server()}/api/user/get`, {
       method: 'GET',
       credentials: 'include'
     });

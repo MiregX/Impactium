@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@/context/User';
 import { useLanguage } from '@/context/Language';
 import { ReactNode, Suspense, useEffect } from 'react';
-import { getServerLink } from '@/dto/master';
+import { _server } from '@/dto/master';
 import Cookies from 'universal-cookie';
 
 function CallbackComponent() {
@@ -17,7 +17,7 @@ function CallbackComponent() {
   const code = searchParams.get('code');
   
   async function loginCallback(code: string, referal?: string) {
-    await fetch(`${getServerLink()}/api/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
+    await fetch(`${_server()}/api/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
       method: 'POST',
       credentials: 'include'
     });

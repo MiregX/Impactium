@@ -11,6 +11,10 @@
   transition: all .3s var(--transition);
   font-weight: 600;
   cursor: pointer;
+  font-size: unset;
+}
+._:focus {
+  outline: none;
 }
 
 ._:hover {

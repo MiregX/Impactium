@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 
 export function LanguageChooser() {
-  const { lang, language, setLanguage, toggleIsLanguageChooserVisible } = useLanguage();
+  const { lang, language, setLanguage } = useLanguage();
   const cookie = new Cookies();
 
   const availableLanguages = {
@@ -32,6 +32,12 @@ export function LanguageChooser() {
     }
   };
 
+  const rightButton: GeistButton = {
+    type: GeistButtonTypes.Button,
+    text: lang._save,
+    focused: true
+  }
+
   const footer = {
     left: [
       {
@@ -41,19 +47,12 @@ export function LanguageChooser() {
         href: 'https://t.me/impactium'
       } as GeistButton
     ],
-    right: [
-      {
-        type: GeistButtonTypes.Button,
-        text: lang._save,
-        action: () => toggleIsLanguageChooserVisible(),
-        focused: true
-      } as GeistButton
-    ]
+    right: [ rightButton ]
   };
   
 
   return (
-    <Banner title={lang.chooseLanguages} footer={footer}>
+    <Banner title={lang.chooseLanguages} footer={footer} onClose={rightButton.action}>
       <div className={_language._}>
         {Object.keys(availableLanguages).map((key) => (
           <div

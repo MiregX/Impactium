@@ -1,0 +1,10 @@
+._ {
+  border-radius: var(--border-m);
+  background: var(--geist-background);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  border: var(--geist-border);
+  gap: 16px;
+  padding: 16px;
+}

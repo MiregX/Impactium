@@ -1,6 +1,6 @@
 export async function requestApplicationInfoFromServer() {
   try {
-    const response = await fetch(`${getServerLink()}/api/application/info`, {
+    const response = await fetch(`${_server()}/api/application/info`, {
       cache: 'no-cache'
     });
     return await response.json();
@@ -11,7 +11,7 @@ export async function requestApplicationInfoFromServer() {
   }
 }
 
-export function getServerLink() {
+export function _server() {
   return process.env.NODE_ENV === 'production'
     ? 'https://impactium.fun'
     : 'http://localhost:3001'

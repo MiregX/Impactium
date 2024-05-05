@@ -1,6 +1,8 @@
-import banner from '@/ui/styles/Banner.module.css';
-import React from 'react';
+'use client'
+import banner from './styles/Banner.module.css';
+import React, { useEffect, useRef } from 'react';
 import { GeistButton } from './GeistButton';
+import { useMessage } from '@/context/Message';
 
 export enum WarnerTypes {
   note,
@@ -22,11 +24,30 @@ interface BannerProps {
     left?: GeistButton[],
     right: GeistButton[],
   };
+  onClose?: () => void;
 }
 
-export function Banner({ title, children, footer }: BannerProps) {
+export function Banner({ title, children, footer, onClose }: BannerProps) {
+  const self = useRef(null);
+  const { destroyBanner } = useMessage();
+
+  useEffect(() => {
+    const closeHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        if (onClose) onClose();
+        destroyBanner();
+      }
+    };
+
+    window.addEventListener('keydown', closeHandler);
+
+    return () => {
+      window.removeEventListener('keydown', closeHandler);
+    };
+  }, [onClose]);
+
   return (
-    <div className={banner.background}>
+    <div ref={self} className={banner.background}>
       <div className={banner._}>
         <h4>{title}</h4>
         <div className={banner.content}>{children}</div>

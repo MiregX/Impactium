@@ -2,8 +2,12 @@ import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton'
 import { Arcana } from './Arcana'
 import s from './Onboard.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate'
+import CreateTeam from '@/banners/create_team/CreateTeam'
+import { useMessage } from '@/context/Message'
 
 export function Onboard() {
+  const { spawnBanner } = useMessage();
+
   return (
     <PanelTemplate>
       <Arcana />
@@ -20,8 +24,8 @@ export function Onboard() {
             style: [ s.button ]
           }} />
           <GeistButton options={{
-            type: GeistButtonTypes.Link,
-            href: '/team/create',
+            type: GeistButtonTypes.Button,
+            action: () => spawnBanner(<CreateTeam />),
             text: 'Создать команду',
             minimized: true
           }} />

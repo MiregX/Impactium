@@ -1,5 +1,5 @@
 'use client';
-import { LanguageChooser } from '@/components/language/LanguageChooser';
+import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import locale from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
@@ -17,7 +17,6 @@ interface ILanguageContext {
   setLanguage: (language: string) => void;
   language: string;
   refreshLanguage: () => void;
-  toggleIsLanguageChooserVisible: () => void;
 }
 
 const LanguageContext = createContext<ILanguageContext | undefined>(undefined);
@@ -73,14 +72,12 @@ const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage
     lang: getLanguagePack(language),
     setLanguage,
     refreshLanguage,
-    language,
-    toggleIsLanguageChooserVisible,
+    language
   };
 
   return (
     <LanguageContext.Provider value={props}>
       {children}
-      {isLanguageChooserVisible && <LanguageChooser />}
     </LanguageContext.Provider>
   );
 };

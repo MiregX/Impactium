@@ -6,7 +6,7 @@ export class Configuration {
     return process.env;
   }
 
-  static getServerLink() {
+  static _server() {
     return this.isProductionMode()
       ? process.env.HOST
       : process.env.API_LOCALHOST

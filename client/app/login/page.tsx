@@ -19,6 +19,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user) {
+      console.log(user)
       redirect('/');
     }
   }, [user]);

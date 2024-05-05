@@ -1,0 +1,91 @@
+._ {
+  background: var(--soft-black);
+  flex: 1;
+  border: 1px solid var(--accent-2);
+  border-radius: var(--border-s);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+._:focus-within:not(input) {
+  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+}
+
+._ input + label {
+  position: absolute;
+  top: 50%;
+  padding: 0 4px;
+  left: 8px;
+  transform: translateY(-50%);
+  color: var(--text-dimmed);
+  font-size: var(--text-medium);
+  transition: all 0.3s var(--transition);
+  background: inherit;
+}
+
+
+._ input:hover + label,
+._ input:not([value=""]) + label,
+._ input:focus + label  {
+  font-size: var(--text-small);
+  top: -16px;
+  left: 4px;
+  background: none;
+}
+
+._ input[type='file'] {
+  display: none;
+}
+
+._ input[type='file'] + label {
+  position: relative !important;
+  top: unset;
+  left: unset;
+  transform: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background: var(--black);
+  border-radius: var(--border-s);
+  padding: 24px;
+  gap: 24px;
+  cursor: pointer;
+  width: -webkit-fill-available;
+}
+
+._ label img {
+  height: 48px;
+  width: 48px;
+  filter: brightness(0.58);
+}
+._ label p {
+  font-size: var(--text-small);
+  color: var(--text-dimmed);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+
+._ input {
+  background: none;
+  border: none;
+  font-size: calc(var(--text-medium) + 1px);
+  flex: 1;
+  height: 38px;
+}
+._ input:focus {
+  outline: none;
+}
+._ span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  filter: brightness(0.58);
+}
+
+._ span img {
+  height: 18px;
+}

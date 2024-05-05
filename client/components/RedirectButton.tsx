@@ -2,7 +2,7 @@
 import s from '@/styles/Login.module.css';
 import type { LoginMethod } from '@/app/login/page';
 import { useRouter } from 'next/navigation';
-import { getServerLink } from '@/dto/master';
+import { _server } from '@/dto/master';
 import { useLanguage } from '@/context/Language';
 
 export function RedirectButton({ type }: { type: LoginMethod }) {
@@ -10,7 +10,7 @@ export function RedirectButton({ type }: { type: LoginMethod }) {
   const router = useRouter();
   
   const login = (type: LoginMethod) => {
-    router.push(`${getServerLink()}/api/oauth2/login/${type}`);
+    router.push(`${_server()}/api/oauth2/login/${type}`);
   }
 
   const map = {

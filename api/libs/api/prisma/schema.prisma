@@ -38,24 +38,24 @@ model Login {
 }
 
 model Player {
-  uid       String      @unique
+  uid       String      @id
   user      User        @relation(fields: [uid], references: [uid])
   steamId   String?     @unique
   nickname  String
   role      Roles
   dotabuff  String?     @unique
-  teamsMember TeamMember[]
+  teams     Team[]
 }
 
 model Team {
   id           String       @id @default(cuid())
-  banner       String
-  title        String       @unique
+  indent       String       @unique
+  banner       String?
+  title        String?
   ownerId      String
   owner        User         @relation(fields: [ownerId], references: [uid])
-  tournamentId String
-  tournament   Tournament   @relation(fields: [tournamentId], references: [id])
-  members      TeamMember[]
+  tournaments  Tournament[]
+  members      Player[]
   battles      Battle[]
 }
 
@@ -69,15 +69,6 @@ enum Roles {
   coach
 }
 
-model TeamMember {
-  id     String  @id @default(cuid())
-  roles  Roles[]
-  uid    String
-  player Player    @relation(fields: [uid], references: [uid])
-  teamId String
-  team   Team    @relation(fields: [teamId], references: [id])
-}
-
 model Tournament {
   id          String   @id @default(cuid())
   banner      String
@@ -87,10 +78,10 @@ model Tournament {
   description Json
   code        String   @unique
   rules       Json
-  ownerId String
-  owner   User     @relation(fields: [ownerId], references: [uid])
-  teams   Team[]
-  battles Battle[]
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [uid])
+  teams       Team[]
+  battles     Battle[]
 }
 
 model Battle {

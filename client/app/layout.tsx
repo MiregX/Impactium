@@ -6,7 +6,7 @@ import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
-import { requestApplicationInfoFromServer } from '@/dto/master'
+import { _server, requestApplicationInfoFromServer } from '@/dto/master'
 import { CookiesConsemption } from '@/components/cookies/Cookies';
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
@@ -37,20 +37,31 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const applicationInfo = await requestApplicationInfoFromServer();
   const cookie = cookies();
 
+  const user = async () => {
+    return fetch(_server() + '/api/user/get', {
+      method: 'GET',
+      headers: {
+        token: cookie.get('Authorization')?.value
+      }
+    }).then(async res => {
+      const user = await res.json()
+      return res.ok ? user : null;
+    })
+  }
+
   return (
     <html>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookies().get('_language')?.value}>
-          <UserProvider>
+          <UserProvider prefetched={await user()}>
+            <MessageProvider>
               <HeaderProvider>
                 {Configuration.isProductionMode() && <Preloader applicationInfo={applicationInfo} />}
-                <MessageProvider>
-                  <main>
-                    {children}
-                  </main>
-                </MessageProvider>
-                <CookiesConsemption consemption={!!cookie.get('_cookies_consemption')} />
+                <main>
+                  {children}
+                </main>
               </HeaderProvider>
+            </MessageProvider>
           </UserProvider>
         </LanguageProvider>
       </body>

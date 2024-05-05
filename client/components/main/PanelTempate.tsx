@@ -9,7 +9,7 @@ interface Panel {
 
 export function PanelTemplate({ children, splitter, style }: Panel) {
   return(
-    <div className={`${s.panel} ${style?.join(' ')}`} data-splitter={splitter}>
+    <div className={`${s.panel} ${style?.join(' ')}`} data-splitter={splitter?.toString()}>
       {children}
       <img src='https://cdn.impactium.fun/el/way.svg'/>
     </div>

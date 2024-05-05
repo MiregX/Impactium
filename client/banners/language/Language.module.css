@@ -1,6 +1,5 @@
 ._ {
   display: flex;
-  margin: 0 24px;
   border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
   background: var(--soft-black);

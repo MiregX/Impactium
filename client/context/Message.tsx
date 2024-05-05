@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import styles from '@/styles/Message.module.css';
 import { useLanguage } from '@/context/Language';
+import { Banner } from '@/ui/Banner';
 
 const MessageContext = createContext(undefined);
 
@@ -12,6 +13,15 @@ export const useMessage = () => {
 export const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const { lang } = useLanguage();
+  const [banner, setBanner] = useState<React.ReactElement>(null);
+
+  const spawnBanner = (element: React.ReactElement) => {
+    setBanner(element);
+  }
+
+  const destroyBanner = () => {
+    setBanner(null);
+  }
 
   const newMessage = (code: number, text: string) => {
     const type = code < 400 ? 'success' : (code >= 400 && code < 500 ? 'warning' : 'attention');
@@ -49,8 +59,9 @@ export const MessageProvider = ({ children }) => {
     };
   }, []);
 
+
   return (
-    <MessageContext.Provider value={{ newMessage, copy }}>
+    <MessageContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner }}>
       {children}
       <div className={styles.messageWrapper}>
         {messages.map((message) => (
@@ -59,6 +70,7 @@ export const MessageProvider = ({ children }) => {
           </div>
         ))}
       </div>
+      {banner}
     </MessageContext.Provider>
   );
 };

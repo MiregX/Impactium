@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { redirect } from 'next/navigation'
 import { PlayerProvider } from '@/context/Player';
 import { cookies } from 'next/headers';
-import { getServerLink } from '@/dto/master';
+import { _server } from '@/dto/master';
 export default async function MeLayout({ children }: Readonly<{ children: ReactNode }>) {
 	const authorization = cookies().get('Authorization');
 
@@ -10,7 +10,7 @@ export default async function MeLayout({ children }: Readonly<{ children: ReactN
 		return redirect('/');
 	}
 	
-	const player = await fetch(`${getServerLink()}/api/player/get`, {
+	const player = await fetch(`${_server()}/api/player/get`, {
 		method: 'GET',
 		credentials: 'include',
 		headers: {
