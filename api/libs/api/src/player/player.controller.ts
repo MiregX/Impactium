@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, UseGuards, ValidationPipe } from '@nestjs/common';
 import { PlayerService } from './player.service';
 import { Player } from './player.decorator';
-import { PlayerEntity } from './entities/player.entity';
+import { PlayerEntity } from './player.entity';
 import { PlayerGuard } from './player.guard';
-import { FindPlayersDto } from './dto/player.dto';
+import { FindPlayersDto } from './player.dto';
 
 @Controller('player')
 export class PlayerController {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { CreateTeamDto, TeamAlreadyExist } from './team.dto';
+import { TeamEntity } from './team.entity';
 
 @Injectable()
 export class TeamService {
@@ -31,6 +32,14 @@ export class TeamService {
             uid
           }
         }
+      }
+    })
+  }
+
+  findManyByUid(uid: string): Promise<TeamEntity[]> {
+    return this.prisma.team.findMany({
+      where: {
+        ownerId: uid
       }
     })
   }
