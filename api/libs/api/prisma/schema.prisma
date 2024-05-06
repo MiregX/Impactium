@@ -17,13 +17,15 @@ enum LoginType {
 }
 
 model User {
-  uid         String       @id @default(cuid())
-  register    DateTime     @default(now())
-  email       String?      @unique
-  logins      Login[]
-  player      Player?
-  teams       Team[]
-  tournaments Tournament[]
+  uid           String       @id @default(cuid())
+  register      DateTime     @default(now())
+  email         String?      @unique
+  logins        Login[]
+  player        Player?
+  comments      Comment[]
+  teams         Team[]
+  participants  TeamParticipiant[]
+  tournaments   Tournament[]
 }
 
 model Login {
@@ -43,20 +45,43 @@ model Player {
   steamId   String?     @unique
   nickname  String
   role      Roles
+  mmr       Int
   dotabuff  String?     @unique
   teams     Team[]
 }
 
 model Team {
-  id           String       @id @default(cuid())
-  indent       String       @unique
-  banner       String?
-  title        String?
-  ownerId      String
-  owner        User         @relation(fields: [ownerId], references: [uid])
-  tournaments  Tournament[]
-  members      Player[]
-  battles      Battle[]
+  indent        String       @id
+  logo          String?
+  title         String?
+  ownerId       String
+  membersAmount Int
+  owner         User         @relation(fields: [ownerId], references: [uid])
+  tournaments   Tournament[]
+  members       Player[]
+  battles       Battle[]
+  joinments     TeamJoinments[]
+}
+
+model TeamParticipiant {
+  uid           String
+  user          User          @relation(fields: [uid], references: [uid]);
+  teamIndent    String
+  team          Team          @relation(fields: [teamIndent], references: [indent]);
+  roles         Roles[],
+}
+
+model TeamJoinments {
+
+}
+
+model Comment {
+  cid           String    @id @default(cuid())
+  uid           String
+  user          User      @relation(fields: [uid], references: [uid])
+  content       String
+  date          DateTime  @default(now())
+  stat          Int       @default(0)
 }
 
 enum Roles {
