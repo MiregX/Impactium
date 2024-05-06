@@ -1,14 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { ApiModule } from './api.module';
-import fastifyCookie from '@fastify/cookie';
+import * as cookieParser from 'cookie-parser';
 import { Configuration } from '@impactium/config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function run() {
-  const api = await NestFactory.create<NestFastifyApplication>(
+  const api = await NestFactory.create<NestExpressApplication>(
     ApiModule,
-    new FastifyAdapter(),
+    new ExpressAdapter(),
   );
 
   api.setGlobalPrefix('api');
@@ -18,10 +18,9 @@ async function run() {
   });
   api.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true
-  }))
-  await api.register(fastifyCookie, {
-    secret: process.env.JWT_SECRET,
-  });
+  }));
+
+  api.use(cookieParser(process.env.JWT_SECRET));
   api.listen(process.env.API_PORT || 3001, '0.0.0.0');
 }
 run();

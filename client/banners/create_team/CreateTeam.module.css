@@ -38,8 +38,9 @@
   max-width: 600px;
 }
 
-.group p {
+.group > p {
   font-size: var(--text-small);
+  color: var(--text-dimmed);
   font-weight: 400;
   margin-bottom: 8px;
 }
@@ -70,8 +71,8 @@
 
 .banner_preview {
   overflow: hidden;
-  width: 96px;
-  height: 96px;
+  width: 40px;
+  height: 40px;
   background: var(--geist-background);
   border: var(--geist-border);
   border-radius: var(--border-s);

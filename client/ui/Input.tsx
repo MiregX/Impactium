@@ -35,7 +35,7 @@ export function Input({ accept, image, label, placeholder, style, value, type, o
       {label && type !== 'file'
           ? placeholder
           : (<React.Fragment>
-              <img src='https://cdn.impactium.fun/ui/cloud/upload.svg'/>
+              <span><img src='https://cdn.impactium.fun/ui/cloud/upload.svg'/></span>
               <p>{placeholder}</p>
           </React.Fragment>)
         }</label>}

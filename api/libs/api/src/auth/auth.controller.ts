@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
-import { FastifyReply } from 'fastify';
-import { CookieSerializeOptions } from '@fastify/cookie';
+import { Response } from 'express';
 
 @Controller('oauth2')
 export class AuthController {
@@ -18,16 +17,16 @@ export class AuthController {
   @Post('callback/discord')
   async discordPostCallback(
     @Query('code') code: string,
-    @Res({ passthrough: true }) response: FastifyReply
+    @Res({ passthrough: true }) response: Response
   ) {
     const { authorization, language } = await this.authService.discordCallback(code);
-    const settings: CookieSerializeOptions = {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    const settings = {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',
     }
 
-    response.setCookie('Authorization', authorization, settings);
-    response.setCookie('_language', language, settings);
+    response.cookie('Authorization', authorization, settings);
+    response.cookie('_language', language, settings);
   }
 
   @Get('login/discord')

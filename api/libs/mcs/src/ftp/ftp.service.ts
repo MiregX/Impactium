@@ -7,6 +7,9 @@ export class FtpService extends Client implements OnModuleInit, OnModuleDestroy 
 
   constructor() {
     super(0);
+    this.options = {
+      host: 'ftpupload.net'
+    }
   }
   async onModuleInit() {
     await this.access(this.options);

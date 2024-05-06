@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './CreateTeam.module.css'
 import { CreateTeamDto } from '@api/main/team/team.dto'
 import { useUser } from '@/context/User';
@@ -13,6 +13,18 @@ export default function CreateTeam() {
   const [team, setTeam] = useState<CreateTeamDto>(null);
   const { user } = useUser();
   const [bannerPreview, setBannerPreview] = useState<any>();
+  const [footer, setFooter] = useState<any>();
+
+  useEffect(() => {
+    setFooter({
+      right: [{
+        type: GeistButtonTypes.Button,
+        action: send,
+        text: 'Создать команду',
+        focused: !!(team && team.banner && team.indent && team.title),
+      }]
+    })
+  }, [team])
 
   if (!user) {
     redirect('/')
@@ -26,8 +38,7 @@ export default function CreateTeam() {
 
   function send() {
     const formData = new FormData();
-    formData.append('banner', team.banner); // Assuming team.banner is the file
-    // Append other data if needed
+    formData.append('banner', team.banner);
     formData.append('title', team.title);
     formData.append('indent', team.indent);
   
@@ -37,24 +48,7 @@ export default function CreateTeam() {
       body: formData
     }).then(async response => {
       return await response.json();
-    }).then(data => {
-      // Handle response data here
-    }).catch(error => {
-      // Handle errors here
     });
-  }  
-
-  const CreateButton: GeistButton = {
-    type: GeistButtonTypes.Button,
-    action: send,
-    text: 'Создать команду',
-    focused: true,
-  }
-
-  const footer = {
-    right: [
-      CreateButton
-    ]
   }
 
   const handleBannerChange = (e) => {

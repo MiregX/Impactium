@@ -24,7 +24,6 @@
 .focus {
   background: var(--soft-white);
   color: var(--soft-black);
-  font-weight: 500;
 }
 
 .focus:hover {
