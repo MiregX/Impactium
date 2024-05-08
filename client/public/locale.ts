@@ -1030,6 +1030,22 @@ const locale: Locale = {
     it: "Selezionato",
     us: "Selected",
     ru: "Выбраный"
+  },
+  team: {
+    edit_team: {
+      ua: "Редагувати",
+      it: "Modifica squadra",
+      us: "Edit team",
+      ru: "Редактировать"
+    }
+  },
+  comments: {
+    empty: {
+      ua: "Здається, тут немає коментарів...",
+      it: "Non sembra esserci alcun commento....",
+      us: "There doesn't seem to be any comments...",
+      ru: "Кажестся тут нет коментариев..."
+    }
   }
 }
 export default locale;

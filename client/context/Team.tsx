@@ -12,7 +12,7 @@ interface TeamContext {
   refreshTeam: (indent?: string) => void;
 }
 
-export const useUser = () => {
+export const useTeam = () => {
   const context = useContext(TeamContext);
 
   if (!context) throw new Error();

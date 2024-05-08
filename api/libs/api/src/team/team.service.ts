@@ -95,7 +95,7 @@ export class TeamService {
   findOneByIndent(indent: string, params?: FindOneByIndent) {
     return this.prisma.team.findUnique({
       where: {
-        indent,
+        indent: this.parseIndent(indent),
       }
     });
   }
@@ -122,4 +122,9 @@ export class TeamService {
 
     return cdn;
   }
+
+  private parseIndent(indent: string) {
+    return indent.replace('@', '');
+  }
+
 }

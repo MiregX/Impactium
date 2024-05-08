@@ -62,7 +62,6 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_api-prisma
     profiles:
       - development
-      - production
 
   redis:
     container_name: ${COMPOSE_PROJECT_NAME}_redis

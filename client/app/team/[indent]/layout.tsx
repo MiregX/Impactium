@@ -9,13 +9,18 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     params.indent = params.indent.replace('%40', '@');
   }
 
-  const team = await fetch(`${_server}/api/team/get/${params.indent}`)
+  const team = await fetch(`${_server()}/api/team/get/${params.indent}`, {
+    method: 'GET',
+    cache: 'no-cache'
+  })
     .then(async (response) => {
       return response.ok ? await response.json() : undefined
     })
     .catch(_ => {
       return undefined
     })
+
+  console.log(team)
 
   return (
     <TeamProvider prefetched={team}>

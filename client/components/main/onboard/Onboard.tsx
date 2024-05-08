@@ -38,7 +38,7 @@ export function Onboard() {
             href: '/me/actions',
             text: 'Найти турнир',
             style: [ s.button ]
-          }} />
+          }} />d
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             href: '/me/actions',
