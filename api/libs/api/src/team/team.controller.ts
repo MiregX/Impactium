@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto } from './team.dto';
+import { CreateTeamDto, DEFAULT_TEAM_PAGINATION_LIMIT, DEFAULT_TEAM_PAGINATION_PAGE } from './team.dto';
 import { AuthGuard } from '@api/main/auth/auth.guard';
 import { User } from '@api/main/user/user.decorator';
 import { UserEntity } from '@api/main/user/entities/user.entity';
@@ -14,8 +14,18 @@ export class TeamController {
   ) {}
 
   @Get('get')
-  async getAll(@Query('limit') limit: number, @Query('skip') skip: number) {
-    return await this.teamService.pagination(limit, skip);
+  async getAll(
+    @Query('limit') limit: number = DEFAULT_TEAM_PAGINATION_LIMIT,
+    @Query('skip') skip: number = DEFAULT_TEAM_PAGINATION_PAGE,
+  ) {
+    const x = await this.teamService.pagination(limit, skip);
+    console.error(x)
+    return x
+  }
+
+  @Get('get/:indent')
+  findByIndent(@Param('indent') indent: string,) {
+    return this.teamService.findOneByIndent(indent);
   }
   
   @Post('create/:indent')

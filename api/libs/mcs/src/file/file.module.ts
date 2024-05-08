@@ -6,10 +6,12 @@ import { Module } from '@nestjs/common';
   imports: [],
   controllers: [],
   providers: [
-    SftpService
+    SftpService,
+    FtpService
   ],
   exports: [
-    SftpService
+    SftpService,
+    FtpService
   ]
 })
 export class FileModule {}

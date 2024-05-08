@@ -13,10 +13,6 @@ implements OnModuleInit, OnModuleDestroy {
   async onModuleDestroy() {
     await this.close();
   }
-  
-  async read(path: string): Promise<any> {
-    return
-  }
 
   private async connect() {
     

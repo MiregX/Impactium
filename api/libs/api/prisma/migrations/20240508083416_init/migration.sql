@@ -30,6 +30,7 @@ CREATE TABLE "Player" (
     "steamId" STRING,
     "nickname" STRING NOT NULL,
     "role" "Roles" NOT NULL,
+    "mmr" INT4 NOT NULL,
     "dotabuff" STRING,
 
     CONSTRAINT "Player_pkey" PRIMARY KEY ("uid")
@@ -37,13 +38,44 @@ CREATE TABLE "Player" (
 
 -- CreateTable
 CREATE TABLE "Team" (
-    "id" STRING NOT NULL,
     "indent" STRING NOT NULL,
-    "banner" STRING,
+    "logo" STRING,
     "title" STRING,
     "ownerId" STRING NOT NULL,
+    "membersAmount" INT4 NOT NULL DEFAULT 0,
 
-    CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Team_pkey" PRIMARY KEY ("indent")
+);
+
+-- CreateTable
+CREATE TABLE "TeamMembers" (
+    "id" STRING NOT NULL,
+    "uid" STRING NOT NULL,
+    "teamIndent" STRING NOT NULL,
+    "roles" "Roles"[],
+
+    CONSTRAINT "TeamMembers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TeamInvitements" (
+    "id" STRING NOT NULL,
+    "uid" STRING NOT NULL,
+    "teamIndent" STRING NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "TeamInvitements_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Comment" (
+    "cid" STRING NOT NULL,
+    "uid" STRING NOT NULL,
+    "content" STRING NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "stat" INT4 NOT NULL DEFAULT 0,
+
+    CONSTRAINT "Comment_pkey" PRIMARY KEY ("cid")
 );
 
 -- CreateTable
@@ -71,12 +103,6 @@ CREATE TABLE "Battle" (
 );
 
 -- CreateTable
-CREATE TABLE "_PlayerToTeam" (
-    "A" STRING NOT NULL,
-    "B" STRING NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "_TeamToTournament" (
     "A" STRING NOT NULL,
     "B" STRING NOT NULL
@@ -101,19 +127,10 @@ CREATE UNIQUE INDEX "Player_steamId_key" ON "Player"("steamId");
 CREATE UNIQUE INDEX "Player_dotabuff_key" ON "Player"("dotabuff");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Team_indent_key" ON "Team"("indent");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Tournament_code_key" ON "Tournament"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Battle_id_key" ON "Battle"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_PlayerToTeam_AB_unique" ON "_PlayerToTeam"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_PlayerToTeam_B_index" ON "_PlayerToTeam"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_TeamToTournament_AB_unique" ON "_TeamToTournament"("A", "B");
@@ -137,19 +154,28 @@ ALTER TABLE "Player" ADD CONSTRAINT "Player_uid_fkey" FOREIGN KEY ("uid") REFERE
 ALTER TABLE "Team" ADD CONSTRAINT "Team_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "TeamMembers" ADD CONSTRAINT "TeamMembers_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TeamMembers" ADD CONSTRAINT "TeamMembers_teamIndent_fkey" FOREIGN KEY ("teamIndent") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TeamInvitements" ADD CONSTRAINT "TeamInvitements_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TeamInvitements" ADD CONSTRAINT "TeamInvitements_teamIndent_fkey" FOREIGN KEY ("teamIndent") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Tournament" ADD CONSTRAINT "Tournament_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Battle" ADD CONSTRAINT "Battle_tournamentId_fkey" FOREIGN KEY ("tournamentId") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PlayerToTeam" ADD CONSTRAINT "_PlayerToTeam_A_fkey" FOREIGN KEY ("A") REFERENCES "Player"("uid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_PlayerToTeam" ADD CONSTRAINT "_PlayerToTeam_B_fkey" FOREIGN KEY ("B") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("indent") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_B_fkey" FOREIGN KEY ("B") REFERENCES "Tournament"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -158,4 +184,4 @@ ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_B_fkey" FOREIG
 ALTER TABLE "_BattleToTeam" ADD CONSTRAINT "_BattleToTeam_A_fkey" FOREIGN KEY ("A") REFERENCES "Battle"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_BattleToTeam" ADD CONSTRAINT "_BattleToTeam_B_fkey" FOREIGN KEY ("B") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_BattleToTeam" ADD CONSTRAINT "_BattleToTeam_B_fkey" FOREIGN KEY ("B") REFERENCES "Team"("indent") ON DELETE CASCADE ON UPDATE CASCADE;

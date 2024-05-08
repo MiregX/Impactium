@@ -46,8 +46,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     }).then(async res => {
       const user = await res.json()
       return res.ok ? user : null;
-    })
-  }
+    }).catch(_ => { return null })
+  };
 
   return (
     <html>

@@ -43,3 +43,6 @@ export type FindTeamDto = FindOneTeamByIndentDto | FindManyTeamsByIndentDto
 export class TeamAlreadyExist extends HttpException {
   constructor() {super('team already exists', HttpStatus.CONFLICT)};
 }
+
+export const DEFAULT_TEAM_PAGINATION_LIMIT = 20;
+export const DEFAULT_TEAM_PAGINATION_PAGE = 0;

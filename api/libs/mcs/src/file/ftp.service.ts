@@ -3,16 +3,13 @@ import { Client, AccessOptions, FTPResponse } from 'basic-ftp';
 
 @Injectable()
 export class FtpService extends Client implements OnModuleInit, OnModuleDestroy {
-  private readonly options: AccessOptions;
+  private readonly options: AccessOptions = JSON.parse(process.env.FTP);
 
   constructor() {
     super(0);
-    this.options = {
-      host: 'ftpupload.net'
-    }
   }
   async onModuleInit() {
-    await this.access(this.options);
+    this.options.password && await this.access(this.options);
   }
   onModuleDestroy() {
     this.ftp.close();

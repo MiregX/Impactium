@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import s from './CreateTeam.module.css'
 import { CreateTeamDto } from '@api/main/team/team.dto'
 import { useUser } from '@/context/User';
-import { redirect } from 'next/navigation';
 import { Banner } from '@/ui/Banner';
 import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 import { _server } from '@/dto/master';
+import { useRouter } from 'next/router';
 import { Input } from '@/ui/Input';
+import { redirect } from 'next/navigation';
+import Error from 'next/error';
 
 export default function CreateTeam() {
   const [team, setTeam] = useState<CreateTeamDto>(null);
@@ -36,18 +38,27 @@ export default function CreateTeam() {
     })
   }
 
+  function handleError(_: Error) {
+  }  
+
   function send() {
     const formData = new FormData();
     formData.append('banner', team.banner);
     formData.append('title', team.title);
     formData.append('indent', team.indent);
   
-    fetch(_server() + '/api/team/create', {
+    fetch(_server() + `/api/team/create/${team.indent}`, {
       method: 'POST',
       credentials: 'include',
       body: formData
-    }).then(async response => {
-      return await response.json();
+    }).then(response => {
+      if (response.ok) {
+        response.json().then(team => {
+          redirect(`/team/${team.indent}`) // Error: NEXT_REDIRECT
+        });
+      }
+    }).catch(_ => {
+      handleError(_);
     });
   }
 

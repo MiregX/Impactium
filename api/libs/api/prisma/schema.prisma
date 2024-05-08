@@ -24,8 +24,9 @@ model User {
   player        Player?
   comments      Comment[]
   teams         Team[]
-  participants  TeamParticipiant[]
+  participate   TeamMembers[]
   tournaments   Tournament[]
+  invites       TeamInvitements[]
 }
 
 model Login {
@@ -47,32 +48,37 @@ model Player {
   role      Roles
   mmr       Int
   dotabuff  String?     @unique
-  teams     Team[]
 }
 
 model Team {
-  indent        String       @id
+  indent        String       @id @unique
   logo          String?
   title         String?
   ownerId       String
-  membersAmount Int
+  membersAmount Int          @default(0)
   owner         User         @relation(fields: [ownerId], references: [uid])
   tournaments   Tournament[]
-  members       Player[]
+  members       TeamMembers[]
   battles       Battle[]
-  joinments     TeamJoinments[]
+  invites       TeamInvitements[]
 }
 
-model TeamParticipiant {
+model TeamMembers {
+  id            String        @id @default(cuid())
   uid           String
-  user          User          @relation(fields: [uid], references: [uid]);
+  user          User          @relation(fields: [uid], references: [uid])
   teamIndent    String
-  team          Team          @relation(fields: [teamIndent], references: [indent]);
-  roles         Roles[],
+  team          Team          @relation(fields: [teamIndent], references: [indent])
+  roles         Roles[]
 }
 
-model TeamJoinments {
-
+model TeamInvitements {
+  id            String        @id @default(uuid())
+  uid           String
+  user          User          @relation(fields: [uid], references: [uid])
+  teamIndent    String
+  team          Team          @relation(fields: [teamIndent], references: [indent])
+  date          DateTime      @default(now())
 }
 
 model Comment {

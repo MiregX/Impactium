@@ -2,7 +2,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { CreateTeamDto, FindOneByIndent, TeamAlreadyExist, TeamCheckoutDto, UpdateTeamDto } from './team.dto';
+import { CreateTeamDto, DEFAULT_TEAM_PAGINATION_LIMIT, DEFAULT_TEAM_PAGINATION_PAGE, FindOneByIndent, TeamAlreadyExist, TeamCheckoutDto, UpdateTeamDto } from './team.dto';
 import { TeamEntity } from './team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
@@ -22,9 +22,11 @@ export class TeamService {
   ) {
     await this.findOneByIndent(indent, {
       throw: true,
-    })
-
-    const cdn = this.uploadBanner(indent, banner);
+    }).then(team => {
+      if (team) {
+        throw new TeamAlreadyExist();
+      }
+    });
 
     return this.prisma.team.upsert({
       where: {
@@ -33,7 +35,6 @@ export class TeamService {
       create: {
         title: team.title,
         indent,
-        banner: cdn,
         owner: {
           connect: {
             uid,
@@ -42,7 +43,6 @@ export class TeamService {
       },
       update: {
         title: team.title,
-        banner: cdn,
         owner: {
           connect: {
             uid,
@@ -67,7 +67,6 @@ export class TeamService {
       create: {
         title: team.title,
         indent,
-        banner: cdn,
         owner: {
           connect: {
             uid
@@ -76,7 +75,6 @@ export class TeamService {
       },
       update: {
         title: team.title,
-        banner: cdn,
         owner: {
           connect: {
             uid,
@@ -94,30 +92,23 @@ export class TeamService {
     })
   }
 
-  findOneByIndent(indent: string, params: FindOneByIndent) {
-    const method = params.throw
-      ? this.prisma.team.findUniqueOrThrow
-      : this.prisma.team.findUnique;
-
-    try {
-      return method({
-        where: {
-          indent,
-        }
-      });
-    } catch (_) {
-      throw new TeamAlreadyExist();
-    }
+  findOneByIndent(indent: string, params?: FindOneByIndent) {
+    return this.prisma.team.findUnique({
+      where: {
+        indent,
+      }
+    });
   }
 
-  pagination(limit: number = 20, skip: number = 0) {
+  pagination(
+    limit: number = DEFAULT_TEAM_PAGINATION_LIMIT,
+    skip: number = DEFAULT_TEAM_PAGINATION_PAGE,
+  ) {
     const teams = this.redisService.hgetall(teams_global_view)
 
-    return teams || this.prisma.team.findMany({
+    return this.prisma.team.findMany({
       take: limit,
       skip: skip,
-    }).then((teams: TeamEntity[]) => {
-      this.redisService.hset(teams_global_view)
     });
   }
 
@@ -131,5 +122,4 @@ export class TeamService {
 
     return cdn;
   }
-
 }

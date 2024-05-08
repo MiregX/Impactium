@@ -2,6 +2,7 @@ import { $Enums, Prisma } from '@prisma/client';
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreatePlayerDto implements Prisma.PlayerCreateInput {
+  mmr: number;
   nickname: string;
   role: $Enums.Roles;
   dotabuff?: string;

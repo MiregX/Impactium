@@ -5,5 +5,6 @@ export class PlayerEntity implements Player {
   steamId: string;
   nickname: string;
   role: $Enums.Roles;
+  mmr: number;
   dotabuff: string;
 }
