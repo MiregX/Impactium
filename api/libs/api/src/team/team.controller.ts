@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto } from './team.dto';
 import { AuthGuard } from '@api/main/auth/auth.guard';
@@ -18,16 +18,33 @@ export class TeamController {
     return await this.teamService.pagination(limit, skip);
   }
   
-  @Post('create')
+  @Post('create/:indent')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('banner'))
-  async create(@UploadedFile() banner: Express.Multer.File, @Body() team: CreateTeamDto, @User() user: UserEntity) {
-    return await this.teamService.create(user.uid, team, banner);
+  async create(
+    @UploadedFile() banner: Express.Multer.File,
+    @Body() team: CreateTeamDto,
+    @User() user: UserEntity,
+    @Param('indent') indent: string
+  ) {
+    return await this.teamService.create({
+      uid: user.uid,
+      indent: indent
+    }, team, banner);
   }
 
-  @Patch('update')
-  @UseGuards(AuthGuard, TeamGuard)
-  async update(@Body() team: CreateTeamDto, @User() user: UserEntity) {
 
+  @Patch('update/:indent')
+  @UseGuards(AuthGuard, TeamGuard)
+  async update(
+    @UploadedFile() banner: Express.Multer.File,
+    @Body() team: CreateTeamDto,
+    @User() user: UserEntity,
+    @Param('indent') indent: string
+  ) {
+    return await this.teamService.update({
+      uid: user.uid,
+      indent: indent
+    }, team, banner);
   }
 }

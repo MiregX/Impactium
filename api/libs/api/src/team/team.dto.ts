@@ -8,6 +8,20 @@ export class CreateTeamDto {
   title: string;
 }
 
+export interface FindOneByIndent {
+  throw: boolean;
+}
+
+export class TeamCheckoutDto {
+  uid: string;
+  indent: string;
+}
+
+export class UpdateTeamDto {
+  banner: any;
+  title: string;
+}
+
 export class FindOneTeamByIndentDto {
   @IsNotEmpty()
   @IsString()

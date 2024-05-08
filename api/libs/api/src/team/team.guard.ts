@@ -21,7 +21,7 @@ export class TeamGuard implements CanActivate {
 
     const userTeams = await this.teamService.findManyByUid(request.user.uid)
     
-    if (user && !userTeams.find(team => team.indent === request.body.indent)) {
+    if (user && !userTeams.some(team => team.indent === request.params.indent)) {
       return false;
     }
 

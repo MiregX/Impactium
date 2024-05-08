@@ -1,3 +1,4 @@
+import { SftpService } from './sftp.service';
 import { FtpService } from './ftp.service';
 import { Module } from '@nestjs/common';
 
@@ -5,10 +6,10 @@ import { Module } from '@nestjs/common';
   imports: [],
   controllers: [],
   providers: [
-    FtpService
+    SftpService
   ],
   exports: [
-    FtpService
+    SftpService
   ]
 })
-export class SFTPModule {}
+export class FileModule {}
