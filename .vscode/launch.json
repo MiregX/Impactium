@@ -11,10 +11,10 @@
     },
     {
       "type": "node-terminal",
-      "name": "Build PRODUCTION",
+      "name": "Start API (X)",
       "request": "launch",
-      "command": "docker compose --profile production up -d",
-      "cwd": "${workspaceFolder}/"
+      "command": "npm run start:debug",
+      "cwd": "${workspaceFolder}/api"
     },
     {
       "type": "node-terminal",
@@ -31,6 +31,13 @@
       "command": "npx prisma studio --schema libs/api/prisma/schema.prisma",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Build PRODUCTION",
+      "request": "launch",
+      "command": "docker compose --profile production up -d",
+      "cwd": "${workspaceFolder}/"
     }
   ]
 }

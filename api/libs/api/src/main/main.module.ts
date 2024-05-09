@@ -12,6 +12,8 @@ import { TeamModule } from '@api/main/team/team.module';
   imports: [
     AuthModule,
     UserModule,
+    // MongooseModule.forRoot(process.env.API_MONGODB_URL, {dbName: 'cdn'}),
+    // MongooseModule.forFeature([{ name: 'Student', schema: ImageSchema }]),
     PrismaModule,
     PlayerModule,
     TeamModule,

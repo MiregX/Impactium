@@ -1052,6 +1052,26 @@ const locale: Locale = {
       us: "There doesn't seem to be any comments...",
       ru: "Кажестся тут нет коментариев..."
     }
+  },
+  create_team: {
+    title: {
+      ua: "...",
+      it: "...",
+      us: "...",
+      ru: "..."
+    },
+    indent: {
+      ua: "...",
+      it: "...",
+      us: "...",
+      ru: "..."
+    },
+    logo: {
+      ua: "...",
+      it: "...",
+      us: "...",
+      ru: "..."
+    }
   }
 }
 export default locale;

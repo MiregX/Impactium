@@ -98,3 +98,7 @@
   font-size: var(--text-large);
   font-weight: 600;
 }
+
+.disactive {
+  pointer-events: none;
+}

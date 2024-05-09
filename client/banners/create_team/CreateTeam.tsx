@@ -4,18 +4,23 @@ import s from './CreateTeam.module.css'
 import { CreateTeamDto } from '@api/main/team/team.dto'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButtonTypes } from '@/ui/GeistButton';
 import { _server } from '@/dto/master';
-import { useRouter } from 'next/router';
-import { Input } from '@/ui/Input';
 import { redirect } from 'next/navigation';
-import Error from 'next/error';
+import { TitleInput } from './components/TitleInput';
+import { IndentInput } from './components/IndentInput';
+import { LogoInput } from './components/LogoInput';
+import { useMessage } from '@/context/Message';
 
 export default function CreateTeam() {
   const [team, setTeam] = useState<CreateTeamDto>(null);
   const { user } = useUser();
-  const [bannerPreview, setBannerPreview] = useState<any>();
+  const { destroyBanner } = useMessage();
   const [footer, setFooter] = useState<any>();
+
+  if (!user) {
+    destroyBanner()
+  }
 
   useEffect(() => {
     setFooter({
@@ -24,13 +29,10 @@ export default function CreateTeam() {
         action: send,
         text: 'Создать команду',
         focused: !!(team && team.banner && team.indent && team.title),
+        style: [!(team && team.banner && team.indent && team.title) && s.disactive]
       }]
     })
   }, [team])
-
-  if (!user) {
-    redirect('/')
-  }
 
   const handle = (obj: Partial<CreateTeamDto>) => {
     setTeam(_team => {
@@ -38,8 +40,9 @@ export default function CreateTeam() {
     })
   }
 
-  function handleError(_: Error) {
-  }  
+  const handleError = (_: any) => {
+    console.log(_);
+  }
 
   function send() {
     const formData = new FormData();
@@ -54,7 +57,8 @@ export default function CreateTeam() {
     }).then(response => {
       if (response.ok) {
         response.json().then(team => {
-          redirect(`/team/${team.indent}`) // Error: NEXT_REDIRECT
+          'use client'
+          redirect(`/team/${team.indent}`);
         });
       }
     }).catch(_ => {
@@ -62,61 +66,13 @@ export default function CreateTeam() {
     });
   }
 
-  const handleBannerChange = (e) => {
-    const file = e.target.files[0];
-    handle({banner: file});
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBannerPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
 
   return (
     <Banner title='Создать команду' footer={footer}>
-      <div className={s.group}>
-        <p>Название команды</p>
-        <Input
-          type="text"
-          image='https://cdn.impactium.fun/ui/text/paragraph.svg'
-          placeholder='Название команды'
-          value={team?.title || ''}
-          onChange={(e) => handle({ title: e.target.value })}
-          style={[s.input]}
-        />
-      </div>
-      <div className={s.group}>
-        <p>Тег команды</p>
-        <Input
-          placeholder='example'
-          image='https://cdn.impactium.fun/ui/specific/mention.svg'
-          value={team?.indent || ''}
-          onChange={(e) => setTeam(t => {
-            return {
-              ...t,
-              indent: e.target.value.match(/^[0-1a-z_\-]+$/) || e.target.value === '' ? e.target.value : t.indent
-            };
-          })}
-          style={[s.input]}
-        />
-      </div>
-      <div className={`${s.group} ${s.banner_uploader}`}>
-        <p>Логотип команды</p>
-        <div className={s.bottom}>
-          <Input
-            type="file"
-            label='file'
-            accept="image/*"
-            onChange={handleBannerChange}
-            placeholder={`Загрузить логотип в формате PNG, SVG, JPG (1 к 1)`}
-            />
-          {bannerPreview && <div className={s.banner_preview}>
-            <img src={bannerPreview} />
-          </div>}
-        </div>
-      </div>
+      <TitleInput team={team} handle={handle} />
+      <IndentInput team={team} setTeam={setTeam} />
+      <LogoInput team={team} handle={handle} />
     </Banner>
   );
 };
