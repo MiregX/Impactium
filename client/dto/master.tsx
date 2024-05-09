@@ -14,7 +14,7 @@ export async function requestApplicationInfoFromServer() {
 export function _server() {
   return process.env.NODE_ENV === 'production'
     ? 'https://impactium.fun'
-    : 'http://localhost:3001'
+    : 'http://0.0.0.0:3001'
 }
 
 interface _ApplicationInfo {

@@ -17,7 +17,7 @@ export const useTeam = () => {
 
   if (!context) throw new Error();
   
-  return context;
+  return context as TeamContext;
 };
 
 export const TeamProvider = ({

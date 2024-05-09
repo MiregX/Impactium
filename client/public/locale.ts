@@ -1040,9 +1040,15 @@ const locale: Locale = {
     }
   },
   comments: {
+    title: {
+      ua: "Коментарі",
+      it: "Commenti",
+      us: "Comments",
+      ru: "Коментарии"
+    },
     empty: {
       ua: "Здається, тут немає коментарів...",
-      it: "Non sembra esserci alcun commento....",
+      it: "Non sembra esserci alcun commento...",
       us: "There doesn't seem to be any comments...",
       ru: "Кажестся тут нет коментариев..."
     }

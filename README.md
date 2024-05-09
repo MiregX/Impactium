@@ -53,6 +53,10 @@ $ docker compose up -d
 
 Чтобы запустить в режиме разработки, то `Run and Debug (CTRL + Shift + D)` в Visual Studio Code и вверху появившейся панели выбери в выпадающем меню Start API и приступай к работе
 
+## Team.INDENT
+
+На клиенте в h6 и ссылке [indent] используем с @, на бекенде используем без собачки
+
 ## Prisma
 
 ```bash

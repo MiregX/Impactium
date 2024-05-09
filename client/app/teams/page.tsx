@@ -4,6 +4,7 @@ import s from './Teams.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate';
 import { _server } from '@/dto/master';
 import { TeamEntity } from '@api/main/team/team.entity';
+import { TeamUnit } from './components/TeamUnit';
 
 export default async function TeamsPage() {
   const teams: TeamEntity[] = await fetch(`http://0.0.0.0:3001/api/team/get`, {
@@ -52,7 +53,7 @@ export default async function TeamsPage() {
         <div className={s.list}>
           {teams && teams.map((team: TeamEntity) => {
             return (
-              <p>{team.title}</p>
+              <TeamUnit team={team} />
             )
           })}
         </div>

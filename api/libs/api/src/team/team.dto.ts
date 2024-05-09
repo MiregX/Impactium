@@ -8,10 +8,6 @@ export class CreateTeamDto {
   title: string;
 }
 
-export interface FindOneByIndent {
-  throw: boolean;
-}
-
 export class TeamCheckoutDto {
   uid: string;
   indent: string;
@@ -41,8 +37,14 @@ export class FindManyTeamsByIndentDto {
 export type FindTeamDto = FindOneTeamByIndentDto | FindManyTeamsByIndentDto
 
 export class TeamAlreadyExist extends HttpException {
-  constructor() {super('team already exists', HttpStatus.CONFLICT)};
+  constructor() {super('already_exists', HttpStatus.CONFLICT)};
 }
 
-export const DEFAULT_TEAM_PAGINATION_LIMIT = 20;
-export const DEFAULT_TEAM_PAGINATION_PAGE = 0;
+export class TeamLimitException extends HttpException {
+  constructor() {super('limit_exception', HttpStatus.CONFLICT)};
+}
+
+export enum TeamStandarts {
+  DEFAULT_PAGINATION_LIMIT = 20,
+  DEFAULT_PAGINATION_PAGE = 0,
+} 

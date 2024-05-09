@@ -14,9 +14,11 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     cache: 'no-cache'
   })
     .then(async (response) => {
-      return response.ok ? await response.json() : undefined
+      console.log('Fetch success', response.body);
+      return response.ok ? await response.json() : null
     })
     .catch(_ => {
+      console.log('Fetch success', _);
       return undefined
     })
 

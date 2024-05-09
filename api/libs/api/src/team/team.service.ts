@@ -2,7 +2,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { CreateTeamDto, DEFAULT_TEAM_PAGINATION_LIMIT, DEFAULT_TEAM_PAGINATION_PAGE, FindOneByIndent, TeamAlreadyExist, TeamCheckoutDto, UpdateTeamDto } from './team.dto';
+import { TeamStandarts, TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto } from './team.dto';
 import { TeamEntity } from './team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
@@ -20,28 +20,40 @@ export class TeamService {
     team: UpdateTeamDto,
     banner: Express.Multer.File
   ) {
-    await this.findOneByIndent(indent, {
-      throw: true,
-    }).then(team => {
-      if (team) {
-        throw new TeamAlreadyExist();
-      }
-    });
+    // LIMIT MAX 3 CREATED TEAMS PER USER 
+    await this.findManyByUid(uid)
+      .then(teams => {
+        teams.length >= 3 && (() => {throw new TeamLimitException()});
+      })
 
-    return this.prisma.team.upsert({
+    try {
+      return this.prisma.team.create({
+        data: {
+          title: team.title,
+          indent,
+          logo: banner && this.uploadBanner(indent, banner),
+          owner: {
+            connect: {
+              uid,
+            }
+          }
+        }
+      });
+    } catch (error) {
+      // Unique @indent issue 
+      throw new TeamAlreadyExist();
+    }
+  }
+
+  async update(
+    { indent, uid }: TeamCheckoutDto,
+    team: UpdateTeamDto
+  ) {
+    return this.prisma.team.update({
       where: {
         indent,
       },
-      create: {
-        title: team.title,
-        indent,
-        owner: {
-          connect: {
-            uid,
-          }
-        }
-      },
-      update: {
+      data: {
         title: team.title,
         owner: {
           connect: {
@@ -52,36 +64,15 @@ export class TeamService {
     });
   }
 
-  async update(
-    { indent, uid }: TeamCheckoutDto,
-    team: UpdateTeamDto,
-    banner: Express.Multer.File
-  ) {
-
-    const cdn = this.uploadBanner(indent, banner);
-
-    return this.prisma.team.upsert({
+  setBanner(indent: string, banner: Express.Multer.File) {
+    return this.prisma.team.update({
       where: {
-        indent,
+        indent
       },
-      create: {
-        title: team.title,
-        indent,
-        owner: {
-          connect: {
-            uid
-          }
-        }
-      },
-      update: {
-        title: team.title,
-        owner: {
-          connect: {
-            uid,
-          }
-        }
+      data: {
+        logo: banner && this.uploadBanner(indent, banner)
       }
-    });
+    })
   }
 
   findManyByUid(uid: string): Promise<TeamEntity[]> {
@@ -92,17 +83,17 @@ export class TeamService {
     })
   }
 
-  findOneByIndent(indent: string, params?: FindOneByIndent) {
+  findOneByIndent(indent: string) {
     return this.prisma.team.findUnique({
       where: {
-        indent: this.parseIndent(indent),
+        indent,
       }
     });
   }
 
   pagination(
-    limit: number = DEFAULT_TEAM_PAGINATION_LIMIT,
-    skip: number = DEFAULT_TEAM_PAGINATION_PAGE,
+    limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
+    skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
   ) {
     const teams = this.redisService.hgetall(teams_global_view)
 
@@ -122,9 +113,4 @@ export class TeamService {
 
     return cdn;
   }
-
-  private parseIndent(indent: string) {
-    return indent.replace('@', '');
-  }
-
 }

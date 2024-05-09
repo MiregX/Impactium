@@ -20,7 +20,20 @@
 .heading > div {
   display: flex;
   flex: 1;
+  height: 40px;
   align-items: center;
   gap: 8px;
   justify-content: flex-start;
+}
+.heading h6 {
+  font-size: var(--text-medium-height);
+  color: var(--text-dimmed);
+  font-weight: 400;
+}
+.heading hr {
+  height: 28px;
+  background: var(--white);
+}
+.heading > div > p {
+  font-size: var(--text-larger);
 }

@@ -11,9 +11,10 @@ export function Heading({ toggleEditable }) {
   return (
     <div className={s.heading}>
       <div>
-        <h6>{team.title}</h6>
+        <img src={team.logo} onError={null} />
+        <p>{team.title}</p>
         <hr data-align='vertical' />
-        <span>{team.indent}</span>
+        <h6>@{team.indent}</h6>
       </div>
       <GeistButton options={{
             type: GeistButtonTypes.Button,

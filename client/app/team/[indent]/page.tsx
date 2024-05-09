@@ -21,7 +21,7 @@ export default function TeamIndentPage() {
     <PanelTemplate>
       <div className={s.wrapper}>
         <Heading toggleEditable={toggleEditable} />
-        <Description isEditable={setIsEditable} />
+        <Description isEditable={isEditable} />
       </div>
       <Comments />
     </PanelTemplate>

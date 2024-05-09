@@ -4,10 +4,12 @@ import _ from './Comments.module.css'
 import { _server } from '@/dto/master';
 import { useMessage } from '@/context/Message';
 import { NoComments } from './NoComments';
+import { useLanguage } from '@/context/Language';
 
 export function Comments() {
   const { team } = useTeam();
   const { newMessage } = useMessage();
+  const { lang } = useLanguage();
 
   const handleError = () => {
     newMessage(403, 'unnable to send message');
@@ -25,7 +27,8 @@ export function Comments() {
   }
 
   return (
-    <div className={_.wrapper}>
+    <div className={_._}>
+      <h4>{lang.comments.title}</h4>
       {team && team.comments ? team.comments.map((comment: any) => {
         return (
           <div>

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto, DEFAULT_TEAM_PAGINATION_LIMIT, DEFAULT_TEAM_PAGINATION_PAGE } from './team.dto';
+import { CreateTeamDto, TeamStandarts } from './team.dto';
 import { AuthGuard } from '@api/main/auth/auth.guard';
 import { User } from '@api/main/user/user.decorator';
 import { UserEntity } from '@api/main/user/entities/user.entity';
@@ -14,17 +14,17 @@ export class TeamController {
   ) {}
 
   @Get('get')
-  async getAll(
-    @Query('limit') limit: number = DEFAULT_TEAM_PAGINATION_LIMIT,
-    @Query('skip') skip: number = DEFAULT_TEAM_PAGINATION_PAGE,
+  pagination(
+    @Query('limit') limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
+    @Query('skip') skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
   ) {
-    const x = await this.teamService.pagination(limit, skip);
-    console.error(x)
-    return x
+    return this.teamService.pagination(limit, skip);  
   }
 
   @Get('get/:indent')
-  findByIndent(@Param('indent') indent: string,) {
+  findOneByIndent(
+    @Param('indent') indent: string,
+  ) {
     return this.teamService.findOneByIndent(indent);
   }
   
@@ -43,18 +43,25 @@ export class TeamController {
     }, team, banner);
   }
 
-
   @Patch('update/:indent')
   @UseGuards(AuthGuard, TeamGuard)
-  async update(
-    @UploadedFile() banner: Express.Multer.File,
+  update(
     @Body() team: CreateTeamDto,
     @User() user: UserEntity,
     @Param('indent') indent: string
   ) {
-    return await this.teamService.update({
+    return this.teamService.update({
       uid: user.uid,
       indent: indent
-    }, team, banner);
+    }, team);
+  }
+
+  @Patch('set/banner/:indent')
+  @UseGuards(AuthGuard, TeamGuard)
+  setBanner(
+    @UploadedFile() banner: Express.Multer.File,
+    @Param('indent') indent: string
+  ) {
+    return this.teamService.setBanner(indent, banner);
   }
 }

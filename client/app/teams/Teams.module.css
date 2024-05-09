@@ -70,5 +70,37 @@
 
 .list {
   display: flex;
+  flex-direction: column;
   min-height: 300px;
+}
+
+.unit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 0 1em;
+  height: 40px;
+  border-bottom: 1px solid var(--accent-2);
+}
+
+.unit > img {
+  height: 40px;
+  width: 40px;
+}
+
+.unit > h6 {
+  font-size: var(--text-medium);
+}
+.unit > hr {
+  height: 24px;
+  background: var(--accent-2);
+}
+.unit > p {
+  font-size: var(--text-medium-height);
+}
+.unit > a {
+  font-size: var(--text-small);
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-dimmed);
 }
