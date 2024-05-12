@@ -19,7 +19,7 @@ export function Heading({ toggleEditable }) {
       <GeistButton options={{
             type: GeistButtonTypes.Button,
             action: toggleEditable,
-            text: lang.team.edit_team,
+            text: lang.team.edit,
             focused: true
           }} />
     </div>

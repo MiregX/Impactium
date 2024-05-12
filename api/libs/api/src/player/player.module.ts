@@ -3,7 +3,7 @@ import { PlayerService } from './player.service';
 import { PlayerController } from './player.controller';
 import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { AuthModule } from '@api/main/auth/auth.module';
-import { PlayerGuard } from './player.guard';
+import { PlayerGuard } from './addon/player.guard';
 
 @Module({
   controllers: [PlayerController],

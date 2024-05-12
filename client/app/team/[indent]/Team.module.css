@@ -1,6 +1,7 @@
-/* .page {
+.page {
   align-items: flex-start;
-} */
+  flex-direction: row !important;
+}
 
 .wrapper {
   display: flex;
@@ -15,6 +16,12 @@
   flex: 1;
   flex-direction: row;
   align-items: center;
+}
+
+.heading img {
+  height: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
 }
 
 .heading > div {
@@ -32,6 +39,8 @@
 }
 .heading hr {
   height: 28px;
+  width: 2px;
+  border-radius: 2px;
   background: var(--white);
 }
 .heading > div > p {

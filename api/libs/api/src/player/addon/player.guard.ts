@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { PlayerService } from './player.service';
-import { AuthGuard } from '@api/main/auth/auth.guard';
+import { PlayerService } from '../player.service';
+import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 
 @Injectable()
 export class PlayerGuard implements CanActivate {

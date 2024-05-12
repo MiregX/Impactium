@@ -17,7 +17,6 @@ export class RedisService
 
   async onModuleInit() {
     await this.connect();
-    console.log('Redis DONE')
   }
 
   async onModuleDestroy() {

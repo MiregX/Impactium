@@ -73,9 +73,6 @@
   overflow: hidden;
   width: 40px;
   height: 40px;
-  background: var(--geist-background);
-  border: var(--geist-border);
-  border-radius: var(--border-s);
 }
 
 .banner_preview img {
@@ -100,5 +97,18 @@
 }
 
 .disactive {
-  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.error {
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
+  font-size: 9px;
+  line-height: var(--text-medium);
+  margin-left: 8px;
+  color: rgb(255, 49, 49);
+  font-weight: 700;
 }

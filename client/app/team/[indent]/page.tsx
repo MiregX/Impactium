@@ -9,8 +9,6 @@ import { useLanguage } from '@/context/Language';
 import { Description } from './components/Description';
 
 export default function TeamIndentPage() {
-  const { team } = useTeam();
-  const { lang } = useLanguage();
   const [ isEditable, setIsEditable ] = useState<boolean>(false);
 
   const toggleEditable = () => {
@@ -18,7 +16,7 @@ export default function TeamIndentPage() {
   }
   
   return (
-    <PanelTemplate>
+    <PanelTemplate style={[s.page]}>
       <div className={s.wrapper}>
         <Heading toggleEditable={toggleEditable} />
         <Description isEditable={isEditable} />

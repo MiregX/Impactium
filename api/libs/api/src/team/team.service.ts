@@ -2,10 +2,11 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { TeamStandarts, TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto } from './team.dto';
-import { TeamEntity } from './team.entity';
+import { TeamStandarts, TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto, CreateTeamDto } from './addon/team.dto';
+import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
+import { FTPUploadError } from '@api/mcs/file/addon/file.error';
 
 @Injectable()
 export class TeamService {
@@ -17,7 +18,7 @@ export class TeamService {
 
   async create(
     { indent, uid }: TeamCheckoutDto,
-    team: UpdateTeamDto,
+    team: CreateTeamDto,
     banner: Express.Multer.File
   ) {
     // LIMIT MAX 3 CREATED TEAMS PER USER 
@@ -25,24 +26,23 @@ export class TeamService {
       .then(teams => {
         teams.length >= 3 && (() => {throw new TeamLimitException()});
       })
+    
+    await this.findOneByIndent(indent).then(team => {
+      if (team) throw new TeamAlreadyExist();
+    });
 
-    try {
-      return this.prisma.team.create({
-        data: {
-          title: team.title,
-          indent,
-          logo: banner && this.uploadBanner(indent, banner),
-          owner: {
-            connect: {
-              uid,
-            }
+    return this.prisma.team.create({
+      data: {
+        title: team.title,
+        indent,
+        logo: banner && this.uploadBanner(indent, banner),
+        owner: {
+          connect: {
+            uid,
           }
         }
-      });
-    } catch (error) {
-      // Unique @indent issue 
-      throw new TeamAlreadyExist();
-    }
+      }
+    });
   }
 
   async update(
@@ -104,12 +104,19 @@ export class TeamService {
   }
 
   private uploadBanner(indent: string, banner: Express.Multer.File) {
+    try {
+      
+    } catch (_) {
+      throw new FTPUploadError()
+    }
     const stream = new Readable();
     stream.push(banner.buffer);
     stream.push(null);
     
-    const { ftp, cdn } = TeamEntity.getLogoPath(indent, banner.mimetype);
-    this.ftpService.uploadFrom(stream, ftp);
+    // Получаем расширение файла из его имени
+    const extension = banner.originalname.split('.').pop();
+    const { ftp, cdn } = TeamEntity.getLogoPath(`${indent}.${extension}`);
+    this.ftpService.uploadFile(ftp, stream);
 
     return cdn;
   }

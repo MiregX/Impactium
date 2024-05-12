@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { UserComposedEntity, UserEntity,  } from './entities/user.entity';
+import { UserComposedEntity, UserEntity,  } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

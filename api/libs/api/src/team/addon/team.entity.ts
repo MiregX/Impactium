@@ -7,11 +7,11 @@ export class TeamEntity implements Team {
   title: string;
   ownerId: string;
 
-  static getLogoPath(filename: string, mimetype: string) {
-    const ftp = `cdn.impactium.fun/public/uploads/${filename}.${mimetype}`
+  static getLogoPath(filename: string) {
+    const ftp = `/public/uploads/${filename}`
     return {
       ftp,
-      cdn: 'https://' + ftp
+      cdn: 'https://cdn.impactium.fun' + ftp
     }
   }
 }

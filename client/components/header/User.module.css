@@ -51,6 +51,7 @@
 }
 .menu p {
   margin-top: 6px;
+  color: var(--white) !important;
 }
 .menu p,
 .menu a,

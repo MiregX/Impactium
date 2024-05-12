@@ -1,11 +1,12 @@
 import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto, TeamStandarts } from './team.dto';
-import { AuthGuard } from '@api/main/auth/auth.guard';
-import { User } from '@api/main/user/user.decorator';
-import { UserEntity } from '@api/main/user/entities/user.entity';
-import { TeamGuard } from './team.guard';
+import { CreateTeamDto, TeamStandarts, UpdateTeamDto } from './addon/team.dto';
+import { AuthGuard } from '@api/main/auth/addon/auth.guard';
+import { User } from '@api/main/user/addon/user.decorator';
+import { UserEntity } from '@api/main/user/addon/user.entity';
+import { TeamGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { IndentValidationPipe } from '@api/main/application/addon/indent.decorator';
 
 @Controller('team')
 export class TeamController {
@@ -35,7 +36,7 @@ export class TeamController {
     @UploadedFile() banner: Express.Multer.File,
     @Body() team: CreateTeamDto,
     @User() user: UserEntity,
-    @Param('indent') indent: string
+    @Param('indent', IndentValidationPipe) indent: string
   ) {
     return await this.teamService.create({
       uid: user.uid,
@@ -46,9 +47,9 @@ export class TeamController {
   @Patch('update/:indent')
   @UseGuards(AuthGuard, TeamGuard)
   update(
-    @Body() team: CreateTeamDto,
+    @Body() team: UpdateTeamDto,
     @User() user: UserEntity,
-    @Param('indent') indent: string
+    @Param('indent', IndentValidationPipe) indent: string
   ) {
     return this.teamService.update({
       uid: user.uid,
@@ -60,7 +61,7 @@ export class TeamController {
   @UseGuards(AuthGuard, TeamGuard)
   setBanner(
     @UploadedFile() banner: Express.Multer.File,
-    @Param('indent') indent: string
+    @Param('indent', IndentValidationPipe) indent: string
   ) {
     return this.teamService.setBanner(indent, banner);
   }

@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { TeamService } from './team.service';
-import { UserEntity } from '@api/main/user/entities/user.entity';
-import { AuthGuard } from '@api/main/auth/auth.guard';
+import { TeamService } from '../team.service';
+import { UserEntity } from '@api/main/user/addon/user.entity';
+import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 
 @Injectable()
 export class TeamGuard implements CanActivate {

@@ -4,50 +4,57 @@ import s from './Onboard.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate'
 import CreateTeam from '@/banners/create_team/CreateTeam'
 import { useMessage } from '@/context/Message'
+import { useLanguage } from '@/context/Language'
 
 export function Onboard() {
   const { spawnBanner } = useMessage();
+  const { lang } = useLanguage();
 
   return (
     <PanelTemplate>
       <Arcana />
       <div className={s.onboard}>
-        <h3>Турниры Dota 2</h3>
-        <p>Мы - технологичный и современный сервис для проведения любительских и профессиональных турниров в игре Dota 2. Прими участие в один клик. Отслеживай статистику. Получай уведомления о новых турнирах. Получай призы</p>
-        <h4><img src='https://cdn.impactium.fun/ui/user/users-group.svg'/> Найди идеальную команду, или возглавь собственную.</h4>
-        <p>С нашими алгоритмами подбора мы найдём тебе зассаных агентов габена которую будут руинить тебе каждую игру.</p>
+        <h3>{lang.main.h3}</h3>
+        <p>{lang.main.we_are}</p>
+        <h4>
+          <img src='https://cdn.impactium.fun/ui/user/users-group.svg'/>
+          {lang.main.find_team}
+        </h4>
+        <p>{lang.main.find_team_description}</p>
         <div className={s.group}>
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             href: '/teams',
-            text: 'Найти команду',
+            text: lang._find_team,
             style: [ s.button ]
           }} />
           <GeistButton options={{
             type: GeistButtonTypes.Button,
             action: () => spawnBanner(<CreateTeam />),
-            text: 'Создать команду',
+            text: lang._create_team,
             minimized: true
           }} />
         </div>
-        <h4><img src='https://cdn.impactium.fun/ui/specific/ticket-voucher.svg'/> Прими участие в турнире <span>бесплатно</span>!</h4>
-        <p>Мы предоставим удобную панель управления и высококачественную стандартизацию. Уведомим команды об изменениях, а зрителей о начале турнира. Настройте событие заполнив небольшую форму - об остальном позаботимся мы сами.</p>
+        <h4>
+          <img src='https://cdn.impactium.fun/ui/specific/ticket-voucher.svg'/>
+          {lang.main.participate}
+        </h4>
+        <p>{lang.main.participate_description}</p>
         <div className={s.group}>
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             href: '/me/actions',
-            text: 'Найти турнир',
+            text: lang._find_team,
             style: [ s.button ]
-          }} />d
+          }} />
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             href: '/me/actions',
-            text: 'Создать турнир',
+            text: lang._create_tournament,
             minimized: true
           }} />
         </div>
       </div>
-      
     </PanelTemplate>
   )
 }

@@ -22,14 +22,14 @@ export function LogoInput({ team, handle }) {
 
   return (
     <div className={`${s.group} ${s.banner_uploader}`}>
-      <p>Логотип команды</p>
+      <p>{lang.create_team.logo_title}</p>
       <div className={s.bottom}>
         <Input
           type="file"
           label='file'
           accept="image/*"
           onChange={handleBannerChange}
-          placeholder={`Загрузить логотип в формате PNG, SVG, JPG (1 к 1)`}
+          placeholder={lang.create_team.logo}
           />
           {bannerPreview && <div className={s.banner_preview}>
           <img src={bannerPreview} />

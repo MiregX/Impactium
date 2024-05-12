@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { Environment, Info } from './application.entity';
+import type { Environment, Info } from './addon/application.entity';
 import { Configuration } from '@impactium/config';
 
 @Injectable()

@@ -9,7 +9,7 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     params.indent = params.indent.replace('%40', '@');
   }
 
-  const team = await fetch(`${_server()}/api/team/get/${params.indent}`, {
+  const team = await fetch(`${_server()}/api/team/get/${params.indent.replace('@', '')}`, {
     method: 'GET',
     cache: 'no-cache'
   })

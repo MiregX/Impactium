@@ -1,11 +1,15 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { $Enums, Prisma } from '@prisma/client';
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsLowercase, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class CreateTeamDto {
-  indent: string;
-  banner: any;
+  @IsString()
+  @MinLength(5)
+  @MaxLength(32)
+  @IsNotEmpty()
   title: string;
+
+  banner?: any;
 }
 
 export class TeamCheckoutDto {
