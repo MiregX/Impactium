@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html>
       <body style={{ backgroundColor: '#000000' }}>
-        <LanguageProvider predefinedLanguage={cookies().get('_language')?.value}>
+        <LanguageProvider predefinedLanguage={cookie.get('_language').value}>
           <UserProvider prefetched={await user()}>
             <MessageProvider>
               <HeaderProvider>

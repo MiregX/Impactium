@@ -2,6 +2,12 @@
 
 module.exports = {
   reactStrictMode: false,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias['@react-frontend'] = '@react-frontend';
+    }
+    return config;
+  },
   serverRuntimeConfig: {
     disableReactStrictModeWarnings: true,
   },
