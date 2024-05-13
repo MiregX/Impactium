@@ -16,33 +16,43 @@
   flex: 1;
   flex-direction: row;
   align-items: center;
+  background: var(--geist-background);
+  border: var(--geist-border);
+  padding: 12px;
+  border-radius: var(--border-l);
 }
 
 .heading img {
-  height: 40px;
+  height: 64px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
+}
+
+.heading .button {
+  align-self: flex-start;
 }
 
 .heading > div {
   display: flex;
   flex: 1;
-  height: 40px;
+  height: 64px;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   justify-content: flex-start;
 }
-.heading h6 {
-  font-size: var(--text-medium-height);
-  color: var(--text-dimmed);
+.heading .text {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.heading .text p {
+  font-size: var(--text-larger);
   font-weight: 400;
 }
-.heading hr {
-  height: 28px;
-  width: 2px;
-  border-radius: 2px;
-  background: var(--white);
-}
-.heading > div > p {
-  font-size: var(--text-larger);
+.heading .text h6 {
+  font-size: var(--text-small);
+  align-self: flex-start;
+  color: var(--text-dimmed);
+  font-weight: 400;
 }

@@ -128,6 +128,9 @@ main {
   flex-direction: column;
   align-items: center;
 }
+main > div {
+  height: calc(100vh - var(--header-height)) !important;
+}
 [data-nextjs-dialog-overlay] {
   user-select: all;
 }

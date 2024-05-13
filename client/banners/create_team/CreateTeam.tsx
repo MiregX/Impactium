@@ -4,7 +4,7 @@ import s from './CreateTeam.module.css'
 import { CreateTeamDto } from '@api/main/team/addon/team.dto'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
-import { GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 import { _server } from '@/dto/master';
 import { redirect, useRouter } from 'next/navigation';
 import { TitleInput } from './components/TitleInput';
@@ -12,32 +12,31 @@ import { IndentInput } from './components/IndentInput';
 import { LogoInput } from './components/LogoInput';
 import { useMessage } from '@/context/Message';
 import { useLanguage } from '@/context/Language';
+import { AuthGuard } from '@/dto/AuthGuard';
+
+interface _CreateTeamDto extends CreateTeamDto {
+  indent: string
+}
 
 export default function CreateTeam() {
-  const [team, setTeam] = useState<CreateTeamDto>(null);
+  const [team, setTeam] = useState<_CreateTeamDto>(null);
   const { user } = useUser();
   const { lang } = useLanguage();
   const { destroyBanner } = useMessage();
-  const [ footer, setFooter ] = useState<any>();
   const [ error, setError ] = useState<string>();
   const router = useRouter();
 
-  if (!user) {
-    destroyBanner()
-  }
+  AuthGuard(user);
 
-  useEffect(() => {
-    const fulfilled = !!(team && team.banner && team.indent && team.title) 
-    setFooter({
-      right: [{
-        type: GeistButtonTypes.Button,
-        action: fulfilled ? send : () => {},
-        text: lang._create_team,
-        focused: fulfilled,
-        style: [!fulfilled && s.disactive]
-      }]
-    })
-  }, [team])
+  const footer = {
+    right: <GeistButton options={{
+      type: GeistButtonTypes.Button,
+      do: !!(team && team.indent && team.title) ? send : () => {},
+      text: lang._create_team,
+      focused: !!(team && team.indent && team.title),
+      style: [!(team && team.indent && team.title) && s.disactive]
+    }} />
+  }
 
   const handle = (obj: Partial<CreateTeamDto>) => {
     setTeam(_team => {
@@ -49,7 +48,6 @@ export default function CreateTeam() {
     const formData = new FormData();
     formData.append('banner', team.banner);
     formData.append('title', team.title);
-    formData.append('indent', team.indent);
   
     fetch(_server() + `/api/team/create/${team.indent}`, {
       method: 'POST',

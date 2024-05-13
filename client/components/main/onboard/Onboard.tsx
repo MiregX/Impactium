@@ -24,13 +24,13 @@ export function Onboard() {
         <div className={s.group}>
           <GeistButton options={{
             type: GeistButtonTypes.Link,
-            href: '/teams',
+            do: '/teams',
             text: lang._find_team,
             style: [ s.button ]
           }} />
           <GeistButton options={{
             type: GeistButtonTypes.Button,
-            action: () => spawnBanner(<CreateTeam />),
+            do: () => spawnBanner(<CreateTeam />),
             text: lang._create_team,
             minimized: true
           }} />
@@ -43,13 +43,13 @@ export function Onboard() {
         <div className={s.group}>
           <GeistButton options={{
             type: GeistButtonTypes.Link,
-            href: '/me/actions',
+            do: '/me/actions',
             text: lang._find_team,
             style: [ s.button ]
           }} />
           <GeistButton options={{
             type: GeistButtonTypes.Link,
-            href: '/me/actions',
+            do: '/me/actions',
             text: lang._create_tournament,
             minimized: true
           }} />

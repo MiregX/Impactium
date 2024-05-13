@@ -21,8 +21,8 @@ interface BannerProps {
   title: string;
   children: React.ReactNode;
   footer?: Warner | {
-    left?: GeistButton[],
-    right: GeistButton[],
+    left?: React.ReactElement,
+    right: React.ReactElement,
   };
   onClose?: () => void;
 }
@@ -65,20 +65,8 @@ export function Banner({ title, children, footer, onClose }: BannerProps) {
               </div>
             ) : (
               <React.Fragment>
-                {footer.left && (
-                  <div className={banner.left}>
-                    {footer.left.map((action: GeistButton) =>
-                      <GeistButton options={action} key={action.text} />
-                    )}
-                  </div>
-                )}
-                {footer.right && (
-                  <div className={banner.right}>
-                    {footer.right.map((action: GeistButton) =>
-                      <GeistButton options={action} key={action.text} />
-                    )}
-                  </div>
-                )}
+                <div className={banner.left}>{footer.left}</div>
+                <div className={banner.right}>{footer.right}</div>
               </React.Fragment>
             )
           ) : null}

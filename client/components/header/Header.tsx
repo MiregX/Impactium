@@ -25,7 +25,7 @@ export function Header() {
         <GeistButton options={{
           type: GeistButtonTypes.Link,
           text: lang._login,
-          href: '/login',
+          do: '/login',
         }} />
       )}
     </header>

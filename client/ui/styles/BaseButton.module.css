@@ -12,6 +12,7 @@
   font-weight: 600;
   cursor: pointer;
   font-size: unset;
+  max-height: 64px;
 }
 ._:focus {
   outline: none;
@@ -24,6 +25,14 @@
 .focus {
   background: var(--soft-white);
   color: var(--soft-black);
+}
+
+._ img {
+  height: 18px !important;
+}
+
+.focus img {
+  filter: brightness(0);
 }
 
 .focus:hover {

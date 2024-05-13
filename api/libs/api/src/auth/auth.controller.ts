@@ -11,7 +11,9 @@ export class AuthController {
   @Redirect()
   async discordGetCallback(@Query('code') code: string) {
     const token = await this.authService.discordCallback(code)
-    return { url: Configuration.getClientLink() + '/login/callback?token=' + token };
+    return {
+      url: Configuration.getClientLink() + '/login/callback?token=' + token
+    };
   }
 
   @Post('callback/discord')

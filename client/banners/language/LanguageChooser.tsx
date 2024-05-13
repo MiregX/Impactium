@@ -32,27 +32,24 @@ export function LanguageChooser() {
     }
   };
 
-  const rightButton: GeistButton = {
-    type: GeistButtonTypes.Button,
-    text: lang._save,
-    focused: true
-  }
-
   const footer = {
-    left: [
-      {
-        type: GeistButtonTypes.Link,
-        minimized: true,
-        text: lang.found_a_translation_error,
-        href: 'https://t.me/impactium'
-      } as GeistButton
-    ],
-    right: [ rightButton ]
+    left: <GeistButton options={{
+            type: GeistButtonTypes.Link,
+            minimized: true,
+            text: lang.found_a_translation_error,
+            do: 'https://t.me/impactium'
+          }} />,
+    right: <GeistButton options={{
+            type: GeistButtonTypes.Button,
+            text: lang._save,
+            img: 'https://cdn.impactium.fun/ui/check/all-big.svg',
+            focused: true
+          }} />
   };
   
 
   return (
-    <Banner title={lang.chooseLanguages} footer={footer} onClose={rightButton.action}>
+    <Banner title={lang.chooseLanguages} footer={footer}>
       <div className={_language._}>
         {Object.keys(availableLanguages).map((key) => (
           <div

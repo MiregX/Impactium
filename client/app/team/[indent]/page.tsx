@@ -18,10 +18,10 @@ export default function TeamIndentPage() {
   return (
     <PanelTemplate style={[s.page]}>
       <div className={s.wrapper}>
-        <Heading toggleEditable={toggleEditable} />
+        <Heading isEditable={isEditable} toggleEditable={toggleEditable} />
         <Description isEditable={isEditable} />
       </div>
-      <Comments />
+      {/* <Comments /> */}
     </PanelTemplate>
   );
 }

@@ -85,10 +85,17 @@
       "json",
       "ts"
     ],
-    "rootDir": "libs",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": ["ts-jest", {
+        "tsconfig": "./tsconfig.json"
+      }]
+    },
+    "moduleNameMapper": {
+      "^@impactium/(.*)$": "<rootDir>/../lib/$1",
+      "^@api/main/(.*)$": "<rootDir>/libs/api/src/$1",
+      "^@api/mcs/(.*)": "<rootDir>/libs/mcs/src/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
