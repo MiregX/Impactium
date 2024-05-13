@@ -3,16 +3,16 @@ import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from
 @Injectable()
 export class IndentValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    const validPattern = /^(?!.*[-_]{2,})[0-9a-z_-]{3,24}$/; // Ваше регулярное выражение для проверки параметра indent
+    const validPattern = /^(?!.*[-_]{2,})[0-9a-z_-]{3,24}$/;
 
     if (metadata.type !== 'param' || metadata.data !== 'indent') {
-      return value; // Пропускаем валидацию, если это не параметр 'indent'
+      return value;
     }
 
     if (!validPattern.test(value)) {
-      throw new BadRequestException('Invalid indent format'); // Бросаем исключение, если параметр не соответствует шаблону
+      throw new BadRequestException('Invalid indent format');
     }
 
-    return value; // Возвращаем значение, если оно прошло валидацию
+    return value;
   }
 }
