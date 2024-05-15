@@ -3,7 +3,7 @@ import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
 import { TeamStandarts, TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto, CreateTeamDto } from './addon/team.dto';
-import { TeamEntity } from './addon/team.entity';
+import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { FTPUploadError } from '@api/mcs/file/addon/file.error';
@@ -90,18 +90,51 @@ export class TeamService {
       }
     });
   }
-
-  pagination(
+  
+  async pagination(
     limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
     skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
-  ) {
-    const teams = this.redisService.hgetall(teams_global_view)
-
+  ): Promise<TeamEntity_ComposedWithMembers[]> {
     return this.prisma.team.findMany({
+      select: {
+        indent: true,
+        logo: true,
+        title: true,
+        ownerId: true,
+        membersAmount: true,
+        members: {
+          select: {
+            uid: true,
+            roles: true,
+            user: {
+              select: {
+                logins: {
+                  orderBy: {
+                    on: 'desc'
+                  },
+                  take: 1,
+                  select: {
+                    avatar: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       take: limit,
       skip: skip,
-    });
+    }).then(response => response.map(team => ({
+      ...team,
+      members: team.members.map(member => ({
+        ...member,
+        avatar: member.user.logins[0]?.avatar || '',
+        user: undefined
+      }))
+    })));
   }
+  
+  
 
   private uploadBanner(indent: string, banner: Express.Multer.File) {
     try {

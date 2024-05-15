@@ -1,16 +1,16 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { UserComposedEntity } from '@api/main/user/entities/user.entity'
+import { UserEntity } from '@api/main/user/addon/user.entity'
 import { _server } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
 interface IUserContext {
-  user: UserComposedEntity,
-  setUser: (user: UserComposedEntity) => void,
+  user: UserEntity,
+  setUser: (user: UserEntity) => void,
   logout: () => void,
-  getUser: (authorization?: string) => Promise<UserComposedEntity>,
+  getUser: (authorization?: string) => Promise<UserEntity>,
   refreshUser: () => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -30,14 +30,14 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
-  const [user, setUser] = useState<UserComposedEntity | null>(prefetched);
+  const [user, setUser] = useState<UserEntity | null>(prefetched);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = async (): Promise<UserComposedEntity> => {
+  const getUser = async (): Promise<UserEntity> => {
     const res = await fetch(`${_server()}/api/user/get`, {
       method: 'GET',
       credentials: 'include'

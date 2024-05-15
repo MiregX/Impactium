@@ -49,7 +49,7 @@ export function LanguageChooser() {
   
 
   return (
-    <Banner title={lang.chooseLanguages} footer={footer}>
+    <Banner title={lang._choose_language} footer={footer}>
       <div className={_language._}>
         {Object.keys(availableLanguages).map((key) => (
           <div

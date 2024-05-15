@@ -1,4 +1,4 @@
-import { $Enums, Team } from "@prisma/client";
+import { $Enums, Roles, Team, TeamMembers } from "@prisma/client";
 
 export class TeamEntity implements Team {
   logo: string;
@@ -14,4 +14,12 @@ export class TeamEntity implements Team {
       cdn: 'https://cdn.impactium.fun' + ftp
     }
   }
+}
+
+export class TeamEntity_ComposedWithMembers extends TeamEntity {
+  members: {
+    avatar: string,
+    roles: Roles[],
+    uid: string,
+  }[];
 }

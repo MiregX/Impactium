@@ -30,7 +30,7 @@ export const useLanguage = () => {
 };
 
 function validate(languageCode: string) {
-  return !languageCode || !['us', 'ua', 'ru', 'it'].includes(languageCode) ? 'us' : languageCode;
+  return !languageCode || !['us', 'ua', 'ru', 'it', 'pl'].includes(languageCode) ? 'us' : languageCode;
 }
 
 const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage?: string }> = ({ children, predefinedLanguage }) => {

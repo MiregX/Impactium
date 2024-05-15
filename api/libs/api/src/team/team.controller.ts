@@ -15,11 +15,13 @@ export class TeamController {
   ) {}
 
   @Get('get')
-  pagination(
+  async pagination(
     @Query('limit') limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
     @Query('skip') skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
   ) {
-    return this.teamService.pagination(limit, skip);  
+    const x = await this.teamService.pagination(limit, skip);
+    console.table(x);
+    return x;
   }
 
   @Get('get/:indent')

@@ -11,6 +11,10 @@
   width: 100%;
 }
 
+.button {
+  height: 100%;
+}
+
 .search {
   background: var(--soft-black);
   flex: 1;
@@ -52,7 +56,7 @@
 }
 
 .recomendations {
-  background: var(--soft-black);
+  background: var(--meta-black);
   border: 1px solid var(--accent-2);
   border-radius: var(--border-m);
   width: 100%;
@@ -79,27 +83,42 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  padding: 0 1em;
-  height: 40px;
+  padding: 1rem;
   border-bottom: 1px solid var(--accent-2);
 }
 
-.unit > img {
-  height: 40px;
-  width: 40px;
+.list .unit:last-child {
+  border: none;
 }
 
-.unit > h6 {
-  font-size: var(--text-medium);
+.logo {
+  background: var(--gray24);
+  border-radius: var(--round);
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.unit > hr {
-  height: 24px;
-  background: var(--accent-2);
+
+.logo img {
+  height: 18px;
+  width: 18px;
+}
+.logo span {
+  color: var(--text-white);
+  font-weight: 700;
 }
 .unit > p {
-  font-size: var(--text-medium-height);
+  font-size: var(--text-medium);
+  font-weight: 500;
+}
+.unit span {
+  color: var(--text-dimmed);
 }
 .unit > a {
+  font-weight: 600;
   font-size: var(--text-small);
   font-family: 'Nunito', sans-serif;
   color: var(--text-dimmed);

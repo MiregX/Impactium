@@ -1,26 +1,33 @@
-'use server'
-// import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+'use client'
 import s from './Teams.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate';
 import { _server } from '@/dto/master';
-import { TeamEntity } from '@api/main/team/team.entity';
+import { TeamEntity_ComposedWithMembers } from '@api/main/team/addon/team.entity';
 import { TeamUnit } from './components/TeamUnit';
+import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { useLanguage } from '@/context/Language';
+import { useEffect, useState } from 'react';
+import CreateTeam from '@/banners/create_team/CreateTeam';
+import { useMessage } from '@/context/Message';
 
-export default async function TeamsPage() {
-  const teams: TeamEntity[] = await fetch(`http://0.0.0.0:3001/api/team/get`, {
-    method: 'GET',
-    cache: 'no-cache'
-  })
-  .then(async (res) => {
-    console.log(res.body)
-    return await res.json();
-  })
-  .catch(_ => {
-    console.log(_)
-    return undefined;
-  });
-
-  console.log(teams)
+export default function TeamsPage() {
+  const { lang } = useLanguage();
+  const { spawnBanner } = useMessage();
+  const [ teams, setTeams ] = useState<TeamEntity_ComposedWithMembers[]>([]);
+  useEffect(() => {
+    (async () => {
+      setTeams(await fetch(`${_server()}/api/team/get`, {
+        method: 'GET',
+        cache: 'no-cache'
+      })
+      .then(async (res) => {
+        return await res.json();
+      })
+      .catch(_ => {
+        return undefined;
+      }));
+    })();
+  }, []);
 
   return (
     <PanelTemplate style={[s.wrapper]} >
@@ -40,20 +47,20 @@ export default async function TeamsPage() {
             type="search" 
             name='q' />
         </div>
-        {/* <GeistButton options={{
-          type: GeistButtonTypes.Link,
-          href: '/team/create',
-          text: 'Создать команду',
+        <GeistButton options={{
+          type: GeistButtonTypes.Button,
+          do: () => spawnBanner(<CreateTeam />),
+          text: lang._create_team,
           focused: true,
           style: [ s.button ]
-        }} /> */}
+        }} />
       </div>
       <div className={s.recomendations}>
         <h4>Рекомендации</h4>
         <div className={s.list}>
-          {teams && teams.map((team: TeamEntity) => {
+          {teams && teams.map((team: TeamEntity_ComposedWithMembers) => {
             return (
-              <TeamUnit team={team} />
+              <TeamUnit key={team.indent} team={team} />
             )
           })}
         </div>

@@ -49,7 +49,10 @@ export function Banner({ title, children, footer, onClose }: BannerProps) {
   return (
     <div ref={self} className={banner.background}>
       <div className={banner._}>
-        <h4>{title}</h4>
+        <h4>{title}
+          <button onClick={destroyBanner}>
+            <img src='https://cdn.impactium.fun/ui/close/md.svg'/>
+          </button></h4>
         <div className={banner.content}>{children}</div>
         <div className={banner.footer}>
           {footer ? (
