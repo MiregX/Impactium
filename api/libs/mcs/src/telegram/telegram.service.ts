@@ -1,6 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Telegraf, Markup } from 'telegraf';
-import { Online } from '@api/mcs/console/console.dto';
 
 @Injectable()
 export class TelegramService
@@ -16,7 +15,7 @@ implements OnModuleInit, OnModuleDestroy {
 
   async onModuleDestroy() {}
   
-  async editPinnedMessage({count, list}: Online) {
+  async editPinnedMessage({count, list}) {
     try {
       await this.telegram.editMessageText(
         process.env.CHANNEL_ID,

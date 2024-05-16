@@ -2,7 +2,7 @@
 CREATE TYPE "LoginType" AS ENUM ('discord', 'google', 'github', 'telegram', 'steam');
 
 -- CreateEnum
-CREATE TYPE "Roles" AS ENUM ('carry', 'mid', 'offlane', 'semisupport', 'fullsupport', 'rotation', 'coach');
+CREATE TYPE "Roles" AS ENUM ('owner', 'carry', 'mid', 'offlane', 'semisupport', 'fullsupport', 'rotation', 'coach');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -25,22 +25,11 @@ CREATE TABLE "Login" (
 );
 
 -- CreateTable
-CREATE TABLE "Player" (
-    "uid" STRING NOT NULL,
-    "steamId" STRING,
-    "nickname" STRING NOT NULL,
-    "role" "Roles" NOT NULL,
-    "mmr" INT4 NOT NULL,
-    "dotabuff" STRING,
-
-    CONSTRAINT "Player_pkey" PRIMARY KEY ("uid")
-);
-
--- CreateTable
 CREATE TABLE "Team" (
     "indent" STRING NOT NULL,
     "logo" STRING,
     "title" STRING,
+    "description" STRING,
     "ownerId" STRING NOT NULL,
     "membersAmount" INT4 NOT NULL DEFAULT 0,
 
@@ -51,7 +40,7 @@ CREATE TABLE "Team" (
 CREATE TABLE "TeamMembers" (
     "id" STRING NOT NULL,
     "uid" STRING NOT NULL,
-    "teamIndent" STRING NOT NULL,
+    "tid" STRING NOT NULL,
     "roles" "Roles"[],
 
     CONSTRAINT "TeamMembers_pkey" PRIMARY KEY ("id")
@@ -61,7 +50,7 @@ CREATE TABLE "TeamMembers" (
 CREATE TABLE "TeamInvitements" (
     "id" STRING NOT NULL,
     "uid" STRING NOT NULL,
-    "teamIndent" STRING NOT NULL,
+    "tid" STRING NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "TeamInvitements_pkey" PRIMARY KEY ("id")
@@ -89,15 +78,22 @@ CREATE TABLE "Tournament" (
     "code" STRING NOT NULL,
     "rules" JSONB NOT NULL,
     "ownerId" STRING NOT NULL,
+    "gid" STRING NOT NULL,
 
     CONSTRAINT "Tournament_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "Grid" (
+    "tid" STRING NOT NULL,
+    "winnerId" STRING
+);
+
+-- CreateTable
 CREATE TABLE "Battle" (
     "id" STRING NOT NULL,
-    "winnerId" STRING NOT NULL,
-    "tournamentId" STRING NOT NULL,
+    "winnerId" STRING,
+    "gid" STRING NOT NULL,
 
     CONSTRAINT "Battle_pkey" PRIMARY KEY ("id")
 );
@@ -121,16 +117,13 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Login_id_key" ON "Login"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Player_steamId_key" ON "Player"("steamId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Player_dotabuff_key" ON "Player"("dotabuff");
+CREATE UNIQUE INDEX "Team_indent_key" ON "Team"("indent");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tournament_code_key" ON "Tournament"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Battle_id_key" ON "Battle"("id");
+CREATE UNIQUE INDEX "Grid_tid_key" ON "Grid"("tid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_TeamToTournament_AB_unique" ON "_TeamToTournament"("A", "B");
@@ -148,22 +141,19 @@ CREATE INDEX "_BattleToTeam_B_index" ON "_BattleToTeam"("B");
 ALTER TABLE "Login" ADD CONSTRAINT "Login_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Player" ADD CONSTRAINT "Player_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TeamMembers" ADD CONSTRAINT "TeamMembers_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TeamMembers" ADD CONSTRAINT "TeamMembers_teamIndent_fkey" FOREIGN KEY ("teamIndent") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TeamMembers" ADD CONSTRAINT "TeamMembers_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TeamInvitements" ADD CONSTRAINT "TeamInvitements_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TeamInvitements" ADD CONSTRAINT "TeamInvitements_teamIndent_fkey" FOREIGN KEY ("teamIndent") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TeamInvitements" ADD CONSTRAINT "TeamInvitements_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -172,7 +162,10 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_uid_fkey" FOREIGN KEY ("uid") REFE
 ALTER TABLE "Tournament" ADD CONSTRAINT "Tournament_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Battle" ADD CONSTRAINT "Battle_tournamentId_fkey" FOREIGN KEY ("tournamentId") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Grid" ADD CONSTRAINT "Grid_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Battle" ADD CONSTRAINT "Battle_gid_fkey" FOREIGN KEY ("gid") REFERENCES "Grid"("tid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("indent") ON DELETE CASCADE ON UPDATE CASCADE;

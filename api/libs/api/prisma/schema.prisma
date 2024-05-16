@@ -21,7 +21,6 @@ model User {
   register      DateTime     @default(now())
   email         String?      @unique
   logins        Login[]
-  player        Player?
   comments      Comment[]
   teams         Team[]
   participate   TeamMembers[]
@@ -40,20 +39,11 @@ model Login {
   lang        String
 }
 
-model Player {
-  uid       String      @id
-  user      User        @relation(fields: [uid], references: [uid])
-  steamId   String?     @unique
-  nickname  String
-  role      Roles
-  mmr       Int
-  dotabuff  String?     @unique
-}
-
 model Team {
   indent        String       @id @unique
   logo          String?
   title         String?
+  description   String?
   ownerId       String
   membersAmount Int          @default(0)
   owner         User         @relation(fields: [ownerId], references: [uid])
@@ -67,8 +57,8 @@ model TeamMembers {
   id            String        @id @default(cuid())
   uid           String
   user          User          @relation(fields: [uid], references: [uid])
-  teamIndent    String
-  team          Team          @relation(fields: [teamIndent], references: [indent])
+  tid           String
+  team          Team          @relation(fields: [tid], references: [indent])
   roles         Roles[]
 }
 
@@ -76,8 +66,8 @@ model TeamInvitements {
   id            String        @id @default(uuid())
   uid           String
   user          User          @relation(fields: [uid], references: [uid])
-  teamIndent    String
-  team          Team          @relation(fields: [teamIndent], references: [indent])
+  tid    String
+  team          Team          @relation(fields: [tid], references: [indent])
   date          DateTime      @default(now())
 }
 
@@ -91,6 +81,7 @@ model Comment {
 }
 
 enum Roles {
+  owner
   carry
   mid
   offlane
@@ -101,24 +92,32 @@ enum Roles {
 }
 
 model Tournament {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   banner      String
   title       String
   start       DateTime
   end         DateTime
   description Json
-  code        String   @unique
+  code        String      @unique
   rules       Json
   ownerId     String
-  owner       User     @relation(fields: [ownerId], references: [uid])
+  owner       User        @relation(fields: [ownerId], references: [uid])
   teams       Team[]
-  battles     Battle[]
+  gid         String
+  grid        Grid?
+}
+
+model Grid {
+  tid           String        @unique
+  tournament    Tournament    @relation(fields: [tid], references: [id])
+  winnerId      String?
+  battles       Battle[]
 }
 
 model Battle {
-  id            String     @id @unique
-  team          Team[]     
-  winnerId      String
-  tournamentId  String
-  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+  id            String     @id @default(cuid())
+  winnerId      String?
+  gid           String
+  grid          Grid       @relation(fields: [gid], references: [tid])
+  teams         Team[]
 }

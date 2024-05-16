@@ -101,6 +101,7 @@ export class TeamService {
         logo: true,
         title: true,
         ownerId: true,
+        description: true,
         membersAmount: true,
         members: {
           select: {

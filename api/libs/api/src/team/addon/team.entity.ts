@@ -5,6 +5,7 @@ export class TeamEntity implements Team {
   membersAmount: number;
   indent: string;
   title: string;
+  description: string;
   ownerId: string;
 
   static getLogoPath(filename: string) {

@@ -85,6 +85,8 @@ export class AuthService {
         data: { avatar, displayName, lang, on: new Date() },
       });
     } else {
+      // TODO
+      // Fix email inplementation (4)
       const user = email
         ? await this.prisma.user.upsert({
             where: { email },

@@ -49,7 +49,7 @@ services:
     extends:
       file: ./api/libs/api/compose-service.yml
       service: api-cockroachdb
-    container_name: ${COMPOSE_PROJECT_NAME}_api-cockroachdb
+    container_name: ${COMPOSE_PROJECT_NAME}api-cockroachdb
     profiles:
       - development
 
@@ -59,12 +59,12 @@ services:
       service: api-prisma
     depends_on:
       - api-cockroachdb
-    container_name: ${COMPOSE_PROJECT_NAME}_api-prisma
+    container_name: ${COMPOSE_PROJECT_NAME}api-prisma
     profiles:
       - development
 
   redis:
-    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    container_name: ${COMPOSE_PROJECT_NAME}redis
     image: redis:latest
     restart: on-failure
     ports:
