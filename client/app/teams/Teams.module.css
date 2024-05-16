@@ -92,7 +92,6 @@
 }
 
 .logo {
-  background: var(--gray24);
   border-radius: var(--round);
   width: 32px;
   height: 32px;

@@ -14,7 +14,7 @@ export function Description() {
 
   return (
     <div className={s.description}>
-      {user.id === team.ownerId && <button
+      {user && user.id === team.ownerId && <button
         onClick={() => spawnBanner(<EditTeamDescription team={team} />)}
         className={s.edit}>
         <img src='https://cdn.impactium.fun/ui/pencil/pencil-line.svg' />

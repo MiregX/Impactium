@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: space-between;
 }
-._ > h4 div {
+._ > h4 button {
   cursor: pointer;
 }
 

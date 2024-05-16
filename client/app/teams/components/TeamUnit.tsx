@@ -8,7 +8,7 @@ export function TeamUnit({ team }) {
     <Link className={s.unit} href={`/team/@${team.indent}`} >
       <div className={s.logo}>
         {team.logo
-          ? <img src={team.logo} />
+          ? <img src={team.logo + '?t=' + Date.now()} />
           : <span>{team.title.slice(0, 1)}</span>
         }
       </div>

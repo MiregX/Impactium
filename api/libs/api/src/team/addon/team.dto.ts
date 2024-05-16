@@ -4,7 +4,7 @@ import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { IsLowercase, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { FileFilterCallback } from 'multer';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 
 export class CreateTeamDto {
   @IsString()
@@ -69,13 +69,6 @@ export enum TeamStandarts {
 export class UploadFileDto {
   static getConfig() {
     return {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-          return cb(null, `${randomName}${extname(file.originalname)}`);
-        }
-      }),
       fileFilter: async (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
         try {
           if (!['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.mimetype)) {
@@ -84,10 +77,12 @@ export class UploadFileDto {
           if (file.size > TeamStandarts.LOGO_BYTE_SIZE) {
             throw new UnallowedFileSize();
           }
-          const image = sharp(file.buffer);
-          const metadata = await image.metadata();
-          if ((file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') && (metadata.width > 512 || metadata.height > 512)) {
-            throw new UnallowedFileMetadata();
+          if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+            const image = sharp(file.buffer);
+            const { width, height } = await image.metadata();
+            if (width > 512 || height > 512) {
+              throw new UnallowedFileMetadata();
+            }
           }
           cb(null, true);
         } catch (_) {

@@ -8,7 +8,6 @@ import { UserService } from '@api/main/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 
 describe('/oauth2', () => {
-  let api: INestApplication;
   let authController: AuthController;
   let authService: AuthService;
 

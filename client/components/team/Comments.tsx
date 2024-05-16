@@ -6,9 +6,11 @@ import { useMessage } from '@/context/Message';
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language';
 import { LeaveComment } from './LeaveComment';
+import { useUser } from '@/context/User';
 
 export function Comments() {
   const { team } = useTeam();
+  const { user } = useUser();
   const { newMessage } = useMessage();
   const { lang } = useLanguage();
 
@@ -31,7 +33,7 @@ export function Comments() {
           </div>
         )
       }): <NoComments />}
-      <LeaveComment />
+      {user && <LeaveComment />}
     </div>
   );
 }

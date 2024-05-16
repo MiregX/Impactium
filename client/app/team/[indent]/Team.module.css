@@ -22,6 +22,7 @@
   height: 64px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
+  border-radius: var(--border-s);
 }
 
 .heading .button {

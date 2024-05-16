@@ -44,7 +44,7 @@ export function Onboard() {
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             do: '/me/actions',
-            text: lang.find.team,
+            text: lang.find.tournament,
             style: [ s.button ]
           }} />
           <GeistButton options={{
