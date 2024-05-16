@@ -15,7 +15,8 @@ export function Heading() {
       <div>
         <img src={team.logo + '?t=' + Date.now()} onError={null} />
         <div className={s.text}>
-          <p>{team.title}</p>  
+          <p>{team.title}</p>
+          <span>·</span>
           <h6>@{team.indent}</h6>
         </div>
       </div>

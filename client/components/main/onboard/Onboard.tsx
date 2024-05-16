@@ -5,6 +5,7 @@ import { PanelTemplate } from '@/components/main/PanelTempate'
 import CreateTeam from '@/banners/create_team/CreateTeam'
 import { useMessage } from '@/context/Message'
 import { useLanguage } from '@/context/Language'
+import { TournamentsRecomendations } from './TournamentsRecomendations'
 
 export function Onboard() {
   const { spawnBanner } = useMessage();
@@ -35,25 +36,7 @@ export function Onboard() {
             minimized: true
           }} />
         </div>
-        <h4>
-          <img src='https://cdn.impactium.fun/ui/specific/ticket-voucher.svg'/>
-          {lang.main.participate}
-        </h4>
-        <p>{lang.main.participate_description}</p>
-        <div className={s.group}>
-          <GeistButton options={{
-            type: GeistButtonTypes.Link,
-            do: '/me/actions',
-            text: lang.find.tournament,
-            style: [ s.button ]
-          }} />
-          <GeistButton options={{
-            type: GeistButtonTypes.Link,
-            do: '/me/actions',
-            text: lang.create.tournament,
-            minimized: true
-          }} />
-        </div>
+        <TournamentsRecomendations tournaments={false} />
       </div>
     </PanelTemplate>
   )

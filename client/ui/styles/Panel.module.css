@@ -1,0 +1,24 @@
+._ {
+  background: var(--meta-black);
+  border: 1px solid var(--accent-2);
+  border-radius: var(--border-m);
+  width: 100%;
+  overflow: hidden;
+}
+
+._ > h4 {
+  height: 40px;
+  border-bottom: 1px solid var(--accent-2);
+  display: flex;
+  line-height: 1px;
+  align-items: center;
+  padding: 0 1em;
+  font-size: var(--text-medium);
+  background: var(--black);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}

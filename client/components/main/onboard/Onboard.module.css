@@ -14,31 +14,18 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 0.85;
 }
 
-.onboard h3 {
+.onboard > h3 {
   font-size: var(--text-larger);
 }
 
-.onboard h4 {
-  margin-top: 24px;
+.onboard > h4 {
   font-size: var(--text-large);
 }
 
-.onboard img {
-  height: 32px;
-  transform: translateY(8px);
-}
-
-.onboard span {
-  background: linear-gradient(to right,#63E8DB, #39C4F5);
-  font-weight: 900;
-  font-family: 'Nunito', sans-serif;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.onboard p {
+.onboard > p {
   color: var(--text-dimmed);
   max-width: 800px;
   margin-bottom: 8px;
@@ -59,4 +46,39 @@
 
 .button:hover {
   color: var(--black);
+}
+
+.tournaments > div {
+  padding: 1em;
+  gap: 1em;
+  flex-direction: row;
+}
+.unit {
+  flex: 1 1;
+  border: 1px solid var(--accent-3);
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--border-s);
+  background: var(--black);
+  line-height: 0;
+}
+.unit > img {
+  width: 100%;
+  height: 75%;
+  object-fit: cover;
+}
+
+.unit desc {
+  padding: 4px;
+  height: 25%;
+  border-top: 1px solid var(--accent-3);
+  width: 100%;
+  display: flex;
+}
+.top {
+}
+.top * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

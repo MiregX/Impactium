@@ -212,6 +212,15 @@ const locale: Locale = {
       pl: 'Drużyna nie ma opisu'
     }  
   },
+  tournament: {
+    recomendations: {
+      us: 'Popular tournaments',
+      ru: 'Популярные турниры',
+      ua: 'Популярні турніри',
+      it: 'Tornei popolari',
+      pl: 'Popularne turnieje'
+    }  
+  },
   already_exists: {
     us: 'A team with this ID already exists, please choose another one',
     ru: 'Команда с таким айди уже существует, придумай другое',
