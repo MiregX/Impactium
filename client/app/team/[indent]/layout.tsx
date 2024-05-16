@@ -20,9 +20,9 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     .catch(_ => {
       console.log('Fetch success', _);
       return undefined
-    })
+    });
 
-  console.log(team)
+  if (!team) redirect('/teams');
 
   return (
     <TeamProvider prefetched={team}>

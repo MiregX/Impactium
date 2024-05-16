@@ -203,6 +203,15 @@ const locale: Locale = {
       pl: "Logo drużyny"
     }
   },
+  team: {
+    has_no_description: {
+      us: 'The team has no description',
+      ru: 'У команды нет описания',
+      ua: 'У команди немає опису',
+      it: 'La squadra non ha una descrizione',
+      pl: 'Drużyna nie ma opisu'
+    }  
+  },
   already_exists: {
     us: 'A team with this ID already exists, please choose another one',
     ru: 'Команда с таким айди уже существует, придумай другое',

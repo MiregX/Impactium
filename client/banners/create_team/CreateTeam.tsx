@@ -52,6 +52,7 @@ export default function CreateTeam() {
       if (response.ok) {
         response.json().then(team => {
           router.push(`/team/${team.indent}`);
+          destroyBanner();
         });
       } else {
         throw response;

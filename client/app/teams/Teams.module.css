@@ -94,17 +94,16 @@
 .logo {
   background: var(--gray24);
   border-radius: var(--round);
-  padding: 4px;
   width: 32px;
   height: 32px;
   display: flex;
+  overflow: hidden;
   justify-content: center;
   align-items: center;
 }
 
 .logo img {
-  height: 18px;
-  width: 18px;
+  height: 100%;
 }
 .logo span {
   color: var(--text-white);

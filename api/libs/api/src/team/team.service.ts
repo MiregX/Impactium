@@ -21,7 +21,6 @@ export class TeamService {
     team: CreateTeamDto,
     banner: Express.Multer.File
   ) {
-    // LIMIT MAX 3 CREATED TEAMS PER USER 
     await this.findManyByUid(uid)
       .then(teams => {
         teams.length >= 3 && (() => {throw new TeamLimitException()});
@@ -35,7 +34,7 @@ export class TeamService {
       data: {
         title: team.title,
         indent,
-        logo: banner && this.uploadBanner(indent, banner),
+        logo: banner && await this.uploadBanner(indent, banner),
         owner: {
           connect: {
             uid,
@@ -64,13 +63,13 @@ export class TeamService {
     });
   }
 
-  setBanner(indent: string, banner: Express.Multer.File) {
+  async setBanner(indent: string, banner: Express.Multer.File) {
     return this.prisma.team.update({
       where: {
         indent
       },
       data: {
-        logo: banner && this.uploadBanner(indent, banner)
+        logo: banner && await this.uploadBanner(indent, banner)
       }
     })
   }
@@ -137,20 +136,14 @@ export class TeamService {
   
   
 
-  private uploadBanner(indent: string, banner: Express.Multer.File) {
-    try {
-      
-    } catch (_) {
-      throw new FTPUploadError()
-    }
+  private async uploadBanner(indent: string, banner: Express.Multer.File) {
     const stream = new Readable();
     stream.push(banner.buffer);
     stream.push(null);
-    
-    // Получаем расширение файла из его имени
+
     const extension = banner.originalname.split('.').pop();
     const { ftp, cdn } = TeamEntity.getLogoPath(`${indent}.${extension}`);
-    this.ftpService.uploadFile(ftp, stream);
+    await this.ftpService.uploadFile(ftp, stream);
 
     return cdn;
   }

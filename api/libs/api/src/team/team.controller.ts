@@ -1,12 +1,15 @@
 import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto, TeamStandarts, UpdateTeamDto } from './addon/team.dto';
+import { CreateTeamDto, TeamStandarts, UnallowedFileFormat, UnallowedFileMetadata, UnallowedFileSize, UpdateTeamDto, UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TeamGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.decorator';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+import sharp from 'sharp';
 
 @Controller('team')
 export class TeamController {
@@ -26,19 +29,19 @@ export class TeamController {
 
   @Get('get/:indent')
   findOneByIndent(
-    @Param('indent') indent: string,
+    @Param('indent', IndentValidationPipe) indent: string
   ) {
     return this.teamService.findOneByIndent(indent);
   }
-  
+
   @Post('create/:indent')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('banner'))
+  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig()))
   async create(
     @UploadedFile() banner: Express.Multer.File,
     @Body() team: CreateTeamDto,
     @User() user: UserEntity,
-    @Param('indent', IndentValidationPipe) indent: string
+    @Param('indent') indent: string
   ) {
     return await this.teamService.create({
       uid: user.uid,
@@ -46,21 +49,9 @@ export class TeamController {
     }, team, banner);
   }
 
-  @Patch('update/:indent')
-  @UseGuards(AuthGuard, TeamGuard)
-  update(
-    @Body() team: UpdateTeamDto,
-    @User() user: UserEntity,
-    @Param('indent', IndentValidationPipe) indent: string
-  ) {
-    return this.teamService.update({
-      uid: user.uid,
-      indent: indent
-    }, team);
-  }
-
   @Patch('set/banner/:indent')
   @UseGuards(AuthGuard, TeamGuard)
+  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig()))
   setBanner(
     @UploadedFile() banner: Express.Multer.File,
     @Param('indent', IndentValidationPipe) indent: string

@@ -5,7 +5,7 @@ import { useTeam } from "@/context/Team"
 import { useUser } from '@/context/User';
 import { GeistButton, GeistButtonTypes } from "@/ui/GeistButton";
 
-export function Heading({ isEditable, toggleEditable }) {
+export function Heading() {
   const { team } = useTeam();
   const { user } = useUser();
   const { lang } = useLanguage();
@@ -19,16 +19,6 @@ export function Heading({ isEditable, toggleEditable }) {
           <h6>@{team.indent}</h6>
         </div>
       </div>
-      {user.uid === team.ownerId && <GeistButton options={{
-        type: GeistButtonTypes.Button,
-        do: toggleEditable,
-        text: lang.edit.team,
-        img: isEditable
-          ? 'https://cdn.impactium.fun/ui/check/all-big.svg'
-          : 'https://cdn.impactium.fun/ui/pencil/pencil-line.svg',
-        focused: true,
-        style: [s.button]
-      }} />}
     </div>
   )
 }

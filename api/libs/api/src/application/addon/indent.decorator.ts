@@ -3,10 +3,10 @@ import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from
 @Injectable()
 export class IndentValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    const validPattern = /^(?!.*[-_]{2,})[0-9a-z_-]{3,24}$/;
+    const validPattern = /^(?!.*[-_]{2,})[a-z0-9][-a-z0-9_]{1,22}[a-z0-9]$/i;
 
     if (metadata.type !== 'param' || metadata.data !== 'indent') {
-      return value;
+      throw new BadRequestException('Indent didn\'t provided');
     }
 
     if (!validPattern.test(value)) {
