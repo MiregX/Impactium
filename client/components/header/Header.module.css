@@ -22,7 +22,7 @@
   height: 64px;
   width: 100vw;
   background-color: var(--soft-black);
-  border-bottom: var(--geist-border);
+  border-bottom: 1px solid var(--accent-3);
   position: fixed;
 }
 .logo {

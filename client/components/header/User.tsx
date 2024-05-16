@@ -41,7 +41,7 @@ export function UserComponent() {
         </Link>
         <hr />
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
-          {lang._choose_language}
+          {lang.choose.language}
           <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>
         </button>
         <hr />

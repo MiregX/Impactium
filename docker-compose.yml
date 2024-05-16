@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   nginx:
-    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    container_name: ${COMPOSE_PROJECT_NAME}nginx
     image: nginx:latest
     restart: on-failure
     ports:
@@ -13,7 +13,7 @@ services:
       - production
 
   client:
-    container_name: ${COMPOSE_PROJECT_NAME}_client
+    container_name: ${COMPOSE_PROJECT_NAME}client
     build:
       context: .
       dockerfile: ./client/Dockerfile
@@ -30,7 +30,7 @@ services:
       - production
 
   api:
-    container_name: ${COMPOSE_PROJECT_NAME}_api
+    container_name: ${COMPOSE_PROJECT_NAME}api
     build:
       context: .
       dockerfile: ./api/Dockerfile
@@ -71,4 +71,3 @@ services:
       - 6379:6379
     profiles:
       - development
-      - production

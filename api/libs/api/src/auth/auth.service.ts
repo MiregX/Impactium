@@ -62,11 +62,12 @@ export class AuthService {
 
   async login(token: string): Promise<UserEntity> {
     const { email, uid } = this.userService.decodeJWT(token);
-    if (email) {
-      return await this.userService.findOneByEmail(email);
-    }
-    else if (uid) {
+
+    if (uid) {
       return await this.userService.findOneById(uid);
+    }
+    else if (email) {
+      return await this.userService.findOneByEmail(email);
     }
     else {
       throw new NotFoundException();

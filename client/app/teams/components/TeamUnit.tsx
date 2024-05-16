@@ -1,12 +1,11 @@
-import { TeamEntity_ComposedWithMembers } from '@api/main/team/addon/team.entity'
 import s from '../Teams.module.css'
 import { TeamUnitRoles } from './TeamUnitRoles'
 import Link from 'next/link'
 
-export function TeamUnit({ team }: { team: TeamEntity_ComposedWithMembers }) {
+export function TeamUnit({ team }) {
   console.log(team)
   return (
-    <div className={s.unit}>
+    <Link className={s.unit} href={`/team/@${team.indent}`} >
       <div className={s.logo}>
         {team.logo
           ? <img src={team.logo} />
@@ -15,8 +14,8 @@ export function TeamUnit({ team }: { team: TeamEntity_ComposedWithMembers }) {
       </div>
       <p>{team.title}</p>
       <span>·</span>
-      <Link href={`/team/@${team.indent}`}>@{team.indent}</Link>
+      <h6>@{team.indent}</h6>
       <TeamUnitRoles members={team.members} />
-    </div>
+    </Link>
   )
 }

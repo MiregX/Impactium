@@ -50,7 +50,8 @@
   --accent-7: #777;
   --accent-8: #888;
 
-  --green-accent: #31dd59;
+  --geist-green: #31dd59;
+  --geist-blue: #0070f3;
 
   --hammer: url("https://cdn.impactium.fun/custom/hammer.svg");
   --hammer-accent: #F14C50;
@@ -101,13 +102,10 @@ li::marker {
 html,
 body {
   max-width: 100vw;
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: var(--black) !important;
-  background-position: top !important;
-  background-size: cover !important;
-  background-repeat: repeat !important;
+  overflow-y: unset;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -130,7 +128,7 @@ main {
   align-items: center;
 }
 main > div {
-  height: calc(100vh - var(--header-height)) !important;
+  min-height: calc(100vh - var(--header-height)) !important;
 }
 [data-nextjs-dialog-overlay] {
   user-select: all;

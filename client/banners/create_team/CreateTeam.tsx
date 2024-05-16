@@ -1,7 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import s from './CreateTeam.module.css'
-import { CreateTeamDto } from '@api/main/team/addon/team.dto'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
 import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
@@ -14,12 +13,8 @@ import { useMessage } from '@/context/Message';
 import { useLanguage } from '@/context/Language';
 import { AuthGuard } from '@/dto/AuthGuard';
 
-interface _CreateTeamDto extends CreateTeamDto {
-  indent: string
-}
-
 export default function CreateTeam() {
-  const [team, setTeam] = useState<_CreateTeamDto>(null);
+  const [team, setTeam] = useState(null);
   const { user } = useUser();
   const { lang } = useLanguage();
   const { destroyBanner } = useMessage();
@@ -29,16 +24,16 @@ export default function CreateTeam() {
   AuthGuard(user);
 
   const footer = {
-    right: <GeistButton options={{
+    right: [<GeistButton options={{
       type: GeistButtonTypes.Button,
       do: !!(team && team.indent && team.title) ? send : () => {},
-      text: lang._create_team,
+      text: lang.create.team,
       focused: !!(team && team.indent && team.title),
       style: [!(team && team.indent && team.title) && s.disactive]
-    }} />
+    }} />]
   }
 
-  const handle = (obj: Partial<CreateTeamDto>) => {
+  const handle = (obj) => {
     setTeam(_team => {
       return Object.assign({}, _team, obj)
     })
@@ -68,7 +63,7 @@ export default function CreateTeam() {
   }
 
   return (
-    <Banner title={lang._create_team} footer={footer}>
+    <Banner title={lang.create.team} footer={footer}>
       <TitleInput team={team} handle={handle} />
       <IndentInput team={team} error={error} setTeam={setTeam} />
       <LogoInput team={team} handle={handle} />

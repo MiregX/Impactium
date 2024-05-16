@@ -13,13 +13,9 @@
 
 .heading {
   display: flex;
-  flex: 1;
+  flex: 1 1;
   flex-direction: row;
   align-items: center;
-  background: var(--geist-background);
-  border: var(--geist-border);
-  padding: 12px;
-  border-radius: var(--border-l);
 }
 
 .heading img {
@@ -55,4 +51,16 @@
   align-self: flex-start;
   color: var(--text-dimmed);
   font-weight: 400;
+}
+.description {
+  position: relative;
+}
+.description .edit {
+  position: absolute;
+  left: -32px;
+}
+.description p {
+  font-size: var(--text-medium-height);
+  font-weight: 400;
+  line-height: var(--text-large);
 }

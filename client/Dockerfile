@@ -8,11 +8,8 @@ WORKDIR /app
 
 COPY --chown=node:node ./client ./client
 COPY --chown=node:node ./lib ./lib
-COPY --chown=node:node ./api/libs ./api/libs
 
 WORKDIR /app/client
-
-RUN npm ci
 
 RUN npm run build
 

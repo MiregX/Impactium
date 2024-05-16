@@ -1,10 +1,9 @@
 Dockerfile
 .dockerignore
 .prisma
-node_modules
 cockroach-data
 npm-debug.log
 dist
 client/.next
-client/node_modules
+api/dist
 .next

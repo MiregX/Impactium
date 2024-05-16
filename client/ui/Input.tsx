@@ -12,11 +12,16 @@ interface Input {
   style?: string | string[]
 }
 
-export function Input({ accept, image, label, placeholder, style, value, type, onChange }: Input) {
+export type CreateInput = Input | {
+  options: Input;
+}
+
+export function Input(options: CreateInput) {
+  const { options: inputOptions } = 'options' in options ? options : { options };
+  const { accept, image, label, placeholder, style, value, type, onChange } = inputOptions;
   return (
     <div className={`${input._} ${typeof style === 'object' ? style.join(' ') : style}`}>
-      {image && <span><img src={image} /></span>
-      }
+      {image && <span><img src={image} /></span>}
       <input
         placeholder={!label && placeholder}
         id={label}

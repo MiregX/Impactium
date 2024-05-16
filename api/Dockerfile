@@ -14,10 +14,9 @@ COPY --chown=node:node ./api/package*.json .
 COPY --chown=node:node ./api/tsconfig*.json .
 COPY --chown=node:node ./api/nest-cli.json .
 COPY --chown=node:node ./api/src ./src
+COPY --chown=node:node ./api/node_modules ./node_modules
 COPY --chown=node:node ./api/libs ./libs
 COPY --chown=node:node ./.env .
-
-RUN npm ci
 
 RUN npm run prisma:generate
 

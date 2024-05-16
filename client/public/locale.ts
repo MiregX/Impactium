@@ -70,13 +70,6 @@ const locale: Locale = {
     ru: "Перевод был выполнен при помощи нейросетей, и может содержать ошибки",
     pl: "Tłumaczenie zostało wykonane za pomocą SI i może zawierać błędy"
   },
-  _choose_language: {
-    us: 'Choose language',
-    ru: 'Выбрать язык',
-    ua: 'Вибрати мову',
-    it: 'Scegli la lingua',
-    pl: "Wybierz język"
-  },
   login: {
     username_or_email: {
       ua: "Нікнейм або пошта",
@@ -134,34 +127,6 @@ const locale: Locale = {
     us: "Settings",
     ru: "Настройки",
     pl: "Ustawienia"
-  },
-  _find_team: {
-    us: 'Find team',
-    ru: 'Найти команду',
-    ua: 'Знайти команду',
-    it: 'Trova squadra',
-    pl: "Znajdź drużynę"
-  },
-  _find_tournament: {
-    us: 'Find tournament',
-    ru: 'Найти турнир',
-    ua: 'Знайти турнір',
-    it: 'Trova torneo',
-    pl: "Znajdź turniej"
-  },
-  _create_team: {
-    us: 'Create team',
-    ru: 'Создать команду',
-    ua: 'Створити команду',
-    it: 'Crea squadra',
-    pl: "Stwórz drużynę"
-  },
-  _create_tournament: {
-    us: 'Create tournament',
-    ru: 'Создать турнир',
-    ua: 'Створити турнір',
-    it: 'Crea torneo',
-    pl: "Stwórz turniej"
   },
   // Main page
   main: {
@@ -245,15 +210,6 @@ const locale: Locale = {
     it: 'Una squadra con questo ID già esiste, scegline un altro',
     pl: "Drużyna o tym ID już istnieje, wybierz inne"
   },
-  team: {
-    edit: {
-      us: 'Edit team',
-      ru: 'Редактировать команду',
-      ua: 'Редагувати команду',
-      it: 'Modifica squadra',
-      pl: "Edytuj drużynę"
-    },
-  },
   comments: {
     title: {
       us: "Comments",
@@ -268,8 +224,150 @@ const locale: Locale = {
       ua: "Здається, тут немає коментарів...",
       it: "Non sembra esserci alcun commento...",
       pl: "Nie wygląda na to, żeby były jakiekolwiek komentarze..."
+    },
+    leave: {
+      us: "Leave a comment...",
+      ru: "Написать комментарий...",
+      ua: "Залиште коментар...",
+      it: "Lascia un commento...",
+      pl: "Zostaw komentarz..."
     }
   },
+  save: {
+  },
+  change: {
+    description: {
+      us: 'Edit team description',
+      ru: 'Редактировать описание команды',
+      ua: 'Редагувати опис команди',
+      it: 'Modifica descrizione squadra',
+      pl: 'Edytuj opis drużyny'
+    }    
+  },
+  find: {
+    team: {
+      us: 'Find team',
+      ru: 'Найти команду',
+      ua: 'Знайти команду',
+      it: 'Trova squadra',
+      pl: "Znajdź drużynę"
+    },
+    tournament: {
+      us: 'Find tournament',
+      ru: 'Найти турнир',
+      ua: 'Знайти турнір',
+      it: 'Trova torneo',
+      pl: "Znajdź turniej"
+    },
+  },
+  create: {
+    team: {
+      us: 'Create team',
+      ru: 'Создать команду',
+      ua: 'Створити команду',
+      it: 'Crea squadra',
+      pl: "Stwórz drużynę"
+    },
+    tournament: {
+      us: 'Create tournament',
+      ru: 'Создать турнир',
+      ua: 'Створити турнір',
+      it: 'Crea torneo',
+      pl: "Stwórz turniej"
+    },
+  },
+  choose: {
+    language: {
+      us: 'Choose language',
+      ru: 'Выбрать язык',
+      ua: 'Вибрати мову',
+      it: 'Scegli la lingua',
+      pl: "Wybierz język"
+    },
+  },
+  edit: {
+    team: {
+      us: 'Edit team',
+      ru: 'Редактировать команду',
+      ua: 'Редагувати команду',
+      it: 'Modifica squadra',
+      pl: "Edytuj drużynę"
+    },
+  },
+  _undo: {
+    us: 'Undo',
+    ru: 'Отменить',
+    ua: 'Скасувати',
+    it: 'Annulla',
+    pl: "Cofnij"
+  },
+  status: {
+    ok: {
+      us: 'All systems normal.',
+      ru: 'Все системы в норме.',
+      ua: 'Усі системи в нормі.',
+      it: 'Tutti i sistemi normali.',
+      pl: 'Wszystkie systemy w porządku.'
+    }
+  },
+  footer: {
+    teams: {
+      us: 'Teams',
+      ru: 'Команды',
+      ua: 'Команди',
+      it: 'Squadre',
+      pl: 'Zespoły'
+    },
+    tournaments: {
+      us: 'Tournaments',
+      ru: 'Турниры',
+      ua: 'Турніри',
+      it: 'Tornei',
+      pl: 'Turnieje'
+    },
+    documentation: {
+      us: 'Documentation',
+      ru: 'Документация',
+      ua: 'Документація',
+      it: 'Documentazione',
+      pl: 'Dokumentacja'
+    },
+    services: {
+      us: 'Services',
+      ru: 'Наши продукты',
+      ua: 'Наші послуги',
+      it: 'Servizi',
+      pl: 'Usługi'
+    },
+    developers: {
+      us: 'Developers',
+      ru: 'Разработчики',
+      ua: 'Розробники',
+      it: 'Sviluppatori',
+      pl: 'Deweloperzy'
+    },
+    privacy: {
+      us: 'Privacy Policy',
+      ru: 'Политика конфиденциальности',
+      ua: 'Політика конфіденційності',
+      it: 'Informativa sulla privacy',
+      pl: 'Polityka prywatności'
+    },
+    terms: {
+      us: 'Terms of Service',
+      ru: 'Условия использования',
+      ua: 'Умови використання',
+      it: 'Termini di servizio',
+      pl: 'Warunki korzystania'
+    },
+    changelog: {
+      us: "Changelog",
+      ru: "История изменений",
+      ua: "Журнал змін",
+      it: "Registro delle modifiche",
+      pl: "Dziennik zmian"
+    }
+  }
 }
 
 export default locale;

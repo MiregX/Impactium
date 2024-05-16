@@ -117,7 +117,7 @@
 .unit span {
   color: var(--text-dimmed);
 }
-.unit > a {
+.unit > h6 {
   font-weight: 600;
   font-size: var(--text-small);
   font-family: 'Nunito', sans-serif;

@@ -1,23 +1,63 @@
 ._ {
-  background: var(--geist-background);
+  background: var(--soft-black);
   flex: 0.33 1;
+  height: 600px;
   align-self: flex-start;
   display: flex;
   min-height: 300px;
-  padding: 1em;
-  border-radius: var(--border-l);
+  border-radius: var(--border-m);
   box-shadow: var(--shadow-menu);
   flex-direction: column;
   align-items: flex-start;
+  overflow: hidden;
 }
 ._ > h4 {
-  font-size: var(--text-medium);
+  font-size: var(--text-medium-height);
   margin-bottom: 1em;
+  width: 100%;
+  border-bottom: 1px solid var(--accent-2);
+  padding: 0.75em;
+  background: var(--black);
 }
 ._ > p {
+  width: 100%;
   flex: 1;
-  display: flex;
-  align-items: center;
+  text-align: center;
   color: var(--text-dimmed);
   font-size: var(--text-small);
+}
+.leave {
+  border-top: 1px solid var(--accent-2);
+  background: var(--black);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  padding: 8px;
+}
+.leave > img {
+  height: 32px;
+  width: 32px;
+  border-radius: var(--round);
+  box-shadow: var(--shadow-menu);
+}
+
+.leave .input {
+  flex: 1 1;
+  padding: 0 8px;
+}
+.leave .input input {
+  height: 32px;
+}
+.leave .button {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+.leave .button img {
+  height: 24px !important;
+  width: 24px !important;
 }

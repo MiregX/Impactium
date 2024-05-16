@@ -22,7 +22,7 @@ export function Heading({ isEditable, toggleEditable }) {
       {user.uid === team.ownerId && <GeistButton options={{
         type: GeistButtonTypes.Button,
         do: toggleEditable,
-        text: lang.team.edit,
+        text: lang.edit.team,
         img: isEditable
           ? 'https://cdn.impactium.fun/ui/check/all-big.svg'
           : 'https://cdn.impactium.fun/ui/pencil/pencil-line.svg',

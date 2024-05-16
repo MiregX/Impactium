@@ -3,7 +3,6 @@ import s from '@/styles/Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { useLanguage } from '@/context/Language';
-import { Configuration } from '@impactium/config';
 import {
     useCallback,
     useEffect,
@@ -47,7 +46,7 @@ export function Preloader({ applicationInfo }) {
 
   useEffect(() => {
     show();
-    if (applicationInfo.enforced_preloader) return;
+    if (applicationInfo?.enforced_preloader) return;
     if (isUserLoaded && !blocker) {
       hide();
     } else {
@@ -61,55 +60,11 @@ export function Preloader({ applicationInfo }) {
     }
   }, [visitedBefore]);
 
-  const buildingMap = [
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/whale_1f40b.webp',
-      phrase: 'enforsedPhrase1'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/eggplant_1f346.webp',
-      phrase: 'enforsedPhrase2'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bottle-with-popping-cork_1f37e.webp',
-      phrase: 'enforsedPhrase3'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/brick_1f9f1.webp',
-      phrase: 'enforsedPhrase4'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/satellite_1f6f0-fe0f.webp',
-      phrase: 'enforsedPhrase5'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/magnifying-glass-tilted-left_1f50d.webp',
-      phrase: 'enforsedPhrase6'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/bookmark-tabs_1f4d1.webp',
-      phrase: 'enforsedPhrase7'
-    },
-    {
-      icon: 'https://em-content.zobj.net/thumbs/60/apple/391/light-bulb_1f4a1.webp',
-      phrase: 'enforsedPhrase8'
-    }
-  ];
-
   useEffect(() => {
-    if (applicationInfo.enforced_preloader)
+    if (applicationInfo?.enforced_preloader)
       self.current.classList.add(s.dev);
   }, [self])
 
-  const [currentSection, setCurrentSection] = useState(0);
-  
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentSection(prevSection => (prevSection + 1) % buildingMap.length);
-    }, 2500);
-  
-    return () => clearInterval(intervalId);
-  }, []);
   return (
     <div className={s.preloader} ref={self}>
       <div className={s.container}>
@@ -128,17 +83,6 @@ export function Preloader({ applicationInfo }) {
           </svg>
           <p>Impactium</p>
         </div>
-        <div className={s.building}>
-          {buildingMap.map((section, index) => {
-            const position = (index - currentSection + buildingMap.length) % buildingMap.length + 1;
-            return (
-              <section key={index} className={s[`p${position}`]}>
-                <img src={section.icon} alt="" />
-                <p>{lang.enforsedPreloader[section.phrase]}</p>
-              </section>
-            );
-          })}
-      </div>
       </div>
     </div>
   );

@@ -25,13 +25,13 @@ export function Onboard() {
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             do: '/teams',
-            text: lang._find_team,
+            text: lang.find.team,
             style: [ s.button ]
           }} />
           <GeistButton options={{
             type: GeistButtonTypes.Button,
             do: () => spawnBanner(<CreateTeam />),
-            text: lang._create_team,
+            text: lang.create.team,
             minimized: true
           }} />
         </div>
@@ -44,13 +44,13 @@ export function Onboard() {
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             do: '/me/actions',
-            text: lang._find_team,
+            text: lang.find.team,
             style: [ s.button ]
           }} />
           <GeistButton options={{
             type: GeistButtonTypes.Link,
             do: '/me/actions',
-            text: lang._create_tournament,
+            text: lang.create.tournament,
             minimized: true
           }} />
         </div>

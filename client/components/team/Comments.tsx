@@ -5,6 +5,7 @@ import { _server } from '@/dto/master';
 import { useMessage } from '@/context/Message';
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language';
+import { LeaveComment } from './LeaveComment';
 
 export function Comments() {
   const { team } = useTeam();
@@ -13,17 +14,6 @@ export function Comments() {
 
   const handleError = () => {
     newMessage(403, 'unnable to send message');
-  }
-
-  const sendComment = async () => {
-    const response = await fetch(`${_server()}/api/comment/send`, {
-      method: 'POST',
-      credentials: 'include'
-    }).then(async response => {
-      return await response.json();
-    }).catch(_ => {
-      handleError();
-    })
   }
 
   return (
@@ -41,6 +31,7 @@ export function Comments() {
           </div>
         )
       }): <NoComments />}
+      <LeaveComment />
     </div>
   );
 }

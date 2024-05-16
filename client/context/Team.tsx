@@ -1,14 +1,12 @@
 'use client'
-import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { TeamEntity } from '@api/main/team/team.entity'
 import { _server } from "@/dto/master";
 
 const TeamContext = createContext(undefined);
 
 interface TeamContext {
-  team: TeamEntity;
-  setTeam: (team: TeamEntity) => void;
+  team: any;
+  setTeam: (team: any) => void;
   refreshTeam: (indent?: string) => void;
 }
 
@@ -24,10 +22,10 @@ export const TeamProvider = ({
     children,
     prefetched
   }) => {
-  const [team, setTeam] = useState<TeamEntity | null>(prefetched);
+  const [team, setTeam] = useState(prefetched);
 
-  const getTeam = async (indent?: string): Promise<TeamEntity> => {
-    const res = await fetch(`${_server()}/api/team/get/${indent || team.indent}`, {
+  const getTeam = async (indent?: string): Promise<any> => {
+    const res = await fetch(`${_server()}/api/team/get/${indent || (team.indent)}`, {
       method: 'GET',
       credentials: 'include'
     });

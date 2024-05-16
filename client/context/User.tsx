@@ -1,16 +1,15 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { UserEntity } from '@api/main/user/addon/user.entity'
 import { _server } from "@/dto/master";
 
 const UserContext = createContext(undefined);
 
 interface IUserContext {
-  user: UserEntity,
-  setUser: (user: UserEntity) => void,
+  user: any,
+  setUser: (user: any) => void,
   logout: () => void,
-  getUser: (authorization?: string) => Promise<UserEntity>,
+  getUser: (authorization?: string) => Promise<any>,
   refreshUser: () => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -30,14 +29,14 @@ export const UserProvider = ({
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
-  const [user, setUser] = useState<UserEntity | null>(prefetched);
+  const [user, setUser] = useState<any | null>(prefetched);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = async (): Promise<UserEntity> => {
+  const getUser = async (): Promise<any> => {
     const res = await fetch(`${_server()}/api/user/get`, {
       method: 'GET',
       credentials: 'include'

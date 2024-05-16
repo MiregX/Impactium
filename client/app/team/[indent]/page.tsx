@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Heading } from './components/Heading';
 import { useLanguage } from '@/context/Language';
 import { Description } from './components/Description';
+import { Members } from './components/Members';
 
 export default function TeamIndentPage() {
   const [ isEditable, setIsEditable ] = useState<boolean>(false);
@@ -20,8 +21,9 @@ export default function TeamIndentPage() {
       <div className={s.wrapper}>
         <Heading isEditable={isEditable} toggleEditable={toggleEditable} />
         <Description isEditable={isEditable} />
+        <Members />
       </div>
-      {/* <Comments /> */}
+      <Comments />
     </PanelTemplate>
   );
 }

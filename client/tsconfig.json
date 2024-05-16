@@ -19,9 +19,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@impactium/*": ["../lib/*"],
-      "@api/main": ["../api/libs/api/src"],
-      "@api/main/*": ["../api/libs/api/src/*"]
+      "@impactium/*": ["../lib/*"]
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

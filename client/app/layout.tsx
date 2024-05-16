@@ -6,10 +6,11 @@ import { MessageProvider } from '@/context/Message';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
-import { _server, requestApplicationInfoFromServer } from '@/dto/master'
-import { CookiesConsemption } from '@/components/cookies/Cookies';
+import { _server } from '@/dto/master'
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
+import { Footer } from '@/components/footer/Footer';
+import { error } from 'console';
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +35,12 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const applicationInfo = await requestApplicationInfoFromServer();
+  const applicationInfo = await fetch(`${_server()}/api/application/info`, {
+    cache: 'no-cache'
+  }).then(async (response) => {
+    return await response.json();
+  }).catch(error => { return null });
+
   const cookie = cookies();
 
   const user = await fetch(_server() + '/api/user/get', {
@@ -58,6 +64,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 <main>
                   {children}
                 </main>
+                <Footer />
               </HeaderProvider>
             </MessageProvider>
           </UserProvider>

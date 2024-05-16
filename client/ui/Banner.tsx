@@ -21,8 +21,8 @@ interface BannerProps {
   title: string;
   children: React.ReactNode;
   footer?: Warner | {
-    left?: React.ReactElement,
-    right: React.ReactElement,
+    left?: React.ReactElement[],
+    right: React.ReactElement[],
   };
   onClose?: () => void;
 }

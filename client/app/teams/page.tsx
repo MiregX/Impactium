@@ -2,7 +2,6 @@
 import s from './Teams.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate';
 import { _server } from '@/dto/master';
-import { TeamEntity_ComposedWithMembers } from '@api/main/team/addon/team.entity';
 import { TeamUnit } from './components/TeamUnit';
 import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 import { useLanguage } from '@/context/Language';
@@ -13,7 +12,7 @@ import { useMessage } from '@/context/Message';
 export default function TeamsPage() {
   const { lang } = useLanguage();
   const { spawnBanner } = useMessage();
-  const [ teams, setTeams ] = useState<TeamEntity_ComposedWithMembers[]>([]);
+  const [ teams, setTeams ] = useState([]);
   useEffect(() => {
     (async () => {
       setTeams(await fetch(`${_server()}/api/team/get`, {
@@ -50,7 +49,7 @@ export default function TeamsPage() {
         <GeistButton options={{
           type: GeistButtonTypes.Button,
           do: () => spawnBanner(<CreateTeam />),
-          text: lang._create_team,
+          text: lang.create.team,
           focused: true,
           style: [ s.button ]
         }} />
@@ -58,7 +57,7 @@ export default function TeamsPage() {
       <div className={s.recomendations}>
         <h4>Рекомендации</h4>
         <div className={s.list}>
-          {teams && teams.map((team: TeamEntity_ComposedWithMembers) => {
+          {teams && teams.map((team) => {
             return (
               <TeamUnit key={team.indent} team={team} />
             )
