@@ -1,7 +1,6 @@
 'use client'
 import banner from './styles/Banner.module.css';
-import React, { useEffect, useRef } from 'react';
-import { GeistButton } from './GeistButton';
+import React, { useEffect } from 'react';
 import { useMessage } from '@/context/Message';
 
 export enum WarnerTypes {
@@ -28,7 +27,6 @@ interface BannerProps {
 }
 
 export function Banner({ title, children, footer, onClose }: BannerProps) {
-  const self = useRef(null);
   const { destroyBanner } = useMessage();
 
   useEffect(() => {
@@ -47,7 +45,7 @@ export function Banner({ title, children, footer, onClose }: BannerProps) {
   }, [onClose]);
 
   return (
-    <div ref={self} className={banner.background}>
+    <div className={banner.background}>
       <div className={banner._}>
         <h4>{title}
           <button onClick={destroyBanner}>

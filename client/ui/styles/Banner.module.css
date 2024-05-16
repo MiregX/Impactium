@@ -31,6 +31,9 @@
   align-items: center;
   justify-content: space-between;
 }
+._ > h4 div {
+  cursor: pointer;
+}
 
 .content {
   flex: 1 1;

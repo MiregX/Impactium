@@ -4,6 +4,7 @@ Dockerfile
 cockroach-data
 npm-debug.log
 dist
+*/node_modules
 client/.next
 api/dist
 .next

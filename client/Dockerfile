@@ -11,6 +11,8 @@ COPY --chown=node:node ./lib ./lib
 
 WORKDIR /app/client
 
+RUN npm i
+
 RUN npm run build
 
 CMD [ "npm", "run", "dev" ]
