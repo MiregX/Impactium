@@ -9,11 +9,13 @@ import { useEffect, useState } from 'react';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import { useMessage } from '@/context/Message';
 
-export default function TeamsPage() {
+export default function TeamsPage({ data }) {
   const { lang } = useLanguage();
   const { spawnBanner } = useMessage();
-  const [ teams, setTeams ] = useState([]);
+  const [ teams, setTeams ] = useState(data);
+
   useEffect(() => {
+    if (data) return;
     (async () => {
       setTeams(await fetch(`${_server()}/api/team/get`, {
         method: 'GET',
@@ -36,7 +38,7 @@ export default function TeamsPage() {
             <img src='https://cdn.impactium.fun/ui/specific/mention.svg' />
           </span>
           <input
-            placeholder="Введи название команды или её тег..."
+            placeholder={lang.team.enter_indent_or_title}
             aria-label="Search"
             aria-invalid="false"
             autoCapitalize="none"

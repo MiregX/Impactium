@@ -210,7 +210,14 @@ const locale: Locale = {
       ua: 'У команди немає опису',
       it: 'La squadra non ha una descrizione',
       pl: 'Drużyna nie ma opisu'
-    }  
+    },
+    enter_indent_or_title: {
+      us: 'Enter team name or its tag...',
+      ru: 'Название команды или её тег...',
+      ua: 'Назва команди або її тег...',
+      it: 'Inserisci il nome della squadra o il suo tag...',
+      pl: 'Wprowadź nazwę zespołu lub jego tag...'
+    }
   },
   tournament: {
     recomendations: {

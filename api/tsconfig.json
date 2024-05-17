@@ -25,7 +25,8 @@
       "@api/mcs/*": ["libs/mcs/src/*"],
       "@api/mcs": ["libs/mcs/src"],
       "@seed": ["libs/seed/src"],
-      "@seed/*": ["libs/seed/src/*"]
+      "@seed/*": ["libs/seed/src/*"],
+      "@seed/main/*": ["libs/seed/src/api/*"]
     }
   }
 }

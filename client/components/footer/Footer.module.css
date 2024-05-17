@@ -9,7 +9,7 @@
 }
 .content {
   max-width: 1488px;
-  width: 1488px;
+  width: 100%;
 }
 .operational {
   display: flex;

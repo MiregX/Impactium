@@ -23,6 +23,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
+  "prisma": {
+    "seed": "ts-node libs/seed/seed.ts"
+  },
   "dependencies": {
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.2",
@@ -45,8 +48,6 @@
     "mongoose": "^8.3.4",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.7.0",
-    "passport-google-oauth2": "^0.2.0",
-    "pterosocket": "^1.0.6",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.4",
@@ -58,11 +59,9 @@
     "@nestjs/schematics": "^10.1.1",
     "@nestjs/testing": "^10.3.8",
     "@types/express": "^4.17.17",
-    "@types/fastify-multipart": "^0.7.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/passport": "^1.0.16",
-    "@types/passport-google-oauth2": "^0.1.8",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -99,7 +98,8 @@
     "moduleNameMapper": {
       "^@impactium/(.*)$": "<rootDir>/../lib/$1",
       "^@api/main/(.*)$": "<rootDir>/libs/api/src/$1",
-      "^@api/mcs/(.*)": "<rootDir>/libs/mcs/src/$1"
+      "^@api/mcs/(.*)": "<rootDir>/libs/mcs/src/$1",
+      "^@seed/main/(.*)$": "<rootDir>/libs/seed/src/api/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

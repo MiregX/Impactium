@@ -39,6 +39,14 @@
       "command": "npm run test",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Start SEED",
+      "request": "launch",
+      "command": "npm run prisma:seed",
+      "cwd": "${workspaceFolder}/api",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }
