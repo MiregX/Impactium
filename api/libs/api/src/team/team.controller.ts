@@ -34,6 +34,13 @@ export class TeamController {
     return this.teamService.findOneByIndent(indent);
   }
 
+  @Get('find/:value')
+  find(
+    @Param('value') value: string
+  ) {
+    return this.teamService.findManyByTitleOrIndent(value);
+  }
+
   @Post('create/:indent')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig()))

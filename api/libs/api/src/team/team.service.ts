@@ -90,38 +90,25 @@ export class TeamService {
     });
   }
   
+  findManyByTitleOrIndent(value: string) {
+    return this.prisma.team.findMany({
+      where: {
+        OR: [
+          { title: { contains: value } },
+          { indent: { contains: value.toLowerCase() } }
+        ]
+      },
+      select: TeamEntity.selectWithMembers(),
+      take: TeamStandarts.DEFAULT_PAGINATION_LIMIT
+    })
+  }
+  
   async pagination(
     limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
     skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
   ): Promise<TeamEntity_ComposedWithMembers[]> {
     return this.prisma.team.findMany({
-      select: {
-        indent: true,
-        logo: true,
-        title: true,
-        ownerId: true,
-        description: true,
-        membersAmount: true,
-        members: {
-          select: {
-            uid: true,
-            roles: true,
-            user: {
-              select: {
-                logins: {
-                  orderBy: {
-                    on: 'desc'
-                  },
-                  take: 1,
-                  select: {
-                    avatar: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+      select: TeamEntity.selectWithMembers(),
       take: limit,
       skip: skip,
     }).then(response => response.map(team => ({
