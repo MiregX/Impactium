@@ -217,6 +217,13 @@ const locale: Locale = {
       ua: 'Назва команди або її тег...',
       it: 'Inserisci il nome della squadra o il suo tag...',
       pl: 'Wprowadź nazwę zespołu lub jego tag...'
+    },
+    recomendations: {
+      us: "Recommendations",
+      ru: "Рекомендации",
+      ua: "Рекомендації",
+      it: "Raccomandazioni",
+      pl: "Rekomendacje"
     }
   },
   tournament: {

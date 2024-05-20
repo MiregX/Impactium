@@ -9,6 +9,7 @@ import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import { TeamUnit } from './components/TeamUnit';
 import s from './Teams.module.css';
+import { Panel } from '@/ui/Panel';
 
 export default function TeamsPage({ data }) {
   const { lang } = useLanguage();
@@ -84,14 +85,11 @@ export default function TeamsPage({ data }) {
           }}
         />
       </div>
-      <div className={s.recomendations}>
-        <h4>Рекомендации</h4>
-        <div className={s.list}>
-          {teams.map((team) => (
-            <TeamUnit key={team.indent} team={team} />
-          ))}
-        </div>
-      </div>
+      <Panel heading={lang.team.recomendations} styles={[s.recomendations]}>
+        {teams.map((team) => (
+          <TeamUnit key={team.indent} team={team} />
+        ))}
+      </Panel>
     </PanelTemplate>
   );
 }

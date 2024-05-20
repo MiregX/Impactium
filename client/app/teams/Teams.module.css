@@ -63,16 +63,7 @@
   overflow: hidden;
 }
 
-.recomendations h4 {
-  height: 40px;
-  border-bottom: 1px solid var(--accent-2);
-  display: flex;
-  align-items: center;
-  padding: 0 1em;
-  background: var(--black);
-}
-
-.list {
+.recomendations > div {
   display: flex;
   flex-direction: column;
   min-height: 300px;
@@ -87,7 +78,7 @@
   border-bottom: 1px solid var(--accent-2);
 }
 
-.list .unit:last-child {
+.recomendations > div .unit:last-child {
   border: none;
 }
 
