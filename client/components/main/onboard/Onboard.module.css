@@ -76,6 +76,7 @@
   display: flex;
 }
 .top {
+  width: 100%;
 }
 .top * {
   white-space: nowrap;
