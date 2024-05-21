@@ -26,6 +26,7 @@ model User {
   participate   TeamMembers[]
   tournaments   Tournament[]
   invites       TeamInvitements[]
+  transactions  Transaction[]
 }
 
 model Login {
@@ -120,4 +121,20 @@ model Battle {
   gid           String
   grid          Grid       @relation(fields: [gid], references: [tid])
   teams         Team[]
+}
+
+enum TransactionStatus {
+  success
+  pending // для пополнений и вывода
+  canceled
+  error
+}
+
+model Transaction {
+  id            String    @id @default(cuid())
+  uid           String
+  user          User      @relation(fields: [uid], references: [uid])
+  coins         Int
+  date          DateTime  @default(now())
+  status        TransactionStatus
 }
