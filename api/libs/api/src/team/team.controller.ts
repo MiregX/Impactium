@@ -35,10 +35,12 @@ export class TeamController {
   }
 
   @Get('find/:value')
-  find(
+  async find(
     @Param('value') value: string
   ) {
-    return this.teamService.findManyByTitleOrIndent(value);
+    return value.length === 25 || !value.includes(' ')
+      ? await this.teamService.findManyByUid(value)
+      : await this.teamService.findManyByTitleOrIndent(value)
   }
 
   @Post('create/:indent')

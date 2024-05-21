@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, createContext, useContext } from "react";
 import { _server } from "@/dto/master";
+import { Team } from "@/dto/Team";
+import s from '@/app/team/[indent]/Team.module.css'
 
 const TeamContext = createContext(undefined);
 
@@ -8,6 +10,12 @@ interface TeamContext {
   team: any;
   setTeam: (team: any) => void;
   refreshTeam: (indent?: string) => void;
+}
+
+export const useLogo = ({ logo, title }: Partial<Team>) => {
+  return logo
+    ? <img src={logo} />
+    :     <span className={s.round}>{title.slice(0, 1)}</span>
 }
 
 export const useTeam = () => {

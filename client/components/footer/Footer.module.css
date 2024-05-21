@@ -61,7 +61,6 @@
 .addictional {
   display: flex;
   gap: 32px;
-  height: 48px;
 }
 
 .navigation {
@@ -70,6 +69,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .navigation * {
   color: var(--text-dimmed);

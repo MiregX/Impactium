@@ -224,6 +224,13 @@ const locale: Locale = {
       ua: "Рекомендації",
       it: "Raccomandazioni",
       pl: "Rekomendacje"
+    },
+    yours: {
+      us: '',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
     }
   },
   tournament: {
@@ -399,6 +406,15 @@ const locale: Locale = {
       it: "Registro delle modifiche",
       pl: "Dziennik zmian"
     }
+  },
+  balance: {
+    top_up: {
+      us: 'Top up balance',
+      ru: 'Пополнить баланс',
+      ua: 'Поповнити баланс',
+      it: 'Ricarica il saldo',
+      pl: 'Doładuj saldo'
+    }    
   }
 }
 

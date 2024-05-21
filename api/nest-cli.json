@@ -7,13 +7,13 @@
   },
   "entryFile": "api/src/main",
   "projects": {
-    "main": {
+    "api": {
       "type": "library",
-      "root": "libs/main",
+      "root": "libs/api",
       "entryFile": "index",
-      "sourceRoot": "libs/main/src",
+      "sourceRoot": "libs/api/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/main/tsconfig.lib.json"
+        "tsConfigPath": "libs/api/tsconfig.lib.json"
       }
     },
     "mcs": {

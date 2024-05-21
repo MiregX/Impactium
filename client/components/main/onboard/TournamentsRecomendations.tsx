@@ -40,7 +40,7 @@ export function TournamentsRecomendations({ tournaments }) {
     <Panel heading={lang.tournament.recomendations} styles={[s.tournaments]}>
       {tournaments.map((tournament: TournamentUnit | any) => {
         return (
-          <div className={s.unit}>
+          <div className={s.unit} key={tournament.code}>
             <img src={tournament.banner} />
             <desc>
               <div className={s.top}>

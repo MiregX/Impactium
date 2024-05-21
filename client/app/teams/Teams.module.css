@@ -95,10 +95,6 @@
 .logo img {
   height: 100%;
 }
-.logo span {
-  color: var(--text-white);
-  font-weight: 700;
-}
 .unit > p {
   font-size: var(--text-medium);
   font-weight: 500;

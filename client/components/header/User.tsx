@@ -40,6 +40,13 @@ export function UserComponent() {
           <img src='https://cdn.impactium.fun/ui/action/settings-future.svg' alt=''/>
         </Link>
         <hr />
+        <Link href='/account/balance' onClick={toggle}>
+          {lang.balance.top_up}
+          <div>
+            {user.balance | 0}
+            <img src='https://cdn.impactium.fun/ui/specific/coffee-coin.svg' alt=''/>
+          </div>
+        </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}
           <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>

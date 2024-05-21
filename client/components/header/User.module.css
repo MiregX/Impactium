@@ -55,7 +55,8 @@
 }
 .menu p,
 .menu a,
-.menu button {
+.menu button,
+.menu a div {
   padding: 8px 20px;
   height: 32px;
   text-rendering: optimizeLegibility;
@@ -68,7 +69,8 @@
   transition: color 0.2s var(--transition);
 }
 .menu a:hover,
-.menu button:hover {
+.menu button:hover,
+.menu a:hover div {
   color: var(--white);
   background: var(--accent-2);
 }
@@ -84,4 +86,11 @@
 .menu a:hover img,
 .menu button:hover img {
   filter: none;
+}
+
+.menu a div {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  gap: 4px;
 }

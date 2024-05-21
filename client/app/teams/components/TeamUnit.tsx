@@ -1,16 +1,13 @@
 import s from '../Teams.module.css'
 import { TeamUnitRoles } from './TeamUnitRoles'
 import Link from 'next/link'
+import { useLogo } from '@/context/Team'
 
 export function TeamUnit({ team }) {
-  console.log(team)
   return (
     <Link className={s.unit} href={`/team/@${team.indent}`} >
       <div className={s.logo}>
-        {team.logo
-          ? <img src={team.logo + '?t=' + Date.now()} />
-          : <span>{team.title.slice(0, 1)}</span>
-        }
+        {useLogo(team)}
       </div>
       <p>{team.title}</p>
       <span>·</span>

@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     cache: 'no-cache'
   }).then(async (response) => {
     return await response.json();
-  }).catch(error => { return null });
+  }).catch(_ => { return null });
 
   const cookie = cookies();
 
