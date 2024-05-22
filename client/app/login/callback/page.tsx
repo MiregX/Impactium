@@ -7,7 +7,7 @@ import { _server } from '@/dto/master';
 import Cookies from 'universal-cookie';
 
 function CallbackComponent() {
-  const { refreshUser, setIsUserLoaded, login } = useUser();
+  const { refreshUser, setIsUserLoaded } = useUser();
   const { refreshLanguage } = useLanguage();
   const cookies = new Cookies();
   const router = useRouter();
@@ -27,22 +27,22 @@ function CallbackComponent() {
     setIsUserLoaded(false);
     (async () => {
       if (token) {
-        login(token);
+        cookies.set('Authorization', token)
       } else if (code) {
         await loginCallback(code);
-        refreshUser();
       }
+      refreshUser();
       refreshLanguage();
     })();
   }, []);
 
   router.push('/');
-  return null 
+  return null
 };
 
 export default function CallbackPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={null}>
       <CallbackComponent />
     </Suspense>
   );

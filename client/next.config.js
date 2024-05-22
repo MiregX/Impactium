@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.alias['@react-frontend'] = '@react-frontend';
@@ -35,5 +35,8 @@ module.exports = {
     fetches: {
       fullUrl: false,
     }
-  }
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
 };

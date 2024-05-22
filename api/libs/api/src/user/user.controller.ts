@@ -11,6 +11,12 @@ export class UserController {
   @Get('get')
   @UseGuards(AuthGuard)
   getUserById(@User() user: UserEntity) {
-    return this.userService.compareUserWithLogin(user.uid);
+    return this.userService.findOneById(user.uid, {
+      ...UserEntity.withLogin(),
+      ...UserEntity.withTeams(),
+    }).then(user => {
+      console.log(UserEntity.fromPrisma(user))
+      return UserEntity.fromPrisma(user);
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton'
+import { GeistButton, GeistButtonTypes } from '@/ui/Button'
 import { Arcana } from './Arcana'
 import s from './Onboard.module.css'
 import { PanelTemplate } from '@/components/main/PanelTempate'

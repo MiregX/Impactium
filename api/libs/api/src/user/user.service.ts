@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity,  } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -12,23 +12,18 @@ export class UserService {
   ) {}
 
 
-  async findOneByEmail(email: string): Promise<UserEntity> {
-    return await this.prisma.user.findUnique({
-      where: { email }
-    });
-  }
-
-  async findOneById(uid: string, select?: Prisma.UserSelect): Promise<Partial<UserEntity>> {
-    return await this.prisma.user.findUnique({
-      where: { uid },
+  findOneByEmail(email: string, select?: Prisma.UserSelect) {
+    return this.prisma.user.findUnique({
+      where: { email },
       select
     });
   }
 
-  compareUserWithLogin(uid: string): Promise<Partial<UserEntity>> {
-    const select = UserEntity.withLogin()
-    const selectA = UserEntity.withTeams(select)
-    return this.findOneById(uid, selectA);
+  findOneById(uid: string, select?: Prisma.UserSelect) {
+    return this.prisma.user.findUnique({
+      where: { uid },
+      select
+    });
   }
   
   signJWT(uid: string, email: string): string {

@@ -27,10 +27,10 @@ export function UserComponent() {
     <div className={`${_user.user} ${active && _user.active}`}>
       <div className={_user.action_lock} onClick={toggle} />
       <div className={_user.wrapper} onClick={toggle}>
-        <Image className={_user.picture} src={user.avatar} width={30} height={30} alt="Avatar" />
+        <Image className={_user.picture} src={user.login.avatar} width={30} height={30} alt="Avatar" />
       </div>
       <nav className={_user.menu}>
-        <p className={_user.name}>{user.email || '@' + user.displayName.toLowerCase()}</p>
+        <p className={_user.name}>{user.email || '@' + user.login.displayName.toLowerCase()}</p>
         <Link href='/me/account' onClick={toggle}>
           {lang.account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>

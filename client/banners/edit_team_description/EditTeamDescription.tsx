@@ -2,7 +2,7 @@
 import { Banner } from '@/ui/Banner'
 import _ from './EditTeamDescription.module.css'
 import { _server } from '@/dto/master'
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
 
 export function EditTeamDescription({ team }) {

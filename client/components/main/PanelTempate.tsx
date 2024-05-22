@@ -1,5 +1,5 @@
 import React from 'react';
-import s from '@/styles/main/Main.module.css';
+import s from '@/app/App.module.css';
 
 interface Panel {
   children: any;

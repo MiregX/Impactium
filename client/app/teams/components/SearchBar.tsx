@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/Language'
 import { _server } from '@/dto/master';
 import { useState } from 'react';
 import { Team } from '@/dto/Team';
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useMessage } from '@/context/Message';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 

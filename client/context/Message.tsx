@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import styles from '@/styles/Message.module.css';
+import styles from './Message.module.css';
 import { useLanguage } from '@/context/Language';
 import { Banner } from '@/ui/Banner';
 

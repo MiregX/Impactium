@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import s from '@/components/header/Header.module.css';
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { UserComponent } from './User';
@@ -19,7 +19,7 @@ export function Header() {
         <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
         <h1>Impactium</h1>
       </Link>
-      {user?.id ? (
+      {user?.uid ? (
         <UserComponent />
       ) : (
         <GeistButton options={{

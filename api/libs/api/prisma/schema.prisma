@@ -8,6 +8,7 @@ datasource db {
   url      = env("API_DATABASE_URL")
 }
 
+// refers to: client\context\User.tsx
 enum LoginType {
   discord
   google

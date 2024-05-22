@@ -3,7 +3,7 @@ import { useState } from 'react';
 import s from './CreateTeam.module.css'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { _server } from '@/dto/master';
 import { redirect, useRouter } from 'next/navigation';
 import { TitleInput } from './components/TitleInput';

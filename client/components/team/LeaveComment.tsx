@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/ui/Input'
 import s from './Comments.module.css'
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton'
+import { GeistButton, GeistButtonTypes } from '@/ui/Button'
 import { _server } from '@/dto/master'
 import { useUser } from '@/context/User'
 import { useLanguage } from '@/context/Language'
@@ -24,7 +24,7 @@ export function LeaveComment() {
 
   return (
     <div className={s.leave}>
-      <img src={user.avatar}  />
+      <img src={user.login.avatar}  />
       <Input options={{
         placeholder: lang.comments.leave,
         style: [s.input]

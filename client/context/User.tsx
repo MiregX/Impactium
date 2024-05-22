@@ -2,24 +2,12 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { _server } from "@/dto/master";
-import { Team } from "@/dto/Team";
+import { User } from "@/dto/User";
 
 const UserContext = createContext(undefined);
 
-interface User {
-  teams?: Team[],
-  uid: string,
-  register: string,
-  id: string,
-  email?: string
-  type: string,
-  on: string,
-  avatar: string,
-  displayName: string,
-  lang: string
-}
 
-interface IUserContext {
+interface UserContext {
   user: User,
   setUser: (user: User) => void,
   logout: () => void,
@@ -34,7 +22,7 @@ export const useUser = () => {
 
   if (!context) throw new Error();
   
-  return context as IUserContext;
+  return context as UserContext;
 };
 
 export const UserProvider = ({
@@ -72,7 +60,7 @@ export const UserProvider = ({
     });
   };
 
-  const userProps: IUserContext = {
+  const userProps: UserContext = {
     user,
     setUser,
     logout,

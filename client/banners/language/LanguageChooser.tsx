@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
-import { GeistButton, GeistButtonTypes } from '@/ui/GeistButton';
+import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 
 export function LanguageChooser() {
   const { lang, language, setLanguage } = useLanguage();
