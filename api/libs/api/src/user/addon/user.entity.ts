@@ -1,12 +1,13 @@
 import { $Enums, Prisma, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
-import { teams } from "@seed/api/assets/teams.data";
+import { TeamEntity } from "@api/main/team/addon/team.entity";
 
 
 export class UserEntity implements User {
   uid: string;
   register: Date;
   email: string;
+  teams?: TeamEntity[];
   
   constructor({ email }: User) {
     this.email = email
@@ -28,7 +29,10 @@ export class UserComposedEntity implements UserComposedEntityInput {
 
   static compose({user, login}: {user: UserEntity, login: LoginEntity}): UserComposedEntity {
     return {
-      ...user,
+      ...{
+        ...user,
+        teams: user.teams.length > 0 ? user.teams : undefined
+      },
       ...login
     }
   }

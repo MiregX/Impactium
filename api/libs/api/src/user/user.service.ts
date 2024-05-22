@@ -27,7 +27,6 @@ export class UserService {
 
   async compareUserWithLogin(uid: string): Promise<any> {
     const user = await this.findOneById(uid, UserComposedEntity.withTeams());
-    console.log(user)
     const login = await this.prisma.login.findFirst({
       where: {
         uid: user.uid,
