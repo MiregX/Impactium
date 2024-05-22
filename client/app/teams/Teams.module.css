@@ -55,6 +55,10 @@
   padding: 1em;
 }
 
+.minimized > div {
+  min-height: unset;
+}
+
 .recomendations {
   background: var(--meta-black);
   border: 1px solid var(--accent-2);
@@ -78,7 +82,8 @@
   border-bottom: 1px solid var(--accent-2);
 }
 
-.recomendations > div .unit:last-child {
+.recomendations > div .unit:last-child,
+.minimized > div .unit:last-child {
   border: none;
 }
 

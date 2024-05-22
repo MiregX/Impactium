@@ -7,8 +7,8 @@ import s from '@/app/team/[indent]/Team.module.css'
 const TeamContext = createContext(undefined);
 
 interface TeamContext {
-  team: any;
-  setTeam: (team: any) => void;
+  team: Team;
+  setTeam: (team: Team) => void;
   refreshTeam: (indent?: string) => void;
 }
 
@@ -29,6 +29,9 @@ export const useTeam = () => {
 export const TeamProvider = ({
     children,
     prefetched
+  }: {
+    children: React.ReactNode,
+    prefetched: Team
   }) => {
   const [team, setTeam] = useState(prefetched);
 

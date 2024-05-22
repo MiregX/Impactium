@@ -1,17 +1,15 @@
-import { $Enums, User } from "@prisma/client";
+import { $Enums, Prisma, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
+import { teams } from "@seed/api/assets/teams.data";
 
-interface UserEntityInput extends User {
 
-}
-
-export class UserEntity implements UserEntityInput {
+export class UserEntity implements User {
   uid: string;
   register: Date;
   email: string;
-
-  constructor(data: UserEntityInput) {
-    this.email = data.email
+  
+  constructor({ email }: User) {
+    this.email = email
   }
 }
 
@@ -29,18 +27,17 @@ export class UserComposedEntity implements UserComposedEntityInput {
   displayName: string;
 
   static compose({user, login}: {user: UserEntity, login: LoginEntity}): UserComposedEntity {
-    const fulfilledUser: UserComposedEntity = {
-      uid: user.uid,
-      register: user.register,
-      email: user.email,
-      avatar: login.avatar,
-      displayName: login.displayName,
-      type: login.type,
-      on: login.on,
-      lang: login.lang,
-      id: login.id
+    return {
+      ...user,
+      ...login
     }
-    
-    return fulfilledUser
   }
+
+  static select = (): Prisma.UserSelect => ({
+    uid: true,
+    email: true,
+    register: true
+  })
+
+  static withTeams = (): Prisma.UserSelect => ({ ...this.select(), teams: true })
 }

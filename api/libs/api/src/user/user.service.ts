@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserComposedEntity, UserEntity,  } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -17,14 +18,16 @@ export class UserService {
     });
   }
 
-  async findOneById(uid: string): Promise<UserEntity> {
+  async findOneById(uid: string, select?: Prisma.UserSelect): Promise<UserEntity> {
     return await this.prisma.user.findUnique({
-      where: { uid }
+      where: { uid },
+      select
     });
   }
 
   async compareUserWithLogin(uid: string): Promise<any> {
-    const user = await this.findOneById(uid);
+    const user = await this.findOneById(uid, UserComposedEntity.withTeams());
+    console.log(user)
     const login = await this.prisma.login.findFirst({
       where: {
         uid: user.uid,
