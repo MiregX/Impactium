@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { UserComposedEntity, UserEntity,  } from './addon/user.entity';
+import { UserEntity,  } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 
@@ -18,28 +18,17 @@ export class UserService {
     });
   }
 
-  async findOneById(uid: string, select?: Prisma.UserSelect): Promise<UserEntity> {
+  async findOneById(uid: string, select?: Prisma.UserSelect): Promise<Partial<UserEntity>> {
     return await this.prisma.user.findUnique({
       where: { uid },
       select
     });
   }
 
-  async compareUserWithLogin(uid: string): Promise<any> {
-    const user = await this.findOneById(uid, UserComposedEntity.withTeams());
-    const login = await this.prisma.login.findFirst({
-      where: {
-        uid: user.uid,
-      },
-      orderBy: {
-        on: 'desc',
-      },
-    });
-    
-    return UserComposedEntity.compose({
-      user,
-      login
-    });
+  compareUserWithLogin(uid: string): Promise<Partial<UserEntity>> {
+    const select = UserEntity.withLogin()
+    const selectA = UserEntity.withTeams(select)
+    return this.findOneById(uid, selectA);
   }
   
   signJWT(uid: string, email: string): string {
@@ -47,7 +36,7 @@ export class UserService {
       uid,
       email,
     }, {
-      secret: process.env.JWT_SECRET || 'secret',
+      secret: process.env.JWT_SECRET,
       expiresIn: '7d'
     });
   }

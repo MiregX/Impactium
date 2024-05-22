@@ -2,39 +2,16 @@ import { $Enums, Prisma, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 
-
 export class UserEntity implements User {
+  // Исправить email usage
   uid: string;
   register: Date;
   email: string;
-  teams?: TeamEntity[];
-  
-  constructor({ email }: User) {
+  login?: LoginEntity
+  teams?: TeamEntity[]
+
+  constructor({ email }: UserEntity) {
     this.email = email
-  }
-}
-
-type UserComposedEntityInput = UserEntity & LoginEntity
-
-export class UserComposedEntity implements UserComposedEntityInput {
-  id: string;
-  lang: string;
-  on: Date;
-  uid: string;
-  register: Date;
-  email: string;
-  type: $Enums.LoginType;
-  avatar: string;
-  displayName: string;
-
-  static compose({user, login}: {user: UserEntity, login: LoginEntity}): UserComposedEntity {
-    return {
-      ...{
-        ...user,
-        teams: user.teams.length > 0 ? user.teams : undefined
-      },
-      ...login
-    }
   }
 
   static select = (): Prisma.UserSelect => ({
@@ -43,5 +20,20 @@ export class UserComposedEntity implements UserComposedEntityInput {
     register: true
   })
 
-  static withTeams = (): Prisma.UserSelect => ({ ...this.select(), teams: true })
+  static withTeams = (select?: Prisma.UserSelect) => ({
+    ...this.select(),
+    ...select,
+    teams: true
+  })
+  
+  static withLogin = (select?: Prisma.UserSelect) => ({ 
+    ...this.select(),
+    ...select,
+    logins: {
+      orderBy: {
+        on: 'desc' as Prisma.SortOrder,
+      },
+      take: 1
+    }
+  })
 }

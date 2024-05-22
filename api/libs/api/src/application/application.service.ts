@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import type { Environment, Info } from './addon/application.entity';
 import { Configuration } from '@impactium/config';
 
 @Injectable()
-export class ApplicationService {
+export class ApplicationService implements OnModuleInit {
+  onModuleInit() {
+    if (!process.env.JWT_SECRET) {
+      process.exit(501)
+    }
+  }
   info(): Info | Promise<Info> {
     const info: Info = {
       status: 200,
@@ -11,6 +16,7 @@ export class ApplicationService {
       enforced_preloader: !!process.env.ENFORCED_PRELOADER,
       localhost: process.env.API_LOCALHOST
     }
+
     return info
   }
 
