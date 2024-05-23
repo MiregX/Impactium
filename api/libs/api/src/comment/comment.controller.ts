@@ -2,11 +2,17 @@ import {
   Controller,
   Get,
   Post,
-  UseGuards
+  UseGuards,
+  Param,
+  Body
 } from '@nest/commnon';
 import { commentService } from './comment.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { PrismaService } from '@api/main/auth/addon/auth.guard';
+import { IndentValidationPipe } from '@api/main/application/addon/indent.decorator';
+import { CommentTypeValidationPipe } from './addon/type.decorator';
+import { CommentEntity } from './addon/comment.entuty';
+import { UserEntity } from '@api/main/user/addon/user.entuty';
 
 @Controller('comment')
 export class CommentController {
@@ -14,18 +20,21 @@ export class CommentController {
     private readonly prisma: PrismaService
   )
 
-  @Get('get/:type/:id')
+  @Get('get/:type/:indent')
   get(
-    @Param('type') type: string,
-    @Param('id') id: string,
+    @Param('type', CommentTypeValidationPipe) type: string,
+    @Param('indent', IndentValidationPipe) id: string,
   ): CommentEntity {
-    return this.conmentService.findOneById(id, type)
+    return this.commentService.findOneById(indent, type)
   }
 
-  @Post('post/:id')
+  @Post('post/:indent')
   @UseGuard(AuthGuard)
   post(
-    @User() user: User,
+    @User() user: UserEntity,
+    @Comment() comment: CommentEntity
     @Param('id') id: string,
-  )
+  ) {
+    return this.commentService.
+  }
 }
