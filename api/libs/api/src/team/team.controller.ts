@@ -22,9 +22,7 @@ export class TeamController {
     @Query('limit') limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
     @Query('skip') skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
   ) {
-    const x = await this.teamService.pagination(limit, skip);
-    console.table(x);
-    return x;
+      return this.teamService.pagination(limit, skip);
   }
 
   @Get('get/:indent')
