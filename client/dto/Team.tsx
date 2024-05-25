@@ -5,5 +5,6 @@ export interface Team {
   ownerId: string,
   description: string,
   membersAmount: number,
-  members?: Array<null>
+  members?: Array<null>,
+  comments: Array<Comment>
 }

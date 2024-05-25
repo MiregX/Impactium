@@ -5,36 +5,45 @@ import {
   UseGuards,
   Param,
   Body
-} from '@nest/commnon';
-import { commentService } from './comment.service';
-import { PrismaService } from '@api/main/prisma/prisma.service';
-import { PrismaService } from '@api/main/auth/addon/auth.guard';
-import { IndentValidationPipe } from '@api/main/application/addon/indent.decorator';
-import { CommentTypeValidationPipe } from './addon/type.decorator';
-import { CommentEntity } from './addon/comment.entuty';
-import { UserEntity } from '@api/main/user/addon/user.entuty';
+} from '@nestjs/common';
+import { CommentService } from './comment.service';
+import { AuthGuard } from '@api/main/auth/addon/auth.guard';
+import { IndentValidationPipe } from '@api/main/application/addon/indent.pipe';
+import { CommentTypeValidationPipe } from './addon/comment.pipe';
+import { CommentEntity } from './addon/comment.entity';
+import { UserEntity } from '@api/main/user/addon/user.entity';
+import { User } from '@api/main/user/addon/user.decorator';
+import { CommentDto, CommentTypeDto } from './addon/comment.dto';
 
 @Controller('comment')
 export class CommentController {
   constructor(
-    private readonly prisma: PrismaService
-  )
+    private readonly commentService: CommentService
+  ) {}
 
   @Get('get/:type/:indent')
   get(
-    @Param('type', CommentTypeValidationPipe) type: string,
-    @Param('indent', IndentValidationPipe) id: string,
+    @Param('type', CommentTypeValidationPipe) type: CommentTypeDto,
+    @Param('indent', IndentValidationPipe) indent: string,
   ): CommentEntity {
-    return this.commentService.findOneById(indent, type)
+    return this.commentService.finyManyByIndent(indent, type)
   }
 
-  @Post('post/:indent')
-  @UseGuard(AuthGuard)
+  // /api/comment/post/team/some-indent
+  @Post('post/:type/:indent')
+  @UseGuards(AuthGuard)
   post(
     @User() user: UserEntity,
-    @Comment() comment: CommentEntity
-    @Param('id') id: string,
+    @Body() body: CommentDto,
+    @Param('type', CommentTypeValidationPipe) type: CommentTypeDto,
+    @Param('indent', IndentValidationPipe) indent: string,
   ) {
-    return this.commentService.
+    console.log(body);
+    return this.commentService.post({
+      uid: user.uid,
+      indent,
+      type,
+      comment: body
+    })
   }
 }

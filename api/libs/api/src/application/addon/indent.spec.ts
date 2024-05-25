@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { IndentValidationPipe } from './indent.decorator';
+import { IndentValidationPipe } from './indent.pipe';
 
 describe('IndentValidationPipe', () => {
   let pipe: IndentValidationPipe;

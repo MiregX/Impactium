@@ -1,31 +1,42 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import type { Environment, Info } from './addon/application.entity';
+import { Injectable } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
+import { RedisService } from '../redis/redis.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { TelegramService } from '@api/mcs/telegram/telegram.service';
 
 @Injectable()
-export class ApplicationService implements OnModuleInit {
-  onModuleInit() {
-    if (!process.env.JWT_SECRET) {
-      process.exit(501)
-    }
-  }
-  info(): Info | Promise<Info> {
-    const info: Info = {
+export class ApplicationService {
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly prismaService: PrismaService,
+    private readonly telegramService: TelegramService,
+  ) {}
+
+  info() {
+    return {
       status: 200,
       environment: this.getEnvironment(),
       enforced_preloader: !!process.env.ENFORCED_PRELOADER,
       localhost: process.env.API_LOCALHOST
     }
-
-    return info
   }
 
-  private getEnvironment(): Environment {
+  status() {
+    return {
+      redis: redis
+    }
+  }
+
+  private getEnvironment() {
     return {
       loaded: Configuration.isEnvironmentLoaded(),
       path: process.env.X_PATH,
       mode: Configuration.getMode(),
       message: process.env.X_MESSAGE,
     }
+  }
+
+  private async getRedis() {
+    return await this.redisService.
   }
 }

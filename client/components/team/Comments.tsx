@@ -21,7 +21,7 @@ export function Comments() {
   return (
     <div className={_._}>
       <h4>{lang.comments.title}</h4>
-      {/* {team.comments.map((comment: any) => {
+      {team.comments?.map((comment: any) => {
         return (
           <div>
             <h6>
@@ -32,7 +32,7 @@ export function Comments() {
             <p>{comment.content}</p>
           </div>
         )
-      }): <NoComments />} */}
+      }) || <NoComments />}
       {user && <LeaveComment />}
     </div>
   );

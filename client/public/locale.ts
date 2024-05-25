@@ -226,11 +226,18 @@ const locale: Locale = {
       pl: "Rekomendacje"
     },
     yours: {
-    us: "Your Teams",
-    ru: "Ваши команды",
-    ua: "Ваші команди",
-    it: "Le tue squadre",
-    pl: "Twoje zespoły"
+      us: "Your Teams",
+      ru: "Ваши команды",
+      ua: "Ваші команди",
+      it: "Le tue squadre",
+      pl: "Twoje zespoły"
+    },
+    members: {
+      us: "Team members",
+      ru: "Участники команды",
+      ua: "Учасники команди",
+      it: "Membri del team",
+      pl: "Członkowie zespołu"
     }
   },
   tournament: {

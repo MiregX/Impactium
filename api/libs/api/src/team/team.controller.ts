@@ -6,7 +6,7 @@ import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TeamGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { IndentValidationPipe } from '@api/main/application/addon/indent.decorator';
+import { IndentValidationPipe } from '@api/main/application/addon/indent.pipe';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import sharp from 'sharp';
