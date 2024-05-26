@@ -21,9 +21,10 @@ export class ApplicationService {
     }
   }
 
-  status() {
+  async status() {
     return {
-      redis: redis
+      redis: await this.getRedis(),
+      telegram: await this.getTelegram(),
     }
   }
 
@@ -37,6 +38,12 @@ export class ApplicationService {
   }
 
   private async getRedis() {
-    return await this.redisService.
+    return {
+      ping: await this.redisService.ping(),
+      info: await this.redisService.info()
+    }
+  }
+
+  private async getTelegram() {
   }
 }
