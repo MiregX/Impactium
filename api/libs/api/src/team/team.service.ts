@@ -2,11 +2,12 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { TeamStandarts, TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto, CreateTeamDto } from './addon/team.dto';
+import { TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto, CreateTeamDto } from './addon/team.dto';
 import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { FTPUploadError } from '@api/mcs/file/addon/file.error';
+import { TeamStandart } from './addon/team.standart';
 
 @Injectable()
 export class TeamService {
@@ -19,7 +20,7 @@ export class TeamService {
   async create(
     { indent, uid }: TeamCheckoutDto,
     team: CreateTeamDto,
-    banner: Express.Multer.File
+    banner?: Express.Multer.File
   ) {
     await this.findManyByUid(uid)
       .then(teams => {
@@ -99,13 +100,13 @@ export class TeamService {
         ]
       },
       select: TeamEntity.selectWithMembers(),
-      take: TeamStandarts.DEFAULT_PAGINATION_LIMIT
+      take: TeamStandart.DEFAULT_PAGINATION_LIMIT
     })
   }
   
   async pagination(
-    limit: number = TeamStandarts.DEFAULT_PAGINATION_LIMIT,
-    skip: number = TeamStandarts.DEFAULT_PAGINATION_PAGE,
+    limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
+    skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
   ): Promise<TeamEntity_ComposedWithMembers[]> {
     return this.prisma.team.findMany({
       select: TeamEntity.selectWithMembers(),

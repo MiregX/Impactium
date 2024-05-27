@@ -41,10 +41,36 @@ export default function CreateTeam() {
 
   function send() {
     const formData = new FormData();
-    formData.append('banner', team.banner);
     formData.append('title', team.title);
   
     fetch(_server() + `/api/team/create/${team.indent}`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    }).then(response => {
+      if (response.ok) {
+        response.json().then(team => {
+          if (team.banner) {
+            setBanner()
+          } else {
+            router.push(`/team/${team.indent}`);
+            destroyBanner();
+          }
+        });
+      } else {
+        throw response;
+      }
+    }).catch(async _ => {
+      const error = await _.json()
+      setError(lang.error[error.message]);
+    });
+  }
+
+  function setBanner() {
+    const formData = new FormData();
+    formData.append('banner', team.banner);
+
+    fetch(_server() + `/api/team/set/banner/${team.indent}`, {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -59,7 +85,7 @@ export default function CreateTeam() {
       }
     }).catch(async _ => {
       const error = await _.json()
-      setError(lang[error.message]);
+      setError(lang.error[error.message]);
     });
   }
 

@@ -23,21 +23,23 @@ export class ApplicationService {
 
   async status() {
     return await this.redisService.get('status')
-      .then(data => JSON.parse(data))
+      .then(data => data ? JSON.parse(data) : Promise.reject())
       .catch(async _ => {
         const [redis, telegram, cockroachdb] = await Promise.all([
           this.getRedis(),
           this.getTelegram(),
           this.getPrisma()
         ]);
-    
+
         const status = {
           redis,
           telegram,
           cockroachdb
         };
     
-        return await this.redisService.setex('status', 60, JSON.stringify(status)).then(_ => status);
+        await this.redisService.setex('status', 60, JSON.stringify(status));
+
+        return status;
       })
   }  
 

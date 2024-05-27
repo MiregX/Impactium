@@ -6,11 +6,11 @@ export class IndentValidationPipe implements PipeTransform {
     const validPattern = /^(?!.*[-_]{2,})[a-z0-9][-a-z0-9_]{1,22}[a-z0-9]$/i;
 
     if (metadata.type !== 'param' || metadata.data !== 'indent') {
-      throw new BadRequestException('Indent didn\'t provided');
+      throw new BadRequestException('indent_not_provided');
     }
 
     if (!validPattern.test(value)) {
-      throw new BadRequestException('Invalid indent format');
+      throw new BadRequestException('indent_invalid_format');
     }
 
     return value;

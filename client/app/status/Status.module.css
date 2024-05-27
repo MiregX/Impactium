@@ -54,7 +54,6 @@
 }
 .unit p {
   display: flex;
-  line-height: 0px;
   gap: 8px;
   border-radius: var(--border-l);
   font-weight: 500;
@@ -62,5 +61,7 @@
   font-family: 'Nunito';
   padding: 8px;
   align-items: center;
+}
+.unit:hover p {
   background: var(--gray16);
 }

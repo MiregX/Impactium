@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
-import { IndentValidationPipe } from '@api/main/application/addon/indent.pipe';
+import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { CommentTypeValidationPipe } from './addon/comment.pipe';
 import { CommentEntity } from './addon/comment.entity';
 import { UserEntity } from '@api/main/user/addon/user.entity';

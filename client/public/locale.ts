@@ -471,6 +471,9 @@ const locale: Locale = {
       it: 'Ricarica il saldo',
       pl: 'Doładuj saldo'
     }    
+  },
+  error: {
+
   }
 }
 

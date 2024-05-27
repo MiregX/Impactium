@@ -1,0 +1,5 @@
+export enum TeamStandart {
+  DEFAULT_PAGINATION_LIMIT = 20,
+  DEFAULT_PAGINATION_PAGE = 0,
+  LOGO_BYTE_SIZE = 1024 * 1024
+}

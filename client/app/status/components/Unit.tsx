@@ -30,7 +30,7 @@ export function Unit({ name }: {
       <p className={`${s.status} ${s[latency]}`}>
         {lang.status[latency]}
         <span />
-        {service.ping < 999 ? `~${service.ping.toFixed(0)}ms` : '>999ms'}
+        {service.ping < 999 ? `~${service.ping.toFixed(0)} ms` : '>999ms'}
       </p>
     </div>
   )

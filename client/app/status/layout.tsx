@@ -10,8 +10,11 @@ export default async function StatusLayout() {
   }).then(async response => {
     return await response.json()
   }).catch(error => {
-    return undefined
+    console.log(error);
+    return null
   });
+
+  console.log(status)
 
   return (
     <StatusPage status={status} />
