@@ -354,6 +354,55 @@ const locale: Locale = {
       ua: 'Усі системи в нормі.',
       it: 'Tutti i sistemi normali.',
       pl: 'Wszystkie systemy w porządku.'
+    },
+    good: {
+      us: '',
+      ru: 'В норме',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    warn: {
+      us: '',
+      ru: 'Нагружен',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    error: {
+      us: '',
+      ru: 'Что-то наебнулось',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    heading: {
+      us: 'Summary of our systems',
+      ru: 'СВОдка о наших системах',
+      ua: 'Огляд наших систем',
+      it: 'Sommario dei nostri sistemi',
+      pl: 'Podsumowanie naszych systemów'
+    },
+    redis: {
+      us: 'Redis Storage',
+      ru: 'Redis Storage',
+      ua: 'Redis Storage',
+      it: 'Redis Storage',
+      pl: 'Redis Storage'
+    },
+    cockroachdb: {
+      us: 'CockroachDB',
+      ru: 'CockroachDB',
+      ua: 'CockroachDB',
+      it: 'CockroachDB',
+      pl: 'CockroachDB'
+    },
+    telegram: {
+      us: 'Telegram',
+      ru: 'Telegram',
+      ua: 'Telegram',
+      it: 'Telegram',
+      pl: 'Telegram'
     }
   },
   footer: {

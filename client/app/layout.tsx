@@ -10,7 +10,6 @@ import { _server } from '@/dto/master'
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/footer/Footer';
-import { error } from 'console';
 
 export const metadata: Metadata = {
   title: {
@@ -43,13 +42,13 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   const cookie = cookies();
 
-  const user = await fetch(_server() + '/api/user/get', {
+  const user = await fetch(_server(true) + '/api/user/get', {
       method: 'GET',
       headers: {
         token: cookie.get('Authorization')?.value
       }
     }).then(async res => {
-      const user = await res.json()
+      const user = await res.json();
       return res.ok ? user : null;
     }).catch(_ => { return null });
 

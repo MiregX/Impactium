@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
-import { RedisService } from '../redis/redis.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { RedisService } from '@api/main/redis/redis.service';
+import { PrismaService } from '@api/main/prisma/prisma.service';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 
 @Injectable()
@@ -22,11 +22,24 @@ export class ApplicationService {
   }
 
   async status() {
-    return {
-      redis: await this.getRedis(),
-      telegram: await this.getTelegram(),
-    }
-  }
+    return await this.redisService.get('status')
+      .then(data => JSON.parse(data))
+      .catch(async _ => {
+        const [redis, telegram, cockroachdb] = await Promise.all([
+          this.getRedis(),
+          this.getTelegram(),
+          this.getPrisma()
+        ]);
+    
+        const status = {
+          redis,
+          telegram,
+          cockroachdb
+        };
+    
+        return await this.redisService.setex('status', 60, JSON.stringify(status)).then(_ => status);
+      })
+  }  
 
   private getEnvironment() {
     return {
@@ -39,7 +52,7 @@ export class ApplicationService {
 
   private async getRedis() {
     return {
-      ping: await this.redisService.ping(),
+      ping: await this.redisService._latency(),
       info: await this.redisService.info().then(response => {
           const lines = response.split('\r\n');
           const result = {};
@@ -65,5 +78,14 @@ export class ApplicationService {
   }
 
   private async getTelegram() {
+  }
+
+  private async getPrisma() {
+    const start = Date.now();
+    await this.prismaService.ping();
+    return {
+      ping: Date.now() - start,
+      info: undefined
+    };
   }
 }

@@ -22,4 +22,12 @@ export class RedisService
   async onModuleDestroy() {
     await this.quit();
   }
+
+  async _latency() {
+    const start = process.hrtime.bigint();
+    await this.ping();
+    const end = process.hrtime.bigint();
+
+    return  Number(end - start) / 1e6;
+  }
 }

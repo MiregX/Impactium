@@ -1,0 +1,66 @@
+.panel {
+  justify-content: flex-start !important;
+  align-items: flex-start;
+}
+
+.unit {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--accent-2);
+  padding: 1em;
+}
+
+.unit img {
+  height: 32px;
+}
+
+.unit h6 {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-size: var(--text-medium);
+}
+
+.unit span::after {
+  content: "";
+  height: 8px;
+  width: 8px;
+  display: inline-flex;
+  border-radius: var(--round);;
+}
+.unit span {
+  height: 100%;
+  display: inline-flex;
+}
+.good {
+  color: var(--geist-blue);
+}
+.good span::after {
+  background-color: var(--geist-blue);
+}
+.warn {
+  color: var(--geist-yellow);
+}
+.warn span::after {
+  background-color: var(--geist-yellow);
+}
+.error {
+  color: var(--geist-red);
+}
+.error span::after {
+  background-color: var(--geist-red);
+}
+.unit p {
+  display: flex;
+  line-height: 0px;
+  gap: 8px;
+  border-radius: var(--border-l);
+  font-weight: 500;
+  font-size: var(--text-small);
+  font-family: 'Nunito';
+  padding: 8px;
+  align-items: center;
+  background: var(--gray16);
+}

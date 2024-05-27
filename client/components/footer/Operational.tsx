@@ -1,6 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language';
 import s from './Footer.module.css'
+import Link from 'next/link';
 
 export function Operational() {
   const { lang } = useLanguage();
@@ -9,9 +10,9 @@ export function Operational() {
       <div className={s.left}>
         <img src='https://cdn.impactium.fun/logo/impactium_thin.svg'/>
         <p>© {new Date(Date.now()).getFullYear()}</p>
-        <a className={s.status}>
+        <Link href='/status' className={s.status}>
           {lang.status.ok}
-        </a>
+        </Link>
       </div>
       <div className={s.right}>
 
