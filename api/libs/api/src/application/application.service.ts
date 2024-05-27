@@ -40,7 +40,27 @@ export class ApplicationService {
   private async getRedis() {
     return {
       ping: await this.redisService.ping(),
-      info: await this.redisService.info()
+      info: await this.redisService.info().then(response => {
+          const lines = response.split('\r\n');
+          const result = {};
+          let section = null;
+        
+          lines.forEach(line => {
+            if (line.startsWith('#')) {
+              section = line.slice(2).toLowerCase();
+              result[section] = {};
+            } else if (line) {
+              const [key, value] = line.split(':');
+              if (section) {
+                result[section][key] = value;
+              } else {
+                result[key] = value;
+              }
+            }
+          });
+
+          return result;
+      })
     }
   }
 

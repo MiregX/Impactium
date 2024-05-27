@@ -9,4 +9,12 @@ export class ApplicationController {
   info() {
     return this.applicationService.info();
   }
+  
+  @Get('status')
+  async status() {
+    return await this.applicationService.status().then(_ => {
+      console.log(_)
+      return _;
+    });
+  }
 }

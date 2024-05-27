@@ -53,6 +53,7 @@ model Team {
   members       TeamMembers[]
   battles       Battle[]
   invites       TeamInvitements[]
+  comments      Comment[]
 }
 
 model TeamMembers {
@@ -74,12 +75,21 @@ model TeamInvitements {
 }
 
 model Comment {
-  cid           String    @id @default(cuid())
-  uid           String
-  user          User      @relation(fields: [uid], references: [uid])
-  content       String
-  date          DateTime  @default(now())
-  stat          Int       @default(0)
+  cid          String    @id @default(cuid())
+  uid          String
+  user         User      @relation(fields: [uid], references: [uid])
+  content      String
+  date         DateTime  @default(now())
+  likes        Int       @default(0)
+
+  teamIndent       String?
+  team         Team?     @relation(fields: [teamIndent], references: [indent])
+  
+  tournamentIndent String?
+  tournament   Tournament? @relation(fields: [tournamentIndent], references: [code])
+
+  @@index([teamIndent], name: "teamIndent")
+  @@index([tournamentIndent], name: "tournamentIndent")
 }
 
 enum Roles {
@@ -107,6 +117,7 @@ model Tournament {
   teams       Team[]
   gid         String
   grid        Grid?
+  comments    Comment[]
 }
 
 model Grid {
