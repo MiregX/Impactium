@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto,  UnallowedFileFormat, UnallowedFileMetadata, UnallowedFileSize, UpdateTeamDto, UploadFileDto } from './addon/team.dto';
+import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
@@ -52,13 +52,14 @@ export class TeamController {
     }, team);
   }
 
-  @Patch('set/banner/:indent')
+  @Patch('update/:indent')
   @UseGuards(AuthGuard, TeamGuard)
   @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig()))
   setBanner(
+    @Body() team: UpdateTeamDto,
     @UploadedFile() banner: Express.Multer.File,
     @Param('indent', IndentValidationPipe) indent: string
   ) {
-    return this.teamService.setBanner(indent, banner);
+    return this.teamService.update(indent, team, banner);
   }
 }

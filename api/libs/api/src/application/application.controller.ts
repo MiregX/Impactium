@@ -11,10 +11,7 @@ export class ApplicationController {
   }
   
   @Get('status')
-  async status() {
-    return await this.applicationService.status().then(_ => {
-      console.log(_)
-      return _;
-    });
+  status() {
+    return this.applicationService.status()
   }
 }

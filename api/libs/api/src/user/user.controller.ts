@@ -15,7 +15,6 @@ export class UserController {
       ...UserEntity.withLogin(),
       ...UserEntity.withTeams(),
     }).then(user => {
-      console.log(UserEntity.fromPrisma(user))
       return UserEntity.fromPrisma(user);
     });
   }

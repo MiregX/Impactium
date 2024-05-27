@@ -1,30 +1,22 @@
-
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { IsLowercase, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsLowercase, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { FileFilterCallback } from 'multer';
-import * as sharp from 'sharp';
 import { TeamStandart } from './team.standart';
 
 export class CreateTeamDto {
-  @IsString()
-  @MinLength(5)
-  @MaxLength(32)
   @IsNotEmpty()
   title: string;
 
   banner?: any;
 }
 
-export class TeamCheckoutDto {
+export class Checkout {
   uid: string;
   indent: string;
 }
 
-export class UpdateTeamDto {
-  banner: any;
-  title: string;
+export class UpdateTeamDto implements Partial<CreateTeamDto> {
+  title: any;
 }
 
 export class FindOneTeamByIndentDto {

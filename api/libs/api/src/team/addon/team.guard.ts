@@ -17,11 +17,11 @@ export class TeamGuard implements CanActivate {
       await this.authGuard.canActivate(context); 
     }
 
-    const user: UserEntity = request.user
+    const { uid }: UserEntity = request.user
 
-    const userTeams = await this.teamService.findManyByUid(request.user.uid)
+    const userTeams = await this.teamService.findManyByUid(uid)
     
-    if (user && !userTeams.some(team => team.indent === request.params.indent)) {
+    if (uid && !userTeams.some(team => team.indent === request.params.indent)) {
       return false;
     }
 

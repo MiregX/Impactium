@@ -2,7 +2,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { TeamAlreadyExist, TeamCheckoutDto, TeamLimitException, UpdateTeamDto, CreateTeamDto } from './addon/team.dto';
+import { TeamAlreadyExist, Checkout, TeamLimitException, CreateTeamDto, UpdateTeamDto } from './addon/team.dto';
 import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
@@ -18,13 +18,13 @@ export class TeamService {
   ) {}
 
   async create(
-    { indent, uid }: TeamCheckoutDto,
+    { indent, uid }: Checkout,
     team: CreateTeamDto,
     banner?: Express.Multer.File
   ) {
     await this.findManyByUid(uid)
       .then(teams => {
-        teams.length >= 3 && (() => {throw new TeamLimitException()});
+        if (teams.length >= 3) throw new TeamLimitException();
       })
     
     await this.findOneByIndent(indent).then(team => {
@@ -46,20 +46,19 @@ export class TeamService {
   }
 
   async update(
-    { indent, uid }: TeamCheckoutDto,
-    team: UpdateTeamDto
+    indent: string,
+    team: UpdateTeamDto,
+    banner: Express.Multer.File
   ) {
+    if (banner) {
+      return this.setBanner(indent, banner)
+    }
     return this.prisma.team.update({
       where: {
         indent,
       },
       data: {
-        title: team.title,
-        owner: {
-          connect: {
-            uid,
-          }
-        }
+        title: team.title
       }
     });
   }
