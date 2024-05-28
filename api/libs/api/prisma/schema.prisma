@@ -150,3 +150,9 @@ model Transaction {
   date          DateTime  @default(now())
   status        TransactionStatus
 }
+
+model Changelog {
+  id            String      @id @default(cuid())
+  on            DateTime    @default(now())
+  new           String
+}

@@ -12,7 +12,7 @@ export class UsersSeedService implements OnSeed {
 
     await this.prisma.user.createMany({
       skipDuplicates: true,
-      data: users.map(user => user),
+      data: users,
     });
   }
 }

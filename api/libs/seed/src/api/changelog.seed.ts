@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../api/src/prisma/prisma.service';
 import { OnSeed } from '..';
-import { teams } from './assets/teams.data';
+import { changelogs } from './assets/changelog.data';
 
 @Injectable()
-export class TeamsSeedService implements OnSeed {
+export class ChangelogsSeedService implements OnSeed {
   constructor(private readonly prisma: PrismaService) {}
 
   async seed(): Promise<void> {
-    if (parseInt(process.env.X) > 0) return;
-
-    await this.prisma.team.createMany({
+    await this.prisma.changelog.createMany({
       skipDuplicates: true,
-      data: teams,
+      data: changelogs.map(changelog => ({
+        ...changelog,
+        on: new Date(changelog.on).toISOString()
+      })),
     });
   };
 };

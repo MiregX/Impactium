@@ -11,7 +11,7 @@
     "prisma:deploy:api": "prisma migrate deploy --schema ./libs/api/prisma/schema.prisma",
     "prisma:push": "npm run prisma:push:api",
     "prisma:push:api": "prisma db push --schema ./libs/api/prisma/schema.prisma",
-    "prisma:seed": "prisma db seed",
+    "prisma:seed": "npm run prisma:deploy && prisma db seed",
     "build": "nest build",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/api/src/main.js",
