@@ -1,13 +1,12 @@
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { teams_global_view } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { TeamAlreadyExist, Checkout, TeamLimitException, CreateTeamDto, UpdateTeamDto } from './addon/team.dto';
+import { Checkout, CreateTeamDto, UpdateTeamDto } from './addon/team.dto';
 import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
-import { FTPUploadError } from '@api/mcs/file/addon/file.error';
 import { TeamStandart } from './addon/team.standart';
+import { TeamAlreadyExist, TeamLimitException } from './addon/team.error';
 
 @Injectable()
 export class TeamService {

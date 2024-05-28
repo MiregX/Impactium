@@ -37,24 +37,6 @@ export class FindManyTeamsByIndentDto {
 
 export type FindTeamDto = FindOneTeamByIndentDto | FindManyTeamsByIndentDto
 
-export class TeamAlreadyExist extends HttpException {
-  constructor() {super('already_exists', HttpStatus.CONFLICT)};
-}
-export class TeamLimitException extends HttpException {
-  constructor() {super('limit_exception', HttpStatus.CONFLICT)};
-}
-export class UnallowedFileFormat extends HttpException {
-  constructor() {super('unallowed_file_format', HttpStatus.NOT_ACCEPTABLE)};
-}
-export class UnallowedFileSize extends HttpException {
-  constructor() {super('unallowed_file_size', HttpStatus.NOT_ACCEPTABLE)};
-}
-export class UnallowedFileMetadata extends HttpException {
-  constructor() {super('limit_metadata', HttpStatus.NOT_ACCEPTABLE)};
-}
-
-
-
 export class UploadFileDto {
   static getConfig() {
     return {

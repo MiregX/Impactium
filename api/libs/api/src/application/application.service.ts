@@ -3,6 +3,7 @@ import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
+import { StatusEntity, StatusInfoEntity, StatusInfoEntityTypes } from './addon/status.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -21,7 +22,7 @@ export class ApplicationService {
     }
   }
 
-  async status() {
+  async status(): Promise<StatusEntity> {
     return await this.redisService.get('status')
       .then(data => data ? JSON.parse(data) : Promise.reject())
       .catch(async _ => {
@@ -35,6 +36,8 @@ export class ApplicationService {
           redis,
           telegram,
           cockroachdb
+        } as {
+          [key: string]: StatusEntity
         };
     
         await this.redisService.setex('status', 60, JSON.stringify(status));
@@ -52,12 +55,12 @@ export class ApplicationService {
     }
   }
 
-  private async getRedis() {
+  private async getRedis(): Promise<StatusEntity> {
     return {
       ping: await this.redisService._latency(),
       info: await this.redisService.info().then(response => {
           const lines = response.split('\r\n');
-          const result = {};
+          const result = {} as any;
           let section = null;
         
           lines.forEach(line => {
@@ -74,15 +77,29 @@ export class ApplicationService {
             }
           });
 
-          return result;
+          const { redis_version, os } = result.server;
+
+          return {
+            type: StatusInfoEntityTypes.Memory,
+            [StatusInfoEntityTypes.Memory]: {
+              used: result.memory.used_memory_human,
+              max: '32MB'
+            },
+            version: redis_version,
+            os
+          };
       })
     }
   }
 
-  private async getTelegram() {
+  private async getTelegram(): Promise<StatusEntity> {
+    return {
+      ping: 999,
+      info: undefined,
+    }
   }
 
-  private async getPrisma() {
+  private async getPrisma(): Promise<StatusEntity> {
     const start = Date.now();
     await this.prismaService.ping();
     return {

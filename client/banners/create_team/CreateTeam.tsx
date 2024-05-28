@@ -27,11 +27,10 @@ export default function CreateTeam() {
   const footer = {
     right: [<GeistButton options={{
       type: GeistButtonTypes.Button,
-      do: !!(team && team.indent && team.title) ? send : () => {},
-      text: !loading && lang.create.team,
-      focused: !!(team && team.indent && team.title),
-      style: [!(team && team.indent && team.title) && s.disactive],
-      img: loading && 'https://cdn.impactium.fun/ui/action/redo.svg'
+      do: !!(team?.indent && team.title?.length >= 5) ? send : () => {},
+      text: lang.create.team,
+      focused: !!(team?.indent && team.title?.length >= 5),
+      style: [!(team?.indent && team.title?.length >= 5) && s.disactive]
     }} />]
   }
 
