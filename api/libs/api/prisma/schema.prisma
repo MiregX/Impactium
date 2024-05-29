@@ -81,10 +81,8 @@ model Comment {
   content      String
   date         DateTime  @default(now())
   likes        Int       @default(0)
-
-  teamIndent       String?
+  teamIndent   String?
   team         Team?     @relation(fields: [teamIndent], references: [indent])
-  
   tournamentIndent String?
   tournament   Tournament? @relation(fields: [tournamentIndent], references: [code])
 
