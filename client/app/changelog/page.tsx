@@ -1,8 +1,10 @@
 'use client'
 import { PanelTemplate } from "@/components/main/PanelTempate";
+import { useChangelog } from "./context";
 
-export default function ChangelogPage({ log }) {
-  const updates = log.sort.date
+export default function ChangelogPage() {
+  const { changelog } = useChangelog();
+
   return (
     <PanelTemplate>
       {null}

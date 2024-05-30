@@ -1,15 +1,16 @@
 import { _server } from "@/dto/master"
 import { redirect } from "next/navigation";
-import ChangelogPage from './page'
+import { ContextProvider } from "./context";
 
-export default async function ChangelogLayout() {
+export default async function ChangelogLayout({ children }) {
   const log = await fetch(`${_server()}/api/changelog`, {
-    method: 'GET'
+    method: 'GET',
+    next: {
+      revalidate: 1800
+    }
   })
   .then(async response => await response.json())
-  .catch(() => redirect('/'));
+  .catch(() => []);
 
-  return (
-    <ChangelogPage log={ log } />
-  )
+  return <ContextProvider prefetched={log} children={children} />;
 }

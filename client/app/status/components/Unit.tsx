@@ -1,6 +1,6 @@
 'use client'
 import { ServiceList } from "@/dto/Status"
-import { useStatus } from "../page"
+import { useStatus } from '../context'
 import s from '../Status.module.css'
 import { useLanguage } from "@/context/Language"
 
@@ -9,7 +9,7 @@ export function Unit({ name }: {
 }) {
   const { status } = useStatus();
   const { lang } = useLanguage();
-  const service = status[name] || {
+  const service = status?.[name] || {
     ping: 999,
     info: {}
   }
@@ -26,7 +26,6 @@ export function Unit({ name }: {
         <img src={`https://cdn.impactium.fun/tech/${name}.png`} />
         {lang.status[name]}
       </h6>
-      {/* <p className={s.memory}>Memory Used: {service.info.memory.used_memory_human}</p> */}
       <p className={`${s.status} ${s[latency]}`}>
         {lang.status[latency]}
         <span />

@@ -1,7 +1,8 @@
 import { _server } from "@/dto/master";
 import StatusPage from "./page";
+import { ContextProvider } from './context'
 
-export default async function StatusLayout() {
+export default async function StatusLayout({ children }) {
   const status = await fetch(`${_server(true)}/api/application/status`, {
     method: 'GET',
     next: {
@@ -10,13 +11,8 @@ export default async function StatusLayout() {
   }).then(async response => {
     return await response.json()
   }).catch(error => {
-    console.log(error);
     return null
   });
 
-  console.log(status)
-
-  return (
-    <StatusPage status={status} />
-  )
+  return <ContextProvider prefetched={status} children={children} />;
 }

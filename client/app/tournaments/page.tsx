@@ -1,14 +1,10 @@
 import { PanelTemplate } from "@/components/main/PanelTempate";
 import { Tournament } from "@/dto/Tournament";
 
-export default function TournamentPage({
-  tournaments
-}: {
-  tournaments: Tournament[]
-}) {
+export default function TournamentPage() {
   return (
     <PanelTemplate>
-      some
+      {null}
     </ PanelTemplate>
   )
 }

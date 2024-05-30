@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PanelTemplate } from '@/components/main/PanelTempate';
 import { _server } from '@/dto/master';
 import { useLanguage } from '@/context/Language';
@@ -10,18 +10,37 @@ import { Team } from '@/dto/Team';
 import { useUser } from '@/context/User';
 import { SearchBar } from './components/SearchBar';
 import React from 'react';
+import { useTeams } from './context';
 
-export default function TeamsPage({ data }) {
+export default function TeamsPage() {
+  const { teams, setTeams } = useTeams();
   const { lang } = useLanguage();
-  const [teams, setTeams] = useState(data);
   const { user } = useUser();
   const [search, setSearch] = useState<string>('');
+
+  useEffect(() => {
+    if (teams === undefined) {
+      fetch(`${_server()}/api/team/get`, {
+        method: 'GET',
+        next: {
+          revalidate: 60
+        }
+      })
+      .then(async (res) => {
+        const teams = await res.json();
+        setTeams(teams);
+      })
+      .catch(_ => {
+        setTeams([]);
+      });
+      }
+  }, [teams])
 
   return (
     <PanelTemplate style={[s.wrapper]}>
       <SearchBar search={search} setSearch={setSearch} setTeams={setTeams} teams={teams} />
       {/* Команды пользователя */}
-      {user.teams ?
+      {user?.teams ?
         <Panel heading={lang.team.yours} styles={[s.minimized]}>
           <React.Fragment>
             {user.teams.map((team: Team) => (
