@@ -1,7 +1,6 @@
 logs
 *.log
 *.prod
-*.env
 *.png
 *.webp
 *.zip
