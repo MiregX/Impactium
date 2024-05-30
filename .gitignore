@@ -2,7 +2,6 @@ logs
 *.log
 *.prod
 *.env
-*.pem
 *.png
 *.webp
 *.zip
