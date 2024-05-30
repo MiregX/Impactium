@@ -1,6 +1,6 @@
 'use client'
 import { useHeader } from '@/context/Header';
-import s from '@/styles/Privacy.module.css'
+import s from './Terms.module.css'
 import React, { useEffect } from 'react';
 
 export default function PrivacyPolicyPage() {

@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+.main * {
+  line-height: 1.1;
+  font-weight: 300;
+}
+.main h1 {
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+}
+.main h2 {
+  margin-top: 32px;
+  font-weight: 700;
+}
+.main h3 {
+  margin-top: 16px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.main h4 {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.main p {
+  margin-top: 2px;
+}
+.main strong {
+  text-decoration: underline;
+}
+.main ul {
+  list-style: disc;
+  margin-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
