@@ -17,7 +17,7 @@ function CallbackComponent() {
   const code = searchParams.get('code');
   
   async function loginCallback(code: string, referal?: string) {
-    await fetch(`${_server()}/api/oauth2/callback/discord?code=${code}${referal ? '&ref=' + referal : ''}`, {
+    await fetch(`${_server()}/api/oauth2/discord/callback?code=${code}${referal ? '&ref=' + referal : ''}`, {
       method: 'POST',
       credentials: 'include'
     });

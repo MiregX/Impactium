@@ -1,9 +1,12 @@
+import { RedisModule } from '@api/main/redis/redis.module';
 import { TelegramService } from './telegram.service';
 import { Module, OnModuleInit } from '@nestjs/common';
 
 @Module({
   controllers: [],
-  imports: [],
+  imports: [
+    RedisModule
+  ],
   providers: [
     TelegramService
   ],

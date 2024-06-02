@@ -7,11 +7,15 @@ import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { UserComponent } from './User';
 import { useLanguage } from '@/context/Language';
+import { LoginBanner } from '@/banners/login/LoginBanner';
+import { useMessage } from '@/context/Message';
+import { LanguageChooser } from '@/banners/language/LanguageChooser';
 
 export function Header() {
   const { user } = useUser();
   const { lang } = useLanguage();
   const { isLogoHidden } = useHeader();
+  const { spawnBanner } = useMessage();
 
   return (
     <header className={s.header}>
@@ -22,11 +26,19 @@ export function Header() {
       {user?.uid ? (
         <UserComponent />
       ) : (
-        <GeistButton options={{
-          type: GeistButtonTypes.Link,
-          text: lang._login,
-          do: '/login',
-        }} />
+        <React.Fragment>
+          <GeistButton options={{
+            type: GeistButtonTypes.Button,
+            text: lang._login,
+            do: () => spawnBanner(<LoginBanner />),
+          }} />
+          <GeistButton options={{
+            text: '',
+            type: GeistButtonTypes.Button,
+            img: 'https://cdn.impactium.fun/ui/specific/globe.svg',
+            do: () => spawnBanner(<LanguageChooser />)
+          }} />
+        </React.Fragment>
       )}
     </header>
   );

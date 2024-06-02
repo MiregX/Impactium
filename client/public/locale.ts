@@ -21,6 +21,13 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  _soon: {
+    us: 'Soon',
+    ru: 'Скоро',
+    ua: 'Незабаром',
+    it: 'Presto',
+    pl: 'Wkrótce'
+  },
   _login: {
     ua: "Увійти",
     it: "Accesso",
@@ -71,48 +78,20 @@ const locale: Locale = {
     pl: "Tłumaczenie zostało wykonane za pomocą SI i może zawierać błędy"
   },
   login: {
-    username_or_email: {
-      ua: "Нікнейм або пошта",
-      it: "Nome utente o email",
-      us: "Username or email",
-      ru: "Никнейм или почта",
-      pl: "Nazwa użytkownika lub email"
+    auth_with: {
+      ua: "Увійти через",
+      it: "Continua con",
+      us: "Continue with",
+      ru: "Войти используя",
+      pl: "Kontynuuj z" 
     },
-    continue_with_github: {
-      ua: "Увійти через GitHub",
-      it: "Continua con GitHub",
-      us: "Continue with GitHub",
-      ru: "Войти используя GitHub",
-      pl: "Kontynuuj z GitHub"
-    },
-    continue_with_discord: {
-      ua: "Увійти через Discord",
-      it: "Continua con Discord",
-      us: "Continue with Discord",
-      ru: "Войти используя Discord",
-      pl: "Kontynuuj z Discord"
-    },
-    dont_have_an_account: {
-      ua: "Не маєте облікового запису?",
-      it: "Non hai un account?",
-      us: "Don't have an account?",
-      ru: "Нет учетной записи?",
-      pl: "Nie masz konta?"
-    },
-    nuhuh: {
-      ua: "Крінжик...",
-      it: "No...",
-      us: "Nuh uh...",
-      ru: "Кринжовичёк...",
-      pl: "Nuuu..."
-    },
-    just_use_these_two: {
-      ua: "Козаче... Просто використай це:",
-      it: "Usa semplicemente queste due:",
-      us: "Just use these two:",
-      ru: "Чел... Просто используй это:",
-      pl: "Po prostu użyj tych dwóch:"
-    },
+    title: {
+      us: 'Log in',
+      ru: 'Авторизоваться',
+      ua: 'Авторизуватися',
+      it: 'Accedi',
+      pl: 'Zaloguj się'
+    }  
   },
   account: {
     ua: "Мій профіль",

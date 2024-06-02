@@ -5,6 +5,7 @@ logs
 *.webp
 *.zip
 *.jpg
+*.env
 *.jpeg
 *.http
 node_modules

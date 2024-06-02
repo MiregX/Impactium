@@ -1,0 +1,72 @@
+._ {
+  display: flex;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+  background: var(--soft-black);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.method {
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--accent-3);
+  transition: all .3s var(--transition);
+}
+
+.disabled {
+  pointer-events: none;
+  filter: brightness(0.6);
+}
+
+.method:last-child {
+  border: unset;
+}
+
+.method:hover {
+  background: var(--black);
+}
+
+.method img {
+  height: 32px;
+}
+
+.text {
+  font-size: 18px;
+  flex: 1;
+}
+
+.soon {
+  display: flex;
+  gap: 8px;
+  border-radius: var(--border-l);
+  font-weight: 700;
+  font-size: var(--text-small);
+  font-family: 'Nunito';
+  padding: 8px;
+  align-items: center;
+  transition: all .3s var(--transition);
+}
+.method:hover .soon {
+  background: var(--soft-black);
+}
+.soon span::after {
+  content: "";
+  height: 8px;
+  width: 8px;
+  display: inline-flex;
+  border-radius: var(--round);
+}
+.soon span {
+  height: 100%;
+  display: inline-flex;
+}
+.soon {
+  color: var(--geist-red);
+}
+.soon span::after {
+  background-color: var(--geist-red);
+}

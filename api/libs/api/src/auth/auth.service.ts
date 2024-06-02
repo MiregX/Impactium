@@ -6,6 +6,7 @@ import { AuthPayload } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { $Enums } from '@prisma/client';
+import { TelegramService } from '@api/mcs/telegram/telegram.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly prisma: PrismaService,
+    private readonly telegramService: TelegramService,
   ) {
     this.oauth = new DiscordOauth2({
       clientId: process.env.DISCORD_ID,
@@ -111,6 +113,17 @@ export class AuthService {
       authorization: this.parseToken(this.userService.signJWT(login.uid, email)),
       language: lang,
     };
+  }
+
+  getTelegramAuthUrl() {
+    return this.telegramService.getLoginUrl()
+  }
+  async telegramCallback(code: string) {
+    const x = this.telegramService.callback(code);
+    return {
+      language: '',
+      authorization: ''
+    }
   }
 
   parseToken (token: string): string {

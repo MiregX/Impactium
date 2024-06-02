@@ -11,6 +11,6 @@ export default function LoginPage() {
   const { lang } = useLanguage();
 
   useEffect(() => {
-    return redirect(_server() + '/api/oauth2/login/discord');
+    return redirect('/');
   }, [user]);
 };
