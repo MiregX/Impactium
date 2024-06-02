@@ -1,5 +1,5 @@
 import { TelegramService } from './telegram.service';
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 
 @Module({
   controllers: [],
