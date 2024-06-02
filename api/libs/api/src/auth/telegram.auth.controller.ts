@@ -10,14 +10,14 @@ export class TelegramController {
   @Get('login')
   @Redirect()
   async getTelegramAuthUrl() {
-    const link = await this.authService.getTelegramAuthUrl()
-    return { url: link };
+    const url = await this.authService.getTelegramAuthUrl()
+    return { url };
   }
 
   @Get('callback')
   @Redirect()
-  async telegramGetCallback(@Query('code') code: string) {
-    const token = await this.authService.telegramCallback(code);
+  async telegramGetCallback(@Query('code') uuid: string) {
+    const token = await this.authService.telegramCallback(uuid);
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + token
     };

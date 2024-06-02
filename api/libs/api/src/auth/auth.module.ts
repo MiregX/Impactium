@@ -8,6 +8,7 @@ import { UserService } from '@api/main/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './addon/auth.guard';
 import { TelegramModule } from '@api/mcs/telegram/telegram.module';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { TelegramModule } from '@api/mcs/telegram/telegram.module';
         module: AuthModule,
       },
     ]),
-    TelegramModule
+    TelegramModule,
+    RedisModule
   ],
   controllers: [TelegramController, DiscordController],
   providers: [

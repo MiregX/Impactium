@@ -7,17 +7,20 @@ import { Configuration } from '@impactium/config';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { $Enums } from '@prisma/client';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
+import { RedisService } from '../redis/redis.service';
+import { dataset } from '../redis/redis.dto';
 
 @Injectable()
 export class AuthService {
-  oauth: DiscordOauth2;
+  discordService: DiscordOauth2;
 
   constructor(
     private readonly userService: UserService,
     private readonly prisma: PrismaService,
     private readonly telegramService: TelegramService,
+    private readonly redisService: RedisService
   ) {
-    this.oauth = new DiscordOauth2({
+    this.discordService = new DiscordOauth2({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
       redirectUri: Configuration.getClientLink() + '/login/callback',
@@ -27,7 +30,7 @@ export class AuthService {
   async discordCallback(code: string) {
     let token: DiscordOauth2.TokenRequestResult
     try {
-      token = await this.oauth.tokenRequest({
+      token = await this.discordService.tokenRequest({
         code: code,
         grantType: 'authorization_code',
         scope: ['identify', 'guilds']
@@ -36,7 +39,7 @@ export class AuthService {
       throw new BadRequestException()
     }
   
-    const payload: AuthPayload = await this.oauth.getUser(token.access_token)
+    const payload: AuthPayload = await this.discordService.getUser(token.access_token)
       .then(payload => {
         return {
           id: payload.id,
@@ -56,7 +59,7 @@ export class AuthService {
   
 
   getDiscordAuthUrl(): string {
-    return this.oauth.generateAuthUrl({
+    return this.discordService.generateAuthUrl({
       scope: ['identify', 'guilds'],
       redirectUri: Configuration.getClientLink() + '/login/callback'
     });
@@ -108,22 +111,24 @@ export class AuthService {
         },
       });
     }
-  
+    
+    const JWT = this.userService.signJWT(login.uid, email)
     return {
-      authorization: this.parseToken(this.userService.signJWT(login.uid, email)),
+      authorization: this.parseToken(JWT),
       language: lang,
     };
   }
 
-  getTelegramAuthUrl() {
-    return this.telegramService.getLoginUrl()
+  async getTelegramAuthUrl() {
+    const uuid = crypto.randomUUID()
+    await this.redisService.setex(`${dataset.telegram_logins}:${uuid}`, 300, '');
+    return `https://t.me/impactium_bot?start=${uuid}`
   }
-  async telegramCallback(code: string) {
-    const x = this.telegramService.callback(code);
-    return {
-      language: '',
-      authorization: ''
-    }
+
+  async telegramCallback(uuid: string) {
+    const payload = await this.redisService.get(`${dataset.telegram_logins}:${uuid}`).then(user => JSON.parse(user)) as AuthPayload;
+
+    return this.register(payload)
   }
 
   parseToken (token: string): string {

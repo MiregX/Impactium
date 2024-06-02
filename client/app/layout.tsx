@@ -10,6 +10,7 @@ import { _server } from '@/dto/master'
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/footer/Footer';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: {
@@ -34,15 +35,15 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const cookie = cookies();
+
   const applicationInfo = await fetch(`${_server()}/api/application/info`, {
     cache: 'no-cache'
   }).then(async (response) => {
     return await response.json();
   }).catch(_ => { return null });
 
-  const cookie = cookies();
-
-  const user = await fetch(_server(true) + '/api/user/get', {
+  const user = cookie.get('Authorization') ? await fetch(_server(true) + '/api/user/get', {
       method: 'GET',
       headers: {
         token: cookie.get('Authorization')?.value
@@ -50,7 +51,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     }).then(async res => {
       const user = await res.json();
       return res.ok ? user : null;
-    }).catch(_ => { return null });
+    }).catch(_ => { return null }) : null;
 
   return (
     <html>
