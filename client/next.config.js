@@ -21,6 +21,11 @@ module.exports = {
       },
       {
         protocol: 'https',
+        hostname: '*.telegram.org',
+        port: '',
+      },
+      {
+        protocol: 'https',
         hostname: 'cdn.discordapp.com',
         port: '',
       },

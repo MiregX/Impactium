@@ -27,12 +27,26 @@ export const useUser = () => {
 
 export const UserProvider = ({
     children,
-    prefetched
+    prefetched,
+    processLogin,
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
   const [user, setUser] = useState<User | null>(prefetched);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
+
+  useEffect(() => {
+    if (!processLogin) return;
+    (async () => {
+      await fetch(`${_server()}/api/oauth2/${cookie.get('login_method')}/callback/${cookie.get('login_uuid')}`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      cookie.remove('login_method');
+      cookie.remove('login_uuid');
+      refreshUser();
+    })();
+  }, [processLogin])
 
   useEffect(() => {
     !isUserFetched && refreshUser()

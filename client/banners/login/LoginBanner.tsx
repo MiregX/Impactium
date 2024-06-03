@@ -9,10 +9,10 @@ export function LoginBanner() {
   return (
     <Banner title={lang.login.title}>
       <div className={s._}>
-        <LoginMethod type='Telegram' />
-        <LoginMethod type='Steam' disabled={true} />
-        <LoginMethod type='Discord' />
-        <LoginMethod type='Google' disabled={true} />
+        <LoginMethod Type='Telegram' useCrypto={true} />
+        <LoginMethod Type='Discord' />
+        <LoginMethod Type='Steam' disabled={true} />
+        <LoginMethod Type='Google' disabled={true} />
       </div>
     </Banner>
   )

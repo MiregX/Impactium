@@ -16,9 +16,9 @@ export class DiscordController {
   @Get('callback')
   @Redirect()
   async discordGetCallback(@Query('code') code: string) {
-    const token = await this.authService.discordCallback(code)
+    const { authorization } = await this.authService.discordCallback(code)
     return {
-      url: Configuration.getClientLink() + '/login/callback?token=' + token
+      url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
   }
 

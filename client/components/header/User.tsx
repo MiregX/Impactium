@@ -30,7 +30,7 @@ export function UserComponent() {
         <Image className={_user.picture} src={user.login.avatar} width={30} height={30} alt="Avatar" />
       </div>
       <nav className={_user.menu}>
-        <p className={_user.name}>{user.email || '@' + user.login.displayName.toLowerCase()}</p>
+        <p className={_user.name}>{user.email || user.login.displayName}</p>
         <Link href='/me/account' onClick={toggle}>
           {lang.account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>

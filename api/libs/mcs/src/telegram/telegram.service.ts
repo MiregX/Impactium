@@ -1,6 +1,7 @@
 import { AuthPayload } from '@api/main/auth/addon/auth.entity';
 import { dataset } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
+import { Configuration } from '@impactium/config';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { LoginType } from '@prisma/client';
 import { Telegraf } from 'telegraf';
@@ -32,9 +33,10 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
       const payload: AuthPayload = await ctx.getChat().then(async data => {  
         const file = await ctx.telegram.getFile(data.photo.small_file_id);
+        console.log(data);
         return {
           id: data.id.toString(),
-          displayName: `${data['first_name']} ${data['last_name']}`,
+          displayName: `${data['first_name']}${data['last_name'] ? ` ${data['last_name']}` : ''}`,
           lang: 'ru',
           type: LoginType.telegram,
           avatar: `https://api.telegram.org/file/bot${this.telegram.token}/${file.file_path}`
@@ -42,9 +44,17 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
       });
 
       await this.redisService.setex(`${dataset.telegram_logins}:${uuid}`, 300, JSON.stringify(payload));
-      ctx.reply(`Готово, можете возвращаться на сайт: https://impactium.fun`);
+      ctx.reply(`Готово, у тебя есть 5 минут чтобы вернуться на сайт: ${Configuration.getClientLink()}`);
     });
 
     this.launch()
+  }
+
+  async _latency() {
+    const start = process.hrtime.bigint();
+    await this.telegram.getMe();
+    const end = process.hrtime.bigint();
+
+    return  Number(end - start) / 1e6;
   }
 }

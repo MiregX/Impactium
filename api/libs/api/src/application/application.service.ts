@@ -94,7 +94,7 @@ export class ApplicationService {
 
   private async getTelegram(): Promise<StatusEntity> {
     return {
-      ping: 999,
+      ping: await this.telegramService._latency(),
       info: undefined,
     }
   }

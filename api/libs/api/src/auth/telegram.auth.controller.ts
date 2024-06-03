@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Post, Query, Redirect, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
@@ -7,28 +7,29 @@ import { Response } from 'express';
 export class TelegramController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('login')
+  @Get('login/:uuid')
   @Redirect()
-  async getTelegramAuthUrl() {
-    const url = await this.authService.getTelegramAuthUrl()
-    return { url };
+  async getTelegramAuthUrl(@Param('uuid') uuid: string) {
+    const url = await this.authService.getTelegramAuthUrl(uuid)
+    
+    return uuid && url? { url } : BadRequestException;
   }
 
-  @Get('callback')
+  @Get('callback/:uuid')
   @Redirect()
-  async telegramGetCallback(@Query('code') uuid: string) {
-    const token = await this.authService.telegramCallback(uuid);
+  async telegramGetCallback(@Param('uuid') uuid: string) {
+    const { authorization } = await this.authService.telegramCallback(uuid);
     return {
-      url: Configuration.getClientLink() + '/login/callback?token=' + token
+      url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
   }
 
-  @Post('callback')
+  @Post('callback/:uuid')
   async telegramPostCallback(
-    @Query('code') code: string,
+    @Param('uuid') uuid: string,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.authService.telegramCallback(code);
+    const { authorization, language } = await this.authService.telegramCallback(uuid);
     const settings = {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',

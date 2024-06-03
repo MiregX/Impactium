@@ -4,18 +4,30 @@ import s from '../LoginBanner.module.css'
 import { _server } from '@/dto/master'
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
-export function LoginMethod({ type, disabled }: {
-  type: string,
+export function LoginMethod({ Type, disabled, useCrypto }: {
+  Type: string,
   disabled?: boolean
+  useCrypto?: boolean
 }) {
   const { lang } = useLanguage();
-  const cookie = new Cookies()
+  const cookie = new Cookies();
+  const type = Type.toLowerCase();
+
+  const uuid = useCrypto ? crypto.randomUUID() : undefined
+
+  const setup = () => {
+    cookie.set('login_method', type);
+    cookie.set('login_uuid', uuid);
+  }
 
   return (
-    <Link  href={`${_server()}/api/oauth2/${type.toLowerCase()}/login`} onClick={() => cookie.set('login_method', type)} className={`${s.method} ${disabled && s.disabled}`}>
-      <img src={`https://cdn.impactium.fun/tech/${type.toLowerCase()}.png`} />
-      <p className={s.text}>{type}</p>
-      {disabled && <p className={s.soon}><span />{lang._soon}</p>}
+    <Link 
+      href={`${_server()}/api/oauth2/${type}/login/${uuid}`}
+      onClick={setup}
+      className={`${s.method} ${disabled && s.disabled}`}>
+        <img src={`https://cdn.impactium.fun/tech/${type}.png`} />
+        <p className={s.text}>{Type}</p>
+        {disabled && <p className={s.soon}><span />{lang._soon}</p>}
     </Link>
   )
 }

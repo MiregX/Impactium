@@ -26,19 +26,11 @@ export function Header() {
       {user?.uid ? (
         <UserComponent />
       ) : (
-        <React.Fragment>
-          <GeistButton options={{
-            type: GeistButtonTypes.Button,
-            text: lang._login,
-            do: () => spawnBanner(<LoginBanner />),
-          }} />
-          <GeistButton options={{
-            text: '',
-            type: GeistButtonTypes.Button,
-            img: 'https://cdn.impactium.fun/ui/specific/globe.svg',
-            do: () => spawnBanner(<LanguageChooser />)
-          }} />
-        </React.Fragment>
+        <GeistButton options={{
+          type: GeistButtonTypes.Button,
+          text: lang._login,
+          do: () => spawnBanner(<LoginBanner />),
+        }} />
       )}
     </header>
   );

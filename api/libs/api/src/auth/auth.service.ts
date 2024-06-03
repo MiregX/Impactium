@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
@@ -92,7 +92,7 @@ export class AuthService {
     } else {
       // TODO
       // Fix email inplementation (4)
-      const user = email
+      const { uid } = email
         ? await this.prisma.user.upsert({
             where: { email },
             update: { email },
@@ -107,7 +107,7 @@ export class AuthService {
           avatar,
           displayName,
           lang,
-          user: { connect: { uid: user.uid } },
+          uid,
         },
       });
     }
@@ -119,9 +119,11 @@ export class AuthService {
     };
   }
 
-  async getTelegramAuthUrl() {
-    const uuid = crypto.randomUUID()
-    await this.redisService.setex(`${dataset.telegram_logins}:${uuid}`, 300, '');
+  async getTelegramAuthUrl(uuid: string) {
+    const isExist = await this.redisService.get(`${dataset.telegram_logins}:${uuid}`);
+    if (isExist) throw new ConflictException;
+
+    await this.redisService.setex(`${dataset.telegram_logins}:${uuid}`, 300, uuid);
     return `https://t.me/impactium_bot?start=${uuid}`
   }
 
@@ -129,6 +131,7 @@ export class AuthService {
     const payload = await this.redisService.get(`${dataset.telegram_logins}:${uuid}`).then(user => JSON.parse(user)) as AuthPayload;
 
     return this.register(payload)
+
   }
 
   parseToken (token: string): string {

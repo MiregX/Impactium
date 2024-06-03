@@ -19,6 +19,9 @@
 
 .disabled {
   pointer-events: none;
+}
+.disabled img,
+.disabled .text {
   filter: brightness(0.6);
 }
 
@@ -42,7 +45,7 @@
 
 .soon {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   border-radius: var(--border-l);
   font-weight: 700;
   font-size: var(--text-small);
@@ -50,9 +53,7 @@
   padding: 8px;
   align-items: center;
   transition: all .3s var(--transition);
-}
-.method:hover .soon {
-  background: var(--soft-black);
+  background: var(--gray16);
 }
 .soon span::after {
   content: "";
@@ -66,8 +67,8 @@
   display: inline-flex;
 }
 .soon {
-  color: var(--geist-red);
+  color: var(--geist-blue);
 }
 .soon span::after {
-  background-color: var(--geist-red);
+  background-color: var(--geist-blue);
 }
