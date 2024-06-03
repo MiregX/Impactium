@@ -22,3 +22,8 @@ export type _AuthPayload = DiscordAuthPayload | GoogleAuthPayload;
 export interface AuthPayload extends CreateLoginDto {
   email?: string,
 }
+
+export interface AuthResult {
+  authorization: string,
+  language?: string
+}

@@ -2,34 +2,35 @@ import { BadRequestException, Controller, Get, Param, Post, Query, Redirect, Req
 import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
+import { TelegramAuthService } from './telegram.auth.service';
 
 @Controller('telegram')
-export class TelegramController {
-  constructor(private readonly authService: AuthService) {}
+export class TelegramAuthController {
+  constructor(private readonly telegramAuthService: TelegramAuthService) {}
 
   @Get('login/:uuid')
   @Redirect()
-  async getTelegramAuthUrl(@Param('uuid') uuid: string) {
-    const url = await this.authService.getTelegramAuthUrl(uuid)
+  async login(@Param('uuid') uuid: string) {
+    const url = await this.telegramAuthService.getUrl(uuid)
     
     return uuid && url? { url } : BadRequestException;
   }
 
   @Get('callback/:uuid')
   @Redirect()
-  async telegramGetCallback(@Param('uuid') uuid: string) {
-    const { authorization } = await this.authService.telegramCallback(uuid);
+  async getCallback(@Param('uuid') uuid: string) {
+    const { authorization } = await this.telegramAuthService.callback(uuid);
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
   }
 
   @Post('callback/:uuid')
-  async telegramPostCallback(
+  async postCallback(
     @Param('uuid') uuid: string,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.authService.telegramCallback(uuid);
+    const { authorization, language } = await this.telegramAuthService.callback(uuid);
     const settings = {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',

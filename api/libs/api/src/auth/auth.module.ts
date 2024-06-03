@@ -1,14 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { AuthService } from './auth.service';
-import { TelegramController } from './telegram.auth.controller';
-import { DiscordController } from './discord.auth.controller';
-import { PrismaService } from '@api/main/prisma/prisma.service';
-import { UserService } from '@api/main/user/user.service';
-import { JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './addon/auth.guard';
 import { TelegramModule } from '@api/mcs/telegram/telegram.module';
-import { RedisModule } from '../redis/redis.module';
+import { PrismaModule } from '@api/main/prisma/prisma.module';
+import { RedisModule } from '@api/main/redis/redis.module';
+import { UserModule } from '@api/main/user/user.module';
+import { TelegramAuthController } from './telegram.auth.controller';
+import { TelegramAuthService } from './telegram.auth.service';
+import { SteamAuthController } from './steam.auth.controller';
+import { SteamAuthService } from './steam.auth.service';
+import { DiscordAuthController } from './discord.auth.controller';
+import { DiscordAuthService } from './discord.auth.service';
 
 @Module({
   imports: [
@@ -19,15 +23,18 @@ import { RedisModule } from '../redis/redis.module';
       },
     ]),
     TelegramModule,
-    RedisModule
+    PrismaModule,
+    JwtModule,
+    RedisModule,
+    forwardRef(() => UserModule),
   ],
-  controllers: [TelegramController, DiscordController],
+  controllers: [TelegramAuthController, DiscordAuthController, SteamAuthController],
   providers: [
+    TelegramAuthService,
+    DiscordAuthService,
+    SteamAuthService,
     AuthService,
     AuthGuard,
-    PrismaService,
-    UserService,
-    JwtService,
   ],
   exports: [AuthService, AuthGuard],
 })

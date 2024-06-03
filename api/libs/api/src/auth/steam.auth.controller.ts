@@ -1,33 +1,34 @@
 import { Controller, Get, Post, Query, Redirect, Res } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
-import { DiscordAuthService } from './discord.auth.service';
+import { SteamAuthService } from './steam.auth.service';
 
-@Controller('discord')
-export class DiscordAuthController {
-  constructor(private readonly discordAuthService: DiscordAuthService) {}
+@Controller('steam')
+export class SteamAuthController {
+  constructor(private readonly steamAuthService: SteamAuthService) {}
 
   @Get('login')
   @Redirect()
-  getDiscordAuthUrl() {
-    return { url: this.discordAuthService.getUrl() };
+  getUrl() {
+    return { url: this.steamAuthService.getUrl() };
   }
 
   @Get('callback')
   @Redirect()
-  async discordGetCallback(@Query('code') code: string) {
-    const { authorization } = await this.discordAuthService.callback(code)
+  async getCallback(@Query('code') code: string) {
+    const { authorization } = await this.steamAuthService.callback(code)
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
   }
 
   @Post('callback')
-  async discordPostCallback(
+  async postCallback(
     @Query('code') code: string,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.discordAuthService.callback(code);
+    const { authorization, language } = await this.steamAuthService.callback(code);
     const settings = {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',
