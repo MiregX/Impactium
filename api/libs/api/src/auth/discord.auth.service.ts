@@ -4,9 +4,10 @@ import { AuthPayload } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
+import { AuthMethod } from './addon/auth.interface';
 
 @Injectable()
-export class DiscordAuthService extends DiscordOauth2 {
+export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
   constructor(
     private readonly authService: AuthService
   ) {
@@ -45,7 +46,7 @@ export class DiscordAuthService extends DiscordOauth2 {
   }
   
 
-  getUrl(): string {
+  getUrl() {
     return this.generateAuthUrl({
       scope: ['identify', 'guilds'],
       redirectUri: Configuration.getClientLink() + '/login/callback'

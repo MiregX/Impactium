@@ -37,7 +37,10 @@ const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage
   const cookie = new Cookies();
   const [language, setLanguage] = useState<string>(cookie.get('_language') || validate(predefinedLanguage));
 
-  useEffect(() => cookie.set('_language', language), [language]);
+  useEffect(() => cookie.set('_language', language, {
+    path: '/',
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }), [language]);
 
   const refreshLanguage = () => { setLanguage(cookie.get('_language')) };
 

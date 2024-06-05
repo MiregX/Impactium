@@ -38,7 +38,6 @@ model Login {
   on          DateTime  @default(now())
   avatar      String?
   displayName String
-  lang        String
 }
 
 model Team {

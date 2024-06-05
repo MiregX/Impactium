@@ -6,7 +6,7 @@ import { ReactNode, Suspense, useEffect } from 'react';
 import { _server } from '@/dto/master';
 import Cookies from 'universal-cookie';
 
-function CallbackComponent() {
+export default function CallbackPage() {
   const { refreshUser, setIsUserLoaded } = useUser();
   const { refreshLanguage } = useLanguage();
   const cookies = new Cookies();
@@ -15,9 +15,9 @@ function CallbackComponent() {
 
   const token = searchParams.get('token');
   const code = searchParams.get('code');
-  
-  async function loginCallback(code: string, referal?: string) {
-    await fetch(`${_server()}/api/oauth2/${cookies.get('login_method').toLowerCase()}/callback?code=${code}${referal ? '&ref=' + referal : ''}`, {
+
+  async function loginCallback(code: string) {
+    await fetch(`${_server()}/api/oauth2/discord/callback/${code}`, {
       method: 'POST',
       credentials: 'include'
     });
@@ -27,19 +27,19 @@ function CallbackComponent() {
     setIsUserLoaded(false);
     (async () => {
       if (token) {
-        cookies.set('Authorization', token)
+        cookies.set('Authorization', token, {
+          path: '/',
+          maxAge: 1000 * 60 * 60 * 24 * 7
+        })
       } else if (code) {
-        await loginCallback(code);
+        await loginCallback(code)
       }
       refreshUser();
       refreshLanguage();
     })();
+    cookies.getAll();
   }, []);
 
   router.push('/');
   return null
 };
-
-export default function CallbackPage() {
-  return <CallbackComponent />
-}

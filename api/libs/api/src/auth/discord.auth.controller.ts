@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Query, Redirect, Res } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, Redirect, Res } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { DiscordAuthService } from './discord.auth.service';
+import { cookieSettings } from './addon/auth.entity';
 
 @Controller('discord')
 export class DiscordAuthController {
@@ -16,24 +17,18 @@ export class DiscordAuthController {
   @Get('callback')
   @Redirect()
   async discordGetCallback(@Query('code') code: string) {
-    const { authorization } = await this.discordAuthService.callback(code)
+    const authorization = await this.discordAuthService.callback(code)
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
   }
 
-  @Post('callback')
+  @Post('callback/:code')
   async discordPostCallback(
-    @Query('code') code: string,
+    @Param('code') code: string,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.discordAuthService.callback(code);
-    const settings = {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/',
-    }
-
-    response.cookie('Authorization', authorization, settings);
-    response.cookie('_language', language, settings);
+    const authorization = await this.discordAuthService.callback(code);
+    response.cookie('Authorization', authorization, cookieSettings);
   }
 }

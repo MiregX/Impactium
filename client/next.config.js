@@ -33,6 +33,11 @@ module.exports = {
         protocol: 'https',
         hostname: 'cdn.impactium.fun',
         port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.steamstatic.com',
+        port: '',
       }
     ]
   },

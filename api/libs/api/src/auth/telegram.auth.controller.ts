@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { TelegramAuthService } from './telegram.auth.service';
+import { cookieSettings } from './addon/auth.entity';
+import { UUID } from 'crypto';
 
 @Controller('telegram')
 export class TelegramAuthController {
@@ -10,7 +12,7 @@ export class TelegramAuthController {
 
   @Get('login/:uuid')
   @Redirect()
-  async login(@Param('uuid') uuid: string) {
+  async login(@Param('uuid') uuid: UUID) {
     const url = await this.telegramAuthService.getUrl(uuid)
     
     return uuid && url? { url } : BadRequestException;
@@ -18,8 +20,8 @@ export class TelegramAuthController {
 
   @Get('callback/:uuid')
   @Redirect()
-  async getCallback(@Param('uuid') uuid: string) {
-    const { authorization } = await this.telegramAuthService.callback(uuid);
+  async getCallback(@Param('uuid') uuid: UUID) {
+    const authorization = await this.telegramAuthService.callback(uuid);
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
@@ -27,16 +29,10 @@ export class TelegramAuthController {
 
   @Post('callback/:uuid')
   async postCallback(
-    @Param('uuid') uuid: string,
+    @Param('uuid') uuid: UUID,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.telegramAuthService.callback(uuid);
-    const settings = {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/',
-    }
-
-    response.cookie('Authorization', authorization, settings);
-    response.cookie('_language', language, settings);
+    const authorization = await this.telegramAuthService.callback(uuid);
+    response.cookie('Authorization', authorization, cookieSettings);
   }
 }

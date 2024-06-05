@@ -1,16 +1,17 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { AuthService } from './auth.service';
+import { AuthMethod } from './addon/auth.interface';
+import { UUID } from 'crypto';
 
 @Injectable()
-export class TelegramAuthService {
-
+export class TelegramAuthService implements AuthMethod {
   constructor(
     private readonly authService: AuthService,
     private readonly telegramService: TelegramService
   ) {}
 
-  async getUrl(uuid: string) {
+  async getUrl(uuid: UUID) {
     const isExist = await this.telegramService.getPayload(uuid);
     if (isExist) throw new ConflictException;
 
@@ -18,7 +19,7 @@ export class TelegramAuthService {
     return `https://t.me/impactium_bot?start=${uuid}`
   }
 
-  async callback(uuid: string) {
+  async callback(uuid: UUID) {
     const payload = await this.telegramService.getPayload(uuid);
     if (typeof payload === 'boolean') throw new BadRequestException;
 

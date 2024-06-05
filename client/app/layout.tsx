@@ -47,6 +47,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const method = cookie.get('login_method')?.value
   const token = cookie.get('Authorization')?.value
 
+  console.log(cookie.getAll())
+
   const user = token ? await fetch(_server(true) + '/api/user/get', {
       method: 'GET',
       headers: {

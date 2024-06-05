@@ -13,9 +13,6 @@ download_file() {
         curl -o "$output" "$url"
     elif [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "win32" ]]; then
         curl.exe -o "$output" "$url"
-    else
-        echo "Unsupported OS"
-        exit 1
     fi
 }
 

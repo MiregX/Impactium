@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Query, Redirect, Res } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Controller, Get, Post, Query, Redirect, Req, Res } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { SteamAuthService } from './steam.auth.service';
+import { cookieSettings } from './addon/auth.entity';
 
 @Controller('steam')
 export class SteamAuthController {
@@ -10,14 +10,15 @@ export class SteamAuthController {
 
   @Get('login')
   @Redirect()
-  getUrl() {
-    return { url: this.steamAuthService.getUrl() };
+  async getUrl() {
+    const url = await this.steamAuthService.getUrl()
+    return { url };
   }
 
   @Get('callback')
   @Redirect()
-  async getCallback(@Query('code') code: string) {
-    const { authorization } = await this.steamAuthService.callback(code)
+  async getCallback(@Req() request: Request) {
+    const authorization = await this.steamAuthService.callback(request)
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
@@ -25,16 +26,10 @@ export class SteamAuthController {
 
   @Post('callback')
   async postCallback(
-    @Query('code') code: string,
+    @Req() request: Request,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { authorization, language } = await this.steamAuthService.callback(code);
-    const settings = {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/',
-    }
-
-    response.cookie('Authorization', authorization, settings);
-    response.cookie('_language', language, settings);
+    const authorization = await this.steamAuthService.callback(request);
+    response.cookie('Authorization', authorization, cookieSettings);
   }
 }

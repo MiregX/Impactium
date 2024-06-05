@@ -11,7 +11,7 @@ export function LoginBanner() {
       <div className={s._}>
         <LoginMethod Type='Telegram' useCrypto={true} />
         <LoginMethod Type='Discord' />
-        <LoginMethod Type='Steam' disabled={true} />
+        <LoginMethod Type='Steam' />
         <LoginMethod Type='Google' disabled={true} />
       </div>
     </Banner>

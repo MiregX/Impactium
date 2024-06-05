@@ -3,12 +3,9 @@ import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { AuthPayload, AuthResult } from './addon/auth.entity';
-import { Configuration } from '@impactium/config';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { $Enums } from '@prisma/client';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { RedisService } from '../redis/redis.service';
-import { dataset } from '../redis/redis.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,12 +15,11 @@ export class AuthService {
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly prisma: PrismaService,
-    private readonly telegramService: TelegramService,
-    private readonly redisService: RedisService
   ) {}
 
   async login(token: string): Promise<UserEntity> {
     const { email, uid } = this.userService.decodeJWT(token);
+    console.log({email, uid})
 
     if (uid) {
       return await this.userService.findOneById(uid);
@@ -36,7 +32,7 @@ export class AuthService {
     }
   }
 
-  async register({ id, type, avatar, displayName, lang, email }: AuthPayload): Promise<AuthResult> {
+  async register({ id, type, avatar, displayName, email }: AuthPayload): Promise<AuthResult> {
     let login = await this.prisma.login.findUnique({
       where: { id, type },
     });
@@ -44,7 +40,7 @@ export class AuthService {
     if (login) {
       login = await this.prisma.login.update({
         where: { id, type },
-        data: { avatar, displayName, lang, on: new Date() },
+        data: { avatar, displayName, on: new Date() },
       });
     } else {
       // TODO
@@ -63,20 +59,16 @@ export class AuthService {
           type,
           avatar,
           displayName,
-          lang,
           uid,
         },
       });
     }
     
     const JWT = this.userService.signJWT(login.uid, email)
-    return {
-      authorization: this.parseToken(JWT),
-      language: lang,
-    };
+    return this.parseToken(JWT)
   }
 
-  parseToken (token: string): string {
-    return token.startsWith('Bearer') ? token : `Bearer ${token}`
+  private parseToken (token: string): AuthResult {
+    return (token.startsWith('Bearer ') ? token : `Bearer ${token}`) as AuthResult
   }
 }
