@@ -1,6 +1,5 @@
 import { _server } from "@/dto/master";
-import StatusPage from "./page";
-import { ContextProvider } from './context'
+import { StatusProvider } from './context'
 
 export default async function StatusLayout({ children }) {
   const status = await fetch(`${_server(true)}/api/application/status`, {
@@ -8,11 +7,13 @@ export default async function StatusLayout({ children }) {
     next: {
       revalidate: 60
     }
-  }).then(async response => {
-    return await response.json()
-  }).catch(error => {
-    return null
+  })
+  .then(async (res) => {
+    return await res.json();
+  })
+  .catch(_ => {
+    return null;
   });
 
-  return <ContextProvider prefetched={status} children={children} />;
+  return <StatusProvider prefetched={status} children={children} />;
 }

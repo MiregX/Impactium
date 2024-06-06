@@ -11,7 +11,7 @@ interface StatusContext {
 
 export const useStatus = () => useContext(StatusContext) || (() => {throw new Error()})();
 
-export const ContextProvider = ({
+export const StatusProvider = ({
     children,
     prefetched
   }) => {

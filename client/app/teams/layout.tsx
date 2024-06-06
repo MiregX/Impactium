@@ -1,6 +1,6 @@
 import { _server } from '@/dto/master';
 import TeamsPage from './page'
-import { TeamProvider } from '@/context/Team';
+import { TeamsProvider } from './context';
 
 export default async function TeamsLayout({ children }) {
   const teams = await fetch(`${_server()}/api/team/get`, {
@@ -16,7 +16,5 @@ export default async function TeamsLayout({ children }) {
     return null;
   });
 
-  return (
-    <TeamProvider prefetched={teams} children={children} />
-  );
+  return <TeamsProvider prefetched={teams} children={children} />;
 };

@@ -11,7 +11,7 @@ interface TeamsContext {
 
 export const useTeams = () => useContext(TeamsContext) || (() => {throw new Error()})();
 
-export const ContextProvider = ({
+export const TeamsProvider = ({
     children,
     prefetched
   }) => {
