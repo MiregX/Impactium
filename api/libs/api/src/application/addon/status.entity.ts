@@ -1,5 +1,5 @@
 export class StatusEntity {
-  ping: number;
+  ping: number | boolean;
   info: StatusInfoEntity;
 }
 

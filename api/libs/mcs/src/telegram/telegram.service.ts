@@ -9,6 +9,8 @@ import { Telegraf } from 'telegraf';
 
 @Injectable()
 export class TelegramService extends Telegraf implements OnModuleInit, OnModuleDestroy {
+  isActive: boolean = false;
+
   constructor(
     private readonly redisService: RedisService,
   ) {
@@ -16,8 +18,13 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
   }
 
   async onModuleInit() {
-    await this.telegram.getMe();
-    this.setupBotCommands();
+    try {
+      await this.telegram.getMe();
+      this.setupBotCommands();
+      this.isActive = true;
+    } catch (_) {
+      this.isActive = false;
+    }
   }
 
   async onModuleDestroy() {
@@ -53,6 +60,7 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
   async getPayload(uuid: UUID): Promise<boolean | AuthPayload> {
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
+    console.log('🔰', !!payload, payload);
     try {
       return JSON.parse(payload);
     } catch (_) {
@@ -69,10 +77,11 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
   }
 
   async _latency() {
+    if (!this.isActive) return false;
     const start = process.hrtime.bigint();
     await this.telegram.getMe();
     const end = process.hrtime.bigint();
 
-    return  Number(end - start) / 1e6;
+    return Number(end - start) / 1e6;
   }
 }
