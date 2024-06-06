@@ -16,7 +16,7 @@ export class TelegramAuthService implements AuthMethod {
     if (isExist) throw new ConflictException;
 
     await this.telegramService.setPayload(uuid);
-    return `https://t.me/impactium_bot?start=${uuid}`
+    return `https://t.me/${process.env.TELEGRAM_API_ID}?start=${uuid}`
   }
 
   async callback(uuid: UUID) {
