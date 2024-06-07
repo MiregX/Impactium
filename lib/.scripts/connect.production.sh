@@ -1,6 +1,10 @@
 #!/bin/bash
 
-read -p "Enter a password here: " password
+set +e
+set -a
+source .env
+set +a
 
-plink -ssh -pw "$password" root@77.221.156.155 << EOF
-EOF
+echo $SSH_EMAIL
+
+sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_IP"

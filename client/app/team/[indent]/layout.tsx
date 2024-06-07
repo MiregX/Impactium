@@ -14,12 +14,10 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     cache: 'no-cache'
   })
     .then(async (response) => {
-      console.log('Fetch success', response.body);
       return response.ok ? await response.json() : null
     })
     .catch(_ => {
-      console.log('Fetch success', _);
-      return undefined
+      return null
     });
 
   if (!team) redirect('/teams');
