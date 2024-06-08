@@ -1,0 +1,40 @@
+.page {
+  justify-content: flex-start !important;
+  flex-direction: column;
+}
+
+.account .avatar {
+  position: absolute;
+  right: 24px;
+  height: 78px;
+  width: 78px;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--round);
+  overflow: hidden;
+  transition: all 0.3s var(--transition);
+  cursor: pointer;
+}
+.account .avatar:hover {
+  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+}
+.account section {
+  background: var(--black);
+  padding: 24px 16px;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+  display: flex;
+  gap: var(--card-gap);
+  align-items: center;
+}
+.account .unit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--card-gap);
+}
+.account .unit img {
+  height: 32px;
+  width: 32px;
+  border-radius: var(--round);
+  border: 1px solid var(--accent-3);
+}

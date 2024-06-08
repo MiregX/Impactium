@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdn.impactium.fun/logo/66f30814ff6d7cdf.p.woff2');
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('https://cdn.impactium.fun/logo/66f30814ff6d7cdf.p.woff2') format('woff2');
+}
+
 :root {
   --black: #000;
   --white: #fff;
@@ -52,6 +58,7 @@
 
   --geist-green: #31dd59;
   --geist-blue: #0070f3;
+  --geist-sky: #52a8ff;
   --geist-yellow: #f3c600;
   --geist-red: #f30000;
 
@@ -67,6 +74,12 @@
   --event-accent: #E465FD;
   --donate: url("https://cdn.impactium.fun/custom/donate.svg");
   --donate-accent: #72E4F2;
+
+  --card-padding: 24px;
+  --card-gap: 12px;
+
+  --mono-geist: 'Geist Mono', "Geist Mono", "geistMonoFont", 'geistMonoFont';
+  --mono-nunito: 'Nunito'
 }
 
 * {

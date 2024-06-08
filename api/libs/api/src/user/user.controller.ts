@@ -11,11 +11,25 @@ export class UserController {
   @Get('get')
   @UseGuards(AuthGuard)
   getUserById(@User() user: UserEntity) {
-    return this.userService.findOneById(user.uid, {
+    return this.userService.findById(user.uid, {
       ...UserEntity.withLogin(),
       ...UserEntity.withTeams(),
     }).then(user => {
-      return UserEntity.fromPrisma(user);
+      return UserEntity.fromPrisma(user, {
+        withTeams: true,
+      });
+    });
+  }
+
+  @Get('logins')
+  @UseGuards(AuthGuard)
+  async getUserLogins(@User() user: UserEntity) {
+    return this.userService.findById(user.uid, {
+      ...UserEntity.withLogins(),
+    }).then(user => {
+      return UserEntity.fromPrisma(user, {
+        withLogins: true,
+      }).logins;
     });
   }
 }

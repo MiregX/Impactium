@@ -7,6 +7,7 @@ export class UserEntity implements User {
   register: Date;
   email: string | null;
   login?: LoginEntity
+  logins?: LoginEntity[]
   teams?: TeamEntity[]
 
   constructor(user: UserEntity) {
@@ -36,13 +37,25 @@ export class UserEntity implements User {
     }
   });
 
-  static fromPrisma(user: User & { logins: Login[], teams: Team[] }): UserEntity {
+  static withLogins = () => ({
+    ...this,
+    ...this.select(),
+    logins: true
+  });
+
+  static fromPrisma(user: User & { logins: Login[], teams: Team[] }, options?: Options): UserEntity {
     return new UserEntity({
       uid: user.uid,
       register: user.register,
       email: user.email,
       login: user.logins[0],
-      teams: user.teams,
+      teams: options?.withTeams ? user.teams : undefined,
+      logins: options?.withLogins ? user.logins : undefined,
     });
   }
+}
+
+interface Options {
+  withLogins?: true
+  withTeams?: true
 }

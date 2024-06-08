@@ -1,11 +1,14 @@
 .preloader {
   pointer-events: none;
   position: fixed;
+  display: flex;
   z-index: 9;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: var(--black);
   transition: background 1.25s var(--transition) 1.5s;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes first {
@@ -35,21 +38,20 @@
   0% {
   }
   100% {
-    left: 32px;
+    left: 39px;
     transform: translate(0%, -50%);
-    top: 40px;
+    top: 32px;
   }
 }
 .container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1488px;
+  height: 100%;
 }
 .slow {
   background: transparent;
 }
-.slow .container {
+.slow .main {
   animation: out 1s var(--transition) 1.75s forwards;
 }
 .preloader svg {
@@ -59,7 +61,7 @@
 }
 
 .slow svg {
-  height: 48px;
+  height: 32px;
   opacity: 1;
 
 }
@@ -72,20 +74,25 @@
 .main {
   display: flex;
   flex-direction: row;
+  position: absolute;
+  top: 50%;
   align-items: center;
   justify-content: center;
   gap: 16px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .main p {
   font-size: 48px;
   overflow: hidden;
   width: 0px;
+  font-family: var(--mono-nunito);
   font-weight: 600;
   transition: width 0.5s var(--transition) 1s, font-size 1s var(--transition) 1.75s;
 }
 
 .slow .main p {
-  font-size: 30px;
+  font-size: 24px;
   width: 256px;
 }
 .dev .main p {

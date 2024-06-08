@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import '@/styles/.globals.css';
+import '@/public/.globals.css';
 import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { MessageProvider } from '@/context/Message';
@@ -10,7 +10,8 @@ import { _server } from '@/dto/master'
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/footer/Footer';
-import { redirect } from 'next/navigation';
+import localFont from 'next/font/local'
+const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});  
 
 export const metadata: Metadata = {
   title: {
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
-  }
+  },
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -60,7 +61,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     }).catch(_ => { return null }) : null;
 
   return (
-    <html>
+    <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user} processLogin={uuid && method && !token}>

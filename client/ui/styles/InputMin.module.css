@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+._ {
+  background: var(--black);
+  outline: none;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+  height: 36px;
+  max-width: 256px;
+  padding: 4px 8px;
+  font-weight: 500;
+  transition: all 0.3s var(--transition);
+}
+._:focus {
+  border: 1px solid var(--soft-white);
+}
+.wrapper p {
+  color: var(--text-dimmed);
+  padding: 8px;
+}

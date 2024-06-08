@@ -1,7 +1,6 @@
 'use client'
 import { Header } from '@/components/header/Header';
 import React, { createContext, useContext, useState } from 'react';
-import { Nav } from '@/components/header/Nav';
 
 interface HeaderContextProps {
   isLogoHidden: boolean;

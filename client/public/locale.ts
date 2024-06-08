@@ -21,6 +21,13 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  _verified: {
+    us: 'Verified',
+    ru: 'Верифицирован',
+    ua: 'Підтверджено',
+    it: 'Verificato',
+    pl: 'Zweryfikowano'
+  },
   _soon: {
     us: 'Soon',
     ru: 'Скоро',
@@ -93,19 +100,140 @@ const locale: Locale = {
       pl: 'Zaloguj się'
     }  
   },
-  account: {
-    ua: "Мій профіль",
-    it: "Il mio profilo",
-    us: "My profile",
-    ru: "Мой профиль",
-    pl: "Mój profil"
+  _account: {
+    us: 'Account Settings',
+    ru: '',
+    ua: '',
+    it: '',
+    pl: ''
   },
-  settings: {
-    ua: "Налаштування",
-    it: "Impostazioni",
-    us: "Settings",
-    ru: "Настройки",
-    pl: "Ustawienia"
+  account: {
+    avatar: {
+      us: 'Avatar',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    avatar_description: {
+      us: "An avatar is optional but strongly recommended.",
+      ru: "",
+      ua: "",
+      it: "",
+      pl: ""
+    },
+    avatar_content: {
+      us: 'This is your avatar.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    displayName: {
+      us: 'Display Name',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    displayName_description: {
+      us: 'Please use 48 characters at maximum.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    displayName_content: {
+      us: 'Please enter your full name, or a display name you are comfortable with.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    username: {
+      us: 'Username',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    username_description: {
+      us: 'Please use 32 characters at maximum.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    username_content: {
+      us: 'This is your URL namespace within Impactium.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    email: {
+      us: 'Email',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    email_description: {
+      us: 'Emails must be verified to be able to login with them or be used as primary email.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    email_content: {
+      us: 'Enter the email addresses you want to use to log in with Impactium. Your primary email will be used for account-related notifications.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    connections: {
+      us: 'Connections',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    connections_description: {
+      us: 'Social networks and authorizations associated with this account',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    connections_content: {
+      us: 'To add or change a binding, click on the corresponding panel below.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    no_email: {
+      us: 'No email is associated with your account.',
+      ru: 'С вашим аккаунтом не ассоциируется ни один email.',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    delete: {
+      us: 'Delete Account',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
+    delete_content: {
+      us: 'Permanently remove your Personal Account and all of its contents from the Impactium platform. This action is not reversible, so please continue with caution.',
+      ru: '',
+      ua: '',
+      it: '',
+      pl: ''
+    },
   },
   // Main page
   main: {

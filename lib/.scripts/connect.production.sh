@@ -7,4 +7,4 @@ set +a
 
 echo $SSH_EMAIL
 
-sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_IP"
+sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_IP" 'bash -s' < ./lib/.scripts/ssh.generate.sh

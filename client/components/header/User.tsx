@@ -31,13 +31,9 @@ export function UserComponent() {
       </div>
       <nav className={_user.menu}>
         <p className={_user.name}>{user.email || user.login.displayName}</p>
-        <Link href='/me/account' onClick={toggle}>
-          {lang.account}
+        <Link href='/account' onClick={toggle}>
+          {lang._account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>
-        </Link>
-        <Link href='/me/settings' onClick={toggle}>
-          {lang.settings}
-          <img src='https://cdn.impactium.fun/ui/action/settings-future.svg' alt=''/>
         </Link>
         <hr />
         <Link href='/account/balance' onClick={toggle}>

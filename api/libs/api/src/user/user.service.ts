@@ -12,14 +12,14 @@ export class UserService {
   ) {}
 
 
-  findOneByEmail(email: string, select?: Prisma.UserSelect) {
+  findByEmail(email: string, select?: Prisma.UserSelect) {
     return this.prisma.user.findUnique({
       where: { email },
       select
     });
   }
 
-  findOneById(uid: string, select?: Prisma.UserSelect) {
+  findById(uid: string, select?: Prisma.UserSelect) {
     return this.prisma.user.findUnique({
       where: { uid },
       select

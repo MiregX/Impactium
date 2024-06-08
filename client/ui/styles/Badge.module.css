@@ -3,14 +3,16 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  width: min-content;
   gap: 4px;
+  font-family: var(--mono-geist);
+  font-size: var(--text-small);
 
   border-radius: 50px;
-  padding: 4px 8px;
-  background-color: #e8e8e818;
+  padding: 8px 12px;
+  background-color: #e8e8e830;
   
   font-weight: 600;
-  font-size: 18px;
   color: var(--soft-white);
   white-space: nowrap;
 }

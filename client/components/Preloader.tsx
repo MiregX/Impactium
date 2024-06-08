@@ -1,8 +1,7 @@
 'use client'
-import s from '@/styles/Preloader.module.css'
+import s from './Preloader.module.css'
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
-import { useLanguage } from '@/context/Language';
 import {
     useCallback,
     useEffect,
@@ -14,7 +13,6 @@ import { usePathname } from 'next/navigation';
 export function Preloader({ applicationInfo }) {
   const { isUserLoaded } = useUser();
   const { setIsLogoHidden } = useHeader();
-  const { lang } = useLanguage();
   const url = usePathname(); 
   const blocker = url === '/login/callback';
 
@@ -45,25 +43,20 @@ export function Preloader({ applicationInfo }) {
   }, [self, visitedBefore]);  
 
   useEffect(() => {
+    console.log(isUserLoaded)
     show();
-    if (applicationInfo?.enforced_preloader) return;
     if (isUserLoaded && !blocker) {
       hide();
     } else {
       show();
     }
-  }, [isUserLoaded, blocker, hide, show]);
+  }, [isUserLoaded, blocker]);
 
   useEffect(() => {
     if (!visitedBefore) {
       window.localStorage.setItem('visitedBefore', String(true));
     }
   }, [visitedBefore]);
-
-  useEffect(() => {
-    if (applicationInfo?.enforced_preloader)
-      self.current.classList.add(s.dev);
-  }, [self])
 
   return (
     <div className={s.preloader} ref={self}>
