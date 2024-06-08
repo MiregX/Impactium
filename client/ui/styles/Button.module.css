@@ -1,7 +1,7 @@
 ._ {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   justify-self: flex-end;
   background: var(--soft-black);
   padding: 8px 12px;

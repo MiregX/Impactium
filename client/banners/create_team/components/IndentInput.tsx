@@ -14,7 +14,7 @@ export function IndentInput({ team, error, setTeam }) {
         image='https://cdn.impactium.fun/ui/specific/mention.svg'
         value={team?.indent || ''}
         onChange={(e) => setTeam((team) => {
-          const inputValue = e.target.value.slice(0, 24); // Ограничение длины айди до 24 символов
+          const inputValue = e.target.value.slice(0, 32);
           return {
             ...team,
             indent: inputValue.match(/^(?!.*[-_]{2,})[0-9a-z_-]*$/) || inputValue === '' ? inputValue : team.indent

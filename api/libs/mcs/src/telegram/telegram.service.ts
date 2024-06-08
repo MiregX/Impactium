@@ -60,7 +60,6 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
   async getPayload(uuid: UUID): Promise<boolean | AuthPayload> {
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
-    console.log('🔰', !!payload, payload);
     try {
       return JSON.parse(payload);
     } catch (_) {

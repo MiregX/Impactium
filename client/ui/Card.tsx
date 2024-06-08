@@ -9,12 +9,13 @@ interface DescriptionOptions {
 export interface Card {
   description: string | DescriptionOptions;
   children: any;
-  className: string | string[]
+  className: string | string[];
+  id: string;
 }
 
-export function Card({ description, children, className }: Card) {
+export function Card({ description, id, children, className }: Card) {
   return (
-    <div className={`${card._} ${typeof className === 'string' ? className : className.join(' ')}`}>
+    <div className={`${card._} ${typeof className === 'string' ? className : className.join(' ')}`} id={id}>
       <div className={card.content}>
         {children}
       </div>

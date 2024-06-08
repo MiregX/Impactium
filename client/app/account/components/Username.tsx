@@ -6,6 +6,7 @@ import s from '../Account.module.css'
 import { useUser } from "@/context/User";
 import { GeistButton, GeistButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
+import { Indent } from '@impactium/pattern'
 
 export function Username() {
   const { lang } = useLanguage();
@@ -17,10 +18,10 @@ export function Username() {
   }}/>
 
   return (
-    <Card className={s.account} description={{ text: lang.account.username_description, button }}>
+    <Card className={s.account} id='username' description={{ text: lang.account.username_description, button }}>
       <h6>{lang.account.username}</h6>
       <p>{lang.account.username_content}</p>
-      <InputMin value={user.uid} before='impactium.fun/user/' />
+      <InputMin value={user.uid} before='impactium.fun/user/' regExp={Indent} />
     </Card>
   );
 }

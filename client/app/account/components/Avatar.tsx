@@ -10,7 +10,7 @@ export function Avatar() {
   const { user } = useUser();
 
   return (
-    <Card className={s.account} description={lang.account.avatar_description}>
+    <Card className={s.account} id='avatar' description={lang.account.avatar_description}>
       <h6>{lang.account.avatar}</h6>
       <p>{lang.account.avatar_content}</p>
       <div className={s.avatar}>

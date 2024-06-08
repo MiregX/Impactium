@@ -1,8 +1,12 @@
-import { Controller, Get, Param, Post, Query, Redirect, Res } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, Redirect, Res, UseGuards } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { DiscordAuthService } from './discord.auth.service';
 import { cookieSettings } from './addon/auth.entity';
+import { User } from '@api/main/user/addon/user.decorator';
+import { UserEntity } from '@api/main/user/addon/user.entity';
+import { ConnectGuard } from './addon/connect.guard';
+import { UUID } from 'crypto';
 
 @Controller('discord')
 export class DiscordAuthController {
@@ -10,14 +14,20 @@ export class DiscordAuthController {
 
   @Get('login')
   @Redirect()
-  getDiscordAuthUrl() {
-    return { url: this.discordAuthService.getUrl() };
+  @UseGuards(ConnectGuard)
+  async getDiscordAuthUrl(@User() user: UserEntity) {
+    const url = await this.discordAuthService.getUrl(user?.uid);
+    console.log(url);
+    return { url };
   }
 
   @Get('callback')
   @Redirect()
-  async discordGetCallback(@Query('code') code: string) {
-    const authorization = await this.discordAuthService.callback(code)
+  async discordGetCallback(
+    @Query('code') code: string,
+    @Query('uuid') uuid?: UUID,
+  ) {
+    const authorization = await this.discordAuthService.callback(code, uuid)
     return {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };

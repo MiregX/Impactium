@@ -9,6 +9,8 @@ import { AuthGuardClientSide } from "@/components/AuthGuardClientSide";
 import { _server } from "@/dto/master";
 import { cookies } from "next/headers";
 import { Login } from "@/dto/Login";
+import Link from "next/link";
+import { Nav } from "./components/Nav";
 
 export default async function AccountPage() {
   const token = cookies().get('Authorization')?.value;
@@ -20,16 +22,17 @@ export default async function AccountPage() {
     }
   }).then(res => res.json()).catch(_ => null) : null;
 
-  console.log(logins)
-
   return (
-    <PanelTemplate style={[s.page]}>
+    <PanelTemplate style={[s.page]} title='$_account'>
       <AuthGuardClientSide />
-      <Avatar />
-      <DisplayName />
-      <Username />
-      <Email />
-      <Connections logins={logins || [] as Login[]} />
+      <Nav />
+      <div className={s.wrapper}>
+        <Avatar />
+        <DisplayName />
+        <Username />
+        <Email />
+        <Connections logins={logins || [] as Login[]} />
+      </div>
     </PanelTemplate>
   );
 }

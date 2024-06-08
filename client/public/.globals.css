@@ -78,6 +78,8 @@
   --card-padding: 24px;
   --card-gap: 12px;
 
+  --panel-gap: 16px;
+
   --mono-geist: 'Geist Mono', "Geist Mono", "geistMonoFont", 'geistMonoFont';
   --mono-nunito: 'Nunito'
 }
@@ -90,6 +92,7 @@
   color: var(--soft-white);
   font-family: 'Inter', sans-serif;
   font-weight: 300;
+  scroll-behavior: smooth;
   line-height: 1;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
@@ -124,6 +127,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+body {
+  overflow: unset;
 }
 
 input[type="search"]::-webkit-search-decoration,

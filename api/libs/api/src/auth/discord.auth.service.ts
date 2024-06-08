@@ -5,6 +5,7 @@ import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AuthMethod } from './addon/auth.interface';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
@@ -18,7 +19,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
     });
   }
 
-  async callback(code: string) {
+  async callback(code: string, uuid?: UUID) {
     const token = await this.tokenRequest({
       code: code,
       grantType: 'authorization_code',
@@ -41,15 +42,25 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
       .catch(error => {
         throw new InternalServerErrorException()
       });
+    
+    payload.uid = uuid && await this.authService.getPayload(uuid) as string;
   
     return this.authService.register(payload)
   }
   
 
-  getUrl() {
-    return this.generateAuthUrl({
+  async getUrl(uid: string) {
+    const uuid = uid ? crypto.randomUUID() : null;
+    if (uuid) {
+      await this.authService.setPayload(uuid, uid)
+    }
+    
+    return uuid ? this.generateAuthUrl({
       scope: ['identify', 'guilds'],
       redirectUri: Configuration.getClientLink() + '/login/callback'
+    }) : this.generateAuthUrl({
+      scope: ['identify', 'guilds'],
+      redirectUri: Configuration._server() + `/api/oauth2/discord/callback${uuid ? `?uuid=${uuid}` : ''}`
     });
   }
 }

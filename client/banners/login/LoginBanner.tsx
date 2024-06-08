@@ -4,10 +4,14 @@ import { Banner } from "@/ui/Banner";
 import { LoginMethod } from "./components/LoginMethod";
 import { useLanguage } from "@/context/Language";
 
-export function LoginBanner() {
+interface LoginBanner {
+  connect?: true
+}
+
+export function LoginBanner({ connect }: LoginBanner) {
   const { lang } = useLanguage();
   return (
-    <Banner title={lang.login.title}>
+    <Banner title={connect ? lang.login.title : lang.account.connect}>
       <div className={s._}>
         <LoginMethod Type='Telegram' useCrypto={true} />
         <LoginMethod Type='Discord' />

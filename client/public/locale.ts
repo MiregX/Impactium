@@ -102,137 +102,144 @@ const locale: Locale = {
   },
   _account: {
     us: 'Account Settings',
-    ru: '',
-    ua: '',
-    it: '',
-    pl: ''
+    ru: 'Настройки аккаунта',
+    ua: 'Налаштування облікового запису',
+    it: 'Impostazioni dell\'account',
+    pl: 'Ustawienia konta'
   },
   account: {
     avatar: {
       us: 'Avatar',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Аватар',
+      ua: 'Аватар',
+      it: 'Avatar',
+      pl: 'Awatar'
     },
     avatar_description: {
       us: "An avatar is optional but strongly recommended.",
-      ru: "",
-      ua: "",
-      it: "",
-      pl: ""
+      ru: "Аватар не обязателен, но настоятельно рекомендуется.",
+      ua: "Аватар не обов'язковий, але настійно рекомендується.",
+      it: "L'avatar è facoltativo ma fortemente consigliato.",
+      pl: "Awatar jest opcjonalny, ale zdecydowanie zalecany."
     },
     avatar_content: {
       us: 'This is your avatar.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Это ваш аватар.',
+      ua: 'Це ваш аватар.',
+      it: 'Questo è il tuo avatar.',
+      pl: 'To jest twój awatar.'
     },
     displayName: {
       us: 'Display Name',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Отображаемое имя',
+      ua: "Ім'я для відображення",
+      it: 'Nome visualizzato',
+      pl: 'Nazwa wyświetlana'
     },
     displayName_description: {
       us: 'Please use 48 characters at maximum.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Используйте не более 48 символов.',
+      ua: 'Використовуйте максимум 48 символів.',
+      it: 'Utilizza un massimo di 48 caratteri.',
+      pl: 'Użyj maksymalnie 48 znaków.'
     },
     displayName_content: {
       us: 'Please enter your full name, or a display name you are comfortable with.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Пожалуйста, введите ваше полное имя или отображаемое имя, которое вам удобно.',
+      ua: 'Будь ласка, введіть ваше повне ім\'я або ім\'я для відображення, яке вам зручно.',
+      it: 'Si prega di inserire il nome completo o un nome visualizzato che ti è comodo.',
+      pl: 'Proszę wprowadzić pełne imię i nazwisko lub nazwę wyświetlaną, z którą czujesz się komfortowo.'
     },
     username: {
       us: 'Username',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Имя пользователя',
+      ua: 'Ім\'я користувача',
+      it: 'Nome utente',
+      pl: 'Nazwa użytkownika'
     },
     username_description: {
       us: 'Please use 32 characters at maximum.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Используйте не более 32 символов.',
+      ua: 'Використовуйте максимум 32 символи.',
+      it: 'Utilizza un massimo di 32 caratteri.',
+      pl: 'Użyj maksymalnie 32 znaków.'
     },
     username_content: {
       us: 'This is your URL namespace within Impactium.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Это ваш URL-неймспейс в Impactium.',
+      ua: 'Це ваш простір імен URL в Impactium.',
+      it: 'Questo è il tuo spazio dei nomi URL all\'interno di Impactium.',
+      pl: 'To jest twoja przestrzeń nazw URL w Impactium.'
     },
     email: {
       us: 'Email',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Электронная почта',
+      ua: 'Електронна пошта',
+      it: 'Email',
+      pl: 'E-mail'
     },
     email_description: {
       us: 'Emails must be verified to be able to login with them or be used as primary email.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Электронные письма должны быть проверены, чтобы можно было войти с их помощью или использовать их в качестве основной электронной почты.',
+      ua: 'Електронні листи повинні бути перевірені, щоб можна було увійти з їх допомогою або використовувати їх як основну електронну пошту.',
+      it: 'Le email devono essere verificate per poter accedere con esse o essere utilizzate come email principale.',
+      pl: 'E-maile muszą być zweryfikowane, aby można było się za ich pomocą zalogować lub używać ich jako głównego e-maila.'
     },
     email_content: {
       us: 'Enter the email addresses you want to use to log in with Impactium. Your primary email will be used for account-related notifications.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Введите адреса электронной почты, которые вы хотите использовать для входа в Impactium. Ваша основная электронная почта будет использоваться для уведомлений, связанных с аккаунтом.',
+      ua: 'Введіть адреси електронної пошти, які ви хочете використовувати для входу в Impactium. Ваша основна електронна пошта буде використовуватися для повідомлень, пов\'язаних з обліковим записом.',
+      it: 'Inserisci gli indirizzi email che desideri utilizzare per accedere a Impactium. La tua email principale verrà utilizzata per le notifiche relative all\'account.',
+      pl: 'Wprowadź adresy e-mail, których chcesz używać do logowania się do Impactium. Twój główny e-mail będzie używany do powiadomień związanych z kontem.'
     },
     connections: {
       us: 'Connections',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Подключения',
+      ua: 'З\'єднання',
+      it: 'Connessioni',
+      pl: 'Połączenia'
     },
     connections_description: {
       us: 'Social networks and authorizations associated with this account',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Социальные сети и авторизации, связанные с этим аккаунтом',
+      ua: 'Соціальні мережі та авторизації, пов\'язані з цим обліковим записом',
+      it: 'Social network e autorizzazioni associate a questo account',
+      pl: 'Sieci społecznościowe i autoryzacje związane z tym kontem'
     },
     connections_content: {
       us: 'To add or change a binding, click on the corresponding panel below.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Чтобы добавить или изменить привязку, нажмите на соответствующую панель ниже.',
+      ua: 'Щоб додати або змінити прив\'язку, натисніть на відповідну панель нижче.',
+      it: 'Per aggiungere o modificare un\'associazione, fai clic sul pannello corrispondente qui sotto.',
+      pl: 'Aby dodać lub zmienić powiązanie, kliknij odpowiedni panel poniżej.'
+    },
+    connect: {
+      us: 'Connect',
+      ru: 'Присоеденить',
+      ua: 'Присобачити',
+      it: 'Autorizzare',
+      pl: 'Połączen'
     },
     no_email: {
       us: 'No email is associated with your account.',
       ru: 'С вашим аккаунтом не ассоциируется ни один email.',
-      ua: '',
-      it: '',
-      pl: ''
+      ua: 'З вашим обліковим записом не пов\'язаний жоден email.',
+      it: 'Nessuna email è associata al tuo account.',
+      pl: 'Żaden e-mail nie jest powiązany z twoim kontem.'
     },
     delete: {
       us: 'Delete Account',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Удалить аккаунт',
+      ua: 'Видалити обліковий запис',
+      it: 'Elimina account',
+      pl: 'Usuń konto'
     },
     delete_content: {
       us: 'Permanently remove your Personal Account and all of its contents from the Impactium platform. This action is not reversible, so please continue with caution.',
-      ru: '',
-      ua: '',
-      it: '',
-      pl: ''
+      ru: 'Полностью удалить ваш персональный аккаунт и все его содержимое с платформы Impactium. Это действие необратимо, поэтому продолжайте с осторожностью.',
+      ua: 'Назавжди видалити ваш персональний обліковий запис і весь його вміст з платформи Impactium. Ця дія незворотна, тому продовжуйте з обережністю.',
+      it: 'Rimuovi permanentemente il tuo account personale e tutti i suoi contenuti dalla piattaforma Impactium. Questa azione non è reversibile, quindi procedi con cautela.',
+      pl: 'Trwale usuń swoje konto osobiste i całą jego zawartość z platformy Impactium. Ta czynność jest nieodwracalna, więc kontynuuj ostrożnie.'
     },
   },
   // Main page
@@ -463,25 +470,25 @@ const locale: Locale = {
       pl: 'Wszystkie systemy w porządku.'
     },
     good: {
-      us: '',
+      us: 'Operational',
       ru: 'В норме',
-      ua: '',
-      it: '',
-      pl: ''
+      ua: 'У нормі',
+      it: 'Operativo',
+      pl: 'Operacyjny'
     },
     warn: {
-      us: '',
+      us: 'Under load',
       ru: 'Нагружен',
-      ua: '',
-      it: '',
-      pl: ''
+      ua: 'Під навантаженням',
+      it: 'Sotto carico',
+      pl: 'Pod obciążeniem'
     },
     error: {
-      us: '',
+      us: 'Something broke',
       ru: 'Что-то наебнулось',
-      ua: '',
-      it: '',
-      pl: ''
+      ua: 'Щось зламалося',
+      it: 'Qualcosa si è rotto',
+      pl: 'Coś się zepsuło'
     },
     heading: {
       us: 'Summary of our systems',
@@ -581,60 +588,60 @@ const locale: Locale = {
   },
   error: {
     indent_not_provided: {
-      us: '',
-      ru: 'Кажеться ты забыл ввести айди',
-      ua: '',
-      it: '',
-      pl: ''    
+      us: 'It seems you forgot to provide an ID.',
+      ru: 'Кажется ты забыл ввести айди',
+      ua: 'Здається, ви забули ввести ідентифікатор',
+      it: 'Sembra che tu abbia dimenticato di fornire un ID',
+      pl: 'Wygląda na to, że zapomniałeś podać identyfikator'
     },
     indent_invalid_format: {
-      us: '',
+      us: 'Invalid ID format. This isn’t Instagram, we have standards here.',
       ru: 'Хреновый формат айди. Это тебе не инстаграм, тут есть стандарты',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'Поганий формат ідентифікатора. Це тобі не Інстаграм, тут є стандарти',
+      it: 'Formato ID non valido. Questo non è Instagram, qui abbiamo standard',
+      pl: 'Nieprawidłowy format identyfikatora. To nie Instagram, mamy tu standardy'
     },
     team_already_exists: {
-      us: '',
+      us: 'A team with this ID already exists, please come up with something new.',
       ru: 'Команда с таким айди уже существует, придумайте что-то новое',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'Команда з таким ідентифікатором вже існує, придумайте щось нове',
+      it: 'Un team con questo ID esiste già, per favore pensa a qualcosa di nuovo',
+      pl: 'Zespół z takim identyfikatorem już istnieje, wymyśl coś nowego'
     },
     team_limit_exception: {
-      us: '',
+      us: 'You’ve hit the team limit. Maximum is 3 teams.',
       ru: 'Всё. Приехали. У вас лимит по командам. Максимум 3 команды',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'У вас ліміт по командам. Максимум 3 команди',
+      it: 'Hai raggiunto il limite del team. Il massimo è di 3 team',
+      pl: 'Osiągnąłeś limit zespołów. Maksymalnie 3 zespoły'
     },
     unallowed_file_format: {
-      us: '',
+      us: 'Only PNG, JPG, and SVG formats are allowed.',
       ru: 'Я разрешаю вам выгружать файлы только в формате PNG, JPG, SVG',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'Я дозволяю вам завантажувати файли лише у форматах PNG, JPG, SVG',
+      it: 'Permetto solo file nei formati PNG, JPG e SVG',
+      pl: 'Dozwolone są tylko formaty PNG, JPG i SVG'
     },
     unallowed_file_size: {
-      us: '',
+      us: 'File too large. Please upload a file smaller than 1 MB.',
       ru: 'Ого какой большой. Загрузи в меня файл меньше 1 мегабайта',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'Ого який великий. Завантажте файл менший за 1 мегабайт',
+      it: 'Il file è troppo grande. Carica un file più piccolo di 1 MB',
+      pl: 'Plik za duży. Prześlij plik mniejszy niż 1 MB'
     },
     unallowed_file_metadata: {
-      us: '',
-      ru: 'Картинки принимаются только до 512 на 512 пикслелей',
-      ua: '',
-      it: '',
-      pl: ''    
+      us: 'Images must be up to 512x512 pixels.',
+      ru: 'Картинки принимаются только до 512 на 512 пикселей',
+      ua: 'Зображення приймаються тільки до 512 на 512 пікселів',
+      it: 'Le immagini devono essere fino a 512x512 pixel',
+      pl: 'Obrazy muszą mieć maksymalnie 512x512 pikseli'
     },
     ftp_upload_error: {
-      us: '',
+      us: 'Error uploading file to the cloud. If this is an actual error, contact @MiregX.',
       ru: 'Ошибка выгрузки файла в облако. Если это реально ошибка - пиши ему: @MiregX',
-      ua: '',
-      it: '',
-      pl: ''    
+      ua: 'Помилка завантаження файлу в хмару. Якщо це справді помилка - пишіть йому: @MiregX',
+      it: 'Errore durante il caricamento del file sul cloud. Se questo è un errore effettivo, contatta @MiregX',
+      pl: 'Błąd przesyłania pliku do chmury. Jeśli to faktyczny błąd, skontaktuj się z @MiregX'
     }
   }
 }

@@ -5,6 +5,7 @@ import s from '../Account.module.css'
 import { useUser } from "@/context/User";
 import { GeistButton, GeistButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
+import { DisplayName as RDisplayName } from "@impactium/pattern";
 
 export function DisplayName() {
   const { lang } = useLanguage();
@@ -16,10 +17,10 @@ export function DisplayName() {
   }}/>
 
   return (
-    <Card className={s.account} description={{ text: lang.account.displayName_description, button }}>
+    <Card className={s.account} id='displayName' description={{ text: lang.account.displayName_description, button }}>
       <h6>{lang.account.displayName}</h6>
       <p>{lang.account.displayName_content}</p>
-      <InputMin value={user.login.displayName} />
+      <InputMin value={user.login.displayName} regExp={RDisplayName} />
     </Card>
   );
 }

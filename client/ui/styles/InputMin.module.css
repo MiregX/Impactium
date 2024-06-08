@@ -12,11 +12,13 @@
   padding: 4px 8px;
   font-weight: 500;
   transition: all 0.3s var(--transition);
+  font-family: var(--mono-geist);
 }
 ._:focus {
   border: 1px solid var(--soft-white);
 }
 .wrapper p {
+  font-family: var(--mono-geist);
   color: var(--text-dimmed);
   padding: 8px;
 }

@@ -21,6 +21,7 @@ export enum BadgeType {
   devops = 'devops',
   primary = 'primary',
   verified = 'verified',
+  selected = 'selected',
 };
 
 type _PredefinedBadge = {
@@ -65,6 +66,11 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       direction: _BadgeDirections.default,
       color: '#52a8ff'
     },
+    [BadgeType.selected]: {
+      title: lang._selected,
+      direction: _BadgeDirections.default,
+      color: '#62c073'
+    }
   };
 
   const { title, icon, direction, color } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;

@@ -1,6 +1,38 @@
 .page {
-  justify-content: flex-start !important;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.wrapper {
+  display: flex;
   flex-direction: column;
+  gap: var(--panel-gap);
+  flex: 1;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 80px;
+  width: 256px;
+}
+
+.nav a {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 8px;
+  border-radius: var(--border-s);
+  white-space: nowrap;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-dimmed);
+}
+
+.nav a:hover,
+.nav a.active {
+  color: var(--text-white);
+  background: var(--soft-black);
 }
 
 .account .avatar {
@@ -31,10 +63,27 @@
   align-items: center;
   justify-content: flex-start;
   gap: var(--card-gap);
+  width: 100%;
 }
-.account .unit img {
+.account .unit > img {
   height: 32px;
   width: 32px;
   border-radius: var(--round);
   border: 1px solid var(--accent-3);
+}
+.account .unit p {
+  flex: 1;
+}
+.account .unit code {
+  font-family: var(--mono-geist);
+  background: var(--soft-black);
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+  align-items: center;
+}
+.account .unit code img {
+  height: 16px;
 }

@@ -9,12 +9,36 @@
   gap: 16px;
   background: var(--black);
 }
+.hasTitle {
+  margin-top: 128px;
+}
 .panel[data-splitter='true'] > img {
   width: calc(100% - 32px);
   transform: translateY(50%);
   bottom: 0;
   display: block;
   position: absolute;
+}
+.panel .title_wrapper {
+  position: absolute;
+  display: flex;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--accent-3);
+  height: 128px;
+  background: var(--black);
+  justify-content: center;
+  align-items: center;
+}
+.panel .title {
+  font-family: var(--mono-geist);
+  width: 100%;
+  max-width: 1488px;
+  font-size: 2rem;
+  font-weight: 500;
+  position: absolute;
+  padding: 0 16px;
 }
 .panel > img {
   display: none;
