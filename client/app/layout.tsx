@@ -44,11 +44,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return await response.json();
   }).catch(_ => { return null });
 
-  const uuid = cookie.get('login_uuid')?.value
-  const method = cookie.get('login_method')?.value
+  const uuid = cookie.get('uuid')?.value
   const token = cookie.get('Authorization')?.value
-
-  console.log(cookie.getAll())
 
   const user = token ? await fetch(_server(true) + '/api/user/get', {
       method: 'GET',
@@ -64,7 +61,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
-          <UserProvider prefetched={user} processLogin={uuid && method && !token}>
+          <UserProvider prefetched={user} processLogin={uuid && !token}>
             <MessageProvider>
               <HeaderProvider>
                 {Configuration.isProductionMode() && <Preloader applicationInfo={applicationInfo} />}

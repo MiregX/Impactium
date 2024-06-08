@@ -12,7 +12,7 @@ export class TelegramAuthService implements AuthMethod {
   ) {}
 
   async getUrl(uuid: UUID) {
-    const isExist = await this.telegramService.getPayload(uuid);
+    const isExist = uuid && await this.telegramService.getPayload(uuid);
     if (isExist) throw new ConflictException;
 
     await this.telegramService.setPayload(uuid);
@@ -23,6 +23,7 @@ export class TelegramAuthService implements AuthMethod {
     const payload = await this.telegramService.getPayload(uuid);
     if (typeof payload === 'boolean') throw new BadRequestException;
 
+    payload.uid = await this.authService.getPayload(uuid) as string || undefined;
     return this.authService.register(payload);
   }
 }

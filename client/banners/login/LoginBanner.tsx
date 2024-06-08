@@ -13,7 +13,7 @@ export function LoginBanner({ connect }: LoginBanner) {
   return (
     <Banner title={connect ? lang.login.title : lang.account.connect}>
       <div className={s._}>
-        <LoginMethod Type='Telegram' useCrypto={true} />
+        <LoginMethod Type='Telegram' />
         <LoginMethod Type='Discord' />
         <LoginMethod Type='Steam' />
         <LoginMethod Type='Google' disabled={true} />

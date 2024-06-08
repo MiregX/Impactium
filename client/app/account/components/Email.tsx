@@ -9,8 +9,6 @@ export function Email() {
   const { lang } = useLanguage();
   const { user } = useUser();
 
-  user.email = 'markgerasimchuk8@gmail.com'
-
   return (
     <Card className={s.account} id='email' description={lang.account.email_description}>
       <h6>{lang.account.email}</h6>

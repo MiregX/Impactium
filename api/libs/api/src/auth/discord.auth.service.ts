@@ -9,13 +9,15 @@ import { UUID } from 'crypto';
 
 @Injectable()
 export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
+  scope: string[] = ['identify', 'guilds', 'email'];
+
   constructor(
     private readonly authService: AuthService
   ) {
     super({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
-      redirectUri: Configuration.getClientLink() + '/login/callback',
+      redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
     });
   }
 
@@ -23,7 +25,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
     const token = await this.tokenRequest({
       code: code,
       grantType: 'authorization_code',
-      scope: ['identify', 'guilds']
+      scope: this.scope
     });
 
     if (!token) throw new BadRequestException();
@@ -40,6 +42,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
         type: 'discord' as $Enums.LoginType
       }))
       .catch(error => {
+        console.log(error)
         throw new InternalServerErrorException()
       });
     
@@ -49,18 +52,10 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
   }
   
 
-  async getUrl(uid: string) {
-    const uuid = uid ? crypto.randomUUID() : null;
-    if (uuid) {
-      await this.authService.setPayload(uuid, uid)
-    }
-    
-    return uuid ? this.generateAuthUrl({
-      scope: ['identify', 'guilds'],
-      redirectUri: Configuration.getClientLink() + '/login/callback'
-    }) : this.generateAuthUrl({
-      scope: ['identify', 'guilds'],
-      redirectUri: Configuration._server() + `/api/oauth2/discord/callback${uuid ? `?uuid=${uuid}` : ''}`
+  getUrl(uuid: string) {
+    return this.generateAuthUrl({
+      scope: this.scope,
+      redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
     });
   }
 }

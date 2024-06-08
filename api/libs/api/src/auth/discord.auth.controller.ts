@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Query, Redirect, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { DiscordAuthService } from './discord.auth.service';
@@ -6,39 +6,46 @@ import { cookieSettings } from './addon/auth.entity';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { ConnectGuard } from './addon/connect.guard';
+import { AuthService } from './auth.service';
+import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
 
 @Controller('discord')
 export class DiscordAuthController {
-  constructor(private readonly discordAuthService: DiscordAuthService) {}
+  constructor(
+    private readonly discordAuthService: DiscordAuthService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get('login')
   @Redirect()
   @UseGuards(ConnectGuard)
-  async getDiscordAuthUrl(@User() user: UserEntity) {
-    const url = await this.discordAuthService.getUrl(user?.uid);
-    console.log(url);
-    return { url };
+  async getDiscordAuthUrl(
+    @Res({ passthrough: true }) response: Response,
+    @User() user: UserEntity,
+  ) {
+    const uuid = user && crypto.randomUUID();
+    if (uuid) {
+      await this.authService.setPayload(uuid, user.uid);
+      response.cookie('uuid', uuid, cookieSettings);
+    }
+
+    return { url: this.discordAuthService.getUrl(uuid) };
   }
 
   @Get('callback')
   @Redirect()
   async discordGetCallback(
     @Query('code') code: string,
-    @Query('uuid') uuid?: UUID,
+    @Res({ passthrough: true }) response: Response,
+    @Cookie('uuid') uuid: UUID,
   ) {
     const authorization = await this.discordAuthService.callback(code, uuid)
-    return {
+    response.clearCookie('uuid')
+    return uuid ? {
+      url: Configuration.getClientLink() + '/account'
+    } : {
       url: Configuration.getClientLink() + '/login/callback?token=' + authorization
     };
-  }
-
-  @Post('callback/:code')
-  async discordPostCallback(
-    @Param('code') code: string,
-    @Res({ passthrough: true }) response: Response
-  ) {
-    const authorization = await this.discordAuthService.callback(code);
-    response.cookie('Authorization', authorization, cookieSettings);
   }
 }

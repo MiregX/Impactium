@@ -87,3 +87,7 @@
 .account .unit code img {
   height: 16px;
 }
+.connections section {
+  flex-direction: column;
+  gap: 24px;
+}

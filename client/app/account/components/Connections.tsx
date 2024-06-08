@@ -22,7 +22,7 @@ export function Connections({ logins }: { logins: Login[] }) {
   }} />
 
   return (
-    <Card className={s.account} id='connections' description={{
+    <Card className={`${s.account} ${s.connections}`} id='connections' description={{
       text: lang.account.connections_description,
       button
       }}>

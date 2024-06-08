@@ -14,14 +14,6 @@ export default function CallbackPage() {
   const searchParams = useSearchParams();
 
   const token = searchParams.get('token');
-  const code = searchParams.get('code');
-
-  async function loginCallback(code: string) {
-    await fetch(`${_server()}/api/oauth2/discord/callback/${code}`, {
-      method: 'POST',
-      credentials: 'include'
-    });
-  }
 
   useEffect(() => {
     setIsUserLoaded(false);
@@ -31,8 +23,6 @@ export default function CallbackPage() {
           path: '/',
           maxAge: 1000 * 60 * 60 * 24 * 7
         })
-      } else if (code) {
-        await loginCallback(code)
       }
       refreshUser();
       refreshLanguage();

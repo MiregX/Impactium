@@ -28,7 +28,6 @@ export const useUser = () => {
 export const UserProvider = ({
     children,
     prefetched,
-    processLogin,
   }) => {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
@@ -36,17 +35,16 @@ export const UserProvider = ({
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
-    if (!processLogin) return;
+    if (!cookie.get('uuid')) return;
     (async () => {
-      await fetch(`${_server()}/api/oauth2/${cookie.get('login_method')}/callback/${cookie.get('login_uuid')}`, {
+      await fetch(`${_server()}/api/oauth2/telegram/callback`, {
         method: 'POST',
         credentials: 'include'
       });
-      cookie.remove('login_method');
-      cookie.remove('login_uuid');
+      cookie.remove('uuid');
       refreshUser();
     })();
-  }, [processLogin])
+  }, [])
 
   useEffect(() => {
     !isUserFetched && refreshUser()
