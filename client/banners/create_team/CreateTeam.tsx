@@ -12,6 +12,7 @@ import { LogoInput } from './components/LogoInput';
 import { useMessage } from '@/context/Message';
 import { useLanguage } from '@/context/Language';
 import { AuthGuard } from '@/dto/AuthGuard';
+import { LoginBanner } from '../login/LoginBanner';
 
 export default function CreateTeam() {
   const [ team, setTeam ] = useState(null);
@@ -19,10 +20,10 @@ export default function CreateTeam() {
   const [ error, setError ] = useState<string>();
   const { user } = useUser();
   const { lang } = useLanguage();
-  const { destroyBanner } = useMessage();
+  const { destroyBanner, spawnBanner } = useMessage();
   const router = useRouter();
 
-  AuthGuard(user);
+  !AuthGuard(user, true) && spawnBanner(<LoginBanner />);
 
   const footer = {
     right: [<GeistButton options={{

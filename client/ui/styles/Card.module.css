@@ -1,6 +1,7 @@
 ._ {
   min-height: 200px;
   width: 100%;
+  max-width: calc(100vw - 48px);
   display: flex;
   background: var(--meta-black);
   border-radius: var(--border-m);
@@ -24,7 +25,7 @@
   font-weight: 400;
 }
 .description {
-  height: 56px;
+  min-height: 56px;
   border-top: 1px solid var(--accent-3);
   padding: 0 var(--card-padding);
   display: flex;
@@ -33,6 +34,8 @@
 }
 .description p {
   font-size: var(--text-medium);
-  line-height: 54px;
+  line-height: 1.2;
   color: var(--text-dimmed);
 }
+
+/* Для телефонов */

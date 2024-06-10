@@ -11,7 +11,7 @@ interface LoginBanner {
 export function LoginBanner({ connect }: LoginBanner) {
   const { lang } = useLanguage();
   return (
-    <Banner title={connect ? lang.login.title : lang.account.connect}>
+    <Banner title={connect ? lang.account.connect : lang.login.title}>
       <div className={s._}>
         <LoginMethod Type='Telegram' />
         <LoginMethod Type='Discord' />

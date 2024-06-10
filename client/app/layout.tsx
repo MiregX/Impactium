@@ -61,7 +61,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
-          <UserProvider prefetched={user} processLogin={uuid && !token}>
+          <UserProvider prefetched={user}>
             <MessageProvider>
               <HeaderProvider>
                 {Configuration.isProductionMode() && <Preloader applicationInfo={applicationInfo} />}

@@ -16,13 +16,13 @@ export function Connections({ logins }: { logins: Login[] }) {
   const button = <GeistButton options={{
     type: GeistButtonTypes.Button,
     text: lang.account.connect,
-    do: () => spawnBanner(<LoginBanner />),
+    do: () => spawnBanner(<LoginBanner connect={true} />),
     img: 'https://cdn.impactium.fun/ui/action/add-plus.svg',
     focused: true
   }} />
 
   return (
-    <Card className={`${s.account} ${s.connections}`} id='connections' description={{
+    <Card className={` ${s.account} ${s.connections}`} id='connections' description={{
       text: lang.account.connections_description,
       button
       }}>

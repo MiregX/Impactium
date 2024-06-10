@@ -25,9 +25,10 @@ export class TelegramAuthController {
     @User() user: UserEntity | undefined,
   ) {
     const uuid = crypto.randomUUID();
+    response.cookie('uuid', uuid, cookieSettings);
+    
     if (user) {
       await this.authService.setPayload(uuid, user.uid);
-      response.cookie('uuid', uuid, cookieSettings);
     }
 
     const url = await this.telegramAuthService.getUrl(uuid)

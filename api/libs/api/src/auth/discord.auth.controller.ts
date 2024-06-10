@@ -2,13 +2,13 @@ import { Controller, Get, Param, Post, Query, Redirect, Req, Res, UseGuards } fr
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { DiscordAuthService } from './discord.auth.service';
-import { cookieSettings } from './addon/auth.entity';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { ConnectGuard } from './addon/connect.guard';
 import { AuthService } from './auth.service';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
+import { cookieSettings } from './addon/auth.entity';
 
 @Controller('discord')
 export class DiscordAuthController {
@@ -20,9 +20,9 @@ export class DiscordAuthController {
   @Get('login')
   @Redirect()
   @UseGuards(ConnectGuard)
-  async getDiscordAuthUrl(
+  async login(
     @Res({ passthrough: true }) response: Response,
-    @User() user: UserEntity,
+    @User() user: UserEntity | undefined,
   ) {
     const uuid = user && crypto.randomUUID();
     if (uuid) {
@@ -35,7 +35,7 @@ export class DiscordAuthController {
 
   @Get('callback')
   @Redirect()
-  async discordGetCallback(
+  async callback(
     @Query('code') code: string,
     @Res({ passthrough: true }) response: Response,
     @Cookie('uuid') uuid: UUID,

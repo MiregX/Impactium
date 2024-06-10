@@ -13,6 +13,8 @@
   font-weight: 500;
   transition: all 0.3s var(--transition);
   font-family: var(--mono-geist);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ._:focus {
   border: 1px solid var(--soft-white);

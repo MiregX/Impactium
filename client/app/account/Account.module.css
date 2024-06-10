@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   position: sticky;
+  flex-wrap: wrap;
   top: 80px;
   width: 256px;
 }
@@ -79,6 +80,8 @@
   background: var(--soft-black);
   padding: 8px 12px;
   display: flex;
+  overflow: hidden;
+  text-overflow: ellipsis;
   gap: 8px;
   border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
@@ -90,4 +93,27 @@
 .connections section {
   flex-direction: column;
   gap: 24px;
+}
+@media all and (max-width: 768px) {
+  .page {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav {
+    flex-direction: row;
+    top: calc(var(--header-height) + 1px);
+    z-index: 2;
+    margin-top: -20px;
+    padding: 8px;
+    width: calc(100% + 32px);
+    background-color: var(--black);
+    border-bottom: 1px solid var(--accent-3);
+  }
+  .account .unit code {
+    display: unset;
+    max-width: 40%;
+  }
+  .account .unit code img  {
+    display: none;
+  }
 }
