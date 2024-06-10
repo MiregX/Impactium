@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import s from './Cookies.module.css'
-import { Badge, BadgeTypes } from "@/ui/Badge";
+import { Badge, BadgeType } from "@/ui/Badge";
 import Cookies from "universal-cookie";
 
 export function CookiesConsemption({ consemption }) {
@@ -26,7 +26,7 @@ export function CookiesConsemption({ consemption }) {
 
   return (
     <div className={`${s.cookies} ${isAccepted && s.hide}`}>
-      <Badge title='Cookies' color='#d17724' icon={BadgeTypes.cookies} />
+      <Badge title='Cookies' color='#d17724' icon={BadgeType.cookies} />
       <p></p>
       <div className={s.node}>
         <button className={s.default}>Consent settings</button>

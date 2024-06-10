@@ -1,7 +1,7 @@
 import { Member } from './Member'
 import { List } from './List'
 import React from 'react';
-import { BadgeTypes } from '@/ui/Badge';
+import { BadgeType } from '@/ui/Badge';
 
 interface Role {
   icon: string;
@@ -9,7 +9,7 @@ interface Role {
   color: string;
 }
 
-type TeamMemberRole = BadgeTypes | Role
+type TeamMemberRole = BadgeType | Role
 
 export interface TeamMember {
   name: string;
@@ -35,7 +35,7 @@ export function TeamPanel() {
           lang: 'mireg_sto',
           color: '#ffff00'
         },
-        BadgeTypes.frontend
+        BadgeType.frontend
       ]
     }
   ]
