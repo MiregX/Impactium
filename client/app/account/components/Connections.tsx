@@ -6,12 +6,12 @@ import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
 import { GeistButton, GeistButtonTypes } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
-import { useMessage } from "@/context/Message";
+import { useApplication } from "@/context/Application";
 
 export function Connections({ logins }: { logins: Login[] }) {
   const { lang } = useLanguage();
   const { user } = useUser();
-  const { spawnBanner } = useMessage();
+  const { spawnBanner } = useApplication();
 
   const button = <GeistButton options={{
     type: GeistButtonTypes.Button,

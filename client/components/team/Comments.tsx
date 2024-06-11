@@ -2,7 +2,7 @@
 import { useTeam } from '@/context/Team'
 import _ from './Comments.module.css'
 import { _server } from '@/dto/master';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language';
 import { LeaveComment } from './LeaveComment';
@@ -11,7 +11,7 @@ import { useUser } from '@/context/User';
 export function Comments() {
   const { team } = useTeam();
   const { user } = useUser();
-  const { newMessage } = useMessage();
+  const { newMessage } = useApplication();
   const { lang } = useLanguage();
 
   const handleError = () => {

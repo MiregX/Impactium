@@ -10,7 +10,7 @@ import {
   } from "react";
 import { usePathname } from 'next/navigation';
 
-export function Preloader({ applicationInfo }) {
+export function Preloader() {
   const { isUserLoaded } = useUser();
   const { setIsLogoHidden } = useHeader();
   const url = usePathname(); 

@@ -34,11 +34,15 @@
 .panel .title {
   font-family: var(--mono-geist);
   width: 100%;
-  max-width: 1488px;
+  max-width: var(--width-limit);
   font-size: 2rem;
   font-weight: 500;
   position: absolute;
   padding: 0 16px;
+}
+.fullscreen {
+  max-width: 100%;
+  padding: 0;
 }
 .panel > img {
   display: none;
@@ -52,7 +56,7 @@
 .panel .right {
   flex-direction: column;
 }
-@media (max-width: 1488px) {
+@media (max-width: var(--width-limit)) {
   .panel {
     flex-direction: column;
     justify-content: space-evenly;

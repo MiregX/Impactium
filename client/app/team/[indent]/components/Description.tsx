@@ -1,13 +1,13 @@
 'use client'
 import { useLanguage } from '@/context/Language';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import s from '../Team.module.css'
 import { useTeam } from "@/context/Team"
 import { useUser } from "@/context/User";
 import { EditTeamDescription } from '@/banners/edit_team_description/EditTeamDescription';
 
 export function Description() {
-  const { spawnBanner } = useMessage();
+  const { spawnBanner } = useApplication();
   const { team } = useTeam();
   const { lang } = useLanguage();
   const { user } = useUser();

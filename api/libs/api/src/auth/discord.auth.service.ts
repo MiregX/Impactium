@@ -6,6 +6,7 @@ import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AuthMethod } from './addon/auth.interface';
 import { UUID } from 'crypto';
+import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
 
 @Injectable()
 export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
@@ -14,11 +15,11 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
   constructor(
     private readonly authService: AuthService
   ) {
-    super({
+    super(process.env.DISCORD_ID && process.env.DISCORD_SECRET ? {
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
       redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
-    });
+    } : (() => { throw new EnvironmentKeyNotProvided('DISCORD_ID || DISCORD_SECRET') })());
   }
 
   async callback(code: string, uuid?: UUID) {

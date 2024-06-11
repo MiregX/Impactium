@@ -6,13 +6,13 @@ import { _server } from '@/dto/master';
 import { useState } from 'react';
 import { Team } from '@/dto/Team';
 import { GeistButton, GeistButtonTypes } from '@/ui/Button';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 
 export function SearchBar({ search, setSearch, setTeams, teams }) {
   const { lang } = useLanguage();
   const [loading, setLoading] = useState(false);
-  const { spawnBanner } = useMessage();
+  const { spawnBanner } = useApplication();
   let searchTimeout: number | any;
   
   const findTeams = async (value: string): Promise<Team[]> => {

@@ -1,7 +1,7 @@
 'use client'
 import banner from './styles/Banner.module.css';
 import React, { useEffect } from 'react';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 
 export enum WarnerTypes {
   note,
@@ -27,7 +27,7 @@ interface BannerProps {
 }
 
 export function Banner({ title, children, footer, onClose }: BannerProps) {
-  const { destroyBanner } = useMessage();
+  const { destroyBanner } = useApplication();
 
   useEffect(() => {
     const closeHandler = (event: KeyboardEvent) => {

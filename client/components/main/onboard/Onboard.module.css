@@ -13,8 +13,9 @@
 .onboard {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 0.85;
+  gap: var(--card-gap);
+  width: 50%;
+  margin: 10%;
 }
 
 .onboard > h3 {
@@ -23,6 +24,9 @@
 
 .onboard > h4 {
   font-size: var(--text-large);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .onboard > p {

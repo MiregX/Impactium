@@ -45,7 +45,7 @@
 }
 .container {
   width: 100%;
-  max-width: 1488px;
+  max-width: var(--width-limit);
   height: 100%;
 }
 .slow {

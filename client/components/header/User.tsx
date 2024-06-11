@@ -5,12 +5,12 @@ import _user from './User.module.css'
 import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import { LanguageChooser } from '../../banners/language/LanguageChooser';
 
 export function UserComponent() {
   const { user, logout } = useUser();
-  const { spawnBanner } = useMessage();
+  const { spawnBanner } = useApplication();
   const { lang } = useLanguage();
   const [active, setActive] = useState<boolean>(false);
 

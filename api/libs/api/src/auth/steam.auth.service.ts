@@ -3,16 +3,17 @@ import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
 import { AuthMethod } from './addon/auth.interface';
+import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
 const SteamAuth = require('node-steam-openid');
 
 @Injectable()
 export class SteamAuthService extends SteamAuth implements AuthMethod {
   constructor(private readonly authService: AuthService) {
-    super({
+    super(process.env.STEAM_API_KEY ? {
       realm: Configuration._server(),
       returnUrl: Configuration._server() + '/api/oauth2/steam/callback',
       apiKey: process.env.STEAM_API_KEY
-    });
+    } : (() => { throw new EnvironmentKeyNotProvided('STEAM_API_KEY') })());
   }
 
   getUrl = (): Promise<string> => this.getRedirectUrl()

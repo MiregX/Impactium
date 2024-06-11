@@ -1,17 +1,18 @@
 'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import styles from './Message.module.css';
+import styles from './Application.module.css';
 import { useLanguage } from '@/context/Language';
 import { Banner } from '@/ui/Banner';
 
-const MessageContext = createContext(undefined);
+const ApplicationContext = createContext(undefined);
 
-export const useMessage = () => {
-  return useContext(MessageContext);
+export const useApplication = () => {
+  return useContext(ApplicationContext);
 };
 
-export const MessageProvider = ({ children }) => {
+export const ApplicationProvider = ({ children, prefetched }) => {
   const [messages, setMessages] = useState([]);
+  const [application, setApplication] = useState(prefetched);
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactElement>(null);
 
@@ -61,7 +62,7 @@ export const MessageProvider = ({ children }) => {
 
 
   return (
-    <MessageContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner }}>
+    <ApplicationContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner }}>
       {children}
       <div className={styles.messageWrapper}>
         {messages.map((message) => (
@@ -71,6 +72,6 @@ export const MessageProvider = ({ children }) => {
         ))}
       </div>
       {banner}
-    </MessageContext.Provider>
+    </ApplicationContext.Provider>
   );
 };

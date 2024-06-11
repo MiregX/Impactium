@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import '@/public/.globals.css';
 import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
-import { MessageProvider } from '@/context/Message';
+import { ApplicationProvider } from '@/context/Application';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const cookie = cookies();
 
-  const applicationInfo = await fetch(`${_server()}/api/application/info`, {
+  const application = await fetch(`${_server()}/api/application/info`, {
     cache: 'no-cache'
   }).then(async (response) => {
     return await response.json();
@@ -62,15 +62,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>
-            <MessageProvider>
+            <ApplicationProvider prefetched={application}>
               <HeaderProvider>
-                {Configuration.isProductionMode() && <Preloader applicationInfo={applicationInfo} />}
+                {Configuration.isProductionMode() && <Preloader />}
                 <main>
                   {children}
                 </main>
                 <Footer />
               </HeaderProvider>
-            </MessageProvider>
+            </ApplicationProvider>
           </UserProvider>
         </LanguageProvider>
       </body>

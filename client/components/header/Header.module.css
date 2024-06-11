@@ -1,7 +1,7 @@
 .header {
   transition: all 0.3s var(--transition);
   height: var(--header-height);
-  max-width: 1488px;
+  max-width: var(--width-limit);
   width: 100%;
   z-index: 3;
   position: fixed;
@@ -24,6 +24,18 @@
   background-color: var(--soft-black);
   border-bottom: 1px solid var(--accent-3);
   position: fixed;
+}
+.wrapper {
+  display: flex;
+  gap: 8px;
+  justify-self: flex-end;
+}
+.languageChooser img {
+  filter: brightness(0.70);
+  transition: all 0.3s var(--transition);
+}
+.languageChooser:hover img {
+  filter: unset;
 }
 .logo {
   gap: 16px;

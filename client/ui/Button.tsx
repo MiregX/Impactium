@@ -1,5 +1,5 @@
 'use client'
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import button from './styles/Button.module.css';
 import Link from 'next/link';
 import React from 'react';
@@ -21,7 +21,7 @@ export type GeistButton = {
 }
 
 export function GeistButton({ options }: { options: GeistButton }) {
-  const { destroyBanner } = useMessage();
+  const { destroyBanner } = useApplication();
   options.do = options.do || destroyBanner
 
   return (

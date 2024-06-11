@@ -9,7 +9,7 @@ import { redirect, useRouter } from 'next/navigation';
 import { TitleInput } from './components/TitleInput';
 import { IndentInput } from './components/IndentInput';
 import { LogoInput } from './components/LogoInput';
-import { useMessage } from '@/context/Message';
+import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
 import { AuthGuard } from '@/dto/AuthGuard';
 import { LoginBanner } from '../login/LoginBanner';
@@ -20,7 +20,7 @@ export default function CreateTeam() {
   const [ error, setError ] = useState<string>();
   const { user } = useUser();
   const { lang } = useLanguage();
-  const { destroyBanner, spawnBanner } = useMessage();
+  const { destroyBanner, spawnBanner } = useApplication();
   const router = useRouter();
 
   !AuthGuard(user, true) && spawnBanner(<LoginBanner />);
