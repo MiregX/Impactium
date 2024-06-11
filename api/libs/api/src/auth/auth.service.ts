@@ -81,6 +81,7 @@ export class AuthService {
   }
 
   async getPayload(uuid: UUID): Promise<string | AuthPayload> {
+    if (!uuid) return null;
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
     try {
       return JSON.parse(payload) as AuthPayload;

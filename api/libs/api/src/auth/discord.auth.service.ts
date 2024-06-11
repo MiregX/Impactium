@@ -53,7 +53,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
   }
   
 
-  getUrl(uuid: string) {
+  getUrl() {
     return this.generateAuthUrl({
       scope: this.scope,
       redirectUri: Configuration._server() + '/api/oauth2/discord/callback',

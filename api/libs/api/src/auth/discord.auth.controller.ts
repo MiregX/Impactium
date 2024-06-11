@@ -30,7 +30,7 @@ export class DiscordAuthController {
       response.cookie('uuid', uuid, cookieSettings);
     }
 
-    return { url: this.discordAuthService.getUrl(uuid) };
+    return { url: this.discordAuthService.getUrl() };
   }
 
   @Get('callback')

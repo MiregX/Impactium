@@ -65,3 +65,8 @@
     position: sticky;
   }
 }
+@media all and (max-width: 768px){
+  .panel{
+    flex-direction: column;
+  }
+}

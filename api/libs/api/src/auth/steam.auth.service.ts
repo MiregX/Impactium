@@ -4,6 +4,7 @@ import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
 import { AuthMethod } from './addon/auth.interface';
 import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
+import { UUID } from 'crypto';
 const SteamAuth = require('node-steam-openid');
 
 @Injectable()
@@ -18,7 +19,7 @@ export class SteamAuthService extends SteamAuth implements AuthMethod {
 
   getUrl = (): Promise<string> => this.getRedirectUrl()
 
-  async callback(request: Request): Promise<AuthResult> {
+  async callback(request: Request, uuid: string): Promise<AuthResult> {
     const payload: AuthPayload = await this.authenticate(request).then(user => ({
       id: user.steamid,
       lang: 'ru',
@@ -26,6 +27,7 @@ export class SteamAuthService extends SteamAuth implements AuthMethod {
       displayName: user.username,
       avatar: user.avatar.medium,
     }))
+    payload.uid = uuid && await this.authService.getPayload(uuid as UUID) as string;
     return this.authService.register(payload)
   }
 }
