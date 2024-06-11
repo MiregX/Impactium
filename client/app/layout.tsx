@@ -44,7 +44,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return await response.json();
   }).catch(_ => { return null });
 
-  const uuid = cookie.get('uuid')?.value
   const token = cookie.get('Authorization')?.value
 
   const user = token ? await fetch(_server(true) + '/api/user/get', {
