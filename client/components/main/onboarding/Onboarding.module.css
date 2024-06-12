@@ -42,32 +42,32 @@
   .statistics section {
    
   }
-  .videoWrapper{
+  .videoWrapper {
     height: 20vh;
     width: 100%;
     border-bottom: 1px solid var(--accent-3);
     filter: blur(2px);
   }
-  .gradient{
+  .gradient {
    width: 100%; 
   }
-  .statistics{
+  .statistics {
     align-items: center;
     flex-direction: column;
     display: none;
   }
 }
-@media all and (min-width: 581px) and (max-width: 768px){
-  .videoWrapper{
+@media all and (min-width: 581px) and (max-width: 768px) {
+  .videoWrapper {
     height: 40vh;
     width: 100%;
   }
-  .gradient{
+  .gradient {
     background: linear-gradient(180deg, #00000000, #000000);
     width: 100%;
     height: calc(100% + 1%);
   }
-  .statistics{
+  .statistics {
     flex-direction: row;
     margin: 32px 0 0 0;
   }
