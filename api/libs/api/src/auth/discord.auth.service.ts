@@ -4,12 +4,12 @@ import { AuthPayload } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
-import { AuthMethod } from './addon/auth.interface';
+import { AuthMethodService } from './addon/auth.interface';
 import { UUID } from 'crypto';
 import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
 
 @Injectable()
-export class DiscordAuthService extends DiscordOauth2 implements AuthMethod {
+export class DiscordAuthService extends DiscordOauth2 implements AuthMethodService {
   scope: string[] = ['identify', 'guilds', 'email'];
 
   constructor(

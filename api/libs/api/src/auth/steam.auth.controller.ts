@@ -9,10 +9,10 @@ import { AuthService } from './auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
-import { AuthController } from './addon/auth.interface';
+import { AuthMethodController } from './addon/auth.interface';
 
 @Controller('steam')
-export class SteamAuthController implements AuthController {
+export class SteamAuthController implements AuthMethodController {
   constructor(
     private readonly steamAuthService: SteamAuthService,
     private readonly authService: AuthService
@@ -44,10 +44,8 @@ export class SteamAuthController implements AuthController {
   ) {
     const authorization = await this.steamAuthService.callback(request, uuid);
     response.clearCookie('uuid')
-    return uuid ? {
-      url: Configuration.getClientLink() + '/account'
-    } : {
-      url: Configuration.getClientLink() + '/login/callback?token=' + authorization
-    };
+    response.cookie('Authorization', authorization, cookieSettings);
+
+    return { url: Configuration.getClientLink() + '/account' };
   }
 }

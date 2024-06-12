@@ -9,9 +9,10 @@ import { ConnectGuard } from './addon/connect.guard';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { User } from '@api/main/user/addon/user.decorator';
 import { Cookie } from '../application/addon/cookie.decorator';
+import { AuthMethodController } from './addon/auth.interface';
 
 @Controller('telegram')
-export class TelegramAuthController {
+export class TelegramAuthController implements AuthMethodController {
   constructor(
     private readonly telegramAuthService: TelegramAuthService,
     private readonly authService: AuthService,
@@ -20,7 +21,7 @@ export class TelegramAuthController {
   @Get('login')
   @UseGuards(ConnectGuard)
   @Redirect()
-  async login(
+  async getUrl(
     @Res({ passthrough: true }) response: Response,
     @User() user: UserEntity | undefined,
   ) {

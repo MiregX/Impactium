@@ -2,14 +2,14 @@ import { Injectable, BadRequestException, InternalServerErrorException } from '@
 import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
-import { AuthMethod } from './addon/auth.interface';
+import { AuthMethodService } from './addon/auth.interface';
 import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
 import { UUID } from 'crypto';
 import { Request } from 'express'
 const SteamAuth = require('node-steam-openid');
 
 @Injectable()
-export class SteamAuthService extends SteamAuth implements AuthMethod {
+export class SteamAuthService extends SteamAuth implements AuthMethodService {
   constructor(private readonly authService: AuthService) {
     super(process.env.STEAM_API_KEY ? {
       realm: Configuration._server(),

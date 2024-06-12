@@ -1,11 +1,11 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { AuthService } from './auth.service';
-import { AuthMethod } from './addon/auth.interface';
+import { AuthMethodService } from './addon/auth.interface';
 import { UUID } from 'crypto';
 
 @Injectable()
-export class TelegramAuthService implements AuthMethod {
+export class TelegramAuthService implements AuthMethodService {
   constructor(
     private readonly authService: AuthService,
     private readonly telegramService: TelegramService

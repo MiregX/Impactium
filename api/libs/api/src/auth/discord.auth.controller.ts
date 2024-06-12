@@ -8,10 +8,10 @@ import { AuthService } from './auth.service';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
 import { cookieSettings } from './addon/auth.entity';
-import { AuthController } from './addon/auth.interface';
+import { AuthMethodController } from './addon/auth.interface';
 import { Response } from 'express';
 @Controller('discord')
-export class DiscordAuthController implements AuthController {
+export class DiscordAuthController implements AuthMethodController {
   constructor(
     private readonly discordAuthService: DiscordAuthService,
     private readonly authService: AuthService,
@@ -42,11 +42,8 @@ export class DiscordAuthController implements AuthController {
     @Cookie('uuid') uuid: UUID,
   ) {
     const authorization = await this.discordAuthService.callback(code, uuid)
-    response.clearCookie('uuid')
-    return uuid ? {
-      url: Configuration.getClientLink() + '/account'
-    } : {
-      url: Configuration.getClientLink() + '/login/callback?token=' + authorization
-    };
+    response.clearCookie('uuid');
+    response.cookie('Authorization', authorization, cookieSettings);
+    return { url: Configuration.getClientLink() + '/account' }
   }
 }

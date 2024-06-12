@@ -44,17 +44,26 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return await response.json();
   }).catch(_ => { return null });
 
+  // Сервер сайт телеграм авторизации чтобы юзер мог
+  // сразу на /client зайти, а не бегать по /api
+  if (cookie.get('uuid')) {
+    await fetch(`${_server()}/api/oauth2/telegram/callback`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+  }
+  
   const token = cookie.get('Authorization')?.value
 
   const user = token ? await fetch(_server(true) + '/api/user/get', {
-      method: 'GET',
-      headers: {
-        token: token
-      }
-    }).then(async res => {
-      const user = await res.json();
-      return res.ok ? user : null;
-    }).catch(_ => { return null }) : null;
+    method: 'GET',
+    headers: {
+      token: token
+    }
+  }).then(async res => {
+    const user = await res.json();
+    return res.ok ? user : null;
+  }).catch(_ => { return null }) : null;
 
   return (
     <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>

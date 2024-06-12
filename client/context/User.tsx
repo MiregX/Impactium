@@ -35,18 +35,6 @@ export const UserProvider = ({
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
-    if (!cookie.get('uuid')) return;
-    (async () => {
-      await fetch(`${_server()}/api/oauth2/telegram/callback`, {
-        method: 'POST',
-        credentials: 'include'
-      });
-      cookie.remove('uuid');
-      refreshUser();
-    })();
-  }, [])
-
-  useEffect(() => {
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
