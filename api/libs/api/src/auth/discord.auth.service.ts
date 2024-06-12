@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Redirect } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { AuthPayload } from './addon/auth.entity';
+import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
@@ -22,14 +22,14 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
     } : (() => { throw new EnvironmentKeyNotProvided('DISCORD_ID || DISCORD_SECRET') })());
   }
 
-  async callback(code: string, uuid?: UUID) {
-    const token = await this.tokenRequest({
+  async callback(code: string, uuid?: UUID): Promise<AuthResult> {
+    const token: any | null = await this.tokenRequest({
       code: code,
       grantType: 'authorization_code',
       scope: this.scope
-    });
+    }).catch(_ => null);
 
-    if (!token) throw new BadRequestException();
+    if (!token) return null;
 
     const payload: AuthPayload = await this.getUser(token.access_token)
       .then(payload => ({
@@ -42,10 +42,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
         lang: payload.locale,
         type: 'discord' as $Enums.LoginType
       }))
-      .catch(error => {
-        console.log(error)
-        throw new InternalServerErrorException()
-      });
+      .catch(_ => { throw new InternalServerErrorException() });
     
     payload.uid = uuid && await this.authService.getPayload(uuid) as string;
   

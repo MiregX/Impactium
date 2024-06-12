@@ -46,10 +46,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   // Сервер сайт телеграм авторизации чтобы юзер мог
   // сразу на /client зайти, а не бегать по /api
-  if (cookie.get('uuid')) {
+  const { value: uuid } = cookie.get('uuid') || {};
+  if (uuid) {
     await fetch(`${_server()}/api/oauth2/telegram/callback`, {
       method: 'POST',
-      credentials: 'include'
+      credentials: 'include',
+      headers: {
+        uuid,
+      }
     });
   }
   

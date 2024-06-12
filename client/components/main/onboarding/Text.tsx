@@ -4,7 +4,7 @@ import CreateTeam from '@/banners/create_team/CreateTeam';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
 
-export function Onboard() {
+export function Text() {
   const { spawnBanner } = useApplication();
   const { lang } = useLanguage();
 
@@ -21,6 +21,7 @@ export function Onboard() {
         <GeistButton options={{
           type: GeistButtonTypes.Link,
           do: '/teams',
+          focused: true,
           text: lang.find.team,
           style: [ s.button ]
         }} />

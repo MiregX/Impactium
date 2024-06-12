@@ -41,9 +41,9 @@ export class DiscordAuthController implements AuthMethodController {
     @Res({ passthrough: true }) response: Response,
     @Cookie('uuid') uuid: UUID,
   ) {
-    const authorization = await this.discordAuthService.callback(code, uuid)
+    const authorization = await this.discordAuthService.callback(code, uuid);
     response.clearCookie('uuid');
     response.cookie('Authorization', authorization, cookieSettings);
-    return { url: Configuration.getClientLink() + '/account' }
+    return { url: `${Configuration.getClientLink()}${uuid ? '' : '/account'}` }
   }
 }

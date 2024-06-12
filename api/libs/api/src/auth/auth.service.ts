@@ -57,7 +57,7 @@ export class AuthService {
     } else {
       // TODO
       // Fix email inplementation (4)
-      const { uid } = email
+      const user = email
         ? await this.prisma.user.upsert({
             where: { email },
             update: { email },
@@ -71,7 +71,7 @@ export class AuthService {
           type,
           avatar,
           displayName,
-          uid,
+          uid: user.uid,
         },
       });
     }

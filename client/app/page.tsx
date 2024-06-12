@@ -1,5 +1,5 @@
 'use client'
-import { Onboard } from '@/components/main/onboard/Onboard';
+import { Text } from '@/components/main/onboarding/Text';
 import { Onboarding } from '@/components/main/onboarding/Onboarding';
 import React from 'react';
 

@@ -1,6 +1,6 @@
 import { Configuration } from '@impactium/config';
 import { ConfigModule } from '@nestjs/config';
-import { MainModule } from '@api/main';
+import { MainModule } from '@api/main/main/main.module';
 import { McsModule } from '@api/mcs';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
