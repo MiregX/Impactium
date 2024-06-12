@@ -3,7 +3,7 @@ import { useApplication } from '@/context/Application';
 import s from './Onboarding.module.css'
 import { useLanguage } from '@/context/Language';
 export function VideoHighlight() {
-  const { application } = useApplication()
+  const { application } = useApplication();
   const { lang } = useLanguage()
   const keys: string[] = ['users_count', 'teams_count', 'tournaments_count'];
   return (
@@ -14,7 +14,7 @@ export function VideoHighlight() {
         <section key={index}>
           <img alt="" />
           <p>{lang.main[key]}</p>
-          <code>{application.statistics.users_count}</code>
+          <code>{application.statistics[key]}</code>
         </section>
       ))}
       </div>

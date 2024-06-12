@@ -38,13 +38,8 @@ export const UserProvider = ({
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = async (): Promise<User> => {
-    const res = await fetch(`${_server()}/api/user/get`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-
-    return res.ok ? await res.json() : undefined;
+  const getUser = (): Promise<User> => {
+    return get('/api/user/get');
   };
 
   const logout = () => {

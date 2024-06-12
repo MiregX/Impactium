@@ -13,6 +13,13 @@ import { Footer } from '@/components/footer/Footer';
 import localFont from 'next/font/local'
 const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});  
 
+globalThis.get = (path, options): Promise<Response> => path
+  ? fetch(_server() + path, { credentials: 'include', ...options}).then(res => options?.isRaw ? res : res.json())
+  : fetch(path, { credentials: 'include', ...options}).then(res => options?.isRaw ? res : res.json());
+declare global {
+  var get: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean }) => Promise<any>;
+}
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Impactium',
@@ -38,17 +45,13 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const cookie = cookies();
 
-  const application = await fetch(`${_server()}/api/application/info`, {
-    cache: 'no-cache'
-  }).then(async (response) => {
-    return await response.json();
-  }).catch(_ => { return null });
+  const application = await get('/api/application/info');
 
   // Сервер сайт телеграм авторизации чтобы юзер мог
   // сразу на /client зайти, а не бегать по /api
   const { value: uuid } = cookie.get('uuid') || {};
   if (uuid) {
-    await fetch(`${_server()}/api/oauth2/telegram/callback`, {
+    await get('/api/oauth2/telegram/callback', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -59,15 +62,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   
   const token = cookie.get('Authorization')?.value
 
-  const user = token ? await fetch(_server(true) + '/api/user/get', {
+  const user = token ? await get('/api/user/get', {
     method: 'GET',
     headers: {
       token: token
     }
-  }).then(async res => {
-    const user = await res.json();
-    return res.ok ? user : null;
-  }).catch(_ => { return null }) : null;
+  }) : null;
 
   return (
     <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>

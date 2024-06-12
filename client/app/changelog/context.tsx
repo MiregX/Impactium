@@ -12,7 +12,7 @@ interface ChangelogContext {
 
 export const useChangelog = () => useContext(ChangelogContext) || (() => {throw new Error()})();
 
-export const ContextProvider = ({
+export const ChangelogProvider = ({
     children,
     prefetched
   }) => {

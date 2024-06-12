@@ -15,12 +15,12 @@ import { Nav } from "./components/Nav";
 export default async function AccountPage() {
   const token = cookies().get('Authorization')?.value;
 
-  const logins = token ? await fetch(`${_server()}/api/user/logins`, {
+  const logins = token && await get('/api/user/logins', {
     method: 'GET',
     headers: {
       token
     }
-  }).then(res => res.json()).catch(_ => null) : null;
+  }) as Login[];
 
   return (
     <PanelTemplate style={[s.page]} title='$_account'>
@@ -31,7 +31,7 @@ export default async function AccountPage() {
         <DisplayName />
         <Username />
         <Email />
-        <Connections logins={logins || [] as Login[]} />
+        <Connections logins={logins || []} />
       </div>
     </PanelTemplate>
   );

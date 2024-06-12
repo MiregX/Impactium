@@ -9,7 +9,7 @@ export function EditTeamDescription({ team }) {
   const { lang } = useLanguage();
 
   const save = async (description: string) => {
-    await fetch(`${_server()}/api/team/${team.indent}/edit/description`, {
+    await get(`/api/team/${team.indent}/edit/description`, {
       method: 'PATCH',
       credentials: 'include',
       body: description

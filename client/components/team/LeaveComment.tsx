@@ -12,14 +12,10 @@ export function LeaveComment() {
   const { lang } = useLanguage();
   
   const send = async () => {
-    const response = await fetch(`${_server()}/api/comment/send`, {
+    await get('/api/comment/send', {
       method: 'POST',
       credentials: 'include'
-    }).then(async response => {
-      return await response.json();
-    }).catch(_ => {
-      // handleError();
-    })
+    });
   }
 
   return (

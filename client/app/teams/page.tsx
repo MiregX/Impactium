@@ -20,14 +20,13 @@ export default function TeamsPage() {
 
   useEffect(() => {
     if (teams === undefined) {
-      fetch(`${_server()}/api/team/get`, {
+      get('/api/team/get', {
         method: 'GET',
         next: {
           revalidate: 60
         }
       })
-      .then(async (res) => {
-        const teams = await res.json();
+      .then(teams => {
         setTeams(teams);
       })
       .catch(_ => {

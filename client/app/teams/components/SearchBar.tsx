@@ -17,14 +17,14 @@ export function SearchBar({ search, setSearch, setTeams, teams }) {
   
   const findTeams = async (value: string): Promise<Team[]> => {
     setLoading(true)
-    const response = await fetch(`${_server()}/api/team/find/${value}`, {
+    const team = await get(`/api/team/find/${value}`, {
       method: 'GET',
       next: {
         revalidate: 60
       }
-    });
+    }) as Team[] ?? [];
     setLoading(false)
-    return response.ok ? await response.json() : [];
+    return team;
   };
 
   const handleSearchChange = (event) => {

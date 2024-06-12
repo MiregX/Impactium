@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
@@ -28,9 +28,6 @@ export class AuthService {
     else if (email) {
       return await this.userService.findByEmail(email);
     }
-    else {
-      throw new NotFoundException();
-    }
   }
 
   async register({ uid, id, type, avatar, displayName, email }: AuthPayload): Promise<AuthResult> {
@@ -55,28 +52,46 @@ export class AuthService {
         }
       })
     } else {
-      // TODO
-      // Fix email inplementation (4)
-      const user = email
-        ? await this.prisma.user.upsert({
-            where: { email },
-            update: { email },
-            create: { email: email ? email : '' },
-          })
-        : await this.prisma.user.create({ data: { email } });
-  
-      login = await this.prisma.login.create({
-        data: {
-          id,
-          type,
-          avatar,
-          displayName,
-          uid: user.uid,
+      uid = await this.prisma.user.upsert({
+        where: { email },
+        update: {
+          email,
+          logins: {
+            connectOrCreate: {
+              where: {
+                id,
+                type
+              },
+              create: {
+                id,
+                type,
+                avatar,
+                displayName,
+              },
+            }
+          }
         },
-      });
-    }
+        create: {
+          email,
+          logins: {
+            connectOrCreate: {
+              where: {
+                id,
+                type
+              },
+              create: {
+                id,
+                type,
+                avatar,
+                displayName
+              }
+            }
+          }
+        },
+      }).then(user => user.uid);
+    };
     
-    const JWT = this.userService.signJWT(login.uid, email)
+    const JWT = this.userService.signJWT(uid, email)
     return this.parseToken(JWT)
   }
 

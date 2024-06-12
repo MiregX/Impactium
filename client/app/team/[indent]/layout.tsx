@@ -1,4 +1,5 @@
 import { TeamProvider } from "@/context/Team";
+import { Team } from "@/dto/Team";
 import { _server } from "@/dto/master";
 import { redirect } from "next/navigation";
 
@@ -9,16 +10,10 @@ export default async function TeamIndentLayout({ params, children }: { params: {
     params.indent = params.indent.replace('%40', '@');
   }
 
-  const team = await fetch(`${_server()}/api/team/get/${params.indent.replace('@', '')}`, {
+  const team = await get(`/api/team/get/${params.indent.replace('@', '')}`, {
     method: 'GET',
     cache: 'no-cache'
-  })
-    .then(async (response) => {
-      return response.ok ? await response.json() : null
-    })
-    .catch(_ => {
-      return null
-    });
+  }) as Team;
 
   if (!team) redirect('/teams');
 

@@ -10,6 +10,7 @@ import { UUID } from 'crypto';
 import { cookieSettings } from './addon/auth.entity';
 import { AuthMethodController } from './addon/auth.interface';
 import { Response } from 'express';
+
 @Controller('discord')
 export class DiscordAuthController implements AuthMethodController {
   constructor(

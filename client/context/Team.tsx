@@ -35,13 +35,8 @@ export const TeamProvider = ({
   }) => {
   const [team, setTeam] = useState(prefetched);
 
-  const getTeam = async (indent?: string): Promise<any> => {
-    const res = await fetch(`${_server()}/api/team/get/${indent || (team.indent)}`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-
-    return res.ok ? await res.json() : undefined;
+  const getTeam = (indent?: string): Promise<any> => {
+    return get(`/api/team/get/${indent || (team.indent)}`);
   };
 
   const refreshTeam = (indent?: string) => {
