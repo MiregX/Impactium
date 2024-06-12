@@ -1,15 +1,22 @@
 'use client'
 import { useApplication } from '@/context/Application';
 import s from './Onboarding.module.css'
+import { useLanguage } from '@/context/Language';
 export function VideoHighlight() {
   const { application } = useApplication()
+  const { lang } = useLanguage()
+  const keys: string[] = ['users_count', 'teams_count', 'tournaments_count'];
   return (
     <div className={s.videoWrapper}>
       <span className={s.gradient} />
       <div className={s.statistics}>
-      <section>{application?.statistics?.users_count}</section>
-      <section>{application?.statistics?.teams_count}</section>
-      <section>{application?.statistics?.tournaments_count}</section>
+      {keys.map((key, index) => (
+        <section key={index}>
+          <img alt="" />
+          <p>{lang.main[key]}</p>
+          <code>{application.statistics.users_count}</code>
+        </section>
+      ))}
       </div>
       <video
         autoPlay={true}

@@ -13,13 +13,32 @@ export class ApplicationService {
     private readonly telegramService: TelegramService,
   ) {}
 
-  info() {
-    return {
-      status: 200,
-      environment: this.getEnvironment(),
-      enforced_preloader: !!process.env.ENFORCED_PRELOADER,
-      localhost: process.env.API_LOCALHOST
-    }
+  async info() {
+    return await this.redisService.get('info')
+      .then(data => data ? JSON.parse(data) : Promise.reject())
+      .catch(async _ => {
+        const [users_count, teams_count, tournaments_count] = await Promise.all([
+          await this.prismaService.user.count(),
+          await this.prismaService.team.count(),
+          await this.prismaService.tournament.count()
+        ]);
+
+        const info = {
+          status: 200,
+          environment: this.getEnvironment(),
+          enforced_preloader: !!process.env.ENFORCED_PRELOADER,
+          localhost: process.env.API_LOCALHOST,
+          statistics: {
+            users_count,
+            teams_count,
+            tournaments_count,
+          }
+        }
+    
+        await this.redisService.setex('status', 600, JSON.stringify(info));
+
+        return info;
+      })
   }
 
   async status(): Promise<StatusEntity> {

@@ -62,7 +62,7 @@ export const ApplicationProvider = ({ children, prefetched }) => {
 
 
   return (
-    <ApplicationContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner }}>
+    <ApplicationContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner, application, setApplication }}>
       {children}
       <div className={styles.messageWrapper}>
         {messages.map((message) => (
