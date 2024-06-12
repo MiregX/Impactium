@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { SteamAuthService } from './steam.auth.service';
 import { cookieSettings } from './addon/auth.entity';
 import { User } from '../user/addon/user.decorator';
@@ -9,9 +9,10 @@ import { AuthService } from './auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
+import { AuthController } from './addon/auth.interface';
 
 @Controller('steam')
-export class SteamAuthController {
+export class SteamAuthController implements AuthController {
   constructor(
     private readonly steamAuthService: SteamAuthService,
     private readonly authService: AuthService
@@ -20,7 +21,7 @@ export class SteamAuthController {
   @Get('login')
   @UseGuards(ConnectGuard)
   @Redirect()
-  async login(
+  async getUrl(
     @Res({ passthrough: true }) response: Response,
     @User() user: UserEntity | undefined,
   ) {
@@ -30,17 +31,18 @@ export class SteamAuthController {
       response.cookie('uuid', uuid, cookieSettings);
     }
 
-    return { url: this.steamAuthService.getUrl() };
+    const url = await this.steamAuthService.getUrl()
+    return { url };
   }
 
   @Get('callback')
   @Redirect()
-  async getCallback(
+  async callback(
     @Cookie('uuid') uuid: string,
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const authorization = await this.steamAuthService.callback(request, uuid)
+    const authorization = await this.steamAuthService.callback(request, uuid);
     response.clearCookie('uuid')
     return uuid ? {
       url: Configuration.getClientLink() + '/account'

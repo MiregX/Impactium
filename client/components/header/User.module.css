@@ -58,6 +58,7 @@
 .menu button,
 .menu a div {
   padding: 8px 20px;
+  gap: var(--card-gap);
   height: 32px;
   text-rendering: optimizeLegibility;
   color: var(--accent-8);

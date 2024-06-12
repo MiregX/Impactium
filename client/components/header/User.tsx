@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application';
-import { LanguageChooser } from '../../banners/language/LanguageChooser';
+import { LanguageChooser } from '@/banners/language/LanguageChooser';
 
 export function UserComponent() {
   const { user, logout } = useUser();
@@ -36,7 +36,7 @@ export function UserComponent() {
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>
         </Link>
         <hr />
-        <Link href='/account/balance' onClick={toggle}>
+        <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
           <div>
             {user.balance | 0}
