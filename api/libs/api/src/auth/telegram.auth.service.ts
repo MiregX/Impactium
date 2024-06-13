@@ -21,7 +21,7 @@ export class TelegramAuthService implements AuthMethodService {
 
   async callback(uuid: UUID) {
     const payload = await this.telegramService.getPayload(uuid);
-    if (typeof payload === 'boolean') throw new BadRequestException;
+    if (!payload || typeof payload === 'boolean') throw new BadRequestException;
 
     payload.uid = await this.authService.getPayload(uuid) as string || undefined;
     return this.authService.register(payload);

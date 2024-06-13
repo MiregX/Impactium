@@ -35,7 +35,7 @@ export class ApplicationService {
           }
         }
     
-        await this.redisService.setex('status', 600, JSON.stringify(info));
+        await this.redisService.setex('info', 600, JSON.stringify(info));
 
         return info;
       })

@@ -13,5 +13,5 @@ export interface AuthMethodController {
     income: Response,
     user: UserEntity | undefined,
   ) => Promise<{ url: string }> | { url: string };
-  callback: (...args: any[]) => PromiseLike<{ url: string }> | PromiseLike<void>;
+  callback: (...args: any[]) => PromiseLike<void | { url: string } | AuthResult>;
 }

@@ -25,8 +25,3 @@ export interface AuthPayload extends CreateLoginDto {
 }
 
 export type AuthResult = `Bearer ${string}`
-
-export const cookieSettings = {
-  maxAge: 1000 * 60 * 60 * 24 * 7,
-  path: '/',
-}

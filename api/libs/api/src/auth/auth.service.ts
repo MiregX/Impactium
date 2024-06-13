@@ -35,69 +35,67 @@ export class AuthService {
       where: { id, type },
     });
   
-    if (login) {
-      login = await this.prisma.login.update({
-        where: { id, type },
-        data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
-      });
-    }
-    else if (uid) {
-      login = await this.prisma.login.create({
-        data: {
-          id,
-          type,
-          avatar,
-          displayName,
-          uid,
-        }
-      })
-    } else {
-      uid = await this.prisma.user.upsert({
-        where: { email },
-        update: {
-          email,
-          logins: {
-            connectOrCreate: {
-              where: {
-                id,
-                type
-              },
-              create: {
-                id,
-                type,
-                avatar,
-                displayName,
-              },
+    const result = login
+      ? await this.prisma.login.update({
+          where: { id, type },
+          data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
+        })
+      : uid
+        ? await this.prisma.login.create({
+            data: {
+              id,
+              type,
+              avatar,
+              displayName,
+              uid,
             }
-          }
-        },
-        create: {
-          email,
-          logins: {
-            connectOrCreate: {
-              where: {
-                id,
-                type
-              },
-              create: {
-                id,
-                type,
-                avatar,
-                displayName
+          })
+        : await this.prisma.user.upsert({
+            where: { email },
+            update: {
+              email,
+              logins: {
+                connectOrCreate: {
+                  where: {
+                    id,
+                    type
+                  },
+                  create: {
+                    id,
+                    type,
+                    avatar,
+                    displayName,
+                  },
+                }
               }
-            }
-          }
-        },
-      }).then(user => user.uid);
-    };
-    
-    const JWT = this.userService.signJWT(uid, email)
+            },
+            create: {
+              email,
+              logins: {
+                connectOrCreate: {
+                  where: {
+                    id,
+                    type
+                  },
+                  create: {
+                    id,
+                    type,
+                    avatar,
+                    displayName
+                  }
+                }
+              }
+            },
+          })
+
+    const JWT = this.userService.signJWT(result.uid, email)
     return this.parseToken(JWT)
   }
 
   async getPayload(uuid: UUID): Promise<string | AuthPayload> {
     if (!uuid) return null;
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
+    await this.delPayload(uuid);
     try {
       return JSON.parse(payload) as AuthPayload;
     } catch (_) {
@@ -107,6 +105,10 @@ export class AuthService {
 
   async setPayload(uuid: UUID, payload: AuthPayload | string) {
     await this.redisService.setex(this.getCacheFolder(uuid), 300, JSON.stringify(payload) || uuid);
+  }
+
+  async delPayload(uuid: UUID) {
+    await this.redisService.del(this.getCacheFolder(uuid));
   }
 
   private getCacheFolder(uuid: UUID) {

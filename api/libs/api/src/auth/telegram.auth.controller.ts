@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Configuration } from '@impactium/config';
 import { Response } from 'express';
 import { TelegramAuthService } from './telegram.auth.service';
-import { cookieSettings } from './addon/auth.entity';
+import { cookieSettings } from '@impactium/pattern';
 import { UUID } from 'crypto';
 import { ConnectGuard } from './addon/connect.guard';
 import { UserEntity } from '@api/main/user/addon/user.entity';

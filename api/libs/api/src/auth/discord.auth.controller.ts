@@ -7,7 +7,7 @@ import { ConnectGuard } from './addon/connect.guard';
 import { AuthService } from './auth.service';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
-import { cookieSettings } from './addon/auth.entity';
+import { cookieSettings } from '@impactium/pattern';
 import { AuthMethodController } from './addon/auth.interface';
 import { Response } from 'express';
 
@@ -45,6 +45,6 @@ export class DiscordAuthController implements AuthMethodController {
     const authorization = await this.discordAuthService.callback(code, uuid);
     response.clearCookie('uuid');
     response.cookie('Authorization', authorization, cookieSettings);
-    return { url: `${Configuration.getClientLink()}${uuid ? '' : '/account'}` }
+    return { url: `${Configuration.getClientLink()}${uuid ? '/account' : ''}` }
   }
 }

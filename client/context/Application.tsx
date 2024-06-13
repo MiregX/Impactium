@@ -1,8 +1,9 @@
 'use client'
+import '@/dto/GlobalGet';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import styles from './Application.module.css';
 import { useLanguage } from '@/context/Language';
-import { Banner } from '@/ui/Banner';
+import { _server } from '@/dto/master';
 
 const ApplicationContext = createContext(undefined);
 

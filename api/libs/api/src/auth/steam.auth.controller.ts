@@ -2,7 +2,7 @@ import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@ne
 import { Configuration } from '@impactium/config';
 import { Response, Request } from 'express';
 import { SteamAuthService } from './steam.auth.service';
-import { cookieSettings } from './addon/auth.entity';
+import { cookieSettings } from '@impactium/pattern';
 import { User } from '../user/addon/user.decorator';
 import { UserEntity } from '../user/addon/user.entity';
 import { AuthService } from './auth.service';

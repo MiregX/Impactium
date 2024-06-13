@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity,  } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -38,6 +38,6 @@ export class UserService {
 
   decodeJWT(token: string) {
     const data = this.jwt.decode(token);
-    return data || new NotFoundException();
+    return data || new ForbiddenException();
   }
 }

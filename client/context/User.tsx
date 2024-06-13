@@ -42,6 +42,13 @@ export const UserProvider = ({
     return get('/api/user/get');
   };
 
+  if (cookie.get('uuid')) {
+    get('/api/oauth2/telegram/callback', {
+      method: 'POST',
+      isRaw: true
+    }).then(_ => refreshUser());
+  }
+
   const logout = () => {
     cookie.remove('Authorization');
     refreshUser();
