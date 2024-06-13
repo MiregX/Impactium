@@ -10,4 +10,4 @@ import { CommentController } from './comment.controller';
   imports: [PrismaModule, UserModule],
   controllers: [CommentController]
 })
-export class RedisModule {}
+export class CommentModule {}

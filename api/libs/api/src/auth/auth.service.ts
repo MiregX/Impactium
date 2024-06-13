@@ -20,6 +20,7 @@ export class AuthService {
   ) {}
 
   async login(token: string): Promise<UserEntity> {
+    if (!token) return null;
     const { email, uid } = this.userService.decodeJWT(token);
 
     if (uid) {

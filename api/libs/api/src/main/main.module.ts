@@ -4,6 +4,7 @@ import { UserModule } from '@api/main/user/user.module';
 import { AuthModule } from '@api/main/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TeamModule } from '@api/main/team/team.module';
+import { TransactionModule } from '@api/main/transaction/transaction.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { TeamModule } from '@api/main/team/team.module';
     UserModule,
     PrismaModule,
     TeamModule,
+    TransactionModule,
     ApplicationModule,
   ],
 })

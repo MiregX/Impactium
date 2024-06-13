@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import { Login } from "@/dto/Login";
 import Link from "next/link";
 import { Nav } from "./components/Nav";
+import { Balance } from "./components/Balance";
 
 export default async function AccountPage() {
   const token = cookies().get('Authorization')?.value;
@@ -27,11 +28,14 @@ export default async function AccountPage() {
       <AuthGuardClientSide />
       <Nav />
       <div className={s.wrapper}>
-        <Avatar />
+        <div className={s.group}>
+          <Avatar />
+          <Balance />
+        </div>
         <DisplayName />
         <Username />
         <Email />
-        <Connections logins={logins || []} />
+        <Connections logins={logins} />
       </div>
     </PanelTemplate>
   );

@@ -136,6 +136,27 @@ const locale: Locale = {
       it: 'Questo è il tuo avatar.',
       pl: 'To jest twój awatar.'
     },
+    balance: {
+      us: 'Your coin balance',
+      ru: 'Количество ваших монет',
+      ua: 'Кількість ваших монет',
+      it: 'Il tuo saldo di monete',
+      pl: 'Ilość twoich monet'
+    },
+    balance_content: {
+      us: 'One coin is one dollar. Used to participate in some tournaments.',
+      ru: 'Одна монета - один доллар. Используется для участия в некоторых турнирах',
+      ua: 'Одна монета - один долар. Використовується для участі в деяких турнірах.',
+      it: 'Una moneta è un dollaro. Utilizzato per partecipare ad alcuni tornei.',
+      pl: 'Jedna moneta to jeden dolar. Używane do udziału w niektórych turniejach.'
+    },
+    balance_description: {
+      us: 'Withdraw coins starting from $5, or by tournament organizers to a card.',
+      ru: 'Вывод монет от 5$, или организаторами турнира на карту',
+      ua: 'Виведення монет від 5$, або організаторами турніру на карту',
+      it: 'Prelievo di monete a partire da 5$, o dagli organizzatori del torneo sulla carta',
+      pl: 'Wypłata monet od 5$, lub przez organizatorów turnieju na kartę'
+    },
     displayName: {
       us: 'Display Name',
       ru: 'Отображаемое имя',

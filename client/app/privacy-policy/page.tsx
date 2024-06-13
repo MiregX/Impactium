@@ -183,7 +183,7 @@ export default function PrivacyPolicyPage() {
       <p>You may update, amend, or delete Your information at any time by signing in to Your Account, if you have one, and visiting the account settings section that allows you to manage Your personal information. You may also contact Us to request access to, correct, or delete any personal information that You have provided to Us.</p>
       <p>Please note, however, that We may need to retain certain information when we have a legal obligation or lawful basis to do so.</p>
       <h3>Disclosure of Your Personal Data</h3>
-      <h4>Business Transactions</h4>
+      <h4>Business Payments</h4>
       <p>If the Company is involved in a merger, acquisition or asset sale, Your Personal Data may be transferred. We will provide notice before Your Personal Data is transferred and becomes subject to a different Privacy Policy.</p>
       <h4>Law enforcement</h4>
       <p>Under certain circumstances, the Company may be required to disclose Your Personal Data if required to do so by law or in response to valid requests by public authorities (e.g. a court or a government agency).</p>
