@@ -107,7 +107,7 @@
   }
   .nav {
     flex-direction: row;
-    top: calc(var(--header-height) + 1px);
+    top: var(--header-height);
     z-index: 2;
     margin-top: -20px;
     padding: 8px;
