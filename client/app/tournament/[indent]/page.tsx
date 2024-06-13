@@ -1,5 +1,5 @@
 'use client'
-import s from './Team.module.css'
+import s from './Tournament.module.css'
 import { PanelTemplate } from "@/components/main/PanelTempate";
 import { Comments } from "@/components/team/Comments";
 import { Heading } from './components/Heading';
