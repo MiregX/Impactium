@@ -12,6 +12,11 @@
 .hasTitle {
   margin-top: 128px;
 }
+.isColumn {
+  flex-direction: column;
+    justify-content: flex-start !important;
+
+}
 .panel[data-splitter='true'] > img {
   width: calc(100% - 32px);
   transform: translateY(50%);

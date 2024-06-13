@@ -1,0 +1,19 @@
+
+.recomendations {
+  background: var(--meta-black);
+  border: 1px solid var(--accent-2);
+  border-radius: var(--border-m);
+  width: 100%;
+  overflow: hidden;
+}
+
+.recomendations > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.recomendations > div .unit:last-child,
+.minimized > div .unit:last-child {
+  border: none;
+}

@@ -8,9 +8,10 @@ import s from './Teams.module.css';
 import { Panel } from '@/ui/Panel';
 import { Team } from '@/dto/Team';
 import { useUser } from '@/context/User';
-import { SearchBar } from './components/SearchBar';
 import React from 'react';
 import { useTeams } from './context';
+import { Recomendations } from '@/components/owerviewPageTemplate/Recomentations';
+import { SearchBar } from '@/components/owerviewPageTemplate/SearchBar';
 
 export default function TeamsPage() {
   const { teams, setTeams } = useTeams();
@@ -37,8 +38,14 @@ export default function TeamsPage() {
   }, [teams])
 
   return (
-    <PanelTemplate style={[s.wrapper]}>
-      <SearchBar search={search} setSearch={setSearch} setTeams={setTeams} teams={teams} />
+    <PanelTemplate useColumn={true}>
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+        state={teams}
+        setState={setTeams}
+        langPathKey={'team'}
+        apiPath={'/api/team/find'} />
       {/* Команды пользователя */}
       {user?.teams ?
         <Panel heading={lang.team.yours} styles={[s.minimized]}>
@@ -50,16 +57,7 @@ export default function TeamsPage() {
         </Panel>
       : null}
       {/* Рекомендации */}
-      <Panel heading={lang.team.recomendations} styles={[s.recomendations]}>
-        {search.length > 0
-          ? (teams.filter((team: Team) => {
-            return team.indent.toLowerCase().includes(search.toLowerCase()) || team.title.toLowerCase().includes(search.toLowerCase())
-          }).map((team: Team) =>
-          <TeamUnit key={team.indent} team={team} />
-        )) : (teams.map((team: Team) => (
-          <TeamUnit key={team.indent} team={team} />
-        )))}
-      </Panel>
+      <Recomendations search={search} data={teams} unit={TeamUnit} />
     </PanelTemplate>
   );
 }

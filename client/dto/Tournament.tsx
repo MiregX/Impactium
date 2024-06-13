@@ -1,3 +1,3 @@
 export type Tournament = {
-
-} | unknown
+  indent: string
+}
