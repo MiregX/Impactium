@@ -5,7 +5,7 @@ import { _server } from '@/dto/master'
 import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
 
-export function EditTeamDescription({ team }) {
+export function EditDescription({ team }) {
   const { lang } = useLanguage();
 
   const save = async (description: string) => {

@@ -9,7 +9,7 @@ interface TournamentContext {
   tournament: Tournament,
 }
 
-export const useTournaments = () => useContext(TournamentContext) ?? (() => { throw new Error() })();
+export const useTournament = () => useContext(TournamentContext) ?? (() => { throw new Error() })();
 
 export const TournamentProvider = ({
     children,

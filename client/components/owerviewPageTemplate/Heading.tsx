@@ -2,15 +2,13 @@
 import s from '../Team.module.css'
 import { useLogo, useTeam } from "@/context/Team"
 
-export function Heading() {
-  const { team } = useTeam();
-
+export function Heading({ state }) {
   return (
     <div className={s.heading}>
-      {useLogo(team)}
+      {useLogo(state)}
       <div className={s.text}>
-        <p>{team.title}</p>
-        <h6>@{team.indent}</h6>
+        <p>{state.title}</p>
+        <h6>@{state.indent}</h6>
       </div>
     </div>
   )

@@ -1,19 +1,20 @@
 'use client'
 import s from './Team.module.css'
 import { PanelTemplate } from "@/components/main/PanelTempate";
+import { Description } from '@/components/owerviewPageTemplate/Description';
+import { Heading } from '@/components/owerviewPageTemplate/Heading';
+import { Members } from '@/components/owerviewPageTemplate/Members';
 import { Comments } from "@/components/team/Comments";
-import { Heading } from './components/Heading';
-import { Description } from './components/Description';
-import { Members } from './components/Members';
+import { useTeam } from '@/context/Team';
 
 export default function TeamIndentPage() {
-  
+  const { team } = useTeam();
   return (
     <PanelTemplate style={[s.page]}>
       <div className={s.wrapper}>
-        <Heading />
-        <Description />
-        <Members />
+        <Heading state={team} />
+        <Description key='team' state={team} />
+        <Members state={team} />
       </div>
       <Comments />
     </PanelTemplate>
