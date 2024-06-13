@@ -13,6 +13,7 @@
   cursor: pointer;
   font-size: unset;
   max-height: 64px;
+  white-space: nowrap;
 }
 ._:focus {
   outline: none;

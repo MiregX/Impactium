@@ -14,12 +14,12 @@ export function Description() {
 
   return (
     <div className={s.description}>
-      {user?.uid === team.ownerId && <button
-        onClick={() => spawnBanner(<EditTeamDescription team={team} />)}
-        className={s.edit}>
-        <img src='https://cdn.impactium.fun/ui/pencil/pencil-line.svg' />
-      </button>}
       <p>{team.description || lang.team.has_no_description}</p>
+        {user?.uid === team.ownerId && <button
+          onClick={() => spawnBanner(<EditTeamDescription team={team} />)}
+          className={s.edit}>
+          <img src='https://cdn.impactium.fun/ui/pencil/pencil-line.svg' />
+        </button>}
     </div>
   )
 }

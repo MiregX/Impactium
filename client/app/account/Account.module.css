@@ -77,6 +77,9 @@
 }
 .account .unit p {
   flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.2;
 }
 .account .unit code {
   font-family: var(--mono-geist);
