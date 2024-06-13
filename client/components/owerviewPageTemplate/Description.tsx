@@ -1,8 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language';
 import { useApplication } from '@/context/Application';
-import s from '../Team.module.css'
-import { useTeam } from "@/context/Team"
+import s from './Description.module.css'
 import { useUser } from "@/context/User";
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
@@ -20,7 +19,7 @@ export function Description({ state, key }: Description) {
 
   return (
     <div className={s.description}>
-      <p>{state.description || lang[key].has_no_description}</p>
+      <p>{state.description || lang?.[key]?.has_no_description}</p>
         {user?.uid === state.ownerId && <button
           onClick={() => spawnBanner(<EditDescription state={state} key={key} />)}
           className={s.edit}>

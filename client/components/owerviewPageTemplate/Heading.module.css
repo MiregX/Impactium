@@ -1,0 +1,41 @@
+.heading {
+  display: flex;
+  flex: 1;
+  height: 64px;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.heading img {
+  height: 64px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: var(--border-s);
+}
+.heading > span {
+  height: 64px;
+  width: 64px;
+  line-height: 64px;
+  font-size: var(--text-larger);
+}
+.heading .button {
+  align-self: flex-start;
+}
+.heading .text {
+  display: flex;
+  height: 64px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  overflow: hidden;
+}
+.heading .text p {
+  font-size: var(--text-larger);
+  font-weight: 400;
+}
+.heading .text h6 {
+  font-size: var(--text-small);
+  align-self: flex-start;
+  color: var(--text-dimmed);
+  font-weight: 400;
+}

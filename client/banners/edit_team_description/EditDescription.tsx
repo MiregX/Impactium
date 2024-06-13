@@ -5,11 +5,11 @@ import { _server } from '@/dto/master'
 import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
 
-export function EditDescription({ team }) {
+export function EditDescription({ state }) {
   const { lang } = useLanguage();
 
   const save = async (description: string) => {
-    await get(`/api/team/${team.indent}/edit/description`, {
+    await get(`/api/team/${state.indent}/edit/description`, {
       method: 'PATCH',
       credentials: 'include',
       body: description

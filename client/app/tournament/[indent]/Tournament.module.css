@@ -1,0 +1,37 @@
+.page {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: flex-start;
+  max-width: 75%;
+}
+.round {
+  color: var(--text-dimmed);
+  height: 32px;
+  width: 32px;
+  line-height: 32px;
+  text-align: center;
+  background-color: var(--accent-2);
+  border-radius: var(--round);
+}
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .wrapper {
+    max-width: 65%;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .page {
+    flex-direction: column !important;
+  }
+  .wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}

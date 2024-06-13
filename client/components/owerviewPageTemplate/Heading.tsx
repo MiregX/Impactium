@@ -1,5 +1,5 @@
 'use client'
-import s from '../Team.module.css'
+import s from './Heading.module.css'
 import { useLogo, useTeam } from "@/context/Team"
 
 export function Heading({ state }) {
