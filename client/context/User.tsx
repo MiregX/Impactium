@@ -46,7 +46,10 @@ export const UserProvider = ({
     get('/api/oauth2/telegram/callback', {
       method: 'POST',
       isRaw: true
-    }).then(_ => refreshUser());
+    }).then(_ => {
+      refreshUser()
+      console.log('🎄')
+    });
   }
 
   const logout = () => {
@@ -56,6 +59,7 @@ export const UserProvider = ({
 
   const refreshUser = () => {
     getUser().then(user => {
+      console.log('🎉')
       setUser(user);
       setIsUserFetched(true);
       setIsUserLoaded(true);
