@@ -24,7 +24,7 @@ export function Text() {
           focused: true,
           text: lang.find.team,
           style: [ s.button ]
-        }} />
+        }} /> 
         <GeistButton options={{
           type: GeistButtonTypes.Button,
           do: () => spawnBanner(<CreateTeam />),

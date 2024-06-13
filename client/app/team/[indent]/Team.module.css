@@ -9,6 +9,7 @@
   gap: 16px;
   flex: 1;
   align-self: flex-start;
+  max-width: 75%;
 }
 
 .heading {
@@ -53,11 +54,11 @@
 }
 .description {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: var(--card-gap);
 }
-.description .edit {
-  position: absolute;
-  left: -32px;
-}
+
 .description p {
   font-size: var(--text-medium-height);
   font-weight: 400;
@@ -71,4 +72,19 @@
   text-align: center;
   background-color: var(--accent-2);
   border-radius: var(--round);
+}
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .wrapper {
+    max-width: 65%;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .page {
+    flex-direction: column !important;
+  }
+  .wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
 }

@@ -49,6 +49,8 @@
 }
 .leave .input input {
   height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .leave .button {
   height: 32px;
@@ -60,4 +62,15 @@
 .leave .button img {
   height: 24px !important;
   width: 24px !important;
+}
+@media all and (min-width: 768px) and (max-width: 1024px) {
+  ._ {
+    min-width: 35%;
+  }
+}
+
+@media all and (max-width: 768px) {
+  ._ {
+    width: 100%;
+  }
 }
