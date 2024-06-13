@@ -15,7 +15,7 @@ export const TeamsProvider = ({
     children,
     prefetched
   }) => {
-  const [teams, setTeams] = useState(prefetched);
+  const [teams, setTeams] = useState(prefetched || []);
 
   return (
     <TeamsContext.Provider value={{

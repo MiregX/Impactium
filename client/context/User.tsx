@@ -48,7 +48,6 @@ export const UserProvider = ({
       isRaw: true
     }).then(_ => {
       refreshUser()
-      console.log('🎄')
     });
   }
 
@@ -59,7 +58,6 @@ export const UserProvider = ({
 
   const refreshUser = () => {
     getUser().then(user => {
-      console.log('🎉')
       setUser(user);
       setIsUserFetched(true);
       setIsUserLoaded(true);

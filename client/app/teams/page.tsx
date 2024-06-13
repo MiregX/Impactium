@@ -19,7 +19,7 @@ export default function TeamsPage() {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    if (teams === undefined) {
+    if (!teams) {
       get('/api/team/get', {
         method: 'GET',
         next: {
@@ -27,12 +27,13 @@ export default function TeamsPage() {
         }
       })
       .then(teams => {
-        setTeams(teams);
+        setTeams(teams || []);
       })
       .catch(_ => {
         setTeams([]);
       });
-      }
+    }
+    console.log(teams)
   }, [teams])
 
   return (
