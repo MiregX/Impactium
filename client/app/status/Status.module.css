@@ -4,10 +4,9 @@
 }
 
 .unit {
-  display: flex;
+  display: grid;
   width: 100%;
-  justify-content: space-between;
-  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
   border-bottom: 1px solid var(--accent-2);
   padding: 1em;
 }
@@ -31,14 +30,13 @@
   border-radius: var(--round);;
 }
 .unit span {
-  height: 100%;
   display: inline-flex;
 }
 .good {
-  color: var(--geist-blue);
+  color: var(--geist-green);
 }
 .good span::after {
-  background-color: var(--geist-blue);
+  background-color: var(--geist-green);
 }
 .warn {
   color: var(--geist-yellow);
@@ -53,6 +51,7 @@
   background-color: var(--geist-red);
 }
 .unit p {
+  justify-self: flex-end;
   display: flex;
   gap: 8px;
   border-radius: var(--border-l);
@@ -64,4 +63,36 @@
 }
 .unit:hover p {
   background: var(--gray16);
+}
+
+.graph {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 3px;
+  height: 32px;
+  justify-self: center;
+  position: relative;
+}
+.graph code {
+  width: 3px;
+  min-height: 3px;
+  border-radius: var(--round);
+}
+.graph s {
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-size: var(--text-small);
+  position: absolute;
+  font-family: var(--mono-geist);
+  border: 1px solid var(--accent-3);
+  border-radius: var(--border-s);
+}
+.graph s:first-child {
+  left: 0;
+  transform: translateX(calc(-100% - 8px));
+}
+.graph s:last-child {
+  right: 0;
+  transform: translateX(calc(100% + 8px));
 }

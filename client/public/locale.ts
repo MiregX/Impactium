@@ -21,6 +21,20 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  max: {
+    us: 'Max',
+    ru: 'Макс.',
+    ua: 'Макс.',
+    it: 'Max',
+    pl: 'Maks.'
+  },
+  min: {
+    us: 'Min',
+    ru: 'Мин.',
+    ua: 'Мин.',
+    it: 'Min',
+    pl: 'Min.'
+  },  
   _enter_indent_or_title: {
     us: 'Enter team name or its tag...',
     ru: 'Название команды или её тег...',

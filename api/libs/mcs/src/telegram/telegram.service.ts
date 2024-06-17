@@ -82,6 +82,6 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
     await this.telegram.getMe();
     const end = process.hrtime.bigint();
 
-    return Number(end - start) / 1e6;
+    return parseInt((Number(end - start) / 1e6).toFixed(0));
   }
 }

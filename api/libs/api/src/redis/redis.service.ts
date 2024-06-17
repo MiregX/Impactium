@@ -28,6 +28,6 @@ export class RedisService
     await this.ping();
     const end = process.hrtime.bigint();
 
-    return  Number(end - start) / 1e6;
+    return parseInt((Number(end - start) / 1e6).toFixed(0));
   }
 }

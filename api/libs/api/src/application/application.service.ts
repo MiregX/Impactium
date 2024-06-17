@@ -4,6 +4,7 @@ import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { StatusEntity, StatusInfoEntity, StatusInfoEntityTypes } from './addon/status.entity';
+import { dataset } from '../redis/redis.dto';
 
 @Injectable()
 export class ApplicationService {
@@ -14,7 +15,7 @@ export class ApplicationService {
   ) {}
 
   async info() {
-    return await this.redisService.get('info')
+    return await this.redisService.get(dataset.info)
       .then(data => data ? JSON.parse(data) : Promise.reject())
       .catch(async _ => {
         const [users_count, teams_count, tournaments_count] = await Promise.all([
@@ -35,35 +36,36 @@ export class ApplicationService {
           }
         }
     
-        await this.redisService.setex('info', 600, JSON.stringify(info));
+        await this.redisService.setex(dataset.info, 600, JSON.stringify(info));
 
         return info;
       })
   }
 
-  async status(): Promise<StatusEntity> {
-    return await this.redisService.get('status')
-      .then(data => data ? JSON.parse(data) : Promise.reject())
-      .catch(async _ => {
-        const [redis, telegram, cockroachdb] = await Promise.all([
-          this.getRedis(),
-          this.getTelegram(),
-          this.getPrisma()
-        ]);
+  async status(): Promise<StatusEntity[]> {
+    return await this.redisService.get(dataset.status)
+      .then(data => data ? JSON.parse(data) : []);
+  }
 
-        const status = {
-          redis,
-          telegram,
-          cockroachdb
-        } as {
-          [key: string]: StatusEntity
-        };
-    
-        await this.redisService.setex('status', 60, JSON.stringify(status));
+  async handle() {
+    const existStatus = await this.status();
 
-        return status;
-      })
-  }  
+    console.log(existStatus);
+
+    const [redis, telegram, cockroachdb] = await Promise.all([
+      this.getRedis(),
+      this.getTelegram(),
+      this.getPrisma()
+    ]);
+
+    await this.redisService.set(dataset.status, JSON.stringify([...existStatus.slice(-60), {
+      redis,
+      telegram,
+      cockroachdb
+    } as {
+      [key: string]: StatusEntity
+    }]));
+  }
 
   private getEnvironment() {
     return {
