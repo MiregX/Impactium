@@ -42,7 +42,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
         lang: payload.locale,
         type: 'discord' as $Enums.LoginType
       }))
-      .catch(_ => { throw new InternalServerErrorException() });
+      .catch(_ => null);
     
     payload.uid = uuid && await this.authService.getPayload(uuid) as string;
   

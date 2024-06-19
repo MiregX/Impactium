@@ -86,3 +86,7 @@
   flex: 1;
   justify-content: flex-end;
 }
+
+.center .content {
+  align-items: center;
+}

@@ -2,10 +2,9 @@ import { redirect } from 'next/navigation'
 import { User } from './User';
 import { Guard, Options } from './Guard'
 
-
-export function AuthGuard(user: User, options?: Options) {
+export function VerifiedGuard(user: User, options?: Options) {
   return Guard(user, {
-    key: 'uid',
+    key: 'verified',
     ...options
-  })
+  });
 }

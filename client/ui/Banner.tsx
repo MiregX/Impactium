@@ -16,6 +16,10 @@ export interface Warner {
   text: string;
 }
 
+interface Options {
+  center: boolean
+}
+
 interface BannerProps {
   title: string;
   children: React.ReactNode;
@@ -23,10 +27,11 @@ interface BannerProps {
     left?: React.ReactElement[],
     right: React.ReactElement[],
   };
-  onClose?: () => void;
+  onClose?: () => void,
+  options?: Partial<Options>
 }
 
-export function Banner({ title, children, footer, onClose }: BannerProps) {
+export function Banner({ title, children, footer, onClose, options }: BannerProps) {
   const { destroyBanner } = useApplication();
 
   useEffect(() => {
@@ -44,9 +49,11 @@ export function Banner({ title, children, footer, onClose }: BannerProps) {
     };
   }, [onClose]);
 
+  console.log(Object.keys(options).filter(key => !!options[key]).map(key => banner[key]).join(' '))
+
   return (
     <div className={banner.background}>
-      <div className={banner._}>
+      <div className={`${banner._}  ${Object.keys(options).filter(key => !!options[key]).map(key => banner[key]).join(' ')}`}>
         <h4>{title}
           <button onClick={destroyBanner}>
             <img src='https://cdn.impactium.fun/ui/close/md.svg'/>

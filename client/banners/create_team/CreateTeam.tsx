@@ -23,7 +23,9 @@ export default function CreateTeam() {
   const { destroyBanner, spawnBanner } = useApplication();
   const router = useRouter();
 
-  !AuthGuard(user, true) && spawnBanner(<LoginBanner />);
+  !AuthGuard(user, {
+    useRedirect: true
+  }) && spawnBanner(<LoginBanner />);
 
   const footer = {
     right: [<GeistButton options={{

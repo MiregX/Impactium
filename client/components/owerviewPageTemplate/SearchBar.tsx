@@ -6,8 +6,8 @@ import { _server } from '@/dto/master';
 import { useState } from 'react';
 import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { useApplication } from '@/context/Application';
-import CreateTeam from '@/banners/create_team/CreateTeam';
-import { Tournament } from '@/dto/Tournament';
+import CreateTeam from '@/banners/create_team/CreateTeam'
+import CreateTournament from '@/banners/create_tournament/CreateTournament';
 
 export function SearchBar({ search, setSearch, setState, state, langPathKey, apiPath }) {
   const { lang } = useLanguage();
@@ -62,7 +62,7 @@ export function SearchBar({ search, setSearch, setState, state, langPathKey, api
       <GeistButton
         options={{
           type: GeistButtonTypes.Button,
-          do: () => spawnBanner(<CreateTeam />),
+          do: () => spawnBanner(langPathKey === 'team' ? <CreateTeam /> : <CreateTournament />),
           text: lang.create[langPathKey],
           focused: true,
           style: [s.button]

@@ -396,7 +396,21 @@ const locale: Locale = {
       ua: 'Популярні турніри',
       it: 'Tornei popolari',
       pl: 'Popularne turnieje'
-    }  
+    },
+    well: {
+      us: 'Got it :(',
+      ru: 'Понятно :(',
+      ua: 'Зрозуміло :(',
+      it: 'Capito :(',
+      pl: 'Rozumiem :('
+    },
+    forbidden: {
+      us: 'You need to be verified to be able to create tournaments.',
+      ru: 'Необходимо пройти верификацию, чтобы получить возможность создавать турниры.',
+      ua: 'Потрібно пройти верифікацію, щоб отримати можливість створювати турніри.',
+      it: 'Devi essere verificato per poter creare tornei.',
+      pl: 'Musisz zostać zweryfikowany, aby móc tworzyć turnieje.'
+    }    
   },
   already_exists: {
     us: 'A team with this ID already exists, please choose another one',
