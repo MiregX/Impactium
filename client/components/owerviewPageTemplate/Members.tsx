@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language";
 import { Panel } from "@/ui/Panel";
 
 
-export function Members() {
+export function Members({ state }) {
   const { lang } = useLanguage();
 
   return (
