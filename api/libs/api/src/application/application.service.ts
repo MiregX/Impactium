@@ -50,8 +50,6 @@ export class ApplicationService {
   async handle() {
     const existStatus = await this.status();
 
-    console.log(existStatus);
-
     const [redis, telegram, cockroachdb] = await Promise.all([
       this.getRedis(),
       this.getTelegram(),

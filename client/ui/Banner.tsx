@@ -49,11 +49,9 @@ export function Banner({ title, children, footer, onClose, options }: BannerProp
     };
   }, [onClose]);
 
-  console.log(Object.keys(options).filter(key => !!options[key]).map(key => banner[key]).join(' '))
-
   return (
     <div className={banner.background}>
-      <div className={`${banner._}  ${Object.keys(options).filter(key => !!options[key]).map(key => banner[key]).join(' ')}`}>
+      <div className={`${banner._}  ${Object.keys(options || {}).filter(key => !!options[key]).map(key => banner[key]).join(' ')}`}>
         <h4>{title}
           <button onClick={destroyBanner}>
             <img src='https://cdn.impactium.fun/ui/close/md.svg'/>

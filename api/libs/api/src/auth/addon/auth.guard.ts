@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
     const response = context.switchToHttp().getResponse();
     const token = request.cookies.Authorization || request.headers.token
 
-    request.user = await this.authService.login(token.split(' ')[1]);
+    request.user = token && await this.authService.login(token.split(' ')[1]);
     
     if (!token || !request.user) {
       request.method === 'GET' && response.redirect('/');

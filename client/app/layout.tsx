@@ -12,9 +12,7 @@ import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/footer/Footer';
 import localFont from 'next/font/local'
-import { metadata } from '@/dto/Metadata';
-import { cookieSettings } from '@impactium/pattern';
-export { metadata };
+export { metadata } from '@/dto/Metadata';
 const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});
 
 declare global {

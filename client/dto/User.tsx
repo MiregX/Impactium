@@ -8,4 +8,5 @@ export interface User {
   balance: number,
   login: Login
   teams?: Team[] | false,
+  verified: boolean
 }

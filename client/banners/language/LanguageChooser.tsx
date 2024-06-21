@@ -5,6 +5,7 @@ import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
 import { GeistButton, GeistButtonTypes } from '@/ui/Button';
 import { Badge, BadgeType } from '@/ui/Badge';
+import Image from 'next/image'
 
 export function LanguageChooser() {
   const { lang, language, setLanguage } = useLanguage();
@@ -57,8 +58,11 @@ export function LanguageChooser() {
             className={key === language ? _language.active : undefined}
             key={key}
             onClick={() => setLanguage(key)}>
-            <img
+            <Image
               src={`https://cdn.impactium.fun/lang/${availableLanguages[key].code}.webp`}
+              height={32}
+              width={32}
+              priority={true}
               alt=''/>
             <p>{availableLanguages[key].target}</p>
             {key === language && <Badge type={BadgeType.selected} />}
