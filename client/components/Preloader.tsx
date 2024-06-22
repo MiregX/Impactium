@@ -10,11 +10,13 @@ import {
   } from "react";
 import { usePathname } from 'next/navigation';
 
-export function Preloader() {
-  const { isUserLoaded } = useUser();
+export function Preloader({ use }: {use?: boolean}) {
+  const { isUserLoaded, user } = useUser();
   const { setIsLogoHidden } = useHeader();
-  const url = usePathname(); 
-  const blocker = url === '/login/callback';
+  const url = usePathname();
+  const [blocker, setBlocker] = useState<boolean>(use || isUserLoaded);
+
+  useEffect(() => user && setBlocker(false), [user])
 
   const [visitedBefore, setVisitedBefore] = useState<boolean>(typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
   const self = useRef(null);

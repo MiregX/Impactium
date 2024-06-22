@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 export function Nav() {
   const { lang } = useLanguage();
   const [activeSection, setActiveSection] = useState('');
+  const sections = ['avatar', 'balance', 'displayName', 'username', 'email', 'connections'];
 
   useEffect(() => {
-    const sections = ['avatar', 'displayName', 'username', 'email', 'connections'];
     const yOffset = -192;
 
     const handleClick = (e) => {
@@ -46,7 +46,7 @@ export function Nav() {
 
   return (
     <nav className={s.nav}>
-      {['avatar', 'displayName', 'username', 'email', 'connections'].map(section => (
+      {sections.map(section => (
         <Link key={section} href={`#${section}`} className={activeSection === section ? s.active : ''}>
           {lang.account[section]}
         </Link>

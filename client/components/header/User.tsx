@@ -38,10 +38,7 @@ export function UserComponent() {
         <hr />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <div>
-            {user.balance | 0}
-            <img src='https://cdn.impactium.fun/ui/specific/coffee-coin.svg' alt=''/>
-          </div>
+          <div style={{ fontFamily: 'var(--mono-geist)'}}>{user.balance | 0}$</div>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}

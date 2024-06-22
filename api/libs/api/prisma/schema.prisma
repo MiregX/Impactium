@@ -99,6 +99,7 @@ enum Roles {
   fullsupport
   rotation
   coach
+  fix
 }
 
 model Tournament {

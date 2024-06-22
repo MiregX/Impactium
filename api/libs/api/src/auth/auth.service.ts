@@ -36,61 +36,104 @@ export class AuthService {
       where: { id, type },
     });
   
-    const result = login
-      ? await this.prisma.login.update({
-          where: { id, type },
-          data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
-        })
-      : uid
-        ? await this.prisma.login.create({
-            data: {
-              id,
-              type,
-              avatar,
-              displayName,
-              uid,
-            }
+    try {
+      const result = login
+        ? await this.prisma.login.update({
+            where: { id, type },
+            data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
           })
-        : await this.prisma.user.upsert({
-            where: { email },
-            update: {
-              email,
-              logins: {
-                connectOrCreate: {
-                  where: {
-                    id,
-                    type
-                  },
-                  create: {
-                    id,
-                    type,
-                    avatar,
-                    displayName,
-                  },
-                }
+        : uid
+          ? await this.prisma.login.create({
+              data: {
+                id,
+                type,
+                avatar,
+                displayName,
+                uid,
               }
-            },
-            create: {
-              email,
-              logins: {
-                connectOrCreate: {
-                  where: {
-                    id,
-                    type
-                  },
-                  create: {
-                    id,
-                    type,
-                    avatar,
-                    displayName
+            })
+          : await this.prisma.user.upsert({
+              where: { email },
+              update: {
+                email,
+                logins: {
+                  connectOrCreate: {
+                    where: {
+                      id,
+                      type
+                    },
+                    create: {
+                      id,
+                      type,
+                      avatar,
+                      displayName,
+                    },
+                  }
+                }
+              },
+              create: {
+                email,
+                uid: crypto.randomUUID(),
+                logins: {
+                  connectOrCreate: {
+                    where: {
+                      id,
+                      type
+                    },
+                    create: {
+                      id,
+                      type,
+                      avatar,
+                      displayName
+                    }
+                  }
+                }
+              },
+            })
+
+      const JWT = this.userService.signJWT(result.uid, email)
+      return this.parseToken(JWT)
+    } catch (error) {
+      console.log(error);
+      const result = login
+        ? await this.prisma.login.update({
+            where: { id, type },
+            data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
+          })
+        : uid
+          ? await this.prisma.login.create({
+              data: {
+                id,
+                type,
+                avatar,
+                displayName,
+                uid,
+              }
+            })
+          : await this.prisma.user.create({
+              data: {
+                email,
+                uid: crypto.randomUUID(),
+                logins: {
+                  connectOrCreate: {
+                    where: {
+                      id,
+                      type
+                    },
+                    create: {
+                      id,
+                      type,
+                      avatar,
+                      displayName,
+                    },
                   }
                 }
               }
-            },
-          })
+            })
 
-    const JWT = this.userService.signJWT(result.uid, email)
-    return this.parseToken(JWT)
+      const JWT = this.userService.signJWT(result.uid, email)
+      return this.parseToken(JWT)
+    }
   }
 
   async getPayload(uuid: UUID): Promise<string | AuthPayload> {
