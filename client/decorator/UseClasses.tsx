@@ -1,0 +1,1 @@
+globalThis.UseClasses = (className: string | string[]) => Array.isArray(className) ? className.join(' ') : className

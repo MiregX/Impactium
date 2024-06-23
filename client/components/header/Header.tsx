@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import s from '@/components/header/Header.module.css';
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';
 import { UserComponent } from './User';
@@ -27,13 +27,13 @@ export function Header() {
         <UserComponent />
       ) : (
         <div className={s.wrapper}>
-          <GeistButton options={{
-            type: GeistButtonTypes.Button,
+          <Button options={{
+            type: ButtonTypes.Button,
             text: lang._login,
             do: () => spawnBanner(<LoginBanner />),
           }} />
-          <GeistButton options={{
-            type: GeistButtonTypes.Button,
+          <Button options={{
+            type: ButtonTypes.Button,
             text: '',
             img: 'https://cdn.impactium.fun/ui/specific/globe.svg',
             do: () => spawnBanner(<LanguageChooser />),

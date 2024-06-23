@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import s from './CreateTeam.module.css'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { _server } from '@/dto/master';
 import { redirect, useRouter } from 'next/navigation';
 import { TitleInput } from './components/TitleInput';
@@ -28,8 +28,8 @@ export default function CreateTeam() {
   }) && spawnBanner(<LoginBanner />);
 
   const footer = {
-    right: [<GeistButton options={{
-      type: GeistButtonTypes.Button,
+    right: [<Button options={{
+      type: ButtonTypes.Button,
       do: !!(team?.indent && team.title?.length >= 5) ? send : () => {},
       text: lang.create.team,
       focused: !!(team?.indent && team.title?.length >= 5),

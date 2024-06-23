@@ -3,24 +3,24 @@ import input from './styles/InputMin.module.css';
 import { useLanguage } from '@/context/Language';
 
 interface InputMinProps {
-  value: string;
+  state: string;
+  setState: (value) => void
   before?: string;
-  regExp: RegExp;
+  regExp: {
+    test: RegExp,
+    message: string
+  };
 }
 
-export function InputMin({ value: initialValue, before, regExp }: InputMinProps) {
-  const [value, setValue] = useState(initialValue);
+export function InputMin({ state, setState, before, regExp }: InputMinProps) {
   const [error, setError] = useState('');
   const { lang } = useLanguage();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    if (regExp.test(newValue)) {
-      setError('');
-    } else {
-      setError(lang.error.indent_invalid_format);
-    }
-    setValue(newValue);
+    setError(regExp.test.test(newValue) ? '' : regExp.message);
+
+    setState(newValue);
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ export function InputMin({ value: initialValue, before, regExp }: InputMinProps)
       {before && <p>{before}</p>}
       <input 
         className={input._} 
-        value={value} 
+        value={state} 
         onChange={handleChange} 
         onFocus={handleFocus}
       />

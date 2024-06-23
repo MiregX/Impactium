@@ -12,7 +12,6 @@ export class CoinbaseService {
     private readonly prisma: PrismaService,
   ) {
     this.client = Client.init(process.env.COINBASE_API_KEY || '5ea8a85f-8674-48fa-90a0-72acb774a051');
-    console.log(this.client);
   }
 
   async createCharge(amount: number, currency: string, description: string) {

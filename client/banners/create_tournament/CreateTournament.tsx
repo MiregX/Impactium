@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import s from './CreateTournament.module.css'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { _server } from '@/dto/master';
 import { useRouter } from 'next/navigation';
 import { useApplication } from '@/context/Application';
@@ -32,8 +32,8 @@ export default function CreateTeam() {
 
   return (
     <Banner title={lang.create.tournament} options={{ center: true }}footer={{right: [
-      <GeistButton options={{
-      type: GeistButtonTypes.Button,
+      <Button options={{
+      type: ButtonTypes.Button,
       text: lang.tournament.well,
       focused: true,
     }} />

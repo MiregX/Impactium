@@ -1,11 +1,13 @@
-import { $Enums, Login, Prisma, Team, User } from "@prisma/client";
+import { Login, Prisma, Team, User } from "@prisma/client";
 import { LoginEntity } from "./login.entity";
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 
 export class UserEntity implements User {
-  uid: string;
-  register: Date;
-  email: string | null;
+  uid: string
+  register: Date
+  email: string | null
+  displayName: string | null
+  username: string | null
   login?: LoginEntity
   logins?: LoginEntity[]
   teams?: TeamEntity[]
@@ -48,6 +50,8 @@ export class UserEntity implements User {
     return new UserEntity({
       uid: user.uid,
       register: user.register,
+      username: user.username,
+      displayName: user.displayName,
       email: user.email,
       login: user.logins[0],
       teams: options?.withTeams ? user.teams : undefined,

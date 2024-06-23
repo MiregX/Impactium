@@ -17,13 +17,6 @@
   top: 0;
   left: 0;
 }
-.picture {
-  box-shadow: var(--shadow-border);
-  height: 32px;
-  width: 32px;
-  border-radius: var(--round);
-  overflow: hidden;
-}
 .menu {
   display: flex;
   position: absolute;

@@ -4,7 +4,7 @@ import s from './SearchBar.module.css'
 import { useLanguage } from '@/context/Language'
 import { _server } from '@/dto/master';
 import { useState } from 'react';
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { useApplication } from '@/context/Application';
 import CreateTeam from '@/banners/create_team/CreateTeam'
 import CreateTournament from '@/banners/create_tournament/CreateTournament';
@@ -59,9 +59,9 @@ export function SearchBar({ search, setSearch, setState, state, langPathKey, api
         style={[loading && s.loading]}
         onChange={handleSearchChange}
       />
-      <GeistButton
+      <Button
         options={{
-          type: GeistButtonTypes.Button,
+          type: ButtonTypes.Button,
           do: () => spawnBanner(langPathKey === 'team' ? <CreateTeam /> : <CreateTournament />),
           text: lang.create[langPathKey],
           focused: true,

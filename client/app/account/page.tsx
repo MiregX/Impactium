@@ -1,6 +1,6 @@
 import { PanelTemplate } from "@/components/main/PanelTempate";
 import s from './Account.module.css'
-import { Avatar } from "./components/Avatar";
+import { PersonalAvatar } from "./components/PersonalAvatar";
 import { DisplayName } from "./components/DisplayName";
 import { Username } from "./components/Username";
 import { Email } from "./components/Email";
@@ -29,7 +29,7 @@ export default async function AccountPage() {
       <Nav />
       <div className={s.wrapper}>
         <div className={s.group}>
-          <Avatar />
+          <PersonalAvatar />
           <Balance />
         </div>
         <DisplayName />

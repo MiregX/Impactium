@@ -23,7 +23,7 @@
   color: var(--text-white);
 }
 
-.focus {
+.focused {
   background: var(--soft-white);
   color: var(--soft-black);
 }
@@ -32,16 +32,25 @@
   height: 18px !important;
 }
 
-.focus img {
+.focused img {
   filter: brightness(0);
 }
 
-.focus:hover {
+.focused:hover {
   color: var(--black);
 }
 
-.min {
+.minimized {
   font-weight: 300;
   background: none;
   border: none;
+}
+
+.loading {
+
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
 }

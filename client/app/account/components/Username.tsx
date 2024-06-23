@@ -1,27 +1,40 @@
 'use client'
 import { useLanguage } from "@/context/Language";
 import { Card } from "@/ui/Card";
-import Image from 'next/image'
 import s from '../Account.module.css'
 import { useUser } from "@/context/User";
-import { GeistButton, GeistButtonTypes } from "@/ui/Button";
+import { Button, ButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
-import { Indent } from '@impactium/pattern'
+import { Username as RUsername } from '@impactium/pattern'
+import { useState } from "react";
 
 export function Username() {
   const { lang } = useLanguage();
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
+  const [ username, setUsername ] = useState(user.uid);
+  const [ loading, setLoading ] = useState<boolean>(false);
 
-  const button = <GeistButton options={{
-    type: GeistButtonTypes.Button,
-    text: lang._save
+  const send = async () => {
+    setLoading(true);
+    await get(`/api/user/${username}`, {
+      method: 'POST'
+    }).then(() => { setLoading(false); refreshUser() })
+  }
+
+  const button = <Button options={{
+    type: ButtonTypes.Button,
+    text: lang._save,
+    do: send,
+    focused: UseUsername(user) !== username && RUsername.test(username),
+    disabled: !(UseUsername(user) !== username && RUsername.test(username)),
+    loading
   }}/>
 
   return (
     <Card className={s.account} id='username' description={{ text: lang.account.username_description, button }}>
       <h6>{lang.account.username}</h6>
       <p>{lang.account.username_content}</p>
-      <InputMin value={user.uid} before='impactium.fun/user/' regExp={Indent} />
+      <InputMin state={username} setState={setUsername} before='impactium.fun/user/' regExp={{test: RUsername, message: lang.error.indent_invalid_format}} />
     </Card>
   );
 }

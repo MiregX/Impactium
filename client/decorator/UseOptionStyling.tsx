@@ -1,0 +1,1 @@
+globalThis.UseOptionStyling = (options: Object = {}, base: Record<string, string>): string => Object.keys(options).filter(key => !!options[key]).map(key => base[key]).join(' ')

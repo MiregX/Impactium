@@ -3,16 +3,17 @@ import { useLanguage } from "@/context/Language";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
-import { GeistButton, GeistButtonTypes } from "@/ui/Button";
+import { Button, ButtonTypes } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application";
+import { Avatar } from "@/components/avatar/Avatar";
 
 export function Connections({ logins }: { logins: Login[] }) {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
 
-  const button = <GeistButton options={{
-    type: GeistButtonTypes.Button,
+  const button = <Button options={{
+    type: ButtonTypes.Button,
     text: lang.account.connect,
     do: () => spawnBanner(<LoginBanner connect={true} />),
     img: 'https://cdn.impactium.fun/ui/action/add-plus.svg',
@@ -38,7 +39,10 @@ function Unit({ login }: { login: Login }) {
   return (
     <div className={s.unit}>
       <img src={`https://cdn.impactium.fun/tech/${login.type}.png`} />
-      {login.avatar && <img className={s.border} src={login.avatar} />}
+      <Avatar
+        size={32}
+        src={login.avatar}
+        alt={login.displayName} />
       <p>{login.displayName}</p>
       <code>
         <img src='https://cdn.impactium.fun/ui/specific/command.svg' />{login.id}

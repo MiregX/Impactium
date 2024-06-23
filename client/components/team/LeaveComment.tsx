@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/ui/Input'
 import s from './Comments.module.css'
-import { GeistButton, GeistButtonTypes } from '@/ui/Button'
+import { Button, ButtonTypes } from '@/ui/Button'
 import { _server } from '@/dto/master'
 import { useUser } from '@/context/User'
 import { useLanguage } from '@/context/Language'
@@ -25,8 +25,8 @@ export function LeaveComment() {
         placeholder: lang.comments.leave,
         style: [s.input]
       }}/>
-      <GeistButton options={{
-        type: GeistButtonTypes.Button,
+      <Button options={{
+        type: ButtonTypes.Button,
         text: '',
         do: send,
         img: 'https://cdn.impactium.fun/ui/specific/paper-plane.svg',

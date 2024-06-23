@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
+import { Avatar } from '../avatar/Avatar';
 
 export function UserComponent() {
   const { user, logout } = useUser();
@@ -26,11 +27,14 @@ export function UserComponent() {
   return (
     <div className={`${_user.user} ${active && _user.active}`}>
       <div className={_user.action_lock} onClick={toggle} />
-      <div className={_user.wrapper} onClick={toggle}>
-        <Image className={_user.picture} src={user.login.avatar} width={30} height={30} alt="Avatar" />
-      </div>
+      <Avatar
+        className={_user.wrapper}
+        size={32}
+        alt={UseUsername(user)}
+        src={user.login.avatar}
+        onClick={toggle} />
       <nav className={_user.menu}>
-        <p className={_user.name}>{user.email || user.login.displayName}</p>
+        <p className={_user.name}>{user.email || UseUsername(user)}</p>
         <Link href='/account' onClick={toggle}>
           {lang._account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>

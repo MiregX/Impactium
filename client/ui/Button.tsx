@@ -5,33 +5,34 @@ import Link from 'next/link';
 import React from 'react';
 import { redirect } from 'next/navigation';
 
-export enum GeistButtonTypes {
+export enum ButtonTypes {
   Link = 'link',
   Button = 'button'
 }
 
-export type GeistButton = {
-  type: GeistButtonTypes;
+export type Button = {
+  type: ButtonTypes;
   text: string;
   do?: string | (() => void);
   img?: string;
   focused?: boolean;
   minimized?: boolean;
-  style?: string[];
+  className?: string | string[];
+  loading?: boolean;
+  disabled?: boolean; 
 }
 
-export function GeistButton({ options }: { options: GeistButton }) {
+export function Button({ options }: { options: Button }) {
   const { destroyBanner } = useApplication();
   options.do = options.do || destroyBanner
 
   return (
-    options.type === GeistButtonTypes.Link ? (
+    options.type === ButtonTypes.Link ? (
       <Link
         className={`
           ${button._}
-          ${options.focused && button.focus}
-          ${options.minimized && button.min}
-          ${options.style?.join(' ')}`}
+          ${UseOptionStyling(options, button)}
+          ${UseClasses(options.className)}`}
         href={typeof options.do === 'string' ? options.do : '#'}>
         {options.img && <img src={options.img} />} 
         {options.text}
@@ -40,9 +41,8 @@ export function GeistButton({ options }: { options: GeistButton }) {
       <button
         className={`
           ${button._}
-          ${options.focused && button.focus}
-          ${options.minimized && button.min}
-          ${options.style?.join(' ')}`}
+          ${UseOptionStyling(options, button)}
+          ${UseClasses(options.className)}`}
         onClick={typeof options.do === 'function' ? options.do : redirect(options.do)}>
         {options.img && <img src={options.img} />} 
         {options.text}

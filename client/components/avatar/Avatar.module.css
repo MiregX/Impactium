@@ -1,0 +1,6 @@
+._ {
+  box-shadow: var(--shadow-border);
+  border-radius: var(--round);
+  overflow: hidden;
+  display: flex;
+}

@@ -636,6 +636,13 @@ const locale: Locale = {
     }    
   },
   error: {
+    displayName_invalid_format: {
+      us: 'Bad nickname. Don\'t cause us trouble, or we\'ll bite.',
+      ru: 'Хреновый никнейм. Не создавай нам проблем, а то откусим яйца.',
+      ua: 'Паршивий нікнейм. Не створюй нам проблем, а то ми відкусимо яйця.',
+      it: 'Brutto soprannome. Non crearci problemi, o morderemo.',
+      pl: 'Zły pseudonim. Nie sprawiaj nam problemów, bo cię ugryziemy.'
+    },
     indent_not_provided: {
       us: 'It seems you forgot to provide an ID.',
       ru: 'Кажется ты забыл ввести айди',

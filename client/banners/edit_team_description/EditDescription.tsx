@@ -2,7 +2,7 @@
 import { Banner } from '@/ui/Banner'
 import _ from './EditTeamDescription.module.css'
 import { _server } from '@/dto/master'
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
 
 export function EditDescription({ state }) {
@@ -18,8 +18,8 @@ export function EditDescription({ state }) {
 
   const footer = {
     right: [
-      <GeistButton options={{
-        type: GeistButtonTypes.Button,
+      <Button options={{
+        type: ButtonTypes.Button,
         text: lang._save,
         do: () => save,
         img: 'https://cdn.impactium.fun/ui/check/big.svg',

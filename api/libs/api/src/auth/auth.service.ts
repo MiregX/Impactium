@@ -7,6 +7,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
+import { LoginEntity } from '../user/addon/login.entity';
 
 @Injectable()
 export class AuthService {
@@ -38,10 +39,7 @@ export class AuthService {
   
     try {
       const result = login
-        ? await this.prisma.login.update({
-            where: { id, type },
-            data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
-          })
+        ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
         : uid
           ? await this.prisma.login.create({
               data: {
@@ -96,20 +94,9 @@ export class AuthService {
     } catch (error) {
       console.log(error);
       const result = login
-        ? await this.prisma.login.update({
-            where: { id, type },
-            data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
-          })
+        ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
         : uid
-          ? await this.prisma.login.create({
-              data: {
-                id,
-                type,
-                avatar,
-                displayName,
-                uid,
-              }
-            })
+          ? await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
           : await this.prisma.user.create({
               data: {
                 email,
@@ -159,7 +146,18 @@ export class AuthService {
     return `${dataset.connections}:${uuid}`
   }
 
-  private parseToken (token: string): AuthResult {
+  private parseToken(token: string): AuthResult {
     return (token.startsWith('Bearer ') ? token : `Bearer ${token}`) as AuthResult
+  }
+
+  private updateLogin({ id, type, avatar, displayName, uid }: AuthPayload, login: LoginEntity): Promise<LoginEntity> {
+    return this.prisma.login.update({
+      where: { id, type },
+      data: { avatar, displayName, on: new Date(), uid: uid || login.uid },
+    })
+  }
+
+  private createLogin(data: Required<AuthPayload>) {
+    return this.prisma.login.create({ data });
   }
 }

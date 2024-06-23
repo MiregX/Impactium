@@ -1,22 +1,29 @@
-import '@/dto/GlobalGet';
+import '@/decorator/GlobalGet';
+import '@/decorator/UseClasses';
+import '@/decorator/UseDisplayName';
+import '@/decorator/UseOptionStyling';
+import '@/decorator/UseUsername';
 import React, { ReactNode } from 'react'
 import '@/public/.globals.css';
-import { Metadata } from 'next'
 import LanguageProvider from '@/context/Language';
 import { ApplicationProvider } from '@/context/Application';
 import { HeaderProvider } from '@/context/Header';
 import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
-import { _server } from '@/dto/master'
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/footer/Footer';
 import localFont from 'next/font/local'
+import { User } from '@/dto/User';
 export { metadata } from '@/dto/Metadata';
 const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});
 
 declare global {
   var get: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
+  var UseClasses: (className: string | string[]) => string;
+  var UseUsername: (user: User) => string;
+  var UseDisplayName: (user: User) => string;
+  var UseOptionStyling: (options: Object, base: Record<string, string>) => string;
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

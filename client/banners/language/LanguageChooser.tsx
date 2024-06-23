@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import { Badge, BadgeType } from '@/ui/Badge';
 import Image from 'next/image'
 
@@ -35,14 +35,14 @@ export function LanguageChooser() {
   };
 
   const footer = {
-    left: [<GeistButton options={{
-            type: GeistButtonTypes.Link,
+    left: [<Button options={{
+            type: ButtonTypes.Link,
             minimized: true,
             text: lang.found_a_translation_error,
             do: 'https://t.me/impactium'
           }} />],
-    right: [<GeistButton options={{
-            type: GeistButtonTypes.Button,
+    right: [<Button options={{
+            type: ButtonTypes.Button,
             text: lang._save,
             img: 'https://cdn.impactium.fun/ui/check/all-big.svg',
             focused: true

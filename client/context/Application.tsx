@@ -1,5 +1,9 @@
 'use client'
-import '@/dto/GlobalGet';
+import '@/decorator/GlobalGet';
+import '@/decorator/UseClasses';
+import '@/decorator/UseDisplayName';
+import '@/decorator/UseOptionStyling';
+import '@/decorator/UseUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import styles from './Application.module.css';
 import { useLanguage } from '@/context/Language';

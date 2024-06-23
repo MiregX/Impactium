@@ -21,6 +21,8 @@ model User {
   uid           String       @id @default(cuid())
   register      DateTime     @default(now())
   email         String?      @unique
+  displayName   String?
+  username      String?
   verified      Boolean      @default(false)
   logins        Login[]
   comments      Comment[]

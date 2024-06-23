@@ -1,4 +1,4 @@
-import { GeistButton, GeistButtonTypes } from '@/ui/Button';
+import { Button, ButtonTypes } from '@/ui/Button';
 import s from './Onboarding.module.css';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import { useApplication } from '@/context/Application';
@@ -18,15 +18,15 @@ export function Text() {
       </h4>
       <p>{lang.main.find_team_description}</p>
       <div className={s.group}>
-        <GeistButton options={{
-          type: GeistButtonTypes.Link,
+        <Button options={{
+          type: ButtonTypes.Link,
           do: '/teams',
           focused: true,
           text: lang.find.team,
           style: [ s.button ]
         }} /> 
-        <GeistButton options={{
-          type: GeistButtonTypes.Button,
+        <Button options={{
+          type: ButtonTypes.Button,
           do: () => spawnBanner(<CreateTeam />),
           text: lang.create.team,
           minimized: true

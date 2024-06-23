@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User";
-import { GeistButton, GeistButtonTypes } from "@/ui/Button";
+import { Button, ButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { _server } from "@/dto/master";
 
@@ -11,8 +11,8 @@ export function Balance() {
   const { lang } = useLanguage();
   const { user } = useUser();
 
-  const button = <GeistButton options={{
-    type: GeistButtonTypes.Link,
+  const button = <Button options={{
+    type: ButtonTypes.Link,
     focused: true,
     do: `${_server()}/api/payment/top-up`,
     text: lang.balance.top_up,

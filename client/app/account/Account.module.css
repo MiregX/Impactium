@@ -42,11 +42,6 @@
 .account .avatar {
   position: absolute;
   right: 24px;
-  height: 78px;
-  width: 78px;
-  border: 1px solid var(--accent-3);
-  border-radius: var(--round);
-  overflow: hidden;
   transition: all 0.3s var(--transition);
   cursor: pointer;
 }
@@ -99,9 +94,6 @@
 }
 .account .unit code img {
   height: 16px;
-}
-.unit .border {
-  border: 1px solid var(--accent-3);
 }
 .balance > div {
   flex-direction: row;

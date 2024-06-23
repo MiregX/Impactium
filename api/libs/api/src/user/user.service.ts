@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { UserEntity,  } from './addon/user.entity';
+import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma, User } from '@prisma/client';
 
@@ -10,7 +10,6 @@ export class UserService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
   ) {}
-
 
   findByEmail(email: string, select?: Prisma.UserSelect) {
     return this.prisma.user.findUnique({
@@ -23,6 +22,20 @@ export class UserService {
     return this.prisma.user.findUnique({
       where: { uid },
       select
+    });
+  }
+
+  setUsername(uid: string, username: string) {
+    return this.prisma.user.update({
+      where: { uid },
+      data: { username }
+    });
+  }
+
+  setDisplayName(uid: string, displayName: string) {
+    return this.prisma.user.update({
+      where: { uid },
+      data: { displayName }
     });
   }
   
