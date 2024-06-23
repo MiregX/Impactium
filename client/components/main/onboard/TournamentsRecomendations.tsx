@@ -37,7 +37,7 @@ export function TournamentsRecomendations({ tournaments }) {
 
   const { lang } = useLanguage();
   return (
-    <Panel heading={lang.tournament.recomendations} styles={[s.tournaments]}>
+    <Panel heading={lang.tournament.recomendations} className={s.tournaments}>
       {tournaments.map((tournament: TournamentUnit | any) => {
         return (
           <div className={s.unit} key={tournament.code}>

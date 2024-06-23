@@ -1,10 +1,34 @@
+import { Team } from "./Team";
+import { User } from "./User";
+
 export interface Tournament {
-  indent: string,
-  logo: null | string,
+  id: string,
+  banner: string,
   title: string,
-  ownerId: string,
+  start: Date,
+  end: Date,
   description: string,
-  membersAmount: number,
-  members?: Array<null>,
-  comments: Array<Comment>
+  code: string,
+  rules: JSON,
+  ownerId: string,
+  owner: User,
+  teams: Team[],
+  gid: string,
+  // grid: Grid,
+  comments: Comment[]
 }
+
+// id          String      @id @default(cuid())
+// banner      String
+// title       String
+// start       DateTime
+// end         DateTime
+// description Json
+// code        String      @unique
+// rules       Json
+// ownerId     String
+// owner       User        @relation(fields: [ownerId], references: [uid])
+// teams       Team[]
+// gid         String
+// grid        Grid?
+// comments    Comment[]

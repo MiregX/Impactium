@@ -15,6 +15,12 @@ or
 import { User } from '@api/main/user/user.entity';
 ```
 
+Object Key value for: {
+  user: @username
+  team: @indent
+  tournament: @code
+}
+
 ### Зависимости
 
 - Docker для контейнеризации и развёртывания.

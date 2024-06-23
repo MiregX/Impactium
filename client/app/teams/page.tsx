@@ -48,7 +48,7 @@ export default function TeamsPage() {
         apiPath={'/api/team/find'} />
       {/* Команды пользователя */}
       {user?.teams ?
-        <Panel heading={lang.team.yours} styles={[s.minimized]}>
+        <Panel heading={lang.team.yours} className={s.minimized}>
           <React.Fragment>
             {user.teams.map((team: Team) => (
               <TeamUnit key={team.indent} team={team} />

@@ -6,7 +6,7 @@ import s from './Recomendations.module.css'
 export function Recomendations({ search, data, unit: TeamUnit }) {
   const { lang } = useLanguage();
   return (
-    <Panel heading={lang.team.recomendations} styles={[s.recomendations]}>
+    <Panel heading={lang.team.recomendations} className={s.recomendations}>
       {search.length > 0
         ? (data.filter((unit: any) => {
           return unit.indent.toLowerCase().includes(search.toLowerCase()) || unit.title.toLowerCase().includes(search.toLowerCase())

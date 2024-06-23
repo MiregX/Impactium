@@ -410,6 +410,13 @@ const locale: Locale = {
       ua: 'Потрібно пройти верифікацію, щоб отримати можливість створювати турніри.',
       it: 'Devi essere verificato per poter creare tornei.',
       pl: 'Musisz zostać zweryfikowany, aby móc tworzyć turnieje.'
+    },
+    members: {
+      us: "Tournament members",
+      ru: "Участники турнира",
+      ua: "Учасники турніру",
+      it: "Partecipanti al torneo",
+      pl: "Uczestnicy turnieju"
     }    
   },
   already_exists: {
