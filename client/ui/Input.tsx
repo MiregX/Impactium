@@ -9,7 +9,7 @@ interface Input {
   value?: any
   onChange?: (value: any) => void
   accept?: string
-  style?: string | string[]
+  className?: string | string[]
 }
 
 export type CreateInput = Input | {
@@ -18,9 +18,9 @@ export type CreateInput = Input | {
 
 export function Input(options: CreateInput) {
   const { options: inputOptions } = 'options' in options ? options : { options };
-  const { accept, image, label, placeholder, style, value, type, onChange } = inputOptions;
+  const { accept, image, label, placeholder, className, value, type, onChange } = inputOptions;
   return (
-    <div className={`${input._} ${typeof style === 'object' ? style.join(' ') : style}`}>
+    <div className={`${input._} ${useClasses(className)}`}>
       {image && <span><img src={image} /></span>}
       <input
         placeholder={!label && placeholder}

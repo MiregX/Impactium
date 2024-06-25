@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { User } from '@/dto/User';
 
 interface _Options extends Options {
-  key: string
+  key: keyof User;
 }
 
 export interface Options {
@@ -10,7 +10,7 @@ export interface Options {
   useRedirect?: boolean
 }
 
-export function Guard(user: User, options: _Options) {
+export function guard(user: User, options: _Options) {
   const next = user && user[options.key];
   return next ? next : (options.useRedirect ? redirect('/') : next)
 }

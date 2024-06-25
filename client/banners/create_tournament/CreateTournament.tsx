@@ -7,7 +7,7 @@ import { Button, ButtonTypes } from '@/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/decorator/AuthGuard';
+import { AuthGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
 import Image from 'next/image'
 

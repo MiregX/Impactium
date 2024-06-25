@@ -10,9 +10,9 @@ import { IndentInput } from './components/IndentInput';
 import { LogoInput } from './components/LogoInput';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/decorator/AuthGuard';
+import { AuthGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
-import { _server } from '@/decorator/Api';
+import { _server } from '@/decorator/api';
 
 export default function CreateTeam() {
   const [ team, setTeam ] = useState(null);

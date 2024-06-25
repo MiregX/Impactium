@@ -4,7 +4,7 @@ import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User";
 import { Button, ButtonTypes } from "@/ui/Button";
-import { _server } from "@/decorator/Api";
+import { _server } from "@/decorator/api";
 
 export function Balance() {
   const { lang } = useLanguage();

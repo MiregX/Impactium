@@ -1,8 +1,8 @@
-import '@/decorator/Api';
-import '@/decorator/UseClasses';
-import '@/decorator/UseDisplayName';
-import '@/decorator/UseOptionStyling';
-import '@/decorator/UseUsername';
+import '@/decorator/api';
+import '@/decorator/useClasses';
+import '@/decorator/useDisplayName';
+import '@/decorator/useOptionStyling';
+import '@/decorator/useUsername';
 import React, { ReactNode } from 'react'
 import '@/public/.globals.css';
 import LanguageProvider from '@/context/Language';
@@ -20,10 +20,10 @@ const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});
 
 declare global {
   var api: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
-  var UseClasses: (className: string | string[]) => string;
-  var UseUsername: (user: User) => string;
-  var UseDisplayName: (user: User) => string;
-  var UseOptionStyling: (options: Object, base: Record<string, string>) => string;
+  var useClasses: (className: string | string[]) => string;
+  var useUsername: (user: User) => string;
+  var useDisplayName: (user: User) => string;
+  var useOptionStyling: (options: Object, base: Record<string, string>) => string;
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

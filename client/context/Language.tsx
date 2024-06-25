@@ -1,5 +1,4 @@
 'use client';
-import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import locale from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';

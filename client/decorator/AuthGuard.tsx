@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 import { User } from '@/dto/User';
-import { Guard, Options } from './Guard'
+import { guard, Options } from './guard'
 
 
-export function AuthGuard(user: User, options?: Options) {
-  return Guard(user, {
+export function authGuard(user: User, options?: Options) {
+  return guard(user, {
     key: 'uid',
     ...options
   })

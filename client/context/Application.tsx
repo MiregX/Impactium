@@ -1,5 +1,5 @@
 'use client'
-import '@/decorator/Api';
+import '@/decorator/api';
 import '@/decorator/UseClasses';
 import '@/decorator/UseDisplayName';
 import '@/decorator/UseOptionStyling';
