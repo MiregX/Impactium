@@ -1,5 +1,5 @@
 'use client'
-import '@/decorator/GlobalGet';
+import '@/decorator/Api';
 import '@/decorator/UseClasses';
 import '@/decorator/UseDisplayName';
 import '@/decorator/UseOptionStyling';
@@ -7,7 +7,6 @@ import '@/decorator/UseUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import styles from './Application.module.css';
 import { useLanguage } from '@/context/Language';
-import { _server } from '@/dto/master';
 
 const ApplicationContext = createContext(undefined);
 

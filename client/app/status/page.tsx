@@ -1,7 +1,6 @@
 'use client'
 import { PanelTemplate } from "@/components/main/PanelTempate";
 import React from 'react';
-import { _server } from "@/dto/master";
 import { Unit } from "./components/Unit";
 import { Panel } from "@/ui/Panel";
 import { useLanguage } from "@/context/Language";

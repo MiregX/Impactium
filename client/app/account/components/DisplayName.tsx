@@ -16,7 +16,7 @@ export function DisplayName() {
 
   const send = async () => {
     setLoading(true);
-    return await get('/user/set/display-name', {
+    return await api('/user/set/display-name', {
       method: 'POST',
       body: JSON.stringify({ displayName })
     }).then(() => { setLoading(false); refreshUser() })

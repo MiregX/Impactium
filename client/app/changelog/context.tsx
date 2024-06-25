@@ -1,6 +1,5 @@
 'use client'
 import { useState, createContext, useContext, useEffect } from "react";
-import { _server } from "@/dto/master";
 import { Changelog } from "@/dto/Changelog";
 
 const ChangelogContext = createContext(undefined);

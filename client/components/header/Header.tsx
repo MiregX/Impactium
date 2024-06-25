@@ -37,7 +37,7 @@ export function Header() {
             text: '',
             img: 'https://cdn.impactium.fun/ui/specific/globe.svg',
             do: () => spawnBanner(<LanguageChooser />),
-            style: [s.languageChooser]
+            className: s.languageChooser
           }} />
         </div>
       )}

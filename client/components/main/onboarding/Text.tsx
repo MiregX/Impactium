@@ -23,7 +23,7 @@ export function Text() {
           do: '/teams',
           focused: true,
           text: lang.find.team,
-          style: [ s.button ]
+          className: s.button
         }} /> 
         <Button options={{
           type: ButtonTypes.Button,

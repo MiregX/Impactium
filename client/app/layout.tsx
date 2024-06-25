@@ -1,4 +1,4 @@
-import '@/decorator/GlobalGet';
+import '@/decorator/Api';
 import '@/decorator/UseClasses';
 import '@/decorator/UseDisplayName';
 import '@/decorator/UseOptionStyling';
@@ -19,7 +19,7 @@ export { metadata } from '@/dto/Metadata';
 const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});
 
 declare global {
-  var get: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
+  var api: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
   var UseClasses: (className: string | string[]) => string;
   var UseUsername: (user: User) => string;
   var UseDisplayName: (user: User) => string;
@@ -29,13 +29,13 @@ declare global {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const cookie = cookies();
 
-  const application = await get('/api/application/info', {
+  const application = await api('/application/info', {
     next: { revalidate: 600 }
   });
 
   const token = cookie.get('Authorization')?.value
 
-  const user = token ? await get('/api/user/get', {
+  const user = token ? await api('/user/get', {
     method: 'GET',
     headers: {
       token: token

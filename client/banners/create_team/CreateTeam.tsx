@@ -4,15 +4,15 @@ import s from './CreateTeam.module.css'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
 import { Button, ButtonTypes } from '@/ui/Button';
-import { _server } from '@/dto/master';
 import { redirect, useRouter } from 'next/navigation';
 import { TitleInput } from './components/TitleInput';
 import { IndentInput } from './components/IndentInput';
 import { LogoInput } from './components/LogoInput';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/dto/AuthGuard';
+import { AuthGuard } from '@/decorator/AuthGuard';
 import { LoginBanner } from '../login/LoginBanner';
+import { _server } from '@/decorator/Api';
 
 export default function CreateTeam() {
   const [ team, setTeam ] = useState(null);
@@ -33,7 +33,7 @@ export default function CreateTeam() {
       do: !!(team?.indent && team.title?.length >= 5) ? send : () => {},
       text: lang.create.team,
       focused: !!(team?.indent && team.title?.length >= 5),
-      style: [!(team?.indent && team.title?.length >= 5) && s.disactive]
+      className: !(team?.indent && team.title?.length >= 5) && s.disactive
     }} />]
   }
 

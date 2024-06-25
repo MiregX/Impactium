@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect, createContext, useContext } from "react";
-import { _server } from "@/dto/master";
 import { Team } from "@/dto/Team";
 import s from '@/app/team/[indent]/Team.module.css'
 
@@ -36,7 +35,7 @@ export const TeamProvider = ({
   const [team, setTeam] = useState(prefetched);
 
   const getTeam = (indent?: string): Promise<any> => {
-    return get(`/api/team/get/${indent || (team.indent)}`);
+    return api(`/team/get/${indent || (team.indent)}`);
   };
 
   const refreshTeam = (indent?: string) => {

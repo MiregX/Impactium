@@ -16,7 +16,7 @@ export function Username() {
 
   const send = async () => {
     setLoading(true);
-    await get(`/api/user/${username}`, {
+    await api(`/user/${username}`, {
       method: 'POST'
     }).then(() => { setLoading(false); refreshUser() })
   }

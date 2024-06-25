@@ -4,13 +4,11 @@ import s from './CreateTournament.module.css'
 import { useUser } from '@/context/User';
 import { Banner } from '@/ui/Banner';
 import { Button, ButtonTypes } from '@/ui/Button';
-import { _server } from '@/dto/master';
 import { useRouter } from 'next/navigation';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/dto/AuthGuard';
+import { AuthGuard } from '@/decorator/AuthGuard';
 import { LoginBanner } from '../login/LoginBanner';
-import { VerifiedGuard } from '@/dto/VerifiedGuard';
 import Image from 'next/image'
 
 export default function CreateTeam() {

@@ -1,7 +1,6 @@
 'use client'
 import { useTeam } from '@/context/Team'
 import _ from './Comments.module.css'
-import { _server } from '@/dto/master';
 import { useApplication } from '@/context/Application';
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language';

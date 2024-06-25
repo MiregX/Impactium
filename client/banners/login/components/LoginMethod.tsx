@@ -1,7 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language'
 import s from '../LoginBanner.module.css'
-import { _server } from '@/dto/master'
+import { _server } from '@/decorator/Api'
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
 export function LoginMethod({ Type, disabled }: {

@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { PanelTemplate } from '@/components/main/PanelTempate';
-import { _server } from '@/dto/master';
 import { useLanguage } from '@/context/Language';
 import { TeamUnit } from './components/TeamUnit';
 import s from './Teams.module.css';
@@ -21,7 +20,7 @@ export default function TeamsPage() {
 
   useEffect(() => {
     if (!teams) {
-      get('/api/team/get', {
+      api('/team/get', {
         method: 'GET',
         next: {
           revalidate: 60

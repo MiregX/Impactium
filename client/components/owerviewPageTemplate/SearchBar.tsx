@@ -2,7 +2,6 @@
 import { Input } from '@/ui/Input'
 import s from './SearchBar.module.css'
 import { useLanguage } from '@/context/Language'
-import { _server } from '@/dto/master';
 import { useState } from 'react';
 import { Button, ButtonTypes } from '@/ui/Button';
 import { useApplication } from '@/context/Application';
@@ -17,7 +16,7 @@ export function SearchBar({ search, setSearch, setState, state, langPathKey, api
   
   const fetchData = async (value: string): Promise<any[]> => {
     setLoading(true)
-    const data = await get(`${apiPath}/${value}`, {
+    const data = await api(`${apiPath}/${value}`, {
       method: 'GET',
       next: {
         revalidate: 60
@@ -65,7 +64,7 @@ export function SearchBar({ search, setSearch, setState, state, langPathKey, api
           do: () => spawnBanner(langPathKey === 'team' ? <CreateTeam /> : <CreateTournament />),
           text: lang.create[langPathKey],
           focused: true,
-          style: [s.button]
+          className: s.button
         }} />
   </div>
   )

@@ -6,18 +6,15 @@ import { Username } from "./components/Username";
 import { Email } from "./components/Email";
 import { Connections } from "./components/Connections";
 import { AuthGuardClientSide } from "@/components/AuthGuardClientSide";
-import { _server } from "@/dto/master";
 import { cookies } from "next/headers";
 import { Login } from "@/dto/Login";
-import Link from "next/link";
 import { Nav } from "./components/Nav";
 import { Balance } from "./components/Balance";
 
 export default async function AccountPage() {
   const token = cookies().get('Authorization')?.value;
 
-  const logins = token && await get('/api/user/logins', {
-    method: 'GET',
+  const logins = token && await api('/user/logins', {
     headers: {
       token
     }

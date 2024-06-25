@@ -2,7 +2,6 @@
 import { Input } from '@/ui/Input'
 import s from './Comments.module.css'
 import { Button, ButtonTypes } from '@/ui/Button'
-import { _server } from '@/dto/master'
 import { useUser } from '@/context/User'
 import { useLanguage } from '@/context/Language'
 
@@ -12,7 +11,7 @@ export function LeaveComment() {
   const { lang } = useLanguage();
   
   const send = async () => {
-    await get('/api/comment/send', {
+    await api('/comment/send', {
       method: 'POST',
       credentials: 'include'
     });
@@ -31,7 +30,7 @@ export function LeaveComment() {
         do: send,
         img: 'https://cdn.impactium.fun/ui/specific/paper-plane.svg',
         focused: true,
-        style: [s.button]
+        className: s.button
       }} />
     </div>
   )

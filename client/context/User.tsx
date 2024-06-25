@@ -1,7 +1,6 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { _server } from "@/dto/master";
 import { User } from "@/dto/User";
 
 const UserContext = createContext(undefined);
@@ -39,11 +38,11 @@ export const UserProvider = ({
   }, [isUserFetched]);
 
   const getUser = (): Promise<User> => {
-    return get('/api/user/get');
+    return api('/user/get');
   };
 
   if (cookie.get('uuid')) {
-    get('/api/oauth2/telegram/callback', {
+    api('/oauth2/telegram/callback', {
       method: 'POST',
       isRaw: true
     }).then(_ => {

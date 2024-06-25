@@ -1,6 +1,5 @@
 'use client'
 import { useState, createContext, useContext } from "react";
-import { _server } from "@/dto/master";
 import { Tournament } from "@/dto/Tournament";
 
 const TournamentContext = createContext(undefined);

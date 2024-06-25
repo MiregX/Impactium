@@ -1,7 +1,6 @@
 'use client'
 import { Banner } from '@/ui/Banner'
 import _ from './EditTeamDescription.module.css'
-import { _server } from '@/dto/master'
 import { Button, ButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
 
@@ -9,7 +8,7 @@ export function EditDescription({ state }) {
   const { lang } = useLanguage();
 
   const save = async (description: string) => {
-    await get(`/api/team/${state.indent}/edit/description`, {
+    await api(`/team/${state.indent}/edit/description`, {
       method: 'PATCH',
       credentials: 'include',
       body: description
