@@ -14,8 +14,8 @@ export function Email() {
       <h6>{lang.account.email}</h6>
       <p>{lang.account.email_content}</p>
       <section>
-        {user.email
-          ? <>{user.email}<Badge type={BadgeType.verified} /><Badge type={BadgeType.primary}/></>
+        {user!.email
+          ? <>{user!.email}<Badge type={BadgeType.verified} /><Badge type={BadgeType.primary}/></>
           : <p>{lang.account.no_email}</p>}
       </section>
     </Card>

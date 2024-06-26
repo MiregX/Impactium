@@ -30,11 +30,11 @@ export function UserComponent() {
       <Avatar
         className={_user.wrapper}
         size={32}
-        alt={UseUsername(user)}
-        src={user.login.avatar}
+        alt={useUsername(user!)}
+        src={user!.login.avatar}
         onClick={toggle} />
       <nav className={_user.menu}>
-        <p className={_user.name}>{user.email || UseUsername(user)}</p>
+        <p className={_user.name}>{user!.email || useUsername(user!)}</p>
         <Link href='/account' onClick={toggle}>
           {lang._account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>
@@ -42,7 +42,7 @@ export function UserComponent() {
         <hr />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <div style={{ fontFamily: 'var(--mono-geist)'}}>{user.balance | 0}$</div>
+          <div style={{ fontFamily: 'var(--mono-geist)'}}>{user!.balance | 0}$</div>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}

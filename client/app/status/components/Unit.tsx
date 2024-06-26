@@ -11,8 +11,6 @@ export function Unit({ name }: {
   const { status } = useStatus();
   const { lang } = useLanguage();
 
-  console.log(status.slice(-1));
-
   const service = status.pop()?.[name] || {
     ping: 999,
     info: {}

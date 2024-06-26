@@ -1,3 +1,5 @@
+import { TeamMember } from "./TeamMember";
+
 export interface Team {
   indent: string,
   logo: null | string,
@@ -5,6 +7,6 @@ export interface Team {
   ownerId: string,
   description: string,
   membersAmount: number,
-  members?: Array<null>,
+  members?: Array<TeamMember>,
   comments: Array<Comment>
 }

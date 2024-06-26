@@ -3,4 +3,6 @@
   border-radius: var(--round);
   overflow: hidden;
   display: flex;
+  color: var(--text-white);
+  font-family: ;
 }

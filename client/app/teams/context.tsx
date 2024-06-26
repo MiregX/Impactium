@@ -1,19 +1,22 @@
 'use client'
-import { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { Team } from "@/dto/Team";
+import { ReactNode } from "@/dto/ReactNode";
 
-const TeamsContext = createContext(undefined);
+const TeamsContext = createContext<TeamsContext | undefined>(undefined);
 
 interface TeamsContext {
   teams: Team[],
+  setTeams: (teams: Team[]) => void
+}
+
+type TeamsProps = ReactNode & {
+  prefetched: Team[]
 }
 
 export const useTeams = () => useContext(TeamsContext) || (() => {throw new Error()})();
 
-export const TeamsProvider = ({
-    children,
-    prefetched
-  }) => {
+export function TeamsProvider({ children, prefetched }: TeamsProps) {
   const [teams, setTeams] = useState(prefetched || []);
 
   return (

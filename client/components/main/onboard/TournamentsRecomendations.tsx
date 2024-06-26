@@ -2,12 +2,10 @@
 import { useLanguage } from "@/context/Language";
 import { Panel } from "@/ui/Panel";
 import s from './Onboard.module.css';
+import { Tournament } from "@/dto/Tournament";
+import React from "react";
 
-interface TournamentUnit {
-
-}
-
-export function TournamentsRecomendations({ tournaments }) {
+export function TournamentsRecomendations({ tournaments }: { tournaments: Tournament[]}) {
   tournaments = tournaments || [
     {
       banner: "https://cdn.impactium.fun/public/uploads/tournaments/major.png",
@@ -38,20 +36,22 @@ export function TournamentsRecomendations({ tournaments }) {
   const { lang } = useLanguage();
   return (
     <Panel heading={lang.tournament.recomendations} className={s.tournaments}>
-      {tournaments.map((tournament: TournamentUnit | any) => {
-        return (
-          <div className={s.unit} key={tournament.code}>
-            <img src={tournament.banner} />
-            <desc>
-              <div className={s.top}>
-                <p>{tournament.title}</p>
-                <span>·</span>
-                <h6>@{tournament.code}</h6>
-              </div>
-            </desc>
-          </div>
-        )
-      })}
+      <React.Fragment>
+        {tournaments.map((tournament: Tournament) => {
+          return (
+            <div className={s.unit} key={tournament.code}>
+              <img src={tournament.banner} />
+              <desc>
+                <div className={s.top}>
+                  <p>{tournament.title}</p>
+                  <span>·</span>
+                  <h6>@{tournament.code}</h6>
+                </div>
+              </desc>
+            </div>
+          )
+        })}
+      </React.Fragment>
     </Panel>
   )
 }

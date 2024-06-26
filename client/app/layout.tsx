@@ -19,11 +19,11 @@ export { metadata } from '@/dto/Metadata';
 const GeistMonoFont = localFont({ src: '../public/GeistMono.woff2'});
 
 declare global {
-  var api: (path: string | URL | RequestInfo, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
-  var useClasses: (className: string | string[]) => string;
+  var api: (path: string, options?: RequestInit & { isRaw?: boolean, isText?: boolean }) => Promise<any>;
+  var useClasses: (...classNames: Array<string | Array<string | string[]> | undefined | boolean>) => string;
   var useUsername: (user: User) => string;
   var useDisplayName: (user: User) => string;
-  var useOptionStyling: (options: Object, base: Record<string, string>) => string;
+  var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   }) : null;
 
   return (
-    <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily} as unknown}>
+    <html style={{'--mono-geist' : GeistMonoFont.style.fontFamily}}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>

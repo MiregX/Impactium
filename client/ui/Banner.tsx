@@ -51,7 +51,7 @@ export function Banner({ title, children, footer, onClose, options }: BannerProp
 
   return (
     <div className={banner.background}>
-      <div className={`${banner._}  ${UseOptionStyling(options, banner)}`}>
+      <div className={`${banner._}  ${useOptionStyling(options, banner)}`}>
         <h4>{title}
           <button onClick={destroyBanner}>
             <img src='https://cdn.impactium.fun/ui/close/md.svg'/>

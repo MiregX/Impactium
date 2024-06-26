@@ -9,12 +9,9 @@ interface HeaderContextProps {
   setIsSettingsVisible: (value: boolean) => void;
 }
 
-const HeaderContext = createContext<HeaderContextProps>(undefined);
+const HeaderContext = createContext<HeaderContextProps | undefined>(undefined)!;
 
-export const useHeader = () => {
-  const context = useContext(HeaderContext);
-  return context;
-};
+export const useHeader = () => useContext(HeaderContext)!;
 
 export const HeaderProvider = ({ children }: { children: React.ReactNode}) => {
   const [isLogoHidden, setIsLogoHidden] = useState<boolean>(false);

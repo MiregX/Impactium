@@ -15,8 +15,8 @@ export function PersonalAvatar() {
       <p>{lang.account.avatar_content}</p>
       <Avatar
         size={78}
-        src={user.login.avatar}
-        alt={UseUsername(user)}
+        src={user!.login.avatar}
+        alt={useUsername(user!)}
         className={s.avatar} />
     </Card>
   );

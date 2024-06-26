@@ -12,14 +12,14 @@ export function Nav() {
   useEffect(() => {
     const yOffset = -192;
 
-    const handleClick = (e) => {
+    const handleClick = (e: any) => {
       e.preventDefault();
       const id = e.target.getAttribute('href').slice(1);
       const element = document.getElementById(id);
       if (element) {
         const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
-        window.history.pushState(null, null, `#${id}`);
+        window.history.pushState(null, '', `#${id}`);
       }
     };
 

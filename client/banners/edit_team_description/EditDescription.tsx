@@ -3,14 +3,16 @@ import { Banner } from '@/ui/Banner'
 import _ from './EditTeamDescription.module.css'
 import { Button, ButtonTypes } from '@/ui/Button';
 import { useLanguage } from '@/context/Language';
+import { Tournament } from '@/dto/Tournament';
+import { Team } from '@/dto/Team';
+import { useApperand } from '@/decorator/useAperand';
 
-export function EditDescription({ state }) {
+export function EditDescription({ state, type }: { state: Team | Tournament, type: 'team' | 'tournament' }) {
   const { lang } = useLanguage();
 
   const save = async (description: string) => {
-    await api(`/team/${state.indent}/edit/description`, {
+    await api(`/${type}/${useApperand(state, ['indent', 'code'])}/edit/description`, {
       method: 'PATCH',
-      credentials: 'include',
       body: description
     })
   }

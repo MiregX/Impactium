@@ -17,7 +17,7 @@ export type Button = {
   img?: string;
   focused?: boolean;
   minimized?: boolean;
-  className?: string | string[];
+  className?: string | string[] | false;
   loading?: boolean;
   disabled?: boolean; 
 }
@@ -31,8 +31,8 @@ export function Button({ options }: { options: Button }) {
       <Link
         className={`
           ${button._}
-          ${UseOptionStyling(options, button)}
-          ${UseClasses(options.className)}`}
+          ${useOptionStyling(options, button)}
+          ${useClasses(options.className)}`}
         href={typeof options.do === 'string' ? options.do : '#'}>
         {options.img && <img src={options.img} />} 
         {options.text}
@@ -41,8 +41,8 @@ export function Button({ options }: { options: Button }) {
       <button
         className={`
           ${button._}
-          ${UseOptionStyling(options, button)}
-          ${UseClasses(options.className)}`}
+          ${useOptionStyling(options, button)}
+          ${useClasses(options.className)}`}
         onClick={typeof options.do === 'function' ? options.do : redirect(options.do)}>
         {options.img && <img src={options.img} />} 
         {options.text}

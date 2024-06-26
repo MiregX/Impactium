@@ -8,7 +8,7 @@ import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application";
 import { Avatar } from "@/components/avatar/Avatar";
 
-export function Connections({ logins }: { logins: Login[] }) {
+export function Connections({ logins }: { logins: Login[] | null }) {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
 
@@ -28,7 +28,7 @@ export function Connections({ logins }: { logins: Login[] }) {
       <h6>{lang.account.connections}</h6>
       <p>{lang.account.connections_content}</p>
       <section>
-        {logins.map((login, index) => <Unit key={index} login={login} /> )}
+        {logins && logins.map((login, index) => <Unit key={index} login={login} /> )}
       </section>
     </Card>
   );

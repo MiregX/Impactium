@@ -7,7 +7,7 @@ import { Button, ButtonTypes } from '@/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/decorator/authGuard';
+import { authGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
 import Image from 'next/image'
 
@@ -20,7 +20,7 @@ export default function CreateTeam() {
   const { destroyBanner, spawnBanner } = useApplication();
   const router = useRouter();
 
-  !AuthGuard(user, {
+  !authGuard(user, {
     useRedirect: false
   }) && spawnBanner(<LoginBanner />);
 

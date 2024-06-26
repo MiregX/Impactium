@@ -14,11 +14,11 @@ import { Balance } from "./components/Balance";
 export default async function AccountPage() {
   const token = cookies().get('Authorization')?.value;
 
-  const logins = token && await api('/user/logins', {
+  const logins: Login[] | null = token && await api('/user/logins', {
     headers: {
       token
     }
-  }) as Login[];
+  });
 
   return (
     <PanelTemplate style={[s.page]} title='$_account'>

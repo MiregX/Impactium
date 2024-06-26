@@ -4,7 +4,7 @@ import { useLanguage } from '@/context/Language';
 
 interface InputMinProps {
   state: string;
-  setState: (value) => void
+  setState: (value: string) => void
   before?: string;
   regExp: {
     test: RegExp,

@@ -1,10 +1,15 @@
-globalThis.useClasses = (...classNames: Array<string | Array<string | string[]>>): string => {
-  const flatten = (arr: Array<string | Array<string | string[]>>): string[] => 
-    arr.reduce((acc: string[], item: string | Array<string | string[]>) =>
-      Array.isArray(item)
-        ? acc.concat(flatten(item))
-        : acc.concat(item)
-    , []);
+globalThis.useClasses = (...classNames: unknown[]): string => {
+  const flatten = (arr: unknown[]): string[] =>
+    arr.reduce<string[]>((acc, item) => {
+      if (Array.isArray(item)) {
+        acc.push(...flatten(item));
+      } else if (typeof item === 'string') {
+        acc.push(item);
+      } else if (typeof item === 'boolean') {
+        acc.push('');
+      }
+      return acc;
+    }, []);
 
-  return flatten(classNames).join(' ');
+  return flatten(classNames).filter(Boolean).join(' ');
 };

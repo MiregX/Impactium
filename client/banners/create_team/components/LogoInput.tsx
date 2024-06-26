@@ -3,12 +3,18 @@ import { Input } from '@/ui/Input';
 import s from '../CreateTeam.module.css'
 import { useLanguage } from '@/context/Language';
 import { useState } from 'react';
+import { Team } from '@/dto/Team';
 
-export function LogoInput({ team, handle }) {
+interface LogoInputProps {
+  team: Team,
+  handle: any
+}
+
+export function LogoInput({ team, handle }: LogoInputProps) {
   const { lang } = useLanguage();
   const [bannerPreview, setBannerPreview] = useState<any>();
 
-  const handleBannerChange = (e) => {
+  const handleBannerChange = (e: any) => {
     const file = e.target.files[0];
     console.log(file)
     handle({banner: file});

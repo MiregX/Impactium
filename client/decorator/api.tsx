@@ -7,8 +7,9 @@ export function _server(v?: boolean) {
 }
 
 globalThis.api = (path, options): Promise<Response> => path
-  ? fetch(_server() + path, {
+  ? fetch(_server() + '/api' + path, {
     credentials: 'include',
+    method: 'GET',
     ...options,
     }).then(res => options?.isRaw
       ? res
@@ -17,9 +18,10 @@ globalThis.api = (path, options): Promise<Response> => path
           ? res.text()
           : res.json()
         : null
-    )
+    ).catch(_ => undefined)
   : fetch(path, {
     credentials: 'include',
+    method: 'GET',
     ...options,
     }).then(res => options?.isRaw
       ? res
@@ -28,4 +30,4 @@ globalThis.api = (path, options): Promise<Response> => path
           ? res.text()
           : res.json()
         : null
-    );
+    ).catch(_ => undefined);

@@ -1,9 +1,18 @@
 export class Configuration {
   static processEnvVariables(): Record<string, string> {
+    const processedEnv: Record<string, string> = {};
+
     for (const key in process.env) {
-      process.env[key] = process.env[key].replace(/\$\{(.+?)\}/g, (_, match) => process.env[match]);
+      const value = process.env[key];
+      if (typeof value === 'string') {
+        processedEnv[key] = value.replace(/\$\{(.+?)\}/g, (_, match) => {
+          const replacement = process.env[match];
+          return replacement !== undefined ? replacement : '';
+        });
+      }
     }
-    return process.env;
+
+    return processedEnv;
   }
 
   static _server() {
@@ -29,7 +38,7 @@ export class Configuration {
   }
 
   static isProductionMode(): boolean {
-    return parseInt(process.env.X) > 0
+    return parseInt(process.env.X!) > 0
   }
 
   static getMode() {

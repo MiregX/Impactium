@@ -12,9 +12,7 @@ import { AvailableLanguage } from '@/dto/AvaliableLanguage';
 
 const ApplicationContext = createContext<IApplicationContext | undefined>(undefined);
 
-export const useApplication = () => {
-  return useContext(ApplicationContext);
-};
+export const useApplication = (): IApplicationContext => useContext(ApplicationContext)!;
 
 interface IApplicationContext {
   newMessage: (code: number, text: string) => void;

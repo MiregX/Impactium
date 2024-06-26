@@ -18,8 +18,7 @@ export default function TournamentPage() {
         setSearch={setSearch}
         setState={setTournaments}
         state={tournaments}
-        langPathKey='tournament'
-        apiPath={'/api/tournament/find'}  />
+        apiPath='tournament' />
       {/* Рекомендации турниров */}
       <Recomendations search={search} data={tournaments} unit={TournamentUnit} />
     </PanelTemplate>

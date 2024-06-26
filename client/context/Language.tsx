@@ -28,7 +28,7 @@ export const useLanguage = () => {
   return context;
 };
 
-function validate(languageCode: string) {
+function validate(languageCode?: string) {
   return !languageCode || !['us', 'ua', 'ru', 'it', 'pl'].includes(languageCode) ? 'us' : languageCode;
 }
 

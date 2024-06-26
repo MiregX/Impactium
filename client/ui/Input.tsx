@@ -9,7 +9,7 @@ interface Input {
   value?: any
   onChange?: (value: any) => void
   accept?: string
-  className?: string | string[]
+  className?: string | string[] | boolean
 }
 
 export type CreateInput = Input | {
@@ -23,7 +23,7 @@ export function Input(options: CreateInput) {
     <div className={`${input._} ${useClasses(className)}`}>
       {image && <span><img src={image} /></span>}
       <input
-        placeholder={!label && placeholder}
+        placeholder={(!label && placeholder)?.toString()}
         id={label}
         aria-label="Search"
         aria-invalid="false"

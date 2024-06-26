@@ -1,7 +1,8 @@
+import { ReactNode } from '@/dto/ReactNode';
 import { TeamsProvider } from './context';
 import { Team } from '@/dto/Team';
 
-export default async function TeamsLayout({ children }) {
+export default async function TeamsLayout({ children }: ReactNode) {
   const teams = await api('/team/find', {
     method: 'GET',
     next: {

@@ -4,6 +4,7 @@ import s from './Comments.module.css'
 import { Button, ButtonTypes } from '@/ui/Button'
 import { useUser } from '@/context/User'
 import { useLanguage } from '@/context/Language'
+import { Avatar } from '../avatar/Avatar'
 
 
 export function LeaveComment() {
@@ -19,10 +20,10 @@ export function LeaveComment() {
 
   return (
     <div className={s.leave}>
-      <img src={user.login.avatar}  />
+      <Avatar size={32} src={user!?.login.avatar} alt={useUsername(user!)} />
       <Input options={{
         placeholder: lang.comments.leave,
-        style: [s.input]
+        className: s.input
       }}/>
       <Button options={{
         type: ButtonTypes.Button,

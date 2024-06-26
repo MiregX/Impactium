@@ -2,12 +2,12 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { User } from "@/dto/User";
+import { ReactNode } from "@/dto/ReactNode";
 
-const UserContext = createContext(undefined);
-
+const UserContext = createContext<UserContext | undefined>(undefined);
 
 interface UserContext {
-  user: User,
+  user: User | null,
   setUser: (user: User) => void,
   logout: () => void,
   getUser: (authorization?: string) => Promise<any>,
@@ -16,18 +16,9 @@ interface UserContext {
   setIsUserLoaded: (value: boolean) => void,
 }
 
-export const useUser = () => {
-  const context = useContext(UserContext);
+export const useUser = () => useContext(UserContext)!;
 
-  if (!context) throw new Error();
-  
-  return context as UserContext;
-};
-
-export const UserProvider = ({
-    children,
-    prefetched,
-  }) => {
+export function UserProvider({ children, prefetched }: ReactNode & { prefetched: User }) {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
   const [user, setUser] = useState<User | null>(prefetched);

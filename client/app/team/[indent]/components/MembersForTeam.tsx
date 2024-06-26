@@ -15,13 +15,13 @@ export function MembersForTeam() {
   return (
     <Panel heading={lang.team.members}>
       <React.Fragment>
-        {team.members.map((member: TeamMember, index: number) => (
+        {team.members && team.members.map((member: TeamMember, index: number) => (
           <div key={index} className={s.unit}>
             <Avatar
               size={32}
               src={member.user.login.avatar}
-              alt={UseUsername(member.user)} />
-            <p>{UseDisplayName(member.user)}</p>
+              alt={useUsername(member.user)} />
+            <p>{useDisplayName(member.user)}</p>
             <p>{member.roles.map((role: TeamMemberRoles, index: number) => (
               <i key={index}><img src={`https://cdn.impactium.fun/roles/${role}.svg`} />{role}</i>
             ))}</p>

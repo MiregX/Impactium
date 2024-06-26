@@ -1,3 +1,3 @@
-export function useApperand<T extends object>(state: T, keys: (keyof T)[]): any {
-  return state[keys[0]] || state[keys[1]];
+export function useApperand(state: Record<string, any>, keys: string[]): any {
+  return keys[0] in state ? state[keys[0]] : (keys[1] in state ? state[keys[1]] : null);
 }

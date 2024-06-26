@@ -11,7 +11,7 @@ import { useState } from "react";
 export function DisplayName() {
   const { lang } = useLanguage();
   const { user, refreshUser } = useUser();
-  const [ displayName, setDisplayName ] = useState<string>(UseDisplayName(user));
+  const [ displayName, setDisplayName ] = useState<string>(useDisplayName(user!));
   const [ loading, setLoading ] = useState<boolean>(false);
 
   const send = async () => {
@@ -24,8 +24,8 @@ export function DisplayName() {
 
   const button = <Button options={{
     type: ButtonTypes.Button,
-    focused: UseDisplayName(user) !== displayName && RDisplayName.test(displayName),
-    disabled: !(UseDisplayName(user) !== displayName && RDisplayName.test(displayName)),
+    focused: useDisplayName(user!) !== displayName && RDisplayName.test(displayName),
+    disabled: !(useDisplayName(user!) !== displayName && RDisplayName.test(displayName)),
     loading,
     text: lang._save,
     do: send

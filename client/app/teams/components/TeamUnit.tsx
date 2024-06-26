@@ -2,8 +2,9 @@ import s from '../Teams.module.css'
 import { TeamUnitRoles } from './TeamUnitRoles'
 import Link from 'next/link'
 import { useLogo } from '@/context/Team'
+import { Team } from '@/dto/Team'
 
-export function TeamUnit({ team }) {
+export function TeamUnit({ team }: { team: Team }) {
   return (
     <Link className={s.unit} href={`/team/@${team.indent}`} >
       <div className={s.logo}>

@@ -21,7 +21,6 @@ export default function TeamsPage() {
   useEffect(() => {
     if (!teams) {
       api('/team/get', {
-        method: 'GET',
         next: {
           revalidate: 60
         }
@@ -43,8 +42,7 @@ export default function TeamsPage() {
         setSearch={setSearch}
         state={teams}
         setState={setTeams}
-        langPathKey={'team'}
-        apiPath={'/api/team/find'} />
+        apiPath={'team'} />
       {/* Команды пользователя */}
       {user?.teams ?
         <Panel heading={lang.team.yours} className={s.minimized}>

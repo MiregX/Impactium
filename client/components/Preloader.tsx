@@ -16,43 +16,50 @@ export function Preloader({ use }: {use?: boolean}) {
   const url = usePathname();
   const [blocker, setBlocker] = useState<boolean>(use || isUserLoaded);
 
-  useEffect(() => user && setBlocker(false), [user])
+  useEffect(() => {
+    user && setBlocker(false)
+  }, [user])
 
   const [visitedBefore, setVisitedBefore] = useState<boolean>(typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
-  const self = useRef(null);
+  const self = useRef<HTMLDivElement>(null); // Specify the type for useRef
 
   const show = useCallback(() => {
-    self.current.classList.remove(s.remove, s.hide, s.slow, s.fast);
-    if (visitedBefore) {
-      self.current.classList.add(s.fast);
-    } else {
-      setIsLogoHidden(true);
-      self.current.classList.add(s.slow);
+    if (self.current) {
+      self.current.classList.remove(s.remove, s.hide, s.slow, s.fast);
+      if (visitedBefore) {
+        self.current.classList.add(s.fast);
+      } else {
+        setIsLogoHidden(true);
+        self.current.classList.add(s.slow);
+      }
     }
-  }, [self, visitedBefore]);
+  }, [self, visitedBefore, setIsLogoHidden]);
 
   const hide = useCallback(() => {
     const opacityDelay = visitedBefore ? 300 : 3000;
 
     setTimeout(() => {
-      self.current.classList.add(s.hide);
-      setIsLogoHidden(false);
-      setTimeout(() => {
-        self.current.classList.add(s.remove);
-        if (!visitedBefore) setVisitedBefore(true);
-      }, 200);
+      if (self.current) {
+        self.current.classList.add(s.hide);
+        setIsLogoHidden(false);
+        setTimeout(() => {
+          if (self.current) {
+            self.current.classList.add(s.remove);
+            if (!visitedBefore) setVisitedBefore(true);
+          }
+        }, 200);
+      }
     }, opacityDelay);
-  }, [self, visitedBefore]);  
+  }, [self, visitedBefore, setIsLogoHidden]);
 
   useEffect(() => {
-    console.log(isUserLoaded)
-    show();
+    show(); // Initial show when component mounts
     if (isUserLoaded && !blocker) {
       hide();
     } else {
       show();
     }
-  }, [isUserLoaded, blocker]);
+  }, [isUserLoaded, blocker, show, hide]);
 
   useEffect(() => {
     if (!visitedBefore) {

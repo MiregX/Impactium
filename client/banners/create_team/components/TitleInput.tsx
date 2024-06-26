@@ -2,8 +2,14 @@
 import { Input } from '@/ui/Input';
 import s from '../CreateTeam.module.css'
 import { useLanguage } from '@/context/Language';
+import { Team } from '@/dto/Team';
 
-export function TitleInput({ team, handle }) {
+interface TitleInputProps {
+  team: Team,
+  handle: any
+}
+
+export function TitleInput({ team, handle }: TitleInputProps) {
   const { lang } = useLanguage();
 
   return (
@@ -15,7 +21,7 @@ export function TitleInput({ team, handle }) {
         placeholder={lang.create_team.title}
         value={team?.title || ''}
         onChange={(e) => handle({ title: e.target.value })}
-        style={[s.input]}
+        className={s.input}
       />
     </div>
   );

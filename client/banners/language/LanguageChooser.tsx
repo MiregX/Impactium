@@ -11,7 +11,8 @@ export function LanguageChooser() {
   const { lang, language, setLanguage } = useLanguage();
   const cookie = new Cookies();
 
-  const availableLanguages = {
+  // Asserting type for availableLanguages
+  const availableLanguages: { [key: string]: { code: string; target: string; } } = {
     us: {
       code: 'english',
       target: 'English'
@@ -53,7 +54,7 @@ export function LanguageChooser() {
   return (
     <Banner title={lang.choose.language} footer={footer}>
       <div className={_language._}>
-        {Object.keys(availableLanguages).map((key) => (
+        {Object.keys(availableLanguages).map((key: string) => (
           <div
             className={key === language ? _language.active : undefined}
             key={key}

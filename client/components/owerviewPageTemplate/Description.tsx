@@ -9,7 +9,7 @@ import { EditDescription } from '@/banners/edit_team_description/EditDescription
 
 interface Description {
   state: Team | Tournament,
-  key: string,
+  key: 'team' | 'tournament',
 }
 
 export function Description({ state, key }: Description) {
@@ -21,7 +21,7 @@ export function Description({ state, key }: Description) {
     <div className={s.description}>
       <p>{state.description || lang?.[key]?.has_no_description}</p>
         {user?.uid === state.ownerId && <button
-          onClick={() => spawnBanner(<EditDescription state={state} key={key} />)}
+          onClick={() => spawnBanner(<EditDescription state={state} key={key} type={key} />)}
           className={s.edit}>
           <img src='https://cdn.impactium.fun/ui/pencil/pencil-line.svg' />
         </button>}

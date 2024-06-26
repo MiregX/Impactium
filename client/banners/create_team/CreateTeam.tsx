@@ -10,12 +10,13 @@ import { IndentInput } from './components/IndentInput';
 import { LogoInput } from './components/LogoInput';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';
-import { AuthGuard } from '@/decorator/authGuard';
+import { authGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
 import { _server } from '@/decorator/api';
+import { Team } from '@/dto/Team';
 
 export default function CreateTeam() {
-  const [ team, setTeam ] = useState(null);
+  const [ team, setTeam ] = useState<Team>({} as Team);
   const [ loading, setLoading ] = useState<boolean>(false);
   const [ error, setError ] = useState<string>();
   const { user } = useUser();
@@ -23,7 +24,7 @@ export default function CreateTeam() {
   const { destroyBanner, spawnBanner } = useApplication();
   const router = useRouter();
 
-  !AuthGuard(user, {
+  !authGuard(user, {
     useRedirect: true
   }) && spawnBanner(<LoginBanner />);
 
@@ -37,7 +38,7 @@ export default function CreateTeam() {
     }} />]
   }
 
-  const handle = (obj) => {
+  const handle = (obj: Team) => {
     setTeam(team => {
       return { ...team, ...obj }
     })
@@ -45,27 +46,17 @@ export default function CreateTeam() {
 
   async function send() {
     setLoading(true);
-    await fetch(_server() + `/api/team/create/${team.indent}`, {
+    api(`/team/create/${team.indent}`, {
       method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({
         title: team.title
       })
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(async () => {
-          if (team.banner) {
-            await setBanner()
-          } else {
-            router.push(`/team/${team.indent}`);
-            destroyBanner();
-          }
-        });
+    }).then(async (team: Team) => {
+      if (team.logo) {
+        await setBanner()
       } else {
-        throw response;
+        router.push(`/team/${team.indent}`);
+        destroyBanner();
       }
     }).catch(async _ => {
       const error = await _.json();
@@ -78,18 +69,18 @@ export default function CreateTeam() {
   async function setBanner() {
     setLoading(true);
     const formData = new FormData();
-    formData.append('banner', team.banner);
+    formData.append('banner', team.logo || new Blob);
 
-    fetch(_server() + `/api/team/set/banner/${team.indent}`, {
+    api(`/team/set/banner/${team.indent}`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': team.banner.type
+        'Content-Type': 'image/*'
       },
       body: formData
     }).then(response => {
       if (response.ok) {
-        response.json().then(team => {
+        response.json().then((team: Team) => {
           router.push(`/team/${team.indent}`);
           destroyBanner();
         });
