@@ -3,26 +3,22 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { Team } from "@/dto/Team";
 import s from '@/app/team/[indent]/Team.module.css'
 
-const TeamContext = createContext(undefined);
-
 interface TeamContext {
   team: Team;
   setTeam: (team: Team) => void;
   refreshTeam: (indent?: string) => void;
 }
 
+const TeamContext = createContext<TeamContext | undefined>(undefined);
+
 export const useLogo = ({ logo, title }: Partial<Team>) => {
   return logo
     ? <img src={logo} />
-    :     <span className={s.round}>{title.slice(0, 1)}</span>
+    : <span className={s.round}>{title?.slice(0, 1) || '?'}</span>
 }
 
 export const useTeam = () => {
-  const context = useContext(TeamContext);
-
-  if (!context) throw new Error();
-  
-  return context as TeamContext;
+  return useContext(TeamContext) || (() => { throw new Error('Обнаружена попытка использовать TeamContext вне области досягаемости') })();
 };
 
 export const TeamProvider = ({

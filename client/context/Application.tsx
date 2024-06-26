@@ -1,26 +1,41 @@
 'use client'
 import '@/decorator/api';
-import '@/decorator/UseClasses';
-import '@/decorator/UseDisplayName';
-import '@/decorator/UseOptionStyling';
-import '@/decorator/UseUsername';
+import '@/decorator/useClasses';
+import '@/decorator/useDisplayName';
+import '@/decorator/useOptionStyling';
+import '@/decorator/useUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import styles from './Application.module.css';
 import { useLanguage } from '@/context/Language';
+import { ReactNode } from '@/dto/ReactNode';
+import { AvailableLanguage } from '@/dto/AvaliableLanguage';
 
-const ApplicationContext = createContext(undefined);
+const ApplicationContext = createContext<IApplicationContext | undefined>(undefined);
 
 export const useApplication = () => {
   return useContext(ApplicationContext);
 };
 
-export const ApplicationProvider = ({ children, prefetched }) => {
-  const [messages, setMessages] = useState([]);
+interface IApplicationContext {
+  newMessage: (code: number, text: string) => void;
+  copy: (text: string) => PromiseLike<void>,
+  spawnBanner: (banner: React.ReactNode) => void,
+  destroyBanner: () => void,
+  application: any,
+  setApplication: (application: any) => void
+}
+
+type IApplicationProvider = ReactNode & {
+  prefetched: AvailableLanguage | undefined
+}
+
+export const ApplicationProvider = ({ children, prefetched }: IApplicationProvider) => {
+  const [messages, setMessages] = useState<Array<any>>([]);
   const [application, setApplication] = useState(prefetched);
   const { lang } = useLanguage();
-  const [banner, setBanner] = useState<React.ReactElement>(null);
+  const [banner, setBanner] = useState<React.ReactNode>(null);
 
-  const spawnBanner = (element: React.ReactElement) => {
+  const spawnBanner = (element: React.ReactNode) => {
     setBanner(element);
   }
 

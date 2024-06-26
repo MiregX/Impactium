@@ -1,14 +1,16 @@
-'use client'
+import { Tournament } from '@/dto/Tournament'
+import { Avatar } from '../avatar/Avatar'
 import s from './Heading.module.css'
-import { useLogo, useTeam } from "@/context/Team"
+import { Team } from '@/dto/Team'
+import { useApperand } from '@/decorator/useAperand'
 
-export function Heading({ state }) {
+export function Heading({ state }: { state: Team | Tournament}) {
   return (
     <div className={s.heading}>
-      {useLogo(state)}
+      <Avatar size={0} src={useApperand(state, ['logo', 'banner'])} alt={state.title} />
       <div className={s.text}>
         <p>{state.title}</p>
-        <h6>@{state.indent}</h6>
+        <h6>@{useApperand(state, ['indent', 'code'])}</h6>
       </div>
     </div>
   )
