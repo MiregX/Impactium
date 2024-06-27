@@ -6,20 +6,7 @@ export function _server(v?: boolean) {
       : process.env.SYMBOLIC_HOST || 'http://localhost:3001'
 }
 
-globalThis.api = (path, options): Promise<Response> => path
-  ? fetch(_server() + '/api' + path, {
-    credentials: 'include',
-    method: 'GET',
-    ...options,
-    }).then(res => options?.isRaw
-      ? res
-      : res.ok
-        ? options?.isText
-          ? res.text()
-          : res.json()
-        : null
-    ).catch(_ => undefined)
-  : fetch(path, {
+globalThis.api = (path, options): Promise<Response> => fetch(`${_server()}/api${path.startsWith('/') ? path : path}`, {
     credentials: 'include',
     method: 'GET',
     ...options,

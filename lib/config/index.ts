@@ -1,18 +1,9 @@
 export class Configuration {
-  static processEnvVariables(): Record<string, string> {
-    const processedEnv: Record<string, string> = {};
-
+  static processEnvVariables() {
     for (const key in process.env) {
-      const value = process.env[key];
-      if (typeof value === 'string') {
-        processedEnv[key] = value.replace(/\$\{(.+?)\}/g, (_, match) => {
-          const replacement = process.env[match];
-          return replacement !== undefined ? replacement : '';
-        });
-      }
+      process.env[key] = process.env[key]!.replace(/\$\{(.+?)\}/g, (_, match) => process.env[match]!);
     }
-
-    return processedEnv;
+    return process.env;
   }
 
   static _server() {

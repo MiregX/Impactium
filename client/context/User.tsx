@@ -28,9 +28,7 @@ export function UserProvider({ children, prefetched }: ReactNode & { prefetched:
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = (): Promise<User> => {
-    return api('/user/get');
-  };
+  const getUser = (): Promise<User> => api('/user/get');
 
   if (cookie.get('uuid')) {
     api('/oauth2/telegram/callback', {
