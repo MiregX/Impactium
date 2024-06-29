@@ -1,5 +1,5 @@
 import { Button, ButtonTypes } from '@/ui/Button';
-import s from './Onboarding.module.css';
+import s from './styles/Onboarding.module.css';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import { useApplication } from '@/context/Application';
 import { useLanguage } from '@/context/Language';

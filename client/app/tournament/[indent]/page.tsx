@@ -1,9 +1,9 @@
 'use client'
 import s from './Tournament.module.css'
-import { PanelTemplate } from "@/components/main/PanelTempate";
+import { PanelTemplate } from "@/components/PanelTempate";
 import { useTournament } from './context';
-import { Description } from '@/components/owerviewPageTemplate/Description';
-import { Heading } from '@/components/owerviewPageTemplate/Heading';
+import { Description } from '@/components/Description';
+import { Heading } from '@/components/Heading';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();

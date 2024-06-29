@@ -6,7 +6,7 @@ import { Login } from "@/dto/Login";
 import { Button, ButtonTypes } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application";
-import { Avatar } from "@/components/avatar/Avatar";
+import { Avatar } from "@/components/Avatar";
 
 export function Connections({ logins }: { logins: Login[] | null }) {
   const { lang } = useLanguage();

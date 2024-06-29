@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UnauthorizedException } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { Configuration } from '@impactium/config';
 
 @Controller('application')
 export class ApplicationController {
@@ -14,6 +15,11 @@ export class ApplicationController {
   @Get('status')
   status() {
     return this.applicationService.status()
+  }
+
+  @Get('debug')
+  debug() {
+    return Configuration.isProductionMode() ? (() => { throw new UnauthorizedException() })() : process.env
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always

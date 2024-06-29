@@ -1,12 +1,13 @@
 'use client'
-import { Text } from '@/components/main/onboarding/Text';
-import { Onboarding } from '@/components/main/onboarding/Onboarding';
+import { Text } from '@/components/Text';
+import { Onboarding } from '@/components/Onboarding';
 import React from 'react';
+import { TournamentsList } from '@/components/TournamentsList';
 
 export default function Main() {
   return (
     <React.Fragment>
-      <Onboarding />
+      <TournamentsList />
     </React.Fragment>
   );
 };

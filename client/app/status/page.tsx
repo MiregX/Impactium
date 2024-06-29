@@ -1,5 +1,5 @@
 'use client'
-import { PanelTemplate } from "@/components/main/PanelTempate";
+import { PanelTemplate } from "@/components/PanelTempate";
 import React from 'react';
 import { Unit } from "./components/Unit";
 import { Panel } from "@/ui/Panel";

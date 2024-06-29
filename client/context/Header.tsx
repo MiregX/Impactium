@@ -1,5 +1,5 @@
 'use client'
-import { Header } from '@/components/header/Header';
+import { Header } from '@/components/Header';
 import React, { createContext, useContext, useState } from 'react';
 
 interface HeaderContextProps {

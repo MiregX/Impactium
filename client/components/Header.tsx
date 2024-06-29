@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import s from '@/components/header/Header.module.css';
+import s from './styles/Header.module.css';
 import { Button, ButtonTypes } from '@/ui/Button';
 import { useUser } from '@/context/User';
 import { useHeader } from '@/context/Header';

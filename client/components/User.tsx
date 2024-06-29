@@ -1,13 +1,13 @@
 'use client'
 import { useLanguage } from '@/context/Language';
 import { useUser } from '@/context/User';
-import _user from './User.module.css'
+import _user from './styles/User.module.css'
 import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
-import { Avatar } from '../avatar/Avatar';
+import { Avatar } from './Avatar';
 
 export function UserComponent() {
   const { user, logout } = useUser();
@@ -30,11 +30,11 @@ export function UserComponent() {
       <Avatar
         className={_user.wrapper}
         size={32}
-        alt={useUsername(user!)}
+        alt={useDisplayName(user!)}
         src={user!.login.avatar}
         onClick={toggle} />
       <nav className={_user.menu}>
-        <p className={_user.name}>{user!.email || useUsername(user!)}</p>
+        <p className={_user.name}>{user!.email || useDisplayName(user!)}</p>
         <Link href='/account' onClick={toggle}>
           {lang._account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>

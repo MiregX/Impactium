@@ -1,4 +1,4 @@
-import s from './Onboarding.module.css'
+import s from './styles/Onboarding.module.css'
 export function VideoHighlight() {
   return (
     <div className={s.videoWrapper}>

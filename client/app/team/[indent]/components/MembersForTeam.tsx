@@ -20,7 +20,7 @@ export function MembersForTeam() {
             <Avatar
               size={32}
               src={member.user.login.avatar}
-              alt={useUsername(member.user)} />
+              alt={useDisplayName(member.user)} />
             <p>{useDisplayName(member.user)}</p>
             <p>{member.roles.map((role: TeamMemberRoles, index: number) => (
               <i key={index}><img src={`https://cdn.impactium.fun/roles/${role}.svg`} />{role}</i>

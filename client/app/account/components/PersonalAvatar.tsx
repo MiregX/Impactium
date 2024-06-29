@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User";
-import { Avatar } from "@/components/avatar/Avatar";
+import { Avatar } from "@/components/Avatar";
 
 export function PersonalAvatar() {
   const { lang } = useLanguage();
@@ -16,7 +16,7 @@ export function PersonalAvatar() {
       <Avatar
         size={78}
         src={user!.login.avatar}
-        alt={useUsername(user!)}
+        alt={useDisplayName(user!)}
         className={s.avatar} />
     </Card>
   );

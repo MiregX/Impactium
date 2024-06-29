@@ -27,8 +27,7 @@ export class ApplicationService {
         const info = {
           status: 200,
           environment: this.getEnvironment(),
-          enforced_preloader: !!process.env.ENFORCED_PRELOADER,
-          localhost: process.env.API_LOCALHOST,
+          localhost: [process.env.API_SYMBOLIC_HOST, process.env.API_NUMERIC_HOST, process.env.API_PRODUCTION_HOST],
           statistics: {
             users_count,
             teams_count,
@@ -68,7 +67,6 @@ export class ApplicationService {
   private getEnvironment() {
     return {
       loaded: Configuration.isEnvironmentLoaded(),
-      path: process.env.X_PATH,
       mode: Configuration.getMode(),
       message: process.env.X_MESSAGE,
     }

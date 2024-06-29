@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { PanelTemplate } from '@/components/main/PanelTempate';
+import { PanelTemplate } from '@/components/PanelTempate';
 import { useLanguage } from '@/context/Language';
 import { TeamUnit } from './components/TeamUnit';
 import s from './Teams.module.css';
@@ -9,8 +9,8 @@ import { Team } from '@/dto/Team';
 import { useUser } from '@/context/User';
 import React from 'react';
 import { useTeams } from './context';
-import { Recomendations } from '@/components/owerviewPageTemplate/Recomentations';
-import { SearchBar } from '@/components/owerviewPageTemplate/SearchBar';
+import { Recomendations } from '@/components/Recomentations';
+import { SearchBar } from '@/components/SearchBar';
 
 export default function TeamsPage() {
   const { teams, setTeams } = useTeams();

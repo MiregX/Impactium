@@ -1,4 +1,4 @@
-import { PanelTemplate } from "@/components/main/PanelTempate";
+import { PanelTemplate } from "@/components/PanelTempate";
 import s from './Account.module.css'
 import { PersonalAvatar } from "./components/PersonalAvatar";
 import { DisplayName } from "./components/DisplayName";

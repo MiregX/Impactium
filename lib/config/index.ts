@@ -8,19 +8,19 @@ export class Configuration {
 
   static _server() {
     return this.isProductionMode()
-      ? process.env.HOST
-      : process.env.API_LOCALHOST
+      ? process.env.API_PRODUCTION_HOST
+      : process.env.API_SYMBOLIC_HOST
   }
 
   static getClientLink() {
     return this.isProductionMode()
-      ? process.env.HOST
-      : process.env.APP_LOCALHOST
+      ? process.env.APP_PRODUCTION_HOST
+      : process.env.APP_SYMBOLIC_HOST
   }
 
   static getLink() {
     return this.isProductionMode()
-      ? process.env.HOST
+      ? process.env.API_PRODUCTION_HOST
       : process.env.LOCALHOST
   }
 
@@ -29,7 +29,11 @@ export class Configuration {
   }
 
   static isProductionMode(): boolean {
-    return parseInt(process.env.X!) > 0
+    return this.λ() > 0
+  }
+
+  static λ() {
+    return parseInt(process.env.X!);
   }
 
   static getMode() {

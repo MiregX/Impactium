@@ -1,8 +1,8 @@
 'use client'
-import { PanelTemplate } from "@/components/main/PanelTempate";
-import { Recomendations } from "@/components/owerviewPageTemplate/Recomentations";
+import { PanelTemplate } from "@/components/PanelTempate";
+import { Recomendations } from "@/components/Recomentations";
 import React, { useState } from "react";
-import { SearchBar } from "@/components/owerviewPageTemplate/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import s from './Tournaments.module.css'
 import { TournamentUnit } from "./components/TournamentUnit";
 import { useTournaments } from "./context";

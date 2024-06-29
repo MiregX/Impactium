@@ -3,7 +3,7 @@ import { Panel } from '@/ui/Panel';
 import s from '../Tournament.module.css'
 import { useTournament } from '../context'
 import { Team } from '@/dto/Team';
-import { Avatar } from '@/components/avatar/Avatar';
+import { Avatar } from '@/components/Avatar';
 import { useLanguage } from '@/context/Language';
 import React from 'react';
 

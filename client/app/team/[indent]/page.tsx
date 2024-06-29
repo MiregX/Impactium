@@ -1,9 +1,9 @@
 'use client'
 import s from './Team.module.css'
-import { PanelTemplate } from "@/components/main/PanelTempate";
-import { Description } from '@/components/owerviewPageTemplate/Description';
-import { Heading } from '@/components/owerviewPageTemplate/Heading';
-import { Comments } from "@/components/team/Comments";
+import { PanelTemplate } from "@/components/PanelTempate";
+import { Description } from '@/components/Description';
+import { Heading } from '@/components/Heading';
+import { Comments } from "@/components/Comments";
 import { useTeam } from '@/context/Team';
 import { MembersForTeam } from './components/MembersForTeam';
 

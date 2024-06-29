@@ -12,7 +12,7 @@ import { UserProvider } from '@/context/User';
 import { Preloader } from '@/components/Preloader';
 import { Configuration } from '@impactium/config';
 import { cookies } from 'next/headers';
-import { Footer } from '@/components/footer/Footer';
+import { Footer } from '@/components/Footer';
 import { User } from '@/dto/User';
 export { metadata } from '@/dto/Metadata';
 import { GeistSans } from 'geist/font/sans';
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   }) : null;
 
   return (
-    <html style={{'--mono-geist' : GeistMono.variable, '--mono-sans' : GeistSans.variable}}>
+    <html style={{'--mono-geist' : GeistMono.style.fontFamily, '--mono-sans' : GeistSans.style.fontFamily}}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>

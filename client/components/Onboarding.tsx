@@ -1,6 +1,6 @@
-import { PanelTemplate } from "../PanelTempate";
+import { PanelTemplate } from "./PanelTempate";
 import { VideoHighlight } from './VideoHighlight';
-import { Text } from "../onboarding/Text";
+import { Text } from "./Text";
 
 export function Onboarding() {
   return (

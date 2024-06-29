@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://cdn.impactium.fun/logo/66f30814ff6d7cdf.p.woff2');
-@font-face {
-  font-family: 'Geist Mono';
-  src: url('https://cdn.impactium.fun/logo/66f30814ff6d7cdf.p.woff2') format('woff2');
-}
 
 :root {
   --black: #000;
@@ -64,35 +59,19 @@
   --geist-yellow: #f3c600;
   --geist-red: #f30000;
 
-  --hammer: url("https://cdn.impactium.fun/custom/hammer.svg");
-  --hammer-accent: #F14C50;
-  --casual: url("https://cdn.impactium.fun/custom/casual.svg");
-  --casual-accent: rgb(163, 255, 163);
-  --defence: url("https://cdn.impactium.fun/custom/defence.svg");
-  --defence-accent: #417FFD;
-  --killer: url("https://cdn.impactium.fun/custom/killer.svg");
-  --killer-accent: #F2DE4C;
-  --event: url("https://cdn.impactium.fun/custom/event.svg");
-  --event-accent: #E465FD;
-  --donate: url("https://cdn.impactium.fun/custom/donate.svg");
-  --donate-accent: #72E4F2;
-
   --card-padding: 24px;
   --card-gap: 12px;
 
   --panel-gap: 16px;
-
-  --mono-geist: 'Geist Mono', "Geist Mono", "geistMonoFont", 'geistMonoFont';
-  --mono-nunito: 'Nunito'
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  letter-spacing: 0.3px;
+  letter-spacing: 1px;
   color: var(--soft-white);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--mono-sans);
   font-weight: 300;
   scroll-behavior: smooth;
   line-height: 1;
