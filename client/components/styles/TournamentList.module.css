@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--card-gap);
+  flex-direction: row;
+  width: 100%;
+}
+.page {
+  padding: 16px;
+}
+.fill {
+  flex: 1;
+}

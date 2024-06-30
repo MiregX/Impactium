@@ -9,13 +9,15 @@
   gap: 16px;
   background: var(--black);
 }
-.hasTitle {
-  margin-top: 128px;
+.title {
+  padding-top: 144px;
 }
-.isColumn {
+.useColumn {
   flex-direction: column;
   justify-content: flex-start !important;
-
+}
+.center {
+  align-items: center;
 }
 .panel[data-splitter='true'] > img {
   width: calc(100% - 32px);

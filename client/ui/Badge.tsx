@@ -22,6 +22,9 @@ export enum BadgeType {
   primary = 'primary',
   verified = 'verified',
   selected = 'selected',
+  Upcoming = 'upcoming',
+  Ongoing = 'ongoing',
+  Finished = 'finished'
 };
 
 type _PredefinedBadge = {
@@ -70,7 +73,19 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       title: lang._selected,
       direction: _BadgeDirections.default,
       color: '#62c073'
-    }
+    },
+    [BadgeType.Upcoming]: {
+      direction: _BadgeDirections.default,
+      color: '#0070f3'
+    },
+    [BadgeType.Ongoing]: {
+      direction: _BadgeDirections.default,
+      color: '#31dd59'
+    },
+    [BadgeType.Finished]: {
+      direction: _BadgeDirections.default,
+      color: '#f30000'
+    },
   };
 
   const { title, icon, direction, color } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;

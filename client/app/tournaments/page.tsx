@@ -4,8 +4,8 @@ import { Recomendations } from "@/components/Recomentations";
 import React, { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import s from './Tournaments.module.css'
-import { TournamentUnit } from "./components/TournamentUnit";
 import { useTournaments } from "./context";
+import { TournamentUnit } from "@/components/TournamentUnit";
 
 export default function TournamentPage() {
   const { tournaments, setTournaments } = useTournaments();

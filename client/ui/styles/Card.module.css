@@ -9,7 +9,7 @@
   flex-direction: column;
 }
 .content {
-  gap: 24px;
+  gap: var(--card-gap);
   display: flex;
   padding: var(--card-padding);
   flex: 1;

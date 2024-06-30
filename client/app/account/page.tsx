@@ -5,7 +5,6 @@ import { DisplayName } from "./components/DisplayName";
 import { Username } from "./components/Username";
 import { Email } from "./components/Email";
 import { Connections } from "./components/Connections";
-import { AuthGuardClientSide } from "@/components/AuthGuardClientSide";
 import { cookies } from "next/headers";
 import { Login } from "@/dto/Login";
 import { Nav } from "./components/Nav";
@@ -21,8 +20,7 @@ export default async function AccountPage() {
   });
 
   return (
-    <PanelTemplate style={[s.page]} title='$_account'>
-      <AuthGuardClientSide />
+    <PanelTemplate className={[s.page]} title='$_account' useAuthGuard={true}>
       <Nav />
       <div className={s.wrapper}>
         <div className={s.group}>

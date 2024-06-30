@@ -5,10 +5,13 @@ import '@/decorator/useDisplayName';
 import '@/decorator/useOptionStyling';
 import '@/decorator/useUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import styles from './Application.module.css';
+import s from './Application.module.css';
 import { useLanguage } from '@/context/Language';
 import { ReactNode } from '@/dto/ReactNode';
 import { AvailableLanguage } from '@/dto/AvaliableLanguage';
+import { Application, ApplicationBase } from '@/dto/Application.dto';
+import { Message } from '@/dto/Message.dto';
+import { useMessageStatus } from '@/decorator/useMessageStatus';
 
 const ApplicationContext = createContext<IApplicationContext | undefined>(undefined);
 
@@ -19,17 +22,13 @@ interface IApplicationContext {
   copy: (text: string) => PromiseLike<void>,
   spawnBanner: (banner: React.ReactNode) => void,
   destroyBanner: () => void,
-  application: any,
-  setApplication: (application: any) => void
+  application: Application,
+  setApplication: (application: Application) => void,
 }
 
-type IApplicationProvider = ReactNode & {
-  prefetched: AvailableLanguage | undefined
-}
-
-export const ApplicationProvider = ({ children, prefetched }: IApplicationProvider) => {
-  const [messages, setMessages] = useState<Array<any>>([]);
-  const [application, setApplication] = useState(prefetched);
+export const ApplicationProvider = ({ children }: ReactNode) => {
+  const [messages, setMessages] = useState<Array<Message>>([]);
+  const [application, setApplication] = useState<Application>(ApplicationBase);
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
 
@@ -41,13 +40,11 @@ export const ApplicationProvider = ({ children, prefetched }: IApplicationProvid
     setBanner(null);
   }
 
-  const newMessage = (code: number, text: string) => {
-    const type = code < 400 ? 'success' : (code >= 400 && code < 500 ? 'warning' : 'attention');
-
-    const message = {
+  const newMessage = (status: number, msg: string) => {
+    const message: Message = {
       id: new Date().getTime(),
-      type,
-      text,
+      status: useMessageStatus(status),
+      msg,
     };
 
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -61,6 +58,12 @@ export const ApplicationProvider = ({ children, prefetched }: IApplicationProvid
       }, 500);
     }, 5000);
   };
+
+  useEffect(() => {
+    return () => {
+      setMessages((prevMessages) => prevMessages.filter((msg) => !msg.hidden));
+    };
+  }, []);
   
   const copy = async (text: string) => {
     try {
@@ -71,20 +74,22 @@ export const ApplicationProvider = ({ children, prefetched }: IApplicationProvid
     }
   };
 
-  useEffect(() => {
-    return () => {
-      setMessages((prevMessages) => prevMessages.filter((msg) => !msg.hidden));
-    };
-  }, []);
-
+  const props: IApplicationContext = {
+    newMessage,
+    copy,
+    spawnBanner,
+    destroyBanner,
+    application,
+    setApplication
+  } 
 
   return (
-    <ApplicationContext.Provider value={{ newMessage, copy, spawnBanner, destroyBanner, application, setApplication }}>
+    <ApplicationContext.Provider value={props}>
       {children}
-      <div className={styles.messageWrapper}>
+      <div className={s.messageWrapper}>
         {messages.map((message) => (
-          <div key={message.id} itemType={message.type} className={`${styles.message} ${message.hidden && styles.toHide}`}>
-            <p>{message.text}</p>
+          <div key={message.id} itemType={message.status} className={`${s.message} ${message.hidden && s.toHide}`}>
+            <p>{message.msg}</p>
           </div>
         ))}
       </div>

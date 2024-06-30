@@ -1,6 +1,6 @@
 'use client'
 import { useTeam } from '@/context/Team'
-import _ from './Comments.module.css'
+import _ from './styles/Comments.module.css'
 import { useApplication } from '@/context/Application';
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language';
@@ -12,10 +12,6 @@ export function Comments() {
   const { user } = useUser();
   const { newMessage } = useApplication();
   const { lang } = useLanguage();
-
-  const handleError = () => {
-    newMessage(403, 'unnable to send message');
-  }
 
   return (
     <div className={_._}>

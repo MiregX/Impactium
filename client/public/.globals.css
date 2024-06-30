@@ -69,7 +69,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: var(--soft-white);
   font-family: var(--mono-sans);
   font-weight: 300;

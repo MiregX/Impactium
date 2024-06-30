@@ -47,7 +47,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>
-            <ApplicationProvider prefetched={application}>
+            <ApplicationProvider>
               <HeaderProvider>
                 {Configuration.isProductionMode() && <Preloader use={!!cookie.get('uuid')} />}
                 <main>

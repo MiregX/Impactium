@@ -19,8 +19,6 @@ services:
       dockerfile: ./client/Dockerfile
       target: production
     restart: on-failure
-    ports:
-      - ${APP_DEBUG_PORT}:${APP_DEBUG_PORT}
     environment:
       - PORT=${APP_PORT}
       - DEBUG_PORT=${APP_DEBUG_PORT}
@@ -36,8 +34,6 @@ services:
       dockerfile: ./api/Dockerfile
       target: production
     restart: on-failure
-    ports:
-      - ${API_DEBUG_PORT}:${API_DEBUG_PORT}
     environment:
       - PORT=${API_PORT}
       - DEBUG_PORT=${API_DEBUG_PORT}

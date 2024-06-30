@@ -39,6 +39,10 @@
   background: var(--soft-black);
 }
 
+.account > div {
+  gap: 24px;
+}
+
 .account .avatar {
   position: absolute;
   right: 24px;
