@@ -14,8 +14,8 @@ export interface Tournament {
   owner: User,
   teams: Team[],
   gid: string,
-  // grid: Grid,
-  comments: Comment[]
+  grid: any, //Grid | 
+  comments: Comment[],
 }
 
 // id          String      @id @default(cuid())

@@ -24,7 +24,8 @@ const mockTournaments: Tournament[] = [
     owner: { uid: "u1", displayName: "Galactic Commander" } as unknown as User,
     teams: [],
     gid: "galactic_space_invaders",
-    comments: []
+    grid: '',
+    comments: [],
   },
   {
     id: "2",
@@ -39,7 +40,8 @@ const mockTournaments: Tournament[] = [
     owner: { uid: "u2", displayName: "Sir Lancelot" } as unknown as User,
     teams: [],
     gid: "medieval_mayhem",
-    comments: []
+    grid: '',
+    comments: [],
   },
   {
     id: "3",
@@ -54,7 +56,8 @@ const mockTournaments: Tournament[] = [
     owner: { uid: "u3", displayName: "Grand Sorcerer" } as unknown as User,
     teams: [],
     gid: "mystic_mage_duel",
-    comments: []
+    grid: '',
+    comments: [],
   },
   {
     id: "4",
@@ -69,7 +72,8 @@ const mockTournaments: Tournament[] = [
     owner: { uid: "u4", displayName: "Dr. Robotnik" } as unknown as User,
     teams: [],
     gid: "robot_rumble",
-    comments: []
+    grid: '',
+    comments: [],
   },
   {
     id: "5",
@@ -84,7 +88,8 @@ const mockTournaments: Tournament[] = [
     owner: { uid: "u5", displayName: "Captain Nemo" } as unknown as User,
     teams: [],
     gid: "underwater_adventure",
-    comments: []
+    grid: '',
+    comments: [],
   }
 ];
 

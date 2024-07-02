@@ -13,7 +13,7 @@ export interface Card {
   id: string;
 }
 
-export function Card({ description, id, children, className }: Card) {
+export function Card({ description, id, children, className ,}: Card) {
   return (
     <div className={useClasses(className, card._)} id={id}>
       <div className={card.content}>

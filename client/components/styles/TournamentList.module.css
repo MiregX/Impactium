@@ -5,10 +5,18 @@
   gap: var(--card-gap);
   flex-direction: row;
   width: 100%;
+  height: 289px;
 }
 .page {
   padding: 16px;
 }
 .fill {
   flex: 1;
+}
+
+@media all and ( max-width: 1024px ) {
+  .wrapper {
+    height: auto;
+    flex-direction: column;
+  }
 }

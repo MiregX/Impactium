@@ -1,3 +1,39 @@
-.unit {
-  
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.card {
+  height: 100%;
+}
+
+.card p {
+  display: flex;
+  align-items: center;
+  color:  var(--text-dimmed);
+  font-weight: 300;
+  gap: 8px;
+} 
+
+.card p:nth-child(3) {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--white);
+  font-family: var(--mono-geist);
+
+}
+
+.card p:nth-child(4) img {
+  filter: brightness(0.58);
+}
+
+.card p:nth-child(5) img {
+  filter: brightness(0.58);
+}
+
+.card p:nth-child(6) a{
+  color: var(--white);
+  text-decoration: underline;
 }
