@@ -7,35 +7,17 @@ import { Readable } from 'stream';
 export class FtpService extends Client implements OnModuleInit, OnModuleDestroy {
   private readonly options: AccessOptions = JSON.parse(process.env.FTP);
 
-  constructor() {
-    super();
-  }
+  onModuleInit = async () => await this.access(this.options).catch(_ => console.error('[Fail] FTP Connection'));
 
-  async onModuleInit() {
-    try {
-      await this.access(this.options);
-    } catch (error) {
-      console.error('Error initializing FTP client:', error);
-      throw error;
-    }
-  }
-
-  async onModuleDestroy() {
-    try {
-      this.close();
-    } catch (error) {
-      console.error('Error closing FTP client:', error);
-      throw error;
-    }
-  }
+  onModuleDestroy = () => this.close();
 
   async uploadFile(path: string, stream: Readable) {
-    const combinedPath = 'cdn.impactium.fun/htdocs/' + path;
-    try {
-      await this.uploadFrom(stream, combinedPath);
-    } catch (error) {
-      await this.access(this.options);
-      this.uploadFile(path, stream);
-    }
+    await this.uploadFrom(stream, 'cdn.impactium.fun/htdocs/' + path).catch(_ => this.reconnect(() => this.uploadFile(path, stream)));
+  }
+
+  private async reconnect(callback?: (...params: any[]) => Promise<void>) {
+    await this.access(this.options)
+      .then(async _ => callback && await callback())
+      .catch(_ => console.error('[Fail] FTP Reconnection'));
   }
 }

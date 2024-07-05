@@ -1,7 +1,6 @@
 'use client'
-import s from './Preloader.module.css'
-import { useUser } from '@/context/User';
-import { useHeader } from '@/context/Header';
+import s from './styles/Preloader.module.css'
+import { useUser } from '@/context/User.context';
 import {
     useCallback,
     useEffect,
@@ -12,7 +11,6 @@ import { usePathname } from 'next/navigation';
 
 export function Preloader({ use }: {use?: boolean}) {
   const { isUserLoaded, user } = useUser();
-  const { setIsLogoHidden } = useHeader();
   const url = usePathname();
   const [blocker, setBlocker] = useState<boolean>(use || isUserLoaded);
 
@@ -20,8 +18,8 @@ export function Preloader({ use }: {use?: boolean}) {
     user && setBlocker(false)
   }, [user])
 
-  const [visitedBefore, setVisitedBefore] = useState<boolean>(typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
-  const self = useRef<HTMLDivElement>(null); // Specify the type for useRef
+  const [visitedBefore, setVisitedBefore] = useState<boolean>(false && typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
+  const self = useRef<HTMLDivElement>(null);
 
   const show = useCallback(() => {
     if (self.current) {
@@ -29,11 +27,10 @@ export function Preloader({ use }: {use?: boolean}) {
       if (visitedBefore) {
         self.current.classList.add(s.fast);
       } else {
-        setIsLogoHidden(true);
         self.current.classList.add(s.slow);
       }
     }
-  }, [self, visitedBefore, setIsLogoHidden]);
+  }, [self, visitedBefore]);
 
   const hide = useCallback(() => {
     const opacityDelay = visitedBefore ? 300 : 3000;
@@ -41,7 +38,6 @@ export function Preloader({ use }: {use?: boolean}) {
     setTimeout(() => {
       if (self.current) {
         self.current.classList.add(s.hide);
-        setIsLogoHidden(false);
         setTimeout(() => {
           if (self.current) {
             self.current.classList.add(s.remove);
@@ -50,7 +46,7 @@ export function Preloader({ use }: {use?: boolean}) {
         }, 200);
       }
     }, opacityDelay);
-  }, [self, visitedBefore, setIsLogoHidden]);
+  }, [self, visitedBefore]);
 
   useEffect(() => {
     show(); // Initial show when component mounts
@@ -89,4 +85,3 @@ export function Preloader({ use }: {use?: boolean}) {
     </div>
   );
 };
-

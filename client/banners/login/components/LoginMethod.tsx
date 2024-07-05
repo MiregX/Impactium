@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language'
+import { useLanguage } from '@/context/Language.context'
 import s from '../LoginBanner.module.css'
 import { _server } from '@/decorator/api'
 import Link from 'next/link';

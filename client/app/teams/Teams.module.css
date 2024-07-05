@@ -39,7 +39,6 @@
 .unit > h6 {
   font-weight: 600;
   font-size: var(--text-small);
-  font-family: 'Nunito', sans-serif;
   color: var(--text-dimmed);
 }
 .loading {

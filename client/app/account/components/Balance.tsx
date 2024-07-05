@@ -1,8 +1,8 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User";
+import { useUser } from "@/context/User.context";
 import { Button, ButtonTypes } from "@/ui/Button";
 import { _server } from "@/decorator/api";
 

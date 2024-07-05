@@ -1,9 +1,9 @@
 'use client'
 import { Input } from '@/ui/Input'
-import s from './Comments.module.css'
+import s from './styles/Comments.module.css'
 import { Button, ButtonTypes } from '@/ui/Button'
-import { useUser } from '@/context/User'
-import { useLanguage } from '@/context/Language'
+import { useUser } from '@/context/User.context'
+import { useLanguage } from '@/context/Language.context'
 import { Avatar } from './Avatar'
 
 

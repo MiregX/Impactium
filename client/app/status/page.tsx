@@ -3,14 +3,14 @@ import { PanelTemplate } from "@/components/PanelTempate";
 import React from 'react';
 import { Unit } from "./components/Unit";
 import { Panel } from "@/ui/Panel";
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import s from './Status.module.css'
 
 export default function StatusPage() {
   const { lang } = useLanguage();
 
   return (
-    <PanelTemplate style={[s.panel]}>
+    <PanelTemplate className={s.panel}>
         <Panel heading={lang.status.heading}>
           <React.Fragment>
             <Unit name='redis' />

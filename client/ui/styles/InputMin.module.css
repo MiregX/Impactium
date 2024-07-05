@@ -12,7 +12,7 @@
   padding: 4px 8px;
   font-weight: 500;
   transition: all 0.3s var(--transition);
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -20,7 +20,7 @@
   border: 1px solid var(--soft-white);
 }
 .wrapper p {
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   color: var(--text-dimmed);
   padding: 8px;
 }

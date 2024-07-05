@@ -1,7 +1,7 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import { Panel } from "@/ui/Panel";
-import s from './Recomendations.module.css'
+import s from './styles/Recomendations.module.css'
 
 interface RecomendationsProps {
   search: string,

@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language'
+import { useLanguage } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
 
@@ -9,7 +9,7 @@ export function Footer() {
   const Operational = () => 
     <div className={s.operational}>
       <div className={s.left}>
-        <img src='https://cdn.impactium.fun/logo/impactium_thin.svg'/>
+        <img src='https://cdn.impactium.fun/logo/impactium_thin.svg' alt='' />
         <p>© {new Date(Date.now()).getFullYear()}</p>
         <Link href='/status' className={s.status}>
           {lang.status.ok}
@@ -22,10 +22,10 @@ export function Footer() {
     <div className={s.addictional}>
       <div className={s.socials}>
         <Link href='https://github.com/Mireg-V'>
-          <img src='https://cdn.impactium.fun/custom/github.svg' />
+          <img src='https://cdn.impactium.fun/custom/github.svg' alt='' />
         </Link>
         <Link href='https://t.me/impactium'>
-          <img src='https://cdn.impactium.fun/custom/telegram.svg' />
+          <img src='https://cdn.impactium.fun/custom/telegram.svg' alt='' />
         </Link>
       </div>
       <div className={s.navigation}>

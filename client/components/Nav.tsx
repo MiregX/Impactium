@@ -2,7 +2,7 @@
 import s from '@/styles/Me.module.css';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import Link from 'next/link';
 
 interface MapType {

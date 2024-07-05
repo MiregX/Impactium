@@ -1,10 +1,10 @@
 'use client'
 import { Input } from '@/ui/Input'
-import s from './SearchBar.module.css'
-import { useLanguage } from '@/context/Language'
+import s from './styles/SearchBar.module.css'
+import { useLanguage } from '@/context/Language.context'
 import { useState } from 'react';
 import { Button, ButtonTypes } from '@/ui/Button';
-import { useApplication } from '@/context/Application';
+import { useApplication } from '@/context/Application.context';
 import CreateTeam from '@/banners/create_team/CreateTeam'
 import CreateTournament from '@/banners/create_tournament/CreateTournament';
 import { Tournament } from '@/dto/Tournament';
@@ -28,14 +28,13 @@ export function SearchBar({ search, setSearch, setState, state, apiPath }: Searc
   
   const fetchData = async (value: string): Promise<any[]> => {
     setLoading(true);
-    const data = await api(`/${apiPath}/find/${value}`, {
-      method: 'GET',
+    const data = await api<any[]>(`/${apiPath}/find/${value}`, {
       next: {
         revalidate: 60
       }
-    }) as any[] ?? [];
+    });
     setLoading(false);
-    return data;
+    return data || [];
   };
 
   const handleSearchChange = (event: any) => {

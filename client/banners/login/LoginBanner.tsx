@@ -2,7 +2,7 @@
 import s from './LoginBanner.module.css'
 import { Banner } from "@/ui/Banner";
 import { LoginMethod } from "./components/LoginMethod";
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 
 interface LoginBanner {
   connect?: true

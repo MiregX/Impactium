@@ -1,11 +1,11 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
 import { Button, ButtonTypes } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
-import { useApplication } from "@/context/Application";
+import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/components/Avatar";
 
 export function Connections({ logins }: { logins: Login[] | null }) {

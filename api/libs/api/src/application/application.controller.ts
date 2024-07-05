@@ -19,7 +19,7 @@ export class ApplicationController {
 
   @Get('debug')
   debug() {
-    return Configuration.isProductionMode() ? (() => { throw new UnauthorizedException() })() : process.env
+    return !Configuration.isProductionMode() ? (() => { throw new UnauthorizedException() })() : process.env
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always

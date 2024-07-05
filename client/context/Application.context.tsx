@@ -6,8 +6,8 @@ import '@/decorator/useOptionStyling';
 import '@/decorator/useUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import s from './Application.module.css';
-import { useLanguage } from '@/context/Language';
-import { ReactNode } from '@/dto/ReactNode';
+import { useLanguage } from '@/context/Language.context';
+import { Children } from '@/dto/Children';
 import { AvailableLanguage } from '@/dto/AvaliableLanguage';
 import { Application, ApplicationBase } from '@/dto/Application.dto';
 import { Message } from '@/dto/Message.dto';
@@ -26,7 +26,7 @@ interface IApplicationContext {
   setApplication: (application: Application) => void,
 }
 
-export const ApplicationProvider = ({ children }: ReactNode) => {
+export const ApplicationProvider = ({ children }: Children) => {
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [application, setApplication] = useState<Application>(ApplicationBase);
   const { lang } = useLanguage();
@@ -86,7 +86,7 @@ export const ApplicationProvider = ({ children }: ReactNode) => {
   return (
     <ApplicationContext.Provider value={props}>
       {children}
-      <div className={s.messageWrapper}>
+      <div className={s.message}>
         {messages.map((message) => (
           <div key={message.id} itemType={message.status} className={`${s.message} ${message.hidden && s.toHide}`}>
             <p>{message.msg}</p>

@@ -1,8 +1,9 @@
-import { ReactNode } from '@/dto/ReactNode';
+import { Children } from '@/dto/Children';
 import { StatusProvider } from './context'
+import { Status } from '@/dto/Status';
 
-export default async function StatusLayout({ children }: ReactNode) {
-  const status = await api('/application/status')
+export default async function StatusLayout({ children }: Children) {
+  const status = await api<Status[]>('/application/status');
 
-  return <StatusProvider prefetched={status} children={children} />;
+  return <StatusProvider prefetched={status || []} children={children} />;
 }

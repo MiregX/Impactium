@@ -8,7 +8,7 @@ import { Heading } from '@/components/Heading';
 export default function TeamIndentPage() {
   const { tournament } = useTournament();
   return (
-    <PanelTemplate style={[s.page]}>
+    <PanelTemplate className={s.page}>
       <div className={s.wrapper}>
         <Heading state={tournament} />
         <Description key='tournament' state={tournament} />

@@ -28,7 +28,7 @@
 }
 .operational p {
   font-weight: 200;
-  font-family: 'Nunito';
+  font-family: var(--font-nunito);
   font-size: var(--text-small);
 }
 .operational .left > img {
@@ -46,16 +46,16 @@
 .operational a {
   display: flex;
   align-items: center;
-  gap: 4px;
-  border-radius: var(--border-l);
+  gap: 8px;
+  border-radius: var(--border-s);
   color: var(--geist-blue);
   font-weight: 500;
   font-size: var(--text-small);
-  font-family: 'Nunito';
-  padding: 8px;
+  font-family: var(--font-mono);
+  padding: 12px 16px;
 }
 .operational a:hover {
-  background: var(--gray16);
+  background: var(--gray24);
 }
 
 .addictional {

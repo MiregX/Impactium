@@ -49,15 +49,15 @@ services:
     profiles:
       - development
 
-  api-prisma:
-    extends:
-      file: ./api/libs/api/compose-service.yml
-      service: api-prisma
-    depends_on:
-      - api-cockroachdb
-    container_name: ${COMPOSE_PROJECT_NAME}api-prisma
-    profiles:
-      - development
+  # api-prisma:
+  #   extends:
+  #     file: ./api/libs/api/compose-service.yml
+  #     service: api-prisma
+  #   depends_on:
+  #     - api-cockroachdb
+  #   container_name: ${COMPOSE_PROJECT_NAME}api-prisma
+  #   profiles:
+  #     - development
 
   redis:
     container_name: ${COMPOSE_PROJECT_NAME}redis

@@ -57,7 +57,6 @@
   border-radius: var(--border-l);
   font-weight: 500;
   font-size: var(--text-small);
-  font-family: 'Nunito';
   padding: 8px;
   align-items: center;
 }
@@ -84,7 +83,7 @@
   white-space: nowrap;
   font-size: var(--text-small);
   position: absolute;
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
 }

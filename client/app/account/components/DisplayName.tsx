@@ -1,8 +1,8 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User";
+import { useUser } from "@/context/User.context";
 import { Button, ButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { DisplayName as RDisplayName } from "@impactium/pattern";
@@ -16,10 +16,12 @@ export function DisplayName() {
 
   const send = async () => {
     setLoading(true);
-    return await api('/user/set/display-name', {
+    await api<boolean>('/user/set/display-name', {
       method: 'POST',
       body: JSON.stringify({ displayName })
-    }).then(() => { setLoading(false); refreshUser() })
+    })
+    setLoading(false);
+    refreshUser();
   }
 
   const button = <Button options={{

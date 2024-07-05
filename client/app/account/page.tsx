@@ -1,23 +1,16 @@
-import { PanelTemplate } from "@/components/PanelTempate";
-import s from './Account.module.css'
 import { PersonalAvatar } from "./components/PersonalAvatar";
+import { PanelTemplate } from "@/components/PanelTempate";
 import { DisplayName } from "./components/DisplayName";
-import { Username } from "./components/Username";
-import { Email } from "./components/Email";
 import { Connections } from "./components/Connections";
-import { cookies } from "next/headers";
-import { Login } from "@/dto/Login";
-import { Nav } from "./components/Nav";
+import { Username } from "./components/Username";
 import { Balance } from "./components/Balance";
+import { Email } from "./components/Email";
+import { Nav } from "./components/Nav";
+import { Login } from "@/dto/Login";
+import s from './Account.module.css';
 
 export default async function AccountPage() {
-  const token = cookies().get('Authorization')?.value;
-
-  const logins: Login[] | null = token && await api('/user/logins', {
-    headers: {
-      token
-    }
-  });
+  const logins = await api<Login[]>('/user/logins') || [];
 
   return (
     <PanelTemplate className={[s.page]} title='$_account' useAuthGuard={true}>
@@ -34,4 +27,4 @@ export default async function AccountPage() {
       </div>
     </PanelTemplate>
   );
-}
+};

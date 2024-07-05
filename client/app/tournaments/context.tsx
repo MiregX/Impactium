@@ -1,7 +1,7 @@
 'use client'
 import { useState, createContext, useContext } from "react";
 import { Tournament } from "@/dto/Tournament";
-import { ReactNode } from "@/dto/ReactNode";
+import { Children } from "@/dto/Children";
 
 const TournamentsContext = createContext<TournamentsContext | undefined>(undefined)!;
 
@@ -12,7 +12,7 @@ interface TournamentsContext {
 
 export const useTournaments = () => useContext(TournamentsContext) ?? (() => { throw new Error() })();
 
-export function TournamentsProvider({ children, prefetched }: ReactNode & { prefetched: Tournament[] }) {
+export function TournamentsProvider({ children, prefetched }: Children & { prefetched: Tournament[] }) {
   const [tournaments, setTournaments] = useState(prefetched || []);
 
   return (

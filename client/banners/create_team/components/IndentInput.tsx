@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/ui/Input';
 import s from '../CreateTeam.module.css'
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { Team } from '@/dto/Team';
 
 interface IndentInputProps {

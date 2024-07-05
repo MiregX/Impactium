@@ -1,4 +1,4 @@
-import { TeamProvider } from "@/context/Team";
+import { TeamProvider } from "./team.context";
 import { Team } from "@/dto/Team";
 import { useIndent } from "@/decorator/useIndent";
 

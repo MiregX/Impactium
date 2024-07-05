@@ -1,8 +1,8 @@
 import { Button, ButtonTypes } from '@/ui/Button';
 import s from './styles/Onboarding.module.css';
 import CreateTeam from '@/banners/create_team/CreateTeam';
-import { useApplication } from '@/context/Application';
-import { useLanguage } from '@/context/Language';
+import { useApplication } from '@/context/Application.context';
+import { useLanguage } from '@/context/Language.context';
 
 export function Text() {
   const { spawnBanner } = useApplication();

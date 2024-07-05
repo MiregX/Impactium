@@ -119,6 +119,8 @@ model Tournament {
   gid         String
   grid        Grid?
   comments    Comment[]
+  live        String?
+  prize       Int         @default(0)
 }
 
 model Grid {

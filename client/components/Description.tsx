@@ -1,8 +1,8 @@
 'use client'
-import { useLanguage } from '@/context/Language';
-import { useApplication } from '@/context/Application';
-import s from './Description.module.css'
-import { useUser } from "@/context/User";
+import { useLanguage } from '@/context/Language.context';
+import { useApplication } from '@/context/Application.context';
+import s from './styles/Description.module.css'
+import { useUser } from "@/context/User.context";
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { EditDescription } from '@/banners/edit_team_description/EditDescription';

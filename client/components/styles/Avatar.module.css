@@ -9,7 +9,7 @@
 }
 ._ p {
   color: var(--text-white);
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   line-height: 0px;
   text-align: center;
 }

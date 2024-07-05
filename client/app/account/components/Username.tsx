@@ -1,8 +1,8 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User";
+import { useUser } from "@/context/User.context";
 import { Button, ButtonTypes } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { Username as RUsername } from '@impactium/pattern'

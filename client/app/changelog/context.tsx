@@ -1,7 +1,7 @@
 'use client'
 import { useState, createContext, useContext, useEffect } from "react";
 import { Changelog } from "@/dto/Changelog";
-import { ReactNode } from "@/dto/ReactNode";
+import { Children } from "@/dto/Children";
 
 const ChangelogContext = createContext<ChangelogContext | undefined>(undefined);
 
@@ -12,7 +12,7 @@ interface ChangelogContext {
 
 export const useChangelog = (): ChangelogContext => useContext(ChangelogContext)!
 
-export function ChangelogProvider({ children, prefetched }: ReactNode & { prefetched: Changelog[]}) {
+export function ChangelogProvider({ children, prefetched }: Children & { prefetched: Changelog[]}) {
   const [changelog, setChangelog] = useState(prefetched);
 
   useEffect(() => {

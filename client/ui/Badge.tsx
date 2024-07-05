@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language'
+import { useLanguage } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
 
 enum _BadgeDirections {

@@ -3,6 +3,11 @@ import s from './styles/TournamentUnit.module.css'
 import { getTournamentState } from '@/decorator/getTournamentState'
 import { Badge, BadgeType } from '@/ui/Badge'
 import { Tournament } from '@/dto/Tournament'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useLanguage } from '@/context/Language.context'
+import { getReadebleDate } from '@/decorator/getReadebleDate'
+import React from 'react'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -14,26 +19,41 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
       <h6>{tournament.title}</h6>
       <div className={s.container}>
         <Badge type={BadgeType[getTournamentState(tournament)]} title={getTournamentState(tournament)} />
-        <span>Aug 15 - Aug 27,2023</span>
+        <span>{getReadebleDate(tournament.start, { year: false })} - {getReadebleDate(tournament.end)} UTC</span>
       </div>
-        <p>
-          <img src="https://cdn.impactium.fun/ui/specific/trophy.svg" alt="" />
-          $20,45
-        </p>
-        <p>
-          <img src="https://cdn.impactium.fun/ui/user/users.svg" alt="" />
-          16 teams
-        </p>
-        <p>
-          <img src="https://cdn.impactium.fun/ui/specific/dart.svg" alt="" />
-          Team A 2 - 1 Team B
-        </p>
-        <p>
-          <img src="https://cdn.impactium.fun/ui/specific/watch-live.svg" alt="" />
-          <a href="">
-            Watch live
-          </a>
-        </p>
+      <Description tournament={tournament} />
+      <WatchLive url={tournament.live} />
     </Card>
     )
+}
+
+function WatchLive({ url }: { url?: string }) {
+  'use client'
+  const { lang } = useLanguage();
+  return url && (
+    <Link href={url}>
+      <Image src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
+      {lang._watch_live}
+    </Link>
+  );
+}
+
+function Description({ tournament }: TournamentUnitProps) {
+  'use client'
+  const { lang } = useLanguage();
+
+  const map = [
+    ['$' + (tournament.prize || 0), 'specific/trophy.svg'],
+    [lang.team.amount + ': ' + tournament.teams.length, 'user/users.svg'],
+    // Ближайшее сражение которое должно произойти * на сумарное кол-во ммр обеих команд
+    [tournament.grid && tournament.grid.sort((battle: any) => battle), 'specific/dart.svg'],
+  ]
+
+  return (
+    <React.Fragment>
+      {map.map((keys, index) =>
+        <p key={index}><Image src={`https://cdn.impactium.fun/ui/${keys[1]}`} width={24} height={24} alt='' />{keys[0]}</p>
+      )}
+    </React.Fragment>
+  );
 }

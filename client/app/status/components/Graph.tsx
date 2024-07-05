@@ -1,6 +1,6 @@
 import React from 'react';
 import s from '../Status.module.css';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 
 export function Graph({ array }: { array: number[] }) {
   const { lang } = useLanguage();

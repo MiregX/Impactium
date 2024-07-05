@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, createContext, useContext } from "react";
 import { Team } from "@/dto/Team";
-import { ReactNode } from "@/dto/ReactNode";
+import { Children } from "@/dto/Children";
 
 const TeamsContext = createContext<TeamsContext | undefined>(undefined);
 
@@ -10,7 +10,7 @@ interface TeamsContext {
   setTeams: (teams: Team[]) => void
 }
 
-type TeamsProps = ReactNode & {
+type TeamsProps = Children & {
   prefetched: Team[]
 }
 

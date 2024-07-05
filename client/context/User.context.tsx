@@ -2,7 +2,8 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { User } from "@/dto/User";
-import { ReactNode } from "@/dto/ReactNode";
+import { Children } from "@/dto/Children";
+import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
@@ -18,7 +19,7 @@ interface UserContext {
 
 export const useUser = () => useContext(UserContext)!;
 
-export function UserProvider({ children, prefetched }: ReactNode & { prefetched: User }) {
+export function UserProvider({ children, prefetched }: Children & { prefetched: User | null }) {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
   const [user, setUser] = useState<User | null>(prefetched);
@@ -28,15 +29,12 @@ export function UserProvider({ children, prefetched }: ReactNode & { prefetched:
     !isUserFetched && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = (): Promise<User> => api('/user/get');
+  const getUser = () => api<User>('/user/get');
 
   if (cookie.get('uuid')) {
-    api('/oauth2/telegram/callback', {
-      method: 'POST',
-      isRaw: true
-    }).then(_ => {
-      refreshUser()
-    });
+    api<OAuth2Callback>('/oauth2/telegram/callback', {
+      method: 'POST'
+    }).then(_ => refreshUser());
   }
 
   const logout = () => {
@@ -44,13 +42,11 @@ export function UserProvider({ children, prefetched }: ReactNode & { prefetched:
     refreshUser();
   };
 
-  const refreshUser = () => {
-    getUser().then(user => {
-      setUser(user);
-      setIsUserFetched(true);
-      setIsUserLoaded(true);
-    });
-  };
+  const refreshUser = () => getUser().then(user => {
+    setUser(user);
+    setIsUserFetched(true);
+    setIsUserLoaded(true);
+  });
 
   const userProps: UserContext = {
     user,

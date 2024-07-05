@@ -3,8 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { MainModule } from '@api/main/main/main.module';
 import { McsModule } from '@api/mcs';
 import { JwtModule } from '@nestjs/jwt';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RequestMiddleware } from '@api/main/application/addon/request.middleware';
+import { ResponseMiddleware } from '@api/main/application/addon/response.middleware';
 
 @Module({
   imports: [
@@ -21,4 +23,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     McsModule,
   ],
 })
-export class ApiModule {}
+export class ApiModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestMiddleware, ResponseMiddleware).forRoutes('*');
+  }
+}

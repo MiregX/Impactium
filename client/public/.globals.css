@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
+  --font-nunito: 'Nunito', sans-serif;
   --black: #000;
   --white: #fff;
   --soft-white: #e8e8e8;
@@ -71,7 +72,7 @@
   margin: 0;
   letter-spacing: 0.5px;
   color: var(--soft-white);
-  font-family: var(--mono-sans);
+  font-family: var(--font-sans);
   font-weight: 300;
   scroll-behavior: smooth;
   line-height: 1;
@@ -83,7 +84,6 @@
   text-decoration: none;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Nunito', sans-serif;
   font-weight: 600;
 }
 img {

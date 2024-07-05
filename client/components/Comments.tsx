@@ -1,14 +1,16 @@
 'use client'
-import { useTeam } from '@/context/Team'
 import _ from './styles/Comments.module.css'
-import { useApplication } from '@/context/Application';
+import { useApplication } from '@/context/Application.context';
 import { NoComments } from './NoComments';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { LeaveComment } from './LeaveComment';
-import { useUser } from '@/context/User';
+import { useUser } from '@/context/User.context';
 
-export function Comments() {
-  const { team } = useTeam();
+interface CommentsProps {
+  comments: Comment[]
+}
+
+export function Comments({ comments }: CommentsProps) {
   const { user } = useUser();
   const { newMessage } = useApplication();
   const { lang } = useLanguage();
@@ -16,7 +18,7 @@ export function Comments() {
   return (
     <div className={_._}>
       <h4>{lang.comments.title}</h4>
-      {team.comments?.map((comment: any) => {
+      {comments.map((comment: any) => {
         return (
           <div>
             <h6>

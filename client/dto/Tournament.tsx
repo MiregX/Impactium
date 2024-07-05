@@ -16,19 +16,6 @@ export interface Tournament {
   gid: string,
   grid: any, //Grid | 
   comments: Comment[],
+  live?: string,
+  prize: number
 }
-
-// id          String      @id @default(cuid())
-// banner      String
-// title       String
-// start       DateTime
-// end         DateTime
-// description Json
-// code        String      @unique
-// rules       Json
-// ownerId     String
-// owner       User        @relation(fields: [ownerId], references: [uid])
-// teams       Team[]
-// gid         String
-// grid        Grid?
-// comments    Comment[]

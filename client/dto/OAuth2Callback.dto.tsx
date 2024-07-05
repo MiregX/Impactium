@@ -1,0 +1,1 @@
+export type OAuth2Callback = null;

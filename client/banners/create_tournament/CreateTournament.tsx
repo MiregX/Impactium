@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react';
 import s from './CreateTournament.module.css'
-import { useUser } from '@/context/User';
+import { useUser } from '@/context/User.context';
 import { Banner } from '@/ui/Banner';
 import { Button, ButtonTypes } from '@/ui/Button';
 import { useRouter } from 'next/navigation';
-import { useApplication } from '@/context/Application';
-import { useLanguage } from '@/context/Language';
+import { useApplication } from '@/context/Application.context';
+import { useLanguage } from '@/context/Language.context';
 import { authGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
 import Image from 'next/image'
@@ -20,7 +20,7 @@ export default function CreateTeam() {
   const { destroyBanner, spawnBanner } = useApplication();
   const router = useRouter();
 
-  !authGuard(user, {
+  !authGuard({
     useRedirect: false
   }) && spawnBanner(<LoginBanner />);
 

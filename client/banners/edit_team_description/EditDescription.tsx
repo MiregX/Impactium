@@ -2,7 +2,7 @@
 import { Banner } from '@/ui/Banner'
 import _ from './EditTeamDescription.module.css'
 import { Button, ButtonTypes } from '@/ui/Button';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { useApperand } from '@/decorator/useAperand';

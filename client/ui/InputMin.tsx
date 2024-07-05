@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import input from './styles/InputMin.module.css';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 
 interface InputMinProps {
   state: string;

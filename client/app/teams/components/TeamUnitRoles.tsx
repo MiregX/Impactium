@@ -1,4 +1,4 @@
-import { Avatar } from "@/components/avatar/Avatar";
+import { Avatar } from "@/components/Avatar";
 import { TeamMember } from "@/dto/TeamMember";
 
 export function TeamUnitRoles({ members }: { members?: TeamMember[] }) {

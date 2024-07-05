@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';

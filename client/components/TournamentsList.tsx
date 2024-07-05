@@ -106,7 +106,7 @@ export const TournamentsList = () => {
       <div className={s.fill} />
       <div className={s.wrapper}>
         {current.map(index => (
-          <TournamentUnit tournament={tournaments[index]} />
+          <TournamentUnit key={index} tournament={tournaments[index]} />
         ))}
       </div>
       <Pagination

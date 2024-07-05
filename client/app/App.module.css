@@ -39,7 +39,7 @@
   align-items: center;
 }
 .panel .title {
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   width: 100%;
   max-width: var(--width-limit);
   font-size: 2rem;

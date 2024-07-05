@@ -21,6 +21,13 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  _watch_live: {
+    us: 'Watch Live',
+    ru: 'Смотреть прямую трансляцию',
+    ua: 'Дивитися прямий ефір',
+    it: 'Guarda in diretta',
+    pl: 'Oglądaj na żywo'
+  },
   max: {
     us: 'Max',
     ru: 'Макс.',
@@ -360,6 +367,13 @@ const locale: Locale = {
     }
   },
   team: {
+    amount: {
+      us: 'Teams',
+      ru: 'Комманд',
+      ua: 'Команд',
+      it: 'Squadre',
+      pl: 'Drużyn'
+    },
     has_no_description: {
       us: 'The team has no description',
       ru: 'У команды нет описания',

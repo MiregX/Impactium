@@ -3,23 +3,21 @@ import React from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
 import { Button, ButtonTypes } from '@/ui/Button';
-import { useUser } from '@/context/User';
-import { useHeader } from '@/context/Header';
+import { useUser } from '@/context/User.context';
 import { UserComponent } from './User';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { LoginBanner } from '@/banners/login/LoginBanner';
-import { useApplication } from '@/context/Application';
+import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 
 export function Header() {
   const { user } = useUser();
   const { lang } = useLanguage();
-  const { isLogoHidden } = useHeader();
   const { spawnBanner } = useApplication();
 
   return (
     <header className={s.header}>
-      <Link href='/' className={`${s.logo} ${isLogoHidden && s.hidden}`}>
+      <Link href='/' className={`${s.logo} ${/* isLogoHidden */ undefined && s.hidden}`}>
         <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
         <h1>Impactium</h1>
       </Link>

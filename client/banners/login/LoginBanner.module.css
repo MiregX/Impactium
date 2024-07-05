@@ -49,7 +49,7 @@
   border-radius: var(--border-l);
   font-weight: 700;
   font-size: var(--text-small);
-  font-family: 'Nunito';
+  font-family: var(--font-mono);
   padding: 8px;
   align-items: center;
   transition: all .3s var(--transition);

@@ -11,12 +11,6 @@ interface TeamContext {
 
 const TeamContext = createContext<TeamContext | undefined>(undefined);
 
-export const useLogo = ({ logo, title }: Partial<Team>) => {
-  return logo
-    ? <img src={logo} />
-    : <span className={s.round}>{title?.slice(0, 1) || '?'}</span>
-}
-
 export const useTeam = () => {
   return useContext(TeamContext) || (() => { throw new Error('Обнаружена попытка использовать TeamContext вне области досягаемости') })();
 };

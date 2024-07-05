@@ -1,7 +1,7 @@
 'use client'
 import banner from './styles/Banner.module.css';
 import React, { useEffect } from 'react';
-import { useApplication } from '@/context/Application';
+import { useApplication } from '@/context/Application.context';
 
 export enum WarnerTypes {
   note,

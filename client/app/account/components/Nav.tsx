@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from "@/context/Language";
+import { useLanguage } from "@/context/Language.context";
 import Link from "next/link";
 import s from '../Account.module.css';
 import { useEffect, useState } from "react";

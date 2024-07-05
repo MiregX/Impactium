@@ -1,5 +1,7 @@
+'use client'
 import { redirect } from 'next/navigation'
 import { User } from '@/dto/User';
+import { useUser } from '@/context/User.context';
 
 interface _Options extends Options {
   key: keyof User;
@@ -10,7 +12,8 @@ export interface Options {
   useRedirect?: boolean
 }
 
-export function guard(user: User | null, options: _Options) {
+export function guard(options: _Options) {
+  const { user } = useUser();
   const next = user && user[options.key];
   return next ? next : (options.useRedirect ? redirect('/') : next)
 }

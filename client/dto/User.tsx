@@ -11,4 +11,4 @@ export interface User {
   login: Login
   teams?: Team[] | false,
   verified: boolean
-}
+};

@@ -1,11 +1,11 @@
 'use client'
-import { useLanguage } from '@/context/Language';
-import { useUser } from '@/context/User';
+import { useLanguage } from '@/context/Language.context';
+import { useUser } from '@/context/User.context';
 import _user from './styles/User.module.css'
 import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
-import { useApplication } from '@/context/Application';
+import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { Avatar } from './Avatar';
 
@@ -42,7 +42,7 @@ export function UserComponent() {
         <hr />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <div style={{ fontFamily: 'var(--mono-geist)'}}>{user!.balance | 0}$</div>
+          <div style={{ fontFamily: 'var(--font-mono)'}}>{user!.balance | 0}$</div>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}

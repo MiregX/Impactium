@@ -1,9 +1,9 @@
 'use client'
 import React from 'react';
 import s from '@/app/App.module.css';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { authGuard } from '@/decorator/authGuard';
-import { useUser } from '@/context/User';
+import { useUser } from '@/context/User.context';
 
 interface Panel {
   children: any;
@@ -25,7 +25,7 @@ export function PanelTemplate({ children, className, title, fullscreen, useColum
   const { lang } = useLanguage();
   const { user } = useUser();
   
-  authGuard(user, {
+  authGuard({
     useRedirect: useAuthGuard
   });
 

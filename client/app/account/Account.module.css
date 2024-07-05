@@ -85,7 +85,7 @@
   line-height: 1.2;
 }
 .account .unit code {
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   background: var(--soft-black);
   padding: 8px 12px;
   display: flex;
@@ -112,7 +112,7 @@
   display: flex;
   align-items: center;
   font-size: var(--text-larger);
-  font-family: var(--mono-geist);
+  font-family: var(--font-mono);
   gap: var(--card-gap);
 }
 .balance_amount img {

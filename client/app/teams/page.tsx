@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { PanelTemplate } from '@/components/PanelTempate';
-import { useLanguage } from '@/context/Language';
+import { useLanguage } from '@/context/Language.context';
 import { TeamUnit } from './components/TeamUnit';
 import s from './Teams.module.css';
 import { Panel } from '@/ui/Panel';
 import { Team } from '@/dto/Team';
-import { useUser } from '@/context/User';
+import { useUser } from '@/context/User.context';
 import React from 'react';
 import { useTeams } from './context';
 import { Recomendations } from '@/components/Recomentations';
@@ -19,20 +19,7 @@ export default function TeamsPage() {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    if (!teams) {
-      api('/team/get', {
-        next: {
-          revalidate: 60
-        }
-      })
-      .then(teams => {
-        setTeams(teams || []);
-      })
-      .catch(_ => {
-        setTeams([]);
-      });
-    }
-    console.log(teams)
+    !teams && api<Team[]>('/team/get').then(teams => setTeams(teams || []));
   }, [teams])
 
   return (

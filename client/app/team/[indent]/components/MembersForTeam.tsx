@@ -1,11 +1,11 @@
 'use client'
-import { useLanguage } from "@/context/Language";
-import { useTeam } from "@/context/Team";
+import { useLanguage } from "@/context/Language.context";
+import { useTeam } from "../team.context";
 import { Panel } from "@/ui/Panel";
 import s from '../Team.module.css';
 import React from "react";
 import { TeamMember } from "@/dto/TeamMember";
-import { Avatar } from "@/components/avatar/Avatar";
+import { Avatar } from "@/components/Avatar";
 import { TeamMemberRoles } from "@/dto/TeamMemberRoles";
 
 export function MembersForTeam() {

@@ -7,4 +7,4 @@ export const useMessageStatus = (num: number): MessageTypes => between(num, 200,
     : 'error'
   );
 
-const between = (num: number, min: number, max: number) => num >= min && num <= max
+export const between = (num: number, min: number, max: number) => num >= min && num <= max

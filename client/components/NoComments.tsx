@@ -1,6 +1,6 @@
 'use client'
-import { useLanguage } from '@/context/Language'
-import _ from './Comments.module.css'
+import { useLanguage } from '@/context/Language.context'
+import _ from './styles/Comments.module.css'
 
 export function NoComments() {
   const { lang } = useLanguage();
