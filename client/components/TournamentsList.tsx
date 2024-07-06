@@ -3,7 +3,6 @@ import { useState } from "react"
 import { Pagination } from "./Pagination";
 import s from './styles/TournamentList.module.css'
 import { Tournament } from "@/dto/Tournament";
-import { Card } from "@/ui/Card";
 import { User } from "@/dto/User";
 import { usePagination } from "@/decorator/usePagination";
 import React from "react";
@@ -26,6 +25,7 @@ const mockTournaments: Tournament[] = [
     gid: "galactic_space_invaders",
     grid: '',
     comments: [],
+    prize: 0
   },
   {
     id: "2",
@@ -42,6 +42,7 @@ const mockTournaments: Tournament[] = [
     gid: "medieval_mayhem",
     grid: '',
     comments: [],
+    prize: 0
   },
   {
     id: "3",
@@ -58,6 +59,7 @@ const mockTournaments: Tournament[] = [
     gid: "mystic_mage_duel",
     grid: '',
     comments: [],
+    prize: 0
   },
   {
     id: "4",
@@ -74,6 +76,7 @@ const mockTournaments: Tournament[] = [
     gid: "robot_rumble",
     grid: '',
     comments: [],
+    prize: 0
   },
   {
     id: "5",
@@ -90,6 +93,7 @@ const mockTournaments: Tournament[] = [
     gid: "underwater_adventure",
     grid: '',
     comments: [],
+    prize: 0
   }
 ];
 
@@ -103,7 +107,28 @@ export const TournamentsList = () => {
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
-      <div className={s.fill} />
+      <div className={s.fill}>
+        <div className={s.left}>
+          <h4>Организаторам</h4>
+          <ul>
+            <li>Удобный конструктор турниров</li>
+            <li>Автоматизация процессов</li>
+            <li>Авто-обновление турнирной сетки</li>
+            <li>Редактор команд</li>
+            <li>Отсутствие бюрократии</li>
+          </ul>
+        </div>
+        <div className={s.right}>
+          <h4>Командам</h4>
+          <ul>
+            <li>Участие в 1 клик</li>
+            <li>Каталог турниров</li>
+            <li>Гарантированный приз за активность</li>
+            <li>Удобный интерфейс менеджмента</li>
+            <li>Приватные чаты с другими командами</li>
+          </ul>
+        </div>
+      </div>
       <div className={s.wrapper}>
         {current.map(index => (
           <TournamentUnit key={index} tournament={tournaments[index]} />

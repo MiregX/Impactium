@@ -2,18 +2,24 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--card-gap);
 }
 
 .card {
   height: 100%;
 }
 
+.card span {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--text-dimmed);
+}
+
 .card p {
   display: flex;
   align-items: center;
   color:  var(--text-dimmed);
-  font-weight: 300;
+  font-weight: 500;
   gap: 8px;
 } 
 
@@ -22,18 +28,13 @@
   font-weight: 600;
   color: var(--white);
   font-family: var(--font-mono);
-
 }
 
-.card p:nth-child(4) img {
-  filter: brightness(0.58);
+.card p:nth-child(4, 5) img {
+  filter: var(--filter-to-e8e8e8);
 }
 
-.card p:nth-child(5) img {
-  filter: brightness(0.58);
-}
-
-.card p:nth-child(6) a{
+.card a {
   color: var(--white);
   text-decoration: underline;
 }

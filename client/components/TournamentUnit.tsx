@@ -6,7 +6,7 @@ import { Tournament } from '@/dto/Tournament'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/context/Language.context'
-import { getReadebleDate } from '@/decorator/getReadebleDate'
+import { getReadableDate } from '@/decorator/getReadableDate'
 import React from 'react'
 
 interface TournamentUnitProps {
@@ -19,7 +19,7 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
       <h6>{tournament.title}</h6>
       <div className={s.container}>
         <Badge type={BadgeType[getTournamentState(tournament)]} title={getTournamentState(tournament)} />
-        <span>{getReadebleDate(tournament.start, { year: false })} - {getReadebleDate(tournament.end)} UTC</span>
+        <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end)} UTC</span>
       </div>
       <Description tournament={tournament} />
       <WatchLive url={tournament.live} />

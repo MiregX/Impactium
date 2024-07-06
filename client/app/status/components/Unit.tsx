@@ -24,6 +24,8 @@ export function Unit({ name }: {
 
   const array = status.map(obj => obj[name].ping);
 
+  console.log(service)
+
   return (
     <div className={`${s.unit} ${s[name]}`}>
       <h6>

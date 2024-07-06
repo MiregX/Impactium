@@ -9,10 +9,6 @@ export function _server(v?: boolean) {
       : process.env.SYMBOLIC_HOST || 'http://localhost:3001'
 }
 
-function api<T>(path: string, options: RequestInit & { raw: true }): Promise<λ<ResponseBase<T>>>;
-function api<T>(path: string, options?: RequestInit & { raw?: false }): Promise<T | null>;
-function api<T>(path: string, options?: RequestInit & { raw?: boolean }): Promise<λ<ResponseBase<T>> | T | null>;
-
 async function api<T>(path: string, options?: RequestInit & { raw?: boolean }): Promise<λ<ResponseBase<T>> | T> {
   const response = await fetch(`${_server()}/api${path.startsWith('/') ? path : '/' + path}`, {
     credentials: 'include',

@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
   --font-nunito: 'Nunito', sans-serif;
@@ -36,6 +35,8 @@
   --border-s: 6px;
   --border-m: 12px;
   --border-l: 18px;
+
+  ----filter-to-e8e8e8: brightness(0.58);
 
   --geist-background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
   --geist-border: 1px solid hsla(0,0%,100%,.07);
