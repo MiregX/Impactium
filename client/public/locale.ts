@@ -21,6 +21,13 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  _please_wait: {
+    us: 'Please wait',
+    ru: 'Подождите',
+    ua: 'Зачекайте',
+    it: 'Attendere prego',
+    pl: 'Proszę czekać'
+  },  
   _watch_live: {
     us: 'Watch Live',
     ru: 'Смотреть прямую трансляцию',

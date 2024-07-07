@@ -1,5 +1,5 @@
 'use client'
-import { Button, ButtonTypes } from '@/ui/Button';
+import { Button } from '@/ui/Button';
 import s from './styles/Pagination.module.css';
 
 interface PaginationComponentProps {
@@ -22,36 +22,24 @@ export function Pagination({
   return (
     <div className={s.pagination}>
       {/* Кнопка назад */}
-      <Button options={{
-        type: ButtonTypes.Button,
-        text: 'Previous',
-        do: prevPage,
-        img: 'https://cdn.impactium.fun/ui/chevron/left-md.svg',
-        className: useClasses(s.button, s.previous),
-        disabled: page === 1
-      }} />
+      <Button variant={page === 1 ? 'disabled' : 'ghost'}
+        img='https://cdn.impactium.fun/ui/chevron/left-md.svg'
+        onClick={prevPage}>Previous</Button>
       
       {/* Количество кнопок зависящее от кол-ва buttons переданное в usePagination */}
       {getPageNumbers().map((_page) => (
         <Button
+          size='icon'
           key={_page}
-          options={{
-            type: ButtonTypes.Button,
-            text: _page.toString(),
-            do: () => goToPage(_page),
-            className: useClasses(s.button, _page === page && s.active),
-          }}
-        />
+          variant={_page === page ? 'hardline' : 'ghost'}
+          onClick={ () => goToPage(_page)}>{_page}</Button>
       ))}
       {/* Кнопка вперёд */}
-      <Button options={{
-        type: ButtonTypes.Button,
-        text: 'Next',
-        do: nextPage,
-        img: 'https://cdn.impactium.fun/ui/chevron/right-md.svg',
-        className: useClasses(s.button, s.next),
-        disabled: page === total
-      }} />
+      <Button
+        revert
+        onClick={nextPage}
+        variant={page === total ? 'disabled' : 'ghost'}
+        img='https://cdn.impactium.fun/ui/chevron/right-md.svg'>Next</Button>
     </div>
   );
 }

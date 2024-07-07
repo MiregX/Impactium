@@ -1,7 +1,7 @@
 import { Login } from "./Login";
 import { Team } from "./Team";
 
-export interface User {
+export type User<T = {}> = {
   uid: string,
   register: string,
   email?: string,
@@ -11,4 +11,12 @@ export interface User {
   login: Login
   teams?: Team[] | false,
   verified: boolean
+} & T;
+
+export interface Logins {
+  logins: Login[]
 };
+
+export type UserAddons = {
+  [key: string]: any;
+} | Logins

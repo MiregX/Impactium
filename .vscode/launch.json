@@ -20,7 +20,7 @@
       "type": "node-terminal",
       "name": "Start CLIENT",
       "request": "launch",
-      "command": "npm run dev",
+      "command": "npm run start:debug",
       "cwd": "${workspaceFolder}/client",
       "envFile": "${workspaceFolder}/.env"
     },

@@ -8,6 +8,11 @@ import { usePagination } from "@/decorator/usePagination";
 import React from "react";
 import { PanelTemplate } from "./PanelTempate";
 import { TournamentUnit } from "./TournamentUnit";
+import { Button } from "@/ui/Button";
+import CreateTeam from "@/banners/create_team/CreateTeam";
+import { useApplication } from "@/context/Application.context";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 const mockTournaments: Tournament[] = [
   {
@@ -99,6 +104,7 @@ const mockTournaments: Tournament[] = [
 
 export const TournamentsList = () => {
   const [ tournaments, setTournaments ] = useState<Tournament[]>(mockTournaments);
+  const { spawnBanner } = useApplication();
   const { page, total, setPage, getPageNumbers, current } = usePagination({
     totalItems: tournaments.length,
     itemsPerPage: 3,
@@ -117,7 +123,14 @@ export const TournamentsList = () => {
             <li>Редактор команд</li>
             <li>Отсутствие бюрократии</li>
           </ul>
+          <div className={s.button_wrapper}>
+            <Button
+              asChild
+              className={s.find_tournament}
+              size='lg'><Link href='/tournaments'><img src='https://cdn.impactium.fun/ui/action/search.svg' />Найти турнир</Link></Button>
+          </div>
         </div>
+        <div className={s.background} />
         <div className={s.right}>
           <h4>Командам</h4>
           <ul>
@@ -127,6 +140,14 @@ export const TournamentsList = () => {
             <li>Удобный интерфейс менеджмента</li>
             <li>Приватные чаты с другими командами</li>
           </ul>
+          <div className={s.button_wrapper}>
+            <Button
+              revert
+              className={s.create_team}
+              size='lg'
+              img='https://cdn.impactium.fun/ui/user/circle.svg'
+              onClick={() => spawnBanner(<CreateTeam />)}>Создать команду</Button>
+          </div>
         </div>
       </div>
       <div className={s.wrapper}>

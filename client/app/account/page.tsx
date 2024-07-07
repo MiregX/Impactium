@@ -10,8 +10,6 @@ import { Login } from "@/dto/Login";
 import s from './Account.module.css';
 
 export default async function AccountPage() {
-  const logins = await api<Login[]>('/user/logins') || [];
-
   return (
     <PanelTemplate className={[s.page]} title='$_account' useAuthGuard={true}>
       <Nav />
@@ -23,7 +21,7 @@ export default async function AccountPage() {
         <DisplayName />
         <Username />
         <Email />
-        <Connections logins={logins} />
+        <Connections />
       </div>
     </PanelTemplate>
   );

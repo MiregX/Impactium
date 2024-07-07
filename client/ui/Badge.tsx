@@ -12,6 +12,7 @@ interface _CustomBadge {
   icon?: BadgeType | string,
   direction?: _BadgeDirections,
   color: string
+  dot?: boolean
 }
 
 export enum BadgeType {
@@ -24,7 +25,8 @@ export enum BadgeType {
   selected = 'selected',
   Upcoming = 'upcoming',
   Ongoing = 'ongoing',
-  Finished = 'finished'
+  Finished = 'finished',
+  Soon = 'soon'
 };
 
 type _PredefinedBadge = {
@@ -86,12 +88,19 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       direction: _BadgeDirections.default,
       color: '#f30000'
     },
+    [BadgeType.Soon]: {
+      direction: _BadgeDirections.default,
+      color: '#0070f3',
+      title: lang._soon,
+      dot: true
+    },
   };
 
-  const { title, icon, direction, color } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
+  const { title, icon, direction, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
   return (
     <div className={s.badge} data-color={color} style={{background: color + '30', color}} data-direction={direction}>
       {icon && (<img src={icon.startsWith('http') || icon.startsWith('/_next') ? icon : `https://cdn.impactium.fun/custom-ui/${icon}.svg`} alt='' />)}
+      {dot && <span style={{background: color}} />}
       {options.title || title}
     </div>
   );

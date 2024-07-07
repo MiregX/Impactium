@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/ui/Input'
 import s from './styles/Comments.module.css'
-import { Button, ButtonTypes } from '@/ui/Button'
+import { Button } from '@/ui/Button'
 import { useUser } from '@/context/User.context'
 import { useLanguage } from '@/context/Language.context'
 import { Avatar } from './Avatar'
@@ -25,14 +25,10 @@ export function LeaveComment() {
         placeholder: lang.comments.leave,
         className: s.input
       }}/>
-      <Button options={{
-        type: ButtonTypes.Button,
-        text: '',
-        do: send,
-        img: 'https://cdn.impactium.fun/ui/specific/paper-plane.svg',
-        focused: true,
-        className: s.button
-      }} />
+      <Button
+        img='https://cdn.impactium.fun/ui/specific/paper-plane.svg'
+        onClick={send}
+        size='icon' />
     </div>
-  )
-}
+  );
+};

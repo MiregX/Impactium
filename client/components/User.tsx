@@ -29,7 +29,7 @@ export function UserComponent() {
       <div className={_user.action_lock} onClick={toggle} />
       <Avatar
         className={_user.wrapper}
-        size={32}
+        size={36}
         alt={useDisplayName(user!)}
         src={user!.login.avatar}
         onClick={toggle} />

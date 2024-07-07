@@ -3,12 +3,15 @@ import { useLanguage } from '@/context/Language.context';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
-import { Button, ButtonTypes } from '@/ui/Button';
+import { Button } from '@/ui/Button';
 import { Badge, BadgeType } from '@/ui/Badge';
 import Image from 'next/image'
+import Link from 'next/link';
+import { useApplication } from '@/context/Application.context';
 
 export function LanguageChooser() {
   const { lang, language, setLanguage } = useLanguage();
+  const { destroyBanner } = useApplication();
   const cookie = new Cookies();
 
   // Asserting type for availableLanguages
@@ -36,18 +39,8 @@ export function LanguageChooser() {
   };
 
   const footer = {
-    left: [<Button options={{
-            type: ButtonTypes.Link,
-            minimized: true,
-            text: lang.found_a_translation_error,
-            do: 'https://t.me/impactium'
-          }} />],
-    right: [<Button options={{
-            type: ButtonTypes.Button,
-            text: lang._save,
-            img: 'https://cdn.impactium.fun/ui/check/all-big.svg',
-            focused: true
-          }} />]
+    left: [<Button variant='link'><Link href='https://t.me/impactium'>{lang.found_a_translation_error}</Link></Button>],
+    right: [<Button img='https://cdn.impactium.fun/ui/check/all-big.svg' onClick={destroyBanner}>{lang._save}</Button>]
   };
   
 

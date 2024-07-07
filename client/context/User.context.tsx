@@ -1,17 +1,17 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { User } from "@/dto/User";
+import { User, UserAddons } from "@/dto/User";
 import { Children } from "@/dto/Children";
 import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
 interface UserContext {
-  user: User | null,
-  setUser: (user: User) => void,
+  user: User<UserAddons> | null,
+  setUser: React.Dispatch<React.SetStateAction<User<UserAddons> | null>>,
   logout: () => void,
-  getUser: (authorization?: string) => Promise<any>,
+  getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -19,10 +19,10 @@ interface UserContext {
 
 export const useUser = () => useContext(UserContext)!;
 
-export function UserProvider({ children, prefetched }: Children & { prefetched: User | null }) {
+export function UserProvider({ children, prefetched }: Children & { prefetched: User<UserAddons> | null }) {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
-  const [user, setUser] = useState<User | null>(prefetched);
+  const [user, setUser] = useState<User<UserAddons> | null>(prefetched);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {

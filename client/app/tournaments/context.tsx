@@ -7,7 +7,7 @@ const TournamentsContext = createContext<TournamentsContext | undefined>(undefin
 
 interface TournamentsContext {
   tournaments: Tournament[],
-  setTournaments: (value: Tournament[]) => void
+  setTournaments: React.Dispatch<React.SetStateAction<Tournament[]>>
 }
 
 export const useTournaments = () => useContext(TournamentsContext) ?? (() => { throw new Error() })();

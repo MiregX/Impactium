@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
-import { Button, ButtonTypes } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { Username as RUsername } from '@impactium/pattern'
 import { useState } from "react";
@@ -21,14 +21,10 @@ export function Username() {
     }).then(() => { setLoading(false); refreshUser() })
   }
 
-  const button = <Button options={{
-    type: ButtonTypes.Button,
-    text: lang._save,
-    do: send,
-    focused: useUsername(user!) !== username && RUsername.test(username),
-    disabled: !(useUsername(user!) !== username && RUsername.test(username)),
-    loading
-  }}/>
+  const button = <Button
+    loading={loading}
+    variant={useUsername(user!) !== username && RUsername.test(username) ? 'default' : 'disabled'}
+    onClick={send}>{lang._save}</Button>
 
   return (
     <Card className={s.account} id='username' description={{ text: lang.account.username_description, button }}>

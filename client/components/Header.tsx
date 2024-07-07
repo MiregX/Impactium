@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
-import { Button, ButtonTypes } from '@/ui/Button';
+import { Button } from '@/ui/Button';
 import { useUser } from '@/context/User.context';
 import { UserComponent } from './User';
 import { useLanguage } from '@/context/Language.context';
@@ -25,18 +25,8 @@ export function Header() {
         <UserComponent />
       ) : (
         <div className={s.wrapper}>
-          <Button options={{
-            type: ButtonTypes.Button,
-            text: lang._login,
-            do: () => spawnBanner(<LoginBanner />),
-          }} />
-          <Button options={{
-            type: ButtonTypes.Button,
-            text: '',
-            img: 'https://cdn.impactium.fun/ui/specific/globe.svg',
-            do: () => spawnBanner(<LanguageChooser />),
-            className: s.languageChooser
-          }} />
+          <Button variant='outline' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
+          <Button size='icon' variant='outline' onClick={() => spawnBanner(<LanguageChooser />)}><img src='https://cdn.impactium.fun/ui/specific/globe.svg' /></Button>
         </div>
       )}
     </header>

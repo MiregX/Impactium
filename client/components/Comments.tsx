@@ -12,7 +12,6 @@ interface CommentsProps {
 
 export function Comments({ comments }: CommentsProps) {
   const { user } = useUser();
-  const { newMessage } = useApplication();
   const { lang } = useLanguage();
 
   return (

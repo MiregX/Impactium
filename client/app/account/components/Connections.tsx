@@ -3,22 +3,26 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
-import { Button, ButtonTypes } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/components/Avatar";
+import { useUser } from "@/context/User.context";
+import { useEffect } from "react";
 
-export function Connections({ logins }: { logins: Login[] | null }) {
+export function Connections() {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
+  const { user, setUser } = useUser();
 
-  const button = <Button options={{
-    type: ButtonTypes.Button,
-    text: lang.account.connect,
-    do: () => spawnBanner(<LoginBanner connect={true} />),
-    img: 'https://cdn.impactium.fun/ui/action/add-plus.svg',
-    focused: true
-  }} />
+  const button = <Button
+    img='https://cdn.impactium.fun/ui/action/add-plus.svg'
+    onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
+
+    useEffect(() => {
+      console.log(user);
+      !user!.logins && api<Login[]>('/user/get?logins=true').then(logins => setUser((prevUser) => prevUser ? { ...prevUser, logins } : null ));
+    }, [user]);
 
   return (
     <Card className={` ${s.account} ${s.connections}`} id='connections' description={{
@@ -28,7 +32,9 @@ export function Connections({ logins }: { logins: Login[] | null }) {
       <h6>{lang.account.connections}</h6>
       <p>{lang.account.connections_content}</p>
       <section>
-        {logins && logins.map((login, index) => <Unit key={index} login={login} /> )}
+        {user?.logins && user.logins.map((login: Login) => (
+          <Unit key={login.id} login={login} />
+        ))}
       </section>
     </Card>
   );

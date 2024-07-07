@@ -31,7 +31,7 @@ export default function TeamsPage() {
         setState={setTeams}
         apiPath={'team'} />
       {/* Команды пользователя */}
-      {user?.teams ?
+      {user?.teams && user.teams.length ?
         <Panel heading={lang.team.yours} className={s.minimized}>
           <React.Fragment>
             {user.teams.map((team: Team) => (

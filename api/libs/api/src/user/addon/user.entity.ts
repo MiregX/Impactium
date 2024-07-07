@@ -62,6 +62,6 @@ export class UserEntity implements User {
 }
 
 interface Options {
-  withLogins?: true
-  withTeams?: true
+  withLogins?: boolean
+  withTeams?: boolean
 }

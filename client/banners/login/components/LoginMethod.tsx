@@ -4,6 +4,7 @@ import s from '../LoginBanner.module.css'
 import { _server } from '@/decorator/api'
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
+import { Badge, BadgeType } from '@/ui/Badge';
 export function LoginMethod({ Type, disabled }: {
   Type: string,
   disabled?: boolean
@@ -21,8 +22,7 @@ export function LoginMethod({ Type, disabled }: {
       href={`${_server()}/api/oauth2/${type}/login`}
       className={`${s.method} ${disabled && s.disabled}`}>
         <img src={`https://cdn.impactium.fun/tech/${type}.png`} />
-        <p className={s.text}>{Type}</p>
-        {disabled && <p className={s.soon}><span />{lang._soon}</p>}
+        {disabled && <Badge type={BadgeType.Soon}></Badge>}
     </Link>
   )
 }

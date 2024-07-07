@@ -4,7 +4,7 @@ import '@/decorator/useDisplayName';
 import '@/decorator/useOptionStyling';
 import '@/decorator/useUsername';
 import React, { ReactNode } from 'react'
-import '@/public/.globals.css';
+import '@/public/.global.css';
 import LanguageProvider from '@/context/Language.context';
 import { ApplicationProvider } from '@/context/Application.context';
 import { UserProvider } from '@/context/User.context';

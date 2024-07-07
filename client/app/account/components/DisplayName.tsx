@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
-import { Button, ButtonTypes } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { DisplayName as RDisplayName } from "@impactium/pattern";
 import { useState } from "react";
@@ -24,14 +24,9 @@ export function DisplayName() {
     refreshUser();
   }
 
-  const button = <Button options={{
-    type: ButtonTypes.Button,
-    focused: useDisplayName(user!) !== displayName && RDisplayName.test(displayName),
-    disabled: !(useDisplayName(user!) !== displayName && RDisplayName.test(displayName)),
-    loading,
-    text: lang._save,
-    do: send
-  }}/>
+  const button = <Button
+    variant={useDisplayName(user!) !== displayName && RDisplayName.test(displayName) ? 'default' : 'disabled'}
+    onClick={send}>{lang._save}</Button>
 
   return (
     <Card className={s.account} id='displayName' description={{ text: lang.account.displayName_description, button }}>

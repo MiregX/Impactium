@@ -5,6 +5,7 @@
 }
 .page {
   padding: 16px;
+  height: calc(100vh - var(--header-height));
 }
 .fill {
   position: relative;
@@ -15,44 +16,77 @@
   overflow: hidden;
   width: 100%;
   border: 1px solid var(--accent-3);
+  background: var(--geist-background);
+  height: 100%;
 }
-.left {
-  background: var(--white);
-  width: 45%;
-  position: relative;
-}
-.left * {
-  color: var(--meta-black);
-}
-.left:after { 
-  position: absolute;
-  right: 0;
-  transform: translateX(10%) rotateZ(15deg) translateY(-36%);
+.background {
+  /* position: absolute;
+  transform: translateX(-90%) rotateZ(15deg) translateY(-35%);
   background: var(--white);
   height: 200%;
-  width: 50%;
-  content: '';
-  align-items: flex-start;
-}
-.right {
+  width: 60vw;
+  z-index: 0; */
   position: absolute;
-  right: 0;
+  background: var(--white);
+  height: 100%;
   width: 50%;
-  height: 100%;
-  background: var(--geist-background);
-  align-items: flex-end;
-  height: 100%;
+  z-index: 0;
 }
 .left,
 .right {
+  z-index: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 32px;
   gap: var(--panel-gap);
+}
+.fill ul {
+  flex: 1;
+}
+.left {
+  width: 50%;
+  padding-right: 0;
+}
+.left * {
+  color: var(--meta-black);
+}
+.right {
+  padding-left: 0;
+  width: 50%;
+  height: 100%;
+  align-items: flex-end;
+}
+.left h4,
+.right h4 {
+  font-size: 36px;
+  text-align: center;
+  width: 100%;
 }
 @media all and ( max-width: 1024px ) {
   .wrapper {
     height: auto;
     flex-direction: column;
   }
+}
+.button_wrapper {
+  width: 100%;
+  display: flex;
+}
+.right .button_wrapper {
+  justify-content: flex-start;
+}
+.left .button_wrapper {
+  justify-content: flex-end;
+}
+.find_tournament {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  filter: invert(1);
+  font-weight: 600;
+}
+.create_team {
+  font-weight: 600;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }

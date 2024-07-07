@@ -4,12 +4,12 @@
   align-items: center;
   justify-content: center;
   width: min-content;
-  gap: 4px;
+  gap: 8px;
   font-family: var(--font-mono);
   font-size: var(--text-small);
 
   border-radius: 50px;
-  padding: 8px 12px;
+  padding: 9px 12px;
   background-color: #e8e8e830;
   
   font-weight: 600;
@@ -20,4 +20,10 @@
 .badge img {
   height: 24px;
   width: 24px;
+}
+
+.badge span {
+  height: 8px;
+  width: 8px;
+  border-radius: var(--round);
 }

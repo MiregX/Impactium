@@ -1,4 +1,4 @@
-import { $Enums, Prisma, Roles, Team, TeamMembers } from "@prisma/client";
+import { Prisma, Roles, Team } from "@prisma/client";
 
 export class TeamEntity implements Team {
   logo: string;

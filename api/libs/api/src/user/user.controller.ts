@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from './addon/user.decorator';
@@ -12,26 +12,19 @@ export class UserController {
 
   @Get('get')
   @UseGuards(AuthGuard)
-  async getUserById(@User() user: UserEntity) {
+  async getUserById(
+    @User() user: UserEntity,
+    @Query() logins: string,
+  ) {
     return this.userService.findById(user.uid, {
       ...UserEntity.withLogin(),
       ...UserEntity.withTeams(),
+      ...(logins && UserEntity.withLogins()),
     }).then(user => {
       return UserEntity.fromPrisma(user, {
         withTeams: true,
+        withLogins: !!logins
       });
-    });
-  }
-
-  @Get('logins')
-  @UseGuards(AuthGuard)
-  async getUserLogins(@User() user: UserEntity) {
-    return this.userService.findById(user.uid, {
-      ...UserEntity.withLogins(),
-    }).then(user => {
-      return UserEntity.fromPrisma(user, {
-        withLogins: true,
-      }).logins;
     });
   }
 

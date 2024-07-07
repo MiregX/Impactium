@@ -57,9 +57,9 @@ export function Banner({ title, children, footer, onClose, options }: BannerProp
             <img src='https://cdn.impactium.fun/ui/close/md.svg'/>
           </button></h4>
         <div className={banner.content}>{children}</div>
-        <div className={banner.footer}>
-          {footer ? (
-            'text' in footer ? (
+        {footer ? (
+          <div className={banner.footer}>
+            {'text' in footer ? (
               <div className={`${banner.description} ${banner[WarnerTypes[footer.type]]}`}>
                 {'type' in footer && (
                   <img
@@ -74,9 +74,9 @@ export function Banner({ title, children, footer, onClose, options }: BannerProp
                 <div className={banner.left}>{footer.left}</div>
                 <div className={banner.right}>{footer.right}</div>
               </React.Fragment>
-            )
-          ) : null}
-        </div>
+            )}
+          </div>
+        ) : null}
       </div>
     </div>
   );
