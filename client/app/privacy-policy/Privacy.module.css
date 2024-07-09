@@ -1,6 +1,9 @@
 .main {
   display: flex;
   flex-direction: column;
+  max-width: 1488px;
+  gap: 12px;
+  padding: 24px;
 }
 .main * {
   line-height: 1.1;

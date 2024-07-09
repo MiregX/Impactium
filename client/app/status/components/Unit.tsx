@@ -11,20 +11,19 @@ export function Unit({ name }: {
   const { status } = useStatus();
   const { lang } = useLanguage();
 
-  const service = status.pop()?.[name] || {
+  const { ping = 999, info } = status.pop()?.[name] || {
     ping: 999,
     info: {}
   }
-  const latency = service.ping < 50
+
+  const latency = ping < 50
     ? 'good'
-    : (service.ping < 250
+    : (ping < 250
       ? 'warn'
       : 'error'
     );
 
   const array = status.map(obj => obj[name].ping);
-
-  console.log(service)
 
   return (
     <div className={`${s.unit} ${s[name]}`}>
@@ -36,7 +35,7 @@ export function Unit({ name }: {
       <p className={`${s.status} ${s[latency]}`}>
         {lang.status[latency]}
         <span />
-        {service.ping < 999 ? `~${service.ping.toFixed(0)} ms` : '>999ms'}
+        {ping < 999 ? `~${ping} ms` : '>999ms'}
       </p>
     </div>
   )

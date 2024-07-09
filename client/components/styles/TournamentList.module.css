@@ -1,5 +1,6 @@
 .wrapper {
   display: grid;
+  width: 100%;
   gap: var(--card-gap);
   grid-template-columns: repeat(3, 1fr);
 }
@@ -20,17 +21,29 @@
   height: 100%;
 }
 .background {
-  /* position: absolute;
-  transform: translateX(-90%) rotateZ(15deg) translateY(-35%);
-  background: var(--white);
-  height: 200%;
-  width: 60vw;
-  z-index: 0; */
   position: absolute;
   background: var(--white);
   height: 100%;
   width: 50%;
   z-index: 0;
+}
+.shape {
+  position: absolute;
+  left: -10%;
+  aspect-ratio: 1 / 1 !important;
+  height: 100% !important;
+  z-index: 0;
+  width: unset;
+}
+.lines {
+  right: -15%;
+  position: absolute;
+  aspect-ratio: 1 / 1 !important;
+  height: 100% !important;
+  width: unset;
+  left: unset;
+  scale: 1.4;
+  z-index: -1;
 }
 .left,
 .right {
@@ -42,7 +55,19 @@
   gap: var(--panel-gap);
 }
 .fill ul {
+  font-size: 18px;
+  padding: 0 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   flex: 1;
+}
+.left li {
+  text-align: right;
+}
+.fill li {
+  font-weight: 400;
+  font-size: 14px;
 }
 .left {
   width: 50%;
@@ -55,13 +80,19 @@
   padding-left: 0;
   width: 50%;
   height: 100%;
-  align-items: flex-end;
 }
 .left h4,
 .right h4 {
   font-size: 36px;
-  text-align: center;
   width: 100%;
+}
+.left h4 {
+  text-align: right;
+  padding-right: 32px;
+}
+.right h4 {
+  text-align: left;
+  padding-left: 32px;
 }
 @media all and ( max-width: 1024px ) {
   .wrapper {
@@ -83,7 +114,7 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   filter: invert(1);
-  font-weight: 600;
+  font-weight: 700;
 }
 .create_team {
   font-weight: 600;

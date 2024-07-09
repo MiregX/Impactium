@@ -17,7 +17,7 @@
   position: relative;
 }
 .content h6 {
-  font-size: var(--text-large);
+  font-size: 18px;
   font-weight: 600;
 }
 .content p {

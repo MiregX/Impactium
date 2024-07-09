@@ -77,7 +77,7 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
   }
 
   async _latency() {
-    if (!this.isActive) return false;
+    if (!this.isActive) return 999;
     const start = process.hrtime.bigint();
     await this.telegram.getMe();
     const end = process.hrtime.bigint();

@@ -11,8 +11,8 @@ import { TournamentUnit } from "./TournamentUnit";
 import { Button } from "@/ui/Button";
 import CreateTeam from "@/banners/create_team/CreateTeam";
 import { useApplication } from "@/context/Application.context";
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const mockTournaments: Tournament[] = [
   {
@@ -115,6 +115,7 @@ export const TournamentsList = () => {
     <PanelTemplate useColumn={true} className={s.page}>
       <div className={s.fill}>
         <div className={s.left}>
+          <Image width={512} height={512} className={s.shape} src='https://cdn.impactium.fun/bgs/cube-shape-fhd.webp' alt='' />
           <h4>Организаторам</h4>
           <ul>
             <li>Удобный конструктор турниров</li>
@@ -127,11 +128,12 @@ export const TournamentsList = () => {
             <Button
               asChild
               className={s.find_tournament}
-              size='lg'><Link href='/tournaments'><img src='https://cdn.impactium.fun/ui/action/search.svg' />Найти турнир</Link></Button>
+              size='lg'><Link href='/tournaments'>Найти турнир</Link></Button>
           </div>
         </div>
         <div className={s.background} />
         <div className={s.right}>
+          <Image width={512} height={512} className={s.lines} src='https://cdn.impactium.fun/bgs/line-shape-fhd.png' alt='' />
           <h4>Командам</h4>
           <ul>
             <li>Участие в 1 клик</li>
@@ -142,14 +144,13 @@ export const TournamentsList = () => {
           </ul>
           <div className={s.button_wrapper}>
             <Button
-              revert
               className={s.create_team}
               size='lg'
-              img='https://cdn.impactium.fun/ui/user/circle.svg'
               onClick={() => spawnBanner(<CreateTeam />)}>Создать команду</Button>
           </div>
         </div>
       </div>
+      <h4 style={{width: '100%', marginTop: '12px', fontSize: '18px'}}>Актуальные турниры:</h4>
       <div className={s.wrapper}>
         {current.map(index => (
           <TournamentUnit key={index} tournament={tournaments[index]} />

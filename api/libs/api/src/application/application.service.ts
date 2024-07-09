@@ -3,7 +3,7 @@ import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
-import { StatusEntity, StatusInfoEntity, StatusInfoEntityTypes } from './addon/status.entity';
+import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 
 @Injectable()
