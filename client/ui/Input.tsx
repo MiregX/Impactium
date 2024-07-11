@@ -1,49 +1,44 @@
-import React from 'react';
-import input from './styles/Input.module.css'
+import React from "react"
+import s from './styles/Input.module.css' 
+import { cn } from "@/lib/utils"
+import { cva, type VariantProps } from "class-variance-authority"; 
 
-interface Input {
-  placeholder?: string
-  image?: string
-  label?: string
-  type?: string
-  value?: any
-  onChange?: (value: any) => void
-  accept?: string
-  className?: string | string[] | boolean
+const inputVariants = cva(s.button, {
+  variants: {
+    variant: {
+      default: s.default,
+    },
+    size: {
+      default: s.defaultSize,
+      sm: s.sm
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
+  img: string
 }
 
-export type CreateInput = Input | {
-  options: Input;
-}
-
-export function Input(options: CreateInput) {
-  const { options: inputOptions } = 'options' in options ? options : { options };
-  const { accept, image, label, placeholder, className, value, type, onChange } = inputOptions;
-  return (
-    <div className={`${input._} ${useClasses(className)}`}>
-      {image && <span><img src={image} /></span>}
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, variant, size, img, ...props }, ref) => {
+    return (
       <input
-        placeholder={(!label && placeholder)?.toString()}
-        id={label}
-        aria-label="Search"
-        aria-invalid="false"
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect="off"
-        spellCheck="false"
-        accept={accept}
-        value={value}
-        type={type || 'default'}
-        onChange={onChange}
-        name='q' />
-      {label && <label htmlFor={label}>
-      {label && type !== 'file'
-          ? placeholder
-          : (<React.Fragment>
-              <span><img src='https://cdn.impactium.fun/ui/cloud/upload.svg'/></span>
-              <p>{placeholder}</p>
-          </React.Fragment>)
-        }</label>}
-    </div>
-  );
-};
+        className={cn(
+          inputVariants({ variant, size, className }),
+          s.input,
+          img && s.image
+        )}
+        data-image={img}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = "Input"
+ 
+export { Input }

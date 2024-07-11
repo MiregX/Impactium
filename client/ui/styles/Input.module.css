@@ -1,96 +1,30 @@
-._ {
-  background: var(--soft-black);
-  flex: 1;
-  border: 1px solid var(--accent-2);
-  border-radius: var(--border-s);
+.input {
   display: flex;
-  align-items: center;
-  position: relative;
+  height: 36px;
   width: 100%;
+  border-radius: var(--border-s);
+  border: 1px solid var(--accent-3);
+  background-color: var(--soft-black);
+  padding: 8px 12px;
+  outline-offset: var(--white);
 }
-._:focus-within:not(input) {
+
+.input::file {
+  border: 0;
+  background-color: transparent;
+  font-weight: 500;
+}
+
+.input::placeholder {
+  color: var(--text-dimmed);
+}
+
+.input:focus-visible {
+  outline: none;
   box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
 }
 
-._ input + label {
-  position: absolute;
-  top: 50%;
-  padding: 0 4px;
-  left: 8px;
-  transform: translateY(-50%);
-  color: var(--text-dimmed);
-  font-size: var(--text-medium);
-  transition: all 0.3s var(--transition);
-  background: inherit;
-}
-
-
-._ input:hover + label,
-._ input:not([value=""]) + label,
-._ input:focus + label  {
-  font-size: var(--text-small);
-  top: -16px;
-  left: 4px;
-  background: none;
-}
-
-._ input[type='file'] {
-  display: none;
-}
-
-._ input[type='file'] + label {
-  position: relative !important;
-  top: unset;
-  left: unset;
-  transform: unset;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: row;
-  border-radius: var(--border-s);
-  height: 40px;
-  cursor: pointer;
-  width: -webkit-fill-available;
-}
-
-._ label p {
-  font-size: calc(var(--text-medium) + 1px);
-  color: var(--text-dimmed);
-  text-align: center;
-}
-
-._ input {
-  background: none;
-  border: none;
-  font-size: calc(var(--text-medium) + 1px);
-  flex: 1;
-  height: 38px;
-
-}
-._ input:focus {
-  outline: none;
-}
-._ span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  filter: brightness(0.58);
-}
-
-._ span img {
-  height: 18px;
-}
-@media all and (max-width: 425px){
-  ._ {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  ._ input {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

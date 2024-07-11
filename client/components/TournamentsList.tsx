@@ -147,6 +147,10 @@ export const TournamentsList = () => {
               className={s.create_team}
               size='lg'
               onClick={() => spawnBanner(<CreateTeam />)}>Создать команду</Button>
+            <Button
+              asChild
+              variant='ghost'
+              size='lg'><Link href='/teams'>Найти команду</Link></Button>
           </div>
         </div>
       </div>

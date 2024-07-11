@@ -70,24 +70,26 @@
 }
 
 * {
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  color: var(--soft-white);
+  scroll-behavior: smooth;
+  -moz-user-select: none;
   box-sizing: border-box;
+  text-decoration: none;
+  -ms-user-select: none;
+  letter-spacing: 0.5px;
+  user-select: none;
+  background: none;
+  font-weight: 300;
+  line-height: 1;
+  outline: none;
   padding: 0;
   margin: 0;
-  letter-spacing: 0.5px;
-  color: var(--soft-white);
-  font-family: var(--font-sans);
-  font-weight: 300;
-  scroll-behavior: smooth;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  text-decoration: none;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-weight: 500;
 }
 img {
   -webkit-user-drag: none;

@@ -27,7 +27,7 @@ const locale: Locale = {
     ua: 'Зачекайте',
     it: 'Attendere prego',
     pl: 'Proszę czekać'
-  },  
+  },
   _watch_live: {
     us: 'Watch Live',
     ru: 'Смотреть прямую трансляцию',
@@ -371,6 +371,15 @@ const locale: Locale = {
       ua: 'Логотип команди',
       it: 'Logo della squadra',
       pl: "Logo drużyny"
+    }
+  },
+  teams: {
+    empty: {
+      us: 'I don\'t think there\'s really fucking anything here. Fuck...',
+      ru: 'Кажется тут реально нихуя нет. Пиздец...',
+      ua: 'Здається тут реально ніхуя немає. Пиздець...',
+      it: 'Non credo che ci sia davvero un cazzo di niente qui. Cazzo...',
+      pl: 'Nie wydaje mi się, żeby było tu cokolwiek pieprzonego. Kurwa...'
     }
   },
   team: {

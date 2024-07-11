@@ -103,6 +103,7 @@
 .button_wrapper {
   width: 100%;
   display: flex;
+  gap: 8px;
 }
 .right .button_wrapper {
   justify-content: flex-start;
