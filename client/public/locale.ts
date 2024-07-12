@@ -373,15 +373,6 @@ const locale: Locale = {
       pl: "Logo drużyny"
     }
   },
-  teams: {
-    empty: {
-      us: 'I don\'t think there\'s really fucking anything here. Fuck...',
-      ru: 'Кажется тут реально нихуя нет. Пиздец...',
-      ua: 'Здається тут реально ніхуя немає. Пиздець...',
-      it: 'Non credo che ci sia davvero un cazzo di niente qui. Cazzo...',
-      pl: 'Nie wydaje mi się, żeby było tu cokolwiek pieprzonego. Kurwa...'
-    }
-  },
   team: {
     amount: {
       us: 'Teams',
@@ -417,6 +408,20 @@ const locale: Locale = {
       ua: "Учасники команди",
       it: "Membri del team",
       pl: "Członkowie zespołu"
+    },
+    not_found: {
+      us: "No teams found with that name",
+      ru: "Команд с таким названием не найдены",
+      ua: "Команд з такою назвою не знайдено",
+      it: "Nessuna squadra trovata con quel nome",
+      pl: "Nie znaleziono drużyn o tej nazwie"            
+    },
+    empty: {
+      us: 'I don\'t think there\'s really fucking anything here. Fuck...',
+      ru: 'Кажется тут реально нихуя нет. Пиздец...',
+      ua: 'Здається тут реально ніхуя немає. Пиздець...',
+      it: 'Non credo che ci sia davvero un cazzo di niente qui. Cazzo...',
+      pl: 'Nie wydaje mi się, żeby było tu cokolwiek pieprzonego. Kurwa...'
     }
   },
   tournament: {
@@ -447,6 +452,20 @@ const locale: Locale = {
       ua: "Учасники турніру",
       it: "Partecipanti al torneo",
       pl: "Uczestnicy turnieju"
+    },
+    empty: {
+      us: "We're so fucking poor that no one made the tournament. Come back tomorrow.",
+      ru: "Мы настролько нищеёбы что никто не сделал турнир. Заходи завтра.",
+      ua: "Ми настільки ніщєйоби, що ніхто не зробив турнір. Заходь завтра.",
+      it: "Siamo così poveri che nessuno ha partecipato al torneo. Tornate domani.",
+      pl: "Jesteśmy tak kurewsko biedni, że nikt nie dostał się do turnieju. Wróć jutro."
+    },
+    not_found: {
+      us: "No tournaments found with that name",
+      ru: "Турниров с таким названием не найдены",
+      ua: "Змагань з такою назвою не знайдено",
+      it: "Nessun torneo trovato con questo nome",
+      pl: "Nie znaleziono turniejów o takiej nazwie"            
     }    
   },
   already_exists: {

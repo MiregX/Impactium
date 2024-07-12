@@ -1,6 +1,6 @@
 .recomendations {
   background: var(--meta-black);
-  border: 1px solid var(--accent-2);
+  border: 1px solid var(--accent-3);
   border-radius: var(--border-m);
   width: 100%;
   overflow: hidden;
@@ -14,7 +14,7 @@
 .minimized > div .unit:last-child {
   border: none;
 }
-.empty {
+.center {
   width: 100%;
   display: flex;
   flex: 1;

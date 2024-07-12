@@ -20,7 +20,7 @@ export default function TournamentPage() {
         state={tournaments}
         apiPath='tournament' />
       {/* Рекомендации турниров */}
-      <Recomendations search={search} data={tournaments} unit={TournamentUnit} key='tournaments' />
+      <Recomendations search={search} data={tournaments} Unit={TournamentUnit} title='tournament' />
     </PanelTemplate>
   )
 }

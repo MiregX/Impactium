@@ -13,7 +13,7 @@
 .search {
   background: var(--soft-black);
   flex: 1;
-  border: 1px solid var(--accent-2);
+  border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
   display: flex;
   align-items: center;

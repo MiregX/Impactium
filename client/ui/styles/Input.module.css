@@ -1,5 +1,6 @@
 .input {
   display: flex;
+  align-items: center;
   height: 36px;
   width: 100%;
   border-radius: var(--border-s);
@@ -7,6 +8,17 @@
   background-color: var(--soft-black);
   padding: 8px 12px;
   outline-offset: var(--white);
+}
+.image {
+  padding: 0;
+  gap: var(--p2);
+}
+.image img {
+  height: 20px;
+  padding-left: 8px; 
+}
+.image input {
+  padding: 8px 12px 8px 0;
 }
 
 .input::file {

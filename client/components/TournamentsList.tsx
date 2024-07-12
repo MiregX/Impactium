@@ -13,14 +13,15 @@ import CreateTeam from "@/banners/create_team/CreateTeam";
 import { useApplication } from "@/context/Application.context";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/context/Language.context";
 
 const mockTournaments: Tournament[] = [
   {
     id: "1",
     banner: "https://example.com/banners/space_invaders.png",
     title: "Galactic Space Invaders Championship",
-    start: new Date('2024-07-10T10:00:00Z'),
-    end: new Date('2024-07-15T18:00:00Z'),
+    start: '2024-07-10T10:00:00Z',
+    end: '2024-07-15T18:00:00Z',
     description: "Join the ultimate battle in space and prove your dominance in the galaxy!",
     code: "GSI2024",
     rules: JSON.parse('{"maxTeams": 16, "minPlayers": 5, "maxPlayers": 10}'),
@@ -36,8 +37,8 @@ const mockTournaments: Tournament[] = [
     id: "2",
     banner: "https://example.com/banners/medieval_mayhem.png",
     title: "Medieval Mayhem Jousting Tournament",
-    start: new Date('2024-06-01T12:00:00Z'),
-    end: new Date('2024-07-05T20:00:00Z'),
+    start: '2024-06-01T12:00:00Z',
+    end: '2024-07-05T20:00:00Z',
     description: "Don your armor and prepare for a clash of knights in the grand jousting arena!",
     code: "MMJT2024",
     rules: JSON.parse('{"maxTeams": 8, "minPlayers": 2, "maxPlayers": 5}'),
@@ -53,8 +54,8 @@ const mockTournaments: Tournament[] = [
     id: "3",
     banner: "https://example.com/banners/mystic_mage_duel.png",
     title: "Mystic Mage Duel of the Elements",
-    start: new Date('2024-05-15T14:00:00Z'),
-    end: new Date('2024-05-20T22:00:00Z'),
+    start: '2024-05-15T14:00:00Z',
+    end: '2024-05-20T22:00:00Z',
     description: "Harness the power of the elements and duel against other mages to become the Archmage!",
     code: "MMDE2024",
     rules: JSON.parse('{"maxTeams": 10, "minPlayers": 1, "maxPlayers": 3}'),
@@ -70,8 +71,8 @@ const mockTournaments: Tournament[] = [
     id: "4",
     banner: "https://example.com/banners/robot_rumble.png",
     title: "Robot Rumble: Battle of the Bots",
-    start: new Date('2024-07-25T09:00:00Z'),
-    end: new Date('2024-07-30T17:00:00Z'),
+    start: '2024-07-25T09:00:00Z',
+    end: '2024-07-30T17:00:00Z',
     description: "Build, program, and battle your robots in the ultimate test of engineering prowess!",
     code: "RRBB2024",
     rules: JSON.parse('{"maxTeams": 20, "minPlayers": 3, "maxPlayers": 6}'),
@@ -87,8 +88,8 @@ const mockTournaments: Tournament[] = [
     id: "5",
     banner: "https://example.com/banners/underwater_adventure.png",
     title: "Underwater Adventure: Deep Sea Quest",
-    start: new Date('2024-08-15T08:00:00Z'),
-    end: new Date('2024-08-20T16:00:00Z'),
+    start: '2024-08-15T08:00:00Z',
+    end: '2024-08-20T16:00:00Z',
     description: "Dive into the deep blue sea and complete quests to uncover the mysteries of the ocean!",
     code: "UADQ2024",
     rules: JSON.parse('{"maxTeams": 12, "minPlayers": 4, "maxPlayers": 8}'),
@@ -102,9 +103,9 @@ const mockTournaments: Tournament[] = [
   }
 ];
 
-export const TournamentsList = () => {
-  const [ tournaments, setTournaments ] = useState<Tournament[]>(mockTournaments);
+export function TournamentsList({ tournaments = mockTournaments }: { tournaments: Tournament[]}) {
   const { spawnBanner } = useApplication();
+  const { lang } = useLanguage();
   const { page, total, setPage, getPageNumbers, current } = usePagination({
     totalItems: tournaments.length,
     itemsPerPage: 3,
@@ -128,7 +129,7 @@ export const TournamentsList = () => {
             <Button
               asChild
               className={s.find_tournament}
-              size='lg'><Link href='/tournaments'>Найти турнир</Link></Button>
+              size='lg'><Link href='/tournaments'>{lang.find.tournament}</Link></Button>
           </div>
         </div>
         <div className={s.background} />
@@ -146,10 +147,11 @@ export const TournamentsList = () => {
             <Button
               className={s.create_team}
               size='lg'
-              onClick={() => spawnBanner(<CreateTeam />)}>Создать команду</Button>
+              onClick={() => spawnBanner(<CreateTeam />)}>{lang.create.team}</Button>
             <Button
               asChild
               variant='ghost'
+              className={s.find_team}
               size='lg'><Link href='/teams'>Найти команду</Link></Button>
           </div>
         </div>

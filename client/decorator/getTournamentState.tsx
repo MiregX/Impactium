@@ -12,5 +12,5 @@ export const getTournamentState = (state: State | Date, endDate?: Date): Tournam
 
   const now = new Date();
 
-  return now < start ? 'Upcoming' : now <= end ? "Ongoing" : "Finished";
+  return now < new Date(start) ? 'Upcoming' : now <= new Date(end) ? "Ongoing" : "Finished";
 };

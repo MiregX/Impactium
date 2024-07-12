@@ -2,7 +2,7 @@ import _ from './styles/Panel.module.css'
 
 interface Panel {
   heading: string;
-  children: React.JSX.Element
+  children: React.ReactNode
   className?: string[] | string;
 }
 

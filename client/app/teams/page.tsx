@@ -41,7 +41,7 @@ export default function TeamsPage() {
         </Panel>
       : null}
       {/* Рекомендации */}
-      <Recomendations search={search} data={teams} unit={TeamUnit} title='teams' />
+      <Recomendations search={search} data={teams} Unit={TeamUnit} title='team' />
     </PanelTemplate>
   );
 }
