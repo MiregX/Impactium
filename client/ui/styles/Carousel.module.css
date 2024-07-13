@@ -1,0 +1,73 @@
+
+.relative {
+  position: relative;
+}
+.content {
+  display: flex;
+}
+.content.h {
+  margin-left: -1rem;
+}
+.content.v {
+  margin-top: -1rem; 
+  flex-direction: column; 
+}
+.item {
+  min-width: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 100%; 
+}
+.item.h {
+  padding-left: 1rem;
+}
+.item.v {
+  padding-top: 1rem;
+}
+.prev {
+  filter: invert(1);
+  position: absolute; 
+  width: 2rem; 
+  height: 2rem; 
+  border-radius: var(--round); 
+}
+.prev.h {
+  left: -3rem; 
+  top: 50%;
+  --transform-translate-y: -50%; 
+}
+.prev.v {
+  top: -3rem; 
+  left: 50%; 
+  --transform-rotate: 90deg; 
+  --transform-translate-x: -50%; 
+}
+.only_sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0; 
+}
+.next {
+  filter: invert(1);
+  position: absolute; 
+  width: 2rem; 
+  height: 2rem; 
+  border-radius: var(--round);
+}
+.next.h {
+  right: -3rem; 
+  top: 50%;
+  --transform-translate-y: -50%;
+}
+.next.v {
+  bottom: -3rem;
+  left: 50%;
+  --transform-rotate: 90deg;
+  --transform-translate-x: -50%;
+}

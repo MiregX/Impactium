@@ -1,5 +1,6 @@
 import React from 'react';
 import card from './styles/Card.module.css'
+import { cn } from '@/lib/utils';
 
 interface DescriptionOptions {
   text: string;
@@ -9,13 +10,13 @@ interface DescriptionOptions {
 export interface Card {
   description?: string | DescriptionOptions;
   children: any;
-  className: string | string[];
-  id: string;
+  className?: string | string[];
+  id: string | number;
 }
 
-export function Card({ description, id, children, className ,}: Card) {
+export function Card({ description, id, children, className }: Card) {
   return (
-    <div className={useClasses(className, card._)} id={id}>
+    <div className={cn(className, card._)} id={id.toString()}>
       <div className={card.content}>
         {children}
       </div>

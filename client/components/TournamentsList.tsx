@@ -1,5 +1,4 @@
 'use client'
-import { useState } from "react"
 import { Pagination } from "./Pagination";
 import s from './styles/TournamentList.module.css'
 import { Tournament } from "@/dto/Tournament";
@@ -14,6 +13,14 @@ import { useApplication } from "@/context/Application.context";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/context/Language.context";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/ui/Carousel"
+import { Card } from "@/ui/Card";
 
 const mockTournaments: Tournament[] = [
   {
@@ -111,20 +118,27 @@ export function TournamentsList({ tournaments = mockTournaments }: { tournaments
     itemsPerPage: 3,
     buttons: 5
   });
+  
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
       <div className={s.fill}>
         <div className={s.left}>
           <Image width={512} height={512} className={s.shape} src='https://cdn.impactium.fun/bgs/cube-shape-fhd.webp' alt='' />
-          <h4>Организаторам</h4>
-          <ul>
-            <li>Удобный конструктор турниров</li>
-            <li>Автоматизация процессов</li>
-            <li>Авто-обновление турнирной сетки</li>
-            <li>Редактор команд</li>
-            <li>Отсутствие бюрократии</li>
-          </ul>
+          <h4>{lang.tournament.for_organizers}</h4>
+          <Carousel className={s.carousel}>
+          <CarouselContent>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <CarouselItem key={index}>
+                <Card className={s.card_content} id={index}>
+                  <span>{index + 1}</span>
+                </Card>
+              </CarouselItem>
+            ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
           <div className={s.button_wrapper}>
             <Button
               asChild
@@ -135,7 +149,7 @@ export function TournamentsList({ tournaments = mockTournaments }: { tournaments
         <div className={s.background} />
         <div className={s.right}>
           <Image width={512} height={512} className={s.lines} src='https://cdn.impactium.fun/bgs/line-shape-fhd.png' alt='' />
-          <h4>Командам</h4>
+          <h4>{lang.team.for_teams}</h4>
           <ul>
             <li>Участие в 1 клик</li>
             <li>Каталог турниров</li>

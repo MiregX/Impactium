@@ -374,6 +374,13 @@ const locale: Locale = {
     }
   },
   team: {
+    for_teams: {
+      us: 'For teams',
+      ru: 'Командам',
+      ua: 'Командам',
+      it: 'Per le squadre',
+      pl: 'Dla drużyn'      
+    },
     amount: {
       us: 'Teams',
       ru: 'Комманд',
@@ -425,6 +432,13 @@ const locale: Locale = {
     }
   },
   tournament: {
+    for_organizers: {
+      us: 'For organizers',
+      ru: 'Организаторам',
+      ua: 'Організаторам',
+      it: 'Per gli organizzatori',
+      pl: 'Dla organizatorów'            
+    },
     recomendations: {
       us: 'Popular tournaments',
       ru: 'Популярные турниры',

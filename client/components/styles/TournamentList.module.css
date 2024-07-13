@@ -125,3 +125,14 @@
 .find_team {
   background: transparent !important;
 }
+.card_content > div {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.carousel {
+  max-width: 200px;
+  max-height: 200px;
+}

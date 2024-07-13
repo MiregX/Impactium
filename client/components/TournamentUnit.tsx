@@ -24,8 +24,8 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
       <Description tournament={tournament} />
       <WatchLive url={tournament.live} />
     </Card>
-    )
-}
+  );
+};
 
 function WatchLive({ url }: { url?: string }) {
   'use client'
