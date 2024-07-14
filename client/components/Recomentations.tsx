@@ -17,6 +17,7 @@ interface RecomendationsProps {
 }
 
 export function Recomendations({ search, data, title, Unit }: RecomendationsProps) {
+  console.log({data});
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
 
@@ -34,18 +35,19 @@ export function Recomendations({ search, data, title, Unit }: RecomendationsProp
   )
   
   const filteredData: any[] = data.filter((unit: any) =>
-    unit.indent.toLowerCase().includes(search.toLowerCase()) ||
-    unit.title.toLowerCase().includes(search.toLowerCase())
+    unit.indent
+      ? unit.indent.toLowerCase().includes(search.toLowerCase())
+      : unit.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <Panel heading={lang[title].recomendations} className={s.recomendations}>
       {search.length > 0
         ? (filteredData.length
-          ? filteredData.map((unit: any) => <Unit key={unit.indent} data={unit} />)
+          ? filteredData.map((unit: any) => <Unit key={unit.indent || unit.code} team={unit} tournament={unit} />)
           : <NotFound />)
         : (data.length
-          ? data.map((unit: any) => <Unit key={unit.indent} data={unit} />)
+          ? data.map((unit: any) => <Unit key={unit.indent || unit.code} team={unit} tournament={unit} />)
           : <Empty />)}
   </Panel>
   );

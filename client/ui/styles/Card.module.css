@@ -16,8 +16,9 @@
   position: relative;
 }
 .content h6 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
+  margin-bottom: 4px;
 }
 .content p {
   font-size: var(--text-medium);

@@ -30,6 +30,7 @@ export class TournamentEntity<T = {}> implements Tournament {
         banner: true,
         title: true,
         start: true,
+        end: true,
         description: true,
         code: true,
         rules: true,
@@ -63,7 +64,7 @@ export class TournamentEntity<T = {}> implements Tournament {
       where: {
         ...args.where,
         end: {
-          lt: new Date(),
+          gt: new Date(),
         },
       },
       orderBy: {

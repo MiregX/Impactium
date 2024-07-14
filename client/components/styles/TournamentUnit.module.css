@@ -33,8 +33,3 @@
 .card p:nth-child(4, 5) img {
   filter: var(--filter-to-e8e8e8);
 }
-
-.card a {
-  color: var(--white);
-  text-decoration: underline;
-}

@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useLanguage } from '@/context/Language.context'
 import { getReadableDate } from '@/decorator/getReadableDate'
 import React from 'react'
+import { Button } from '@/ui/Button'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -31,10 +32,12 @@ function WatchLive({ url }: { url?: string }) {
   'use client'
   const { lang } = useLanguage();
   return url && (
-    <Link href={url}>
-      <Image width={24} height={24} src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
-      {lang._watch_live}
-    </Link>
+    <Button asChild>
+      <Link href={url}>
+        <Image width={20} height={20} src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
+        {lang._watch_live}
+      </Link>
+    </Button>
   );
 }
 

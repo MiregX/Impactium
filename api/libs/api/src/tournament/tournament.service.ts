@@ -18,11 +18,12 @@ export class TournamentService implements OnModuleInit {
     limit: number = TournamentStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TournamentStandart.DEFAULT_PAGINATION_PAGE,
   ): Promise<TournamentEntity<TournamentEntityWithTeams>[]> {
-    return this.prisma.tournament.findMany({
+    const x = await this.prisma.tournament.findMany({
       ...TournamentEntity.selectWithTeams(),
       take: limit,
       skip: skip
     });
+    return x
   }
 
   private async insertBattleCups() {
@@ -52,9 +53,7 @@ export class TournamentService implements OnModuleInit {
           start: friday,
         },
       }).then(async battleCup => {
-        console.log(battleCup)
         if (!battleCup) {
-          console.log('Called: ', friday)
           await this.createBattleCup(friday);
         }
       })

@@ -1,5 +1,6 @@
 .button {
   display: inline-flex;
+  width: min-content;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
@@ -12,6 +13,11 @@
   transition-timing-function: var(--transition);
   outline: none;
   gap: 8px
+}
+
+.button img {
+  height: 20px;
+  width: 20px;
 }
 
 .default {
