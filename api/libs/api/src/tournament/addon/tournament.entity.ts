@@ -1,4 +1,5 @@
 import { Prisma, Roles, Team, Tournament } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
 export class TournamentEntity<T = {}> implements Tournament {
   id: string;
@@ -13,7 +14,6 @@ export class TournamentEntity<T = {}> implements Tournament {
   gid: string;
   live: string;
   prize: number;
-  teams?: Team[] 
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/tournaments/${filename}`
@@ -23,37 +23,55 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static selectWithTeams = () => ({
-    id: true,
-    banner: true,
-    title: true,
-    start: true,
-    end: true,
-    description: true,
-    code: true,
-    rules: true,
-    ownerId: true,
-    gid: true,
-    live: true,
-    prize: true,
-    teams: {
+  static selectWithTeams(): Prisma.TournamentFindManyArgs {
+    return this.findActual({
       select: {
-        indent: true,
-        logo: true,
+        id: true,
+        banner: true,
         title: true,
+        start: true,
         description: true,
+        code: true,
+        rules: true,
         ownerId: true,
-        membersAmount: true,
-        owner: true,
-        tournaments: true,
-        members: true,
-        battles: true,
-        invites: true,
-        comments: true,
-      }
-    }
-  });
+        gid: true,
+        live: true,
+        prize: true,
+        teams: {
+          select: {
+            indent: true,
+            logo: true,
+            title: true,
+            description: true,
+            ownerId: true,
+            membersAmount: true,
+            owner: true,
+            tournaments: true,
+            members: true,
+            battles: true,
+            invites: true,
+            comments: true,
+          },
+        },
+      },
+    });
+  }
 
+  static findActual(args: Partial<Prisma.TournamentFindManyArgs> = {}): Prisma.TournamentFindManyArgs {
+    return {
+      ...args,
+      where: {
+        ...args.where,
+        end: {
+          lt: new Date(),
+        },
+      },
+      orderBy: {
+        ...args.orderBy,
+        start: 'asc',
+      },
+    };
+  }
 }
 
 export interface TournamentEntityWithTeams {

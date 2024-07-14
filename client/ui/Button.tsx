@@ -41,7 +41,7 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, img, revert, loading, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, img, revert, disabled, loading, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const paddingClass = img ? (props.children ? (revert ? s.revert : s.withImage) : s.onlyImage) : null;
 
@@ -49,7 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }), paddingClass)}
+        className={cn(buttonVariants({ variant: disabled ? 'disabled' : variant, size, className }), paddingClass)}
         ref={ref}
         {...props}>
         {asChild ? props.children : (loading

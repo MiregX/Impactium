@@ -1,11 +1,9 @@
-"use client"
-
+'use client'
 import Image from 'next/image'
 import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/ui/Button"
 import s from './styles/Carousel.module.css'
@@ -158,7 +156,7 @@ const CarouselContent = React.forwardRef<
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} style={{overflow: 'hidden'}}>
+    <div ref={carouselRef} className={s.wrapper}>
       <div
         ref={ref}
         className={cn(
@@ -200,6 +198,7 @@ const CarouselPrevious = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, variant = "hardline", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  console.log('Disabled: ', !canScrollPrev)
 
   return (
     <Button
@@ -217,7 +216,7 @@ const CarouselPrevious = React.forwardRef<
       onClick={scrollPrev}
       {...props}
     >
-      <Image src='https://cdn.impactium.fun/ui/chevron/right-md.svg' width={16} height={16} alt='' />
+      <Image src='https://cdn.impactium.fun/ui/chevron/left-md.svg' width={16} height={16} alt='' />
       <span className={s.only_sr}>Previous slide</span>
     </Button>
   )
@@ -229,7 +228,7 @@ const CarouselNext = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, variant = "hardline", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
-
+  console.log('Disabled: ', !canScrollNext)
   return (
     <Button
       ref={ref}

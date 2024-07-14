@@ -8,6 +8,7 @@ export class UserEntity implements User {
   email: string | null
   displayName: string | null
   username: string | null
+  verified: boolean
   login?: LoginEntity
   logins?: LoginEntity[]
   teams?: TeamEntity[]
@@ -15,7 +16,6 @@ export class UserEntity implements User {
   constructor(user: UserEntity) {
     return Object.assign(this, user)
   }
-  verified: boolean;
 
   static select = (): Prisma.UserSelect => ({
     uid: true,

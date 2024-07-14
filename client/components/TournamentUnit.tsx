@@ -32,7 +32,7 @@ function WatchLive({ url }: { url?: string }) {
   const { lang } = useLanguage();
   return url && (
     <Link href={url}>
-      <Image src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
+      <Image width={24} height={24} src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
       {lang._watch_live}
     </Link>
   );

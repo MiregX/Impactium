@@ -71,7 +71,8 @@
 }
 .left {
   width: 50%;
-  padding-right: 0;
+  padding: 32px 0;
+  align-items: center;
 }
 .left * {
   color: var(--meta-black);
@@ -87,8 +88,7 @@
   width: 100%;
 }
 .left h4 {
-  text-align: right;
-  padding-right: 32px;
+  text-align: center;
 }
 .right h4 {
   text-align: left;
@@ -125,14 +125,21 @@
 .find_team {
   background: transparent !important;
 }
-.card_content > div {
+.card {
+  height: 100%;
+  background: transparent !important;
+  backdrop-filter: blur(5px);
+}
+.card > div {
   display: flex;
-  aspect-ratio: 1 / 1;
   align-items: center;
   justify-content: center;
   padding: 32px;
 }
 .carousel {
-  max-width: 200px;
-  max-height: 200px;
+  width: calc(100% - 64px - 64px);
+  height: 100%;
+}
+.carousel_right {
+  filter: invert(1);
 }

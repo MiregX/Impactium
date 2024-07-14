@@ -38,7 +38,7 @@
 
   --filter-to-e8e8e8: brightness(0.58);
   --filter-to-black: brightness(0);
-  --filter-to-white: brightness(1);
+  --filter-to-white: brightness(100);
 
   --geist-background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
   --geist-border: 1px solid hsla(0,0%,100%,.07);

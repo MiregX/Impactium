@@ -71,7 +71,7 @@ model TeamInvitements {
   id            String        @id @default(uuid())
   uid           String
   user          User          @relation(fields: [uid], references: [uid])
-  tid    String
+  tid           String
   team          Team          @relation(fields: [tid], references: [indent])
   date          DateTime      @default(now())
 }

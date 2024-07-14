@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
@@ -7,10 +7,10 @@ import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 
 @Injectable()
-export class ApplicationService {
+export class ApplicationService implements OnModuleInit {
   constructor(
     private readonly redisService: RedisService,
-    private readonly prismaService: PrismaService,
+    private readonly prisma: PrismaService,
     private readonly telegramService: TelegramService,
   ) {}
 
@@ -19,9 +19,9 @@ export class ApplicationService {
       .then(data => data ? JSON.parse(data) : Promise.reject())
       .catch(async _ => {
         const [users_count, teams_count, tournaments_count] = await Promise.all([
-          await this.prismaService.user.count(),
-          await this.prismaService.team.count(),
-          await this.prismaService.tournament.count()
+          await this.prisma.user.count(),
+          await this.prisma.team.count(),
+          await this.prisma.tournament.count()
         ]);
 
         const info = {
@@ -118,10 +118,26 @@ export class ApplicationService {
 
   private async getPrisma(): Promise<StatusEntity> {
     const start = Date.now();
-    await this.prismaService.ping();
+    await this.prisma.ping();
     return {
       ping: Date.now() - start,
       info: undefined
     };
+  }
+  
+  async onModuleInit() {
+    await this.prisma.user.upsert({
+      where: {
+        uid: 'system'
+      },
+      create: {
+        uid: 'system',
+        displayName: 'System',
+        username: 'system',
+        email: 'admin@impactium.fun',
+        verified: true
+      },
+      update: {}
+    });
   }
 }

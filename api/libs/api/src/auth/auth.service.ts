@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, ForbiddenException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
@@ -33,94 +33,37 @@ export class AuthService {
   }
 
   async register({ uid, id, type, avatar, displayName, email }: AuthPayload): Promise<AuthResult> {
-    let login = await this.prisma.login.findUnique({
+    return this.prisma.login.findUnique({
       where: { id, type },
+    }).then(async (login) => {
+      const uuid = crypto.randomUUID();
+      if (login)
+        await this.updateLogin({ id, type, avatar, displayName, uid }, login)
+      else if (uid)
+        await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
+      else
+        await this.prisma.user.create({
+          data: {
+            email,
+            uid: crypto.randomUUID(),
+            logins: {
+              connectOrCreate: {
+                where: {
+                  id,
+                  type
+                },
+                create: {
+                  id,
+                  type,
+                  avatar,
+                  displayName,
+                },
+              }
+            }
+          }
+        })
+      return this.parseToken(this.userService.signJWT(uuid, email))
     });
-  
-    try {
-      const result = login
-        ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
-        : uid
-          ? await this.prisma.login.create({
-              data: {
-                id,
-                type,
-                avatar,
-                displayName,
-                uid,
-              }
-            })
-          : await this.prisma.user.upsert({
-              where: { email },
-              update: {
-                email,
-                logins: {
-                  connectOrCreate: {
-                    where: {
-                      id,
-                      type
-                    },
-                    create: {
-                      id,
-                      type,
-                      avatar,
-                      displayName,
-                    },
-                  }
-                }
-              },
-              create: {
-                email,
-                uid: crypto.randomUUID(),
-                logins: {
-                  connectOrCreate: {
-                    where: {
-                      id,
-                      type
-                    },
-                    create: {
-                      id,
-                      type,
-                      avatar,
-                      displayName
-                    }
-                  }
-                }
-              },
-            })
-
-      const JWT = this.userService.signJWT(result.uid, email)
-      return this.parseToken(JWT)
-    } catch (error) {
-      console.log(error);
-      const result = login
-        ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
-        : uid
-          ? await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
-          : await this.prisma.user.create({
-              data: {
-                email,
-                uid: crypto.randomUUID(),
-                logins: {
-                  connectOrCreate: {
-                    where: {
-                      id,
-                      type
-                    },
-                    create: {
-                      id,
-                      type,
-                      avatar,
-                      displayName,
-                    },
-                  }
-                }
-              }
-            })
-
-      const JWT = this.userService.signJWT(result.uid, email)
-      return this.parseToken(JWT)
-    }
   }
 
   async getPayload(uuid: UUID): Promise<string | AuthPayload> {
