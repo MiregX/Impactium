@@ -3,55 +3,63 @@ import { LoginEntity } from "./login.entity";
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 
 export class UserEntity implements User {
-  uid: string
-  register: Date
-  email: string | null
-  displayName: string | null
-  username: string | null
-  verified: boolean
-  login?: LoginEntity
-  logins?: LoginEntity[]
-  teams?: TeamEntity[]
+  uid: string;
+  register: Date;
+  email: string | null;
+  username: string | null;
+  avatar: string;
+  displayName: string | null;
+  verified: boolean;
+  login?: LoginEntity;
+  logins?: LoginEntity[];
+  teams?: TeamEntity[];
 
   constructor(user: UserEntity) {
-    return Object.assign(this, user)
+    return Object.assign(this, user);
   }
 
-  static select = (): Prisma.UserSelect => ({
+  static select = () => ({
     uid: true,
     email: true,
-    register: true
+    register: true,
+    displayName: true,
+    verified: true,
+    username: true,
+    avatar: true,
   });
 
-  static withTeams = () => ({
-    ...this,
-    ...this.select(),
-    teams: true
+  static withTeams = (): Prisma.UserSelect => ({
+  ...this.select(),
+    teams: {
+      select: TeamEntity.select(),
+    },
   });
-  
-  static withLogin = () => ({
-    ...this,
+
+  static withLogin = (): Prisma.UserSelect => ({
     ...this.select(),
     logins: {
       orderBy: {
         on: 'desc' as Prisma.SortOrder,
       },
-      take: 1
-    }
+      take: 1,
+    },
   });
 
-  static withLogins = () => ({
-    ...this,
+  static withLogins = (): Prisma.UserSelect => ({
     ...this.select(),
-    logins: true
+    logins: true,
   });
 
-  static fromPrisma(user: User & { logins: Login[], teams: Team[] }, options?: Options): UserEntity {
+  static fromPrisma(
+    user: User & { logins: Login[]; teams: Team[] },
+    options?: Options,
+  ): UserEntity {
     return new UserEntity({
       uid: user.uid,
       register: user.register,
       username: user.username,
       displayName: user.displayName,
+      avatar: user.avatar,
       email: user.email,
       login: user.logins[0],
       teams: options?.withTeams ? user.teams : undefined,
@@ -62,6 +70,6 @@ export class UserEntity implements User {
 }
 
 interface Options {
-  withLogins?: boolean
-  withTeams?: boolean
+  withLogins?: boolean;
+  withTeams?: boolean;
 }

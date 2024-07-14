@@ -11,4 +11,5 @@ export class LoginEntity implements LoginEntityInput {
   avatar: string;
   displayName: string;
   on: Date;
+  username: string;
 }

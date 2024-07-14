@@ -1,3 +1,4 @@
+import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { Prisma, Roles, Team, Tournament } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 
@@ -39,20 +40,7 @@ export class TournamentEntity<T = {}> implements Tournament {
         live: true,
         prize: true,
         teams: {
-          select: {
-            indent: true,
-            logo: true,
-            title: true,
-            description: true,
-            ownerId: true,
-            membersAmount: true,
-            owner: true,
-            tournaments: true,
-            members: true,
-            battles: true,
-            invites: true,
-            comments: true,
-          },
+          select: TeamEntity.selectWithMembers()
         },
       },
     });
@@ -64,11 +52,10 @@ export class TournamentEntity<T = {}> implements Tournament {
       where: {
         ...args.where,
         end: {
-          gt: new Date(),
+          lt: new Date(),
         },
       },
       orderBy: {
-        ...args.orderBy,
         start: 'asc',
       },
     };

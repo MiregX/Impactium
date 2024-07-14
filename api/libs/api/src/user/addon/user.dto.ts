@@ -1,4 +1,4 @@
-import { DisplayName } from "@impactium/pattern";
+import { DisplayNameBase } from "@impactium/pattern";
 import { $Enums, Prisma } from "@prisma/client";
 import { IsNotEmpty, Matches } from "class-validator";
 
@@ -14,7 +14,7 @@ export class UpdateUserDto implements Prisma.UserUpdateInput {
 
 export class UpdateUserDisplayNameDto implements Prisma.UserUpdateInput {
   @IsNotEmpty()
-  @Matches(DisplayName, { message: 'displayName_invalid_format' })
+  @Matches(DisplayNameBase, { message: 'displayName_invalid_format' })
   displayName: string;
 }
 

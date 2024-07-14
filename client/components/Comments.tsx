@@ -5,6 +5,7 @@ import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language.context';
 import { LeaveComment } from './LeaveComment';
 import { useUser } from '@/context/User.context';
+import { useAvatar } from '@/decorator/useAvatar';
 
 interface CommentsProps {
   comments: Comment[]
@@ -22,7 +23,7 @@ export function Comments({ comments }: CommentsProps) {
           <div>
             <h6>
               <span>
-                <img src={comment.user.login.avatar} />
+                <img src={useAvatar(comment.user)} />
               </span>
               {comment.user.displayName}</h6>
             <p>{comment.content}</p>

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { Indent } from '@impactium/pattern'
+import { Identifier } from '@impactium/pattern'
 import { useUser } from '@/context/User.context';
 import { Button } from '@/ui/Button';
 import { redirect, useRouter } from 'next/navigation';
@@ -33,7 +33,7 @@ export default function CreateTeam() {
       <Button
         onClick={send}
         loading={loading}
-        variant={(Indent.test(team?.indent) && team.title?.length >= 5 ? 'default' : 'disabled')}>{lang.create.team}</Button>]
+        variant={(Identifier.test(team?.indent) && team.title?.length >= 5 ? 'default' : 'disabled')}>{lang.create.team}</Button>]
   }
 
   const handle = (obj: Team) => {
@@ -43,7 +43,7 @@ export default function CreateTeam() {
   }
 
   async function send() {
-    if (!Indent.test(team?.indent) || !(team.title?.length >= 5)) return;
+    if (!Identifier.test(team?.indent) || !(team.title?.length >= 5)) return;
     setLoading(true);
     await api<Team>(`/team/create/${team.indent}`, {
       method: 'POST',

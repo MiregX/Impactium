@@ -5,7 +5,7 @@ import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
-import { DisplayName as RDisplayName } from "@impactium/pattern";
+import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
 
 export function DisplayName() {
@@ -25,7 +25,7 @@ export function DisplayName() {
   }
 
   const button = <Button
-    variant={useDisplayName(user!) !== displayName && RDisplayName.test(displayName) ? 'default' : 'disabled'}
+    variant={useDisplayName(user!) !== displayName && DisplayNameBase.test(displayName) ? 'default' : 'disabled'}
     onClick={send}>{lang._save}</Button>
 
   return (
@@ -36,7 +36,7 @@ export function DisplayName() {
         state={displayName}
         setState={setDisplayName}
         regExp={{
-          test: RDisplayName,
+          test: DisplayNameBase,
           message: lang.error.displayName_invalid_format
       }} />
     </Card>

@@ -21,8 +21,18 @@ model User {
   uid           String       @id @default(cuid())
   register      DateTime     @default(now())
   email         String?      @unique
+  // Отображаемый аватар, если пользователь захочет поставить свой, вместо того, что отображается после последнего логина
+  avatar        String?
+  // Никнейм который отображается в UI сайта для удобного идентифицирования
+  // Герасимчук Марк
+  // Вскукарачиватель
+  // PRO100RUBIK
   displayName   String?
-  username      String?
+  // Юзернейм: <Без @>
+  // @mireg
+  // @admin
+  // @system
+  username      String?      @unique
   verified      Boolean      @default(false)
   logins        Login[]
   comments      Comment[]
@@ -35,12 +45,13 @@ model User {
 
 model Login {
   uid         String
-  id          String    @unique
+  id          String    @id @default(uuid())
   user        User      @relation(fields: [uid], references: [uid])
   type        LoginType
   on          DateTime  @default(now())
+  username    String?   @unique
   avatar      String?
-  displayName String
+  displayName String?
 }
 
 model Team {
@@ -53,7 +64,6 @@ model Team {
   owner         User         @relation(fields: [ownerId], references: [uid])
   tournaments   Tournament[]
   members       TeamMembers[]
-  battles       Battle[]
   invites       TeamInvitements[]
   comments      Comment[]
 }
@@ -124,18 +134,23 @@ model Tournament {
 }
 
 model Grid {
-  tid           String        @unique
-  tournament    Tournament    @relation(fields: [tid], references: [id])
-  winnerId      String?
+  id            String      @id @default(cuid())
+  tournamentId  String      @unique
+  tournament    Tournament  @relation(fields: [tournamentId], references: [id])
+  rounds        Json
   battles       Battle[]
 }
 
 model Battle {
-  id            String     @id @default(cuid())
-  winnerId      String?
-  gid           String
-  grid          Grid       @relation(fields: [gid], references: [tid])
-  teams         Team[]
+  id          String   @id @default(cuid())
+  gridId      String
+  grid        Grid     @relation(fields: [gridId], references: [id])
+  round       Int
+  slot1       String?
+  slot2       String?
+  winner      String?
+  start   DateTime?
+  end     DateTime?
 }
 
 enum TransactionStatus {

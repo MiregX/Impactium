@@ -21,10 +21,9 @@ export function LeaveComment() {
   return (
     <div className={s.leave}>
       <Avatar size={32} src={user!?.login.avatar} alt={useDisplayName(user!)} />
-      <Input options={{
-        placeholder: lang.comments.leave,
-        className: s.input
-      }}/>
+      <Input
+        placeholder={lang.comments.leave}
+        className={s.input} />
       <Button
         img='https://cdn.impactium.fun/ui/specific/paper-plane.svg'
         onClick={send}

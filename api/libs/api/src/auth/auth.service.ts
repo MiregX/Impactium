@@ -62,7 +62,7 @@ export class AuthService {
             }
           }
         })
-      return this.parseToken(this.userService.signJWT(uuid, email))
+      return this.parseToken(this.userService.signJWT(uuid, email));
     });
   }
 
@@ -80,17 +80,15 @@ export class AuthService {
   async setPayload(uuid: UUID, payload: AuthPayload | string) {
     await this.redisService.setex(this.getCacheFolder(uuid), 300, JSON.stringify(payload) || uuid);
   }
-
+  
   async delPayload(uuid: UUID) {
     await this.redisService.del(this.getCacheFolder(uuid));
   }
-
+  
+  parseToken = (token: string): AuthResult => token.startsWith('Bearer ') ? token as AuthResult : `Bearer ${token}`
+  
   private getCacheFolder(uuid: UUID) {
     return `${dataset.connections}:${uuid}`
-  }
-
-  private parseToken(token: string): AuthResult {
-    return (token.startsWith('Bearer ') ? token : `Bearer ${token}`) as AuthResult
   }
 
   private updateLogin({ id, type, avatar, displayName, uid }: AuthPayload, login: LoginEntity): Promise<LoginEntity> {

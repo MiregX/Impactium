@@ -15,6 +15,15 @@ export class TeamEntity implements Team {
       cdn: 'https://cdn.impactium.fun' + ftp
     }
   }
+
+  static select = () => ({
+    logo: true,
+    membersAmount: true,
+    indent: true,
+    title: true,
+    ownerId: true,
+    description: true,
+  });
   
   static selectWithMembers() {
     return {

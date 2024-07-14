@@ -6,6 +6,7 @@ export type User<T = {}> = {
   register: string,
   email?: string,
   username: string,
+  avatar: string,
   displayName: string,
   balance: number,
   login: Login

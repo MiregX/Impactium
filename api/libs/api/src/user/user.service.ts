@@ -3,6 +3,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma, User } from '@prisma/client';
+import { UsernameTakenException } from './addon/user.error';
 
 @Injectable()
 export class UserService {
@@ -18,14 +19,32 @@ export class UserService {
     });
   }
 
-  findById(uid: string, select?: Prisma.UserSelect) {
+  async findById(uid: string, select?: Prisma.UserSelect) {
+    console.log(select);
     return this.prisma.user.findUnique({
       where: { uid },
       select
     });
   }
 
-  setUsername(uid: string, username: string) {
+  async setUsername(uid: string, username: string) {
+    const exist = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { username },
+          {
+            logins: {
+              some: {
+                username
+              }
+            }
+          }
+        ]
+      }
+    });
+
+    if (exist) throw new UsernameTakenException();
+
     return this.prisma.user.update({
       where: { uid },
       data: { username }

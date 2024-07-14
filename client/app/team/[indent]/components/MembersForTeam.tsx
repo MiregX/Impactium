@@ -7,6 +7,7 @@ import React from "react";
 import { TeamMember } from "@/dto/TeamMember";
 import { Avatar } from "@/components/Avatar";
 import { TeamMemberRoles } from "@/dto/TeamMemberRoles";
+import { useAvatar } from "@/decorator/useAvatar";
 
 export function MembersForTeam() {
   const { lang } = useLanguage();
@@ -19,7 +20,7 @@ export function MembersForTeam() {
           <div key={index} className={s.unit}>
             <Avatar
               size={32}
-              src={member.user.login.avatar}
+              src={useAvatar(member.user)}
               alt={useDisplayName(member.user)} />
             <p>{useDisplayName(member.user)}</p>
             <p>{member.roles.map((role: TeamMemberRoles, index: number) => (

@@ -5,7 +5,7 @@ import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
-import { Username as RUsername } from '@impactium/pattern'
+import { Identifier } from '@impactium/pattern'
 import { useState } from "react";
 
 export function Username() {
@@ -23,14 +23,14 @@ export function Username() {
 
   const button = <Button
     loading={loading}
-    variant={useUsername(user!) !== username && RUsername.test(username) ? 'default' : 'disabled'}
+    variant={useUsername(user!) !== username && Identifier.test(username) ? 'default' : 'disabled'}
     onClick={send}>{lang._save}</Button>
 
   return (
     <Card className={s.account} id='username' description={{ text: lang.account.username_description, button }}>
       <h6>{lang.account.username}</h6>
       <p>{lang.account.username_content}</p>
-      <InputMin state={username} setState={setUsername} before='impactium.fun/user/' regExp={{test: RUsername, message: lang.error.indent_invalid_format}} />
+      <InputMin state={username} setState={setUsername} before='impactium.fun/user/' regExp={{test: Identifier.Username, message: lang.error.indent_invalid_format}} />
     </Card>
   );
 }

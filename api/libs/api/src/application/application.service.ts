@@ -5,6 +5,8 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
+import { UserService } from '@api/main/user/user.service';
+import { AuthService } from '@api/main/auth/auth.service';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -12,6 +14,8 @@ export class ApplicationService implements OnModuleInit {
     private readonly redisService: RedisService,
     private readonly prisma: PrismaService,
     private readonly telegramService: TelegramService,
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
   ) {}
 
   async info() {
@@ -126,7 +130,11 @@ export class ApplicationService implements OnModuleInit {
   }
   
   async onModuleInit() {
-    await this.prisma.user.upsert({
+    await this.createSystemAccount();
+  }
+
+  private async createSystemAccount() {
+    const system = await this.prisma.user.upsert({
       where: {
         uid: 'system'
       },
@@ -134,10 +142,12 @@ export class ApplicationService implements OnModuleInit {
         uid: 'system',
         displayName: 'System',
         username: 'system',
+        avatar: 'https://cdn.impactium.fun/logo/impactium.svg',
         email: 'admin@impactium.fun',
         verified: true
       },
       update: {}
     });
+    console.log('[ λ ] Admin token: ', this.authService.parseToken(this.userService.signJWT(system.uid, system.email)));
   }
 }

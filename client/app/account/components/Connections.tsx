@@ -20,8 +20,7 @@ export function Connections() {
     onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
 
     useEffect(() => {
-      console.log(user);
-      !user!.logins && api<Login[]>('/user/get?logins=true').then(logins => setUser((prevUser) => prevUser ? { ...prevUser, logins } : null ));
+      !user!.logins && api<Login[]>('/user/get?logins=true').then(logins => setUser((prevUser) => prevUser ? { ...prevUser, logins } : null));
     }, [user]);
 
   return (
@@ -32,7 +31,7 @@ export function Connections() {
       <h6>{lang.account.connections}</h6>
       <p>{lang.account.connections_content}</p>
       <section>
-        {user?.logins && user.logins.map((login: Login) => (
+        {user?.logins?.length && user.logins.map((login: Login) => (
           <Unit key={login.id} login={login} />
         ))}
       </section>

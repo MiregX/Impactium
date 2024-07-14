@@ -14,17 +14,18 @@ export class UserController {
   @UseGuards(AuthGuard)
   async getUserById(
     @User() user: UserEntity,
-    @Query() logins: string,
+    @Query('logins') logins: string,
   ) {
-    return this.userService.findById(user.uid, {
+    const userEntity = await this.userService.findById(user.uid, {
+      ...UserEntity.select(),
       ...UserEntity.withLogin(),
       ...UserEntity.withTeams(),
       ...(logins && UserEntity.withLogins()),
-    }).then(user => {
-      return UserEntity.fromPrisma(user, {
-        withTeams: true,
-        withLogins: !!logins
-      });
+    });
+
+    return UserEntity.fromPrisma(userEntity, {
+      withTeams: true,
+      withLogins: !!logins,
     });
   }
 
