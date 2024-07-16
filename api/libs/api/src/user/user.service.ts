@@ -19,8 +19,7 @@ export class UserService {
     });
   }
 
-  async findById(uid: string, select?: Prisma.UserSelect) {
-    console.log(select);
+  findById(uid: string, select?: Prisma.UserSelect) {
     return this.prisma.user.findUnique({
       where: { uid },
       select

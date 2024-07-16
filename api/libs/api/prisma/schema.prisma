@@ -49,7 +49,6 @@ model Login {
   user        User      @relation(fields: [uid], references: [uid])
   type        LoginType
   on          DateTime  @default(now())
-  username    String?   @unique
   avatar      String?
   displayName String?
 }

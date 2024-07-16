@@ -34,7 +34,10 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
   if (cookie.get('uuid')) {
     api<OAuth2Callback>('/oauth2/telegram/callback', {
       method: 'POST'
-    }).then(_ => refreshUser());
+    }).then(token => {
+      cookie.set('Authorization', token);
+      refreshUser();
+    });
   }
 
   const logout = () => {

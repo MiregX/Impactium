@@ -198,7 +198,6 @@ const CarouselPrevious = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, variant = "hardline", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
-  console.log('Disabled: ', !canScrollPrev)
 
   return (
     <Button
@@ -228,7 +227,7 @@ const CarouselNext = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, variant = "hardline", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
-  console.log('Disabled: ', !canScrollNext)
+
   return (
     <Button
       ref={ref}

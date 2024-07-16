@@ -33,41 +33,22 @@ export class AuthService {
   }
 
   async register({ uid, id, type, avatar, displayName, email }: AuthPayload): Promise<AuthResult> {
-    return this.prisma.login.findUnique({
+    const login = await this.prisma.login.findUnique({
       where: { id, type },
-    }).then(async (login) => {
-      const uuid = crypto.randomUUID();
-      if (login)
-        await this.updateLogin({ id, type, avatar, displayName, uid }, login)
-      else if (uid)
-        await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
-      else
-        await this.prisma.user.create({
-          data: {
-            email,
-            uid: crypto.randomUUID(),
-            logins: {
-              connectOrCreate: {
-                where: {
-                  id,
-                  type
-                },
-                create: {
-                  id,
-                  type,
-                  avatar,
-                  displayName,
-                },
-              }
-            }
-          }
-        })
-      return this.parseToken(this.userService.signJWT(uuid, email));
-    });
+    })
+    const result = (login
+      ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
+      : (uid
+        ? await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
+        : await this.createUser({ id, type, avatar, displayName, uid, email, on: new Date() }, email)
+      )
+    )
+    return this.parseToken(this.userService.signJWT(result.uid, email));
   }
-
+      
   async getPayload(uuid: UUID): Promise<string | AuthPayload> {
     if (!uuid) return null;
+
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
     await this.delPayload(uuid);
     try {
@@ -98,7 +79,25 @@ export class AuthService {
     })
   }
 
-  private createLogin(data: Required<AuthPayload>) {
+  private createLogin(data: Required<AuthPayload>): Promise<LoginEntity> {
     return this.prisma.login.create({ data });
+  }
+
+  private createUser(data: Required<AuthPayload>, email?: string): Promise<UserEntity> {
+    return this.prisma.user.create({
+      data: {
+        email,
+        uid: crypto.randomUUID(),
+        logins: {
+          connectOrCreate: {
+            where: {
+              id: data.id,
+              type: data.type
+            },
+            create: data,
+          }
+        }
+      }
+    })
   }
 }

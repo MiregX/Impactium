@@ -12,15 +12,17 @@ export function _server(v?: boolean) {
 }
 
 async function api<T>(path: string, options?: RequestInit & { raw?: boolean } & RequestOptions): Promise<λ<ResponseBase<T>> | T> {
-  const response = await fetch(`${_server(options?.useNumericHost)}/api${path.startsWith('/') ? path : '/' + path}`, {
+  const response = await fetch(`${_server(options?.useNumericHost)}/api${path.startsWith('/') ? path : `/${path}`}`, {
     credentials: 'include',
     method: 'GET',
+    cache: 'no-cache',
     ...options,
-  }).catch(_ => undefined);
+  }).catch(() => undefined);
 
   const res = new λ(!response
     ? undefined
-    : await response.json().catch(() => response.text().catch(() => console.log(response))))
+    : await response.json()
+  );
 
   return options?.raw
     ? res

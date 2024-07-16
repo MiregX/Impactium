@@ -17,7 +17,6 @@ interface RecomendationsProps {
 }
 
 export function Recomendations({ search, data, title, Unit }: RecomendationsProps) {
-  console.log({data});
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
 

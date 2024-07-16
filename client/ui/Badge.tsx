@@ -93,7 +93,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       color: '#0070f3',
       title: lang._soon,
       dot: true
-    },
+    }
   };
 
   const { title, icon, direction, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;

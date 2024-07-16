@@ -44,5 +44,6 @@ export class TelegramAuthController implements AuthMethodController {
     const authorization = await this.telegramAuthService.callback(uuid);
     response.clearCookie('uuid')
     response.cookie('Authorization', authorization, cookieSettings);
+    return authorization;
   }
 }

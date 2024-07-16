@@ -1,1 +1,1 @@
-export type OAuth2Callback = null;
+export type OAuth2Callback = string;

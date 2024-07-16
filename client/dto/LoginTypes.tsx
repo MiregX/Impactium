@@ -1,5 +1,7 @@
 export enum LoginTypes {
-  steam = 'steam',
   discord = 'discord',
-  telegram = 'telegram'
+  google = 'google',
+  github = 'github',
+  telegram = 'telegram',
+  steam = 'steam'
 }

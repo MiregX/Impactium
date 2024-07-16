@@ -3,7 +3,6 @@ import '@/decorator/api';
 import '@/decorator/useClasses';
 import '@/decorator/useDisplayName';
 import '@/decorator/useOptionStyling';
-import '@/decorator/useUsername';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import s from './Application.module.css';
 import { useLanguage } from '@/context/Language.context';

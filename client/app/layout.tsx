@@ -2,7 +2,6 @@ import '@/decorator/api';
 import '@/decorator/useClasses';
 import '@/decorator/useDisplayName';
 import '@/decorator/useOptionStyling';
-import '@/decorator/useUsername';
 import React, { ReactNode } from 'react'
 import '@/public/.global.css';
 import LanguageProvider from '@/context/Language.context';
@@ -22,7 +21,6 @@ import { Api } from '@/dto/api.dto';
 declare global {
   var api: Api;
   var useClasses: (...classNames: Array<string | Array<string | string[]> | undefined | boolean>) => string;
-  var useUsername: (user: User) => string;
   var useDisplayName: (user: User) => string;
   var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
@@ -33,7 +31,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const token = cookie.get('Authorization')?.value
 
   const user = token ? await api<User>('/user/get', {
-    method: 'GET',
     headers: {
       token
     }

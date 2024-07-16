@@ -52,7 +52,7 @@ export class TournamentEntity<T = {}> implements Tournament {
       where: {
         ...args.where,
         end: {
-          lt: new Date(),
+          gt: new Date(),
         },
       },
       orderBy: {
