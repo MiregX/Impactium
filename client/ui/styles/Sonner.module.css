@@ -1,0 +1,26 @@
+/* Sonner.module.css */
+.toaster {
+  /* ваши стили для .toaster */
+}
+
+.toast {
+  background: var(--meta-black);
+  color: var(--white);
+  border: 1px solid var(--geist-border);
+  box-shadow: var(--shadow-border);
+  border-radius: var(--border-s);
+}
+
+.description {
+  color: var(--text-dimmed);
+}
+
+.actionButton {
+  background: var(--primary-color); /* замените на ваш цвет */
+  color: var(--primary-foreground-color); /* замените на ваш цвет */
+}
+
+.cancelButton {
+  background: var(--muted-color); /* замените на ваш цвет */
+  color: var(--muted-foreground-color); /* замените на ваш цвет */
+}

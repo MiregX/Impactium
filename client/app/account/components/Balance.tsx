@@ -5,13 +5,15 @@ import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { _server } from "@/decorator/api";
-import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export function Balance() {
   const { lang } = useLanguage();
   const { user } = useUser();
 
-  const button = <Button variant='default' onClick={() => redirect(`${_server()}/api/payment/top-up`)}>{lang.balance.top_up}</Button>
+  const button = <Button variant='default' onClick={() => toast(lang.not_inplemented.title, {
+    description: lang.not_inplemented.description
+  })}>{lang.balance.top_up}</Button>
 
   return (
     <Card

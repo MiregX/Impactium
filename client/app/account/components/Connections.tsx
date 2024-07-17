@@ -9,6 +9,8 @@ import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/components/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect } from "react";
+import { Logins, User } from "@/dto/User";
+import { cn } from "@/lib/utils";
 
 export function Connections() {
   const { lang } = useLanguage();
@@ -20,11 +22,11 @@ export function Connections() {
     onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
 
     useEffect(() => {
-      !user!.logins && api<Login[]>('/user/get?logins=true').then(logins => setUser((prevUser) => prevUser ? { ...prevUser, logins } : null));
+      !user!.logins && api<User<Logins>>('/user/get?logins=true').then(user => setUser(user))
     }, [user]);
 
   return (
-    <Card className={` ${s.account} ${s.connections}`} id='connections' description={{
+    <Card className={cn(s.account, s.connections)} id='connections' description={{
       text: lang.account.connections_description,
       button
     }}>

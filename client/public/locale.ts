@@ -21,6 +21,22 @@ export interface Locale {
 }
 
 const locale: Locale = {
+  not_inplemented: {
+    title: {
+      us: 'This feature is not yet implemented',
+      ru: 'Этот функционал ещё не готов',
+      ua: 'Ця функція ще не реалізована',
+      it: 'Questa funzionalità non è ancora implementata',
+      pl: 'Ta funkcja nie jest jeszcze zaimplementowana'
+    },
+    description: {
+      us: 'Expected release date: later.',
+      ru: 'Ожидаемая дата релиза: потом.',
+      ua: 'Очікувана дата релізу: пізніше.',
+      it: 'Data di rilascio prevista: più tardi.',
+      pl: 'Oczekiwana data wydania: później.'
+    }
+  },  
   _please_wait: {
     us: 'Please wait',
     ru: 'Подождите',

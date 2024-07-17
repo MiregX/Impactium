@@ -6,7 +6,6 @@ import { Username } from "./components/Username";
 import { Balance } from "./components/Balance";
 import { Email } from "./components/Email";
 import { Nav } from "./components/Nav";
-import { Login } from "@/dto/Login";
 import s from './Account.module.css';
 
 export default async function AccountPage() {

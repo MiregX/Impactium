@@ -17,7 +17,7 @@ export function TitleInput({ team, handle }: TitleInputProps) {
       <p>{lang.create_team.title + '*'}</p>
       <Input
         type="text"
-        image='https://cdn.impactium.fun/ui/text/paragraph.svg'
+        img='https://cdn.impactium.fun/ui/text/paragraph.svg'
         placeholder={lang.create_team.title}
         value={team?.title || ''}
         onChange={(e) => handle({ title: e.target.value })}

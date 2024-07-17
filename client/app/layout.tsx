@@ -17,6 +17,7 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { Header } from '@/components/Header';
 import { Api } from '@/dto/api.dto';
+import { Toaster } from '@/ui/Toaster';
 
 declare global {
   var api: Api;
@@ -47,6 +48,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <main>
                 {children}
               </main>
+              <Toaster />
               <Footer />
             </ApplicationProvider>
           </UserProvider>

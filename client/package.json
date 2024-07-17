@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "css-loader": "^6.10.0",
@@ -27,6 +28,7 @@
     "react-dom": "^18",
     "react-transition-group": "^4.4.5",
     "sharp": "^0.33.2",
+    "sonner": "^1.5.0",
     "style-loader": "^3.3.4",
     "tailwind-merge": "^2.3.0",
     "universal-cookie": "^7.1.4"

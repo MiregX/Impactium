@@ -10,6 +10,7 @@ import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { useApperand } from '@/decorator/useAperand';
+import { cn } from '@/lib/utils';
 
 interface SearchBarProps {
   search: string,
@@ -56,7 +57,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath }: Searc
   return (
     <div className={s.bar}>
       <Input
-        image={loading
+        img={loading
           ? 'https://cdn.impactium.fun/ui/action/redo.svg'
           : 'https://cdn.impactium.fun/ui/specific/mention.svg'
         }
@@ -65,7 +66,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath }: Searc
         aria-invalid="false"
         type="search"
         value={search}
-        className={loading && s.loading}
+        className={cn(loading && s.loading)}
         onChange={handleSearchChange}
       />
       <Button onClick={() => spawnBanner(apiPath === 'team' ? <CreateTeam /> : <CreateTournament />)}>{lang.create[apiPath]}</Button>

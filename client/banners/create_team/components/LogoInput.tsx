@@ -33,7 +33,6 @@ export function LogoInput({ team, handle }: LogoInputProps) {
       <div className={s.bottom}>
         <Input
           type="file"
-          label='file'
           accept="image/*"
           onChange={handleBannerChange}
           placeholder={lang.create_team.logo}

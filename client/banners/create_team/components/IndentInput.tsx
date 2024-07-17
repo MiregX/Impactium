@@ -29,7 +29,7 @@ export function IndentInput({ team, error, setTeam }: IndentInputProps) {
       <p>{lang.create_team.indent + '*'}<span className={s.error}>{error}</span></p>
       <Input
         placeholder={lang.create_team.indent}
-        image='https://cdn.impactium.fun/ui/specific/mention.svg'
+        img='https://cdn.impactium.fun/ui/specific/mention.svg'
         value={team.indent || ''}
         onChange={handleIndentChange}
         className={s.input}

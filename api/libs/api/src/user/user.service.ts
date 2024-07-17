@@ -28,18 +28,7 @@ export class UserService {
 
   async setUsername(uid: string, username: string) {
     const exist = await this.prisma.user.findFirst({
-      where: {
-        OR: [
-          { username },
-          {
-            logins: {
-              some: {
-                username
-              }
-            }
-          }
-        ]
-      }
+      where: { username }
     });
 
     if (exist) throw new UsernameTakenException();
