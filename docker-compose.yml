@@ -46,8 +46,6 @@ services:
       file: ./api/libs/api/compose-service.yml
       service: api-cockroachdb
     container_name: ${COMPOSE_PROJECT_NAME}api-cockroachdb
-    profiles:
-      - development
 
   # api-prisma:
   #   extends:
@@ -65,5 +63,3 @@ services:
     restart: on-failure
     ports:
       - 6379:6379
-    profiles:
-      - development
