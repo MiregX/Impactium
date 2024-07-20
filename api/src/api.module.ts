@@ -1,7 +1,6 @@
 import { Configuration } from '@impactium/config';
 import { ConfigModule } from '@nestjs/config';
 import { MainModule } from '@api/main/main/main.module';
-import { McsModule } from '@api/mcs';
 import { JwtModule } from '@nestjs/jwt';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -20,7 +19,6 @@ import { ResponseMiddleware } from '@api/main/application/addon/response.middlew
     }),
     ScheduleModule.forRoot(),
     MainModule,
-    McsModule,
   ],
 })
 export class ApiModule implements NestModule {

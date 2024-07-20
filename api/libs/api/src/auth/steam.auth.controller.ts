@@ -10,7 +10,9 @@ import { ConnectGuard } from './addon/connect.guard';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
 import { AuthMethodController } from './addon/auth.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth <Steam>')
 @Controller('steam')
 export class SteamAuthController implements AuthMethodController {
   constructor(

@@ -13,6 +13,7 @@ interface UserContext {
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => void,
+  assignUser: (user: User | null) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
 }
@@ -51,6 +52,8 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     setIsUserLoaded(true);
   });
 
+  const assignUser = (user: User | null) => setUser((_user) => Object.assign({}, _user, user));
+
   const userProps: UserContext = {
     user,
     setUser,
@@ -58,7 +61,8 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     getUser,
     refreshUser,
     isUserLoaded,
-    setIsUserLoaded
+    setIsUserLoaded,
+    assignUser,
   };
   return (
     <UserContext.Provider value={userProps}>

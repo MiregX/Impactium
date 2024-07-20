@@ -5,7 +5,7 @@ export function Loading() {
   const { lang } = useLanguage();
   return (
     <>
-      <img src='' />
+      <img src='https://cdn.impactium.fun/ui/action/loading.svg' />
       {lang._please_wait}
     </>
   )

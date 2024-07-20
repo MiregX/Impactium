@@ -140,3 +140,15 @@
 .lg.revert {
   padding: 0 12px 0 16px;
 }
+
+.loading {
+  pointer-events: none;
+}
+.loading > img {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% {
+    transform: rotateZ(1turn);
+  }
+}

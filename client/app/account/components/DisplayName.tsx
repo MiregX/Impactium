@@ -7,24 +7,26 @@ import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
+import { User } from "@/dto/User";
 
 export function DisplayName() {
   const { lang } = useLanguage();
-  const { user, refreshUser } = useUser();
+  const { user, refreshUser, assignUser } = useUser();
   const [ displayName, setDisplayName ] = useState<string>(useDisplayName(user!));
   const [ loading, setLoading ] = useState<boolean>(false);
 
   const send = async () => {
     setLoading(true);
-    await api<boolean>('/user/set/display-name', {
+    await api<User>('/user/set/displayname', {
       method: 'POST',
+      toast: 'user_updated_successfully',
       body: JSON.stringify({ displayName })
-    })
-    setLoading(false);
-    refreshUser();
+    }, assignUser)
+    setLoading(false)
   }
 
   const button = <Button
+    loading={loading}
     variant={useDisplayName(user!) !== displayName && DisplayNameBase.test(displayName) ? 'default' : 'disabled'}
     onClick={send}>{lang._save}</Button>
 

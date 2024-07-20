@@ -1,7 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tournament')
 @Controller('tournament')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}

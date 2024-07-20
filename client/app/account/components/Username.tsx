@@ -11,23 +11,17 @@ import { User } from "@/dto/User";
 
 export function Username() {
   const { lang } = useLanguage();
-  const { user, refreshUser } = useUser();
+  const { user, assignUser } = useUser();
   const [ username, setUsername ] = useState<string>(user!.username);
-  const [ error, setError ] = useState<string | null>();
   const [ loading, setLoading ] = useState<boolean>(false);
 
   const send = async () => {
     setLoading(true);
     await api<User>(`/user/set/username/${username}`, {
-      method: 'POST'
-    }).then(user => {
-      if (user) {
-        setLoading(false);
-        refreshUser();
-      } else {
-        setError(lang.username_invalid_format)
-      }
-    });
+      method: 'POST',
+      toast: 'user_updated_successfully'
+    }, assignUser);
+    setLoading(false);
   }
 
   const button = <Button

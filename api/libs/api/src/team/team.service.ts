@@ -6,7 +6,7 @@ import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity'
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamLimitException } from './addon/team.error';
+import { TeamAlreadyExist, TeamLimitException } from '../application/addon/error';
 
 @Injectable()
 export class TeamService {

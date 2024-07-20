@@ -1,6 +1,6 @@
 import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
 import { Identifier } from '@impactium/pattern'
-import { IndentInvalidFormat, IndentNotProvided } from './indent.error';
+import { IndentInvalidFormat, IndentNotProvided } from './error';
 
 @Injectable()
 export class IndentValidationPipe implements PipeTransform {

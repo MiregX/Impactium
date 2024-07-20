@@ -1,4 +1,5 @@
 import { DisplayNameBase } from "@impactium/pattern";
+import { ApiProperty } from "@nestjs/swagger";
 import { $Enums, Prisma } from "@prisma/client";
 import { IsNotEmpty, Matches } from "class-validator";
 
@@ -13,6 +14,7 @@ export class UpdateUserDto implements Prisma.UserUpdateInput {
 }
 
 export class UpdateUserDisplayNameDto implements Prisma.UserUpdateInput {
+  @ApiProperty()
   @IsNotEmpty()
   @Matches(DisplayNameBase, { message: 'displayName_invalid_format' })
   displayName: string;

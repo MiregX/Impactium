@@ -3,7 +3,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma, User } from '@prisma/client';
-import { UsernameTakenException } from './addon/user.error';
+import { UsernameTakenException } from '../application/addon/error';
 
 @Injectable()
 export class UserService {
@@ -35,15 +35,18 @@ export class UserService {
 
     return this.prisma.user.update({
       where: { uid },
-      data: { username }
+      data: { username },
+      select: UserEntity.select()
     });
   }
 
-  setDisplayName(uid: string, displayName: string) {
-    return this.prisma.user.update({
+  async setDisplayName(uid: string, displayName: string) {
+    const user = await this.prisma.user.update({
       where: { uid },
-      data: { displayName }
+      data: { displayName },
+      select: UserEntity.select()
     });
+    return UserEntity.fromPrisma(user);
   }
   
   signJWT(uid: string, email: string): string {

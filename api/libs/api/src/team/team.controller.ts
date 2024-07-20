@@ -8,7 +8,9 @@ import { TeamGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Team')
 @Controller('team')
 export class TeamController {
   constructor(

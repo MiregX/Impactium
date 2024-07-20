@@ -1,4 +1,4 @@
-import { EnvironmentKeyNotProvided } from '@api/main/application/addon/environment.error';
+import { EnvironmentKeyNotProvided } from '@api/main/application/addon/error';
 import { AuthPayload } from '@api/main/auth/addon/auth.entity';
 import { dataset } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';

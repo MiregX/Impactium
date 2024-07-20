@@ -32,7 +32,7 @@ export function InputMin({ state, setState, before, regExp }: InputMinProps) {
       {before && <p>{before}</p>}
       <input 
         className={input._} 
-        value={state} 
+        value={state || ''} 
         onChange={handleChange} 
         onFocus={handleFocus}
       />

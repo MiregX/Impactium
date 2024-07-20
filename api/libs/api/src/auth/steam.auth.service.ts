@@ -3,9 +3,9 @@ import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
-import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
 import { UUID } from 'crypto';
 import { Request } from 'express'
+import { EnvironmentKeyNotProvided } from '../application/addon/error';
 const SteamAuth = require('node-steam-openid');
 
 @Injectable()

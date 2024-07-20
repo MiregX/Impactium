@@ -10,7 +10,9 @@ import { UserEntity } from '@api/main/user/addon/user.entity';
 import { User } from '@api/main/user/addon/user.decorator';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { AuthMethodController } from './addon/auth.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth <Telegram>')
 @Controller('telegram')
 export class TelegramAuthController implements AuthMethodController {
   constructor(

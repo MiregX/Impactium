@@ -1,3 +1,6 @@
+import { error, ErrorLocale } from "./error";
+import { success, SuccessLocale } from "./success";
+
 export interface Translation {
   ua: string;
   it: string;
@@ -6,7 +9,7 @@ export interface Translation {
   pl: string;
 }
 
-const template = {
+const template: Translation = {
   us: '',
   ru: '',
   ua: '',
@@ -14,29 +17,16 @@ const template = {
   pl: ''
 }
 
-export interface Locale {
-  [key: string]: {
-    [key: string]: string | Translation;
-  } | Array<Translation>;
+export type Locale = Record<string, Translation | Record<string, LocaleUnit | Translation>> & {
+  error: ErrorLocale
+  success: SuccessLocale
+}
+
+export interface LocaleUnit {
+  [key: string]: Translation;
 }
 
 const locale: Locale = {
-  not_inplemented: {
-    title: {
-      us: 'This feature is not yet implemented',
-      ru: 'Этот функционал ещё не готов',
-      ua: 'Ця функція ще не реалізована',
-      it: 'Questa funzionalità non è ancora implementata',
-      pl: 'Ta funkcja nie jest jeszcze zaimplementowana'
-    },
-    description: {
-      us: 'Expected release date: later.',
-      ru: 'Ожидаемая дата релиза: потом.',
-      ua: 'Очікувана дата релізу: пізніше.',
-      it: 'Data di rilascio prevista: più tardi.',
-      pl: 'Oczekiwana data wydania: później.'
-    }
-  },  
   _please_wait: {
     us: 'Please wait',
     ru: 'Подождите',
@@ -721,71 +711,8 @@ const locale: Locale = {
       pl: 'Doładuj saldo'
     }    
   },
-  error: {
-    displayName_invalid_format: {
-      us: 'Bad nickname. Don\'t cause us trouble, or we\'ll bite.',
-      ru: 'Хреновый никнейм. Не создавай нам проблем, а то откусим яйца.',
-      ua: 'Паршивий нікнейм. Не створюй нам проблем, а то ми відкусимо яйця.',
-      it: 'Brutto soprannome. Non crearci problemi, o morderemo.',
-      pl: 'Zły pseudonim. Nie sprawiaj nam problemów, bo cię ugryziemy.'
-    },
-    indent_not_provided: {
-      us: 'It seems you forgot to provide an ID.',
-      ru: 'Кажется ты забыл ввести айди',
-      ua: 'Здається, ви забули ввести ідентифікатор',
-      it: 'Sembra che tu abbia dimenticato di fornire un ID',
-      pl: 'Wygląda na to, że zapomniałeś podać identyfikator'
-    },
-    indent_invalid_format: {
-      us: 'Invalid ID format. This isn’t Instagram, we have standards here.',
-      ru: 'Хреновый формат айди. Это тебе не инстаграм, тут есть стандарты',
-      ua: 'Поганий формат ідентифікатора. Це тобі не Інстаграм, тут є стандарти',
-      it: 'Formato ID non valido. Questo non è Instagram, qui abbiamo standard',
-      pl: 'Nieprawidłowy format identyfikatora. To nie Instagram, mamy tu standardy'
-    },
-    team_already_exists: {
-      us: 'A team with this ID already exists, please come up with something new.',
-      ru: 'Команда с таким айди уже существует, придумайте что-то новое',
-      ua: 'Команда з таким ідентифікатором вже існує, придумайте щось нове',
-      it: 'Un team con questo ID esiste già, per favore pensa a qualcosa di nuovo',
-      pl: 'Zespół z takim identyfikatorem już istnieje, wymyśl coś nowego'
-    },
-    team_limit_exception: {
-      us: 'You’ve hit the team limit. Maximum is 3 teams.',
-      ru: 'Всё. Приехали. У вас лимит по командам. Максимум 3 команды',
-      ua: 'У вас ліміт по командам. Максимум 3 команди',
-      it: 'Hai raggiunto il limite del team. Il massimo è di 3 team',
-      pl: 'Osiągnąłeś limit zespołów. Maksymalnie 3 zespoły'
-    },
-    unallowed_file_format: {
-      us: 'Only PNG, JPG, and SVG formats are allowed.',
-      ru: 'Я разрешаю вам выгружать файлы только в формате PNG, JPG, SVG',
-      ua: 'Я дозволяю вам завантажувати файли лише у форматах PNG, JPG, SVG',
-      it: 'Permetto solo file nei formati PNG, JPG e SVG',
-      pl: 'Dozwolone są tylko formaty PNG, JPG i SVG'
-    },
-    unallowed_file_size: {
-      us: 'File too large. Please upload a file smaller than 1 MB.',
-      ru: 'Ого какой большой. Загрузи в меня файл меньше 1 мегабайта',
-      ua: 'Ого який великий. Завантажте файл менший за 1 мегабайт',
-      it: 'Il file è troppo grande. Carica un file più piccolo di 1 MB',
-      pl: 'Plik za duży. Prześlij plik mniejszy niż 1 MB'
-    },
-    unallowed_file_metadata: {
-      us: 'Images must be up to 512x512 pixels.',
-      ru: 'Картинки принимаются только до 512 на 512 пикселей',
-      ua: 'Зображення приймаються тільки до 512 на 512 пікселів',
-      it: 'Le immagini devono essere fino a 512x512 pixel',
-      pl: 'Obrazy muszą mieć maksymalnie 512x512 pikseli'
-    },
-    ftp_upload_error: {
-      us: 'Error uploading file to the cloud. If this is an actual error, contact @MiregX.',
-      ru: 'Ошибка выгрузки файла в облако. Если это реально ошибка - пиши ему: @MiregX',
-      ua: 'Помилка завантаження файлу в хмару. Якщо це справді помилка - пишіть йому: @MiregX',
-      it: 'Errore durante il caricamento del file sul cloud. Se questo è un errore effettivo, contatta @MiregX',
-      pl: 'Błąd przesyłania pliku do chmury. Jeśli to faktyczny błąd, skontaktuj się z @MiregX'
-    }
-  }
+  error,
+  success
 }
 
 export default locale;

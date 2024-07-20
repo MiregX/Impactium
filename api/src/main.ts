@@ -4,6 +4,7 @@ import { ApiModule } from './api.module';
 import * as cookieParser from 'cookie-parser';
 import { Configuration } from '@impactium/config';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function run() {
   const api = await NestFactory.create<NestExpressApplication>(
@@ -23,6 +24,11 @@ async function run() {
   }));
 
   api.use(cookieParser(process.env.JWT_SECRET));
+
+  SwaggerModule.setup('api', api, SwaggerModule.createDocument(api, new DocumentBuilder()
+    .setTitle('API | Impactium')
+    .build()
+  ));
 
   api.listen(process.env.API_PORT || 3001, '0.0.0.0');
 }

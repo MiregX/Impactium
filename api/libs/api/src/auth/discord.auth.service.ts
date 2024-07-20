@@ -6,7 +6,7 @@ import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
 import { UUID } from 'crypto';
-import { EnvironmentKeyNotProvided } from '../application/addon/environment.error';
+import { EnvironmentKeyNotProvided } from '../application/addon/error';
 
 @Injectable()
 export class DiscordAuthService extends DiscordOauth2 implements AuthMethodService {

@@ -2,7 +2,9 @@ import { Controller, Get, UnauthorizedException } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Configuration } from '@impactium/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Application')
 @Controller('application')
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}

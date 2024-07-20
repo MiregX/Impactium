@@ -10,7 +10,9 @@ import { UUID } from 'crypto';
 import { cookieSettings } from '@impactium/pattern';
 import { AuthMethodController } from './addon/auth.interface';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth <Discord>')
 @Controller('discord')
 export class DiscordAuthController implements AuthMethodController {
   constructor(

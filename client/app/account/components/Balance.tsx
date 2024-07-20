@@ -11,8 +11,8 @@ export function Balance() {
   const { lang } = useLanguage();
   const { user } = useUser();
 
-  const button = <Button variant='default' onClick={() => toast(lang.not_inplemented.title, {
-    description: lang.not_inplemented.description
+  const button = <Button variant='default' onClick={() => toast(lang.error.not_inplemented_title, {
+    description: lang.error.not_inplemented_description
   })}>{lang.balance.top_up}</Button>
 
   return (

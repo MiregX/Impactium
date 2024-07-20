@@ -7,14 +7,9 @@ export interface ResponseBase<T = any> {
   data: T;
 }
 
-export interface ResponseSuccess<T = any> extends ResponseBase<T> {
-  status: number;
-}
+export interface ResponseSuccess<T = any> extends ResponseBase<T> {};
 
 export interface ResponseError extends ResponseBase<{
   statusCode: number;
   message: string
-}> {
-  status: number;
-}
-
+}> {};
