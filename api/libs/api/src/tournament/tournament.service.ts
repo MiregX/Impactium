@@ -32,7 +32,7 @@ export class TournamentService implements OnModuleInit {
     friday.setUTCHours(20, 0, 0, 0);
     
     const fridays = Array.from({ length: 4 }, (_, i) => addWeeks(friday, i));
-  
+
     fridays.forEach(friday => {
       this.prisma.tournament.findFirst({
         where: {
@@ -66,6 +66,6 @@ export class TournamentService implements OnModuleInit {
         live: 'https://twitch.tv/impactium',
         prize: 50
       }
-    });
+    }).then(console.log);
   }
 };
