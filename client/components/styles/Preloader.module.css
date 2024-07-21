@@ -5,8 +5,8 @@
   z-index: 9;
   height: 100vh;
   width: 100%;
-  background: var(--black);
-  transition: background 1.25s var(--transition) 1.5s;
+  background-color: var(--black);
+  transition: background-color 1.25s var(--transition) 1.5s;
   align-items: center;
   justify-content: center;
 }
@@ -38,8 +38,8 @@
   0% {
   }
   100% {
-    left: 39px;
-    transform: translate(0%, -50%);
+    left: 16;
+    transform: translate(0, -50%);
     top: 32px;
   }
 }

@@ -45,8 +45,8 @@ model User {
 
 model Login {
   uid         String
-  id          String    @id @default(uuid())
   user        User      @relation(fields: [uid], references: [uid])
+  id          String    @id @default(uuid())
   type        LoginType
   on          DateTime  @default(now())
   avatar      String?

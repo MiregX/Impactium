@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <UserProvider prefetched={user}>
             <ApplicationProvider>
               <Header />
-              {Configuration.isProductionMode() && <Preloader use={!!cookie.get('uuid')} />}
+              {/* <Preloader use={!!cookie.get('uuid')} /> */}
               <main>
                 {children}
               </main>

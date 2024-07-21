@@ -1,24 +1,20 @@
 'use client'
-import { useLanguage } from '@/context/Language.context'
 import s from '../LoginBanner.module.css'
 import { _server } from '@/decorator/api'
 import Link from 'next/link';
-import Cookies from 'universal-cookie';
 import { Badge, BadgeType } from '@/ui/Badge';
-export function LoginMethod({ Type, disabled }: {
+
+interface LoginMethodProps {
   Type: string,
   disabled?: boolean
-}) {
-  const { lang } = useLanguage();
-  const cookie = new Cookies();
-  const type = Type.toLowerCase();
+}
 
-  const setup = () => {
-    cookie.set('login_method', type);
-  }
+export function LoginMethod({ Type, disabled }: LoginMethodProps) {
+  const type = Type.toLowerCase();
 
   return (
     <Link
+      prefetch={false}
       href={`${_server()}/api/oauth2/${type}/login`}
       className={`${s.method} ${disabled && s.disabled}`}>
         <img src={`https://cdn.impactium.fun/tech/${type}.png`} />

@@ -40,7 +40,7 @@ export class AuthService {
       ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
       : (uid
         ? await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
-        : await this.createUser({ id, type, avatar, displayName, uid, email, on: new Date() }, email)
+        : await this.createUser({ id, type, avatar, displayName, email, on: new Date() }, email)
       )
     )
     return this.parseToken(this.userService.signJWT(result.uid, email));
@@ -83,7 +83,7 @@ export class AuthService {
     return this.prisma.login.create({ data });
   }
 
-  private createUser(data: Required<AuthPayload>, email?: string): Promise<UserEntity> {
+  private createUser(data: AuthPayload, email?: string): Promise<UserEntity> {
     return this.prisma.user.create({
       data: {
         email,
