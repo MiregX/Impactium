@@ -9,8 +9,8 @@ export function _server(v?: boolean) {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
     ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
     : v
-      ? process.env.NUMERIC_HOST || 'http://0.0.0.0:3001'
-      : process.env.SYMBOLIC_HOST || 'http://localhost:3001'
+      ? process.env.NUMERIC_HOST || 'https://impactium.fun'
+      : process.env.SYMBOLIC_HOST || 'https://impactium.fun'
 }
 
 const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promise<λ<ResponseBase<T>> | T | null> {
