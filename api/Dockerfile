@@ -21,8 +21,6 @@ RUN npm i
 
 RUN npm run prisma:generate
 
-RUN npm run prisma:deploy
-
 CMD [ "npm", "run", "start:debug" ]
 
 ##################
