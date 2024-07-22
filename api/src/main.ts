@@ -34,3 +34,11 @@ async function run() {
 }
 
 run();
+
+process.on('uncaughtException', function (error: Error) {
+  console.log("\x1b[31m", "Exception: ", error, "\x1b[0m");
+});
+
+process.on('unhandledRejection', function (error: Error, p) {
+  console.log("\x1b[31m","Error: ", error.message, "\x1b[0m");
+});

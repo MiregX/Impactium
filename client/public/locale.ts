@@ -1,5 +1,6 @@
 import { error, ErrorLocale } from "./error";
 import { success, SuccessLocale } from "./success";
+import { landing } from "./landing";
 
 export interface Translation {
   ua: string;
@@ -19,7 +20,8 @@ const template: Translation = {
 
 export type Locale = Record<string, Translation | Record<string, LocaleUnit | Translation>> & {
   error: ErrorLocale
-  success: SuccessLocale
+  success: SuccessLocale,
+  landing: LocaleUnit
 }
 
 export interface LocaleUnit {
@@ -712,7 +714,8 @@ const locale: Locale = {
     }    
   },
   error,
-  success
+  success,
+  landing
 }
 
 export default locale;

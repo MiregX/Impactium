@@ -11,13 +11,14 @@
 }
 .image {
   padding: 0;
-  gap: var(--p2);
+  gap: 8px;
 }
 .image img {
   height: 20px;
   padding-left: 8px; 
 }
 .image input {
+  width: 100%;
   padding: 8px 12px 8px 0;
 }
 

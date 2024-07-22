@@ -2,7 +2,6 @@
 import { Pagination } from "./Pagination";
 import s from './styles/TournamentList.module.css'
 import { Tournament } from "@/dto/Tournament";
-import { User } from "@/dto/User";
 import { usePagination } from "@/decorator/usePagination";
 import React from "react";
 import { PanelTemplate } from "./PanelTempate";
@@ -21,6 +20,7 @@ import {
   CarouselPrevious,
 } from "@/ui/Carousel"
 import { Card } from "@/ui/Card";
+import { map as organizersMap } from '@/public/landing'
 
 export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
   const { spawnBanner } = useApplication();
@@ -30,7 +30,6 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
     itemsPerPage: 3,
     buttons: 5
   });
-  
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
@@ -40,10 +39,14 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
           <h4>{lang.tournament.for_organizers}</h4>
           <Carousel className={s.carousel}>
           <CarouselContent>
-            {Array.from({ length: 5 }).map((_, index) => (
+            {organizersMap.map(({ image, title, description }, index) => (
               <CarouselItem key={index}>
                 <Card className={s.card} id={index}>
-                  <span>{index + 1}</span>
+                  <div className={s.heading}>
+                    <Button size='icon' className={s.icon} disabled img={image} />
+                    <h3>{lang.landing[title]}</h3>
+                  </div>
+                  <p>{lang.landing[description]}</p>
                 </Card>
               </CarouselItem>
             ))}
@@ -62,13 +65,7 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
         <div className={s.right}>
           <Image width={512} height={512} className={s.lines} src='https://cdn.impactium.fun/bgs/line-shape-fhd.png' alt='' />
           <h4>{lang.team.for_teams}</h4>
-          <ul>
-            <li>Участие в 1 клик</li>
-            <li>Каталог турниров</li>
-            <li>Гарантированный приз за активность</li>
-            <li>Удобный интерфейс менеджмента</li>
-            <li>Приватные чаты с другими командами</li>
-          </ul>
+
           <div className={s.button_wrapper}>
             <Button
               className={s.create_team}

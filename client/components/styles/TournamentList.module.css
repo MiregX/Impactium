@@ -127,14 +127,42 @@
 }
 .card {
   height: 100%;
-  background: transparent !important;
+  background: #ffffff73 !important;
+  overflow: hidden;
   backdrop-filter: blur(5px);
+}
+.card .icon {
+  background-color: black;
+  min-width: 36px;
+}
+.card .icon img {
+  filter: var(--filter-to-white);
+}
+.card .heading {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--card-gap);
+}
+.card .heading h3 {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  font-weight: 500;
+}
+.card p {
+  flex: 1;
+  text-shadow: 0px 1px 2px #ffffff24;
+  font-weight: 500 !important;
+  font-size: 16px !important;
 }
 .card > div {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  padding: 16px;
 }
 .carousel {
   width: calc(100% - 64px - 64px);
