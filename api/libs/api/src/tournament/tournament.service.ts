@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { TournamentStandart } from './addon/tournament.standart';
 import { TournamentEntity, TournamentEntityWithTeams } from './addon/tournament.entity';
 import { addWeeks, addDays, getMonth } from 'date-fns';
+import { UserEntity } from '../user/addon/user.entity';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -27,30 +28,33 @@ export class TournamentService implements OnModuleInit {
 
   async insertBattleCups() {
     const today = new Date();
-    const friday = new Date(today);
-    friday.setUTCDate(today.getUTCDate() + (today.getUTCDay() - 2) % 7);
-    friday.setUTCHours(20, 0, 0, 0);
-    
-    const fridays = Array.from({ length: 4 }, (_, i) => addWeeks(friday, i));
 
-    fridays.forEach(friday => {
+    const nextFriday = new Date(today);
+    nextFriday.setUTCDate(today.getUTCDate() + ((5 - today.getUTCDay() + 7) % 7));
+    nextFriday.setUTCHours(20, 0, 0, 0);
+  
+    const fridays = Array.from({ length: 4 }, (_, i) => addWeeks(nextFriday, i));
+  
+    for (const friday of fridays) {
       this.prisma.tournament.findFirst({
         where: {
           ownerId: 'system',
           start: friday,
         },
-      }).then(async battleCup => {
-        if (!battleCup) {
-          this.createBattleCup(friday);
-        }
-      });
+      }).then(battleCup => !battleCup && this.createBattleCup(friday));
+    }
+  }
+
+  delete(user: UserEntity, id: string) {
+    return this.prisma.tournament.delete({
+      where: { id, ownerId: user.uid }
     });
-  }  
+  }
 
   private createBattleCup(date: Date) {
     this.prisma.tournament.create({
       data: {
-        banner: 'https://cdn.impactium.fum/logo/battle_cup.png',
+        banner: 'https://cdn.impactium.fun/logo/battle_cup.png',
         title: `Friday Battle Cup ${getMonth(date) + 1}/${date.getDate()}`,
         start: date,
         end: addDays(date, 1),

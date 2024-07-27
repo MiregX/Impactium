@@ -1,0 +1,31 @@
+.tournaments {
+  max-width: 30%;
+}
+
+.tournaments > div {
+  display: flex;
+  flex-direction: column;
+}
+.tournaments .unit {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  gap: var(--card-gap);
+}
+.tournaments .unit .sub {
+  flex: 1;
+  display: flex;
+  height: 36px;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.tournaments .unit .sub p {
+  color: var(--text-dimmed);
+  font-size: 12px;
+}
+.tournaments .unit .sub .bold {
+  font-weight: 500;
+  color: var(--white);
+  font-size: 14px;
+}

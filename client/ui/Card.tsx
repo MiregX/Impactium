@@ -11,12 +11,12 @@ export interface Card {
   description?: string | DescriptionOptions;
   children: any;
   className?: string | string[];
-  id: string | number;
+  id?: string | number;
 }
 
 export function Card({ description, id, children, className }: Card) {
   return (
-    <div className={cn(className, card._)} id={id.toString()}>
+    <div className={cn(className, card._)} id={id?.toString()}>
       <div className={card.content}>
         {children}
       </div>

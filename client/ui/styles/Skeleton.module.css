@@ -1,0 +1,28 @@
+.skeleton {
+  background-color: var(--gray24);
+  animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+.avatar {
+  border-radius: var(--round);
+}
+
+.short {
+  max-width: 64px !important;
+}
+
+.icon {
+  max-height: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  min-width: 36px !important;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}

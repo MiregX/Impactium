@@ -1,6 +1,7 @@
 import { error, ErrorLocale } from "./error";
 import { success, SuccessLocale } from "./success";
 import { landing } from "./landing";
+import Cookies from "universal-cookie";
 
 export interface Translation {
   ua: string;
@@ -488,7 +489,14 @@ const locale: Locale = {
       ua: "Змагань з такою назвою не знайдено",
       it: "Nessun torneo trovato con questo nome",
       pl: "Nie znaleziono turniejów o takiej nazwie"            
-    }    
+    },
+    delete: {
+      us: 'Delete tournament',
+      ru: 'Удалить турнир',
+      ua: 'Видалити змагання',
+      it: 'Elimina torneo',
+      pl: 'Usuń turniej'
+    },
   },
   already_exists: {
     us: 'A team with this ID already exists, please choose another one',
@@ -719,3 +727,29 @@ const locale: Locale = {
 }
 
 export default locale;
+
+// const lang: Locale = new Proxy(locale, {
+//   get(target: Locale, prop: string, receiver: any) {
+//     console.log(new Cookies().getAll())
+//     const currentLanguage = new Cookies().get('_language') || 'us';
+
+//     const handleLocale = (obj: any): any => {
+//       return new Proxy(obj, {
+//         get(innerTarget: any, innerProp: string) {
+//           const value = innerTarget[innerProp];
+//           const isObject = typeof value === 'object';
+
+//           if (value && isObject && currentLanguage in value) {
+//             return value[currentLanguage];
+//           }
+//           if (typeof value === 'object' && value !== null) {
+//             return handleLocale(value);
+//           }
+//           return value;
+//         }
+//       });
+//     };
+
+//     return handleLocale(target[prop]);
+//   }
+// });

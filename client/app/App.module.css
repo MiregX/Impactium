@@ -16,6 +16,10 @@
   flex-direction: column;
   justify-content: flex-start !important;
 }
+.useStart {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
 .center {
   align-items: center;
 }

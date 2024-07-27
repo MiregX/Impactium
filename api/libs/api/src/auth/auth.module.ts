@@ -13,6 +13,8 @@ import { SteamAuthController } from './steam.auth.controller';
 import { SteamAuthService } from './steam.auth.service';
 import { DiscordAuthController } from './discord.auth.controller';
 import { DiscordAuthService } from './discord.auth.service';
+import { ConnectGuard } from './addon/connect.guard';
+import { AdminGuard } from './addon/admin.guard';
 
 @Module({
   imports: [
@@ -35,7 +37,9 @@ import { DiscordAuthService } from './discord.auth.service';
     SteamAuthService,
     AuthService,
     AuthGuard,
+    ConnectGuard,
+    AdminGuard
   ],
-  exports: [AuthService, AuthGuard],
+  exports: [AuthService, AuthGuard, ConnectGuard, AdminGuard],
 })
 export class AuthModule {}

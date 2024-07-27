@@ -19,9 +19,11 @@ interface Panel {
   center?: true;
   // Включить AuthGuard?
   useAuthGuard?: true;
+  // Смещает контент в левый верхний угол
+  useStart?: true
 }
 
-export function PanelTemplate({ children, className, title, fullscreen, useColumn, center, useAuthGuard }: Panel) {
+export function PanelTemplate({ children, className, title, fullscreen, useColumn, center, useAuthGuard, useStart }: Panel) {
   const { lang } = useLanguage();
   const { user } = useUser();
   
@@ -30,7 +32,7 @@ export function PanelTemplate({ children, className, title, fullscreen, useColum
   });
 
   return(
-    <div className={`${s.panel} ${useClasses(className)} ${center && s.center} ${title && s.title} ${fullscreen && s.fullscreen} ${useColumn && s.useColumn}`}>
+    <div className={`${s.panel} ${useClasses(className)} ${center && s.center} ${title && s.title} ${fullscreen && s.fullscreen} ${useColumn && s.useColumn} ${useStart && s.useStart}`}>
       {title && <div className={s.title_wrapper}><h3 className={s.title}>{title.startsWith('$') ? lang[title.substring(1)] : title}</h3></div>}
       {children}
       <img src='https://cdn.impactium.fun/el/way.svg'/>
