@@ -4,7 +4,7 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    restart: on-failure
+    restart: always
     ports:
       - 80:80
     depends_on:
@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: ./client/Dockerfile
       target: production
-    restart: on-failure
+    restart: always
     environment:
       - PORT=${APP_PORT}
       - DEBUG_PORT=${APP_DEBUG_PORT}
@@ -39,7 +39,7 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
       target: production
-    restart: on-failure
+    restart: always
     environment:
       - PORT=${API_PORT}
       - DEBUG_PORT=${API_DEBUG_PORT}
@@ -72,7 +72,7 @@ services:
   redis:
     container_name: redis
     image: redis:latest
-    restart: on-failure
+    restart: always
     ports:
       - 6379:6379
     networks:
