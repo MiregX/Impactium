@@ -24,7 +24,7 @@ export function DeleteTournaments() {
   }
 
   return (
-    <Card className={s.tournaments}>
+    <Card className={s.delete}>
       <h6>{lang.tournament.delete}</h6>
       {tournaments ? tournaments?.map(tournament => (
         <div className={s.unit} key={tournament.id}>

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
@@ -9,6 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 
 @ApiTags('Team')
 @Controller('team')
@@ -39,6 +40,15 @@ export class TeamController {
     return value.length === 25 || !value.includes(' ')
       ? await this.teamService.findManyByUid(value)
       : await this.teamService.findManyByTitleOrIndent(value)
+  }
+  
+  @Delete('delete/:indent')
+  @UseGuards(AdminGuard)
+  delete(
+    @Param('indent') indent: string,
+    @User() user: UserEntity,
+  ) {
+    return this.teamService.delete(user, indent);
   }
 
   @Post('create/:indent')

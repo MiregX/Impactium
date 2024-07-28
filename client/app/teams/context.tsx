@@ -6,18 +6,18 @@ import { Children } from "@/dto/Children";
 const TeamsContext = createContext<TeamsContext | undefined>(undefined);
 
 interface TeamsContext {
-  teams: Team[],
+  teams: Team[] | null,
   setTeams: (teams: Team[]) => void
 }
 
 type TeamsProps = Children & {
-  prefetched: Team[]
+  prefetched: Team[] | null
 }
 
 export const useTeams = () => useContext(TeamsContext) || (() => {throw new Error()})();
 
 export function TeamsProvider({ children, prefetched }: TeamsProps) {
-  const [teams, setTeams] = useState(prefetched || []);
+  const [teams, setTeams] = useState<Team[] | null>(prefetched);
 
   return (
     <TeamsContext.Provider value={{

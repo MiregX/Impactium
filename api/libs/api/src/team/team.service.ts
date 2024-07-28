@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
 import { TeamAlreadyExist, TeamLimitException } from '../application/addon/error';
+import { UserEntity } from '../user/addon/user.entity';
 
 @Injectable()
 export class TeamService {
@@ -60,6 +61,12 @@ export class TeamService {
         title: team.title
       }
     });
+  }
+  
+  delete(user: UserEntity, indent: string) {
+    return this.prisma.team.delete({
+      where: { indent, ownerId: user.uid }
+    })
   }
 
   async setBanner(indent: string, banner: Express.Multer.File) {

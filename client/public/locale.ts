@@ -445,7 +445,14 @@ const locale: Locale = {
       ua: 'Здається тут реально ніхуя немає. Пиздець...',
       it: 'Non credo che ci sia davvero un cazzo di niente qui. Cazzo...',
       pl: 'Nie wydaje mi się, żeby było tu cokolwiek pieprzonego. Kurwa...'
-    }
+    },
+    delete: {
+      us: 'Delete team',
+      ru: 'Удалить команду',
+      ua: 'Видалити команду',
+      it: 'Elimina squadra',
+      pl: 'Usuń drużynu'
+    },
   },
   tournament: {
     for_organizers: {
