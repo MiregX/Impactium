@@ -11,6 +11,7 @@ import React from 'react';
 import { useTeams } from './context';
 import { Recomendations } from '@/components/Recomentations';
 import { SearchBar } from '@/components/SearchBar';
+import { UserEntity } from '@/dto/User';
 
 export default function TeamsPage() {
   const { teams, setTeams } = useTeams();
@@ -19,7 +20,13 @@ export default function TeamsPage() {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    !teams && api<Team[]>('/team/get').then(teams => setTeams(teams || []));
+    !teams && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
+      ...team,
+      members: team.members?.map(member =>({
+        ...member,
+        user: new UserEntity(member.user)
+      }))
+    })) : []));;
   }, [teams])
 
   return (

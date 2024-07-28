@@ -20,7 +20,7 @@ export function LeaveComment() {
 
   return (
     <div className={s.leave}>
-      <Avatar size={32} src={user!?.login.avatar} alt={useDisplayName(user!)} />
+      <Avatar size={32} src={user?.avatar || user?.login?.avatar || null} alt={user!.displayName} />
       <Input
         placeholder={lang.comments.leave}
         className={s.input} />

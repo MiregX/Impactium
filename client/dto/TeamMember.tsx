@@ -1,12 +1,12 @@
 import { TeamMemberRoles } from "./TeamMemberRoles"
-import { User } from "./User"
+import { User, UserEntity } from "./User"
 
 export interface TeamMember {
   id: string
   uid: string
   tid: string
   roles: TeamMemberRoles[]
-  user: User
+  user: UserEntity
 }
 
 

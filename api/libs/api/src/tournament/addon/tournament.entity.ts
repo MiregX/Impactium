@@ -40,7 +40,7 @@ export class TournamentEntity<T = {}> implements Tournament {
         live: true,
         prize: true,
         teams: {
-          select: TeamEntity.selectWithMembers()
+          select: TeamEntity.select({ members: true })
         },
       },
     });

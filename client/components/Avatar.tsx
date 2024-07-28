@@ -4,7 +4,7 @@ import { MouseEventHandler, useState } from 'react';
 
 interface Avatar {
   size: number | `${number}`
-  src: string | null
+  src: string | null | undefined;
   alt: string
   onClick?: MouseEventHandler
   className?: string | string[]

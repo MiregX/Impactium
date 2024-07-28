@@ -2,7 +2,7 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
 import { Checkout, CreateTeamDto, UpdateTeamDto } from './addon/team.dto';
-import { TeamEntity, TeamEntity_ComposedWithMembers } from './addon/team.entity';
+import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
@@ -97,7 +97,7 @@ export class TeamService {
           { indent: { contains: value.toLowerCase() } }
         ]
       },
-      select: TeamEntity.selectWithMembers(),
+      select: TeamEntity.select({ members: true }),
       take: TeamStandart.DEFAULT_PAGINATION_LIMIT
     })
   }
@@ -105,22 +105,13 @@ export class TeamService {
   async pagination(
     limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
-  ): Promise<TeamEntity_ComposedWithMembers[]> {
+  ): Promise<TeamEntity[]> {
     return this.prisma.team.findMany({
-      select: TeamEntity.selectWithMembers(),
+      select: TeamEntity.select({ members: true }),
       take: limit,
       skip: skip,
-    }).then(response => response.map(team => ({
-      ...team,
-      members: team.members.map(member => ({
-        ...member,
-        avatar: member.user.logins[0]?.avatar || '',
-        user: undefined
-      }))
-    })));
+    });
   }
-  
-  
 
   private async uploadBanner(indent: string, banner: Express.Multer.File) {
     const stream = new Readable();

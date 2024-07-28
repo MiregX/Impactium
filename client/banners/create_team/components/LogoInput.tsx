@@ -4,6 +4,7 @@ import s from '../CreateTeam.module.css'
 import { useLanguage } from '@/context/Language.context';
 import { useState } from 'react';
 import { Team } from '@/dto/Team';
+import { Label } from '@/ui/Label';
 
 interface LogoInputProps {
   team: Team,
@@ -32,12 +33,13 @@ export function LogoInput({ team, handle }: LogoInputProps) {
       <p>{lang.create_team.logo_title}</p>
       <div className={s.bottom}>
         <Input
-          type="file"
+          type='file'
+          id='file'
           accept="image/*"
           onChange={handleBannerChange}
           placeholder={lang.create_team.logo}
           />
-          {bannerPreview && <div className={s.banner_preview}>
+        {bannerPreview && <div className={s.banner_preview}>
           <img src={bannerPreview} />
         </div>}
       </div>

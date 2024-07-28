@@ -7,7 +7,6 @@ import React from "react";
 import { TeamMember } from "@/dto/TeamMember";
 import { Avatar } from "@/components/Avatar";
 import { TeamMemberRoles } from "@/dto/TeamMemberRoles";
-import { useAvatar } from "@/decorator/useAvatar";
 
 export function MembersForTeam() {
   const { lang } = useLanguage();
@@ -16,18 +15,20 @@ export function MembersForTeam() {
   return (
     <Panel heading={lang.team.members}>
       <React.Fragment>
-        {team.members && team.members.map((member: TeamMember, index: number) => (
+        {team.members && team.members.map((member: TeamMember, index: number) => {
+          return (
           <div key={index} className={s.unit}>
             <Avatar
               size={32}
-              src={useAvatar(member.user)}
-              alt={useDisplayName(member.user)} />
-            <p>{useDisplayName(member.user)}</p>
+              src={member.user.avatar}
+              alt={member.user.displayName} />
+            <p>{member.user.displayName}</p>
             <p>{member.roles.map((role: TeamMemberRoles, index: number) => (
               <i key={index}><img src={`https://cdn.impactium.fun/roles/${role}.svg`} />{role}</i>
             ))}</p>
           </div>
-        ))}
+          )
+        })}
       </React.Fragment>
     </Panel>
   )

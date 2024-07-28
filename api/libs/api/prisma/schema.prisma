@@ -37,7 +37,7 @@ model User {
   logins        Login[]
   comments      Comment[]
   teams         Team[]
-  participate   TeamMembers[]
+  participate   TeamMember[]
   tournaments   Tournament[]
   invites       TeamInvitements[]
   transactions  Transaction[]
@@ -62,12 +62,12 @@ model Team {
   membersAmount Int          @default(0)
   owner         User         @relation(fields: [ownerId], references: [uid])
   tournaments   Tournament[]
-  members       TeamMembers[]
+  members       TeamMember[]
   invites       TeamInvitements[]
   comments      Comment[]
 }
 
-model TeamMembers {
+model TeamMember {
   id            String        @id @default(cuid())
   uid           String
   user          User          @relation(fields: [uid], references: [uid])

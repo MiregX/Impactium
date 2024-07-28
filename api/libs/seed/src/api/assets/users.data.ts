@@ -1,32 +1,56 @@
 export const users = [
   {
-    uid: 'clw9d3q0w00006dv3te9oqnrm',
+    uid: '2',
     register: new Date().toISOString(),
-    email: 'something@impactium.fun'
+    email: 'user1@example.com',
+    displayName: 'Юра Рибак'
   },
   {
-    uid: 'clw9d4q1w00007ev4ty0plnsm',
+    uid: '3',
     register: new Date().toISOString(),
-    email: 'user1@example.com'
+    email: 'user2@example.com',
+    displayName: 'Мельничук Назар'
   },
   {
-    uid: 'clw9d5q2w00008fw5uv1qmpno',
+    uid: '4',
     register: new Date().toISOString(),
-    email: 'user2@example.com'
+    email: 'user3@example.com',
+    displayName: 'Саня Бєлка'
   },
   {
-    uid: 'clw9d6q3w00009gw6vw2rnqpp',
+    uid: '5',
     register: new Date().toISOString(),
-    email: 'user3@example.com'
+    email: 'user4@example.com',
+    displayName: 'Саня Бетмен'
   },
   {
-    uid: 'clw9d7q4w00010hx7wx3snqrr',
+    uid: '6',
     register: new Date().toISOString(),
-    email: 'user4@example.com'
+    email: 'user6@example.com',
+    displayName: 'Перетятко Богдан'
   },
   {
-    uid: 'clw9d8q5w00011ix8xy4toqss',
+    uid: '7',
     register: new Date().toISOString(),
-    email: 'user5@example.com'
+    email: 'user7@example.com',
+    displayName: 'Андрійчук Дем\'ян'
+  },
+  {
+    uid: '8',
+    register: new Date().toISOString(),
+    email: 'user8@example.com',
+    displayName: 'Андрійчук Артем'
+  },
+  {
+    uid: '9',
+    register: new Date().toISOString(),
+    email: 'user9@example.com',
+    displayName: 'Миханюк Денис'
+  },
+  {
+    uid: '10',
+    register: new Date().toISOString(),
+    email: 'user10@example.com',
+    displayName: 'Гусарук Руслан'
   }
 ];

@@ -30,6 +30,13 @@ export interface LocaleUnit {
 }
 
 const locale: Locale = {
+  _select_file: {
+    us: 'Select a file',
+    ru: 'Выберите файл',
+    ua: 'Виберіть файл',
+    it: 'Seleziona un file',
+    pl: 'Wybierz plik'
+  },
   _please_wait: {
     us: 'Please wait',
     ru: 'Подождите',

@@ -1,14 +1,39 @@
 .input {
   display: flex;
-  align-items: center;
   height: 36px;
   width: 100%;
-  border-radius: var(--border-s);
-  border: 1px solid var(--accent-3);
+  border-radius: 4px;
+  border: 1px solid var(--accent-2);
   background-color: var(--soft-black);
-  padding: 8px 12px;
-  outline-offset: var(--white);
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+  align-items: center;
+  outline: none;
 }
+.input[type=file] {
+  cursor: pointer;
+}
+.input[type=file]::file-selector-button,
+.input[type=file]::-webkit-file-upload-button {
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;  
+}
+.input::placeholder {
+  color: var(--text-dimmed);
+}
+.input:focus-visible {
+  outline: none;
+  cursor: text;
+  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+}
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .image {
   padding: 0;
   gap: 8px;
@@ -18,26 +43,6 @@
   padding-left: 8px; 
 }
 .image input {
-width: 100%;
+  width: 100%;
   padding: 8px 12px 8px 0;
-}
-
-.input::file {
-  border: 0;
-  background-color: transparent;
-  font-weight: 500;
-}
-
-.input::placeholder {
-  color: var(--text-dimmed);
-}
-
-.input:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
-}
-
-.input:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }

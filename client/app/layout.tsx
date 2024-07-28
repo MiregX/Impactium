@@ -1,6 +1,5 @@
 import '@/decorator/api';
 import '@/decorator/useClasses';
-import '@/decorator/useDisplayName';
 import '@/decorator/useOptionStyling';
 import React, { ReactNode } from 'react'
 import '@/public/.global.css';
@@ -22,7 +21,6 @@ import { Toaster } from '@/ui/Toaster';
 declare global {
   var api: Api;
   var useClasses: (...classNames: Array<string | Array<string | string[]> | undefined | boolean>) => string;
-  var useDisplayName: (user: User) => string;
   var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
 

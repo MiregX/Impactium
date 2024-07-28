@@ -12,7 +12,7 @@ import { User } from "@/dto/User";
 export function DisplayName() {
   const { lang } = useLanguage();
   const { user, refreshUser, assignUser } = useUser();
-  const [ displayName, setDisplayName ] = useState<string>(useDisplayName(user!));
+  const [ displayName, setDisplayName ] = useState<string>(user!.displayName);
   const [ loading, setLoading ] = useState<boolean>(false);
 
   const send = async () => {
@@ -27,7 +27,7 @@ export function DisplayName() {
 
   const button = <Button
     loading={loading}
-    variant={useDisplayName(user!) !== displayName && DisplayNameBase.test(displayName) ? 'default' : 'disabled'}
+    variant={user!.displayName !== displayName && DisplayNameBase.test(displayName) ? 'default' : 'disabled'}
     onClick={send}>{lang._save}</Button>
 
   return (
