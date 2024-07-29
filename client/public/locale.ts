@@ -30,6 +30,13 @@ export interface LocaleUnit {
 }
 
 const locale: Locale = {
+  _admin_panel: {
+    us: 'Admin panel',
+    ru: 'Админ-панель',
+    ua: 'Адмін-панель',
+    it: 'Pannello amministrativo',
+    pl: 'Panel administracyjny'
+  },
   _select_file: {
     us: 'Select a file',
     ru: 'Выберите файл',

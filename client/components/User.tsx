@@ -35,6 +35,12 @@ export function UserComponent() {
         onClick={toggle} />
       <nav className={_user.menu}>
         <p className={_user.name}>{user!.email || user!.displayName}</p>
+        {user!.uid === 'system' && (
+          <Link href='/admin' onClick={toggle}>
+            {lang._admin_panel}
+            <img src='https://cdn.impactium.fun/ui/specific/star.svg' alt=''/>
+          </Link>
+        )}
         <Link href='/account' onClick={toggle}>
           {lang._account}
           <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>

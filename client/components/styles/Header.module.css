@@ -45,7 +45,7 @@
   width: min-content;
   opacity: 1;
 }
-.logo.hidden {
+.hidden {
   opacity: 0;
 }
 .logo h1 {
@@ -69,8 +69,8 @@
   -webkit-user-drag: none;
   user-select: none;
 }
-.logo.inner-animation {
-  animation: first 0s linear 3.3s forwards;
+.hidden {
+  animation: first 0s linear 3s forwards;
 }
 
 @keyframes first {

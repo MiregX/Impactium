@@ -38,8 +38,8 @@
   0% {
   }
   100% {
-    left: 16;
-    transform: translate(0, -50%);
+    left: 16px;
+    transform: translate(0px, -50%);
     top: 32px;
   }
 }
@@ -47,6 +47,8 @@
   width: 100%;
   max-width: var(--width-limit);
   height: 100%;
+  position: relative;
+  padding: 0 16px;
 }
 .slow {
   background: transparent;

@@ -7,18 +7,16 @@ import {
     useState,
     useRef,
   } from "react";
-import { usePathname } from 'next/navigation';
 
-export function Preloader({ use }: {use?: boolean}) {
+export function Preloader() {
   const { isUserLoaded, user } = useUser();
-  const url = usePathname();
-  const [blocker, setBlocker] = useState<boolean>(use || isUserLoaded);
+  const [blocker, setBlocker] = useState<boolean>(isUserLoaded);
 
   useEffect(() => {
     user && setBlocker(false)
   }, [user])
 
-  const [visitedBefore, setVisitedBefore] = useState<boolean>(false && typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
+  const [visitedBefore, setVisitedBefore] = useState<boolean>(typeof window !== 'undefined' && !!window.localStorage.getItem('visitedBefore'));
   const self = useRef<HTMLDivElement>(null);
 
   const show = useCallback(() => {
@@ -49,11 +47,10 @@ export function Preloader({ use }: {use?: boolean}) {
   }, [self, visitedBefore]);
 
   useEffect(() => {
-    show(); // Initial show when component mounts
-    if (isUserLoaded && !blocker) {
-      hide();
-    } else {
+    if (!isUserLoaded || blocker) {
       show();
+    } else {
+      hide();
     }
   }, [isUserLoaded, blocker, show, hide]);
 

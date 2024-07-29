@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
 import { Button } from '@/ui/Button';
@@ -9,15 +9,24 @@ import { useLanguage } from '@/context/Language.context';
 import { LoginBanner } from '@/banners/login/LoginBanner';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
+import { cn } from '@/lib/utils';
 
 export function Header() {
   const { user } = useUser();
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
+  const [hidden, setHidden] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof hidden === 'object') {
+      const hidden = window.localStorage.getItem('visitedBefore');
+      setHidden(!hidden);
+    }
+  }, [hidden]);
 
   return (
     <header className={s.header}>
-      <Link href='/' className={`${s.logo} ${/* isLogoHidden */ undefined && s.hidden}`}>
+      <Link href='/' className={cn(s.logo, hidden && s.hidden)}>
         <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
         <h1>Impactium</h1>
       </Link>
