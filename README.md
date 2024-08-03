@@ -110,3 +110,4 @@ $ docker push 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-
 ## Support
 
 С любыми вопросами обращаемся к лиду, или идём с вопросиком к `admin@impactium.fun`.
+ 
