@@ -25,7 +25,7 @@
   background: var(--white);
   height: 100%;
   width: 50%;
-  z-index: 0;
+  z-index: -1;
 }
 .shape {
   position: absolute;
@@ -170,4 +170,16 @@
 }
 .carousel_right {
   filter: invert(1);
+}
+
+@media all and (max-width: 768px) {
+  .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media all and (max-width: 510px) {
+  .wrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

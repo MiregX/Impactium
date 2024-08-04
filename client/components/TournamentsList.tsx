@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from "react";
 import { Pagination } from "./Pagination";
 import s from './styles/TournamentList.module.css'
 import { Tournament } from "@/dto/Tournament";
@@ -25,11 +26,34 @@ import { map as organizersMap } from '@/public/landing'
 export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
   const { spawnBanner } = useApplication();
   const { lang } = useLanguage();
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 510) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth <= 768) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(3);
+      }
+    };
+
+    updateItemsPerPage();
+
+    window.addEventListener('resize', updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
+  
   const { page, total, setPage, getPageNumbers, current } = usePagination({
     totalItems: tournaments.length,
-    itemsPerPage: 3,
+    itemsPerPage: itemsPerPage,
     buttons: 5
   });
+
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
@@ -60,12 +84,11 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
               className={s.find_tournament}
               size='lg'><Link href='/tournaments'>{lang.find.tournament}</Link></Button>
           </div>
+          <div className={s.background}/>
         </div>
-        <div className={s.background} />
         <div className={s.right}>
           <Image width={512} height={512} className={s.lines} src='https://cdn.impactium.fun/bgs/line-shape-fhd.png' alt='' />
           <h4>{lang.team.for_teams}</h4>
-
           <div className={s.button_wrapper}>
             <Button
               className={s.create_team}
