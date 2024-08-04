@@ -26,6 +26,11 @@ module.exports = {
       },
       {
         protocol: 'https',
+        hostname: 't.me',
+        port: '',
+      },
+      {
+        protocol: 'https',
         hostname: 'cdn.discordapp.com',
         port: '',
       },

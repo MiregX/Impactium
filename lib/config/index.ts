@@ -29,12 +29,14 @@ export class Configuration {
   }
 
   static isProductionMode(): boolean {
-    return this.λ() > 0
+    return this.λ() > 0 || process.env.NODE_ENV === 'production'
   }
 
   static λ() {
     return parseInt(process.env.X!);
   }
+
+  static compareBehaviour = ([ prod, dev ]: [string, string]) => Configuration.isProductionMode() ? prod : dev;
 
   static getMode() {
     return this.isProductionMode()

@@ -12,7 +12,7 @@ interface Avatar {
 
 export function Avatar({ size, src, alt, onClick, className }: Avatar) {
   const [err, setErr] = useState<boolean>(!src);
-  const fallback = <p style={{fontSize: typeof size === 'string' ? parseInt(size) : size / 2.5}}>{alt.slice(0, 2)}</p>
+  const fallback = <p style={{fontSize: typeof size === 'string' ? parseInt(size) : size / 2.5}}>{alt?.slice(0, 2) || '?'}</p>
   
   return (
     <div

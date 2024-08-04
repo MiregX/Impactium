@@ -2,7 +2,8 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
-import { UUID } from 'crypto';
+import { createHash, createHmac, UUID } from 'crypto';
+import { AuthPayload } from './addon/auth.entity';
 
 @Injectable()
 export class TelegramAuthService implements AuthMethodService {
@@ -19,11 +20,19 @@ export class TelegramAuthService implements AuthMethodService {
     return `https://t.me/${process.env.TELEGRAM_API_ID}?start=${uuid}`
   }
 
-  async callback(uuid: UUID) {
-    const payload = await this.telegramService.getPayload(uuid);
-    if (!payload || typeof payload === 'boolean') throw new BadRequestException;
-
+  async callback(payload: AuthPayload, uuid: UUID) {
     payload.uid = await this.authService.getPayload(uuid) as string || undefined;
     return this.authService.register(payload);
+  }
+
+  validate({ hash, ...obj }: Record<string, string>) {
+    const dataCheckString = Object.keys(obj)
+      .sort()
+      .map(key => key + '=' + obj[key])
+      .join('\n');
+
+    const secretKey = createHash('sha256').update(process.env.TELEGRAM_API_KEY).digest();
+    
+    return hash === createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
   }
 }

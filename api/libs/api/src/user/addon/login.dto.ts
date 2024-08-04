@@ -1,11 +1,11 @@
 import { Prisma, $Enums } from "@prisma/client";
 
 export class CreateLoginDto implements Prisma.LoginCreateWithoutUserInput {
-  id: string
-  on?: string | Date;
+  id?: string;
   type: $Enums.LoginType;
+  on?: string | Date;
   avatar?: string;
-  displayName: string;
+  displayName?: string;
 }
 
 export class UpdateLoginDto implements Prisma.LoginUpdateInput {
