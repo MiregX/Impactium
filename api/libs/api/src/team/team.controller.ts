@@ -34,12 +34,12 @@ export class TeamController {
   }
 
   @Get('find/:value')
-  async find(
+  find(
     @Param('value') value: string
   ) {
-    return value.length === 25 || !value.includes(' ')
-      ? await this.teamService.findManyByUid(value)
-      : await this.teamService.findManyByTitleOrIndent(value)
+    return value.length === 25 && !value.includes(' ')
+      ? this.teamService.findManyByUid(value)
+      : this.teamService.findManyByTitleOrIndent(value);
   }
   
   @Delete('delete/:indent')

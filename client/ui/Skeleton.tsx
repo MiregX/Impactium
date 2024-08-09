@@ -11,8 +11,7 @@ const skeletonVariants = cva(s.skeleton, {
     },
     size: {
       default: s.defaultSize,
-      short,
-      icon
+      short
     },
   },
   defaultVariants: {

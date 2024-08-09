@@ -1,0 +1,27 @@
+.combination {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex: 1;
+}
+.group {
+  flex: 1;
+  display: flex;
+  height: 36px;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.group p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.name {
+  font-weight: 500;
+  color: var(--white) !important;
+  font-size: 14px;
+}
+.id {
+  font-size: 12px;
+  color: var(--text-dimmed);
+}

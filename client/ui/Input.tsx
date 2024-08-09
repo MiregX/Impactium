@@ -20,16 +20,21 @@ const inputVariants = cva(s.button, {
 });
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
-  img?: string
+  img?: string;
+  loading?: boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, size, img, ...props }, ref) => {
+  ({ className, variant, loading, size, img, ...props }, ref) => {
+    if (loading) {
+      img = 'https://cdn.impactium.fun/ui/action/loading.svg'
+    }
     return img ? (
       <div className={cn(
         inputVariants({ variant, size, className }),
         s.input,
-        img && s.image
+        img && s.image,
+        loading && s.loading
       )}>
         <img src={img} alt='' />
         <input ref={ref} {...props} />  

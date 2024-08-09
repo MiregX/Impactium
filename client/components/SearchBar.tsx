@@ -11,38 +11,42 @@ import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { useApperand } from '@/decorator/useAperand';
 import { cn } from '@/lib/utils';
+import { Toaster } from 'sonner';
 
 interface SearchBarProps {
   search: string,
   setSearch: (value: string) => void,
   state: Team[] | Tournament[];
   setState: (value: any) => void;
-  apiPath: 'team' | 'tournament'
+  apiPath: 'team' | 'tournament';
+  loading: boolean,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function SearchBar({ search, setSearch, setState, state, apiPath }: SearchBarProps) {
+export function SearchBar({ search, setSearch, setState, state, apiPath, loading, setLoading }: SearchBarProps) {
   const { lang } = useLanguage();
-  const [loading, setLoading] = useState(false);
   const { spawnBanner } = useApplication();
   let searchTimeout: number | any;
   
   const fetchData = async (value: string): Promise<any[]> => {
     setLoading(true);
-    const data = await api<any[]>(`/${apiPath}/find/${value}`, {
+    return await api<any[]>(`/${apiPath}/find/${value}`, {
       next: {
         revalidate: 60
       }
-    });
-    setLoading(false);
-    return data || [];
+    }) || [];
   };
 
   const handleSearchChange = (event: any) => {
     setSearch(event.target.value);
+    setLoading(!!event.target.value);
     if (event.target.value.length >= 3) {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
-        fetchData(event.target.value.toLowerCase()).then((results) => setState(mergeData(results)));
+        fetchData(event.target.value.toLowerCase()).then((results) => {
+          setState(mergeData(results));
+          setLoading(false);
+        });
       }, 1000);
     }
   };
@@ -57,10 +61,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath }: Searc
   return (
     <div className={s.bar}>
       <Input
-        img={loading
-          ? 'https://cdn.impactium.fun/ui/action/redo.svg'
-          : 'https://cdn.impactium.fun/ui/specific/mention.svg'
-        }
+        img={'https://cdn.impactium.fun/ui/specific/mention.svg'}
         placeholder={lang._enter_indent_or_title}
         aria-label="Search"
         aria-invalid="false"
@@ -68,6 +69,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath }: Searc
         value={search}
         className={cn(loading && s.loading)}
         onChange={handleSearchChange}
+        loading={loading}
       />
       <Button onClick={() => spawnBanner(apiPath === 'team' ? <CreateTeam /> : <CreateTournament />)}>{lang.create[apiPath]}</Button>
     </div>

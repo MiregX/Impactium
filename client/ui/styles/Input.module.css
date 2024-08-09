@@ -2,13 +2,12 @@
   display: flex;
   height: 36px;
   width: 100%;
-  border-radius: 4px;
-  border: 1px solid var(--accent-2);
+  border-radius: 6px;
+  border: 1px solid var(--accent-3);
   background-color: var(--soft-black);
   padding: 0.5rem 0.75rem;
   font-size: 14px;
   align-items: center;
-  outline: none;
 }
 .input[type=file] {
   cursor: pointer;
@@ -37,12 +36,20 @@
 .image {
   padding: 0;
   gap: 8px;
+  padding-left: 8px; 
 }
 .image img {
   height: 20px;
-  padding-left: 8px; 
 }
 .image input {
   width: 100%;
   padding: 8px 12px 8px 0;
+}
+.loading > img {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% {
+    transform: rotateZ(1turn);
+  }
 }

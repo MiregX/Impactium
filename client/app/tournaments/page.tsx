@@ -3,7 +3,6 @@ import { PanelTemplate } from "@/components/PanelTempate";
 import { Recomendations } from "@/components/Recomentations";
 import React, { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
-import s from './Tournaments.module.css'
 import { useTournaments } from "./context";
 import { TournamentUnit } from "@/components/TournamentUnit";
 

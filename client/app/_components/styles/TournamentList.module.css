@@ -23,6 +23,7 @@
 .background {
   position: absolute;
   background: var(--white);
+  top: 0;
   height: 100%;
   width: 50%;
   z-index: -1;
@@ -154,7 +155,7 @@
 }
 .card p {
   flex: 1;
-  text-shadow: 0px 1px 2px #ffffff24;
+text-shadow: 0px 1px 2px #ffffff24;
   font-weight: 500 !important;
   font-size: 16px !important;
 }

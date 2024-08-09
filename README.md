@@ -21,6 +21,10 @@ Object Key value for: {
   tournament: @code
 }
 
+## Team
+
+Для аватарок используем title в качестве альта
+
 ### Зависимости
 
 - Docker для контейнеризации и развёртывания.
@@ -110,4 +114,3 @@ $ docker push 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-
 ## Support
 
 С любыми вопросами обращаемся к лиду, или идём с вопросиком к `admin@impactium.fun`.
- 

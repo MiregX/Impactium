@@ -1,5 +1,5 @@
 import React from 'react';
-import { TournamentsList } from '@/components/TournamentsList';
+import { TournamentsList } from '@/app/_components/TournamentsList';
 import { Tournament } from '@/dto/Tournament';
 
 export default async function Main() {

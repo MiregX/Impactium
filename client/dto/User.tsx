@@ -31,6 +31,7 @@ export class UserEntity<T extends UserAddons = {}> implements User {
   login: Login;
   teams?: false | Team[] | undefined;
   verified: boolean;
+  logins?: Login[]
   // privates
   private _avatar: string | null;
   private _displayName: string;

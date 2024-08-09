@@ -90,6 +90,7 @@ export class TeamService {
 
   findOneByIndent(indent: string) {
     return this.prisma.team.findUnique({
+      select: TeamEntity.select({ members: true }),
       where: {
         indent,
       }
@@ -106,7 +107,7 @@ export class TeamService {
       },
       select: TeamEntity.select({ members: true }),
       take: TeamStandart.DEFAULT_PAGINATION_LIMIT
-    })
+    });
   }
   
   async pagination(

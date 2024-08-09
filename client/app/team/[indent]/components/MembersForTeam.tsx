@@ -4,32 +4,26 @@ import { useTeam } from "../team.context";
 import { Panel } from "@/ui/Panel";
 import s from '../Team.module.css';
 import React from "react";
-import { TeamMember } from "@/dto/TeamMember";
 import { Avatar } from "@/components/Avatar";
 import { TeamMemberRoles } from "@/dto/TeamMemberRoles";
+import { Combination } from "@/components/Combitation";
 
 export function MembersForTeam() {
   const { lang } = useLanguage();
   const { team } = useTeam();
 
   return (
-    <Panel heading={lang.team.members}>
-      <React.Fragment>
-        {team.members && team.members.map((member: TeamMember, index: number) => {
-          return (
-          <div key={index} className={s.unit}>
-            <Avatar
-              size={32}
-              src={member.user.avatar}
-              alt={member.user.displayName} />
-            <p>{member.user.displayName}</p>
-            <p>{member.roles.map((role: TeamMemberRoles, index: number) => (
-              <i key={index}><img src={`https://cdn.impactium.fun/roles/${role}.svg`} />{role}</i>
-            ))}</p>
+    <Panel heading={lang.team.members} className={s.members_for_team}>
+      {team.members && team.members.map(({user, ...member }) => 
+        <div key={member.id} className={s.role_unit}>
+          <Combination src={user.avatar} name={user.displayName} id={user.username} />
+          <div className={s.roles}>
+            {member.roles.map((role: TeamMemberRoles, index: number) => (
+              <i key={index}><img src={`https://cdn.impactium.fun/ui/roles/${role}.svg`} />{role}</i>
+            ))}
           </div>
-          )
-        })}
-      </React.Fragment>
+        </div>
+      )}
     </Panel>
   )
 }

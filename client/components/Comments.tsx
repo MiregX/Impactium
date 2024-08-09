@@ -1,5 +1,5 @@
 'use client'
-import _ from './styles/Comments.module.css'
+import s from './styles/Comments.module.css'
 import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language.context';
 import { LeaveComment } from './LeaveComment';
@@ -16,9 +16,9 @@ export function Comments({ comments }: CommentsProps) {
   const { lang } = useLanguage();
 
   return (
-    <div className={_._}>
+    <div className={s._}>
       <h4>{lang.comments.title}</h4>
-      {comments.map((comment: any) => {
+      {comments &&  comments.map((comment: any) => {
         comment.user = new UserEntity(comment.user);
         return (
           <div>

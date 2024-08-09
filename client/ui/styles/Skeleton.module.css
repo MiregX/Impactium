@@ -8,17 +8,14 @@
 
 .avatar {
   border-radius: var(--round);
-}
-
-.short {
-  max-width: 64px !important;
-}
-
-.icon {
   max-height: 36px !important;
   min-height: 36px !important;
   max-width: 36px !important;
   min-width: 36px !important;
+}
+
+.short {
+  max-width: 40% !important;
 }
 
 @keyframes pulse {

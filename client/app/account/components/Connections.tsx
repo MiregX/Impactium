@@ -9,7 +9,7 @@ import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/components/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect } from "react";
-import { Logins, User } from "@/dto/User";
+import { Logins, User, UserAddons, UserEntity } from "@/dto/User";
 import { cn } from "@/lib/utils";
 
 export function Connections() {
@@ -22,7 +22,7 @@ export function Connections() {
     onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
 
     useEffect(() => {
-      !user!.logins && api<User<Logins>>('/user/get?logins=true').then(user => setUser(user))
+      !user!.logins && api<User<UserAddons>>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)))
     }, [user]);
 
   return (

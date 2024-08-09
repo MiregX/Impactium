@@ -26,3 +26,7 @@
     max-width: 100%;
   }
 }
+.members_for_team > div {
+  padding: var(--card-gap);
+  gap: var(--card-gap);
+}
