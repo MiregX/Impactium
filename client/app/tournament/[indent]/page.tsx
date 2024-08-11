@@ -2,16 +2,16 @@
 import s from './Tournament.module.css'
 import { PanelTemplate } from "@/components/PanelTempate";
 import { useTournament } from './context';
-import { Description } from '@/app/team/[indent]/components/Description';
-import { Heading } from '@/app/team/[indent]/components/Heading';
+import { Description } from './components/Description';
+import { Combination } from '@/components/Combitation';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();
   return (
     <PanelTemplate className={s.page}>
       <div className={s.wrapper}>
-        <Heading state={tournament} />
-        <Description key='tournament' state={tournament} />
+        <Combination size='heading' src={tournament.banner} name={tournament.title} id={tournament.code} />
+        <Description />
       </div>
     </PanelTemplate>
   );

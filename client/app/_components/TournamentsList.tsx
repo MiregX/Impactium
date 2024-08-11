@@ -7,7 +7,7 @@ import { usePagination } from "@/decorator/usePagination";
 import React from "react";
 import { PanelTemplate } from "@/components/PanelTempate";
 import { TournamentUnit } from "@/components/TournamentUnit";
-import { Shapes } from "./Shapes";
+import { ПошёлНахуй } from "./ПошёлНахуй";
 
 export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
   const [itemsPerPage, setItemsPerPage] = useState(3);
@@ -41,7 +41,7 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
-      <Shapes />
+      <ПошёлНахуй />
       <h4 style={{width: '100%', marginTop: '12px', fontSize: '18px'}}>Актуальные турниры:</h4>
       <div className={s.wrapper}>
         {current.map(index => (

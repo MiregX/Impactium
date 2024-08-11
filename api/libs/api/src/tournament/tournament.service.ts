@@ -19,10 +19,12 @@ export class TournamentService implements OnModuleInit {
     limit: number = TournamentStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TournamentStandart.DEFAULT_PAGINATION_PAGE,
   ): Promise<TournamentEntity<TournamentEntityWithTeams>[]> {
+    const actual = TournamentEntity.findActual();
     return await this.prisma.tournament.findMany({
-      ...TournamentEntity.selectWithTeams(),
+      select: TournamentEntity.select({ teams: true }),
       take: limit,
-      skip: skip
+      skip: skip,
+      ...actual
     });
   }
 
@@ -48,6 +50,15 @@ export class TournamentService implements OnModuleInit {
   delete(user: UserEntity, id: string) {
     return this.prisma.tournament.delete({
       where: { id, ownerId: user.uid }
+    });
+  }
+  
+  findOneByCode(code: string) {
+    return this.prisma.tournament.findUnique({
+      select: TournamentEntity.select({ teams: true }),
+      where: {
+        code,
+      }
     });
   }
 

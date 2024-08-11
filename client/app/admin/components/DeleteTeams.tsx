@@ -6,6 +6,7 @@ import { Button } from '@/ui/Button';
 import { Skeleton } from '@/ui/Skeleton';
 import { useState, useEffect } from 'react';
 import { Team } from '@/dto/Team';
+import { Combination, CombinationSkeleton } from '@/components/Combitation';
 
 export function DeleteTeams() {
   const { lang } = useLanguage();
@@ -28,23 +29,11 @@ export function DeleteTeams() {
       <h6>{lang.team.delete}</h6>
       {teams ? teams?.map(team => (
         <div className={s.unit} key={team.indent}>
-          <Avatar size={36} src={team.logo} alt={team.title} />
-          <div className={s.sub}>
-            <p className={s.bold}>{team.title}</p>
-            <p>@{team.indent}</p>
-          </div>
+          <Combination src={team.logo} name={team.title} id={team.indent} />
           <Button img='https://cdn.impactium.fun/ui/trash/full.svg' size='icon' variant='ghost' onClick={() => deleteTeam(team.indent)} />
         </div>
-      )) : Array.from({ length: 4}).map((_, i) => (
-        <div className={s.unit} key={i}>
-          <Skeleton variant='avatar' size='icon' />
-          <div className={s.sub}>
-            <Skeleton />
-            <Skeleton width={96} />
-          </div>
-          <Skeleton size='icon' />
-        </div>
-      ))}
+      )) : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton />)
+      }
     </Card>
   )
 }

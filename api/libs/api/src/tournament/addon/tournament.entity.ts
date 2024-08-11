@@ -24,36 +24,35 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static selectWithTeams(): Prisma.TournamentFindManyArgs {
-    return this.findActual({
-      select: {
-        id: true,
-        banner: true,
-        title: true,
-        start: true,
-        end: true,
-        description: true,
-        code: true,
-        rules: true,
-        ownerId: true,
-        gid: true,
-        live: true,
-        prize: true,
-        teams: {
-          select: TeamEntity.select({ members: true })
-        },
+  static select({ teams }: Options = {}) {
+    return {
+      id: true,
+      banner: true,
+      title: true,
+      start: true,
+      end: true,
+      description: true,
+      code: true,
+      rules: true,
+      ownerId: true,
+      gid: true,
+      live: true,
+      prize: true,
+      teams: teams && {
+        select: TeamEntity.select({ members: true }),
       },
-    });
+    };
   }
 
-  static findActual(args: Partial<Prisma.TournamentFindManyArgs> = {}): Prisma.TournamentFindManyArgs {
+  static findActual() {
     return {
-      ...args,
       where: {
-        ...args.where,
+        end: {
+          gt: new Date().toISOString()
+        }
       },
       orderBy: {
-        start: 'asc',
+        start: 'asc' as Prisma.SortOrder,
       },
     };
   }
@@ -66,3 +65,7 @@ export interface TournamentEntityWithTeams {
     uid: string;
   }[];
 };
+
+interface Options {
+  teams?: boolean;
+}

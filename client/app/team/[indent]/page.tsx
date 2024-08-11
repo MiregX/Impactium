@@ -1,11 +1,11 @@
 'use client'
 import s from './Team.module.css'
 import { PanelTemplate } from "@/components/PanelTempate";
-import { Description } from '@/app/team/[indent]/components/Description';
-import { TeamHeading } from '@/app/team/[indent]/components/TeamHeading';
+import { Description } from './components/Description';
 import { Comments } from "@/components/Comments";
 import { useTeam } from './team.context';
 import { MembersForTeam } from './components/MembersForTeam';
+import { Combination } from '@/components/Combitation';
 
 export default function TeamIndentPage() {
   const { team } = useTeam();
@@ -13,7 +13,7 @@ export default function TeamIndentPage() {
   return (
     <PanelTemplate className={s.page}>
       <div className={s.wrapper}>
-        <TeamHeading team={team} />
+        <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
         <Description key='team' state={team} />
         <MembersForTeam />
       </div>

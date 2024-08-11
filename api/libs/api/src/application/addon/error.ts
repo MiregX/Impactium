@@ -23,6 +23,16 @@ export class UsernameInvalidFormat extends HttpException {
     super('username_invalid_format', HttpStatus.CONFLICT);
   }
 }
+export class CodeNotProvided extends HttpException {
+  constructor() {
+    super('code_not_provided', HttpStatus.CONFLICT);
+  }
+}
+export class CodeInvalidFormat extends HttpException {
+  constructor() {
+    super('code_invalid_format', HttpStatus.CONFLICT);
+  }
+}
 export class UsernameTakenException extends HttpException {
   constructor() {
     super('username_taken_exception', HttpStatus.CONFLICT);

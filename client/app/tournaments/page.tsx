@@ -9,7 +9,8 @@ import { TournamentUnit } from "@/components/TournamentUnit";
 export default function TournamentPage() {
   const { tournaments, setTournaments } = useTournaments();
   const [search, setSearch] = useState<string>('');
-  
+  const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <PanelTemplate useColumn={true}>
       <SearchBar
@@ -17,8 +18,9 @@ export default function TournamentPage() {
         setSearch={setSearch}
         setState={setTournaments}
         state={tournaments}
-        apiPath='tournament' />
-      {/* Рекомендации турниров */}
+        apiPath='tournament'
+        loading={loading}
+        setLoading={setLoading} />
       <Recomendations search={search} data={tournaments} Unit={TournamentUnit} title='tournament' />
     </PanelTemplate>
   )

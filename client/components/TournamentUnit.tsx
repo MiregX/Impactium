@@ -9,6 +9,7 @@ import { useLanguage } from '@/context/Language.context'
 import { getReadableDate } from '@/decorator/getReadableDate'
 import React from 'react'
 import { Button } from '@/ui/Button'
+import { Combination } from './Combitation'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -17,13 +18,22 @@ interface TournamentUnitProps {
 export function TournamentUnit({ tournament }: TournamentUnitProps) {
   return (
     <Card className={s.card} id={tournament.code} key={tournament.code}>
-      <h6>{tournament.title}</h6>
+      <div className={s.heading}>
+        <Combination src={tournament.banner} name={tournament.title} id={tournament.code} />
+        <Button variant='ghost' asChild>
+          <Link href={`/tournament/${tournament.code}`}>
+            Подробнее
+            <Image width='24' height='24' src='https://cdn.impactium.fun/ui/arrow-lg/right.svg' alt='' />
+          </Link>
+        </Button>
+      </div>
       <div className={s.container}>
         <Badge type={BadgeType[getTournamentState(tournament)]} title={getTournamentState(tournament)} />
-        <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end)} UTC</span>
+        <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
+        <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end, { year: false })} UTC</span>
       </div>
-      <Description tournament={tournament} />
-      <WatchLive url={tournament.live} />
+      {/* <Description tournament={tournament} /> */}
+      {/* <WatchLive url={tournament.live} /> */}
     </Card>
   );
 };
@@ -54,9 +64,9 @@ function Description({ tournament }: TournamentUnitProps) {
 
   return (
     <React.Fragment>
-      {map.map((keys, index) =>
-        <p key={index}><Image src={`https://cdn.impactium.fun/ui/${keys[1]}`} width={24} height={24} alt='' />{keys[0]}</p>
-      )}
+      <div className={s.description_section}>
+        Призовой фонд: {'$' + (tournament.prize || 0)}
+      </div>
     </React.Fragment>
   );
 }

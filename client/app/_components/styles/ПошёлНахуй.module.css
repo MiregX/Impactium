@@ -1,0 +1,37 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 228px;
+}
+.wrapper * {
+  line-height: 100%;
+  text-align: center;
+}
+.wrapper h1 {
+  font-size: 64px;
+  transform: translateX(0);
+}
+.wrapper h2 {
+  font-size: 56px;
+  transform: translateX(110px);
+}
+.wrapper h3 {
+  font-size: 48px;
+  transform: translateX(192px);
+}
+.wrapper h4 {
+  font-size: 40px;
+  transform: translateX(238px);
+}
+.wrapper h5 {
+  font-size: 32px;
+  transform: translateX(326px);
+}
+.wrapper h6 {
+  font-size: 24px;
+  transform: translateX(388px);
+}

@@ -8,7 +8,12 @@
 .card {
   height: 100%;
 }
-
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--card-gap);
+}
 .card span {
   font-family: var(--font-mono);
   font-size: var(--text-small);

@@ -16,10 +16,8 @@
   color: var(--soft-white);
   white-space: nowrap;
 }
-
-.badge img {
-  height: 24px;
-  width: 24px;
+.badge.icon {
+  padding: 7px 12px;
 }
 
 .badge span {
