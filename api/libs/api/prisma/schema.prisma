@@ -59,7 +59,7 @@ model Team {
   title         String?
   description   String?
   ownerId       String
-  membersAmount Int          @default(0)
+  registered    DateTime     @default(now())
   owner         User         @relation(fields: [ownerId], references: [uid])
   tournaments   Tournament[]
   members       TeamMember[]

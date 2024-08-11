@@ -1,9 +1,9 @@
-import { Prisma, Team } from '@prisma/client';
+import { Team } from '@prisma/client';
 import { TeamMemberEntity } from './team.member.entity';
 
 export class TeamEntity implements Team {
+  registered: Date;
   logo: string;
-  membersAmount: number;
   indent: string;
   title: string;
   description: string;
@@ -20,7 +20,7 @@ export class TeamEntity implements Team {
 
   static select = ({ members}: Options = {}) => ({
     logo: true,
-    membersAmount: true,
+    registered: true,
     indent: true,
     title: true,
     ownerId: true,

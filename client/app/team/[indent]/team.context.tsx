@@ -5,7 +5,7 @@ import s from '@/app/team/[indent]/Team.module.css'
 
 interface TeamContext {
   team: Team;
-  setTeam: (team: Team) => void;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
   refreshTeam: (indent?: string) => void;
 }
 

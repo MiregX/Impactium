@@ -8,5 +8,6 @@ export interface Team {
   description: string,
   membersAmount: number,
   members?: Array<TeamMember>,
-  comments: Array<Comment>
+  comments: Array<Comment>,
+  registered: number,
 }

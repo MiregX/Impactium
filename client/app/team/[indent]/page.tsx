@@ -6,14 +6,20 @@ import { Comments } from "@/components/Comments";
 import { useTeam } from './team.context';
 import { MembersForTeam } from './components/MembersForTeam';
 import { Combination } from '@/components/Combitation';
+import { Badge } from '@/ui/Badge';
+import { getReadableDate } from '@/decorator/getReadableDate';
 
 export default function TeamIndentPage() {
   const { team } = useTeam();
+  console.log(team)
 
   return (
     <PanelTemplate className={s.page}>
       <div className={s.wrapper}>
-        <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
+        <div className={s.heading}>
+          <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
+          Время регистрации {getReadableDate(team.registered)}
+        </div>
         <Description key='team' state={team} />
         <MembersForTeam />
       </div>

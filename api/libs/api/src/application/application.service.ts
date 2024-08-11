@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 import { UserService } from '@api/main/user/user.service';
@@ -13,7 +12,6 @@ export class ApplicationService implements OnModuleInit {
   constructor(
     private readonly redisService: RedisService,
     private readonly prisma: PrismaService,
-    private readonly telegramService: TelegramService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
@@ -53,15 +51,13 @@ export class ApplicationService implements OnModuleInit {
   async handle() {
     const existStatus = await this.status();
 
-    const [redis, telegram, cockroachdb] = await Promise.all([
+    const [redis, cockroachdb] = await Promise.all([
       this.getRedis(),
-      this.getTelegram(),
       this.getPrisma()
     ]);
 
     await this.redisService.set(dataset.status, JSON.stringify([...existStatus.slice(-60), {
       redis,
-      telegram,
       cockroachdb
     } as {
       [key: string]: StatusEntity
@@ -110,13 +106,6 @@ export class ApplicationService implements OnModuleInit {
             os
           };
       })
-    }
-  }
-
-  private async getTelegram(): Promise<StatusEntity> {
-    return {
-      ping: await this.telegramService._latency(),
-      info: undefined,
     }
   }
 

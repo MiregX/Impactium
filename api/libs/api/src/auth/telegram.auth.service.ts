@@ -1,27 +1,16 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { TelegramService } from '@api/mcs/telegram/telegram.service';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
 import { createHash, createHmac, UUID } from 'crypto';
 import { AuthPayload } from './addon/auth.entity';
 
 @Injectable()
-export class TelegramAuthService implements AuthMethodService {
+export class TelegramAuthService implements Omit<AuthMethodService, 'getUrl'> {
   constructor(
     private readonly authService: AuthService,
-    private readonly telegramService: TelegramService
   ) {}
 
-  async getUrl(uuid: UUID) {
-    const isExist = uuid && await this.telegramService.getPayload(uuid);
-    if (isExist) throw new ConflictException;
-
-    await this.telegramService.setPayload(uuid);
-    return `https://t.me/${process.env.TELEGRAM_API_ID}?start=${uuid}`
-  }
-
-  async callback(payload: AuthPayload, uuid: UUID) {
-    payload.uid = await this.authService.getPayload(uuid) as string || undefined;
+  async callback(payload: AuthPayload) {
     return this.authService.register(payload);
   }
 

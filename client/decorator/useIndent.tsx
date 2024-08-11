@@ -11,7 +11,5 @@ export async function useIndent<T>(params: any, key: Key): Promise<{ indent: str
     raw: true
   });
 
-  console.log(result)
-
   return result.isSuccess() || true ? { result: result.data, indent } : redirect('/');
 }

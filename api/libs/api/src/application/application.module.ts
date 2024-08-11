@@ -3,7 +3,6 @@ import { ApplicationService } from './application.service';
 import { ApplicationController } from './application.controller';
 import { RedisModule } from '@api/main/redis/redis.module';
 import { PrismaModule } from '@api/main/prisma/prisma.module';
-import { TelegramModule } from '@api/mcs/telegram/telegram.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
   imports: [
     PrismaModule,
     RedisModule,
-    TelegramModule,
     UserModule,
     AuthModule,
   ]

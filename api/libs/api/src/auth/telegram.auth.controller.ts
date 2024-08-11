@@ -11,39 +11,22 @@ import { Cookie } from '../application/addon/cookie.decorator';
 import { AuthMethodController } from './addon/auth.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { Configuration } from '@impactium/config';
+import { JwtService } from '@nestjs/jwt';
 
 @ApiTags('Auth <Telegram>')
 @Controller('telegram')
-export class TelegramAuthController implements AuthMethodController {
+export class TelegramAuthController implements Omit<AuthMethodController, 'getUrl'> {
   constructor(
     private readonly telegramAuthService: TelegramAuthService,
-    private readonly authService: AuthService,
   ) {}
 
-  @Get('login')
-  @UseGuards(ConnectGuard)
-  @Redirect()
-  async getUrl(
-    @Res({ passthrough: true }) response: Response,
-    @User() user: UserEntity | undefined,
-  ) {
-    const uuid = crypto.randomUUID();
-    response.cookie('uuid', uuid, cookieSettings);
-    
-    if (user) {
-      await this.authService.setPayload(uuid, user.uid);
-    }
-
-    const url = await this.telegramAuthService.getUrl(uuid)
-    return { url };
-  }
-
   @Get('callback')
+  @UseGuards(ConnectGuard)
   @Redirect()
   async callback(
     @Res({ passthrough: true }) response: Response,
     @Query() query: Record<string, string>,
-    @Cookie('uuid') uuid: UUID,
+    @User() user: UserEntity,
   ) {
     const isValid = this.telegramAuthService.validate(query);
 
@@ -54,9 +37,9 @@ export class TelegramAuthController implements AuthMethodController {
       type: 'telegram',
       avatar: query.photo_url,
       displayName: query.username || query.first_name,
-    }, uuid);
-    
-    response.clearCookie('uuid')
+      uid: user ? user.uid : null
+    });
+
     response.cookie('Authorization', authorization, cookieSettings);
     return { url: Configuration.getClientLink() };
   }

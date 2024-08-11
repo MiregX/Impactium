@@ -30,3 +30,8 @@
   padding: var(--card-gap);
   gap: var(--card-gap);
 }
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

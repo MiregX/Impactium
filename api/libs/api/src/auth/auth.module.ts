@@ -3,7 +3,6 @@ import { RouterModule } from '@nestjs/core';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './addon/auth.guard';
-import { TelegramModule } from '@api/mcs/telegram/telegram.module';
 import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { RedisModule } from '@api/main/redis/redis.module';
 import { UserModule } from '@api/main/user/user.module';
@@ -24,7 +23,6 @@ import { AdminGuard } from './addon/admin.guard';
         module: AuthModule,
       },
     ]),
-    TelegramModule,
     PrismaModule,
     JwtModule,
     RedisModule,
