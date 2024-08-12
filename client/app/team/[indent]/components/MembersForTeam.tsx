@@ -4,9 +4,9 @@ import { useTeam } from "../team.context";
 import { Panel } from "@/ui/Panel";
 import s from '../Team.module.css';
 import React from "react";
-import { Avatar } from "@/components/Avatar";
+import { Avatar } from "@/ui/Avatar";
 import { TeamMemberRoles } from "@/dto/TeamMemberRoles";
-import { Combination } from "@/components/Combitation";
+import { Combination } from "@/ui/Combitation";
 
 export function MembersForTeam() {
   const { lang } = useLanguage();

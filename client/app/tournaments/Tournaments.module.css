@@ -1,0 +1,11 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc((var(--width-limit) - 56px) / 3), 1fr));
+  grid-template-rows: repeat(5, 1fr);
+  max-height: calc(var(--content-height) - 32px - 36px);
+  gap: var(--card-gap);
+  width: 100%;
+}
+.pagination {
+  align-self: flex-end;
+}

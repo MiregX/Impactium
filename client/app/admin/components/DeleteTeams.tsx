@@ -1,12 +1,12 @@
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
-import { Avatar } from '@/components/Avatar';
+import { Avatar } from '@/ui/Avatar';
 import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
 import { Skeleton } from '@/ui/Skeleton';
 import { useState, useEffect } from 'react';
 import { Team } from '@/dto/Team';
-import { Combination, CombinationSkeleton } from '@/components/Combitation';
+import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 
 export function DeleteTeams() {
   const { lang } = useLanguage();

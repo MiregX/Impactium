@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { PanelTemplate } from '@/components/PanelTempate';
 import { useLanguage } from '@/context/Language.context';
-import { TeamUnit, TeamUnitSkeletoned } from './components/TeamUnit';
+import { TeamUnit, TeamUnitSkeleton } from '../../components/TeamUnit';
 import s from './Teams.module.css';
 import { Panel } from '@/ui/Panel';
 import { Team } from '@/dto/Team';
@@ -14,6 +14,10 @@ import { UserEntity } from '@/dto/User';
 import { useApplication } from '@/context/Application.context';
 import { Button } from '@/ui/Button';
 import CreateTeam from '@/banners/create_team/CreateTeam';
+import { usePagination } from '@/decorator/usePagination';
+import { Pagination } from '@/components/Pagination';
+import { useItemsPerPage } from '@/decorator/useItemsPerPage';
+import { PostProcessing } from '@/decorator/PostProcessing';
 
 export default function TeamsPage() {
   const { spawnBanner } = useApplication();
@@ -22,61 +26,31 @@ export default function TeamsPage() {
   const { user } = useUser();
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const { itemsPerPage } = useItemsPerPage();
 
   useEffect(() => {
-    !teams && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
+    !teams.length && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
       ...team,
       members: team.members?.map(member =>({
         ...member,
         user: new UserEntity(member.user)
       }))
-    })) : []));;
+    })) : []));
   }, [teams]);
 
-  const Empty = () => (
-    <div className={s.center}>
-      <p>{lang.team.empty}</p>
-      <Button onClick={() => spawnBanner(<CreateTeam />)}>{lang.create.team}</Button>
-    </div>
-  );
-
-  const NotFound = () => (
-    <div className={s.center}>
-      <p>{lang.team.not_found}</p>
-    </div>
-  )
-
-  const _Skeletons = () => Array.from({ length: 21}).map((_, i) => <TeamUnitSkeletoned key={i} />);
-  
-  const filteredData: Team[] = teams ? teams.filter((unit: any) =>
+  const filteredData: Team[] = teams ? teams.filter((unit: Team) =>
     unit.indent
       ? unit.indent.toLowerCase().includes(search.toLowerCase())
       : unit.title.toLowerCase().includes(search.toLowerCase())
   ) : [];
 
-  const PostProcessing = () => {
-    // При поиске пользователем при запросе в <SearchBar />
-    if (search.length > 0) {
-      if (filteredData.length) {
-        return filteredData.map((team: Team) => <TeamUnit key={team.indent} team={team} />)
-      } else if (loading) {
-        return <_Skeletons />;
-      } else {
-        return <NotFound />
-      }
-    // Команды загружены (Array а не null)
-    } else if (teams) {
-      // Если длинна масива больше 0
-      if (teams.length) {
-        return teams.map((team: Team) => <TeamUnit key={team.indent} team={team} />)
-      } else {
-        // Иначе ставим заглушку
-        return <Empty />  
-      }
-    } else {
-      return <_Skeletons />
-    }
-  }
+  const dataToPaginate = search.length > 0 ? filteredData : teams || [];
+
+  const { page, total, setPage, getPageNumbers, current } = usePagination({
+    totalItems: dataToPaginate.length,
+    itemsPerPage,
+    buttons: 5
+  });
 
   return (
     <PanelTemplate useColumn={true}>
@@ -98,9 +72,14 @@ export default function TeamsPage() {
           </React.Fragment>
         </Panel>
       : null}
+      <Pagination
+        page={page}
+        total={total}
+        getPageNumbers={getPageNumbers}
+        setPage={setPage} />
       {/* Рекомендации */}
       <div className={s.grid}>
-        <PostProcessing />
+        <PostProcessing search={search} type={'team'} data={teams} filtered={filteredData} current={current} loading={loading} />
       </div>
     </PanelTemplate>
   );

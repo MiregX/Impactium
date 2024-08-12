@@ -3,7 +3,7 @@ import s from './Tournament.module.css'
 import { PanelTemplate } from "@/components/PanelTempate";
 import { useTournament } from './context';
 import { Description } from './components/Description';
-import { Combination } from '@/components/Combitation';
+import { Combination } from '@/ui/Combitation';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();

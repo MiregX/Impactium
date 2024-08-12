@@ -1,4 +1,4 @@
-._ {
+.avatar {
   box-shadow: var(--shadow-border);
   border-radius: var(--round);
   overflow: hidden;
@@ -7,7 +7,7 @@
   justify-content: center;
   background: var(--geist-background);
 }
-._ p {
+.avatar p {
   color: var(--text-white);
   font-family: var(--font-mono);
   line-height: 0px;

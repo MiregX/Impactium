@@ -1,8 +1,9 @@
 .wrapper {
   display: grid;
   width: 100%;
+  overflow: hidden;
   gap: var(--card-gap);
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(calc((var(--width-limit) - 56px) / 3), 1fr));
 }
 .page {
   padding: 16px;
@@ -171,16 +172,4 @@ text-shadow: 0px 1px 2px #ffffff24;
 }
 .carousel_right {
   filter: invert(1);
-}
-
-@media all and (max-width: 768px) {
-  .wrapper {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media all and (max-width: 510px) {
-  .wrapper {
-    grid-template-columns: repeat(1, 1fr);
-  }
 }

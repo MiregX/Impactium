@@ -1,6 +1,6 @@
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
-import { Avatar } from '@/components/Avatar';
+import { Avatar } from '@/ui/Avatar';
 import { useLanguage } from '@/context/Language.context';
 import { Tournament } from '@/dto/Tournament';
 import { Button } from '@/ui/Button';

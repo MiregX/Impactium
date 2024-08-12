@@ -11,14 +11,14 @@ import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { useApperand } from '@/decorator/useAperand';
 import { cn } from '@/lib/utils';
-import { Toaster } from 'sonner';
+import { TeamOrTournament } from '@/dto/TeamOrTournament.type';
 
 interface SearchBarProps {
   search: string,
   setSearch: (value: string) => void,
   state: Team[] | Tournament[];
   setState: (value: any) => void;
-  apiPath: 'team' | 'tournament';
+  apiPath: TeamOrTournament;
   loading: boolean,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -39,8 +39,8 @@ export function SearchBar({ search, setSearch, setState, state, apiPath, loading
 
   const handleSearchChange = (event: any) => {
     setSearch(event.target.value);
-    setLoading(!!event.target.value);
     if (event.target.value.length >= 3) {
+      setLoading(!!event.target.value);
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         fetchData(event.target.value.toLowerCase()).then((results) => {
@@ -62,7 +62,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath, loading
     <div className={s.bar}>
       <Input
         img={'https://cdn.impactium.fun/ui/specific/mention.svg'}
-        placeholder={lang._enter_indent_or_title}
+        placeholder={lang.search[apiPath]}
         aria-label="Search"
         aria-invalid="false"
         type="search"

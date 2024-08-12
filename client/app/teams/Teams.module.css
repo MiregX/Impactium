@@ -17,6 +17,3 @@
   gap: var(--card-gap);
   width: 100%;
 }
-.unit > div {
-  flex-direction: row;
-}

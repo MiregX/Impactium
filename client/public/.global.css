@@ -29,6 +29,7 @@
   --text-medium-height: 1.25rem;
 
   --header-height: 64px;
+  --content-height: calc(100vh - var(var(--header-height)));
   
   --transition: cubic-bezier(.21,.29,0,.94);
   --round: 100px;

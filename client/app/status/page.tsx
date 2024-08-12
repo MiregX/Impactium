@@ -14,7 +14,6 @@ export default function StatusPage() {
         <Panel heading={lang.status.heading}>
           <React.Fragment>
             <Unit name='redis' />
-            <Unit name='telegram' />
             <Unit name='cockroachdb' />
           </React.Fragment>
         </Panel>

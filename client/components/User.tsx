@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
-import { Avatar } from './Avatar';
+import { Avatar } from '../ui/Avatar';
 
 export function UserComponent() {
   const { user, logout } = useUser();

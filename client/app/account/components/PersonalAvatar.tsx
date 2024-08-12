@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { useUser } from "@/context/User.context";
-import { Avatar } from "@/components/Avatar";
+import { Avatar } from "@/ui/Avatar";
 
 export function PersonalAvatar() {
   const { lang } = useLanguage();

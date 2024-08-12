@@ -9,7 +9,8 @@ import { useLanguage } from '@/context/Language.context'
 import { getReadableDate } from '@/decorator/getReadableDate'
 import React from 'react'
 import { Button } from '@/ui/Button'
-import { Combination } from './Combitation'
+import { Combination, CombinationSkeleton } from '../ui/Combitation'
+import { Skeleton } from '@/ui/Skeleton'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -32,41 +33,21 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
         <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
         <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end, { year: false })} UTC</span>
       </div>
-      {/* <Description tournament={tournament} /> */}
-      {/* <WatchLive url={tournament.live} /> */}
     </Card>
   );
 };
 
-function WatchLive({ url }: { url?: string }) {
-  'use client'
-  const { lang } = useLanguage();
-  return url && (
-    <Button asChild>
-      <Link href={url}>
-        <Image width={20} height={20} src='https://cdn.impactium.fun/ui/specific/watch-live.svg' alt='' />
-        {lang._watch_live}
-      </Link>
-    </Button>
-  );
-}
-
-function Description({ tournament }: TournamentUnitProps) {
-  'use client'
-  const { lang } = useLanguage();
-
-  const map = [
-    ['$' + (tournament.prize || 0), 'specific/trophy.svg'],
-    [lang.team.amount + ': ' + tournament.teams.length, 'user/users.svg'],
-    // Ближайшее сражение которое должно произойти * на сумарное кол-во ммр обеих команд
-    [tournament.grid && tournament.grid.sort((battle: any) => battle), 'specific/dart.svg'],
-  ]
-
+export function TournamentUnitSkeleton() {
   return (
-    <React.Fragment>
-      <div className={s.description_section}>
-        Призовой фонд: {'$' + (tournament.prize || 0)}
+    <Card className={s.card}>
+      <div className={s.heading}>
+        <CombinationSkeleton />
       </div>
-    </React.Fragment>
-  );
+      <div className={s.container}>
+        <Skeleton variant='badge' />
+        <Skeleton variant='badge' />
+        <Skeleton size='short' />
+      </div>
+    </Card>
+  )
 }

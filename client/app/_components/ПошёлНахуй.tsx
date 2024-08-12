@@ -8,17 +8,26 @@ import { useApplication } from '@/context/Application.context';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import Image from 'next/image';
 
-export function ПошёлНахуй() {
+interface ПошёлНахуйProps {
+  mode: 'default' | 'frendly'
+}
+
+export function ПошёлНахуй({ mode }: ПошёлНахуйProps) {
   const { spawnBanner } = useApplication();
+  
+  const map = {
+    default: ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
+    frendly: ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
+  }[mode];
+
+  console.log(map, mode);
 
   return (
     <div className={s.wrapper}>
-      <h1>Пошёл</h1>
-      <h2>нахуй</h2>
-      <h3>сын</h3>
-      <h4>мёртвой</h4>
-      <h5>шлюхи.</h5>
-      <h6>Чё хочу, то, блять, и делаю.</h6>
+      {map.map((word, i) => {
+        const Tag = `h${i + 1}` as keyof JSX.IntrinsicElements;
+        return <Tag>{word}</Tag>
+      })}
       <Button asChild className={cn(s.button, s.tournaments)}>
         <Link href='/tournaments'>
           <Image src='https://cdn.impactium.fun/ui/specific/trophy.svg' alt='' width={20} height={20} />

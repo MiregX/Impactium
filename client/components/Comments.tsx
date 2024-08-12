@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/Language.context';
 import { LeaveComment } from './LeaveComment';
 import { useUser } from '@/context/User.context';
 import { UserEntity } from '@/dto/User';
-import { Avatar } from './Avatar';
+import { Avatar } from '../ui/Avatar';
 
 interface CommentsProps {
   comments: Comment[]

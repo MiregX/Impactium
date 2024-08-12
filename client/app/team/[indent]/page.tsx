@@ -5,7 +5,7 @@ import { Description } from './components/Description';
 import { Comments } from "@/components/Comments";
 import { useTeam } from './team.context';
 import { MembersForTeam } from './components/MembersForTeam';
-import { Combination } from '@/components/Combitation';
+import { Combination } from '@/ui/Combitation';
 import { Badge } from '@/ui/Badge';
 import { getReadableDate } from '@/decorator/getReadableDate';
 

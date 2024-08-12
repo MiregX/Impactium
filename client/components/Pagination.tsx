@@ -1,12 +1,14 @@
 'use client'
 import { Button } from '@/ui/Button';
 import s from './styles/Pagination.module.css';
+import { HTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
 
-interface PaginationComponentProps {
+type PaginationComponentProps = HTMLAttributes<HTMLDivElement> & {
   page: number;
   total: number;
   getPageNumbers: () => number[];
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function Pagination({
@@ -14,13 +16,15 @@ export function Pagination({
   total,
   getPageNumbers,
   setPage,
+  className,
+  ...props
 }: PaginationComponentProps) {
   const nextPage = () => setPage((prev) => Math.min(prev + 1, total));
   const prevPage = () => setPage((prev) => Math.max(prev - 1, 1));
   const goToPage = (page: number) => setPage(page);
 
   return (
-    <div className={s.pagination}>
+    <div className={cn(s.pagination, className)} {...props}>
       {/* Кнопка назад */}
       <Button variant={page === 1 ? 'disabled' : 'ghost'}
         img='https://cdn.impactium.fun/ui/chevron/left-md.svg'

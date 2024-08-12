@@ -1,10 +1,10 @@
-import s from '../Teams.module.css'
+import s from './styles/_.module.css'
 import { Team } from '@/dto/Team'
 import { Card } from '@/ui/Card'
 import { Button } from '@/ui/Button'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Combination, CombinationSkeleton } from '@/components/Combitation'
+import { Combination, CombinationSkeleton } from '@/ui/Combitation'
 
 export function TeamUnit({ team }: { team: Team }) {
   return (
@@ -20,7 +20,7 @@ export function TeamUnit({ team }: { team: Team }) {
   )
 }
 
-export function TeamUnitSkeletoned() {
+export function TeamUnitSkeleton() {
   return (
     <Card className={s.unit}>
       <CombinationSkeleton />

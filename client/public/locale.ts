@@ -30,6 +30,22 @@ export interface LocaleUnit {
 }
 
 const locale: Locale = {
+  search: {
+    team: {
+      us: 'Enter team name or its tag...',
+      ru: 'Название команды или её тег...',
+      ua: 'Назва команди або її тег...',
+      it: 'Inserisci il nome della squadra o il suo tag...',
+      pl: 'Wprowadź nazwę zespołu lub jego tag...'
+    },
+    tournament: {
+      us: 'Enter tournament title or its tag...',
+      ru: 'Название турнира или тег...',
+      ua: 'Назва змагання або його тег...',
+      it: 'Inserisci il titolo del torneo o il suo tag...',
+      pl: 'Wpisz tytuł turnieju lub jego tag...'
+    },    
+  },
   _admin_panel: {
     us: 'Admin panel',
     ru: 'Админ-панель',
@@ -71,13 +87,6 @@ const locale: Locale = {
     ua: 'Мин.',
     it: 'Min',
     pl: 'Min.'
-  },  
-  _enter_indent_or_title: {
-    us: 'Enter team name or its tag...',
-    ru: 'Название команды или её тег...',
-    ua: 'Назва команди або її тег...',
-    it: 'Inserisci il nome della squadra o il suo tag...',
-    pl: 'Wprowadź nazwę zespołu lub jego tag...'
   },
   _verified: {
     us: 'Verified',

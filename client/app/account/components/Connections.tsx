@@ -6,7 +6,7 @@ import { Login } from "@/dto/Login";
 import { Button } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application.context";
-import { Avatar } from "@/components/Avatar";
+import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect } from "react";
 import { Logins, User, UserAddons, UserEntity } from "@/dto/User";

@@ -1,13 +1,14 @@
 import s from './styles/Skeleton.module.css'
 import { cva, VariantProps } from "class-variance-authority";
 
-const { avatar, short, icon } = s;
+const { avatar, short, badge } = s;
 
 const skeletonVariants = cva(s.skeleton, {
   variants: {
     variant: {
       default: s.default,
-      avatar
+      avatar,
+      badge
     },
     size: {
       default: s.defaultSize,
@@ -29,13 +30,12 @@ const Skeleton = ({
   className,
   variant,
   size,
-  height = 14,
-  width = 256,
+  height,
+  width,
   ...props
 }: SkeletonProps) => {
   return (
     <div
-    style={{ maxHeight: `${height}px`, maxWidth: `${width}px`}}
       className={skeletonVariants({ variant, size, className })}
       {...props}
     />

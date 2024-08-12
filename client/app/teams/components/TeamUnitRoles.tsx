@@ -1,4 +1,4 @@
-import { Avatar } from "@/components/Avatar";
+import { Avatar } from "@/ui/Avatar";
 import { TeamMember } from "@/dto/TeamMember";
 import s from '../Teams.module.css';
 

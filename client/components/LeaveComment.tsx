@@ -4,7 +4,7 @@ import s from './styles/Comments.module.css'
 import { Button } from '@/ui/Button'
 import { useUser } from '@/context/User.context'
 import { useLanguage } from '@/context/Language.context'
-import { Avatar } from './Avatar'
+import { Avatar } from '../ui/Avatar'
 
 
 export function LeaveComment() {
