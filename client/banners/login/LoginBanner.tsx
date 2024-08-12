@@ -3,7 +3,7 @@ import s from './LoginBanner.module.css'
 import { Banner } from "@/ui/Banner";
 import { LoginMethod } from "./components/LoginMethod";
 import { useLanguage } from "@/context/Language.context";
-import { TelegramWidget } from '@/components/TelegramWidget';
+import { TelegramWidget } from './components/TelegramWidget';
 
 interface LoginBanner {
   connect?: true
