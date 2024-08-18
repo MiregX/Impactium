@@ -20,7 +20,6 @@ export default function TeamIndentPage() {
           <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
           Время регистрации {getReadableDate(team.registered)}
         </div>
-        <Description key='team' state={team} />
         <MembersForTeam />
       </div>
       <Comments comments={team.comments} />

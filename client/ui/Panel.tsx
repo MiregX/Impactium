@@ -1,7 +1,7 @@
 import _ from './styles/Panel.module.css'
 
 interface Panel {
-  heading: string;
+  heading: string | React.ReactNode;
   children: React.ReactNode | React.ReactNode[]
   className?: string[] | string;
 }
@@ -9,7 +9,7 @@ interface Panel {
 export function Panel({ heading, children, className }: Panel) {
   return (
     <div className={`${_._} ${useClasses(className)}`}>
-      <h4>{heading}</h4>
+      {typeof heading === 'string' ? <h4>{heading}</h4> : heading}
       <div className={_.content}>
         {children}
       </div>

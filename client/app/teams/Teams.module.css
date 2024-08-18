@@ -17,3 +17,6 @@
   gap: var(--card-gap);
   width: 100%;
 }
+.pagination {
+  align-self: flex-end;
+}

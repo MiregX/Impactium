@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
-  flex: 1;
 }
 .group {
   flex: 1;
@@ -33,6 +32,6 @@
 .heading .name {
   font-size: 22px;
 }
-.id {
+.heading .id {
   font-size: 20px;
 }

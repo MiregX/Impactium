@@ -12,15 +12,12 @@ import { useTeams } from './context';
 import { SearchBar } from '@/components/SearchBar';
 import { UserEntity } from '@/dto/User';
 import { useApplication } from '@/context/Application.context';
-import { Button } from '@/ui/Button';
-import CreateTeam from '@/banners/create_team/CreateTeam';
 import { usePagination } from '@/decorator/usePagination';
 import { Pagination } from '@/components/Pagination';
 import { useItemsPerPage } from '@/decorator/useItemsPerPage';
 import { PostProcessing } from '@/decorator/PostProcessing';
 
 export default function TeamsPage() {
-  const { spawnBanner } = useApplication();
   const { teams, setTeams } = useTeams();
   const { lang } = useLanguage();
   const { user } = useUser();
@@ -73,6 +70,7 @@ export default function TeamsPage() {
         </Panel>
       : null}
       <Pagination
+        className={s.pagination}
         page={page}
         total={total}
         getPageNumbers={getPageNumbers}

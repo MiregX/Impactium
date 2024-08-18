@@ -5,7 +5,7 @@ export interface TeamMember {
   id: string
   uid: string
   tid: string
-  roles: TeamMemberRoles[]
+  roles: string[]
   user: UserEntity
 }
 

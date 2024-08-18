@@ -8,3 +8,9 @@
   align-items: center;
   gap: 12px;
 }
+.unit > div {
+  flex-direction: row;
+}
+.team_combination {
+  flex: 1;
+}

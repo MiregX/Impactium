@@ -16,7 +16,7 @@ export function UserComponent() {
   const [active, setActive] = useState<boolean>(false);
 
   const toggle = () => {
-    setActive(!active);
+    setActive((_) => !_);
   }
 
   const handle = (func: Function) => {
@@ -27,12 +27,12 @@ export function UserComponent() {
   return (
     <div className={`${_user.user} ${active && _user.active}`}>
       <div className={_user.action_lock} onClick={toggle} />
-      <Avatar
-        className={_user.wrapper}
-        size={36}
-        alt={user!.displayName}
-        src={user!.avatar}
-        onClick={toggle} />
+        <Avatar
+          className={_user.wrapper}
+          size={36}
+          alt={user!.displayName}
+          src={user!.avatar}
+          onClick={toggle} />
       <nav className={_user.menu}>
         <p className={_user.name}>{user!.email || user!.displayName}</p>
         {user!.uid === 'system' && (
