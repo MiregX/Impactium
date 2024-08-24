@@ -1,4 +1,4 @@
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 import { ChangelogProvider } from "./context";
 import { Changelog } from "@/dto/Changelog";
 

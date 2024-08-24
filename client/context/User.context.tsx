@@ -2,7 +2,7 @@
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
 import { User, UserAddons, UserEntity } from "@/dto/User";
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
 
 const UserContext = createContext<UserContext | undefined>(undefined);

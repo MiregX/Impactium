@@ -1,7 +1,7 @@
 'use client'
 import { useState, createContext, useContext, useEffect } from "react";
 import { Changelog } from "@/dto/Changelog";
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 
 const ChangelogContext = createContext<ChangelogContext | undefined>(undefined);
 

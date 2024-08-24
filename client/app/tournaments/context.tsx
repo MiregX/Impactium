@@ -1,7 +1,7 @@
 'use client'
 import { useState, createContext, useContext } from "react";
 import { Tournament } from "@/dto/Tournament";
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 
 const TournamentsContext = createContext<TournamentsContext | undefined>(undefined)!;
 

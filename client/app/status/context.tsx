@@ -1,7 +1,7 @@
 'use client'
 import { useState, createContext, useContext } from "react";
 import { Status } from "@/dto/Status";
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 
 const StatusContext = createContext<StatusContext | undefined>(undefined)!;
 

@@ -1,4 +1,4 @@
-import { Children } from "@/dto/Children";
+import { Children } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
