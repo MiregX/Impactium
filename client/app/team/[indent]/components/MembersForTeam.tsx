@@ -32,29 +32,32 @@ export function MembersForTeam() {
 
   return (
     <Panel heading={heading} className={s.members_for_team}>
-      {team.members && team.members.map(({user, ...member }) => 
+      {team.members && team.members.map(({ user, ...member }) => (
         <div key={member.id} className={s.role_unit}>
           <Combination src={user.avatar} name={user.displayName} id={user.username} />
           <div className={s.roles}>
-          {Object.values(TeamMemberMainRoles).filter(key => typeof key === 'number').map((role: TeamMemberMainRoles) => (
-            <TooltipProvider key={role}>
-            <Tooltip>
-              <TooltipTrigger>
-                <img
-                  className={cn(s.icon, member.roles.includes(TeamMemberMainRolesMap[role]) && s.active)}
-                  src={`https://cdn.impactium.fun/ui/roles/${TeamMemberMainRolesMap[role]}.png`}
-                  alt=''
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{TeamMemberMainRolesMap[role]}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          ))}
+            {Object.values(TeamMemberMainRoles)
+              // Уточняем, что ключ должен быть числом (значением enum-а)
+              .filter((key): key is TeamMemberMainRoles => typeof key === 'number')
+              .map((role) => (
+                <TooltipProvider key={role}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <img
+                        className={cn(s.icon, member.roles.includes(TeamMemberMainRolesMap[role]) && s.active)}
+                        src={`https://cdn.impactium.fun/ui/roles/${TeamMemberMainRolesMap[role]}.png`}
+                        alt=""
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{TeamMemberMainRolesMap[role]}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
           </div>
         </div>
-      )}
+      ))}
     </Panel>
-  )
-}
+  );
+};
