@@ -14,7 +14,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--card-gap);
+  gap: var(--gap);
   width: 100%;
 }
 .pagination {

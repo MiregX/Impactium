@@ -9,7 +9,7 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--panel-gap);
+  gap: var(--padding-s);
   flex: 1;
 }
 
@@ -58,20 +58,20 @@
   border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
   display: flex;
-  gap: var(--card-gap);
+  gap: var(--gap);
   align-items: center;
 }
 .account .unit {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--card-gap);
+  gap: var(--gap);
   width: 100%;
 }
 .group {
   display: flex;
   flex-direction: row;
-  gap: var(--panel-gap);
+  gap: var(--padding-s);
 }
 .account .unit > img {
   height: 32px;
@@ -105,7 +105,7 @@
 .balance .stack {
   flex: 1;
   display: flex;
-  gap: var(--card-padding);
+  gap: var(--padding);
   flex-direction: column;
 }
 .balance_amount {
@@ -113,7 +113,7 @@
   align-items: center;
   font-size: var(--text-larger);
   font-family: var(--font-mono);
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 .balance_amount img {
   height: 42px;

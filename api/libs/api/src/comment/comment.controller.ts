@@ -38,7 +38,6 @@ export class CommentController {
     @Param('type', CommentTypeValidationPipe) type: CommentTypeDto,
     @Param('indent', IndentValidationPipe) indent: string,
   ) {
-    console.log(body);
     return this.commentService.post({
       uid: user.uid,
       indent,

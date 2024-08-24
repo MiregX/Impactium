@@ -2,7 +2,7 @@
   display: grid;
   width: 100%;
   overflow: hidden;
-  gap: var(--card-gap);
+  gap: var(--gap);
   grid-template-columns: repeat(auto-fill, minmax(calc((var(--width-limit) - 56px) / 3), 1fr));
 }
 .page {
@@ -54,7 +54,7 @@
   display: flex;
   flex-direction: column;
   padding: 32px;
-  gap: var(--panel-gap);
+  gap: var(--padding-s);
 }
 .fill ul {
   font-size: 18px;
@@ -146,7 +146,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 .card .heading h3 {
   display: flex;

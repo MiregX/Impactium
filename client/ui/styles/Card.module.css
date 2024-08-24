@@ -8,9 +8,9 @@
   flex-direction: column;
 }
 .content {
-  gap: var(--card-gap);
+  gap: var(--gap);
   display: flex;
-  padding: var(--card-padding);
+  padding: var(--padding);
   flex: 1;
   flex-direction: column;
   position: relative;
@@ -27,17 +27,17 @@
 .description {
   min-height: 56px;
   border-top: 1px solid var(--accent-3);
-  padding: 0 var(--card-padding);
+  padding: 0 var(--padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 .description p {
   font-size: var(--text-medium);
   line-height: 1.2;
   color: var(--text-dimmed);
-  margin: var(--card-padding) 0px;
+  margin: var(--padding) 0px;
 }
 
 /* Для телефонов */

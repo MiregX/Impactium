@@ -20,13 +20,11 @@ export function ПошёлНахуй({ mode }: ПошёлНахуйProps) {
     frendly: ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
   }[mode];
 
-  console.log(map, mode);
-
   return (
     <div className={s.wrapper}>
       {map.map((word, i) => {
         const Tag = `h${i + 1}` as keyof JSX.IntrinsicElements;
-        return <Tag>{word}</Tag>
+        return <Tag key={i}>{word}</Tag>
       })}
       <Button asChild className={cn(s.button, s.tournaments)}>
         <Link href='/tournaments'>

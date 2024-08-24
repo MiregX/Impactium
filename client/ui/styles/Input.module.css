@@ -26,7 +26,7 @@
 .input:focus-visible {
   outline: none;
   cursor: text;
-  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+  box-shadow: var(--ring);
 }
 .input:disabled {
   cursor: not-allowed;

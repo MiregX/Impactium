@@ -81,6 +81,6 @@ export class TournamentService implements OnModuleInit {
         live: 'https://twitch.tv/impactium',
         prize: 50
       }
-    }).then(console.log);
+    });
   }
 };

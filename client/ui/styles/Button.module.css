@@ -49,7 +49,7 @@
   color: var(--white);
 }
 .outline img {
-  filter: var(--filter-to-e8e8e8);
+  filter: var(--filter-to-dimmed);
 }
 .outline:hover img {
   filter: var(--filter-to-white);
@@ -80,7 +80,7 @@
   color: var(--text-dimmed);
 }
 .ghost img {
-  filter: var(--filter-to-e8e8e8);
+  filter: var(--filter-to-dimmed);
 }
 .ghost:hover {
   background-color: var(--gray16);
@@ -106,7 +106,7 @@
   color: var(--text-dimmed);
 }
 .disabled img {
-  filter: var(--filter-to-e8e8e8);
+  filter: var(--filter-to-dimmed);
 }
 
 .defaultSize {

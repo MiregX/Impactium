@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 
 .card {
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 .card span {
   font-family: var(--font-mono);
@@ -36,5 +36,5 @@
 }
 
 .card p:nth-child(4, 5) img {
-  filter: var(--filter-to-e8e8e8);
+  filter: var(--filter-to-dimmed);
 }

@@ -11,7 +11,7 @@
   align-items: center;
   flex-direction: row;
   width: 100%;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 .delete .unit .sub {
   flex: 1;
@@ -28,4 +28,12 @@
   font-weight: 500;
   color: var(--white);
   font-size: 14px;
+}
+.safe_toggle_wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  align-items: center;
+  font-family: var(--font-mono);
+  color: var(--text-dimmed);
 }

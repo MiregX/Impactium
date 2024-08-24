@@ -27,8 +27,8 @@
   }
 }
 .members_for_team > div:nth-child(2) {
-  padding: var(--card-gap);
-  gap: var(--card-gap);
+  padding: var(--gap);
+  gap: var(--gap);
   min-height: min-content;
 }
 .heading {
@@ -59,7 +59,7 @@
 .roles .icon {
   height: 24px;
   width: 24px;
-  filter: var(--filter-to-e8e8e8) brightness(0.3);
+  filter: var(--filter-to-dimmed) brightness(0.3);
 }
 .roles .icon.active {
   filter: var(--filter-to-white);

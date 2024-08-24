@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  gap: var(--card-gap);
+  gap: var(--gap);
 }
 
 .description p {

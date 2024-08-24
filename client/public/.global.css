@@ -1,25 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
+  /* TEXT */
   --font-nunito: 'Nunito', sans-serif;
-  --black: #000;
-  --white: #fff;
-  --soft-white: #e8e8e8;
-  --soft-black: #0d0d0d;
-  --meta-black: #0a0a0a;
-
-  --semi-hd: 1366px;
-  
-  --gray16: #161616;
-  --gray24: #242424;
-  --gray32: #323232;
-  --gray48: #484848;
-  --gray64: #646464;
-  --gray80: #808080;
-  --gray96: #929292;
-
-  --width-limit: 1488px;
-
   --text-dimmed: #a1a1a1;
   --text-white: #e8e8e8;
   --text-medium: .875rem;
@@ -28,21 +11,43 @@
   --text-small: 12px;
   --text-medium-height: 1.25rem;
 
+  /* COLOR */
+  --black: #000;
+  --white: #fff;
+  --soft-white: #e8e8e8;
+  --soft-black: #0d0d0d;
+  --meta-black: #0a0a0a;
+  --gray16: #161616;
+  --gray24: #242424;
+  --gray32: #323232;
+  --gray48: #484848;
+  --gray64: #646464;
+  --gray80: #808080;
+  --gray96: #929292;
+
+  /* LIMIT */
+  --semi-hd: 1366px;
+  --width-limit: 1488px;
   --header-height: 64px;
   --content-height: calc(100vh - var(var(--header-height)));
-  
-  --transition: cubic-bezier(.21,.29,0,.94);
+
+  /* BORDER */
   --round: 100px;
   --border-s: 6px;
   --border-m: 12px;
   --border-l: 18px;
+  --geist-border: 1px solid hsla(0,0%,100%,.07);
+  --ring: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
 
-  --filter-to-e8e8e8: brightness(0.58);
+  
+  --transition: cubic-bezier(.21,.29,0,.94);
+
+  --filter-to-dimmed: brightness(0.58);
   --filter-to-black: brightness(0);
   --filter-to-white: brightness(100);
 
   --geist-background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
-  --geist-border: 1px solid hsla(0,0%,100%,.07);
+  
   --shadow-border: 0 0 0 1px hsla(0, 0%, 100%, .145);
   --geist-weak-shadow: 0 0 0 1px hsla(0,0%,100%,.145) ,0px 1px 1px rgba(0,0,0,.02),0px 4px 8px -4px rgba(0,0,0,.04),0px 16px 24px -8px rgba(0,0,0,.06);
   --geist-right-radial-gradient: radial-gradient(50% 50% at 50% 50%, #121212 0, #000 100%);
@@ -64,10 +69,13 @@
   --geist-yellow: #f3c600;
   --geist-red: #f30000;
 
-  --card-padding: 24px;
-  --card-gap: 12px;
+  /* PADDING */
+  --padding: 24px;
+  --padding-s: 16px;
 
-  --panel-gap: 16px;
+  /* GAP */
+  --gap: 12px;
+  --gapX2: 24px;
 }
 
 * {

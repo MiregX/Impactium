@@ -17,7 +17,6 @@ export function LogoInput({ team, handle }: LogoInputProps) {
 
   const handleBannerChange = (e: any) => {
     const file = e.target.files[0];
-    console.log(file)
     handle({banner: file});
     if (file) {
       const reader = new FileReader();

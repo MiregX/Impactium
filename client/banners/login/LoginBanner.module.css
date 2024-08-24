@@ -25,7 +25,7 @@
 }
 .disabled img,
 .disabled .text {
-  filter: var(--filter-to-e8e8e8);
+  filter: var(--filter-to-dimmed);
 }
 
 .method:last-child {
