@@ -18,7 +18,7 @@ export function MembersForTeam() {
 
   const heading = (
     <div className={s.heading}>
-      <h4>{lang.team.members}</h4>
+      <h4>{lang.team.members}<span>{(team.members?.length || 0)} / 8 участников</span></h4>
       {user?.uid === team.ownerId
         ? <Button size='sm'>Edit team</Button>
         : team.members?.find(m => m.uid === user?.uid)
@@ -37,11 +37,10 @@ export function MembersForTeam() {
           <Combination src={user.avatar} name={user.displayName} id={user.username} />
           <div className={s.roles}>
           {Object.values(TeamMemberMainRoles).filter(key => typeof key === 'number').map((role: TeamMemberMainRoles) => (
-            <TooltipProvider>
+            <TooltipProvider key={role}>
             <Tooltip>
               <TooltipTrigger>
                 <img
-                  key={role}
                   className={cn(s.icon, member.roles.includes(TeamMemberMainRolesMap[role]) && s.active)}
                   src={`https://cdn.impactium.fun/ui/roles/${TeamMemberMainRolesMap[role]}.png`}
                   alt=''

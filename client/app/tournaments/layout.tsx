@@ -1,4 +1,4 @@
-import { Children } from '@/dto/Children';
+import { Children } from '@/types';
 import { TournamentsProvider } from './context'
 import { Tournament } from '@/dto/Tournament';
 

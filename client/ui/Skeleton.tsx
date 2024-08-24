@@ -22,20 +22,22 @@ const skeletonVariants = cva(s.skeleton, {
 });
 
 type SkeletonProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof skeletonVariants> & {
-  height?: number | `${number}`;
-  width?: number | `${number}`
+  height?: number | string;
+  width?: number | string
 };
 
 const Skeleton = ({
   className,
   variant,
   size,
-  height,
-  width,
+  height = '',
+  width = '',
+  style = {},
   ...props
 }: SkeletonProps) => {
   return (
     <div
+      style={{...style, height, width }}
       className={skeletonVariants({ variant, size, className })}
       {...props}
     />

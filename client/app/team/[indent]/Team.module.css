@@ -76,3 +76,22 @@
   line-height: 1px;
   font-size: var(--text-medium);
 }
+.members_for_team h4 span {
+  color: var(--text-dimmed);
+  margin-left: 16px;
+}
+.combination > div:first-child {
+  position: relative;
+}
+.combination > div:first-child::after {
+  content: url('https://cdn.impactium.fun/ui/pencil/pencil.svg');
+  position: absolute;
+  opacity: 0;
+  backdrop-filter: brightness(0.9) blur(2px);
+  height: 100%;
+  width: 100%;
+  transition: all 0.15s var(--transition);
+}
+.combination > div:first-child:hover::after {
+  opacity: 1;
+}

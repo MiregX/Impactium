@@ -1,4 +1,4 @@
-import { Children } from '@/dto/Children';
+import { Children } from '@/types';
 import { StatusProvider } from './context'
 import { Status } from '@/dto/Status';
 

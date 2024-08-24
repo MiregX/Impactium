@@ -29,10 +29,10 @@ type CombinationProps = CombinationSkeletonProps & {
 
 type CombinationSkeletonProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof combinationVariants>;
 
-export function Combination({ src, name, className, size, id, children, ...props }: CombinationProps) {
+export function Combination({ src, name, className, onClick, size, id, children, ...props }: CombinationProps) {
   return (
     <div className={combinationVariants({ className, size })} {...props}>
-      <Avatar size={size === 'heading' ? 64 : 36} src={src} alt={name} />
+      <Avatar size={size === 'heading' ? 64 : 36} onClick={onClick} src={src} alt={name} />
       <div className={s.group}>
         <p className={s.name}>{name}</p>
         {id && <p className={s.id}>@{id}</p>}

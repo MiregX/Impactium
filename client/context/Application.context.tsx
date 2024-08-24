@@ -5,7 +5,7 @@ import '@/decorator/useOptionStyling';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import s from './Application.module.css';
 import { useLanguage } from '@/context/Language.context';
-import { Children } from '@/dto/Children';
+import { Children } from '@/types';
 import { AvailableLanguage } from '@/dto/AvaliableLanguage';
 import { Application, ApplicationBase } from '@/dto/Application.dto';
 import { Message } from '@/dto/Message.dto';

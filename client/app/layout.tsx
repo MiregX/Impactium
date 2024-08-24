@@ -16,6 +16,7 @@ import { GeistMono } from 'geist/font/mono';
 import { Header } from '@/components/Header';
 import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
+import { Children } from '@/types';
 
 declare global {
   var api: Api;
@@ -23,7 +24,7 @@ declare global {
   var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
 
-export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Children) {
   const cookie = cookies();
 
   const token = cookie.get('Authorization')?.value

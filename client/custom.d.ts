@@ -1,7 +1,8 @@
 import 'react';
 
 declare module 'react' {
-  interface CSSProperties {
-    [key: string]: string | number;
+  interface CSSProperties extends React.CSSProperties  {
+    '--font-mono'?: string;
+    '--font-sans'?: string;
   }
 }
