@@ -10,8 +10,6 @@ import Image from 'next/image';
 
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
-
-  console.log(application.isSafeMode);
   
   const map = [
     ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
