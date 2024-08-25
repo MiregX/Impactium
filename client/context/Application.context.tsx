@@ -5,7 +5,7 @@ import '@/decorator/useOptionStyling';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
-import { Application } from '@impactium/types';
+import { Application, ws } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
@@ -43,7 +43,7 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
   }, [application]);
   
   useEffect(() => {
-    socket?.on('updateApplicationInfo', setApplication);
+    socket?.on(ws.updateApplicationInfo, setApplication);
   
     return socket?.disconnect as unknown as void;
   }, [socket]);

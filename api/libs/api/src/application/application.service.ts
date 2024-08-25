@@ -6,7 +6,7 @@ import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
-import { type Application } from '@impactium/types';
+import { ws, type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class ApplicationService implements OnModuleInit {
     const toggled = await this._getIsSafeMode() ? 0 : 1;
     await this.redisService.set(dataset.isSafeMode, toggled);
     const info = await this._reloadInfo();
-    this.webSocket.server.emit('updateApplicationInfo', info);
+    this.webSocket.server.emit(ws.updateApplicationInfo, info);
     return info;
   }
 

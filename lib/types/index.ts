@@ -31,3 +31,7 @@ export const ApplicationBase: Application = {
   },
   isSafeMode: 1
 }
+
+export enum ws {
+  updateApplicationInfo = 'updateApplicationInfo'
+}
