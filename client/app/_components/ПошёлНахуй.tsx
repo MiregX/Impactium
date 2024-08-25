@@ -16,7 +16,7 @@ export function ПошёлНахуй() {
   const map = [
     ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
     ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
-  ][application.isSafeMode];
+  ][application.isSafeMode || 1];
 
   return (
     <div className={s.wrapper}>
