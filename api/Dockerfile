@@ -1,10 +1,6 @@
-####################
-# STAGE 1: Prepare #
-####################
-
-FROM node:20-alpine AS development
+FROM node:20-alpine AS production
 USER node
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 WORKDIR /app/lib
 COPY --chown=node:node ./lib .
