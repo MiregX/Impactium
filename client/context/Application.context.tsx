@@ -37,6 +37,10 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
       path: '/api/ws'
     }));
   }, []);
+
+  useEffect(() => {
+    console.log(application);
+  }, [application]);
   
   useEffect(() => {
     socket?.on('updateApplicationInfo', setApplication);
