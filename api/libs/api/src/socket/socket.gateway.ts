@@ -12,6 +12,7 @@ import { Configuration } from '@impactium/config';
 
 @Injectable()
 @WebSocketGateway({
+  path: '/api/ws',
   cors: {
     origin: Configuration.getClientLink(),
     methods: ['*'],

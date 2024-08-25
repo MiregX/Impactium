@@ -33,8 +33,8 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    setSocket(io(`${_server()}`, {
-      path: '/api/socket.io'
+    setSocket(io(_server(), {
+      path: '/api/ws'
     }));
   }, []);
   
