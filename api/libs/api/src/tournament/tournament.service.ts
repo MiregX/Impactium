@@ -4,6 +4,7 @@ import { TournamentStandart } from './addon/tournament.standart';
 import { TournamentEntity, TournamentEntityWithTeams } from './addon/tournament.entity';
 import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -36,14 +37,18 @@ export class TournamentService implements OnModuleInit {
     nextFriday.setUTCHours(20, 0, 0, 0);
   
     const fridays = Array.from({ length: 4 }, (_, i) => addWeeks(nextFriday, i));
+    if (!fridays.length) Logger.error(fridays, 'TournamentService');
   
     for (const friday of fridays) {
-      this.prisma.tournament.findFirst({
+      await this.prisma.tournament.findFirst({
         where: {
           ownerId: 'system',
           start: friday,
         },
-      }).then(battleCup => !battleCup && this.createBattleCup(friday));
+      }).then(battleCup => {
+        Logger.log(battleCup.start, 'TournamentService');
+        !battleCup && this.createBattleCup(friday)
+      });
     }
   }
 
@@ -62,8 +67,8 @@ export class TournamentService implements OnModuleInit {
     });
   }
 
-  private createBattleCup(date: Date) {
-    this.prisma.tournament.create({
+  private async createBattleCup(date: Date) {
+    await this.prisma.tournament.create({
       data: {
         banner: 'https://cdn.impactium.fun/logo/battle_cup.png',
         title: `Friday Battle Cup ${getMonth(date) + 1}/${date.getDate()}`,
@@ -81,6 +86,6 @@ export class TournamentService implements OnModuleInit {
         live: 'https://twitch.tv/impactium',
         prize: 50
       }
-    });
+    }).then(tournament => Logger.log(tournament));
   }
 };

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
@@ -44,7 +44,7 @@ export class ApplicationService implements OnModuleInit {
   } 
 
   private async _generateInfo(): Promise<Application> {
-    const [users_count, teams_count, tournaments_count, isSafeMode = '1'] = await Promise.all([
+    const [users_count, teams_count, tournaments_count, isSafeMode] = await Promise.all([
       await this.prisma.user.count(),
       await this.prisma.team.count(),
       await this.prisma.tournament.count(),
@@ -60,7 +60,7 @@ export class ApplicationService implements OnModuleInit {
         teams_count,
         tournaments_count,
       },
-      isSafeMode: parseInt(isSafeMode)
+      isSafeMode: parseInt(isSafeMode || '1') 
     } as Application
   }
 
@@ -158,7 +158,7 @@ export class ApplicationService implements OnModuleInit {
       },
       update: {}
     });
-    console.log('[ λ ] Admin token: ', this.authService.parseToken(this.userService.signJWT(system.uid, system.email)));
+    Logger.verbose(this.authService.parseToken(this.userService.signJWT(system.uid, system.email)), 'λ');
   }
 
   private async _getIsSafeMode(): Promise<0 | 1> {

@@ -32,6 +32,5 @@ export class ApplicationController {
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always
-  // @Cron(CronExpression.EVERY_10_SECONDS) // Development test
   handle() { this.applicationService.handle() };
 }

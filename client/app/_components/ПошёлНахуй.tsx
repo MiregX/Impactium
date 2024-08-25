@@ -11,14 +11,16 @@ import Image from 'next/image';
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
 
+  const getIndex = () => typeof application.isSafeMode === 'number' ? Math.max(0, Math.min(1, application.isSafeMode)) : 1;
+
   const map = [
     ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
     ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
-  ][application.isSafeMode];
+  ][getIndex()];
 
   return (
     <div className={s.wrapper}>
-      {map.map((word, i) => {
+      {map?.map((word, i) => {
         const Tag = `h${i + 1}` as keyof JSX.IntrinsicElements;
         return <Tag key={i}>{word}</Tag>
       })}
