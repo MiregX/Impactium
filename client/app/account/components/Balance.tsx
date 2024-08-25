@@ -6,6 +6,7 @@ import { useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { _server } from "@/decorator/api";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export function Balance() {
   const { lang } = useLanguage();
@@ -17,7 +18,7 @@ export function Balance() {
 
   return (
     <Card
-      className={[s.account, s.balance]}
+      className={cn(s.account, s.balance)}
       id='displayName'
       description={{ text: lang.account.balance_description, button }}>
       <div className={s.stack}>

@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { ApplicationController } from './application.controller';
 import { RedisModule } from '@api/main/redis/redis.module';
 import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
+import { SocketModule } from '../socket/socket.module';
 
 @Module({
   controllers: [ApplicationController],
@@ -14,6 +15,8 @@ import { AuthModule } from '../auth/auth.module';
     RedisModule,
     UserModule,
     AuthModule,
-  ]
+    forwardRef(() => SocketModule)
+  ],
+  exports: [ApplicationService],
 })
 export class ApplicationModule {}

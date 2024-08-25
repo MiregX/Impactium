@@ -17,6 +17,7 @@ import { Header } from '@/components/Header';
 import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
 import { Children } from '@/types';
+import { Application, ApplicationBase } from '@impactium/types';
 
 declare global {
   var api: Api;
@@ -33,14 +34,16 @@ export default async function RootLayout({ children }: Children) {
     headers: {
       token
     }
-  }) : null
+  }) : null;
+
+  const application = await api<Application>('/application/info') || ApplicationBase;
 
   return (
     <html style={{'--font-mono' : GeistMono.style.fontFamily, '--font-sans' : GeistSans.style.fontFamily}}>
       <body style={{ backgroundColor: '#000000' }}>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>
-            <ApplicationProvider>
+            <ApplicationProvider application={application}>
               <Header />
               <Preloader />
               <main>

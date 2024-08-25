@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
@@ -6,10 +6,14 @@ import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
+import { type Application } from '@impactium/types';
+import { SocketGateway } from '../socket/socket.gateway';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
   constructor(
+    @Inject(forwardRef(() => SocketGateway))
+    private readonly webSocket: SocketGateway,
     private readonly redisService: RedisService,
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
@@ -17,30 +21,47 @@ export class ApplicationService implements OnModuleInit {
   ) {}
 
   async info() {
-    return await this.redisService.get(dataset.info)
-      .then(data => data ? JSON.parse(data) : Promise.reject())
+    return await this._getInfo()
       .catch(async _ => {
-        const [users_count, teams_count, tournaments_count] = await Promise.all([
-          await this.prisma.user.count(),
-          await this.prisma.team.count(),
-          await this.prisma.tournament.count()
-        ]);
-
-        const info = {
-          status: 200,
-          environment: this.getEnvironment(),
-          localhost: [process.env.API_SYMBOLIC_HOST, process.env.API_NUMERIC_HOST, process.env.API_PRODUCTION_HOST],
-          statistics: {
-            users_count,
-            teams_count,
-            tournaments_count,
-          }
-        }
-    
-        await this.redisService.setex(dataset.info, 600, JSON.stringify(info));
-
-        return info;
+        return await this._reloadInfo();
       })
+  }
+
+  async toggleSafeMode() {
+    const toggled = await this._getIsSafeMode() ? 0 : 1;
+    await this.redisService.set(dataset.isSafeMode, toggled);
+    const info = await this._reloadInfo();
+    this.webSocket.server.emit('updateApplicationInfo', info);
+    return info;
+  }
+
+  private _getInfo = () => this.redisService.get(dataset.info).then(data => data ? JSON.parse(data) : Promise.reject());
+
+  private async _reloadInfo(data?: Application) {
+    const info = data || await this._generateInfo()
+    await this.redisService.setex(dataset.info, 600, JSON.stringify(info));
+    return info;
+  } 
+
+  private async _generateInfo(): Promise<Application> {
+    const [users_count, teams_count, tournaments_count, isSafeMode = '1'] = await Promise.all([
+      await this.prisma.user.count(),
+      await this.prisma.team.count(),
+      await this.prisma.tournament.count(),
+      await this.redisService.get(dataset.isSafeMode)
+    ]);
+
+    return {
+      status: 200,
+      environment: this.getEnvironment(),
+      localhost: [process.env.API_SYMBOLIC_HOST, process.env.API_NUMERIC_HOST, process.env.API_PRODUCTION_HOST],
+      statistics: {
+        users_count,
+        teams_count,
+        tournaments_count,
+      },
+      isSafeMode: parseInt(isSafeMode)
+    } as Application
   }
 
   async status(): Promise<StatusEntity[]> {
@@ -138,5 +159,10 @@ export class ApplicationService implements OnModuleInit {
       update: {}
     });
     console.log('[ λ ] Admin token: ', this.authService.parseToken(this.userService.signJWT(system.uid, system.email)));
+  }
+
+  private async _getIsSafeMode(): Promise<0 | 1> {
+    const string = await this.redisService.get(dataset.isSafeMode);
+    return Math.min(1, Math.max(0, parseInt(string) || 0)) as 0 | 1;
   }
 }

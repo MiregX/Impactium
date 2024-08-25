@@ -34,7 +34,7 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
 
   return (
     <PanelTemplate useColumn={true} className={s.page}>
-      <ПошёлНахуй mode='frendly' />
+      <ПошёлНахуй />
       <h4 style={{width: '100%', marginTop: '12px', fontSize: '18px'}}>Актуальные турниры:</h4>
       <div className={s.wrapper}>
         {current.map(index => (

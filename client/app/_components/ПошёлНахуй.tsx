@@ -8,17 +8,15 @@ import { useApplication } from '@/context/Application.context';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import Image from 'next/image';
 
-interface ПошёлНахуйProps {
-  mode: 'default' | 'frendly'
-}
+export function ПошёлНахуй() {
+  const { spawnBanner, application } = useApplication();
 
-export function ПошёлНахуй({ mode }: ПошёлНахуйProps) {
-  const { spawnBanner } = useApplication();
+  console.log(application.isSafeMode);
   
-  const map = {
-    default: ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
-    frendly: ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
-  }[mode];
+  const map = [
+    ['Пошёл', 'нахуй', 'сын', 'мёртвой', 'шлюхи.', 'Чё хочу, то, блять, и делаю.'],
+    ['Просто', 'сервис', 'для', 'проведения', 'турниров', 'Реально, никакого подвоха.']
+  ][application.isSafeMode];
 
   return (
     <div className={s.wrapper}>

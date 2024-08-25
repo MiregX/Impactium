@@ -2,33 +2,45 @@
 import '@/decorator/api';
 import '@/decorator/useClasses';
 import '@/decorator/useOptionStyling';
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import s from './Application.module.css';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
-import { AvailableLanguage } from '@/dto/AvaliableLanguage';
-import { Application, ApplicationBase } from '@/dto/Application.dto';
-import { Message } from '@/dto/Message.dto';
-import { useMessageStatus } from '@/decorator/useMessageStatus';
+import { Application } from '@impactium/types';
 import { toast } from 'sonner';
+import { io, Socket } from 'socket.io-client';
+import { _server } from '@/decorator/api';
 
-const ApplicationContext = createContext<IApplicationContext | undefined>(undefined);
+const ApplicationContext = createContext<ApplicationContextProps | undefined>(undefined);
 
-export const useApplication = (): IApplicationContext => useContext(ApplicationContext)!;
+export const useApplication = (): ApplicationContextProps => useContext(ApplicationContext)!;
 
-interface IApplicationContext {
+interface ApplicationContextProps {
   copy: (text: string) => PromiseLike<void>,
   spawnBanner: (banner: React.ReactNode) => void,
   destroyBanner: () => void,
   application: Application,
-  setApplication: (application: Application) => void,
+  setApplication: (application: Application) => void
 }
 
-export const ApplicationProvider = ({ children }: Children) => {
-  const [messages, setMessages] = useState<Array<Message>>([]);
-  const [application, setApplication] = useState<Application>(ApplicationBase);
+interface ApplicationProviderProps extends Children {
+  application: Application;
+}
+
+export const ApplicationProvider = ({ children, application: λapplication }: Children & ApplicationProviderProps) => {
+  const [application, setApplication] = useState<Application>(λapplication);
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
+  const [socket, setSocket] = useState<Socket>();
+
+  useEffect(() => {
+    setSocket(io(_server()));
+  }, []);
+  
+  useEffect(() => {
+    socket?.on('updateApplicationInfo', setApplication);
+  
+    return socket?.disconnect as unknown as void;
+  }, [socket]);
 
   const spawnBanner = (element: React.ReactNode) => {
     setBanner(element);
@@ -37,12 +49,6 @@ export const ApplicationProvider = ({ children }: Children) => {
   const destroyBanner = () => {
     setBanner(null);
   }
-
-  useEffect(() => {
-    return () => {
-      setMessages((prevMessages) => prevMessages.filter((msg) => !msg.hidden));
-    };
-  }, []);
   
   const copy = async (text: string) => {
     try {
@@ -53,7 +59,7 @@ export const ApplicationProvider = ({ children }: Children) => {
     }
   };
 
-  const props: IApplicationContext = {
+  const props: ApplicationContextProps = {
     copy,
     spawnBanner,
     destroyBanner,

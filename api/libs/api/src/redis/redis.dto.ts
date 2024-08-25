@@ -3,5 +3,6 @@ export enum dataset {
   telegram_logins = 'telegram_logins',
   connections = 'connections',
   status = 'status',
-  info = 'info'
+  info = 'info',
+  isSafeMode = 'isSafeMode'
 }
