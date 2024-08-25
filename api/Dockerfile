@@ -1,10 +1,6 @@
-####################
-# STAGE 1: Prepare #
-####################
-
-FROM node:20-alpine AS development
+FROM node:20-alpine AS production
 USER node
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 WORKDIR /app/lib
 COPY --chown=node:node ./lib .
@@ -21,32 +17,6 @@ RUN npm i
 
 RUN npm run prisma:generate
 
-CMD [ "npm", "run", "start:debug" ]
-
-##################
-# STAGE 2: Build #
-##################
-
-FROM node:20-alpine As build
-
-ENV NODE_ENV production
-
-COPY --chown=node:node --from=development /app /app
-
-WORKDIR /app/api
-
 RUN npm run build
 
 CMD [ "npm", "run", "start" ]
-
-###################
-# STAGE 3: Deploy #
-###################
-
-FROM node:20-alpine AS production
-
-COPY --from=build /app /app
-
-WORKDIR /app/api
-
-CMD [ "npm", "run", "start:prod" ]

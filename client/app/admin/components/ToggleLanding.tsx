@@ -3,9 +3,7 @@ import { Card } from "@/ui/Card";
 import { Switch } from "@/ui/Switch";
 import s from '../Admin.module.css';
 import { useApplication } from "@/context/Application.context";
-import { Application, ApplicationBase } from "@impactium/types";
-import { useState } from "react";
-
+import { Application } from "@impactium/types";
 
 export function ToggleLanding() {
   const { application } = useApplication();
