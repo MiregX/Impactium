@@ -45,9 +45,8 @@ export class TournamentService implements OnModuleInit {
           ownerId: 'system',
           start: friday,
         },
-      }).then(battleCup => {
-        Logger.log(battleCup.start, 'TournamentService');
-        !battleCup && this.createBattleCup(friday)
+      }).then((battleCup) => {
+        !battleCup ? this.createBattleCup(friday) : Logger.log(battleCup.start, 'TournamentService');
       });
     }
   }
