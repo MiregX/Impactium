@@ -12,9 +12,9 @@ import { Configuration } from '@impactium/config';
 
 @Injectable()
 @WebSocketGateway({
-  path: Configuration.isProductionMode() ? '/ws' : '/api/ws',
+  path: '/api/ws',
   cors: {
-    origin: Configuration.getClientLink(),
+    origin: Configuration.isProductionMode() ? 'https://impactium.fun' : 'http://localhost:3000',
     methods: ['*'],
     credentials: true,
   },
@@ -27,7 +27,11 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
   @WebSocketServer() server: Server;
 
-  afterInit(server: Server) {}
+  afterInit(server: Server) {
+    console.log(process.env.APP_PRODUCTION_HOST)
+    console.log(process.env.APP_SYMBOLIC_HOST)
+    console.log(server)
+  }
 
   handleConnection(client: Socket) {
     client.emit('stateUpdate', this.applicationService.info());
