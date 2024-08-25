@@ -11,8 +11,8 @@ COPY --chown=node:node ./.env .
 
 RUN npm i
 
-RUN npm run build
-
 RUN npm run prisma:generate
+
+RUN npm run build
 
 CMD [ "npm", "run", "start:prod" ]
