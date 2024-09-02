@@ -27,11 +27,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
   @WebSocketServer() server: Server;
 
-  afterInit(server: Server) {
-    console.log(process.env.APP_PRODUCTION_HOST)
-    console.log(process.env.APP_SYMBOLIC_HOST)
-    console.log(server)
-  }
+  afterInit(server: Server) {}
 
   handleConnection(client: Socket) {
     client.emit('stateUpdate', this.applicationService.info());

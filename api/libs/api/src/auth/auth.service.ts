@@ -8,6 +8,7 @@ import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
+import { OmitObject } from '@impactium/utils';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +40,8 @@ export class AuthService {
     const result = (login
       ? await this.updateLogin({ id, type, avatar, displayName, uid }, login)
       : (uid
-        ? await this.createLogin({ id, type, avatar, displayName, uid, email, on: new Date() })
-        : await this.createUser({ id, type, avatar, displayName, email, on: new Date() }, email)
+        ? await this.createLogin({ id, type, avatar, displayName, uid, on: new Date() })
+        : await this.createUser({ id, type, avatar, displayName, on: new Date() }, email)
       )
     )
     return this.parseToken(this.userService.signJWT(result.uid, email));
@@ -79,11 +80,12 @@ export class AuthService {
     })
   }
 
-  private createLogin(data: Required<AuthPayload>): Promise<LoginEntity> {
+  private createLogin(data: Omit<Required<AuthPayload>, 'email'>): Promise<LoginEntity> {
     return this.prisma.login.create({ data });
   }
 
-  private createUser(data: AuthPayload, email?: string): Promise<UserEntity> {
+  private createUser(data: AuthPayload, email: string): Promise<UserEntity> {
+    delete data.email;
     return this.prisma.user.create({
       data: {
         email,

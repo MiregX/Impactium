@@ -101,7 +101,7 @@
 .disabled {
   background: none;
   cursor: default;
-  border: none;
+  border: 1px solid transparent;
   pointer-events: none;
   color: var(--text-dimmed);
 }

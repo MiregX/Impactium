@@ -9,7 +9,7 @@ type AvatarProps = HTMLAttributes<HTMLDivElement> & {
   alt: string
 }
 
-export function Avatar({ size, src, alt, onClick, className, style, ...props }: AvatarProps) {
+export function Avatar({ size, src, alt, className, style, ...props }: AvatarProps) {
   const [err, setErr] = useState<boolean>(!src);
   const fallback = <p style={{fontSize: typeof size === 'string' ? parseInt(size) : size / 2.5}}>{alt?.slice(0, 2) || '?'}</p>
 

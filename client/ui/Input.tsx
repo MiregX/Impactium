@@ -1,5 +1,5 @@
 import React from "react"
-import s from './styles/Input.module.css' 
+import s from './styles/Input.module.css';
 import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"; 
 
@@ -7,6 +7,7 @@ const inputVariants = cva(s.button, {
   variants: {
     variant: {
       default: s.default,
+      color: s.color
     },
     size: {
       default: s.defaultSize,
@@ -20,24 +21,21 @@ const inputVariants = cva(s.button, {
 });
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
-  img?: string;
-  loading?: boolean
+  img?: string
+  revert?: boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, loading, size, img, ...props }, ref) => {
-    if (loading) {
-      img = 'https://cdn.impactium.fun/ui/action/loading.svg'
-    }
+  ({ className, revert, variant, type, size, img, ...props }, ref) => {
     return img ? (
       <div className={cn(
         inputVariants({ variant, size, className }),
         s.input,
         img && s.image,
-        loading && s.loading
+        revert && s.revert
       )}>
         <img src={img} alt='' />
-        <input ref={ref} {...props} />  
+        <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />  
       </div>
     ) : (
       <input
@@ -46,6 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           s.input,
           img && s.image
         )}
+        type={variant === 'color' ? 'color' : type}
         ref={ref}
         {...props}
       />

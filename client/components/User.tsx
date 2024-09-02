@@ -16,7 +16,7 @@ export function UserComponent() {
   const [active, setActive] = useState<boolean>(false);
 
   const toggle = () => {
-    setActive((_) => !_);
+    setActive((active) => !active);
   }
 
   const handle = (func: Function) => {

@@ -8,7 +8,7 @@ import { LoginBanner } from "@/banners/login/LoginBanner";
 import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Logins, User, UserAddons, UserEntity } from "@/dto/User";
 import { cn } from "@/lib/utils";
 
@@ -16,13 +16,19 @@ export function Connections() {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
   const { user, setUser } = useUser();
+  const [fetched, setFetched] = useState<boolean>(!!user?.logins);
 
   const button = <Button
     img='https://cdn.impactium.fun/ui/action/add-plus.svg'
     onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
 
     useEffect(() => {
-      !user!.logins && api<User<UserAddons>>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)))
+      (async () => {
+        if (!fetched) {
+          await api<User<UserAddons>>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)));
+          setFetched(true);
+        }
+      })();
     }, [user]);
 
   return (
@@ -33,7 +39,7 @@ export function Connections() {
       <h6>{lang.account.connections}</h6>
       <p>{lang.account.connections_content}</p>
       <section>
-        {user?.logins?.length && user.logins.map((login: Login) => (
+        {(user!.logins || []).map((login: Login) => (
           <Unit key={login.id} login={login} />
         ))}
       </section>

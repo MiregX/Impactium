@@ -45,6 +45,7 @@ export class UserEntity<T extends UserAddons = {}> implements User {
     this._avatar = user.avatar;
     this.balance = user.balance;
     this.login = user.login;
+    this.logins = user.logins;
     this.teams = user.teams;
     this.verified = user.verified;
   }
