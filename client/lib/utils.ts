@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-type unresolwedArgument<T> = RequestInit & RequestOptions & { raw?: boolean } | Callback<T> | undefined;
+type unresolwedArgument<T> = RequestInit & RequestOptions & { raw?: boolean} | Callback<T> | undefined;
 
 export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgument<T>) {
   let options: RequestInit & RequestOptions & { raw?: boolean } = {};

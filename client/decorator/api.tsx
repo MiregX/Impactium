@@ -32,7 +32,7 @@ const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promi
     : await response.json()
   );
 
-  const result = options?.raw
+  const result = options.raw
     ? res
     : res.isSuccess()
       ? res.data
@@ -43,7 +43,7 @@ const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promi
   }
 
   if (callback) {
-    callback(result);
+    await callback(result);
   }
 
   return result;

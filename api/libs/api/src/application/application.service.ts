@@ -8,6 +8,7 @@ import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
 import { ws, type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
+import { AuthResult } from '../auth/addon/auth.entity';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -143,7 +144,7 @@ export class ApplicationService implements OnModuleInit {
     await this.createSystemAccount();
   }
 
-  private async createSystemAccount() {
+  async createSystemAccount(): Promise<AuthResult> {
     const system = await this.prisma.user.upsert({
       where: {
         uid: 'system'
@@ -158,7 +159,9 @@ export class ApplicationService implements OnModuleInit {
       },
       update: {}
     });
-    Logger.verbose(this.authService.parseToken(this.userService.signJWT(system.uid, system.email)), 'λ');
+    const token = this.authService.parseToken(this.userService.signJWT(system.uid, system.email));
+    Logger.verbose(token, 'λ');
+    return token;
   }
 
   private async _getIsSafeMode(): Promise<0 | 1> {

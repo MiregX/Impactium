@@ -13,7 +13,7 @@ interface UserContext {
   setUser: React.Dispatch<React.SetStateAction<UserEntity<UserAddons> | null>>,
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
-  refreshUser: () => void,
+  refreshUser: () => Promise<void>,
   assignUser: (user: User | null) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -47,7 +47,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     refreshUser();
   };
 
-  const refreshUser = () => getUser().then(user => {
+  const refreshUser = async () => await getUser().then(user => {
     setUser(user ? new UserEntity(user) : null);
     setIsUserFetched(true);
     setIsUserLoaded(true);

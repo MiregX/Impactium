@@ -39,5 +39,6 @@ export const cookieSettings = {
 }
 
 export enum cookiePattern {
+  redirectedToBypass = 'redirectedToBypass',
   Authorization = 'Authorization'
 }

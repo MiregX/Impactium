@@ -22,7 +22,7 @@ export class TelegramAuthService implements AuthMethodService {
   }
 
   async callback(payload: AuthPayload, uuid?: UUID): Promise<`Bearer ${string}`> {
-    if (uuid) Object.assign(payload, await this.telegramService.getPayload(uuid) || {});
+    if (uuid) Object.assign(payload, await this.telegramService.getPayload(uuid));
 
     payload.uid = await this.authService.getPayload(uuid) as string || undefined;
     return this.authService.register(payload);

@@ -6,7 +6,7 @@ import { Configuration } from '@impactium/config';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { LoginType } from '@prisma/client';
 import { UUID } from 'crypto';
-import { Telegraf } from 'telegraf';
+import { Markup, Telegraf } from 'telegraf';
 
 @Injectable()
 export class TelegramService extends Telegraf implements OnModuleInit, OnModuleDestroy {
@@ -53,7 +53,15 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
       });
 
       await this.setPayload(uuid, payload);
-      ctx.reply(`Готово, у тебя есть 5 минут чтобы вернуться на сайт: <a href='${Configuration.getClientLink()}'>Impactium</a>`);
+      ctx.reply(
+        `Готово, у тебя есть 5 минут чтобы вернуться на сайт <a href='${Configuration.getClientLink()}'>Impactium</a>`,
+        {
+          parse_mode: 'HTML',
+          ...Markup.inlineKeyboard([
+            Markup.button.url('Вернуться на сайт', Configuration.isProductionMode() ? Configuration.getClientLink() : 'https://impactium.fun')
+          ])
+        }
+      );
     });
 
     this.launch()
@@ -61,8 +69,11 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
   async getPayload(uuid: UUID): Promise<boolean | AuthPayload> {
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
+
+    if (!payload) return false;
+
     try {
-      return JSON.parse(payload!);
+      return JSON.parse(payload);
     } catch (_) {
       return !!payload
     }

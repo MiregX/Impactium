@@ -25,7 +25,6 @@ interface Panel {
 
 export function PanelTemplate({ children, className, title, fullscreen, useColumn, center, useAuthGuard, useStart }: Panel) {
   const { lang } = useLanguage();
-  const { user } = useUser();
   
   authGuard({
     useRedirect: useAuthGuard

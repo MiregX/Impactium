@@ -16,11 +16,6 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.googleusercontent.com',
-        port: '',
-      },
-      {
-        protocol: 'https',
         hostname: '*.telegram.org',
         port: '',
       },

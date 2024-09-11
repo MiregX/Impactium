@@ -13,8 +13,8 @@ import { SocketModule } from '../socket/socket.module';
   imports: [
     PrismaModule,
     RedisModule,
-    UserModule,
     AuthModule,
+    forwardRef(() => UserModule),
     forwardRef(() => SocketModule)
   ],
   exports: [ApplicationService],

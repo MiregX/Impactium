@@ -67,7 +67,6 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
 
   @Post('callback')
   @UseGuards(ConnectGuard)
-  @Redirect()
   async pastCallback(
     @Res({ passthrough: true }) response: Response,
     @Cookie('uuid') uuid: UUID | null,
@@ -78,6 +77,6 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
 
     response.clearCookie('uuid')
     response.cookie(cookiePattern.Authorization, authorization, cookieSettings);
-    return { url: Configuration.getClientLink() };
+    return authorization;
   }
 }

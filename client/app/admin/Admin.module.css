@@ -37,3 +37,17 @@
   font-family: var(--font-mono);
   color: var(--text-dimmed);
 }
+.bypass {
+  width: min-content;
+}
+.bypass > div {
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.bypass > div > div {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
