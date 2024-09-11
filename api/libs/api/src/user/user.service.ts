@@ -2,8 +2,9 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UsernameTakenException } from '../application/addon/error';
+import { AuthPayload } from '../auth/addon/auth.entity';
 
 @Injectable()
 export class UserService {
@@ -48,8 +49,8 @@ export class UserService {
     });
     return UserEntity.fromPrisma(user);
   }
-  
-  signJWT(uid: string, email: string): string {
+
+  signJWT(uid: Required<AuthPayload['uid']>, email: AuthPayload['email']): string {
     return this.jwt.sign({
       uid,
       email,

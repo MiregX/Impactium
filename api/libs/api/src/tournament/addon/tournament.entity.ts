@@ -3,18 +3,18 @@ import { Prisma, Roles, Team, Tournament } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 
 export class TournamentEntity<T = {}> implements Tournament {
-  id: string;
-  banner: string;
-  title: string;
-  start: Date;
-  end: Date;
-  description: Prisma.JsonValue;
-  code: string;
-  rules: Prisma.JsonValue;
-  ownerId: string;
-  gid: string;
-  live: string;
-  prize: number;
+  id!: string;
+  banner!: string;
+  title!: string;
+  start!: Date;
+  end!: Date;
+  description!: Prisma.JsonValue | null;
+  code!: string;
+  rules!: Prisma.JsonValue | null;
+  ownerId!: string;
+  gid!: string;
+  live!: string | null;
+  prize!: number;
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/tournaments/${filename}`

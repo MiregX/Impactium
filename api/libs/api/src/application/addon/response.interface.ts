@@ -4,32 +4,32 @@ import { UUID } from 'crypto';
 
 export class ResponseBase<T = any> {
   @ApiProperty({ example: 200, description: 'HTTP status code' })
-  status: number;
+  status!: number;
 
   @ApiProperty({ example: new Date().toISOString(), description: 'Timestamp of the response' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @ApiProperty({ example: crypto.randomUUID(), description: 'Request ID' })
-  req_id: UUID;
+  req_id!: UUID;
 
   @ApiProperty({ description: 'Response data' })
-  data: T;
+  data!: T;
 }
 
 export class ResponseSuccess<T = any> extends ResponseBase<T> {
   @ApiProperty({ description: 'Response data' })
-  data: T;
+  data!: T;
 }
 
 export class ResponseError {
   @ApiProperty({ example: 409, description: 'HTTP status code' })
-  status: number;
+  status!: number;
 
   @ApiProperty({ example: new Date().toISOString(), description: 'Timestamp of the response' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @ApiProperty({ example: crypto.randomUUID(), description: 'Request ID' })
-  req_id: string;
+  req_id!: string;
 
   @ApiProperty({
     description: 'Error data',
@@ -39,7 +39,7 @@ export class ResponseError {
       message: { type: 'string', example: 'error_key_message' },
     },
   })
-  data: {
+  data!: {
     statusCode: number;
     message: string;
   };

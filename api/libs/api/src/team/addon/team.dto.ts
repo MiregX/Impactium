@@ -5,14 +5,14 @@ import { TeamStandart } from './team.standart';
 
 export class CreateTeamDto {
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   banner?: any;
 }
 
 export class Checkout {
-  uid: string;
-  indent: string;
+  uid!: string;
+  indent!: string;
 }
 
 export class UpdateTeamDto implements Partial<CreateTeamDto> {
@@ -24,7 +24,7 @@ export class FindOneTeamByIndentDto {
   @IsString()
   @MinLength(3)
   @MaxLength(32)
-  nickname: string;
+  nickname!: string;
 }
 
 export class FindManyTeamsByIndentDto {
@@ -32,7 +32,7 @@ export class FindManyTeamsByIndentDto {
   @IsString({ each: true })
   @MinLength(3, {each: true })
   @MaxLength(32, {each: true })
-  nicknames: string[];
+  nicknames!: string[];
 }
 
 export type FindTeamDto = FindOneTeamByIndentDto | FindManyTeamsByIndentDto
@@ -41,19 +41,23 @@ export class UploadFileDto {
   static getConfig() {
     return {
       fileFilter: (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+        // Проверяем тип mime
         if (!['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.mimetype)) {
-          return cb(null, false);
+          return cb(new Error('Unsupported file type') as unknown as null, false);
         }
 
+        // Проверяем размер файла
         if (file.size > TeamStandart.LOGO_BYTE_SIZE) {
-          return cb(null, false);
+          return cb(new Error('File too large') as unknown as null, false);
         }
 
+        // Если все ок
         cb(null, true);
       },
       limits: {
-        fileSize: TeamStandart.LOGO_BYTE_SIZE
+        fileSize: TeamStandart.LOGO_BYTE_SIZE, // Лимит на размер файла
       },
     };
   }
 }
+

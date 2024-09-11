@@ -99,7 +99,7 @@ export class ApplicationService implements OnModuleInit {
       info: await this.redisService.info().then(response => {
           const lines = response.split('\r\n');
           const result = {} as any;
-          let section = null;
+          let section: null | string = null;
         
           lines.forEach(line => {
             if (line.startsWith('#')) {
@@ -162,7 +162,7 @@ export class ApplicationService implements OnModuleInit {
   }
 
   private async _getIsSafeMode(): Promise<0 | 1> {
-    const string = await this.redisService.get(dataset.isSafeMode);
+    const string = await this.redisService.get(dataset.isSafeMode) || '0';
     return Math.min(1, Math.max(0, parseInt(string) || 0)) as 0 | 1;
   }
 }

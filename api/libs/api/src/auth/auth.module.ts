@@ -14,6 +14,7 @@ import { DiscordAuthController } from './discord.auth.controller';
 import { DiscordAuthService } from './discord.auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { AdminGuard } from './addon/admin.guard';
+import { TelegramModule } from '@api/mcs/telegram/telegram.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AdminGuard } from './addon/admin.guard';
     ]),
     PrismaModule,
     JwtModule,
+    TelegramModule,
     RedisModule,
     forwardRef(() => UserModule),
   ],

@@ -26,8 +26,8 @@ export class ResponseMiddleware implements NestMiddleware {
     res.redirect = (url: string | number, status: string | number = 302) => {
       res.locals.redirecting = true;
       return _redirect(
-        typeof status === 'number' ? status : url,
-        typeof url === 'number' ? status : url,
+        typeof status === 'number' ? status : url as unknown as any,
+        typeof url === 'number' ? status : url as unknown as any,
       );
     };
 

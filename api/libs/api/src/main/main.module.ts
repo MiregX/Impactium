@@ -7,6 +7,7 @@ import { TeamModule } from '@api/main/team/team.module';
 import { TransactionModule } from '@api/main/transaction/transaction.module';
 import { TournamentModule } from '@api/main/tournament/tournament.module';
 import { SocketModule } from '../socket/socket.module';
+import { TelegramModule } from '@api/mcs/telegram/telegram.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SocketModule } from '../socket/socket.module';
     TeamModule,
     TournamentModule,
     TransactionModule,
+    TelegramModule,
     SocketModule,
   ]
 })

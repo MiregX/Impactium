@@ -3,23 +3,23 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginEntity implements Login {
   @ApiProperty({ description: 'ID аккаунта с которого была произведена авторизация' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'User ID from database' })
-  uid: string;
+  uid!: string;
 
   @ApiProperty({
     description: 'The type of login',
     enum: [$Enums.LoginType],
   })
-  type: $Enums.LoginType;
+  type!: $Enums.LoginType;
 
   @ApiProperty({ description: 'The avatar URL associated with the login' })
-  avatar: string;
+  avatar!: string | null;
 
   @ApiProperty({ description: 'The display name associated with the login' })
-  displayName: string;
+  displayName!: string | null;
 
   @ApiProperty({ description: 'The timestamp when the login occurred' })
-  on: Date;
+  on!: Date;
 }

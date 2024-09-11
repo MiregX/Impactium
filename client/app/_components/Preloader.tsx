@@ -1,14 +1,17 @@
 'use client'
 import s from './styles/Preloader.module.css'
 import { useUser } from '@/context/User.context';
+import { cookiePattern } from '@impactium/pattern';
 import {
     useCallback,
     useEffect,
     useState,
     useRef,
   } from "react";
+import Cookies from 'universal-cookie';
 
 export function Preloader() {
+  const cookie = new Cookies();
   const { isUserLoaded, user } = useUser();
   const [blocker, setBlocker] = useState<boolean>(isUserLoaded);
 
@@ -47,7 +50,7 @@ export function Preloader() {
   }, [self, visitedBefore]);
 
   useEffect(() => {
-    if (!isUserLoaded || blocker) {
+    if ((!isUserLoaded && cookie.get(cookiePattern.Authorization)) || blocker) {
       show();
     } else {
       hide();

@@ -2,18 +2,15 @@ import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { AuthPayload, AuthResult } from './addon/auth.entity';
+import { AuthPayload, AuthResult, RequiredAuthPayload } from './addon/auth.entity';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
-import { OmitObject } from '@impactium/utils';
 
 @Injectable()
 export class AuthService {
-  discordService: DiscordOauth2;
-
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
@@ -21,15 +18,16 @@ export class AuthService {
     private readonly redisService: RedisService,
   ) {}
 
-  async login(token: string): Promise<UserEntity> {
-    if (!token) return null;
-    const { email, uid } = this.userService.decodeJWT(token);
+  async login(token: string): Promise<UserEntity | undefined> {
+    if (!token) return undefined;
+    
+    const { email, uid } = this.userService.decodeJWT(this.unparseToken(token));
 
     if (uid) {
-      return await this.userService.findById(uid);
+      return await this.userService.findById(uid) as UserEntity;
     }
     else if (email) {
-      return await this.userService.findByEmail(email);
+      return await this.userService.findByEmail(email) as UserEntity;
     }
   }
 
@@ -47,15 +45,15 @@ export class AuthService {
     return this.parseToken(this.userService.signJWT(result.uid, email));
   }
       
-  async getPayload(uuid: UUID): Promise<string | AuthPayload> {
+  async getPayload<T extends string | AuthPayload = AuthPayload>(uuid?: UUID): Promise<T | null> {
     if (!uuid) return null;
 
     const payload = await this.redisService.get(this.getCacheFolder(uuid));
     await this.delPayload(uuid);
     try {
-      return JSON.parse(payload) as AuthPayload;
+      return JSON.parse(payload!) as T;
     } catch (_) {
-      return payload as string
+      return payload as T
     }
   }
 
@@ -68,6 +66,8 @@ export class AuthService {
   }
   
   parseToken = (token: string): AuthResult => token.startsWith('Bearer ') ? token as AuthResult : `Bearer ${token}`
+
+  unparseToken = (token: string): string => token.startsWith('Bearer ') ? token.substring(7) : token
   
   private getCacheFolder(uuid: UUID) {
     return `${dataset.connections}:${uuid}`
@@ -80,11 +80,11 @@ export class AuthService {
     })
   }
 
-  private createLogin(data: Omit<Required<AuthPayload>, 'email'>): Promise<LoginEntity> {
+  private createLogin(data: Omit<AuthPayload, 'email'> & RequiredAuthPayload<'uid'>): Promise<LoginEntity> {
     return this.prisma.login.create({ data });
   }
 
-  private createUser(data: AuthPayload, email: string): Promise<UserEntity> {
+  private createUser(data: AuthPayload, email?: AuthPayload['email']): Promise<UserEntity> {
     delete data.email;
     return this.prisma.user.create({
       data: {

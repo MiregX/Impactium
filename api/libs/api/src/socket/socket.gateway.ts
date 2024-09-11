@@ -25,7 +25,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     private readonly applicationService: ApplicationService
   ) {}
 
-  @WebSocketServer() server: Server;
+  @WebSocketServer() server!: Server;
 
   afterInit(server: Server) {}
 

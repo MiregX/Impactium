@@ -5,7 +5,7 @@ import { Response, Request } from 'express'
 
 export interface AuthMethodService {
   getUrl: (uuid?: UUID) => Promise<URL> | URL | Promise<string> | string ;
-  callback: (code: string | UUID | Request | AuthPayload, uuid: string | UUID ) => Promise<AuthResult> | AuthResult
+  callback: (code: string | UUID | Request | AuthPayload | any, uuid: string | UUID | any ) => Promise<AuthResult> | AuthResult | any
 }
 
 export interface AuthMethodController {

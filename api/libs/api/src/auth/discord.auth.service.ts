@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Redirect } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Redirect } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
@@ -29,20 +29,20 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
       scope: this.scope
     }).catch(_ => null);
 
-    if (!token) return null;
+    if (!token) throw ForbiddenException;
 
     const payload: AuthPayload = await this.getUser(token.access_token)
       .then(payload => ({
         id: payload.id,
-        avatar: payload.avatar
-          ? `https://cdn.discordapp.com/avatars/${payload.id}/${payload.avatar}.png`
-          : '',
-        email: payload.email,
+        avatar: payload.avatar ? `https://cdn.discordapp.com/avatars/${payload.id}/${payload.avatar}.png` : null,
+        email: payload.email as string,
         displayName: payload.global_name || payload.username + '#' + payload.discriminator,
         lang: payload.locale,
         type: 'discord' as $Enums.LoginType
       }))
-      .catch(_ => null);
+      .catch(_ => {
+        throw ForbiddenException
+      });
     
     payload.uid = uuid && await this.authService.getPayload(uuid) as string;
   

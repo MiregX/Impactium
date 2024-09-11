@@ -2,12 +2,12 @@ import { Team } from '@prisma/client';
 import { TeamMemberEntity } from './team.member.entity';
 
 export class TeamEntity implements Team {
-  registered: Date;
-  logo: string;
-  indent: string;
-  title: string;
-  description: string;
-  ownerId: string;
+  registered!: Date;
+  logo!: string | null;
+  indent!: string;
+  title!: string | null;
+  description!: string | null;
+  ownerId!: string;
   members?: TeamMemberEntity[];
 
   static getLogoPath(filename: string) {

@@ -1,10 +1,11 @@
+import { Optional } from "@api/main/auth/addon/auth.entity";
 import { Prisma, $Enums } from "@prisma/client";
 
 export class CreateLoginDto implements Prisma.LoginCreateWithoutUserInput {
-  id?: string;
-  type: $Enums.LoginType;
+  id!: string;
+  type!: $Enums.LoginType;
   on?: string | Date;
-  avatar?: string;
+  avatar?: Optional;
   displayName?: string;
 }
 

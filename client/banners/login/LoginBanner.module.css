@@ -35,6 +35,11 @@
   background: #18305e;
 }
 
+.telegram,
+.telegram:hover {
+  background: linear-gradient(#2AABEE 0%, #229ED9 75%);
+}
+
 .disabled {
   pointer-events: none;
 }

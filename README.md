@@ -111,6 +111,18 @@ $ docker tag impactium-api:latest 905418431500.dkr.ecr.eu-north-1.amazonaws.com/
 $ docker push 905418431500.dkr.ecr.eu-north-1.amazonaws.com/impactium/impactium-api:latest
 
 ```
+
+
+## Aeza Deploying
+
+```bash
+$ git clone git@github.com:Mireg-V/Impactium.git
+
+$ cd Impactium
+
+$ git pull
+
+```
 ## Support
 
 С любыми вопросами обращаемся к лиду, или идём с вопросиком к `admin@impactium.fun`.

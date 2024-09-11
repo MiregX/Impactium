@@ -66,7 +66,7 @@ export class TeamController {
 
   @Patch('update/:indent')
   @UseGuards(AuthGuard, TeamGuard)
-  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig()))
+  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
   setBanner(
     @Body() team: UpdateTeamDto,
     @UploadedFile() banner: Express.Multer.File,

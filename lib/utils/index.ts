@@ -1,3 +1,5 @@
+import { Configuration } from "@impactium/config";
+
 export class OmitObject {
   static omit<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
     const result = { ...obj };
@@ -12,4 +14,8 @@ export class OmitObject {
 
 export function ui(path: string) {
   return `https://cdn.impactium.fun/ui/${path}.svg`
+}
+
+export function home() {
+  return { url: Configuration.getClientLink() }
 }

@@ -1,6 +1,6 @@
 export class StatusEntity {
-  ping: number | boolean;
-  info: StatusInfoEntity;
+  ping!: number | boolean;
+  info?: StatusInfoEntity;
 }
 
 export enum StatusInfoEntityTypes {
@@ -9,12 +9,12 @@ export enum StatusInfoEntityTypes {
 }
 
 export class RedisMemory {
-  used: string;
-  max: string;
+  used!: string;
+  max!: string;
 }
 
 export class TelegramUptime {
-  percentage: number;
+  percentage!: number;
 }
 
 interface StatusInfoEntityBase {

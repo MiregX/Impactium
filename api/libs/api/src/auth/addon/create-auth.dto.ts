@@ -4,5 +4,5 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateAuthDto {
   @ApiProperty()
   @IsNotEmpty()
-  token: string;
+  token!: string;
 }

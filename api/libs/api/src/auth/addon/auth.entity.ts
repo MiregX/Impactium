@@ -21,7 +21,11 @@ export type _AuthPayload = DiscordAuthPayload | GoogleAuthPayload;
 
 export interface AuthPayload extends CreateLoginDto {
   uid?: string;
-  email?: string;
+  email?: Optional;
 }
+
+export type Optional<T = string> = T | null;
+
+export type RequiredAuthPayload<T extends keyof AuthPayload> = Omit<AuthPayload, T> & Required<Pick<AuthPayload, T>>;
 
 export type AuthResult = `Bearer ${string}`

@@ -4,6 +4,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { User, UserAddons, UserEntity } from "@/dto/User";
 import { Children } from "@/types";
 import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
+import { cookiePattern } from "@impactium/pattern";
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
@@ -27,7 +28,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {
-    !isUserFetched && refreshUser()
+    !isUserFetched && cookie.get(cookiePattern.Authorization) && refreshUser()
   }, [isUserFetched]);
 
   const getUser = () => api<User>('/user/get');

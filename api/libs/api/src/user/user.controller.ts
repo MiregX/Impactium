@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from './addon/user.decorator';
@@ -23,6 +23,8 @@ export class UserController {
     @Query('teams') teams?: boolean,
   ) {
     const userEntity = await this.userService.findById(user.uid, UserEntity.select({ teams, logins }));
+
+    if (!userEntity) throw NotFoundException;
 
     return UserEntity.fromPrisma(userEntity, { teams, logins });
   }
