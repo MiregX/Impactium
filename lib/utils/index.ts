@@ -9,3 +9,7 @@ export class OmitObject {
     return result as Omit<T, K>;
   }
 }
+
+export function ui(path: string) {
+  return `https://cdn.impactium.fun/ui/${path}.svg`
+}

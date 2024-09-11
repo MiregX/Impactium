@@ -55,7 +55,7 @@
 .account section {
   background: var(--black);
   padding: 24px 16px;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-s);
   display: flex;
   gap: var(--gap);
@@ -92,7 +92,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   gap: 8px;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-s);
   align-items: center;
 }
@@ -141,7 +141,7 @@
     padding: 8px;
     width: calc(100% + 32px);
     background-color: var(--black);
-    border-bottom: 1px solid var(--accent-3);
+    border-bottom: 1px solid var(--accent-2);
   }
   .account .unit code {
     display: unset;

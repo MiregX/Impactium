@@ -3,22 +3,26 @@ import s from '../LoginBanner.module.css'
 import { _server } from '@/decorator/api'
 import Link from 'next/link';
 import { Badge, BadgeType } from '@/ui/Badge';
+import { LoginMethod as LoginMethods } from '@/types';
+import { capitalize, cn } from '@/lib/utils';
+import { Button } from '@/ui/Button';
 
 interface LoginMethodProps {
-  Type: string,
+  type: LoginMethods,
   disabled?: boolean
 }
 
-export function LoginMethod({ Type, disabled }: LoginMethodProps) {
-  const type = Type.toLowerCase();
-
+export function LoginMethod({ type, disabled }: LoginMethodProps) {
   return (
-    <Link
-      prefetch={false}
-      href={`${_server()}/api/oauth2/${type}/login`}
-      className={`${s.method} ${disabled && s.disabled}`}>
-        <img src={`https://cdn.impactium.fun/tech/${type}.png`} />
-        {disabled && <Badge type={BadgeType.Soon}></Badge>}
-    </Link>
+    <Button asChild>
+      <Link
+        prefetch={false}
+        href={`${_server()}/api/oauth2/${type}/login`}
+        className={cn(s.method, disabled && s.disabled, s[type])}>
+        <img src={`https://cdn.impactium.fun/tech/${type}.svg?t=1`} />
+        {disabled && <Badge type={BadgeType.Soon} />}
+        Login with {capitalize(type)}
+      </Link>
+    </Button>
   )
 }

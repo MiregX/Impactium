@@ -47,6 +47,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const children = !asChild && props.children;
 
+    if (!size && img && !children) {
+      size = 'icon'
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant: disabled ? 'disabled' : variant, size, className }), paddingClass, loading && s.loading)}

@@ -29,3 +29,7 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
 
   return { options, callback };
 }
+
+export function capitalize(str: string) {
+  return str.substring(0, 1).toUpperCase() + str.substring(1)
+}

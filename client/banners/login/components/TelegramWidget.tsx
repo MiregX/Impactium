@@ -18,7 +18,5 @@ export function TelegramWidget() {
     document.getElementById('telegram-widget')!.appendChild(script);
   }, []);
 
-  return <div className={s.method} id="telegram-widget" />;
+  return <div className={s.telegramWidget} id="telegram-widget" />;
 };
-
-export default TelegramWidget;

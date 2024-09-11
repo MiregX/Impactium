@@ -27,7 +27,7 @@
   padding: 8px 16px 8px 10px;
 }
 .active {
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   color: var(--white);
 }
 .next {

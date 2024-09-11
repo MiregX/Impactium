@@ -11,10 +11,8 @@
   justify-content: center;
 }
 ._ {
-  width: var(--width-limit);
-  box-shadow: var(--shadow-menu);
-  max-width: 600px;
-  width: 90%;
+  max-width: calc(100vw - 32px);
+  width: 600px;
   height: min-content;
   border-radius: var(--border-l);
   background: var(--black);
@@ -29,6 +27,7 @@
   font-size: var(--text-large);
   display: flex;
   align-items: center;
+  gap: 32px;
   justify-content: space-between;
 }
 ._ > h4 button {
@@ -44,7 +43,7 @@
 }
 
 .footer {
-  border-top: 1px solid var(--accent-3);
+  border-top: 1px solid var(--accent-2);
   background: var(--soft-black);
   display: flex;
   justify-content: space-between;

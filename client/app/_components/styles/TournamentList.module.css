@@ -17,7 +17,7 @@
   border-radius: var(--border-m);
   overflow: hidden;
   width: 100%;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   background: var(--geist-background);
   height: 100%;
 }

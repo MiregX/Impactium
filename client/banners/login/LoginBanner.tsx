@@ -4,6 +4,7 @@ import { Banner } from "@/ui/Banner";
 import { LoginMethod } from "./components/LoginMethod";
 import { useLanguage } from "@/context/Language.context";
 import { TelegramWidget } from './components/TelegramWidget';
+import { Separator } from '@/ui/Separator';
 
 interface LoginBanner {
   connect?: true
@@ -12,13 +13,12 @@ interface LoginBanner {
 export function LoginBanner({ connect }: LoginBanner) {
   const { lang } = useLanguage();
   return (
-    <Banner title={connect ? lang.account.connect : lang.login.title}>
-      <div className={s._}>
-        <TelegramWidget />
-        <LoginMethod Type='Discord' />
-        <LoginMethod Type='Steam' />
-        <LoginMethod Type='Google' disabled={true} />
-      </div>
+    <Banner className={s._} title={connect ? lang.account.connect : lang.login.title}>
+      <LoginMethod type='discord' />
+      <Separator />
+      <LoginMethod type='steam' />
+      <Separator />
+      <TelegramWidget />
     </Banner>
   )
 }

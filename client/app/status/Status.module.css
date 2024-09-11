@@ -84,7 +84,7 @@
   font-size: var(--text-small);
   position: absolute;
   font-family: var(--font-mono);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-s);
 }
 .graph s:first-child {

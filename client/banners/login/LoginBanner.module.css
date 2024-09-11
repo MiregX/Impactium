@@ -1,23 +1,38 @@
 ._ {
   display: flex;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-s);
   background: var(--soft-black);
-  flex-direction: row;
+  flex-direction: column;
+  gap: 8px;
   overflow: hidden;
+  width: min-content;
 }
 
 .method {
-  cursor: pointer;
+  width: 100%;
+  height: 36px;
   display: flex;
-  gap: 12px;
+  flex-direction: row;
+  font-weight: 500;
   align-items: center;
-  aspect-ratio: 3 / 2;
-  flex: 1;
-  border-right: 1px solid var(--accent-3);
-  transition: all .3s var(--transition);
-  flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  color: var(--text-white);  
+}
+
+.method > img {
+  filter: brightness(1);
+}
+
+.discord,
+.discord:hover {
+  background: #5165f6;
+}
+
+.steam,
+.steam:hover {
+  background: #18305e;
 }
 
 .disabled {
@@ -28,23 +43,21 @@
   filter: var(--filter-to-dimmed);
 }
 
-.method:last-child {
-  border: unset;
-}
-
-.method:hover {
-  background: var(--black);
-}
-
-.method img {
-  height: 64px;
-  padding: 3px;
-}
-
 .text {
   font-size: 18px;
 }
 .method > div {
   position: absolute;
   backdrop-filter: blur(5px);
+}
+.telegramWidget {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+.telegramWidget > iframe {
+  height: 36px !important;
+  width: 100% !important;
 }

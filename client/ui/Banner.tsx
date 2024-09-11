@@ -1,7 +1,10 @@
 'use client'
 import banner from './styles/Banner.module.css';
-import React, { useEffect } from 'react';
+import React, { HTMLAttributes, useEffect } from 'react';
 import { useApplication } from '@/context/Application.context';
+import { cn } from '@/lib/utils';
+import { ui } from '@impactium/utils';
+import { Button } from './Button';
 
 export enum WarnerTypes {
   note,
@@ -20,7 +23,7 @@ interface Options {
   center: boolean
 }
 
-interface BannerProps {
+interface BannerProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   children: React.ReactNode;
   footer?: Warner | {
@@ -31,7 +34,7 @@ interface BannerProps {
   options?: Partial<Options>
 }
 
-export function Banner({ title, children, footer, onClose, options }: BannerProps) {
+export function Banner({ title, children, footer, onClose, options, className, ...props }: BannerProps) {
   const { destroyBanner } = useApplication();
 
   useEffect(() => {
@@ -50,12 +53,12 @@ export function Banner({ title, children, footer, onClose, options }: BannerProp
   }, [onClose]);
 
   return (
-    <div className={banner.background}>
-      <div className={`${banner._}  ${useOptionStyling(options, banner)}`}>
-        <h4>{title}
-          <button onClick={destroyBanner}>
-            <img src='https://cdn.impactium.fun/ui/close/md.svg'/>
-          </button></h4>
+    <div className={banner.background} {...props}>
+      <div className={cn(banner._, useOptionStyling(options, banner), className)}>
+        <h4>
+          {title}
+          <Button variant='ghost' img={ui('close/md')} onClick={destroyBanner} />
+        </h4>
         <div className={banner.content}>{children}</div>
         {footer ? (
           <div className={banner.footer}>

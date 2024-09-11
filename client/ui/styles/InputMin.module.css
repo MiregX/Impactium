@@ -5,7 +5,7 @@
 ._ {
   background: var(--black);
   outline: none;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-s);
   height: 36px;
   max-width: 256px;

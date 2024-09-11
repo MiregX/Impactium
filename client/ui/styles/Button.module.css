@@ -12,6 +12,7 @@
   transition-duration: 150ms;
   transition-timing-function: var(--transition);
   outline: none;
+  border: 1px solid transparent;
   gap: 8px
 }
 
@@ -101,7 +102,6 @@
 .disabled {
   background: none;
   cursor: default;
-  border: 1px solid transparent;
   pointer-events: none;
   color: var(--text-dimmed);
 }
