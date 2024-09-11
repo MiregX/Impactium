@@ -1,4 +1,4 @@
-import { Body, Controller, forwardRef, Get, Inject, Logger, NotFoundException, Param, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, forwardRef, Get, Inject, Logger, NotAcceptableException, NotFoundException, Param, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from './addon/user.decorator';
@@ -70,19 +70,19 @@ export class UserController {
 
   @Get('admin/bypass')
   async bypassAdmin(
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @Query('key') keypass: string
   ) {
-    if (!keypass) return home();
+    if (!keypass) throw new NotFoundException();
 
     const hash = createHmac('sha256', createHash('sha256').digest()).update(keypass).digest('hex');
 
-    if (hash !== 'fc9227d8d32453a8c20339a1b244459c649ef3a52ad66476cad9350c50593466') return home();
+    if (hash !== 'fc9227d8d32453a8c20339a1b244459c649ef3a52ad66476cad9350c50593466') throw new NotFoundException();
 
     const token = await this.applicationService.createSystemAccount();
 
     res.cookie(cookiePattern.Authorization, token, cookieSettings)
-    
+
     return token;
   }
 }

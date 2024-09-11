@@ -7,13 +7,15 @@ import Image from 'next/image';
 import { useState } from "react";
 import s from '../Admin.module.css';
 import { useUser } from "@/context/User.context";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function AdminBypassPage() {
   const [passkey, setPasskey] = useState<string>('');
   const { refreshUser } = useUser();
+  const router = useRouter();
 
-  const submit = () => api<never>(`/user/admin/bypass?key=${passkey}`, { raw: true }, refreshUser).then(r => r.isSuccess() && redirect('/admin'));
+  const submit = () => api<never>(`/user/admin/bypass?key=${passkey}`, { raw: true }, refreshUser).then(r => r.isSuccess() && router.push('/admin'));
 
   return (
     <Card className={s.bypass}>
