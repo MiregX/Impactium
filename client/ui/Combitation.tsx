@@ -3,7 +3,7 @@ import { Avatar } from './Avatar'
 import s from './styles/Combination.module.css'
 import { cva, VariantProps } from 'class-variance-authority';
 
-const { heading, combination } = s;
+const { heading, combination, full } = s;
 
 const combinationVariants = cva(combination, {
   variants: {
@@ -12,7 +12,8 @@ const combinationVariants = cva(combination, {
     },
     size: {
       default: undefined,
-      heading
+      heading,
+      full
     },
   },
   defaultVariants: {
@@ -27,7 +28,9 @@ type CombinationProps = CombinationSkeletonProps & {
   id: string
 };
 
-type CombinationSkeletonProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof combinationVariants>;
+interface CombinationSkeletonProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof combinationVariants> {
+  button?: boolean
+};
 
 export function Combination({ src, name, className, onClick, size, id, children, ...props }: CombinationProps) {
   return (
@@ -49,6 +52,7 @@ export function CombinationSkeleton({children, className, size, ...props}: Combi
         <Skeleton className={s.name} />
         <Skeleton className={s.id} size='short' />
       </div>
+      <Skeleton className={s.button} variant='button' />
     </div>
   )
 }

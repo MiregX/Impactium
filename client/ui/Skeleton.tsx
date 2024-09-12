@@ -1,14 +1,15 @@
 import s from './styles/Skeleton.module.css'
 import { cva, VariantProps } from "class-variance-authority";
 
-const { avatar, short, badge } = s;
+const { avatar, short, badge, button } = s;
 
 const skeletonVariants = cva(s.skeleton, {
   variants: {
     variant: {
       default: s.default,
       avatar,
-      badge
+      badge,
+      button
     },
     size: {
       default: s.defaultSize,

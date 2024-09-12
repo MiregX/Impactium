@@ -1,12 +1,10 @@
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
-import { Avatar } from '@/ui/Avatar';
 import { useLanguage } from '@/context/Language.context';
 import { Tournament } from '@/dto/Tournament';
-import { Button } from '@/ui/Button';
-import { Skeleton } from '@/ui/Skeleton';
 import { useState, useEffect } from 'react';
-import { CombinationSkeleton } from '@/ui/Combitation';
+import { Combination, CombinationSkeleton } from '@/ui/Combitation';
+import { Button } from '@/ui/Button';
 
 export function DeleteTournaments() {
   const { lang } = useLanguage();
@@ -27,16 +25,15 @@ export function DeleteTournaments() {
   return (
     <Card className={s.delete}>
       <h6>{lang.tournament.delete}</h6>
-      {tournaments ? tournaments?.map(tournament => (
-        <div className={s.unit} key={tournament.id}>
-          <Avatar size={36} src={tournament.banner} alt={tournament.title} />
-          <div className={s.sub}>
-            <p className={s.bold}>{tournament.title}</p>
-            <p>@{tournament.code}</p>
+      {tournaments
+        ? tournaments?.map(t => (
+          <div className={s.unit}>
+            <Combination id={t.code} size='full' src={t.banner} name={t.title} />
+            <Button img='https://cdn.impactium.fun/ui/trash/full.svg' size='icon' variant='ghost' onClick={() => deleteTournament(t.id)} />
           </div>
-          <Button img='https://cdn.impactium.fun/ui/trash/full.svg' size='icon' variant='ghost' onClick={() => deleteTournament(tournament.id)} />
-        </div>
-      )) : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton />)}
+        ))
+        : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton size='full' key={i} />)
+      }
     </Card>
   )
 }

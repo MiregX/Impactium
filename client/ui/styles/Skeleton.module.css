@@ -10,6 +10,8 @@
   border-radius: var(--round);
   height: 36px;
   width: 36px;
+  min-height: 36px;
+  min-width: 36px;
 }
 
 .short {
@@ -20,6 +22,14 @@
   height: 30px;
   width: 100px;
   border-radius: var(--round);
+}
+
+.button {
+  min-height: 36px;
+  height: 36px;
+  min-width: 36px;
+  width: 36px;
+  border-radius: 6px;
 }
 
 @keyframes pulse {

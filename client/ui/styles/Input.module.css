@@ -76,3 +76,6 @@
 .revert input {
   padding: 8px 0 8px 12px;
 }
+.input input[type="password"] {
+  font-weight: 900;
+}

@@ -1,10 +1,12 @@
 import { λ } from "@/decorator/λ.class";
 import { ResponseBase } from "./Response.dto";
 import { Callback } from '@impactium/types'
+import { SetState } from "@/lib/utils";
 
 export interface RequestOptions {
-  useNumericHost?: boolean
-  toast?: string | boolean
+  useNumericHost?: boolean;
+  toast?: string | boolean;
+  state?: SetState<boolean>;
 };
 
 type RawTrueOptions = RequestInit & { raw: true } & RequestOptions;

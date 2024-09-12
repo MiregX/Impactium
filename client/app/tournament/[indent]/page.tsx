@@ -4,6 +4,7 @@ import { PanelTemplate } from "@/components/PanelTempate";
 import { useTournament } from './context';
 import { Description } from './components/Description';
 import { Combination } from '@/ui/Combitation';
+import { Badge } from '@/ui/Badge';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();

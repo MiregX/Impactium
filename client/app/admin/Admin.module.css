@@ -1,7 +1,7 @@
-.delete {
-  max-width: 30%;
+.page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
-
 .delete > div {
   display: flex;
   flex-direction: column;
@@ -10,24 +10,8 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  width: 100%;
+  justify-content: space-between;
   gap: var(--gap);
-}
-.delete .unit .sub {
-  flex: 1;
-  display: flex;
-  height: 36px;
-  justify-content: space-around;
-  flex-direction: column;
-}
-.delete .unit .sub p {
-  color: var(--text-dimmed);
-  font-size: 12px;
-}
-.delete .unit .sub .bold {
-  font-weight: 500;
-  color: var(--white);
-  font-size: 14px;
 }
 .safe_toggle_wrapper {
   display: flex;
@@ -42,8 +26,11 @@
 }
 .bypass > div {
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
+}
+.bypass h1 {
+  font-size: 28px;
 }
 .bypass > div > div {
   display: flex;
