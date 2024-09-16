@@ -11,8 +11,6 @@ services:
       - api
     volumes:
       - ./lib/.nginx:/etc/nginx
-    profiles:
-      - production
     networks:
       - backend
 
@@ -28,8 +26,6 @@ services:
       - DEBUG_PORT=${APP_DEBUG_PORT}
     env_file: .env
     command: npm run start
-    profiles:
-      - production
     networks:
       - backend
 
@@ -46,8 +42,6 @@ services:
     env_file: .env
     depends_on:
       - api-cockroachdb
-    profiles:
-      - production
     networks:
       - backend
 
@@ -58,16 +52,8 @@ services:
     container_name: api-cockroachdb
     networks:
       - backend
-
-  # api-prisma:
-  #   extends:
-  #     file: ./api/libs/api/compose-service.yml
-  #     service: api-prisma
-  #   depends_on:
-  #     - api-cockroachdb
-  #   container_name: ${COMPOSE_PROJECT_NAME}api-prisma
-  #   profiles:
-  #     - development
+    profiles:
+      - development
 
   redis:
     container_name: redis
@@ -77,6 +63,8 @@ services:
       - 6379:6379
     networks:
       - backend
+    profiles:
+      - development
 
 networks:
   backend:
