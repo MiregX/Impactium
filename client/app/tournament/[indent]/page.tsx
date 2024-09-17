@@ -4,16 +4,18 @@ import { PanelTemplate } from "@/components/PanelTempate";
 import { useTournament } from './context';
 import { Description } from './components/Description';
 import { Combination } from '@/ui/Combitation';
-import { Badge } from '@/ui/Badge';
+import { Card } from '@/ui/Card';
+import { Grid } from './components/Grid';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();
   return (
     <PanelTemplate className={s.page}>
-      <div className={s.wrapper}>
+      <Card className={s.heading}>
         <Combination size='heading' src={tournament.banner} name={tournament.title} id={tournament.code} />
         <Description />
-      </div>
+      </Card>
+      <Grid length={8} />
     </PanelTemplate>
   );
 }

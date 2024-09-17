@@ -32,7 +32,7 @@ export function DeleteTeams() {
           <Combination src={team.logo} name={team.title} id={team.indent} />
           <Button img='https://cdn.impactium.fun/ui/trash/full.svg' size='icon' variant='ghost' onClick={() => deleteTeam(team.indent)} />
         </div>
-      )) : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton key={i} />)
+      )) : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton key={i} button />)
       }
     </Card>
   )

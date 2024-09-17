@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 type SeparatorPrimitive = React.ElementRef<typeof SeparatorPrimitive.Root>;
 type ComponentPropsWithoutRef = React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
 
-const Separator = forwardRef<SeparatorPrimitive, ComponentPropsWithoutRef>(({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (
+const Separator = forwardRef<SeparatorPrimitive, ComponentPropsWithoutRef>(({ className, orientation = 'horizontal', decorative = true, color, ...props }, ref) => (
   <SeparatorPrimitive.Root
       ref={ref}
       decorative={decorative}
@@ -16,6 +16,7 @@ const Separator = forwardRef<SeparatorPrimitive, ComponentPropsWithoutRef>(({ cl
         s[orientation],
         className
       )}
+      style={{ color }}
       {...props}
     />
   )

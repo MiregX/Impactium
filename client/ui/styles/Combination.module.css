@@ -28,8 +28,7 @@
   color: var(--text-dimmed);
 }
 .heading .group {
-  height: 72px;
-  padding-bottom: 8px;
+  height: 64px;
 }
 
 .heading .name {

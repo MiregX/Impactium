@@ -19,7 +19,9 @@ export function Avatar({ size, src, alt, className, style, ...props }: AvatarPro
       style={{
         ...style,
         height: size,
-        width: size
+        width: size,
+        minHeight: size,
+        minWidth: size
       }}
       {...props}>
       {src && !err

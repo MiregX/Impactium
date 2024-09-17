@@ -44,7 +44,7 @@ export function Combination({ src, name, className, onClick, size, id, children,
   )
 }
 
-export function CombinationSkeleton({children, className, size, ...props}: CombinationSkeletonProps) {
+export function CombinationSkeleton({children, button, className, size, ...props}: CombinationSkeletonProps) {
   return (
     <div className={combinationVariants({ className, size })} {...props}>
       <Skeleton variant='avatar' />
@@ -52,7 +52,7 @@ export function CombinationSkeleton({children, className, size, ...props}: Combi
         <Skeleton className={s.name} />
         <Skeleton className={s.id} size='short' />
       </div>
-      <Skeleton className={s.button} variant='button' />
+      {button && <Skeleton className={s.button} variant='button' />}
     </div>
   )
 }

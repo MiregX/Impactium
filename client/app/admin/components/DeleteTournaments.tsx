@@ -32,7 +32,7 @@ export function DeleteTournaments() {
             <Button img='https://cdn.impactium.fun/ui/trash/full.svg' size='icon' variant='ghost' onClick={() => deleteTournament(t.id)} />
           </div>
         ))
-        : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton size='full' key={i} />)
+        : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton button size='full' key={i} />)
       }
     </Card>
   )
