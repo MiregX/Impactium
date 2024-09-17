@@ -26,11 +26,6 @@ export class ApplicationController {
     return this.applicationService.status()
   }
 
-  @Get('debug')
-  debug() {
-    return !Configuration.isProductionMode() ? (() => { throw new ForbiddenException() })() : process.env
-  }
-
   @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always
   handle() { this.applicationService.handle() };
 }

@@ -32,6 +32,7 @@ export class ApplicationService implements OnModuleInit {
     const toggled = await this._getIsSafeMode() ? 0 : 1;
     await this.redisService.set(dataset.isSafeMode, toggled);
     const info = await this._reloadInfo();
+
     this.webSocket.server.emit(ws.updateApplicationInfo, info);
     return info;
   }
