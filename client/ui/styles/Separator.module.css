@@ -15,7 +15,7 @@
   justify-content: center;
 }
 .separator i {
-  background: var(--soft-black);
+  background: var(--meta-black);
   padding: 0 8px;
   color: var(--accent-4);
   font-weight: 500;

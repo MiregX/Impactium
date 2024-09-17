@@ -28,7 +28,7 @@ const connectorPath = (startX: number, startY: number, endX: number, endY: numbe
 export function Grid({ length }: GridProps) {
   const Iteration = ({ l, roundName, isLast }: IterationProps) => (
     <div className={s.iteration}>
-      <h3>{roundName}</h3>
+      {/* <h3>{roundName}</h3> */}
       {Array.from({ length: l }, (_, i) => (
         <div key={i} className={cn(s.unit, l)}>
           <CombinationSkeleton size="full" />
@@ -45,80 +45,34 @@ export function Grid({ length }: GridProps) {
   );
 
   const SVG = ({ iteration }: SVGProps) => {
+    const wrapper = document.getElementsByClassName(s.iteration);
     const units = Array.from(document.getElementsByClassName(cn(s.unit, iteration)));
-    const gap = 18
+
+    if (!units.length || !wrapper.length) return;
+
+    const height = wrapper[0].clientHeight;
+
+    const gap = height / iteration;
 
     return units.map((unit, i) => {
-      const height = unit.clientHeight + gap;
-      const middle = unit.clientHeight / 2;
-
-      const getInset = () => {
-        if (iteration === 4) {
-          return height * 2;
-        }
-        if (iteration === 2) {
-          return height * 3;
-        }
-        return 0;
-      }
-
-      const startY = height * i + middle + getInset();
-      const end = () => {
-        if (iteration === 8) {
-          if (0 === i) {
-            return 2
-          }
-          if (1 === i) {
-            return 1
-          }
-          if (2 === i) {
-            return 1
-          }
-          if (5 === i) {
-            return -1
-          }
-          if (6 === i) {
-            return -1
-          }
-          if (7 === i) {
-            return -2
-          }
-        }
-        if (iteration === 4) {
-          if (0 === i) {
-            return 1
-          }
-          if (3 === i) {
-            return -1
-          }
-        }
-        if (iteration === 2) {
-          if (0 === i) {
-            return 0.5
-          }
-          console.log(i)
-          if (1 === i) {
-            return -0.5
-          }
-        }
-        return 0;
-      }
+      const unitHeight = unit.clientHeight / 2;
+      const diff = (length / iteration * unitHeight);
+      
+      const startY = gap * i + diff;
+      
       const starts: [number, number] = [
-        startY - 28,
-        startY + 28
+        startY - 32,
+        startY + 32
       ]
-      const getOffset = (y: number) => y % 2 < 1 ? y-28 : y+28;
 
-      const ends: [number, number] = [
-        getOffset(startY) + height * end(),
-        getOffset(startY) + height * end()
-      ]
+      const end = startY + (i % 2 === 0 ? diff : -diff);  
+
       return (
         <React.Fragment>
           {starts.map((n, i) => (
             <path
               key={i + units.length}
-              d={connectorPath(0, n, 48, ends[i])}
+              d={connectorPath(0, n, 48, end)}
               stroke='var(--accent-2)'
               strokeWidth="1"
               fill="transparent"
@@ -130,9 +84,8 @@ export function Grid({ length }: GridProps) {
   }
 
   const getRoundName = (round: number, totalRounds: number) => {
-    if (round === totalRounds) return 'Финал';
-    if (round === totalRounds - 1) return 'Полуфинал';
-    if (round === totalRounds - 2) return 'Четвертьфинал';
+    if (round === totalRounds) return 'Полуфинал';
+    if (round === totalRounds - 1) return 'Четвертьфинал';
     return `Раунд ${round}`;
   };
 

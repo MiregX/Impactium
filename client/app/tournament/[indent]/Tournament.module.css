@@ -25,9 +25,9 @@
 .grid .iteration {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   height: 100%;
-  justify-content: center;
+  gap: 16px;
+  justify-content: space-around;
   position: relative;
 }
 .grid .iteration:last-child {
@@ -35,8 +35,7 @@
 }
 .grid .connector {
   position: absolute;
-  top: 34px;
-  height: calc(100% - 24px) !important;
+  height: 100% !important;
   width: 48px !important;
   right: 0;
   transform: translate(100%, 0%);
