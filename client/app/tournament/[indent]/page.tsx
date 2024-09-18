@@ -15,7 +15,7 @@ export default function TeamIndentPage() {
         <Combination size='heading' src={tournament.banner} name={tournament.title} id={tournament.code} />
         <Description />
       </Card>
-      <Grid length={16} />
+      <Grid length={64} />
     </PanelTemplate>
   );
 }

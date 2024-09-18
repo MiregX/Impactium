@@ -1,23 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Card } from '@/ui/Card';
 import s from '../Tournament.module.css';
 import { CombinationSkeleton } from '@/ui/Combitation';
-import { useMemo } from 'react';
 import { Separator } from '@/ui/Separator';
 import { cn } from '@/lib/utils';
 
 interface GridProps {
   length: number;
-}
-
-interface SVGProps {
-  iteration: number;
-}
-
-interface IterationProps {
-  l: number;
-  roundName: string;
-  isLast?: boolean;
 }
 
 const connectorPath = (startX: number, startY: number, endX: number, endY: number) => `
@@ -26,62 +15,77 @@ const connectorPath = (startX: number, startY: number, endX: number, endY: numbe
 `;
 
 export function Grid({ length }: GridProps) {
-  const Iteration = ({ l, roundName, isLast }: IterationProps) => (
-    <div className={s.iteration}>
-      {/* <h3>{roundName}</h3> */}
-      {Array.from({ length: l }, (_, i) => (
-        <div key={i} className={cn(s.unit, l)}>
-          <CombinationSkeleton size="full" />
-          <Separator color='var(--accent-2)'><i>VS</i></Separator>
-          <CombinationSkeleton size="full" />
-        </div>
-      ))}
-      {!isLast && (
-        <svg className={s.connector} xmlns="http://www.w3.org/2000/svg">
-          <SVG key={l} iteration={l} />
-        </svg>
-      )}
-    </div>
-  );
+  const [iterations, setIterations] = useState<React.JSX.Element[]>([]);
+  const wrapperRef = useRef<HTMLDivElement[]>([]);
+  const unitRefs = useRef<HTMLDivElement[][]>([]);
 
-  const SVG = ({ iteration }: SVGProps) => {
-    const wrapper = document.getElementsByClassName(s.iteration);
-    const units = Array.from(document.getElementsByClassName(cn(s.unit, iteration)));
+  const getTopOffset = (unit: HTMLDivElement) => unit.offsetTop + unit.clientHeight / 2;;
 
-    if (!units.length || !wrapper.length) return;
+  const SVG = ({ iteration, nextIteration }: { iteration: number, nextIteration: number }) => {
+    const units = unitRefs.current[iteration];
+    const nextUnits = unitRefs.current[nextIteration];
 
-    const height = wrapper[0].clientHeight;
+    if (!units || !nextUnits) return null;
 
-    const gap = height / iteration;
+    return (
+      <svg className={s.connector} xmlns="http://www.w3.org/2000/svg">
+        {units.map((unit, i) => {
+          const start = getTopOffset(unit);
+          const end = getTopOffset(nextUnits[Math.floor(i / 2)]);
 
-    return units.map((unit, i) => {
-      const unitHeight = unit.clientHeight / 2;
-      const diff = (length / iteration * unitHeight);
-      
-      const startY = gap * i + diff;
-      
-      const starts: [number, number] = [
-        startY - 32,
-        startY + 32
-      ]
+          return (
+            <React.Fragment key={i}>
+              {[start - 32, start + 32].map((n, j) => (
+                <path
+                  key={j}
+                  d={connectorPath(0, n, 48, end)}
+                  stroke='var(--accent-2)'
+                  strokeWidth="1"
+                  fill="transparent"
+                />
+              ))}
+            </React.Fragment>
+          );
+        })}
+      </svg>
+    );
+  };
 
-      const end = startY + (i % 2 === 0 ? diff : -diff);  
+  const Iteration = ({ l, roundName, nextL }: { l: number; roundName: string; nextL?: number }) => {
+    const iterationRef = useRef<HTMLDivElement>(null);
 
-      return (
-        <React.Fragment>
-          {starts.map((n, i) => (
-            <path
-              key={i + units.length}
-              d={connectorPath(0, n, 48, end)}
-              stroke='var(--accent-2)'
-              strokeWidth="1"
-              fill="transparent"
-            />
-          ))}
-        </React.Fragment>
-      )
-    });
-  }
+    useEffect(() => {
+      if (iterationRef.current) {
+        wrapperRef.current[l] = iterationRef.current;
+      }
+    }, [l]);
+
+    return (
+      <div ref={iterationRef} className={s.iteration}>
+        {Array.from({ length: l }).map((_, i) => {
+          const unitRef = useRef<HTMLDivElement>(null);
+
+          useEffect(() => {
+            if (!unitRefs.current[l]) {
+              unitRefs.current[l] = [];
+            }
+            unitRefs.current[l][i] = unitRef.current!;
+          }, [l, i]);
+
+          return (
+            <div key={i} ref={unitRef} className={cn(s.unit, l)}>
+              <CombinationSkeleton size="full" />
+              <Separator color='var(--accent-2)'><i>VS</i></Separator>
+              <CombinationSkeleton size="full" />
+            </div>
+          );
+        })}
+        {nextL && (
+          <SVG iteration={l} nextIteration={nextL} />
+        )}
+      </div>
+    );
+  };
 
   const getRoundName = (round: number, totalRounds: number) => {
     if (round === totalRounds) return 'Полуфинал';
@@ -90,35 +94,40 @@ export function Grid({ length }: GridProps) {
   };
 
   const renderIterations = (length: number) => {
-    const iterations = [];
     let currentLength = length;
     let round = 1;
     const totalRounds = Math.floor(Math.log2(length));
+    const generatedIterations = [];
 
     while (currentLength > 1) {
       const roundName = getRoundName(round, totalRounds);
-      iterations.push(
+      const nextLength = Math.floor(currentLength / 2);
+      generatedIterations.push(
         <Iteration 
           key={currentLength} 
           l={currentLength} 
           roundName={roundName} 
+          nextL={nextLength}
         />
       );
-      currentLength = Math.floor(currentLength / 2);
+      currentLength = nextLength;
       round++;
     }
 
-    // Финальный раунд
     if (currentLength === 1) {
-      iterations.push(<Iteration key={currentLength} l={1} roundName="Финал" isLast />);
+      generatedIterations.push(<Iteration key={currentLength} l={1} roundName="Финал" />);
     }
 
-    return iterations;
+    setIterations(generatedIterations);
   };
+
+  useEffect(() => {
+    renderIterations(length);
+  }, [length]);
 
   return (
     <Card className={s.grid}>
-      {renderIterations(length)}
+      {iterations}
     </Card>
   );
 }
