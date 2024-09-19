@@ -6,6 +6,8 @@ import { Description } from './components/Description';
 import { Combination } from '@/ui/Combitation';
 import { Card } from '@/ui/Card';
 import { Grid } from './components/Grid';
+import { TournamentInformation } from './components/TournamentInformation';
+import { TournamentGeneral } from './components/TournamentGeneral';
 
 export default function TeamIndentPage() {
   const { tournament } = useTournament();
@@ -15,7 +17,9 @@ export default function TeamIndentPage() {
         <Combination size='heading' src={tournament.banner} name={tournament.title} id={tournament.code} />
         <Description />
       </Card>
-      <Grid length={64} />
+      <Grid />
+      <TournamentInformation />
+      <TournamentGeneral />
     </PanelTemplate>
   );
 }

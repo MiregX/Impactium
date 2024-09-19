@@ -38,7 +38,7 @@ export class UserEntity {
     return Object.assign(this, user);
   }
 
-  static select = ({ teams, logins }: Options = {}): Prisma.UserSelect => ({
+  static select = ({ teams, logins = true }: Options = {}): Prisma.UserSelect => ({
     uid: true,
     email: true,
     register: true,

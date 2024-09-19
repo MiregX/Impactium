@@ -59,10 +59,8 @@ export class TournamentService implements OnModuleInit {
   
   findOneByCode(code: string) {
     return this.prisma.tournament.findUnique({
-      select: TournamentEntity.select({ teams: true }),
-      where: {
-        code,
-      }
+      select: TournamentEntity.select({ teams: true, owner: true }),
+      where: { code }
     });
   }
 

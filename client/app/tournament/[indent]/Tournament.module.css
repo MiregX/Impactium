@@ -11,14 +11,21 @@
 .heading {
   grid-column: 1 / 3;
 }
-.grid {
+.grid_wrapper {
   height: 100%;
   grid-row: 2 / 7;
   grid-column: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.grid {
   overflow: scroll;
+  height: calc(100% - 48px);
 }
 .grid > div {
   gap: 48px;
+  padding-top: 48px;
   flex-direction: row;
   height: max-content;
 }
@@ -50,12 +57,54 @@
   border: var(--geist-border);
   border-radius: var(--border-m);
 }
-.grid .settings {
-  z-index: 3;
-  position: absolute;
-  top: 24px;
-  right: 24px;
+.grid_wrapper .header {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+.grid_wrapper .header h3 {
+  flex: 1;
+}
+.grid_wrapper .header .settings {
 }
 .top {
   justify-content: flex-start !important;
+}
+.center {
+  justify-content: center !important;
+}
+.grid .unit:not([data-round="false"])::before {
+  content: attr(data-round);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(calc(-100% - 12px));
+}
+.information {
+  grid-column: 3 / 4;
+  grid-row: 1 / 6;
+  height: 100%;
+}
+.information > div {
+  overflow: hidden;
+}
+.information .members {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 100%;
+  overflow: scroll;
+}
+.general {
+  grid-column: 3 / 4;
+  grid-row: 6 / 7;
+  height: 100%;
+}
+.general .group {
+  display: flex;
+  gap: 16px;
+}
+.general .group button {
+  flex: 1;
 }
