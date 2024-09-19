@@ -6,7 +6,7 @@ import { Tournament } from "@/dto/Tournament";
 import { usePagination } from "@/decorator/usePagination";
 import React from "react";
 import { PanelTemplate } from "@/components/PanelTempate";
-import { TournamentUnit, TournamentUnitSkeleton } from "@/components/TournamentUnit";
+import { TournamentUnit } from "@/components/TournamentUnit";
 import { ПошёлНахуй } from "./ПошёлНахуй";
 
 export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {

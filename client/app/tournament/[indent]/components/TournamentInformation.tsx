@@ -11,13 +11,13 @@ export function TournamentInformation({}) {
 
   return (
     <Card className={s.information}>
-      <p>Организатор:</p>
-      <Combination id={tournament.owner.uid} src={tournament.owner.avatar} name={tournament.owner.displayName} />
+      <h3>Основная информация</h3>
+      <div className={s.node}>
+        <p>Организатор:</p>
+        <Combination id={tournament.owner.uid} src={tournament.owner.avatar} name={tournament.owner.displayName} />
+      </div>
+      <div className={s.pod}><p>Мест: 12 / 16</p><span>(cвободно: 4)</span></div>
       <Separator />
-      <p>Мест: 12 / 16</p>
-      <span>Свободно: 4</span>
-      <Separator />
-      <p>Участники</p>
       <div className={s.members}>
         {tournament.teams.length
         ? tournament.teams.map(team => (
@@ -27,7 +27,10 @@ export function TournamentInformation({}) {
         }
       </div>
       <Separator />
-      <p>Начало через: 16 часов 43 минуты</p>
+      <div className={s.time}>
+        <span>Начало через:</span>
+        <p>16 часов 43 минуты</p>
+      </div> 
     </Card>
   )
 }

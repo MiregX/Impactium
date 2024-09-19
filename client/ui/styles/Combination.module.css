@@ -1,7 +1,7 @@
 .combination {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
 }
 .group {
   flex: 1;
@@ -26,6 +26,9 @@
 .id {
   font-size: 12px;
   color: var(--text-dimmed);
+}
+.heading {
+  gap: 12px;
 }
 .heading .group {
   height: 64px;

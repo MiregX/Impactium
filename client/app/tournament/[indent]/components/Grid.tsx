@@ -1,14 +1,15 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, WheelEventHandler } from 'react';
 import { Card } from '@/ui/Card';
 import s from '../Tournament.module.css';
 import { CombinationSkeleton } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { cn } from '@/lib/utils';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '@/ui/Select';
 import { capitalize } from '@impactium/utils';
 import { useTournament } from '../context';
+import { useLanguage } from '@/context/Language.context';
 
 interface GridProps {
   length: number;
@@ -33,7 +34,13 @@ const connectorPath = (startX: number, startY: number, endX: number, endY: numbe
 export function Grid() {
   const [iterations, setIterations] = useState<React.JSX.Element[]>([]);
   const [align, setAlign] = useState<AlignSettings>(AlignSettings.middle);
+  const [scrolled, setScrolled] = useState<number>(0);
+  const [maxScroll, setMaxScroll] = useState<number>(0);
+  const self = useRef<HTMLDivElement>(null);
   const { tournament } = useTournament();
+  const { lang } = useLanguage();
+  
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => setScrolled((v) => Math.min((maxScroll), Math.max(0, v + event.deltaY)));
 
   const Connectors = useCallback(({ current, next = 0 }: { current: number, next?: number }) => {
     useEffect(() => {
@@ -72,15 +79,22 @@ export function Grid() {
   }, []);
 
   const Iteration = useCallback(({ length, roundName, next }: { length: number; roundName: string; next?: number }) => {
+    const self = useRef<HTMLDivElement>(null);
+
+    useEffect(() => { self.current && setMaxScroll(self.current.clientHeight)});
+
     return (
-      <div className={cn(s.iteration, s[align])}>
-        {Array.from({ length }).map((_, index) => (
-          <div data-round={index === 0 ? roundName : undefined} key={index} className={cn(s.unit, length)} data-length={length}>
-            <CombinationSkeleton size="full" />
-            <Separator color='var(--accent-2)'><i>VS</i></Separator>
-            <CombinationSkeleton size="full" />
-          </div>
-        ))}
+      <div ref={self} className={s.iteration}>
+        <div className={s.round}>{roundName}</div>
+        <div className={cn(s.units, s[align])}>
+          {Array.from({ length }).map((_, index) => (
+            <div key={index} className={cn(s.unit, length)} data-length={length}>
+              <CombinationSkeleton size="full" />
+              <Separator color='var(--accent-2)'><i>VS</i></Separator>
+              <CombinationSkeleton size="full" />
+            </div>
+          ))}
+        </div>
         <Connectors current={length} next={next} />
       </div>
     );
@@ -120,16 +134,19 @@ export function Grid() {
         <h3>Турнирная сетка</h3>
         <div className={s.settings}>
           <Select onValueChange={v => setAlign(v as AlignSettings)} defaultValue={'middle'}>
-            <SelectTrigger value={align}>{capitalize(align) || 'Режим отображения'}</SelectTrigger>
+            <SelectTrigger value={align}>{lang.display_options[align] || 'Режим отображения'}</SelectTrigger>
             <SelectContent>
-              {Object.values(AlignSettings).map(v => (
-                <SelectItem value={AlignSettings[v]} className={s.item}>{capitalize(v)}</SelectItem>
-              ))}
+              <SelectGroup>
+                <SelectLabel>Режим отображения</SelectLabel>
+                {Object.values(AlignSettings).map(v => (
+                  <SelectItem value={AlignSettings[v]} className={s.item}>{lang.display_options[v ]}</SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
       </div>
-      <Card className={s.grid}>
+      <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border)}>
         {iterations}
       </Card>
     </div>

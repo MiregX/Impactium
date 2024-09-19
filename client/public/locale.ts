@@ -470,13 +470,36 @@ const locale: Locale = {
       pl: 'Usuń drużynu'
     },
   },
+  display_options: {
+    top: {
+      us: 'On top',
+      ru: 'Вверху',
+      ua: 'Зверху',
+      it: 'In alto',
+      pl: 'Na górze'
+    },
+    middle: {
+      us: 'Default',
+      ru: 'По умолчанию',
+      ua: 'За замовчуванням',
+      it: 'Predefinito',
+      pl: 'Domyślny'
+    },
+    center: {
+      us: 'In the center',
+      ru: 'В центре',
+      ua: 'В центрі',
+      it: 'Al centro',
+      pl: 'W centrum'
+    }    
+  },
   tournament: {
     for_organizers: {
       us: 'For organizers',
       ru: 'Организаторам',
       ua: 'Організаторам',
       it: 'Per gli organizzatori',
-      pl: 'Dla organizatorów'            
+      pl: 'Dla organizatorów'
     },
     recomendations: {
       us: 'Popular tournaments',
