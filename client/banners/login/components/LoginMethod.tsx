@@ -4,8 +4,9 @@ import { _server } from '@/decorator/api'
 import Link from 'next/link';
 import { Badge, BadgeType } from '@/ui/Badge';
 import { LoginMethod as LoginMethods } from '@/types';
-import { capitalize, cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Button } from '@/ui/Button';
+import { capitalize } from '@impactium/utils';
 
 interface LoginMethodProps {
   type: LoginMethods,

@@ -144,6 +144,9 @@ main {
   flex-direction: column;
   align-items: center;
 }
+body[data-scroll-locked] {
+  transform: translateX(4px) !important;
+}
 main > div {
   min-height: calc(100vh - var(--header-height)) !important;
 }
@@ -197,7 +200,6 @@ body::-webkit-scrollbar-track {
   border-radius: 0px;
   background-color: var(--soft-black);
 }
-
 *::-webkit-scrollbar-thumb {
   background-color: var(--text-white);
   border-radius: 10px;

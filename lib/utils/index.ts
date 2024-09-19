@@ -19,3 +19,5 @@ export function ui(path: string) {
 export function home() {
   return { url: Configuration.getClientLink() }
 }
+
+export const capitalize = (str: string) => str.substring(0, 1).toUpperCase() + str.substring(1);

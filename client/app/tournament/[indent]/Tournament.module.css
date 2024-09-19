@@ -50,3 +50,12 @@
   border: var(--geist-border);
   border-radius: var(--border-m);
 }
+.grid .settings {
+  z-index: 3;
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+.top {
+  justify-content: flex-start !important;
+}

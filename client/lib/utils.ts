@@ -35,7 +35,3 @@ export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 export function soft<T>(value: T, func?: SetState<T>) {
   if (func) func((v: T) => value as T);
 }
-
-export function capitalize(str: string) {
-  return str.substring(0, 1).toUpperCase() + str.substring(1)
-}

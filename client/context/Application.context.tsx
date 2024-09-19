@@ -41,7 +41,9 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
   useEffect(() => {
     socket?.on(ws.updateApplicationInfo, setApplication);
   
-    return socket?.disconnect as unknown as void;
+    return () => {
+      socket?.disconnect()
+    };
   }, [socket]);
 
   const spawnBanner = (element: React.ReactNode) => {
