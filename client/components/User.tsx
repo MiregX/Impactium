@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { Avatar } from '../ui/Avatar';
+import { Icon } from '@/ui/Icon';
 
 export function UserComponent() {
   const { user, logout } = useUser();
@@ -38,12 +39,12 @@ export function UserComponent() {
         {user!.uid === 'system' && (
           <Link href='/admin' onClick={toggle}>
             {lang._admin_panel}
-            <img src='https://cdn.impactium.fun/ui/specific/star.svg' alt=''/>
+            <Icon name='Fingerprint' />
           </Link>
         )}
         <Link href='/account' onClick={toggle}>
           {lang._account}
-          <img src='https://cdn.impactium.fun/ui/user/card-id.svg' alt=''/>
+          <Icon name='CreditCard' />
         </Link>
         <hr />
         <Link href='/account#balance' onClick={toggle}>
@@ -52,12 +53,12 @@ export function UserComponent() {
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}
-          <img src='https://cdn.impactium.fun/ui/specific/globe.svg' alt=''/>
+          <Icon name='Globe' />
         </button>
         <hr />
         <button onClick={() => handle(logout)}>
           {lang.logout}
-          <img src='https://cdn.impactium.fun/ui/action/log-out.svg' alt=''/>
+          <Icon name='LogOut' />
         </button>
       </nav>
     </div>

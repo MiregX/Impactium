@@ -25,7 +25,7 @@ export function LeaveComment() {
         placeholder={lang.comments.leave}
         className={s.input} />
       <Button
-        img='https://cdn.impactium.fun/ui/specific/paper-plane.svg'
+        img='SendHorizontal'
         onClick={send}
         size='icon' />
     </div>

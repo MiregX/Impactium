@@ -35,7 +35,7 @@ export function Header() {
       ) : (
         <div className={s.wrapper}>
           <Button variant='outline' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
-          <Button size='icon' variant='outline' onClick={() => spawnBanner(<LanguageChooser />)}><img src='https://cdn.impactium.fun/ui/specific/globe.svg' /></Button>
+          <Button size='icon' img='Globe' variant='outline' onClick={() => spawnBanner(<LanguageChooser />)} />
         </div>
       )}
     </header>

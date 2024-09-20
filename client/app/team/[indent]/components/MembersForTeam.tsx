@@ -10,6 +10,8 @@ import { Button } from "@/ui/Button";
 import { useUser } from "@/context/User.context";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/Tooltip";
+import { Icon } from "@/ui/Icon";
+import { icons } from "lucide-react";
 
 export function MembersForTeam() {
   const { user } = useUser();
@@ -37,16 +39,14 @@ export function MembersForTeam() {
           <Combination src={user.avatar} name={user.displayName} id={user.username} />
           <div className={s.roles}>
             {Object.values(TeamMemberMainRoles)
-              // Уточняем, что ключ должен быть числом (значением enum-а)
               .filter((key): key is TeamMemberMainRoles => typeof key === 'number')
               .map((role) => (
                 <TooltipProvider key={role}>
                   <Tooltip>
                     <TooltipTrigger>
-                      <img
+                      <Icon
+                        name={TeamMemberMainRolesMap[role] as keyof typeof icons}
                         className={cn(s.icon, member.roles.includes(TeamMemberMainRolesMap[role]) && s.active)}
-                        src={`https://cdn.impactium.fun/ui/roles/${TeamMemberMainRolesMap[role]}.png`}
-                        alt=""
                       />
                     </TooltipTrigger>
                     <TooltipContent>

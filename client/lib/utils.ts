@@ -3,6 +3,7 @@ import { RequestOptions } from "@/dto/api.dto"
 import { ResponseBase } from "@/dto/Response.dto";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
+import { icons } from "lucide-react";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -35,3 +36,5 @@ export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 export function soft<T>(value: T, func?: SetState<T>) {
   if (func) func((v: T) => value as T);
 }
+
+export type Icons = keyof typeof icons;

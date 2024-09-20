@@ -1,11 +1,12 @@
 'use client'
 import { useLanguage } from "@/context/Language.context"
+import { Icon } from "./Icon";
 
 export function Loading() {
   const { lang } = useLanguage();
   return (
     <>
-      <img src='https://cdn.impactium.fun/ui/action/loading.svg' />
+      <Icon name='LoaderCircle' />
       {lang._please_wait}
     </>
   )

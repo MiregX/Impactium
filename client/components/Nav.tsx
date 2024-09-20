@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/Language.context';
 import Link from 'next/link';
+import { Icon } from '@/ui/Icon';
+import { Icons } from '@/lib/utils';
 
 interface MapType {
-  [key: string]: { image: string }; // Index signature allowing any string key with an object containing 'image' property
+  [key: string]: { image: Icons };
 }
 
 export function Nav() {
@@ -16,10 +18,10 @@ export function Nav() {
 
   const map: MapType = {
     account: {
-      image: 'https://cdn.impactium.fun/ui/user/user.svg'
+      image: 'User'
     },
     settings: {
-      image: 'https://cdn.impactium.fun/ui/action/settings.svg'
+      image: 'Settings'
     }
   };
 
@@ -32,7 +34,7 @@ export function Nav() {
           onClick={() => { router.push('account'); setSelectedButton(index) }}
           href={`/me/${title}`}
         >
-          <img src={map[title].image} alt='' />
+          <Icon name={map[title].image} />
           <p>{lang[title]}</p>
         </Link>
       ))}

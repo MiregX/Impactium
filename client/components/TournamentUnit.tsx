@@ -10,6 +10,7 @@ import React from 'react'
 import { Button } from '@/ui/Button'
 import { Combination, CombinationSkeleton } from '../ui/Combitation'
 import { Skeleton } from '@/ui/Skeleton'
+import { Icon } from '@/ui/Icon'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -23,7 +24,7 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
         <Button variant='ghost' asChild>
           <Link href={`/tournament/${tournament.code}`}>
             Подробнее
-            <Image width='24' height='24' src='https://cdn.impactium.fun/ui/arrow-lg/right.svg' alt='' />
+            <Icon size={24} variant='dimmed' name='ArrowRight' />
           </Link>
         </Button>
       </div>

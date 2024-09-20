@@ -147,7 +147,7 @@ export function Grid() {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button className={cn(fullScreen && s.minimize)} onClick={() => setFullScreen(v => !v)} img={ui(`action/${fullScreen ? 'minimize' : 'maximize'}`)} variant={fullScreen ? 'default' : 'secondary'}>{fullScreen && 'Minimize'}</Button>
+          <Button className={cn(fullScreen && s.minimize)} onClick={() => setFullScreen(v => !v)} img={fullScreen ? 'Minimize' : 'Maximize'} variant={fullScreen ? 'default' : 'secondary'}>{fullScreen && 'Minimize'}</Button>
         </div>
       </div>
       <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>

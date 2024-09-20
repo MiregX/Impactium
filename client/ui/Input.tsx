@@ -3,6 +3,8 @@ import s from './styles/Input.module.css'
 import { cva, type VariantProps } from "class-variance-authority"; 
 import { ui } from "@impactium/utils";
 import { cn } from "@/lib/utils";
+import { icons } from "lucide-react";
+import { Icon } from "./Icon";
 
 const inputVariants = cva(s.button, {
   variants: {
@@ -22,8 +24,9 @@ const inputVariants = cva(s.button, {
 });
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
-  img?: string
+  img?: keyof typeof icons
   revert?: boolean
+  loading?: boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -35,7 +38,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         s.image,
         revert && s.revert
       )}>
-        <img src={img || ui('action/upload')} alt='' />
+        <Icon name={img || 'ImageUp'} />
         <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />
       </div>
     ) : (

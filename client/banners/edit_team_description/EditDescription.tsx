@@ -23,7 +23,7 @@ export function EditDescription({ state, type }: { state: Team | Tournament, typ
 
   const footer = {
     right: [
-      <Button img='https://cdn.impactium.fun/ui/check/big.svg' onClick={save}>{lang._save}</Button>
+      <Button img='Check' onClick={save}>{lang._save}</Button>
     ]
   }
 

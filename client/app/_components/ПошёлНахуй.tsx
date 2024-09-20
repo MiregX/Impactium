@@ -7,7 +7,8 @@ import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
 import { useApplication } from '@/context/Application.context';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import Image from 'next/image';
-import { Medal } from 'lucide-react';
+import { Medal, Users } from 'lucide-react';
+import { Icon } from '@/ui/Icon';
 
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
@@ -27,20 +28,20 @@ export function ПошёлНахуй() {
       })}
       <Button asChild className={cn(s.button, s.tournaments)}>
         <Link href='/tournaments'>
-          <Image src='https://cdn.impactium.fun/ui/specific/trophy.svg' alt='' width={20} height={20} />
+          <Icon variant='black' name='Trophy' />
           Турниры
         </Link>
       </Button>
       <Button asChild className={cn(s.button, s.teams)}>
         <Link href='/teams'>
-          <Image src='https://cdn.impactium.fun/ui/user/users-group.svg' alt='' width={20} height={20} />
+          <Icon variant='black' name='Users' />
           Команды
         </Link>
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img={<Medal />}>
+      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img='Medal'>
         Создать турнир
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='https://cdn.impactium.fun/ui/specific/node.svg'>
+      <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='Users'>
         Создать команду
       </Button>
     </div>

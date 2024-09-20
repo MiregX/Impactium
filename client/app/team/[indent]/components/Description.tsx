@@ -6,6 +6,7 @@ import { useUser } from "@/context/User.context";
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team';
 import { EditDescription } from '@/banners/edit_team_description/EditDescription';
+import { Icon } from '@/ui/Icon';
 
 interface Description {
   state: Team | Tournament,
@@ -23,7 +24,7 @@ export function Description({ state, key }: Description) {
         {user?.uid === state.ownerId && <button
           onClick={() => spawnBanner(<EditDescription state={state} key={key} type={key} />)}
           className={s.edit}>
-          <img src='https://cdn.impactium.fun/ui/pencil/pencil-line.svg' />
+          <Icon name='PenLine' />
         </button>}
     </div>
   )

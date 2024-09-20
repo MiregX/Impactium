@@ -61,7 +61,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath, loading
   return (
     <div className={s.bar}>
       <Input
-        img={'https://cdn.impactium.fun/ui/specific/mention.svg'}
+        img='AtSign'
         placeholder={lang.search[apiPath]}
         aria-label="Search"
         aria-invalid="false"

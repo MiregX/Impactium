@@ -9,8 +9,9 @@ import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
-import { Logins, User, UserAddons, UserEntity } from "@/dto/User";
+import { User, UserAddons, UserEntity } from "@/dto/User";
 import { cn } from "@/lib/utils";
+import { Icon } from "@/ui/Icon";
 
 export function Connections() {
   const { lang } = useLanguage();
@@ -19,7 +20,7 @@ export function Connections() {
   const [fetched, setFetched] = useState<boolean>(!!user?.logins);
 
   const button = <Button
-    img='https://cdn.impactium.fun/ui/action/add-plus.svg'
+    img='UserPlus'
     onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
 
     useEffect(() => {
@@ -58,7 +59,7 @@ function Unit({ login }: { login: Login }) {
         alt={login.displayName} />
       <p>{login.displayName}</p>
       <code>
-        <img src='https://cdn.impactium.fun/ui/specific/command.svg' />{login.id}
+        <Icon name='Command' />{login.id}
       </code>
     </div>
   );

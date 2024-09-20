@@ -7,11 +7,11 @@ export enum TeamMemberMainRoles {
 }
 
 export const TeamMemberMainRolesMap = {
-  [TeamMemberMainRoles.carry]: 'carry',
-  [TeamMemberMainRoles.mid]: 'mid',
-  [TeamMemberMainRoles.offlane]: 'offlane',
-  [TeamMemberMainRoles.semisupport]: 'semisupport',
-  [TeamMemberMainRoles.fullsupport]: 'fullsupport'
+  [TeamMemberMainRoles.carry]: 'Sword',
+  [TeamMemberMainRoles.mid]: 'Crosshair',
+  [TeamMemberMainRoles.offlane]: 'Shield',
+  [TeamMemberMainRoles.semisupport]: 'HandCoins',
+  [TeamMemberMainRoles.fullsupport]: 'HandHeart'
 }
 
 export enum TeamMemberRoles {

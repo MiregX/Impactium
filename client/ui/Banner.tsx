@@ -57,7 +57,7 @@ export function Banner({ title, children, footer, onClose, options, className, .
       <div className={cn(banner._, useOptionStyling(options, banner), className)}>
         <h4>
           {title}
-          <Button variant='ghost' img={ui('close/md')} onClick={destroyBanner} />
+          <Button variant='ghost' img='X' onClick={destroyBanner} />
         </h4>
         <div className={banner.content}>{children}</div>
         {footer ? (

@@ -27,7 +27,7 @@ export function Pagination({
     <div className={cn(s.pagination, className)} {...props}>
       {/* Кнопка назад */}
       <Button variant={page === 1 ? 'disabled' : 'ghost'}
-        img='https://cdn.impactium.fun/ui/chevron/left-md.svg'
+        img='ChevronLeft'
         onClick={prevPage}>Previous</Button>
       
       {/* Количество кнопок зависящее от кол-ва buttons переданное в usePagination */}
@@ -43,7 +43,7 @@ export function Pagination({
         revert
         onClick={nextPage}
         variant={page === total ? 'disabled' : 'ghost'}
-        img='https://cdn.impactium.fun/ui/chevron/right-md.svg'>Next</Button>
+        img='ChevronRight'>Next</Button>
     </div>
   );
 }

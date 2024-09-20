@@ -10,6 +10,7 @@ import { authGuard } from '@/decorator/authGuard';
 import { LoginBanner } from '../login/LoginBanner';
 import Image from 'next/image'
 import { verifiedGuard } from '@/decorator/verifiedGuard';
+import { Icon } from '@/ui/Icon';
 
 export function CreateTournament() {
   const { lang } = useLanguage();
@@ -27,7 +28,7 @@ export function CreateTournament() {
     <Banner title={lang.create.tournament} options={{ center: true }}footer={{right: [
       <Button onClick={destroyBanner}>{lang.tournament.well}</Button>
   ]}}>
-      <Image width={92} height={92} src='https://cdn.impactium.fun/ui/wavy/check.svg' alt='Not Verified' />
+      <Icon size={96} name='BadgeCheck' />
       <h4 style={{
         fontSize: '18px',
         fontWeight: 300,
