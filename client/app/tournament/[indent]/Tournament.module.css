@@ -61,7 +61,7 @@
   top: 0px;
   border-top: none;
   left: 0;
-  font-size: 14px;
+  font-size: 16px;
   height: 32px;
   text-align: center;
   font-weight: 500;
@@ -70,7 +70,7 @@
 .units {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   height: 100%;
 }
 .grid .iteration {
@@ -108,6 +108,9 @@
   flex: 1;
 }
 .grid_wrapper .header .settings {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 .top {
   justify-content: flex-start !important;
@@ -179,7 +182,25 @@
   justify-content: space-between;
   align-items: center;
 }
-.time span {
+.time p {
   color: var(--text-dimmed);
   font-size: 14px;
+}
+.time span {
+  font-size: 14px;
+  font-weight: 500;
+}
+.grid.fullscreen {
+  position: fixed;
+  z-index: 1;
+  top: 84px;
+  left: 16px;
+  height: calc(100vh - 104px);
+  width: calc(100vw - 40px);
+}
+.minimize {
+  position: fixed;
+  bottom: 32px;
+  right: 28px;
+  z-index: 2;
 }

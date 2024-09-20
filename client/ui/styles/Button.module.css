@@ -65,15 +65,13 @@
   filter: var(--filter-to-white);
 }
 .hardline:hover {
-  background-color: var(--gray-16);
+  background-color: var(--soft-black);
 }
 
 .secondary {
-  background-color: var(--gray-16);
+  background-color: var(--soft-black);
   color: var(--white);
-}
-.secondary:hover {
-  background-color: var(--gray-16);
+  border: 1px solid var(--accent-2);
 }
 
 .ghost {

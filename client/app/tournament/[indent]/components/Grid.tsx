@@ -7,9 +7,10 @@ import { CombinationSkeleton } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '@/ui/Select';
-import { capitalize } from '@impactium/utils';
+import { capitalize, ui } from '@impactium/utils';
 import { useTournament } from '../context';
 import { useLanguage } from '@/context/Language.context';
+import { Button } from '@/ui/Button';
 
 interface GridProps {
   length: number;
@@ -36,7 +37,7 @@ export function Grid() {
   const [align, setAlign] = useState<AlignSettings>(AlignSettings.middle);
   const [scrolled, setScrolled] = useState<number>(0);
   const [maxScroll, setMaxScroll] = useState<number>(0);
-  const self = useRef<HTMLDivElement>(null);
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
   const { tournament } = useTournament();
   const { lang } = useLanguage();
   
@@ -128,6 +129,8 @@ export function Grid() {
     renderIterations(tournament.grid?.length || 16);
   }, [tournament, align, renderIterations]);
 
+  useEffect(() => document.documentElement.scroll(0, 0), [fullScreen])
+
   return (
     <div className={s.grid_wrapper}>
       <div className={s.header}>
@@ -139,14 +142,15 @@ export function Grid() {
               <SelectGroup>
                 <SelectLabel>Режим отображения</SelectLabel>
                 {Object.values(AlignSettings).map(v => (
-                  <SelectItem value={AlignSettings[v]} className={s.item}>{lang.display_options[v ]}</SelectItem>
+                  <SelectItem value={AlignSettings[v]} className={s.item}>{lang.display_options[v]}</SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
           </Select>
+          <Button className={cn(fullScreen && s.minimize)} onClick={() => setFullScreen(v => !v)} img={ui(`action/${fullScreen ? 'minimize' : 'maximize'}`)} variant={fullScreen ? 'default' : 'secondary'}>{fullScreen && 'Minimize'}</Button>
         </div>
       </div>
-      <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border)}>
+      <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>
         {iterations}
       </Card>
     </div>
