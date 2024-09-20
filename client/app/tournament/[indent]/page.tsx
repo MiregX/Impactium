@@ -7,7 +7,6 @@ import { Combination } from '@/ui/Combitation';
 import { Card } from '@/ui/Card';
 import { Grid } from './components/Grid';
 import { TournamentInformation } from './components/TournamentInformation';
-import { TournamentGeneral } from './components/TournamentGeneral';
 import { Badge, BadgeType } from '@/ui/Badge';
 import { getTournamentState } from '@/decorator/getTournamentState';
 
@@ -23,7 +22,6 @@ export default function TeamIndentPage() {
       </Card>
       <Grid />
       <TournamentInformation />
-      <TournamentGeneral />
     </PanelTemplate>
   );
 }

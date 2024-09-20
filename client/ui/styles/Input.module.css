@@ -10,7 +10,6 @@
   outline-offset: var(--white);
 }
 
-
 .image {
   padding: 0;
   gap: 8px;
@@ -20,8 +19,9 @@
   padding-left: 8px; 
 }
 .image input {
-  flex: 1;
   padding: 8px 12px 8px 0;
+  flex: 1;
+  cursor: pointer;
 }
 
 .input::file {
@@ -76,6 +76,13 @@
 .revert input {
   padding: 8px 0 8px 12px;
 }
-.input input[type="password"] {
-  font-weight: 900;
+.input::file-selector-button,
+.input input::file-selector-button {
+  background: transparent;
+  outline: none;
+  border: none;
+  color: var(--text-dimmed);
+  margin-right: 8px;
+  cursor: pointer;
+  padding: 0;
 }

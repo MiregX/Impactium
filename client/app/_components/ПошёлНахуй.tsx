@@ -7,6 +7,7 @@ import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
 import { useApplication } from '@/context/Application.context';
 import CreateTeam from '@/banners/create_team/CreateTeam';
 import Image from 'next/image';
+import { Medal } from 'lucide-react';
 
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
@@ -36,7 +37,7 @@ export function ПошёлНахуй() {
           Команды
         </Link>
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img='https://cdn.impactium.fun/ui/specific/cluster.svg'>
+      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img={<Medal />}>
         Создать турнир
       </Button>
       <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='https://cdn.impactium.fun/ui/specific/node.svg'>

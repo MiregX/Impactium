@@ -123,7 +123,7 @@
 }
 .information {
   grid-column: 3 / 4;
-  grid-row: 1 / 6;
+  grid-row: 1 / 7;
   height: 100%;
 }
 .information > div {
@@ -140,18 +140,6 @@
 }
 .information .members::-webkit-scrollbar {
   height: 0px;
-}
-.general {
-  grid-column: 3 / 4;
-  grid-row: 6 / 7;
-  height: 100%;
-}
-.general .group {
-  display: flex;
-  gap: 16px;
-}
-.general .group button {
-  flex: 1;
 }
 .node {
   display: flex;
@@ -203,4 +191,12 @@
   bottom: 32px;
   right: 28px;
   z-index: 2;
+}
+.participate {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.participate button {
+  flex: 1;
 }

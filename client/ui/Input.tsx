@@ -1,7 +1,8 @@
 import React from "react"
-import s from './styles/Input.module.css';
-import { cn } from "@/lib/utils"
+import s from './styles/Input.module.css' 
 import { cva, type VariantProps } from "class-variance-authority"; 
+import { ui } from "@impactium/utils";
+import { cn } from "@/lib/utils";
 
 const inputVariants = cva(s.button, {
   variants: {
@@ -27,15 +28,15 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, revert, variant, type, size, img, ...props }, ref) => {
-    return img ? (
+    return img || type === 'file' ? (
       <div className={cn(
         inputVariants({ variant, size, className }),
         s.input,
-        img && s.image,
+        s.image,
         revert && s.revert
       )}>
-        <img src={img} alt='' />
-        <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />  
+        <img src={img || ui('action/upload')} alt='' />
+        <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />
       </div>
     ) : (
       <input

@@ -10,7 +10,7 @@ export type User<T = {}> = {
   displayName: string,
   balance: number,
   login: Login
-  teams?: Team[] | false,
+  teams?: Team[],
   verified: boolean
 } & T;
 
@@ -29,7 +29,7 @@ export class UserEntity<T extends UserAddons = {}> implements User {
   username: string;
   balance: number;
   login: Login;
-  teams?: false | Team[] | undefined;
+  teams?: Team[] | undefined;
   verified: boolean;
   logins?: Login[]
   // privates

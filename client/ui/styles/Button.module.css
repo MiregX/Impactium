@@ -109,6 +109,7 @@
 
 .defaultSize {
   height: 36px;
+  min-height: 36px;
   padding: 0 12px;
 }
 .sm {

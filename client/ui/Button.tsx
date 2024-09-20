@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 import s from "./styles/Button.module.css";
 import { Loading } from "./Loading";
+import { Image, ImageProps, imageVariants } from "./Image";
 
 const buttonVariants = cva(s.button, {
   variants: {
@@ -26,8 +26,8 @@ const buttonVariants = cva(s.button, {
     },
   },
   defaultVariants: {
-    variant: "default",
-    size: "default",
+    variant: 'default',
+    size: 'default',
   },
 });
 
@@ -35,7 +35,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  img?: string;
+  img?: string | React.ReactElement;
   revert?: boolean;
   loading?: boolean;
 }
@@ -59,7 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {asChild ? props.children : (loading
           ? <Loading />
           : <React.Fragment>
-              {img && <img src={img} />}
+              <Image src={img} variant={convertButtonVariantToImageVariant(variant)} />
               {children}
             </React.Fragment>
         )}
@@ -68,5 +68,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 Button.displayName = "Button";
+
+const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): ImageProps['variant'] => ({
+  default: 'black',
+  destructive: 'white',
+  outline: 'dimmed',
+  secondary: 'white',
+  ghost: 'dimmed',
+  link: 'white',
+  disabled: 'dimmed',
+  hardline: 'white',
+} as Record<NonNullable<ButtonProps['variant']>, ImageProps['variant']>)[variant!] ?? 'black';
 
 export { Button, buttonVariants };

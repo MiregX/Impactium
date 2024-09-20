@@ -5,9 +5,17 @@ import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import s from '../Tournament.module.css';
 import { Separator } from '@/ui/Separator';
 import Countdown from 'react-countdown';
+import { Button } from '@/ui/Button';
+import { LoginBanner } from '@/banners/login/LoginBanner';
+import { ParticapateTournament } from './ParticapateTournament.banner';
+import { useApplication } from '@/context/Application.context';
+import { useUser } from '@/context/User.context';
+import { TournamentRules } from './TournamentRules.banner';
 
 export function TournamentInformation({}) {
   const { tournament } = useTournament();
+  const { spawnBanner } = useApplication();
+  const { user } = useUser();
 
   return (
     <Card className={s.information}>
@@ -34,7 +42,16 @@ export function TournamentInformation({}) {
             <span>Турнир закончился</span>
           </Countdown>
         </Countdown>
-      </div> 
+      </div>
+      <div className={s.time} style={{ marginTop: 0, marginBottom: 8 }}>
+        <p>Призовой фонд:</p>
+        <span>{tournament.prize}$</span>
+      </div>
+      <Separator />
+      <div className={s.participate}>
+        <Button onClick={() => spawnBanner(user ? <ParticapateTournament /> : <LoginBanner />)}>Учавствовать</Button>
+        <Button variant='ghost' onClick={() => spawnBanner(<TournamentRules tournament={tournament} />)}>Регламент турнира</Button>
+      </div>
     </Card>
   )
 }

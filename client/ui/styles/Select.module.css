@@ -1,6 +1,6 @@
 .trigger {
   display: flex;
-  height: 36px;
+  min-height: 36px;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -175,7 +175,7 @@
   width: 100%;
   text-align: left;
   cursor: pointer;
-  height: 36px;
+  min-height: 36px;
   user-select: none;
   align-items: center;
   gap: 8px;

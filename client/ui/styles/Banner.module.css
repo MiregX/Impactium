@@ -9,13 +9,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(2px);
 }
 ._ {
   max-width: calc(100vw - 32px);
   width: 600px;
   height: min-content;
   border-radius: var(--border-l);
-  background: var(--black);
+  background: var(--meta-black);
+  border: 1px solid var(--accent-2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -66,6 +68,7 @@
   background: linear-gradient(to right, #ff2a00, #00000000);
 }
 .tip {
+  border: 1px solid #ffff0020;
   border-left: 4px solid #ffff00;
   background: linear-gradient(to right, #ffff0010, #00000000);
 }
