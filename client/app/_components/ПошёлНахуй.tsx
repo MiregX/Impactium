@@ -41,7 +41,7 @@ export function ПошёлНахуй() {
       <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img='Medal'>
         Создать турнир
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='Users'>
+      <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='DiamondPlus'>
         Создать команду
       </Button>
     </div>

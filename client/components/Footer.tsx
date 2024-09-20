@@ -2,6 +2,8 @@
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
+import { Button } from '@/ui/Button';
+import { Icon } from '@/ui/Icon';
 
 export function Footer() {
   const { lang } = useLanguage();
@@ -21,12 +23,16 @@ export function Footer() {
   const Addictional = () => 
     <div className={s.addictional}>
       <div className={s.socials}>
-        <Link href='https://github.com/Mireg-V'>
-          <img src='https://cdn.impactium.fun/custom/github.svg' alt='' />
-        </Link>
-        <Link href='https://t.me/impactium'>
-          <img src='https://cdn.impactium.fun/custom/telegram.svg' alt='' />
-        </Link>
+        <Button variant='ghost' size='icon' asChild>
+          <Link href='https://github.com/Mireg-V'>
+            <Icon variant='dimmed' name='Github' />
+          </Link>
+        </Button>
+        <Button variant='ghost' size='icon' asChild>
+          <Link href='https://t.me/impactium'>
+            <Icon variant='dimmed' name='Send' />
+          </Link>
+        </Button>
       </div>
       <div className={s.navigation}>
         <Link href='/teams'>{lang.footer.teams}</Link>

@@ -108,7 +108,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
   const { title, icon, direction, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
   return (
     <div className={cn(s.badge, icon && s.icon)} data-color={color} style={{background: color + '30', color}} data-direction={direction}>
-      {icon && <Icon color={color} name={icon} />}
+      {icon && <Icon size={16} color={color} name={icon} />}
       {dot && <span style={{background: color}} />}
       {options.title || title}
     </div>
