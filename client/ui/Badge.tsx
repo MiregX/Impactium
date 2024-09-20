@@ -2,7 +2,8 @@
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
 import Image from 'next/image'
-import { cn } from '@/lib/utils'
+import { cn, Icons } from '@/lib/utils'
+import { Icon } from './Icon'
 
 enum _BadgeDirections {
   default = 'default',
@@ -11,7 +12,7 @@ enum _BadgeDirections {
 
 interface _CustomBadge {
   title?: string,
-  icon?: BadgeType | string,
+  icon?: Icons,
   direction?: _BadgeDirections,
   color: string
   dot?: boolean
@@ -42,25 +43,25 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
   const map: Record<BadgeType, _CustomBadge> = {
     [BadgeType.cookies]: {
       title: 'Cookies',
-      icon: 'cookies',
+      icon: 'Cookie',
       direction: _BadgeDirections.default,
       color: '#d17724'
     },
     [BadgeType.frontend]: {
       title: 'Frontend',
-      icon: 'leaf',
+      icon: 'Leaf',
       direction: _BadgeDirections.default,
       color: '#449d5d'
     },
     [BadgeType.backend]: {
       title: 'Backend',
-      icon: 'cloud',
+      icon: 'Cloud',
       direction: _BadgeDirections.default,
       color: '#9162c0'
     },
     [BadgeType.devops]: {
       title: 'DevOps',
-      icon: 'sql',
+      icon: 'Database',
       direction: _BadgeDirections.default,
       color: '#3b88e9'
     },
@@ -98,7 +99,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       dot: true
     },
     [BadgeType.prize]: {
-      icon: 'trophy',
+      icon: 'Trophy',
       direction: _BadgeDirections.default,
       color: '#f3e000'
     }
@@ -107,7 +108,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
   const { title, icon, direction, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
   return (
     <div className={cn(s.badge, icon && s.icon)} data-color={color} style={{background: color + '30', color}} data-direction={direction}>
-      {icon && (<Image src={icon.startsWith('http') || icon.startsWith('/_next') ? icon : `https://cdn.impactium.fun/custom-ui/${icon}.svg`} alt='' width={16} height={16} />)}
+      {icon && <Icon color={color} name={icon} />}
       {dot && <span style={{background: color}} />}
       {options.title || title}
     </div>
