@@ -1,8 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
-import Image from 'next/image'
-import { cn, Icons } from '@/lib/utils'
+import { cn, λIcon } from '@/lib/utils'
 import { Icon } from './Icon'
 
 enum _BadgeDirections {
@@ -12,7 +11,7 @@ enum _BadgeDirections {
 
 interface _CustomBadge {
   title?: string,
-  icon?: Icons,
+  icon?: λIcon,
   direction?: _BadgeDirections,
   color: string
   dot?: boolean
@@ -26,9 +25,9 @@ export enum BadgeType {
   primary = 'primary',
   verified = 'verified',
   selected = 'selected',
-  Upcoming = 'upcoming',
-  Ongoing = 'ongoing',
-  Finished = 'finished',
+  upcoming = 'upcoming',
+  ongoing = 'ongoing',
+  finished = 'finished',
   Soon = 'soon',
   prize = 'prize'
 };
@@ -80,15 +79,15 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       direction: _BadgeDirections.default,
       color: '#62c073'
     },
-    [BadgeType.Upcoming]: {
+    [BadgeType.upcoming]: {
       direction: _BadgeDirections.default,
       color: '#0070f3'
     },
-    [BadgeType.Ongoing]: {
+    [BadgeType.ongoing]: {
       direction: _BadgeDirections.default,
       color: '#31dd59'
     },
-    [BadgeType.Finished]: {
+    [BadgeType.finished]: {
       direction: _BadgeDirections.default,
       color: '#f30000'
     },

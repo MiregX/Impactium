@@ -132,6 +132,7 @@
 .information .members {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 8px;
   max-height: 100%;
   overflow: scroll;
@@ -140,6 +141,13 @@
 }
 .information .members::-webkit-scrollbar {
   height: 0px;
+}
+.information .members > span {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  align-self: center;
+  color: var(--text-dimmed);
 }
 .node {
   display: flex;

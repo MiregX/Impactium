@@ -1,6 +1,7 @@
 .trigger {
   display: flex;
   min-height: 36px;
+  height: 36px;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -176,6 +177,7 @@
   text-align: left;
   cursor: pointer;
   min-height: 36px;
+  height: min-content;
   user-select: none;
   align-items: center;
   gap: 8px;
@@ -189,9 +191,8 @@
 }
 .item * {
   color: var(--text-dimmed);
-  line-height: 36px;
 }
-.item:has(img) * {
+.item:has(svg) * {
   color: var(--white);
 }
 
@@ -214,9 +215,7 @@
   background-color: var(--gray-36);
 }
 .item img {
-  transform: translateY(4px);
-  height: 20px;
-  width: 20px;
+  transform: translateY(2px);
 }
 /* .check {
 } */

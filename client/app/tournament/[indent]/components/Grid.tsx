@@ -126,7 +126,7 @@ export function Grid() {
   }, [Iteration]);
 
   useEffect(() => {
-    renderIterations(tournament.grid?.length || 16);
+    renderIterations(tournament.grid?.max || 16);
   }, [tournament, align, renderIterations]);
 
   useEffect(() => document.documentElement.scroll(0, 0), [fullScreen])
@@ -147,7 +147,7 @@ export function Grid() {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button className={cn(fullScreen && s.minimize)} onClick={() => setFullScreen(v => !v)} img={fullScreen ? 'Minimize' : 'Maximize'} variant={fullScreen ? 'default' : 'secondary'}>{fullScreen && 'Minimize'}</Button>
+          <Button className={cn(fullScreen && s.minimize)} onClick={() => setFullScreen(v => !v)} img={fullScreen ? 'Minimize' : 'Maximize'} variant={fullScreen ? 'default' : 'secondary'}>{fullScreen ? 'Minimize' : 'Maximize'}</Button>
         </div>
       </div>
       <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>

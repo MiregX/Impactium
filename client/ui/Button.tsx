@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn, Icons } from "@/lib/utils";
+import { cn, λIcon } from "@/lib/utils";
 import s from "./styles/Button.module.css";
 import { Loading } from "./Loading";
-import { icons } from "lucide-react";
 import { Icon, IconProps } from "./Icon";
 
 const buttonVariants = cva(s.button, {
@@ -36,7 +35,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  img?: Icons;
+  img?: λIcon;
   revert?: boolean;
   loading?: boolean;
 }

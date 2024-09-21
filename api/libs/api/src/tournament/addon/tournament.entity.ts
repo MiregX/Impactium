@@ -1,7 +1,7 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
 import { Prisma, Roles, Team, Tournament } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
+import { GridEntity } from "./grid.entity";
 
 export class TournamentEntity<T = {}> implements Tournament {
   id!: string;
@@ -25,7 +25,7 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static select({ teams, owner }: Options = {}) {
+  static select({ teams, owner, grid }: Options = {}): Prisma.TournamentSelect {
     return {
       id: true,
       banner: true,
@@ -37,6 +37,9 @@ export class TournamentEntity<T = {}> implements Tournament {
       rules: true,
       ownerId: true,
       gid: true,
+      grid: grid && {
+        select: GridEntity.select({ teams: true })
+      },
       live: true,
       prize: true,
       teams: teams && {
@@ -72,5 +75,6 @@ export interface TournamentEntityWithTeams {
 
 interface Options {
   teams?: boolean;
-  owner?: boolean
+  owner?: boolean;
+  grid?: boolean;
 }

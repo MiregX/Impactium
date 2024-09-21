@@ -1,6 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import React from 'react';
-import { icons as Icons } from 'lucide-react';
+import { λIcon } from '@/lib/utils';
+import { icons } from 'lucide-react';
 
 export const iconVariants = cva('', {
   variants: {
@@ -16,12 +17,12 @@ export const iconVariants = cva('', {
 });
 
 export interface IconProps extends React.ImgHTMLAttributes<SVGSVGElement>, VariantProps<typeof iconVariants> {
-  name: keyof typeof Icons;
+  name: λIcon;
   size?: number;
 }
 
-export function Icon({ name = 'BoxSelect', color, variant, className, size = 20, ...props }: IconProps) {
-  const Icon = Icons[name!];
+export function Icon({ name, color, variant, className, size = 20, ...props }: IconProps) {
+  const Icon = icons[name];
 
   return <Icon {...props} size={size} stroke={color || iconVariants({ variant })} />
 }

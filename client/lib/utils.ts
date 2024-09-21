@@ -1,6 +1,7 @@
 import { λ } from "@/decorator/λ.class";
 import { RequestOptions } from "@/dto/api.dto"
 import { ResponseBase } from "@/dto/Response.dto";
+import { Tournament } from "@/dto/Tournament";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
 import { icons } from "lucide-react";
@@ -37,4 +38,18 @@ export function soft<T>(value: T, func?: SetState<T>) {
   if (func) func((v: T) => value as T);
 }
 
-export type Icons = keyof typeof icons;
+export type λIcon = keyof typeof icons;
+
+const convertISOstringToValue = (date: string) => new Date(date).valueOf();
+
+export enum TournamentReadyState {
+  Upcoming = 'upcoming',
+  Ongoing = 'ongoing',
+  Finished = 'finished'
+}
+
+export const getTournamentReadyState = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
+  ? TournamentReadyState.Ongoing
+  : (convertISOstringToValue(tournament.end) > Date.now()
+    ? TournamentReadyState.Ongoing
+    : TournamentReadyState.Finished);

@@ -11,6 +11,7 @@ import { ParticapateTournament } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
+import { getTournamentReadyState, TournamentReadyState } from '@/lib/utils';
 
 export function TournamentInformation({}) {
   const { tournament } = useTournament();
@@ -24,19 +25,24 @@ export function TournamentInformation({}) {
         <p>Организатор:</p>
         <Combination id={tournament.owner.uid} src={tournament.owner.avatar} name={tournament.owner.displayName} />
       </div>
-      <div className={s.pod}><p>Мест: 12 / 16</p><span>(cвободно: 4)</span></div>
+      <div className={s.pod}>
+        <p>Мест: {tournament.teams.length} / {tournament.grid?.max || '∞'}</p>
+        <span>(cвободно: {tournament.grid?.max ? tournament.grid?.max - tournament.teams.length : '∞'})</span>
+      </div>
       <Separator />
       <div className={s.members}>
         {tournament.teams.length
-          ? tournament.teams.map(team => (
-            <Combination id={team.indent} src={team.logo} name={team.title} />
-          ))
-          : Array.from({ length: 16 }).map((_, i) => <CombinationSkeleton />)
+          ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
+          : <span>Все места свободны</span>
         }
       </div>
       <Separator />
       <div className={s.time}>
-        <p>Начало через:</p>
+        <p>{getTournamentReadyState(tournament) === TournamentReadyState.Upcoming
+          ? 'Начнётся через'
+          : getTournamentReadyState(tournament) === TournamentReadyState.Ongoing
+            ? 'Закончится через'
+            : null}</p>
         <Countdown date={tournament.start}>
           <Countdown date={tournament.end}>
             <span>Турнир закончился</span>
@@ -44,7 +50,7 @@ export function TournamentInformation({}) {
         </Countdown>
       </div>
       <div className={s.time} style={{ marginTop: 0, marginBottom: 8 }}>
-        <p>Призовой фонд:</p>
+        <p>Призовой фонд</p>
         <span>{tournament.prize}$</span>
       </div>
       <Separator />

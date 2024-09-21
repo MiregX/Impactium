@@ -134,17 +134,17 @@ model Tournament {
 
 model Grid {
   id            String      @id @default(cuid())
-  tournamentId  String      @unique
-  tournament    Tournament  @relation(fields: [tournamentId], references: [id])
-  rounds        Json
+  tid           String      @unique
+  tournament    Tournament  @relation(fields: [tid], references: [id])
+  max           Int?
   battles       Battle[]
 }
 
 model Battle {
   id          String   @id @default(cuid())
-  gridId      String
-  grid        Grid     @relation(fields: [gridId], references: [id])
-  round       Int
+  gid         String
+  grid        Grid     @relation(fields: [gid], references: [id])
+  iteration   Int
   slot1       String?
   slot2       String?
   winner      String?

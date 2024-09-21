@@ -1,6 +1,5 @@
 import { Card } from '@/ui/Card'
 import s from './styles/TournamentUnit.module.css'
-import { getTournamentState } from '@/decorator/getTournamentState'
 import { Badge, BadgeType } from '@/ui/Badge'
 import { Tournament } from '@/dto/Tournament'
 import Link from 'next/link'
@@ -11,6 +10,8 @@ import { Button } from '@/ui/Button'
 import { Combination, CombinationSkeleton } from '../ui/Combitation'
 import { Skeleton } from '@/ui/Skeleton'
 import { Icon } from '@/ui/Icon'
+import { getTournamentReadyState } from '@/lib/utils'
+import { capitalize } from '@impactium/utils'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -24,12 +25,12 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
         <Button variant='ghost' asChild>
           <Link href={`/tournament/${tournament.code}`}>
             Подробнее
-            <Icon size={24} variant='dimmed' name='ArrowRight' />
+            <Icon size={24} variant='dimmed' name='MoveRight' />
           </Link>
         </Button>
       </div>
       <div className={s.container}>
-        <Badge type={BadgeType[getTournamentState(tournament)]} title={getTournamentState(tournament)} />
+        <Badge type={BadgeType[getTournamentReadyState(tournament)]} title={capitalize(getTournamentReadyState(tournament))} />
         <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
         <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end, { year: false })} UTC</span>
       </div>

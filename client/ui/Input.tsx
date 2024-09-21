@@ -2,7 +2,7 @@ import React from "react"
 import s from './styles/Input.module.css' 
 import { cva, type VariantProps } from "class-variance-authority"; 
 import { ui } from "@impactium/utils";
-import { cn } from "@/lib/utils";
+import { cn, λIcon } from "@/lib/utils";
 import { icons } from "lucide-react";
 import { Icon } from "./Icon";
 
@@ -24,7 +24,7 @@ const inputVariants = cva(s.button, {
 });
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
-  img?: keyof typeof icons
+  img?: λIcon
   revert?: boolean
   loading?: boolean
 }

@@ -1,3 +1,4 @@
+import { Grid } from "./Grid.dto";
 import { Team } from "./Team";
 import { User } from "./User";
 
@@ -14,7 +15,7 @@ export interface Tournament {
   owner: User,
   teams: Team[],
   gid: string,
-  grid: any, //Grid | 
+  grid: Grid | null,
   comments: Comment[],
   live?: string,
   prize: number

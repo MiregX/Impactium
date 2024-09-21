@@ -14,7 +14,6 @@ interface InputMinProps {
 
 export function InputMin({ state, setState, before, regExp }: InputMinProps) {
   const [error, setError] = useState('');
-  const { lang } = useLanguage();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
