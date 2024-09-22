@@ -7,6 +7,7 @@ import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { CodeValidationPipe } from '@api/main/application/addon/code.validator';
 import { λthrow } from '@impactium/utils';
+import { TournamentEntity } from './addon/tournament.entity';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -21,20 +22,20 @@ export class TournamentController {
     return this.tournamentService.pagination(limit, skip);
   }
   
-  @Get('get/:code')
+  @Get(':code/get')
   async findOneByIndent(
-    @Param('code', CodeValidationPipe) code: string
+    @Param('code', CodeValidationPipe) code: TournamentEntity['code']
   ) {
     return await this.tournamentService.findOneByCode(code) || λthrow(NotFoundException);
   }
 
-  @Delete('delete/:id')
+  @Delete(':code/delete')
   @UseGuards(AdminGuard)
   delete(
-    @Param('id') id: string,
+    @Param('code') code: TournamentEntity['code'],
     @User() user: UserEntity,
   ) {
-    return this.tournamentService.delete(user, id);
+    return this.tournamentService.delete(user, code);
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES)

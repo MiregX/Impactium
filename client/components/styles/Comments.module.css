@@ -1,10 +1,7 @@
 ._ {
   background: var(--soft-black);
-  flex: 0.33 1;
-  height: 600px;
   align-self: flex-start;
   display: flex;
-  min-height: 300px;
   border-radius: var(--border-m);
   box-shadow: var(--shadow-menu);
   flex-direction: column;

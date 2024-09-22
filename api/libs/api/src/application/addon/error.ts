@@ -63,6 +63,11 @@ export class TeamLimitException extends HttpException {
     super('team_limit_exception', HttpStatus.CONFLICT)
   };
 }
+export class TeamMemberRoleExistException extends HttpException {
+  constructor() {
+    super('team_member_with_exact_role_already_exist', HttpStatus.CONFLICT)
+  };
+}
 export class UnallowedFileFormat extends HttpException {
   constructor() {
     super('unallowed_file_format', HttpStatus.NOT_ACCEPTABLE)

@@ -9,6 +9,13 @@ const success: SuccessLocale = {
     ua: 'Зміни успішно збережено!',
     it: 'Modifiche salvate con successo!',
     pl: 'Zmiany zostały pomyślnie zapisane!'
+  },
+  member_updated_successfully: {
+    us: 'Changes saved successfully!',
+    ru: 'Изменения успешно сохранены!',
+    ua: 'Зміни успішно збережено!',
+    it: 'Modifiche salvate con successo!',
+    pl: 'Zmiany zostały pomyślnie zapisane!'
   }
 }
 

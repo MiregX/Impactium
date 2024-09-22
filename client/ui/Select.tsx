@@ -2,7 +2,6 @@
 import s from './styles/Select.module.css';
 import React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import Image from 'next/image';
 import { cn } from "@/lib/utils"
 import { Icon } from './Icon';
 

@@ -19,7 +19,7 @@ export function DeleteTeams() {
   }, [teams])
 
   const deleteTeam = (id: string) => {
-    api(`/team/delete/${id}`, {
+    api(`/team/${id}/delete`, {
       method: 'DELETE'
     }, reloadTeams)
   }

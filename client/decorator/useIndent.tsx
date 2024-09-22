@@ -7,7 +7,7 @@ export async function useIndent<T>(params: any, key: Key): Promise<{ indent: str
   ? redirect(`/${key}/@${params.indent}`)
   : params.indent.replace('%40', '@');
   
-  const result = await api<T>(`/${key}/get/${indent.replace('@', '')}`, {
+  const result = await api<T>(`/${key}/${indent.replace('@', '')}/get`, {
     raw: true
   });
 

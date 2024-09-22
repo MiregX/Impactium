@@ -57,6 +57,13 @@ const error: ErrorLocale = {
     it: 'Hai raggiunto il limite del team. Il massimo è di 3 team',
     pl: 'Osiągnąłeś limit zespołów. Maksymalnie 3 zespoły'
   },
+  team_member_with_exact_role_already_exist: {
+    us: 'Cannot assign the same role to different team members',
+    ru: 'Нельзя установить одинаковую роль для разных участников',
+    ua: 'Не можна призначити однакову роль різним учасникам',
+    it: 'Non è possibile assegnare lo stesso ruolo a membri diversi del team',
+    pl: 'Nie można przypisać tej samej roli różnym członkom zespołu'
+  },  
   unallowed_file_format: {
     us: 'Only PNG, JPG, and SVG formats are allowed.',
     ru: 'Я разрешаю вам выгружать файлы только в формате PNG, JPG, SVG',
@@ -112,6 +119,13 @@ const error: ErrorLocale = {
     ua: 'Введене вами ім\'я користувача є таким же, як і поточне.',
     it: 'Il nome utente che hai inserito è lo stesso di quello attuale.',
     pl: 'Wprowadzona nazwa użytkownika jest taka sama jak aktualna.'
+  },
+  'Forbidden resource': {
+    us: 'Forbidden resource',
+    ru: 'Отказано в доступе',
+    ua: 'Відмовлено в доступі',
+    it: 'Accesso negato',
+    pl: 'Kurwa bober'
   }
 }
 

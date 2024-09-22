@@ -59,7 +59,7 @@
 .content {
   position: relative;
   z-index: 50;
-  max-height: 384px;
+  max-height: 454px;
   min-width: 128px;
   overflow: hidden;
   border-radius: 6px;
@@ -227,5 +227,3 @@
 .item img {
   transform: translateY(2px);
 }
-/* .check {
-} */

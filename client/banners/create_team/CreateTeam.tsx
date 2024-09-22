@@ -45,7 +45,7 @@ export default function CreateTeam() {
   async function send() {
     if (!Identifier.test(team?.indent) || !(team.title?.length >= 5)) return;
     setLoading(true);
-    await api<Team>(`/team/create/${team.indent}`, {
+    await api<Team>(`/team/${team.indent}/create`, {
       method: 'POST',
       raw: true,
       body: JSON.stringify({
@@ -73,7 +73,7 @@ export default function CreateTeam() {
     const formData = new FormData();
     formData.append('banner', team.logo || new Blob);
 
-    api<Team>(`/team/set/banner/${team.indent}`, {
+    api<Team>(`/team/${team.indent}/set/banner`, {
       method: 'POST',
       headers: {
         'Content-Type': 'image/*'

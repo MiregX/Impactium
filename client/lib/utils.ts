@@ -35,7 +35,7 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export function soft<T>(value: T, func?: SetState<T>) {
-  if (func) func((v: T) => value as T);
+  if (func) func((_: T) => value as T);
 }
 
 export type λIcon = keyof typeof icons;

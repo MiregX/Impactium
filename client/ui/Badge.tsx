@@ -28,6 +28,7 @@ export enum BadgeType {
   Upcoming = 'Upcoming',
   Ongoing = 'Ongoing',
   Finished = 'Finished',
+  Registered = 'Registered',
   Soon = 'soon',
   prize = 'prize'
 };
@@ -101,6 +102,11 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       icon: 'Trophy',
       direction: _BadgeDirections.default,
       color: '#f3e000'
+    },
+    [BadgeType.Registered]: {
+      icon: 'CircleCheck',
+      direction: _BadgeDirections.default,
+      color: '#c0c0c0'
     }
   };
 

@@ -1,5 +1,7 @@
 import { Team } from '@prisma/client';
 import { TeamMemberEntity } from './team.member.entity';
+import { UserEntity } from '@api/main/user/addon/user.entity';
+import { TournamentEntity } from '@api/main/tournament/addon/tournament.entity';
 
 export class TeamEntity implements Team {
   registered!: Date;
@@ -18,7 +20,7 @@ export class TeamEntity implements Team {
     };
   }
 
-  static select = ({ members}: Options = {}) => ({
+  static select = ({ members = false, owner = false, tournaments = false }: Options = {}) => ({
     logo: true,
     registered: true,
     indent: true,
@@ -27,10 +29,18 @@ export class TeamEntity implements Team {
     description: true,
     members: members && {
       select: TeamMemberEntity.select({ user: true }),
+    },
+    owner: owner && {
+      select: UserEntity.select()
+    },
+    tournaments: tournaments && {
+      select: TournamentEntity.select()
     }
   });
 }
 
 interface Options {
-  members?: boolean
+  members?: boolean;
+  owner?: boolean;
+  tournaments?: boolean;
 }

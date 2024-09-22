@@ -31,8 +31,8 @@ export default function AdminBypassPage() {
     <Card className={s.bypass}>
       <h1>Съебался в ужасе!</h1>
       <div>
-        <Input type='password' img={ui('specific/key')} value={passkey} onChange={e => setPasskey(e.target.value)} />
-        <Button loading={loading} variant={passkey ? 'default' : 'disabled'} onClick={submit} img={ui('specific/command')}>Try it out</Button>
+        <Input type='password' img='KeyRound' value={passkey} onChange={e => setPasskey(e.target.value)} />
+        <Button loading={loading} variant={passkey ? 'default' : 'disabled'} onClick={submit} img='Command'>Try it out</Button>
       </div>
     </Card>
   )

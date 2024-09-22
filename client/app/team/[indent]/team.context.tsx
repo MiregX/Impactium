@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, createContext, useContext } from "react";
 import { Team } from "@/dto/Team";
-import s from '@/app/team/[indent]/Team.module.css'
 
 interface TeamContext {
   team: Team;
@@ -25,7 +24,7 @@ export const TeamProvider = ({
   const [team, setTeam] = useState(prefetched);
 
   const getTeam = (indent?: string): Promise<any> => {
-    return api(`/team/get/${indent || (team.indent)}`);
+    return api(`/team/${indent || team.indent}/get`);
   };
 
   const refreshTeam = (indent?: string) => {

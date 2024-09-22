@@ -6,7 +6,7 @@ import { Tournament } from "@/dto/Tournament";
 import { usePagination } from "@/decorator/usePagination";
 import React from "react";
 import { PanelTemplate } from "@/components/PanelTempate";
-import { TournamentUnit } from "@/components/TournamentUnit";
+import { TournamentUnit, TournamentUnitSkeleton } from "@/components/TournamentUnit";
 import { ПошёлНахуй } from "./ПошёлНахуй";
 import { TeamOrTournamentUnitSkeleton } from "@/components/Skeletons";
 
@@ -41,7 +41,7 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
         {current.map(index => (
           tournaments[index]
             ? <TournamentUnit key={index} tournament={tournaments[index]} />
-            : <TeamOrTournamentUnitSkeleton type='tournament' length={3} />
+            : <TournamentUnitSkeleton />
         ))}
       </div>
       <Pagination

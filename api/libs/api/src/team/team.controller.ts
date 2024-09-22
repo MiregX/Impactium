@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete, NotFoundException, Put } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
@@ -11,6 +11,11 @@ import { TeamStandart } from './addon/team.standart';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 import { λthrow } from '@impactium/utils';
+import { UpdateTeamMemberRoleDto } from './addon/team.dto';
+import { TeamEntity } from './addon/team.entity';
+import { Team } from './addon/team.decorator';
+import { members } from '@seed/api/assets/teamMembers.data';
+import { TeamMember } from '@prisma/client';
 
 @ApiTags('Team')
 @Controller('team')
@@ -27,7 +32,7 @@ export class TeamController {
       return this.teamService.pagination(limit, skip);
   }
 
-  @Get('get/:indent')
+  @Get(':indent/get')
   async findOneByIndent(
     @Param('indent', IndentValidationPipe) indent: string
   ) {
@@ -43,7 +48,7 @@ export class TeamController {
       : this.teamService.findManyByTitleOrIndent(value);
   }
   
-  @Delete('delete/:indent')
+  @Delete(':indent/delete')
   @UseGuards(AdminGuard)
   delete(
     @Param('indent') indent: string,
@@ -52,27 +57,46 @@ export class TeamController {
     return this.teamService.delete(user, indent);
   }
 
-  @Post('create/:indent')
+  @Post(':indent/create')
   @UseGuards(AuthGuard)
-  async create(
+  create(
     @Body() team: CreateTeamDto,
-    @User() user: UserEntity,
+    @User() { uid }: UserEntity,
     @Param('indent', IndentValidationPipe) indent: string
   ) {
-    return await this.teamService.create({
-      uid: user.uid,
-      indent: indent
-    }, team);
+    return this.teamService.create({ uid, indent }, team);
   }
 
-  @Patch('update/:indent')
-  @UseGuards(AuthGuard, TeamGuard)
+  @Patch(':indent/update')
+  @UseGuards(TeamGuard)
   @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
   setBanner(
-    @Body() team: UpdateTeamDto,
+    @Body() body: UpdateTeamDto,
     @UploadedFile() banner: Express.Multer.File,
-    @Param('indent', IndentValidationPipe) indent: string
+    @Team() team: TeamEntity
   ) {
-    return this.teamService.update(indent, team, banner);
+    return this.teamService.update(team.indent, body, banner);
+  }
+
+  @Put(':indent/set/member-role')
+  @UseGuards(TeamGuard)
+  async setMemberRole(
+    @Body() body: UpdateTeamMemberRoleDto,
+    @Team() team: TeamEntity
+  ) {
+    await this.teamService.setMemberRole(team, body);
+
+    return this.teamService.findOneByIndent(team.indent);
+  }
+
+  @Delete(':indent/kick/:memberId')
+  @UseGuards(TeamGuard)
+  async kickMember(
+    @Team() team: TeamEntity,
+    @Param('memberId') memberId: TeamMember['id']
+  ) {
+    await this.teamService.kickMember(team, memberId);
+
+    return this.teamService.findOneByIndent(team.indent);
   }
 }

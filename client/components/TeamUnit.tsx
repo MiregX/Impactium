@@ -3,7 +3,7 @@ import { Team } from '@/dto/Team'
 import { Card } from '@/ui/Card'
 import { Button } from '@/ui/Button'
 import Link from 'next/link'
-import Image from 'next/image'
+import { Icon } from '@/ui/Icon';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation'
 
 export function TeamUnit({ team }: { team: Team }) {
@@ -13,7 +13,7 @@ export function TeamUnit({ team }: { team: Team }) {
       <Button variant='ghost' asChild>
         <Link href={`/team/${team.indent}`}>
           Подробнее
-          <Image width='24' height='24' src='https://cdn.impactium.fun/ui/arrow-lg/right.svg' alt='' />
+          <Icon size={24} variant='dimmed' name='MoveRight' />
         </Link>
       </Button>
     </Card>

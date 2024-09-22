@@ -1,13 +1,15 @@
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { Checkout, CreateTeamDto, UpdateTeamDto } from './addon/team.dto';
+import { Checkout, CreateTeamDto, UpdateTeamDto, UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamLimitException } from '../application/addon/error';
+import { TeamAlreadyExist, TeamLimitException, TeamMemberRoleExistException } from '../application/addon/error';
 import { UserEntity } from '../user/addon/user.entity';
+import { λthrow } from '@impactium/utils';
+import { TeamMember } from '@prisma/client';
 
 @Injectable()
 export class TeamService {
@@ -88,16 +90,16 @@ export class TeamService {
     })
   }
 
-  findOneByIndent(indent: string) {
+  findOneByIndent(indent: TeamEntity['indent']) {
     return this.prisma.team.findUnique({
-      select: TeamEntity.select({ members: true }),
+      select: TeamEntity.select({ members: true, owner: true, tournaments: true }),
       where: {
         indent,
       },
     });
   }
   
-  findManyByTitleOrIndent(value: string) {
+  findManyByTitleOrIndent(value: NonNullable<TeamEntity['indent'] | TeamEntity['title']>) {
     return this.prisma.team.findMany({
       where: {
         OR: [
@@ -121,7 +123,34 @@ export class TeamService {
     });
   }
 
-  private async uploadBanner(indent: string, banner: Express.Multer.File) {
+  async setMemberRole(team: TeamEntity, { id, role }: UpdateTeamMemberRoleDto) {
+    const isMemberWithExactRoleExist = team.members
+      ? team.members.some(member => member.id !== id && member.role === role)
+      : await this.prisma.teamMember.findMany({
+          where: { team: { indent: team.indent } },
+          select: {
+            role: true
+          }
+        }).then(members => members.some(member => member.role === role));
+
+    if (isMemberWithExactRoleExist) λthrow(TeamMemberRoleExistException);
+
+    return await this.prisma.teamMember.update({
+      where: {
+        id,
+        team: { indent: team.indent }
+      },
+      data: { role }
+    })
+  }
+  
+  kickMember(team: TeamEntity, id: TeamMember['id']) {
+    return this.prisma.teamMember.delete({
+      where: { id, team: { indent: team.indent } }
+    });
+  }
+
+  private async uploadBanner(indent: TeamEntity['indent'], banner: Express.Multer.File) {
     const stream = new Readable();
     stream.push(banner.buffer);
     stream.push(null);

@@ -12,7 +12,7 @@ export class TeamMemberEntity implements TeamMember {
     id: true,
     tid: true,
     uid: true,
-    roles: true,
+    role: true,
     user: user && {
       select: UserEntity.select()
     },
