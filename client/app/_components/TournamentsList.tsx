@@ -8,11 +8,12 @@ import React from "react";
 import { PanelTemplate } from "@/components/PanelTempate";
 import { TournamentUnit } from "@/components/TournamentUnit";
 import { ПошёлНахуй } from "./ПошёлНахуй";
+import { TeamOrTournamentUnitSkeleton } from "@/components/Skeletons";
 
 export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const { page, total, setPage, getPageNumbers, current } = usePagination({
-    totalItems: tournaments.length,
+    totalItems: tournaments.length || 3,
     itemsPerPage: itemsPerPage,
     buttons: 5
   });
@@ -38,7 +39,9 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
       <h4 style={{width: '100%', marginTop: '12px', fontSize: '18px'}}>Актуальные турниры:</h4>
       <div className={s.wrapper}>
         {current.map(index => (
-          <TournamentUnit key={index} tournament={tournaments[index]} />
+          tournaments[index]
+            ? <TournamentUnit key={index} tournament={tournaments[index]} />
+            : <TeamOrTournamentUnitSkeleton type='tournament' length={3} />
         ))}
       </div>
       <Pagination

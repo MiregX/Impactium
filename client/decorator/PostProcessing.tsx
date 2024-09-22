@@ -2,10 +2,10 @@ import { TeamUnit } from "@/components/TeamUnit";
 import { Tournament } from "@/dto/Tournament";
 import { Team } from "@/dto/Team";
 import { TournamentUnit } from "@/components/TournamentUnit";
-import { Skeletons } from "@/components/Skeletons";
 import { TeamOrTournament } from "@/dto/TeamOrTournament.type";
 import { NotFound } from "@/components/NotFound";
 import { Empty } from "@/components/Empty";
+import { TeamOrTournamentUnitSkeleton } from "@/components/Skeletons";
 
 interface PostProcessingProps<T> {
   search: string;
@@ -22,20 +22,20 @@ export function PostProcessing<T extends Team | Tournament>({ type, search, data
   // Если есть фильтр
   if (search.length > 0) {
     if (filtered.length) {
-      return current.map((i) => <Unit data={filtered[i]} />)
+      return current.map((i) => <Unit key={i} data={filtered[i]} />)
     } else if (loading) {
-      return <Skeletons type={type} />;
+      return <TeamOrTournamentUnitSkeleton type={type} />;
     } else {
       return <NotFound type={type} />
     }
   // Без фильтра
   } else if (data) {
     if (data.length) {
-      return current.map((i) => <Unit data={data[i]} />)
+      return current.map((i) => <Unit key={i} data={data[i]} />)
     } else {
       return <Empty type={type} />
     }
   } else {
-    return <Skeletons type={type} />
+    return <TeamOrTournamentUnitSkeleton type={type} />
   }
 }

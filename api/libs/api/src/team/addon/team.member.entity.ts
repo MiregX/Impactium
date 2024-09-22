@@ -1,11 +1,11 @@
 import { UserEntity } from "@api/main/user/addon/user.entity";
-import { $Enums, Prisma, TeamMember } from "@prisma/client";
+import { $Enums, TeamMember } from "@prisma/client";
 
 export class TeamMemberEntity implements TeamMember {
   id!: string;
   uid!: string;
   tid!: string;
-  roles!: $Enums.Roles[];
+  role!: $Enums.Role | null;
   user?: UserEntity;
 
   static select = ({ user }: Options = {}) => ({

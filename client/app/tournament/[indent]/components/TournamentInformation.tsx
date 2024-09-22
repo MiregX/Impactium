@@ -11,7 +11,7 @@ import { ParticapateTournament } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
-import { getTournamentReadyState, TournamentReadyState } from '@/lib/utils';
+import { getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
 
 export function TournamentInformation({}) {
   const { tournament } = useTournament();

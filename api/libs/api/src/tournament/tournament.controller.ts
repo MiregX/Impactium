@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, NotFoundException, Param, Query, UseGuards } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { CodeValidationPipe } from '@api/main/application/addon/code.validator';
+import { λthrow } from '@impactium/utils';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -21,10 +22,10 @@ export class TournamentController {
   }
   
   @Get('get/:code')
-  findOneByIndent(
+  async findOneByIndent(
     @Param('code', CodeValidationPipe) code: string
   ) {
-    return this.tournamentService.findOneByCode(code);
+    return await this.tournamentService.findOneByCode(code) || λthrow(NotFoundException);
   }
 
   @Delete('delete/:id')

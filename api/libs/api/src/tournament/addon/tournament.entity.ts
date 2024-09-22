@@ -1,6 +1,6 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
-import { Prisma, Roles, Team, Tournament } from "@prisma/client";
+import { Prisma, Role, Tournament } from "@prisma/client";
 import { GridEntity } from "./grid.entity";
 
 export class TournamentEntity<T = {}> implements Tournament {
@@ -68,7 +68,7 @@ export class TournamentEntity<T = {}> implements Tournament {
 export interface TournamentEntityWithTeams {
   teams: {
     avatar: string;
-    roles: Roles[];
+    role: Role;
     uid: string;
   }[];
 };

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete, NotFoundException } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
@@ -10,6 +10,7 @@ import { IndentValidationPipe } from '@api/main/application/addon/indent.validat
 import { TeamStandart } from './addon/team.standart';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '@api/main/auth/addon/admin.guard';
+import { λthrow } from '@impactium/utils';
 
 @ApiTags('Team')
 @Controller('team')
@@ -27,10 +28,10 @@ export class TeamController {
   }
 
   @Get('get/:indent')
-  findOneByIndent(
+  async findOneByIndent(
     @Param('indent', IndentValidationPipe) indent: string
   ) {
-    return this.teamService.findOneByIndent(indent);
+    return await this.teamService.findOneByIndent(indent) || λthrow(NotFoundException);
   }
 
   @Get('find/:value')

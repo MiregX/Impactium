@@ -8,7 +8,7 @@ export class TeamMembersSeedService implements OnSeed {
   constructor(private readonly prisma: PrismaService) {}
 
   async seed(): Promise<void> {
-    if (parseInt(process.env.X) > 0) return;
+    if (process.env.NODE_ENV === 'production') return;
 
     await this.prisma.teamMember.createMany({
       skipDuplicates: true,

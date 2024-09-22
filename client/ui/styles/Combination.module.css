@@ -1,7 +1,7 @@
 .combination {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--gap);
 }
 .group {
   flex: 1;
@@ -28,7 +28,7 @@
   color: var(--text-dimmed);
 }
 .heading {
-  gap: 12px;
+  gap: var(--padding-m);
 }
 .heading .group {
   height: 64px;

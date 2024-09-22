@@ -1,7 +1,7 @@
 import { Card } from '@/ui/Card'
 import s from './styles/TournamentUnit.module.css'
 import { Badge, BadgeType } from '@/ui/Badge'
-import { Tournament } from '@/dto/Tournament'
+import { getTournamentReadyState, Tournament } from '@/dto/Tournament'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getReadableDate } from '@/decorator/getReadableDate'
@@ -10,7 +10,6 @@ import { Button } from '@/ui/Button'
 import { Combination, CombinationSkeleton } from '../ui/Combitation'
 import { Skeleton } from '@/ui/Skeleton'
 import { Icon } from '@/ui/Icon'
-import { getTournamentReadyState } from '@/lib/utils'
 import { capitalize } from '@impactium/utils'
 
 interface TournamentUnitProps {

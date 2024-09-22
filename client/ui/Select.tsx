@@ -26,7 +26,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <Icon name='ChevronDown' className={s.icon} />
+      <Icon name='ChevronDown' className={cn(s.icon, s.down)} />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ))

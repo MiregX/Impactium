@@ -13,9 +13,8 @@
 
   /* COLOR */
   --black: #000;
-  --white: #fff;
+  --white: #e8e8e8;
   --dimmed: #a1a1a1;
-  --soft-white: #e8e8e8;
   --soft-black: #0d0d0d;
   --meta-black: #0a0a0a;
   --gray16: #161616;
@@ -38,7 +37,7 @@
   --border-m: 12px;
   --border-l: 18px;
   --geist-border: 1px solid hsla(0,0%,100%,.07);
-  --ring: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+  --ring: 0 0 0 1px var(--white), 0 0 0 4px hsla(0, 0%, 100%, .24);
 
   
   --transition: cubic-bezier(.21,.29,0,.94);
@@ -72,6 +71,7 @@
 
   /* PADDING */
   --padding: 24px;
+  --padding-m: 20px;
   --padding-s: 16px;
 
   /* GAP */
@@ -83,7 +83,7 @@
   -webkit-tap-highlight-color: transparent;
   font-family: var(--font-sans);
   -webkit-user-select: none;
-  color: var(--soft-white);
+  color: var(--white);
   scroll-behavior: smooth;
   -moz-user-select: none;
   box-sizing: border-box;

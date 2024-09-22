@@ -1,3 +1,4 @@
+import { convertISOstringToValue } from "@/lib/utils";
 import { Grid } from "./Grid.dto";
 import { Team } from "./Team";
 import { User } from "./User";
@@ -20,3 +21,15 @@ export interface Tournament {
   live?: string,
   prize: number
 }
+
+export enum TournamentReadyState {
+  Upcoming = 'Upcoming',
+  Ongoing = 'Ongoing',
+  Finished = 'Finished'
+}
+
+export const getTournamentReadyState = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
+  ? TournamentReadyState.Upcoming
+  : (convertISOstringToValue(tournament.end) > Date.now()
+    ? TournamentReadyState.Ongoing
+    : TournamentReadyState.Finished);

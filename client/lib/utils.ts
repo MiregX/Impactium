@@ -40,16 +40,4 @@ export function soft<T>(value: T, func?: SetState<T>) {
 
 export type λIcon = keyof typeof icons;
 
-const convertISOstringToValue = (date: string) => new Date(date).valueOf();
-
-export enum TournamentReadyState {
-  Upcoming = 'upcoming',
-  Ongoing = 'ongoing',
-  Finished = 'finished'
-}
-
-export const getTournamentReadyState = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
-  ? TournamentReadyState.Ongoing
-  : (convertISOstringToValue(tournament.end) > Date.now()
-    ? TournamentReadyState.Ongoing
-    : TournamentReadyState.Finished);
+export const convertISOstringToValue = (date: string) => new Date(date).valueOf();

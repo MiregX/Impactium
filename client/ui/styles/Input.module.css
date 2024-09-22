@@ -14,9 +14,10 @@
   padding: 0;
   gap: 8px;
 }
-.image img {
+.image svg {
   height: 20px;
-  padding-left: 8px; 
+  padding-left: 8px;
+  width: 24px;
 }
 .image input {
   padding: 8px 12px 8px 0;
@@ -36,7 +37,7 @@
 
 .input:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 1px var(--soft-white), 0 0 0 4px hsla(0, 0%, 100%, .24);
+  box-shadow: 0 0 0 1px var(--white), 0 0 0 4px hsla(0, 0%, 100%, .24);
 }
 
 .input:disabled {
@@ -69,9 +70,11 @@
   flex-direction: row-reverse;
   justify-content: space-between;
 }
-.revert img {
+.revert svg {
   height: 20px;
-  padding-right: 8px; 
+  padding-right: 8px;
+  padding-left: 0;
+  width: 24px;
 }
 .revert input {
   padding: 8px 0 8px 12px;

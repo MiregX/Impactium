@@ -93,7 +93,7 @@ export class TeamService {
       select: TeamEntity.select({ members: true }),
       where: {
         indent,
-      }
+      },
     });
   }
   

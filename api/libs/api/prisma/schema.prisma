@@ -73,7 +73,7 @@ model TeamMember {
   user          User          @relation(fields: [uid], references: [uid])
   tid           String
   team          Team          @relation(fields: [tid], references: [indent])
-  roles         Roles[]
+  role          Role?
 }
 
 model TeamInvitements {
@@ -101,16 +101,14 @@ model Comment {
   @@index([tournamentIndent], name: "tournamentIndent")
 }
 
-enum Roles {
-  owner
-  carry
-  mid
-  offlane
-  semisupport
-  fullsupport
-  rotation
-  coach
-  fix
+enum Role {
+  Carry
+  Mid
+  Offlane
+  SemiSupport
+  FullSupport
+  Rotation
+  Coach
 }
 
 model Tournament {

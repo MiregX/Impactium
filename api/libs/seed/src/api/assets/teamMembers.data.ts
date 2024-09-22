@@ -1,54 +1,54 @@
-import { Roles } from "@prisma/client";
+import { Role } from "@prisma/client";
 
 export const members = [
   {
     uid: 'system',
     tid: 'feeders',
-    roles: [Roles.carry, Roles.owner]
+    role: Role.Carry
   },
   {
     uid: '2',
     tid: 'feeders',
-    roles: [Roles.offlane]
+    role: Role.Offlane
   },
   {
     uid: '3',
     tid: 'feeders',
-    roles: [Roles.fullsupport, Roles.semisupport]
+    role: Role.FullSupport
   },
   {
     uid: '4',
     tid: 'feeders',
-    roles: [Roles.rotation]
+    role: Role.Rotation
   },
   {
     uid: '5',
     tid: 'feeders',
-    roles: [Roles.carry]
+    role: Role.Carry
   },
   {
     uid: '6',
     tid: 'champions',
-    roles: [Roles.owner, Roles.carry]
+    role: Role.Carry
   },
   {
     uid: '7',
     tid: 'champions',
-    roles: [Roles.mid, Roles.carry]
+    role: Role.Mid
   },
   {
     uid: '8',
     tid: 'champions',
-    roles: [Roles.offlane]
+    role: Role.Offlane
   },
   {
     uid: '9',
     tid: 'champions',
-    roles: [Roles.semisupport, Roles.carry]
+    role: Role.SemiSupport
   },
   {
     uid: '10',
     tid: 'champions',
-    roles: [Roles.fullsupport]
+    role: Role.FullSupport
   }
 ];

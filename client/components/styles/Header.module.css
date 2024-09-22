@@ -197,13 +197,13 @@
 .nav button .bar h3 {
   text-align: left;
   font-weight: 600;
-  color: var(--soft-white);
+  color: var(--white);
   transition: all 0.2s cubic-bezier(.21,.29,0,.94) !important;
   font-size: 18px;
 }
 .nav .line {
   width: 1px;
-  background: var(--soft-white);
+  background: var(--white);
   height: 16px;
 }
 .nav .line:last-child {

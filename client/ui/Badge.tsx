@@ -25,9 +25,9 @@ export enum BadgeType {
   primary = 'primary',
   verified = 'verified',
   selected = 'selected',
-  upcoming = 'upcoming',
-  ongoing = 'ongoing',
-  finished = 'finished',
+  Upcoming = 'Upcoming',
+  Ongoing = 'Ongoing',
+  Finished = 'Finished',
   Soon = 'soon',
   prize = 'prize'
 };
@@ -79,15 +79,15 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       direction: _BadgeDirections.default,
       color: '#62c073'
     },
-    [BadgeType.upcoming]: {
+    [BadgeType.Upcoming]: {
       direction: _BadgeDirections.default,
       color: '#0070f3'
     },
-    [BadgeType.ongoing]: {
+    [BadgeType.Ongoing]: {
       direction: _BadgeDirections.default,
       color: '#31dd59'
     },
-    [BadgeType.finished]: {
+    [BadgeType.Finished]: {
       direction: _BadgeDirections.default,
       color: '#f30000'
     },

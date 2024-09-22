@@ -8,11 +8,12 @@ import { Card } from '@/ui/Card';
 import { Grid } from './components/Grid';
 import { TournamentInformation } from './components/TournamentInformation';
 import { Badge, BadgeType } from '@/ui/Badge';
-import { getTournamentReadyState } from '@/lib/utils';
 import { capitalize } from '@impactium/utils';
+import { getTournamentReadyState } from '@/dto/Tournament';
 
 export default function TournamentIndentPage() {
   const { tournament } = useTournament();
+
   return (
     <PanelTemplate className={s.page}>
       <Card className={s.heading}>

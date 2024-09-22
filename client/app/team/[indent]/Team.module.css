@@ -64,13 +64,22 @@
 .roles .icon.active {
   filter: var(--filter-to-white);
 }
+.members_for_team > div {
+  padding-top: 64px;
+}
 .members_for_team .heading {
+  position: absolute;
+  background: var(--black);
+  border-top-left-radius: var(--border-m);
+  border-top-right-radius: var(--border-m);
   height: 40px;
+  top: 0;
+  left: 0;
+  width: 100%;
   border-bottom: 1px solid var(--accent-2);
   display: flex;
   align-items: center;
   padding: 0 1em;
-  background: var(--black);
 }
 .members_for_team .heading h4 {
   line-height: 1px;

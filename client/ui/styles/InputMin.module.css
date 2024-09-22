@@ -17,7 +17,7 @@
   text-overflow: ellipsis;
 }
 ._:focus {
-  border: 1px solid var(--soft-white);
+  border: 1px solid var(--white);
 }
 .wrapper p {
   font-family: var(--font-mono);

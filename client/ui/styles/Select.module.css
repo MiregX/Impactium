@@ -13,6 +13,7 @@
   font-size: 14px;
   color: var(--white);
   outline: none;
+  text-align: left;
   transition: box-shadow 0.2s;
   position: relative;
   cursor: pointer;
@@ -174,12 +175,10 @@
   position: relative;
   display: flex;
   width: 100%;
-  text-align: left;
   cursor: pointer;
   min-height: 36px;
   height: min-content;
   user-select: none;
-  align-items: center;
   gap: 8px;
   border-radius: 4px;
   padding: 8px 12px;
@@ -189,11 +188,22 @@
   transition-duration: 150ms;
   transition-timing-function: var(--transition);
 }
-.item * {
+.item span {
   color: var(--text-dimmed);
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
 }
-.item:has(svg) * {
-  color: var(--white);
+.item svg {
+  stroke: var(--dimmed);
+}
+.item[data-state="checked"] span {
+  color: var(--white) !important;
+}
+.item[data-state="checked"] svg {
+  stroke: var(--white);
 }
 
 .item:focus,
