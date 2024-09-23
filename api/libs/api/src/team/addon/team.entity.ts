@@ -1,4 +1,4 @@
-import { Team } from '@prisma/client';
+import { $Enums, Team } from '@prisma/client';
 import { TeamMemberEntity } from './team.member.entity';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TournamentEntity } from '@api/main/tournament/addon/tournament.entity';
@@ -11,6 +11,7 @@ export class TeamEntity implements Team {
   description!: string | null;
   ownerId!: string;
   members?: TeamMemberEntity[];
+  joinable!: $Enums.Joinable;
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/${filename}`;
@@ -27,6 +28,7 @@ export class TeamEntity implements Team {
     title: true,
     ownerId: true,
     description: true,
+    joinable: true,
     members: members && {
       select: TeamMemberEntity.select({ user: true }),
     },

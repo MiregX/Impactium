@@ -39,7 +39,6 @@ model User {
   teams         Team[]
   participate   TeamMember[]
   tournaments   Tournament[]
-  invites       TeamInvitements[]
   transactions  Transaction[]
 }
 
@@ -61,10 +60,11 @@ model Team {
   ownerId       String
   registered    DateTime     @default(now())
   owner         User         @relation(fields: [ownerId], references: [uid])
+  joinable      Joinable
   tournaments   Tournament[]
   members       TeamMember[]
-  invites       TeamInvitements[]
   comments      Comment[]
+  invites       TeamInvite[]
 }
 
 model TeamMember {
@@ -74,15 +74,6 @@ model TeamMember {
   tid           String
   team          Team          @relation(fields: [tid], references: [indent])
   role          Role?
-}
-
-model TeamInvitements {
-  id            String        @id @default(uuid())
-  uid           String
-  user          User          @relation(fields: [uid], references: [uid])
-  tid           String
-  team          Team          @relation(fields: [tid], references: [indent])
-  date          DateTime      @default(now())
 }
 
 model Comment {
@@ -109,6 +100,12 @@ enum Role {
   FullSupport
   Rotation
   Coach
+}
+
+enum Joinable {
+  Free
+  Invites
+  Closed
 }
 
 model Tournament {
@@ -170,4 +167,13 @@ model Changelog {
   id            String      @id @default(cuid())
   on            DateTime    @default(now())
   new           String
+}
+
+model TeamInvite {
+  id            String      @id @default(cuid())
+  created       DateTime    @default(now())
+  indent        String
+  team          Team        @relation(fields: [indent], references: [indent])
+  used          Int         @default(0)
+  maxUses       Int         @default(4)
 }

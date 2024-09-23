@@ -87,7 +87,7 @@ const SelectContent = React.forwardRef<
         className={cn(
           s.primitive,
           position === "popper" &&
-            s.popper
+            s.podder
         )}
       >
         {children}

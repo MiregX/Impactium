@@ -4,9 +4,51 @@ import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import { useTeam } from '../team.context';
 import { Separator } from '@/ui/Separator';
 import { Button } from '@/ui/Button';
+import { useUser } from '@/context/User.context';
+import { useMemo, useState } from 'react';
+import { isUserAreTeamOwner, isUserAdmin, isUserAreTeamMember, isUserCanJoinTeam } from '@/lib/utils';
+import { QRCode } from '@/dto/QRCode.dto';
+import { useApplication } from '@/context/Application.context';
+import { QRCodeBanner } from '@/banners/qrcode/QRCodeBanner';
+import { toast } from 'sonner';
 
 export function TeamInformation() {
+  const { spawnBanner } = useApplication();
+  const { user } = useUser();
   const { team } = useTeam();
+  const [QRCode, setQRCode] = useState<QRCode | null>(null);
+
+  const requestQRCode = useMemo(() => async () => {
+    if (!isUserAreTeamOwner(user, team) && !isUserAdmin(user)) return;
+
+    const QRCode = await api<QRCode>(`/team/${team.indent}/qrcode`, {
+      method: 'GET',
+      state: setQRCode
+    })
+
+    if (QRCode) {
+      spawnBanner(<QRCodeBanner QRCode={QRCode} />)
+    } else {
+      toast('Во время генерации QR-кода произошла ошибка');
+    }
+  }, [team, user]);
+  
+  const InviteMemberButton = useMemo(() => <Button onClick={requestQRCode} img='QrCode'>Invite member</Button>, [user, team]);
+
+  const LeaveTeamButton = useMemo(() => <Button img='LogOut'>Leave team</Button>, [user, team]);
+
+  const JoinTeamButton = useMemo(() => <Button img='UserPlus'>Join team</Button>, [user, team]);
+
+  const AccentButton = useMemo(() => {
+    if (isUserAreTeamOwner(user, team) || isUserAdmin(user))
+      return InviteMemberButton;
+
+    if (isUserAreTeamMember(user, team))
+      return LeaveTeamButton;
+
+    if (isUserCanJoinTeam(team))
+      return JoinTeamButton;
+  }, [user, team]);
 
   return (
     <Card className={s.information}>
@@ -28,7 +70,7 @@ export function TeamInformation() {
       </div>
       <Separator />
       <div className={s.group}>
-        <Button>Присоеденится</Button>
+        {AccentButton}
         <Button variant='ghost'>Связь с командой</Button>
       </div>
     </Card>

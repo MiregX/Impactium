@@ -1,15 +1,21 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { IsEnum, IsLowercase, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsLowercase, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { FileFilterCallback } from 'multer';
 import { TeamStandart } from './team.standart';
 import { TeamMemberEntity } from './team.member.entity';
-import { Role } from '@prisma/client';
+import { Joinable, Role } from '@prisma/client';
 
 export class CreateTeamDto {
   @IsNotEmpty()
   title!: string;
 
   banner?: any;
+
+  @IsOptional()
+  @IsEnum(Joinable, {
+    message: 'invalid_joinable_field'
+  })
+  joinable!: Joinable;
 }
 
 export class Checkout {
@@ -68,9 +74,9 @@ export class UpdateTeamMemberRoleDto {
   @IsString()
   id!: TeamMemberEntity['id'];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(Role, {
     message: 'invalid_role'
   })
-  role!: Role
+  role!: Role | null
 }

@@ -6,10 +6,11 @@ import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamLimitException, TeamMemberRoleExistException } from '../application/addon/error';
+import { TeamAlreadyExist, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes } from '../application/addon/error';
 import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
-import { TeamMember } from '@prisma/client';
+import { TeamMemberEntity } from './addon/team.member.entity';
+import { $Enums, Joinable } from '@prisma/client';
 
 @Injectable()
 export class TeamService {
@@ -37,6 +38,7 @@ export class TeamService {
       data: {
         title: team.title,
         indent,
+        joinable: team.joinable ?? 'Free',
         logo: banner && await this.uploadBanner(indent, banner),
         owner: {
           connect: {
@@ -144,10 +146,25 @@ export class TeamService {
     })
   }
   
-  kickMember(team: TeamEntity, id: TeamMember['id']) {
+  kickMember(team: TeamEntity, id: TeamMemberEntity['id']) {
     return this.prisma.teamMember.delete({
       where: { id, team: { indent: team.indent } }
     });
+  }
+  
+  async newInvite(team: TeamEntity) {
+    if (team.joinable === Joinable.Free) λthrow(TeamIsFreeToJoin)
+    if (team.joinable === Joinable.Closed) λthrow(TeamIsCloseToEveryone)
+
+    const amount = await this.prisma.teamInvite.findMany({
+      where: { indent: team.indent }
+    })
+    
+    if (amount.length) λthrow(TooManyQRCodes);
+
+    return this.prisma.teamInvite.create({
+      data: { indent: team.indent, used: 0 }
+    })
   }
 
   private async uploadBanner(indent: TeamEntity['indent'], banner: Express.Multer.File) {

@@ -68,6 +68,21 @@ export class TeamMemberRoleExistException extends HttpException {
     super('team_member_with_exact_role_already_exist', HttpStatus.CONFLICT)
   };
 }
+export class TooManyQRCodes extends HttpException {
+  constructor() {
+    super('too_many_qrcodes', HttpStatus.TOO_MANY_REQUESTS)
+  };
+}
+export class TeamIsFreeToJoin extends HttpException {
+  constructor() {
+    super('team_is_free_to_join', HttpStatus.CONFLICT)
+  };
+}
+export class TeamIsCloseToEveryone extends HttpException {
+  constructor() {
+    super('team_is_close_to_everyone', HttpStatus.CONFLICT)
+  };
+}
 export class UnallowedFileFormat extends HttpException {
   constructor() {
     super('unallowed_file_format', HttpStatus.NOT_ACCEPTABLE)

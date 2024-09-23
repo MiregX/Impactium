@@ -152,9 +152,11 @@
 .cluster button {
   width: 100% !important;
   border-radius: 4px !important;
-  margin-bottom: 1px;
   display: flex;
+  justify-content: flex-start;
 }
-.cluster {
-
+.trigger i {
+  font-style: normal;
+  text-align: left;
+  flex: 1;
 }

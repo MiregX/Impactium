@@ -99,4 +99,12 @@ export class TeamController {
 
     return this.teamService.findOneByIndent(team.indent);
   }
+
+  @Get(':indent/qrcode')
+  @UseGuards(TeamGuard)
+  qrcode(
+    @Team() team: TeamEntity,
+  ) {
+    return this.teamService.newInvite(team);
+  }
 }

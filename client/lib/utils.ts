@@ -1,7 +1,9 @@
 import { λ } from "@/decorator/λ.class";
 import { RequestOptions } from "@/dto/api.dto"
 import { ResponseBase } from "@/dto/Response.dto";
+import { Team } from "@/dto/Team";
 import { Tournament } from "@/dto/Tournament";
+import { User } from "@/dto/User";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
 import { icons } from "lucide-react";
@@ -41,3 +43,11 @@ export function soft<T>(value: T, func?: SetState<T>) {
 export type λIcon = keyof typeof icons;
 
 export const convertISOstringToValue = (date: string) => new Date(date).valueOf();
+
+export const isUserAreTeamOwner = (user: User | null, team: Team) => user?.uid === team.ownerId;
+
+export const isUserAreTeamMember = (user: User | null, team: Team) => team.members?.some(member => user?.uid === member.uid);
+
+export const isUserCanJoinTeam = (team: Team) => team.members && team.members.length <= 7
+
+export const isUserAdmin = (user: User | null) => user?.uid === 'system';
