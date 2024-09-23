@@ -4,10 +4,14 @@ import { ResponseBase } from "@/dto/Response.dto";
 import { Team } from "@/dto/Team";
 import { Tournament } from "@/dto/Tournament";
 import { User } from "@/dto/User";
+import locale, { Template } from "@/public/locale";
+import { cookiePattern } from "@impactium/pattern";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
 import { icons } from "lucide-react";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge"
+import Cookies from "universal-cookie";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -51,3 +55,15 @@ export const isUserAreTeamMember = (user: User | null, team: Team) => team.membe
 export const isUserCanJoinTeam = (team: Team) => team.members && team.members.length <= 7
 
 export const isUserAdmin = (user: User | null) => user?.uid === 'system';
+
+export const copy = (value: string) => {
+  const cookie = new Cookies();
+
+  const key: keyof Template = cookie.get(cookiePattern.language) || 'us';
+
+  navigator.clipboard.writeText(value);
+  toast(locale.copied.title[key], {
+    description: locale.copied.description[key]
+  })
+}
+export const λcopy = (value: string) => () => copy(value);

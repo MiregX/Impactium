@@ -1,9 +1,8 @@
 'use client'
 import { ExternalToast, Toaster as Sonner, toast as _toast } from 'sonner';
 import s from './styles/Toaster.module.css';
-import { useLanguage } from '@/context/Language.context';
 import Cookies from 'universal-cookie';
-import locale, { Translation } from '@/public/locale';
+import locale, { Template } from '@/public/locale';
 import { success } from '@/public/success';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
@@ -34,7 +33,7 @@ const keyNotFound = (key: string, target: string) => {
 }
 
 export function useToast(key: string, data: ExternalToast = {}, onSuccess: string | boolean) {
-  const l: keyof Translation = new Cookies().get('_language') || 'us'
+  const l: keyof Template = new Cookies().get('_language') || 'us'
   const error = locale.error as any
 
   const phrase = typeof onSuccess === 'string'

@@ -29,6 +29,9 @@ export enum BadgeType {
   Ongoing = 'Ongoing',
   Finished = 'Finished',
   Registered = 'Registered',
+  Free = 'Free',
+  Invite = 'Invite',
+  Closed = 'Closed',
   Soon = 'soon',
   prize = 'prize'
 };
@@ -97,6 +100,21 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       color: '#0070f3',
       title: lang._soon,
       dot: true
+    },
+    [BadgeType.Free]: {
+      icon: 'DoorOpen',
+      direction: _BadgeDirections.default,
+      color: '#4af379',
+    },
+    [BadgeType.Invite]: {
+      icon: 'TicketPercent',
+      direction: _BadgeDirections.default,
+      color: '#fe8d59',
+    },
+    [BadgeType.Closed]: {
+      icon: 'DoorClosed',
+      direction: _BadgeDirections.default,
+      color: '#d41d14',
     },
     [BadgeType.prize]: {
       icon: 'Trophy',

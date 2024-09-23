@@ -2,7 +2,6 @@
 import { useLanguage } from '@/context/Language.context';
 import { useUser } from '@/context/User.context';
 import _user from './styles/User.module.css'
-import Image from 'next/image';
 import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application.context';
@@ -44,21 +43,21 @@ export function UserComponent() {
         )}
         <Link href='/account' onClick={toggle}>
           {lang._account}
-          <Icon name='CreditCard' />
+          <Icon name='CreditCard' variant='dimmed' />
         </Link>
         <hr />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <div style={{ fontFamily: 'var(--font-mono)'}}>{user!.balance | 0}$</div>
+          <p>{user!.balance | 0}<Icon name='DollarSign' variant='dimmed' /></p>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}
-          <Icon name='Globe' />
+          <Icon name='Globe' variant='dimmed' />
         </button>
         <hr />
         <button onClick={() => handle(logout)}>
           {lang.logout}
-          <Icon name='LogOut' />
+          <Icon variant='dimmed' name='LogOut' />
         </button>
       </nav>
     </div>

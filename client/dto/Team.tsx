@@ -1,3 +1,4 @@
+import { Joinable } from "./Joinable.dto";
 import { TeamMember } from "./TeamMember";
 import { Tournament } from "./Tournament";
 import { User } from "./User";
@@ -10,6 +11,7 @@ export interface Team {
   owner: User | null,
   description: string,
   membersAmount: number,
+  joinable: Joinable,
   members?: Array<TeamMember>,
   comments: Array<Comment>,
   registered: number,

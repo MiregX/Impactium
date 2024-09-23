@@ -11,9 +11,12 @@ import { QRCode } from '@/dto/QRCode.dto';
 import { useApplication } from '@/context/Application.context';
 import { QRCodeBanner } from '@/banners/qrcode/QRCodeBanner';
 import { toast } from 'sonner';
+import { Joinable } from '@/dto/Joinable.dto';
+import { Configuration } from '@impactium/config';
 
 export function TeamInformation() {
-  const { spawnBanner } = useApplication();
+  const { spawnBanner, application } = useApplication();
+  console.log(application);[]
   const { user } = useUser();
   const { team } = useTeam();
   const [QRCode, setQRCode] = useState<QRCode | null>(null);
@@ -21,19 +24,27 @@ export function TeamInformation() {
   const requestQRCode = useMemo(() => async () => {
     if (!isUserAreTeamOwner(user, team) && !isUserAdmin(user)) return;
 
+    if (team.joinable === Joinable.Free) return spawnBanner(<QRCodeBanner QRCode={{
+      url: `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/${team.indent}/join`,
+      expires: Infinity,
+    }} />);
+
     const QRCode = await api<QRCode>(`/team/${team.indent}/qrcode`, {
       method: 'GET',
-      state: setQRCode
+      state: setQRCode,
+      toast: true
     })
 
     if (QRCode) {
       spawnBanner(<QRCodeBanner QRCode={QRCode} />)
-    } else {
-      toast('Во время генерации QR-кода произошла ошибка');
     }
   }, [team, user]);
   
-  const InviteMemberButton = useMemo(() => <Button onClick={requestQRCode} img='QrCode'>Invite member</Button>, [user, team]);
+  const InviteMemberButton = useMemo(() => {
+    if (team.joinable === Joinable.Closed) return null;
+
+    return <Button onClick={requestQRCode} img='QrCode'>Invite member</Button>
+  }, [user, team.joinable]);
 
   const LeaveTeamButton = useMemo(() => <Button img='LogOut'>Leave team</Button>, [user, team]);
 

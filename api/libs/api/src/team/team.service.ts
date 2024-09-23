@@ -38,7 +38,7 @@ export class TeamService {
       data: {
         title: team.title,
         indent,
-        joinable: team.joinable ?? 'Free',
+        joinable: team.joinable,
         logo: banner && await this.uploadBanner(indent, banner),
         owner: {
           connect: {

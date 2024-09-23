@@ -26,6 +26,7 @@
 
 ._ > h4 {
   padding: 24px;
+  padding-bottom: var(--padding-s);
   font-size: var(--text-large);
   display: flex;
   align-items: center;

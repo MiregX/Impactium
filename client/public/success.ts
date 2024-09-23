@@ -1,6 +1,6 @@
-import { Translation } from "./locale";
+import { Template } from "./locale";
 
-export type SuccessLocale = Record<string, Translation>;
+export type SuccessLocale = Record<string, Template>;
 
 const success: SuccessLocale = {
   user_updated_successfully: {

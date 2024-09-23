@@ -1,9 +1,10 @@
-import { error, ErrorLocale } from "./error";
-import { success, SuccessLocale } from "./success";
-import { landing } from "./landing";
-import Cookies from "universal-cookie";
+import { error, ErrorLocale } from './error';
+import { success, SuccessLocale } from './success';
+import { landing } from './landing';
+import Cookies from 'universal-cookie';
+import { title } from 'process';
 
-export interface Translation {
+export interface Template {
   ua: string;
   it: string;
   us: string;
@@ -11,7 +12,7 @@ export interface Translation {
   pl: string;
 }
 
-const template: Translation = {
+const template: Template = {
   us: '',
   ru: '',
   ua: '',
@@ -19,17 +20,17 @@ const template: Translation = {
   pl: ''
 }
 
-export type Locale = Record<string, Translation | Record<string, LocaleUnit | Translation>> & {
+export type _Locale = Record<string, Template | Record<string, LocaleUnit | Template>> & {
   error: ErrorLocale
   success: SuccessLocale,
   landing: LocaleUnit
 }
 
 export interface LocaleUnit {
-  [key: string]: Translation;
+  [key: string]: Template;
 }
 
-const locale: Locale = {
+const locale = {
   search: {
     team: {
       us: 'Enter team name or its tag...',
@@ -74,6 +75,36 @@ const locale: Locale = {
     it: 'Guarda in diretta',
     pl: 'Oglądaj na żywo'
   },
+  copied: {
+    title: {
+      us: 'Copied to clipboard',
+      ru: 'Скопировано в буфер обмена',
+      ua: 'Скопійовано до буфера обміну',
+      it: 'Copiato negli appunti',
+      pl: 'Skopiowano do schowka'
+    },
+    description: {
+      us: 'CTRL + V to paste the value',
+      ru: 'CTRL + V чтобы вставить значение',
+      ua: 'CTRL + V щоб вставити значення',
+      it: 'CTRL + V per incollare il valore',
+      pl: 'CTRL + V, aby wkleić wartość'
+    }
+  },
+  or: {
+    us: 'OR',
+    ru: 'ИЛИ',
+    ua: 'АБО',
+    it: 'O',
+    pl: 'LUB'
+  },
+  copyUrl: {
+    us: 'Copy link',
+    ru: 'Копировать ссылку',
+    ua: 'Копіювати посилання',
+    it: 'Copia il link',
+    pl: 'Kopiuj link'
+  },
   max: {
     us: 'Max',
     ru: 'Макс.',
@@ -103,61 +134,61 @@ const locale: Locale = {
     pl: 'Wkrótce'
   },
   _login: {
-    ua: "Увійти",
-    it: "Accesso",
-    us: "Sign in",
-    ru: "Войти",
-    pl: "Zaloguj się"
+    ua: 'Увійти',
+    it: 'Accesso',
+    us: 'Sign in',
+    ru: 'Войти',
+    pl: 'Zaloguj się'
   },
   _selected: {
     us: 'Selected',
     ru: 'Выбрано',
     ua: 'Обрано',
     it: 'Selezionato',
-    pl: "Wybrany"
+    pl: 'Wybrany'
   },
   _or: {
-    ua: "Або",
-    it: "O",
-    us: "Or",
-    ru: "Или",
-    pl: "Lub"
+    ua: 'Або',
+    it: 'O',
+    us: 'Or',
+    ru: 'Или',
+    pl: 'Lub'
   },
   _save: {
-    ua: "Зберегти",
-    it: "Salva",
-    us: "Save",
-    ru: "Сохранить",
-    pl: "Zapisz"
+    ua: 'Зберегти',
+    it: 'Salva',
+    us: 'Save',
+    ru: 'Сохранить',
+    pl: 'Zapisz'
   },
   logout: {
-    ua: "Вийти",
-    it: "Disconnettersi",
-    us: "Logout",
-    ru: "Выйти",
-    pl: "Wyloguj się"
+    ua: 'Вийти',
+    it: 'Disconnettersi',
+    us: 'Logout',
+    ru: 'Выйти',
+    pl: 'Wyloguj się'
   },
-  found_a_translation_error: {
-    ua: "Знайшли помилку в перекладі?",
-    it: "Hai trovato un errore di traduzione?",
-    us: "Found an error in translation?",
-    ru: "Нашёл ошибку в переводе? Иди нахуй",
-    pl: "Znalazłeś błąd w tłumaczeniu?"
+  found_a_Template_error: {
+    ua: 'Знайшли помилку в перекладі?',
+    it: 'Hai trovato un errore di traduzione?',
+    us: 'Found an error in Template?',
+    ru: 'Нашёл ошибку в переводе? Иди нахуй',
+    pl: 'Znalazłeś błąd w tłumaczeniu?'
   },
-  _translationWarning: {
-    ua: "Переклад був виконаний за допомогою нейромереж, і може містити помилки",
-    it: "La traduzione è stata effettuata con IA e può contenere errori.",
-    us: "The translation was performed using AI and may contain errors",
-    ru: "Перевод был выполнен при помощи нейросетей, и может содержать ошибки",
-    pl: "Tłumaczenie zostało wykonane za pomocą SI i może zawierać błędy"
+  _TemplateWarning: {
+    ua: 'Переклад був виконаний за допомогою нейромереж, і може містити помилки',
+    it: 'La traduzione è stata effettuata con IA e può contenere errori.',
+    us: 'The Template was performed using AI and may contain errors',
+    ru: 'Перевод был выполнен при помощи нейросетей, и может содержать ошибки',
+    pl: 'Tłumaczenie zostało wykonane za pomocą SI i może zawierać błędy'
   },
   login: {
     auth_with: {
-      ua: "Увійти через",
-      it: "Continua con",
-      us: "Continue with",
-      ru: "Войти используя",
-      pl: "Kontynuuj z" 
+      ua: 'Увійти через',
+      it: 'Continua con',
+      us: 'Continue with',
+      ru: 'Войти используя',
+      pl: 'Kontynuuj z' 
     },
     title: {
       us: 'Log in',
@@ -183,11 +214,11 @@ const locale: Locale = {
       pl: 'Awatar'
     },
     avatar_description: {
-      us: "An avatar is optional but strongly recommended.",
-      ru: "Аватар не обязателен, но настоятельно рекомендуется.",
+      us: 'An avatar is optional but strongly recommended.',
+      ru: 'Аватар не обязателен, но настоятельно рекомендуется.',
       ua: "Аватар не обов'язковий, але настійно рекомендується.",
       it: "L'avatar è facoltativo ma fortemente consigliato.",
-      pl: "Awatar jest opcjonalny, ale zdecydowanie zalecany."
+      pl: 'Awatar jest opcjonalny, ale zdecydowanie zalecany.'
     },
     avatar_content: {
       us: 'This is your avatar.',
@@ -337,42 +368,42 @@ const locale: Locale = {
       ru: 'Турниры Dota 2',
       ua: 'Турніри Dota 2',
       it: 'Tornei di Dota 2',
-      pl: "Turnieje Dota 2"
+      pl: 'Turnieje Dota 2'
     },
     we_are: {
       us: 'We are a technological and modern service for conducting amateur and professional tournaments in the game Dota 2. Join in one click. Track statistics. Get notifications about new tournaments. Win prizes.',
       ru: 'Мы - технологичный и современный сервис для проведения любительских и профессиональных турниров в игре Dota 2. Прими участие в один клик. Отслеживай статистику. Получай уведомления о новых турнирах. Получай призы',
       ua: 'Ми - технологічний та сучасний сервіс для проведення любительських та професійних турнірів у грі Dota 2. Приєднуйтеся в один клік. Відстежуйте статистику. Отримуйте сповіщення про нові турніри. Вигравайте призи.',
       it: 'Siamo un servizio tecnologico e moderno per la conduzione di tornei amatoriali e professionali nel gioco Dota 2. Unisciti in un clic. Tieni traccia delle statistiche. Ricevi notifiche sui nuovi tornei. Vinci premi.',
-      pl: "Jesteśmy technologicznym i nowoczesnym serwisem do organizacji amatorskich i profesjonalnych turniejów w grze Dota 2. Dołącz w jednym kliknięciu. Śledź statystyki. Otrzymuj powiadomienia o nowych turniejach. Wygrywaj nagrody."
+      pl: 'Jesteśmy technologicznym i nowoczesnym serwisem do organizacji amatorskich i profesjonalnych turniejów w grze Dota 2. Dołącz w jednym kliknięciu. Śledź statystyki. Otrzymuj powiadomienia o nowych turniejach. Wygrywaj nagrody.'
     },
     find_team: {
       us: 'Find the perfect team or lead your own.',
       ru: 'Найди идеальную команду, или возглавь собственную.',
       ua: 'Знайдіть ідеальну команду або очоліть власну.',
       it: 'Trova la squadra perfetta o guida la tua.',
-      pl: "Znajdź idealną drużynę lub poprowadź własną."
+      pl: 'Znajdź idealną drużynę lub poprowadź własną.'
     },
     find_team_description: {
       us: 'With our matching algorithms, we will find you skilled agents of Gaben who will ruin every game for you.',
       ru: 'С нашими алгоритмами подбора мы найдём тебе зассаных агентов габена которые будут руинить тебе каждую игру.',
       ua: 'З нашими алгоритмами підбору ми знайдемо тобі засраніх агентів габена, які будуть руйнувати тобі кожну гру.',
       it: 'Con i nostri algoritmi di abbinamento, troveremo per te agenti esperti di Gaben che rovineranno ogni partita per te.',
-      pl: "Dzięki naszym algorytmom dopasowania znajdziemy dla ciebie wykwalifikowanych agentów Gaben, którzy zrujnują każdą grę dla ciebie."
+      pl: 'Dzięki naszym algorytmom dopasowania znajdziemy dla ciebie wykwalifikowanych agentów Gaben, którzy zrujnują każdą grę dla ciebie.'
     },
     participate: {
       us: 'Participate in the tournament for free!',
       ru: 'Прими участие в турнире бесплатно!',
       ua: 'Прийміть участь у турнірі безкоштовно!',
       it: 'Partecipa al torneo gratuitamente!',
-      pl: "Weź udział w turnieju za darmo!"
+      pl: 'Weź udział w turnieju za darmo!'
     },
     participate_description: {
       us: 'We provide a convenient control panel and high-quality standardization. Notify teams of changes and viewers about the start of the tournament. Set up the event by filling out a short form - we\'ll take care of the rest.',
       ru: 'Мы предоставим удобную панель управления и высококачественную стандартизацию. Уведомим команды об изменениях, а зрителей о начале турнира. Настройте событие, заполнив небольшую форму - об остальном позаботимося мы сами.',
       ua: 'Ми надамо зручну панель управління та високоякісну стандартизацію. Повідомимо команди про зміни, а глядачів про початок турніру. Налаштуйте подію, заповнивши коротку форму - про решту позаботимося ми самі.',
       it: 'Forniamo un pannello di controllo comodo e una standardizzazione di alta qualità. Notifichiamo le squadre sui cambiamenti e gli spettatori sull\'inizio del torneo. Configura l\'evento compilando un breve modulo: noi ci occupiamo del resto.',
-      pl: "Zapewniamy wygodną panel sterowania i wysokiej jakości standaryzację. Powiadamiamy zespoły o zmianach, a widzów o rozpoczęciu turnieju. Skonfiguruj wydarzenie, wypełniając krótki formularz - resztę załatwimy sami."
+      pl: 'Zapewniamy wygodną panel sterowania i wysokiej jakości standaryzację. Powiadamiamy zespoły o zmianach, a widzów o rozpoczęciu turnieju. Skonfiguruj wydarzenie, wypełniając krótki formularz - resztę załatwimy sami.'
     }
   },
   create_team: {
@@ -381,37 +412,81 @@ const locale: Locale = {
       ru: 'Название команды',
       ua: 'Назва команди',
       it: 'Nome della squadra',
-      pl: "Nazwa drużyny"
+      pl: 'Nazwa drużyny'
     },
     indent: {
       us: 'Team ID (only: a-z, 0-9, _ and -)',
       ru: 'Айди команды (только: a-z, 0-9, _ и -)',
       ua: 'Ідентифікатор команди (тільки: a-z, 0-9, _ і -)',
       it: 'ID squadra (solo: a-z, 0-9, _ e -)',
-      pl: "ID drużyny (tylko: a-z, 0-9, _ i -)"
+      pl: 'ID drużyny (tylko: a-z, 0-9, _ i -)'
     },
     logo: {
       us: 'Upload logo (PNG, JPG, SVG, >1MB, 512x512px)',
       ru: 'Загрузить логотип (PNG, JPG, SVG, >1MB, 512x512px)',
       ua: 'Завантажити логотип (PNG, JPG, SVG, >1MB, 512x512px)',
       it: 'Carica logo (PNG, JPG, SVG, >1MB, 512x512px)',
-      pl: "Prześlij logo (PNG, JPG, SVG, >1MB, 512x512px)"
+      pl: 'Prześlij logo (PNG, JPG, SVG, >1MB, 512x512px)'
     },
     logo_title: {
       us: 'Team Logo',
       ru: 'Логотип команды',
       ua: 'Логотип команди',
       it: 'Logo della squadra',
-      pl: "Logo drużyny"
+      pl: 'Logo drużyny'
+    }
+  },
+  created_at: {
+    us: 'Created at ',
+    ru: 'Создано ',
+    ua: 'Створено ',
+    it: 'Creato il ',
+    pl: 'Utworzono '
+  },  
+  joinable: {
+    Closed: {
+      us: 'Closed to new members',
+      ru: 'Закрыта для присоединения',
+      ua: 'Закрита для приєднання',
+      it: 'Chiuso per nuove adesioni',
+      pl: 'Zamknięta na nowych członków'
+    },
+    Invite: {
+      us: 'Invite only',
+      ru: 'Только по приглашению',
+      ua: 'Лише за запрошенням',
+      it: 'Solo su invito',
+      pl: 'Tylko na zaproszenie'
+    },
+    Free: {
+      us: 'Open to join',
+      ru: 'Открыта для вступления',
+      ua: 'Відкрита для приєднання',
+      it: 'Aperto a tutti',
+      pl: 'Otwarta dla wszystkich'
     }
   },
   team: {
+    invite: {
+      us: 'Invitation',
+      ru: 'Приглашение',
+      ua: 'Запрошення',
+      it: 'Invito',
+      pl: 'Zaproszenie'
+    },
+    settings: {
+      us: 'Privacy settings',
+      ru: 'Настройки приватности',
+      ua: 'Налаштування приватності',
+      it: 'Impostazioni sulla privacy',
+      pl: 'Ustawienia prywatności'
+    },
     for_teams: {
       us: 'For teams',
       ru: 'Командам',
       ua: 'Командам',
       it: 'Per le squadre',
-      pl: 'Dla drużyn'      
+      pl: 'Dla drużyn'
     },
     amount: {
       us: 'Teams',
@@ -428,32 +503,32 @@ const locale: Locale = {
       pl: 'Drużyna nie ma opisu'
     },
     recomendations: {
-      us: "Recommendations",
-      ru: "Рекомендации",
-      ua: "Рекомендації",
-      it: "Raccomandazioni",
-      pl: "Rekomendacje"
+      us: 'Recommendations',
+      ru: 'Рекомендации',
+      ua: 'Рекомендації',
+      it: 'Raccomandazioni',
+      pl: 'Rekomendacje'
     },
     yours: {
-      us: "Your Teams",
-      ru: "Ваши команды",
-      ua: "Ваші команди",
-      it: "Le tue squadre",
-      pl: "Twoje zespoły"
+      us: 'Your Teams',
+      ru: 'Ваши команды',
+      ua: 'Ваші команди',
+      it: 'Le tue squadre',
+      pl: 'Twoje zespoły'
     },
     members: {
-      us: "Team members",
-      ru: "Участники команды",
-      ua: "Учасники команди",
-      it: "Membri del team",
-      pl: "Członkowie zespołu"
+      us: 'Team members',
+      ru: 'Участники команды',
+      ua: 'Учасники команди',
+      it: 'Membri del team',
+      pl: 'Członkowie zespołu'
     },
     not_found: {
-      us: "No teams found with that name",
-      ru: "Команд с таким названием не найдены",
-      ua: "Команд з такою назвою не знайдено",
-      it: "Nessuna squadra trovata con quel nome",
-      pl: "Nie znaleziono drużyn o tej nazwie"            
+      us: 'No teams found with that name',
+      ru: 'Команд с таким названием не найдены',
+      ua: 'Команд з такою назвою не знайдено',
+      it: 'Nessuna squadra trovata con quel nome',
+      pl: 'Nie znaleziono drużyn o tej nazwie'            
     },
     empty: {
       us: 'I don\'t think there\'s really fucking anything here. Fuck...',
@@ -523,25 +598,25 @@ const locale: Locale = {
       pl: 'Musisz zostać zweryfikowany, aby móc tworzyć turnieje.'
     },
     members: {
-      us: "Tournament members",
-      ru: "Участники турнира",
-      ua: "Учасники турніру",
-      it: "Partecipanti al torneo",
-      pl: "Uczestnicy turnieju"
+      us: 'Tournament members',
+      ru: 'Участники турнира',
+      ua: 'Учасники турніру',
+      it: 'Partecipanti al torneo',
+      pl: 'Uczestnicy turnieju'
     },
     empty: {
       us: "We're so fucking poor that no one made the tournament. Come back tomorrow.",
-      ru: "Мы настролько нищеёбы что никто не сделал турнир. Заходи завтра.",
-      ua: "Ми настільки ніщєйоби, що ніхто не зробив турнір. Заходь завтра.",
-      it: "Siamo così poveri che nessuno ha partecipato al torneo. Tornate domani.",
-      pl: "Jesteśmy tak kurewsko biedni, że nikt nie dostał się do turnieju. Wróć jutro."
+      ru: 'Мы настролько нищеёбы что никто не сделал турнир. Заходи завтра.',
+      ua: 'Ми настільки ніщєйоби, що ніхто не зробив турнір. Заходь завтра.',
+      it: 'Siamo così poveri che nessuno ha partecipato al torneo. Tornate domani.',
+      pl: 'Jesteśmy tak kurewsko biedni, że nikt nie dostał się do turnieju. Wróć jutro.'
     },
     not_found: {
-      us: "No tournaments found with that name",
-      ru: "Турниров с таким названием не найдены",
-      ua: "Змагань з такою назвою не знайдено",
-      it: "Nessun torneo trovato con questo nome",
-      pl: "Nie znaleziono turniejów o takiej nazwie"            
+      us: 'No tournaments found with that name',
+      ru: 'Турниров с таким названием не найдены',
+      ua: 'Змагань з такою назвою не знайдено',
+      it: 'Nessun torneo trovato con questo nome',
+      pl: 'Nie znaleziono turniejów o takiej nazwie'            
     },
     delete: {
       us: 'Delete tournament',
@@ -556,32 +631,37 @@ const locale: Locale = {
     ru: 'Команда с таким айди уже существует, придумай другое',
     ua: 'Команда з таким ідентифікатором вже існує, придумайте інший',
     it: 'Una squadra con questo ID già esiste, scegline un altro',
-    pl: "Drużyna o tym ID już istnieje, wybierz inne"
+    pl: 'Drużyna o tym ID już istnieje, wybierz inne'
   },
   comments: {
     title: {
-      us: "Comments",
-      ru: "Коментарии",
-      ua: "Коментарі",
-      it: "Commenti",
-      pl: "Komentarze"
+      us: 'Comments',
+      ru: 'Коментарии',
+      ua: 'Коментарі',
+      it: 'Commenti',
+      pl: 'Komentarze'
     },
     empty: {
       us: "There doesn't seem to be any comments...",
-      ru: "Кажестся тут нет коментариев...",
-      ua: "Здається, тут немає коментарів...",
-      it: "Non sembra esserci alcun commento...",
-      pl: "Nie wygląda na to, żeby były jakiekolwiek komentarze..."
+      ru: 'Кажестся тут нет коментариев...',
+      ua: 'Здається, тут немає коментарів...',
+      it: 'Non sembra esserci alcun commento...',
+      pl: 'Nie wygląda na to, żeby były jakiekolwiek komentarze...'
     },
     leave: {
-      us: "Leave a comment...",
-      ru: "Написать комментарий...",
-      ua: "Залиште коментар...",
-      it: "Lascia un commento...",
-      pl: "Zostaw komentarz..."
+      us: 'Leave a comment...',
+      ru: 'Написать комментарий...',
+      ua: 'Залиште коментар...',
+      it: 'Lascia un commento...',
+      pl: 'Zostaw komentarz...'
     }
   },
-  save: {
+  warn_everyone_can_join: {
+    us: 'The team is open and anyone can join.',
+    ru: 'Команда открыта и каждый желающий может присоеденится.',
+    ua: 'Команда відкрита і кожен охочий може приєднатися.',
+    it: 'La squadra è aperta e tutti sono invitati a farne parte.',
+    pl: 'Zespół jest otwarty i każdy może do niego dołączyć.'
   },
   change: {
     description: {
@@ -598,14 +678,14 @@ const locale: Locale = {
       ru: 'Найти команду',
       ua: 'Знайти команду',
       it: 'Trova squadra',
-      pl: "Znajdź drużynę"
+      pl: 'Znajdź drużynę'
     },
     tournament: {
       us: 'Find tournament',
       ru: 'Найти турнир',
       ua: 'Знайти турнір',
       it: 'Trova torneo',
-      pl: "Znajdź turniej"
+      pl: 'Znajdź turniej'
     },
   },
   create: {
@@ -614,14 +694,14 @@ const locale: Locale = {
       ru: 'Создать команду',
       ua: 'Створити команду',
       it: 'Crea squadra',
-      pl: "Stwórz drużynę"
+      pl: 'Stwórz drużynę'
     },
     tournament: {
       us: 'Create tournament',
       ru: 'Создать турнир',
       ua: 'Створити турнір',
       it: 'Crea torneo',
-      pl: "Stwórz turniej"
+      pl: 'Stwórz turniej'
     },
   },
   choose: {
@@ -630,7 +710,7 @@ const locale: Locale = {
       ru: 'Выбрать язык',
       ua: 'Вибрати мову',
       it: 'Scegli la lingua',
-      pl: "Wybierz język"
+      pl: 'Wybierz język'
     },
   },
   edit: {
@@ -639,7 +719,7 @@ const locale: Locale = {
       ru: 'Редактировать команду',
       ua: 'Редагувати команду',
       it: 'Modifica squadra',
-      pl: "Edytuj drużynę"
+      pl: 'Edytuj drużynę'
     },
   },
   _undo: {
@@ -647,7 +727,7 @@ const locale: Locale = {
     ru: 'Отменить',
     ua: 'Скасувати',
     it: 'Annulla',
-    pl: "Cofnij"
+    pl: 'Cofnij'
   },
   status: {
     ok: {
@@ -758,11 +838,11 @@ const locale: Locale = {
       pl: 'Warunki korzystania'
     },
     changelog: {
-      us: "Changelog",
-      ru: "История изменений",
-      ua: "Журнал змін",
-      it: "Registro delle modifiche",
-      pl: "Dziennik zmian"
+      us: 'Changelog',
+      ru: 'История изменений',
+      ua: 'Журнал змін',
+      it: 'Registro delle modifiche',
+      pl: 'Dziennik zmian'
     }
   },
   balance: {
@@ -781,28 +861,12 @@ const locale: Locale = {
 
 export default locale;
 
-// const lang: Locale = new Proxy(locale, {
-//   get(target: Locale, prop: string, receiver: any) {
-//     console.log(new Cookies().getAll())
-//     const currentLanguage = new Cookies().get('_language') || 'us';
+type Generic = typeof locale;
 
-//     const handleLocale = (obj: any): any => {
-//       return new Proxy(obj, {
-//         get(innerTarget: any, innerProp: string) {
-//           const value = innerTarget[innerProp];
-//           const isObject = typeof value === 'object';
+type Translations<T> = {
+  [K in keyof T]: T[K] extends Template
+    ? string
+    : Translations<T[K]>
+};
 
-//           if (value && isObject && currentLanguage in value) {
-//             return value[currentLanguage];
-//           }
-//           if (typeof value === 'object' && value !== null) {
-//             return handleLocale(value);
-//           }
-//           return value;
-//         }
-//       });
-//     };
-
-//     return handleLocale(target[prop]);
-//   }
-// });
+export type Locale = Translations<Generic>;

@@ -60,7 +60,7 @@ model Team {
   ownerId       String
   registered    DateTime     @default(now())
   owner         User         @relation(fields: [ownerId], references: [uid])
-  joinable      Joinable
+  joinable      Joinable     @default(Free)
   tournaments   Tournament[]
   members       TeamMember[]
   comments      Comment[]

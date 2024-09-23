@@ -24,15 +24,16 @@ export default function TeamsPage() {
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { itemsPerPage } = useItemsPerPage();
+  const [fetched, setFetched] = useState<boolean>(!!teams.length);
 
   useEffect(() => {
-    !teams.length && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
+    !fetched && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
       ...team,
       members: team.members?.map(member =>({
         ...member,
         user: new UserEntity(member.user)
       }))
-    })) : []));
+    })) : [])).then(() => setFetched(true));
   }, [teams]);
 
   const filteredData: Team[] = teams ? teams.filter((unit: Team) =>

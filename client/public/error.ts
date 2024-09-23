@@ -1,10 +1,10 @@
-import { Translation } from "./locale";
+import { Template } from "./locale";
 
 export interface ErrorLocale {
   [key: string]: {
-    title: Translation,
-    description: Translation
-  } | Translation;
+    title: Template,
+    description: Template
+  } | Template;
 }
 
 const error: ErrorLocale = {
@@ -63,6 +63,20 @@ const error: ErrorLocale = {
     ua: 'Не можна призначити однакову роль різним учасникам',
     it: 'Non è possibile assegnare lo stesso ruolo a membri diversi del team',
     pl: 'Nie można przypisać tej samej roli różnym członkom zespołu'
+  },
+  team_is_free_to_join: {
+    us: "Cannot generate an invitation, the team is open for everyone to join",
+    ru: "Нельзя сгенерировать приглашение, команда открыта к вступлению для всех",
+    ua: "Неможливо створити запрошення, команда відкрита для всіх",
+    it: "Impossibile generare un invito, la squadra è aperta a tutti",
+    pl: "Nie można wygenerować zaproszenia, drużyna jest otwarta dla wszystkich"
+  },
+  team_is_close_to_everyone: {
+    us: "Cannot generate an invitation, the team is closed for joining",
+    ru: "Нельзя сгенерировать приглашение, команда закрыта к вступлению",
+    ua: "Неможливо створити запрошення, команда закрита для вступу",
+    it: "Impossibile generare un invito, la squadra è chiusa all'adesione",
+    pl: "Nie można wygenerować zaproszenia, drużyna jest zamknięta na dołączenie"
   },  
   unallowed_file_format: {
     us: 'Only PNG, JPG, and SVG formats are allowed.',

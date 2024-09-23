@@ -1,5 +1,5 @@
 'use client';
-import locale from '@/public/locale';
+import locale, { _Locale, Locale } from '@/public/locale';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 
@@ -12,7 +12,7 @@ interface Translations {
 }
 
 interface ILanguageContext {
-  lang: Translations;
+  lang: Locale;
   setLanguage: (language: string) => void;
   language: string;
   refreshLanguage: () => void;
@@ -43,12 +43,12 @@ const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage
 
   const refreshLanguage = () => { setLanguage(cookie.get('_language')) };
 
-  function getLanguagePack(languageCode: string = 'us'): Translations {
-    const translations: Translations = {};
+  function getLanguagePack(languageCode: string = 'us') {
+    const translations: any = {};
     languageCode = validate(languageCode);
   
     for (const key in locale) {
-      const prop: any = locale[key];
+      const prop: any = locale[key as keyof Locale];
   
       if (Array.isArray(prop)) {
         translations[key] = prop.map((item: any) => item[languageCode]);
