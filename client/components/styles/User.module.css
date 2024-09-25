@@ -54,7 +54,7 @@
   gap: var(--gap);
   height: 32px;
   text-rendering: optimizeLegibility;
-  color: var(--accent-8);
+  color: var(--text-dimmed);
   font-size: var(--text-medium);
   font-weight: 600;
   display: flex;
@@ -69,17 +69,16 @@
   background: var(--accent-2);
 }
 
-.menu p img,
-.menu a img,
-.menu button img {
+.menu p svg,
+.menu a svg,
+.menu button svg {
   transition: all 0.2s var(--transition);
-  filter: brightness(0.58);
-  height: 20px;
+  stroke: var(--dimmed);
 }
-.menu p:hover img,
-.menu a:hover img,
-.menu button:hover img {
-  filter: none;
+.menu p:hover svg,
+.menu a:hover svg,
+.menu button:hover svg {
+  stroke: var(--white);
 }
 
 .menu a div {
@@ -87,4 +86,16 @@
   align-items: center;
   padding: 0;
   gap: 4px;
+}
+.menu span {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-dimmed);
+  transition: all 0.2s var(--transition);
+}
+.menu a:hover span {
+  color: var(--text-white);
 }

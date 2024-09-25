@@ -32,7 +32,7 @@ const keyNotFound = (key: string, target: string) => {
   return target
 }
 
-export function useToast(key: string, data: ExternalToast = {}, onSuccess: string | boolean) {
+export function useToast(key: string, data: ExternalToast = {}, onSuccess?: string | boolean) {
   const l: keyof Template = new Cookies().get('_language') || 'us'
   const error = locale.error as any
 

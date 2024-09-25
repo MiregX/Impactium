@@ -40,15 +40,15 @@ export function MembersForTeam() {
     }, team => team && setTeam(team));
   }
 
-  const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} />)
+  const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} setTeam={setTeam} />)
 
-  const EditTeamButton = useMemo(() => <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>, [user, team]);
+  const EditTeamButton = <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>;
 
-  const LeaveTeamButton = useMemo(() => <Button variant='secondary' img='UserMinus'>Leave team</Button>, [user, team]);
+  const LeaveTeamButton = <Button variant='secondary' img='UserMinus'>Leave team</Button>
 
-  const JoinTeamButton = useMemo(() => <Button variant='secondary' img='UserPlus'>Join team</Button>, [user, team]);
+  const JoinTeamButton = <Button variant='secondary' img='UserPlus'>Join team</Button>
 
-  const AccentButton = useMemo(() => {
+  const AccentButton = () => {
     if (isUserAreTeamOwner(user, team) || isUserAdmin(user))
       return EditTeamButton;
 
@@ -57,13 +57,13 @@ export function MembersForTeam() {
 
     if (isUserCanJoinTeam(team))
       return JoinTeamButton;
-  }, [user, team]);
+  }
 
   return (
     <div className={s.members_wrapper}>
       <div className={s.heading}>
         <h3>{lang.team.members}<span>{(team.members?.length || 0)} / 7 участников</span></h3>
-        {AccentButton}
+        <AccentButton />
       </div>
       <Card className={s.members_for_team}>
         {team.members && team.members.sort((a, b) => SortRoles(a.role, b.role)).map((member) => {

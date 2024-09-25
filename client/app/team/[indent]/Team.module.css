@@ -9,21 +9,36 @@
   overflow: hidden;
 }
 .members_for_team > div:nth-child(2) {
-  padding: var(--gap);
+  padding: va(--gap);
   gap: var(--gap);
   min-height: min-content;
 }
 .header {
   height: 100%;
-  flex-wrap: wrap;
   grid-column: 1 / 3;
   grid-row: 1 / 2;
 }
 .header > div {
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   gap: var(--gap);
   align-items: center;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-end;
+  max-height: 64px;
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+.badges > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: max-content;
 }
 .role_unit {
   display: grid;

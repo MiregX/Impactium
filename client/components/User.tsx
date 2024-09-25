@@ -1,7 +1,7 @@
 'use client'
 import { useLanguage } from '@/context/Language.context';
 import { useUser } from '@/context/User.context';
-import _user from './styles/User.module.css'
+import s from './styles/User.module.css'
 import Link from "next/link";
 import { useState } from 'react';
 import { useApplication } from '@/context/Application.context';
@@ -25,16 +25,16 @@ export function UserComponent() {
   }
 
   return (
-    <div className={`${_user.user} ${active && _user.active}`}>
-      <div className={_user.action_lock} onClick={toggle} />
+    <div className={`${s.user} ${active && s.active}`}>
+      <div className={s.action_lock} onClick={toggle} />
         <Avatar
-          className={_user.wrapper}
+          className={s.wrapper}
           size={36}
           alt={user!.displayName}
           src={user!.avatar}
           onClick={toggle} />
-      <nav className={_user.menu}>
-        <p className={_user.name}>{user!.email || user!.displayName}</p>
+      <nav className={s.menu}>
+        <p className={s.name}>{user!.email || user!.displayName}</p>
         {user!.uid === 'system' && (
           <Link href='/admin' onClick={toggle}>
             {lang._admin_panel}
@@ -48,7 +48,7 @@ export function UserComponent() {
         <hr />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <p>{user!.balance | 0}<Icon name='DollarSign' variant='dimmed' /></p>
+          <span>{user!.balance | 0}<Icon name='DollarSign' variant='dimmed' /></span>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}

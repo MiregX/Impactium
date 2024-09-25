@@ -30,7 +30,7 @@ export enum BadgeType {
   Finished = 'Finished',
   Registered = 'Registered',
   Free = 'Free',
-  Invite = 'Invite',
+  Invites = 'Invites',
   Closed = 'Closed',
   Soon = 'soon',
   prize = 'prize'
@@ -106,7 +106,7 @@ export function Badge(options: _PredefinedBadge | _CustomBadge) {
       direction: _BadgeDirections.default,
       color: '#4af379',
     },
-    [BadgeType.Invite]: {
+    [BadgeType.Invites]: {
       icon: 'TicketPercent',
       direction: _BadgeDirections.default,
       color: '#fe8d59',

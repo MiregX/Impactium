@@ -12,6 +12,12 @@ export class OmitObject {
   }
 }
 
+export class λUtils {
+  public static array = <K extends unknown>(unknown: Arrayed<K>): K[] => Array.isArray(unknown) ? unknown : (typeof unknown === 'undefined' ? [] : [unknown]);
+}
+
+export type Arrayed<K> = K | K[];
+
 export function ui(path: string) {
   return `https://cdn.impactium.fun/ui/${path}.svg`
 }

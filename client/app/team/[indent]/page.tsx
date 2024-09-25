@@ -28,8 +28,10 @@ export default function TeamIndentPage() {
     <PanelTemplate className={s.page}>
       <Card className={s.header}>
         <Combination size='heading' className={cn(isCurrentUserOwner && s.combination)} onClick={() => isCurrentUserOwner && handle()} src={team.logo} name={team.title} id={team.indent} />
-        <Badge type={BadgeType.Registered} title={lang.created_at + getReadableDate(team.registered)} />  
-        <Badge type={BadgeType[team.joinable]} title={lang.joinable[team.joinable]} />  
+        <div className={s.badges}>
+          <Badge type={BadgeType.Registered} title={lang.created_at + getReadableDate(team.registered)} />  
+          <Badge type={BadgeType[team.joinable]} title={lang.joinable[team.joinable]} />  
+        </div>
       </Card>
       <MembersForTeam />
       <TeamInformation />

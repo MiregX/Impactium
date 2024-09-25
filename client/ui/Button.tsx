@@ -52,15 +52,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size = 'icon'
     }
 
+    const λvariant = convertButtonVariantToImageVariant(variant);
+
     return (
       <Comp
         className={cn(buttonVariants({ variant: disabled ? 'disabled' : variant, size, className }), paddingClass, loading && s.loading)}
         ref={ref}
         {...props}>
         {asChild ? props.children : (loading
-          ? <Loading />
+          ? <Loading variant={λvariant} />
           : <React.Fragment>
-              {img && <Icon name={img} variant={convertButtonVariantToImageVariant(variant)} />}
+              {img && <Icon name={img} variant={λvariant} />}
               {children}
             </React.Fragment>
         )}

@@ -23,7 +23,7 @@ export class TeamService {
   async create(
     { indent, uid }: Checkout,
     team: CreateTeamDto,
-    banner?: Express.Multer.File
+    logo?: Express.Multer.File
   ) {
     await this.findManyByUid(uid)
       .then(teams => {
@@ -39,7 +39,7 @@ export class TeamService {
         title: team.title,
         indent,
         joinable: team.joinable,
-        logo: banner && await this.uploadBanner(indent, banner),
+        logo: await this.uploadLogo(indent, logo),
         owner: {
           connect: {
             uid,
@@ -49,17 +49,23 @@ export class TeamService {
     });
   }
 
-  async edit(
-    indent: string,
-    team: UpdateTeamDto,
+  async update(
+    team: TeamEntity,
+    update: UpdateTeamDto,
     logo?: Express.Multer.File
   ) {
+    
     if (logo) {
-      return this.setBanner(indent, logo)
+      update.logo = await this.uploadLogo(update.indent || team.indent, logo);
+      if (team.logo && team.logo !== update.logo) await this.deleteLogo(team);
+    } else if (update.indent && update.indent !== team.indent) {
+      update.logo = await this.renameLogo(team, update.indent)
     }
+
     return this.prisma.team.update({
-      where: { indent },
-      data: team
+      where: { indent: team.indent },
+      data: update,
+      select: TeamEntity.select({ members: true, owner: true, tournaments: true })
     });
   }
   
@@ -69,13 +75,13 @@ export class TeamService {
     })
   }
 
-  async setBanner(indent: string, banner: Express.Multer.File) {
+  async setLogo(indent: string, logo: Express.Multer.File) {
     return this.prisma.team.update({
       where: {
         indent
       },
       data: {
-        logo: banner && await this.uploadBanner(indent, banner)
+        logo: logo && await this.uploadLogo(indent, logo)
       }
     })
   }
@@ -163,15 +169,28 @@ export class TeamService {
     })
   }
 
-  private async uploadBanner(indent: TeamEntity['indent'], banner: Express.Multer.File) {
+  private async uploadLogo(indent: TeamEntity['indent'], logo?: Express.Multer.File): Promise<string | undefined> {
     const stream = new Readable();
-    stream.push(banner.buffer);
+    if (!logo) return undefined;
+    stream.push(logo.buffer);
     stream.push(null);
 
-    const extension = banner.originalname.split('.').pop();
+    const extension = logo.originalname.split('.').pop();
     const { ftp, cdn } = TeamEntity.getLogoPath(`${indent}.${extension}`);
     await this.ftpService.uploadFile(ftp, stream);
 
     return cdn;
   }
+
+  private async renameLogo(team: TeamEntity, newIndent: TeamEntity['indent']): Promise<string | undefined> {
+    if (!team.logo) return;
+
+    const old = TeamEntity.getLogoPath(team.logo.split('/').pop()!);
+    const _new = TeamEntity.getLogoPath(`${newIndent}.${team.logo.split('.').pop()}`);
+    await this.ftpService.rename(old.ftp, _new.ftp);
+
+    return _new.cdn;
+  }
+
+  private deleteLogo =(team: TeamEntity) => this.ftpService.remove(TeamEntity.getLogoPath(team.logo!.split('/').pop()!).ftp, true);
 }

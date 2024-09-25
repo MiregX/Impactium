@@ -47,5 +47,6 @@ export enum cookiePattern {
 export enum λError {
   indent_invalid_format = 'indent_invalid_format',
   invalid_joinable_field = 'invalid_joinable_field',
-  username_invalid_format = 'username_invalid_format'
+  username_invalid_format = 'username_invalid_format',
+  internal_server_error = 'internal_server_error'
 }

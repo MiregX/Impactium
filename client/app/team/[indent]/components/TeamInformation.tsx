@@ -10,14 +10,15 @@ import { isUserAreTeamOwner, isUserAdmin, isUserAreTeamMember, isUserCanJoinTeam
 import { QRCode } from '@/dto/QRCode.dto';
 import { useApplication } from '@/context/Application.context';
 import { QRCodeBanner } from '@/banners/qrcode/QRCodeBanner';
-import { toast } from 'sonner';
 import { Joinable } from '@/dto/Joinable.dto';
-import { Configuration } from '@impactium/config';
+import { Badge, BadgeType } from '@/ui/Badge';
+import { useLanguage } from '@/context/Language.context';
+import { getReadableDate } from '@/decorator/getReadableDate';
 
 export function TeamInformation() {
   const { spawnBanner, application } = useApplication();
-  console.log(application);[]
   const { user } = useUser();
+  const { lang } = useLanguage();
   const { team } = useTeam();
   const [QRCode, setQRCode] = useState<QRCode | null>(null);
 
@@ -31,7 +32,6 @@ export function TeamInformation() {
 
     const QRCode = await api<QRCode>(`/team/${team.indent}/qrcode`, {
       method: 'GET',
-      state: setQRCode,
       toast: true
     })
 

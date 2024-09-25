@@ -1,12 +1,16 @@
 'use client'
 import { useLanguage } from "@/context/Language.context"
-import { Icon } from "./Icon";
+import { Icon, IconProps } from "./Icon";
 
-export function Loading() {
+interface LoadingProps {
+  variant: IconProps['variant']
+}
+
+export function Loading({ variant }: LoadingProps) {
   const { lang } = useLanguage();
   return (
     <>
-      <Icon name='LoaderCircle' />
+      <Icon variant={variant} name='LoaderCircle' />
       {lang._please_wait}
     </>
   )

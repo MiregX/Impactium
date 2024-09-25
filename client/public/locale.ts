@@ -450,7 +450,7 @@ const locale = {
       it: 'Chiuso per nuove adesioni',
       pl: 'Zamknięta na nowych członków'
     },
-    Invite: {
+    Invites: {
       us: 'Invite only',
       ru: 'Только по приглашению',
       ua: 'Лише за запрошенням',

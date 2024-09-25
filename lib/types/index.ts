@@ -1,4 +1,4 @@
-export type Callback<T> = (data: T | null) => void;
+export type Callback<T> = (data: T) => void;
 
 export interface Application {
   status: number;
