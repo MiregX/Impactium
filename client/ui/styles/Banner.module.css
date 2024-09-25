@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(2px);
 }
 ._ {
   max-width: calc(100vw - 32px);

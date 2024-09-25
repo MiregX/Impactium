@@ -14,11 +14,14 @@ import { capitalize } from "@impactium/utils";
 import { TeamMember, TeamMemberSetRoleRequest } from "@/dto/TeamMember";
 import { Team } from "@/dto/Team";
 import { isUserAdmin, isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam, SetState } from "@/lib/utils";
+import { useApplication } from "@/context/Application.context";
+import { EditTeamBanner } from "@/banners/edit_team/EditTeam.banner";
 
 export function MembersForTeam() {
   const { user } = useUser();
   const { lang } = useLanguage();
   const { team, setTeam } = useTeam();
+  const { spawnBanner } = useApplication();
 
   const setMemberRole = (member: TeamMember, role: Role | null, state: SetState<boolean>) => {
     state(false);
@@ -37,7 +40,9 @@ export function MembersForTeam() {
     }, team => team && setTeam(team));
   }
 
-  const EditTeamButton = useMemo(() => <Button variant='secondary' img='PenLine'>Edit team</Button>, [user, team]);
+  const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} />)
+
+  const EditTeamButton = useMemo(() => <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>, [user, team]);
 
   const LeaveTeamButton = useMemo(() => <Button variant='secondary' img='UserMinus'>Leave team</Button>, [user, team]);
 

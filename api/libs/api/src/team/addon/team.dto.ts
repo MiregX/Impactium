@@ -1,19 +1,29 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { IsEnum, IsLowercase, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsLowercase, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { FileFilterCallback } from 'multer';
 import { TeamStandart } from './team.standart';
 import { TeamMemberEntity } from './team.member.entity';
 import { Joinable, Role } from '@prisma/client';
+import { λError, Identifier, DisplayName } from '@impactium/pattern';
+import { TeamEntity } from './team.entity';
 
 export class CreateTeamDto {
   @IsNotEmpty()
-  title!: string;
+  @Matches(Identifier.Indent, {
+    message: λError.indent_invalid_format
+  })
+  indent!: TeamEntity['indent'];
+
+  @IsNotEmpty()
+  @Matches(DisplayName.base, {
+    message: λError.username_invalid_format
+  })
+  title!: TeamEntity['title'];
 
   banner?: any;
 
-  @IsOptional()
   @IsEnum(Joinable, {
-    message: 'invalid_joinable_field'
+    message: λError.invalid_joinable_field
   })
   joinable!: Joinable;
 }
@@ -24,7 +34,26 @@ export class Checkout {
 }
 
 export class UpdateTeamDto implements Partial<CreateTeamDto> {
-  title: any;
+  @IsOptional()
+  @IsNotEmpty()
+  @Matches(Identifier.Indent, {
+    message: λError.indent_invalid_format
+  })
+  indent?: TeamEntity['indent'];
+
+  @IsOptional()
+  @IsNotEmpty()
+  @Matches(DisplayName.base, {
+    message: λError.username_invalid_format
+  })
+  title?: TeamEntity['title'];
+
+  @IsEnum(Joinable, {
+    message: λError.invalid_joinable_field
+  })
+  joinable?: Joinable;
+
+  logo?: TeamEntity['logo'];
 }
 
 export class FindOneTeamByIndentDto {

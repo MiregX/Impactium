@@ -10,7 +10,6 @@ export interface Team {
   ownerId: string,
   owner: User | null,
   description: string,
-  membersAmount: number,
   joinable: Joinable,
   members?: Array<TeamMember>,
   comments: Array<Comment>,

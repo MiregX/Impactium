@@ -49,21 +49,17 @@ export class TeamService {
     });
   }
 
-  async update(
+  async edit(
     indent: string,
     team: UpdateTeamDto,
-    banner: Express.Multer.File
+    logo?: Express.Multer.File
   ) {
-    if (banner) {
-      return this.setBanner(indent, banner)
+    if (logo) {
+      return this.setBanner(indent, logo)
     }
     return this.prisma.team.update({
-      where: {
-        indent,
-      },
-      data: {
-        title: team.title
-      }
+      where: { indent },
+      data: team
     });
   }
   

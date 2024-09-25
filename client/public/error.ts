@@ -1,13 +1,4 @@
-import { Template } from "./locale";
-
-export interface ErrorLocale {
-  [key: string]: {
-    title: Template,
-    description: Template
-  } | Template;
-}
-
-const error: ErrorLocale = {
+const error = {
   not_inplemented_title: {
     us: 'This feature is not yet implemented',
     ru: 'Этот функционал ещё не готов',

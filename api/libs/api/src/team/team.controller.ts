@@ -67,15 +67,14 @@ export class TeamController {
     return this.teamService.create({ uid, indent }, team);
   }
 
-  @Patch(':indent/update')
+  @Patch(':indent/edit')
   @UseGuards(TeamGuard)
-  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
-  setBanner(
+  // @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
+  edit(
     @Body() body: UpdateTeamDto,
-    @UploadedFile() banner: Express.Multer.File,
     @Team() team: TeamEntity
   ) {
-    return this.teamService.update(team.indent, body, banner);
+    return this.teamService.edit(team.indent, body);
   }
 
   @Put(':indent/set/member-role')

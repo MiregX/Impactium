@@ -1,4 +1,4 @@
-import { error, ErrorLocale } from './error';
+import { error } from './error';
 import { success, SuccessLocale } from './success';
 import { landing } from './landing';
 import Cookies from 'universal-cookie';
@@ -21,7 +21,6 @@ const template: Template = {
 }
 
 export type _Locale = Record<string, Template | Record<string, LocaleUnit | Template>> & {
-  error: ErrorLocale
   success: SuccessLocale,
   landing: LocaleUnit
 }
@@ -854,7 +853,7 @@ const locale = {
       pl: 'Doładuj saldo'
     }    
   },
-  error,
+  error: error,
   success,
   landing
 }
