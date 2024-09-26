@@ -1,3 +1,4 @@
+import { λError } from "@impactium/pattern";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class IndentNotProvided extends HttpException {
@@ -8,7 +9,7 @@ export class IndentNotProvided extends HttpException {
 
 export class IndentInvalidFormat extends HttpException {
   constructor() {
-    super('indent_invalid_format', HttpStatus.CONFLICT);
+    super(λError.indent_invalid_format, HttpStatus.CONFLICT);
   }
 }
 
@@ -20,7 +21,7 @@ export class UsernameNotProvided extends HttpException {
 
 export class UsernameInvalidFormat extends HttpException {
   constructor() {
-    super('username_invalid_format', HttpStatus.CONFLICT);
+    super(λError.username_invalid_format, HttpStatus.CONFLICT);
   }
 }
 export class CodeNotProvided extends HttpException {
