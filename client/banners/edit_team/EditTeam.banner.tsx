@@ -28,10 +28,10 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
   const { lang } = useLanguage();
   const [loading, setLoading] = useState<boolean>(false);
   const [indent, setIndent] = useState<Team['indent']>(team.indent);
-  const indentInput = useRef<HTMLInputElement>(null);
+  const [indentValid, setIndentValid] = useState<boolean>(true);
   
   const [title, setTitle] = useState<Team['title']>(team.title);
-  const titleInput = useRef<HTMLInputElement>(null);
+  const [titleValid, setTitleValid] = useState<boolean>(true);
 
   const [joinable, setJoinable] = useState<Team['joinable']>(team.joinable);
   const [logo, setLogo] = useState<Team['logo']>(team.logo);
@@ -41,12 +41,12 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
     let error: string | number = 0;
 
     if (!Identifier.test(indent)) {
-      indentInput.current?.classList.add(s.invalid);
+      setIndentValid(false);
       error = toast(lang.error.indent_invalid_format);
       
     }
     if (!DisplayName.test(title)) {
-      titleInput.current?.classList.add(s.invalid);
+      setTitleValid(false);
       error = toast(lang.error.displayName_invalid_format);
     }
 
@@ -69,12 +69,12 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
   }
 
   const indentInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    indentInput.current?.classList.remove(s.invalid);
+    setIndentValid(true);
     setIndent(event.target.value)
   };
 
   const titleInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    titleInput.current?.classList.remove(s.invalid);
+    setTitleValid(true);
     setTitle(event.target.value)
   };
 
@@ -104,11 +104,11 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
       <Separator />
       <div className={s.node}>
         <p>Название команды*</p>
-        <Input ref={titleInput} value={title} onChange={titleInputHandler} img='Quote' placeholder='Название команды' />
+        <Input valid={titleValid} value={title} onChange={titleInputHandler} img='Quote' placeholder='Название команды' />
       </div>
       <div className={s.node}>
         <p>Айди команды*</p>
-        <Input ref={indentInput} img='AtSign' value={indent} onChange={indentInputHandler} placeholder='Айди команды' />
+        <Input valid={indentValid} img='AtSign' value={indent} onChange={indentInputHandler} placeholder='Айди команды' />
       </div>
       <div className={s.node}>
         <p>Логотип команды</p>

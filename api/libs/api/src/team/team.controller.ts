@@ -100,11 +100,28 @@ export class TeamController {
     return this.teamService.findOneByIndent(team.indent);
   }
 
-  @Get(':indent/qrcode')
+  @Get(':indent/invite/list')
   @UseGuards(TeamGuard)
-  qrcode(
+  invites(
+    @Team() team: TeamEntity,
+  ) {
+    return this.teamService.invites(team);
+  }
+
+  @Post(':indent/invite/new')
+  @UseGuards(TeamGuard)
+  newInvite(
     @Team() team: TeamEntity,
   ) {
     return this.teamService.newInvite(team);
+  }
+
+  @Delete(':indent/invite/delete/:id')
+  @UseGuards(TeamGuard)
+  deleteInvite(
+    @Team() team: TeamEntity,
+    @Param('id') id: string
+  ) {
+    return this.teamService.deleteInvite(team, id);
   }
 }

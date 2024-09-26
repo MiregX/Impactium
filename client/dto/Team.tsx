@@ -1,4 +1,5 @@
 import { Joinable } from "./Joinable.dto";
+import { TeamInvite } from "./TeamInvite.dto";
 import { TeamMember } from "./TeamMember";
 import { Tournament } from "./Tournament";
 import { User } from "./User";
@@ -15,4 +16,5 @@ export interface Team {
   comments: Array<Comment>,
   registered: number,
   tournaments?: Array<Tournament>,
+  invites?: TeamInvite[]
 }

@@ -10,7 +10,7 @@ import { TeamAlreadyExist, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitExc
 import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
 import { TeamMemberEntity } from './addon/team.member.entity';
-import { $Enums, Joinable } from '@prisma/client';
+import { $Enums, Joinable, TeamInvite } from '@prisma/client';
 
 @Injectable()
 export class TeamService {
@@ -153,19 +153,31 @@ export class TeamService {
       where: { id, team: { indent: team.indent } }
     });
   }
+
+  invites(team: TeamEntity) {
+    return this.prisma.teamInvite.findMany({
+      where: { indent: team.indent }
+    })
+  }
   
-  async newInvite(team: TeamEntity) {
+  async newInvite(team: TeamEntity, maxUses?: number) {
     if (team.joinable === Joinable.Free) λthrow(TeamIsFreeToJoin)
     if (team.joinable === Joinable.Closed) λthrow(TeamIsCloseToEveryone)
 
     const amount = await this.prisma.teamInvite.findMany({
       where: { indent: team.indent }
-    })
+    });
     
-    if (amount.length) λthrow(TooManyQRCodes);
+    if (amount.length >= 5) λthrow(TooManyQRCodes);
 
     return this.prisma.teamInvite.create({
-      data: { indent: team.indent, used: 0 }
+      data: { indent: team.indent, maxUses }
+    })
+  }
+
+  deleteInvite(team: TeamEntity, id: TeamInvite['id']) {
+    return this.prisma.teamInvite.delete({
+      where: { indent: team.indent, id }
     })
   }
 

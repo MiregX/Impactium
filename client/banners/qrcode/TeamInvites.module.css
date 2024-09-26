@@ -1,0 +1,83 @@
+.qrcode {
+  padding: var(--gap);
+  background: var(--white);
+  border: var(--geist-border);
+  border-radius: var(--border-s);
+}
+.mini {
+  min-width: 36px;
+  padding: 4px;
+}
+.banner {
+  width: min-content;
+}
+.banner > div {
+  display: flex;
+  align-items: center;
+}
+.banner > div > span {
+  font-size: 12px;
+  color: var(--text-dimmed);
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+  line-height: 16px;
+}
+.invite {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+.invite .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  max-height: 36px;
+  height: 36px;
+  flex: 1;
+}
+.invite .text p {
+  font-size: 14px;
+  color: var(--text-white);
+}
+.invite .text span {
+  font-size: 12px;
+  color: var(--text-dimmed);
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+.new_invite {
+  align-self: flex-end;
+}
+.expires {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-between;
+}
+.expires * {
+  font-size: 14px;
+}
+.expires p {
+  color: var(--text-dimmed);
+}
+.expires span {
+  font-weight: 500;
+}
+.general_buttons_group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+}
+.general_buttons_group button:first-child {
+  flex: 1;
+}
+.new_invite_banner > div {
+  flex-direction: row;
+}

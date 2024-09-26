@@ -1,0 +1,9 @@
+{
+  "useState with loading": {
+    "prefix": "vv",
+    "body": [
+      "const [valid, setValid] = useState<boolean>(true);"
+    ],
+    "description": "useState hook for input valid state"
+  }
+}

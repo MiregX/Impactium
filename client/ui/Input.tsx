@@ -1,9 +1,7 @@
 import React from "react"
 import s from './styles/Input.module.css' 
 import { cva, type VariantProps } from "class-variance-authority"; 
-import { ui } from "@impactium/utils";
 import { cn, λIcon } from "@/lib/utils";
-import { icons } from "lucide-react";
 import { Icon } from "./Icon";
 
 const inputVariants = cva(s.button, {
@@ -26,17 +24,19 @@ const inputVariants = cva(s.button, {
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
   img?: λIcon
   revert?: boolean
+  valid?: boolean
   loading?: boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, revert, variant, type, itemRef, size, img, ...props }, ref) => {
+  ({ className, revert, valid, variant, type, itemRef, size, img, ...props }, ref) => {
     return img || type === 'file' ? (
       <div className={cn(
         inputVariants({ variant, size, className }),
         s.input,
         s.image,
-        revert && s.revert
+        revert && s.revert,
+        !valid && s.invalid
       )}
       ref={ref}>
         <Icon variant='dimmed' name={img || 'ImageUp'} />
