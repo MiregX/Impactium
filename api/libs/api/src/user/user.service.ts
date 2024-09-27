@@ -5,6 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { UsernameTakenException } from '../application/addon/error';
 import { AuthPayload } from '../auth/addon/auth.entity';
+import { UpdateUserDto } from './addon/user.dto';
+import { λthrow } from '@impactium/utils';
 
 @Injectable()
 export class UserService {
@@ -27,16 +29,16 @@ export class UserService {
     });
   }
 
-  async setUsername(uid: string, username: string) {
-    const exist = await this.prisma.user.findFirst({
-      where: { username }
-    });
-
-    if (exist) throw new UsernameTakenException();
+  async update(uid: string, user: UpdateUserDto) {
+    if (user.username) {
+      await this.prisma.user.findFirst({
+        where: { username: user.username }
+      }) && λthrow(UsernameTakenException);
+    }
 
     return this.prisma.user.update({
       where: { uid },
-      data: { username },
+      data: { ...user },
       select: UserEntity.select()
     });
   }

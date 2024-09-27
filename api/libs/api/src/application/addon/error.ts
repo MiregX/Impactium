@@ -46,12 +46,12 @@ export class UsernameIsSame extends HttpException {
 }
 export class DisplayNameIsSame extends HttpException {
   constructor() {
-    super('displayName_is_same', HttpStatus.CONFLICT);
+    super(λError.displayName_is_same, HttpStatus.CONFLICT);
   }
 }
 export class DisplayNameInvalidFormat extends HttpException {
   constructor() {
-    super('displayName_invalid_format', HttpStatus.CONFLICT);
+    super(λError.displayName_invalid_format, HttpStatus.CONFLICT);
   }
 }
 export class TeamAlreadyExist extends HttpException {

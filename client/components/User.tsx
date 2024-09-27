@@ -43,7 +43,7 @@ export function UserComponent() {
         )}
         <Link href='/account' onClick={toggle}>
           {lang._account}
-          <Icon name='CreditCard' variant='dimmed' />
+          <Icon name='Settings' variant='dimmed' />
         </Link>
         <hr />
         <Link href='/account#balance' onClick={toggle}>

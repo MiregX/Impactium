@@ -41,11 +41,10 @@ const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promi
       ? res.data
       : null
 
-  if (options.toast) {
+  if (isSuccess && typeof options.toast === 'string') {
+    useToast('', {}, options.toast)
+  } else {
     λUtils.array(res.data?.message).map(m => useToast(m, {}, options.toast))
-    if (isSuccess && typeof options.toast === 'string') {
-      useToast('', {}, options.toast)
-    }
   }
 
   if (isSuccess && callback) {

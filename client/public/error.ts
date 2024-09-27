@@ -131,7 +131,7 @@ const error = {
     ua: 'Відмовлено в доступі',
     it: 'Accesso negato',
     pl: 'Kurwa bober'
-  }
+  },
 }
 
 export { error }

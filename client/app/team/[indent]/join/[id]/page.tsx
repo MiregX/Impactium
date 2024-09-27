@@ -14,7 +14,7 @@ import { TeamInviteStatus } from '@/dto/TeamInvite.dto';
 export default function TeamJoinPage() {
   const { team } = useTeam();
   const { lang } = useLanguage();
-  const { id, valid, loaded } = useTeamJoin();
+  const { valid } = useTeamJoin();
 
   const Loading = useMemo(() => (
     <div className={s.node}>

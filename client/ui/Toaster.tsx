@@ -36,12 +36,12 @@ export function useToast(key: string, data: ExternalToast = {}, onSuccess?: stri
   const l: keyof Template = new Cookies().get('_language') || 'us'
   const error = locale.error as any
 
-  const phrase = typeof onSuccess === 'string'
+  const phrase = typeof onSuccess === 'string' && !key
     ? (success[onSuccess]?.[l] || null)
     : typeof error[key]?.[l] === 'string'
       ? error[key]?.[l]
       : (data.description = error[key]?.description?.[l] || error.not_inplemented_description[l],
-        error[key]?.title?.[l] || keyNotFound(key, error.not_inplemented_title[l]));
+        error[key]?.title?.[l]);
   
   phrase ? _toast(phrase, data) : console.error(`Key '${onSuccess}' for toast not found`);
 }

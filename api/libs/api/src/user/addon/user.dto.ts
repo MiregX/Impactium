@@ -1,7 +1,7 @@
-import { DisplayNameBase } from "@impactium/pattern";
+import { DisplayName, DisplayNameBase, Identifier, λError } from "@impactium/pattern";
 import { ApiProperty } from "@nestjs/swagger";
 import { $Enums, Prisma } from "@prisma/client";
-import { IsNotEmpty, Matches } from "class-validator";
+import { IsNotEmpty, IsOptional, Matches } from "class-validator";
 
 export class CreateUserDto implements Prisma.UserCreateInput {
   lastLogin!: $Enums.LoginType;
@@ -9,8 +9,17 @@ export class CreateUserDto implements Prisma.UserCreateInput {
 }
 
 export class UpdateUserDto implements Prisma.UserUpdateInput {
-  lastLogin!: Prisma.EnumLoginTypeFieldUpdateOperationsInput | $Enums.LoginType;
-  logins?: Prisma.LoginCreateNestedManyWithoutUserInput;
+  @IsOptional()
+  @Matches(Identifier.Username, {
+    message: λError.username_invalid_format
+  })
+  username?: string
+
+  @IsOptional()
+  @Matches(DisplayName.base, {
+    message: λError.displayName_invalid_format
+  })
+  displayName?: string
 }
 
 export class UpdateUserDisplayNameDto implements Prisma.UserUpdateInput {

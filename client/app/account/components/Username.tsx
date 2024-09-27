@@ -8,6 +8,7 @@ import { InputMin } from "@/ui/InputMin";
 import { Identifier } from '@impactium/pattern'
 import { useState } from "react";
 import { User } from "@/dto/User";
+import { UpdateUserRequest } from "@/dto/UpdateUser.request";
 
 export function Username() {
   const { lang } = useLanguage();
@@ -15,14 +16,12 @@ export function Username() {
   const [ username, setUsername ] = useState<string>(user!.username);
   const [ loading, setLoading ] = useState<boolean>(false);
 
-  const send = async () => {
-    setLoading(true);
-    await api<User>(`/user/set/username/${username}`, {
-      method: 'POST',
-      toast: 'user_updated_successfully'
-    }, assignUser);
-    setLoading(false);
-  }
+  const send = async () => api<User>(`/user/edit`, {
+    method: 'PATCH',
+    toast: 'user_updated_successfully',
+    body: UpdateUserRequest.create({ username }),
+    setLoading
+  }, assignUser);
 
   const button = <Button
     loading={loading}

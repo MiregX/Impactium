@@ -1,10 +1,10 @@
-import { Body, Controller, forwardRef, Get, Inject, Logger, NotAcceptableException, NotFoundException, Param, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, forwardRef, Get, Inject, Logger, NotAcceptableException, NotFoundException, Param, Patch, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from './addon/user.decorator';
 import { UserEntity } from './addon/user.entity';
 import { UsernameValidationPipe } from '@api/main/application/addon/username.validator';
-import { UpdateUserDisplayNameDto } from './addon/user.dto';
+import { UpdateUserDisplayNameDto, UpdateUserDto } from './addon/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseSuccess } from '@api/main/application/addon/responce.success.decorator';
 import { ApiResponseConflict } from '@api/main/application/addon/response.conflict.decorator';
@@ -40,26 +40,17 @@ export class UserController {
     return UserEntity.fromPrisma(userEntity, { teams, logins });
   }
 
-  @Post('set/username/:username')
-  @UseGuards(AuthGuard)
-  setUsername(
-    @Param('username', UsernameValidationPipe) username: string,
-    @User() user: UserEntity
-  ) {
-    if (user.username === username) throw new UsernameIsSame();
-    return this.userService.setUsername(user.uid, username);
-  }
-
-  @Post('set/displayname')
+  @Patch('edit')
   @UseGuards(AuthGuard)
   @ApiResponseSuccess(UserEntity)
   @ApiResponseConflict()
-  setDisplayName(
-    @Body() body: UpdateUserDisplayNameDto,
+  setUsername(
+    @Body() body: UpdateUserDto,
     @User() user: UserEntity
   ) {
-    if (user.displayName === body.displayName) throw new DisplayNameIsSame();
-    return this.userService.setDisplayName(user.uid, body.displayName);
+    if (user.username === body.username) throw new UsernameIsSame();
+    if (user.displayName === body.displayName) throw new DisplayNameIsSame()
+    return this.userService.update(user.uid, body);
   }
 
   @Get('admin/is')

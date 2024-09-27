@@ -8,6 +8,7 @@ import { InputMin } from "@/ui/InputMin";
 import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
 import { User } from "@/dto/User";
+import { UpdateUserRequest } from "@/dto/UpdateUser.request";
 
 export function DisplayName() {
   const { lang } = useLanguage();
@@ -15,15 +16,12 @@ export function DisplayName() {
   const [ displayName, setDisplayName ] = useState<string>(user!.displayName);
   const [ loading, setLoading ] = useState<boolean>(false);
 
-  const send = async () => {
-    setLoading(true);
-    await api<User>('/user/set/displayname', {
-      method: 'POST',
-      toast: 'user_updated_successfully',
-      body: JSON.stringify({ displayName })
-    }, assignUser)
-    setLoading(false)
-  }
+  const send = async () => api<User>(`/user/edit`, {
+    method: 'PATCH',
+    toast: 'user_updated_successfully',
+    body: UpdateUserRequest.create({ displayName }),
+    setLoading
+  }, assignUser);
 
   const button = <Button
     loading={loading}
