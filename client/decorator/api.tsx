@@ -5,7 +5,6 @@ import { Configuration } from "@impactium/config";
 import { parseApiOptions, soft } from "@/lib/utils";
 import { useToast } from "@/ui/Toaster";
 import { λUtils } from "@impactium/utils";
-import { λError } from "@impactium/pattern";
 
 export function _server(v?: boolean) {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
