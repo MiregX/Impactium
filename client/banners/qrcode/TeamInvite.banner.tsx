@@ -24,7 +24,7 @@ export function TeamInviteBanner({ team, setTeam, invite }: TeamInviteBannerProp
   const { spawnBanner, application } = useApplication();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const url = `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/${team.indent}/join${invite?.id ? `/${invite.id}` : ''}`;
+  const url = `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/@${team.indent}/join${invite?.id ? `/${invite.id}` : ''}`;
 
   const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} setTeam={setTeam} />);
 

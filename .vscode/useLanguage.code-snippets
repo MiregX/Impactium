@@ -1,0 +1,9 @@
+{
+  "useState with loading": {
+    "prefix": "la",
+    "body": [
+      "const { lang } = useLanguage();"
+    ],
+    "description": "useState hook for input valid state"
+  }
+}

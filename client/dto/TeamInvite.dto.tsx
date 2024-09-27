@@ -7,3 +7,10 @@ export interface TeamInvite {
   used: number;
   maxUses: number;
 }
+
+export enum TeamInviteStatus {
+  Valid = 'Valid',
+  NotFound = 'NotFound',
+  Expired = 'Expired',
+  Used = 'Used'
+}

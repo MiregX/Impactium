@@ -29,7 +29,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, revert, valid, variant, type, itemRef, size, img, ...props }, ref) => {
+  ({ className, revert, valid = true, variant, type, itemRef, size, img, ...props }, ref) => {
     return img || type === 'file' ? (
       <div className={cn(
         inputVariants({ variant, size, className }),

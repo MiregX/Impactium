@@ -22,7 +22,7 @@ interface TeamInvitesBannerProps {
 export function TeamInvitesBanner({ team, setTeam, invites = team.invites }: TeamInvitesBannerProps) {
   const { application, spawnBanner } = useApplication();
   
-  const url = (id: string) => `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/${team.indent}/join/${id}`;
+  const url = (id: string) => `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/@${team.indent}/join/${id}`;
 
   return (
     <Banner title='Приглашения'>

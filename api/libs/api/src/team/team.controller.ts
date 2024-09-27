@@ -14,7 +14,6 @@ import { λthrow } from '@impactium/utils';
 import { UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
-import { members } from '@seed/api/assets/teamMembers.data';
 import { TeamMember } from '@prisma/client';
 
 @ApiTags('Team')
@@ -123,5 +122,13 @@ export class TeamController {
     @Param('id') id: string
   ) {
     return this.teamService.deleteInvite(team, id);
+  }
+
+  @Get(':indent/invite/check/:id')
+  checkInvite(
+    @Param('indent') indent: string,
+    @Param('id') id: string
+  ) {
+    return this.teamService.checkInvite(indent, id);
   }
 }

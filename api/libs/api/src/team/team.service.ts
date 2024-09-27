@@ -11,6 +11,7 @@ import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
 import { TeamMemberEntity } from './addon/team.member.entity';
 import { $Enums, Joinable, TeamInvite } from '@prisma/client';
+import { TeamInviteStatus } from './addon/teamInvite.entity';
 
 @Injectable()
 export class TeamService {
@@ -180,6 +181,15 @@ export class TeamService {
       where: { indent: team.indent, id }
     })
   }
+
+  public checkInvite = (indent: TeamEntity['indent'], id: TeamInvite['id']): Promise<TeamInviteStatus> => this.prisma.teamInvite.findFirst({
+    where: { indent, id }
+  }).then(invite => {
+    if (!invite) return TeamInviteStatus.NotFound;
+    if (invite.used >= invite.maxUses) return TeamInviteStatus.Used
+    if (invite.created.valueOf() + 1000 * 60 * 60 * 24 * 7 < Date.now()) return TeamInviteStatus.Expired
+    return TeamInviteStatus.Valid;
+  });
 
   private async uploadLogo(indent: TeamEntity['indent'], logo?: Express.Multer.File): Promise<string | undefined> {
     const stream = new Readable();

@@ -21,7 +21,7 @@ export class TeamEntity implements Team {
     };
   }
 
-  static select = ({ members = false, owner = false, tournaments = false }: Options = {}) => ({
+  static select = ({ members = false, owner = false, tournaments = false, invites = false }: Options = {}) => ({
     logo: true,
     registered: true,
     indent: true,
@@ -37,7 +37,8 @@ export class TeamEntity implements Team {
     },
     tournaments: tournaments && {
       select: TournamentEntity.select()
-    }
+    },
+    invites
   });
 }
 
@@ -45,4 +46,5 @@ interface Options {
   members?: boolean;
   owner?: boolean;
   tournaments?: boolean;
+  invites?: boolean;
 }
