@@ -29,5 +29,5 @@ export function home() {
 export const capitalize = (str: string) => str?.substring(0, 1).toUpperCase() + str?.substring(1);
 
 export const λthrow = (Exception: new () => Error): never => {
-  throw new Exception;
-}
+  throw new Exception();
+};

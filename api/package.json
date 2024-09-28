@@ -6,7 +6,7 @@
   "scripts": {
     "prisma:generate": "npm run prisma:generate:api",
     "prisma:generate:api": "prisma generate --schema ./libs/api/prisma/schema.prisma",
-    "prisma:migrate:api": "prisma migrate dev --schema ./libs/api/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema ./libs/api/prisma/schema.prisma",
     "prisma:deploy": "npm run prisma:deploy:api",
     "prisma:deploy:api": "prisma migrate deploy --schema ./libs/api/prisma/schema.prisma",
     "prisma:push": "npm run prisma:push:api",

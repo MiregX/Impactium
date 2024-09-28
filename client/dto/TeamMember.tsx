@@ -4,7 +4,7 @@ import { UserEntity } from "./User"
 export interface TeamMember {
   id: string
   uid: string
-  tid: string
+  indent: string
   role: Role | null;
   user: UserEntity
 }

@@ -1,3 +1,5 @@
+import { λError } from "@impactium/pattern"
+
 const error = {
   not_inplemented_title: {
     us: 'This feature is not yet implemented',
@@ -132,6 +134,13 @@ const error = {
     it: 'Accesso negato',
     pl: 'Kurwa bober'
   },
+  [λError.user_not_found]: {
+    us: 'User not found',
+    ru: 'Пользователь не найден',
+    ua: 'Користувача не знайдено',
+    it: 'Porco dio',
+    pl: 'Kurwa bober'
+  }
 }
 
 export { error }

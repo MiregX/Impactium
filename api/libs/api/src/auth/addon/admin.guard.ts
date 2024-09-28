@@ -12,6 +12,6 @@ export class AdminGuard implements CanActivate {
       await this.authGuard.canActivate(context); 
     }
 
-    return request.user.uid === 'system'
+    return request.user?.uid === 'system'
   }
 }

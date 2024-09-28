@@ -50,5 +50,9 @@ export enum λError {
   username_invalid_format = 'username_invalid_format',
   internal_server_error = 'internal_server_error',
   displayName_invalid_format = 'displayName_invalid_format',
-  displayName_is_same = 'displayName_is_same'
+  displayName_is_same = 'displayName_is_same',
+  team_invite_not_found = 'team_invite_not_found',
+  team_invite_used = 'team_invite_used',
+  team_invite_expired = 'team_invite_expired',
+  user_not_found = 'user_not_found'
 }

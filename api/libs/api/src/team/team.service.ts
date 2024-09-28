@@ -6,12 +6,12 @@ import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes } from '../application/addon/error';
+import { TeamAlreadyExist, TeamInviteExpired, TeamInviteNotFound, TeamInviteUsed, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes } from '../application/addon/error';
 import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
 import { TeamMemberEntity } from './addon/team.member.entity';
 import { $Enums, Joinable, TeamInvite } from '@prisma/client';
-import { TeamInviteStatus } from './addon/teamInvite.entity';
+import { TeamInviteEntity } from './addon/teamInvite.entity';
 
 @Injectable()
 export class TeamService {
@@ -120,7 +120,7 @@ export class TeamService {
   async pagination(
     limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
-  ): Promise<TeamEntity[]> {
+  ) {
     return this.prisma.team.findMany({
       select: TeamEntity.select({ members: true }),
       take: limit,
@@ -176,20 +176,50 @@ export class TeamService {
     })
   }
 
-  deleteInvite(team: TeamEntity, id: TeamInvite['id']) {
-    return this.prisma.teamInvite.delete({
+  async deleteInvite(team: TeamEntity, id: TeamInvite['id']): Promise<TeamInviteEntity[]> {
+    await this.prisma.teamInvite.delete({
       where: { indent: team.indent, id }
+    })
+
+    return this.prisma.teamInvite.findMany({
+      where: { indent: team.indent }
     })
   }
 
-  public checkInvite = (indent: TeamEntity['indent'], id: TeamInvite['id']): Promise<TeamInviteStatus> => this.prisma.teamInvite.findFirst({
+  public checkInvite = (indent: TeamEntity['indent'], id: TeamInvite['id']) => this.prisma.teamInvite.findFirst({
     where: { indent, id }
   }).then(invite => {
-    if (!invite) return TeamInviteStatus.NotFound;
-    if (invite.used >= invite.maxUses) return TeamInviteStatus.Used
-    if (invite.created.valueOf() + 1000 * 60 * 60 * 24 * 7 < Date.now()) return TeamInviteStatus.Expired
-    return TeamInviteStatus.Valid;
+    if (!invite) return λthrow(TeamInviteNotFound);
+    if (invite.used >= invite.maxUses) λthrow(TeamInviteUsed)
+    if (invite.created.valueOf() + 1000 * 60 * 60 * 24 * 7 < Date.now()) return λthrow(TeamInviteExpired)
+    return invite;
   });
+
+  public declineInvite = async (indent: TeamEntity['indent'], id: TeamInvite['id'], uid: UserEntity['uid']) => {
+    const invite = await this.prisma.teamInvite.findFirst({
+      where: { indent, id }
+    });
+    
+    if (!invite) return λthrow(TeamInviteNotFound);
+    
+    return this.prisma.teamInvite.update({
+      where: { indent, id },
+      data: {
+        declines: invite.declines++
+      }
+    });
+  }
+
+  public acceptInvite = (indent: TeamEntity['indent'], id: TeamInvite['id'], uid: UserEntity['uid']) => {
+    return this.prisma.team.update({
+      where: { indent },
+      data: {
+        members: {
+          create: TeamMemberEntity.create({ uid, indent })
+        }
+      }
+    });
+  }
 
   private async uploadLogo(indent: TeamEntity['indent'], logo?: Express.Multer.File): Promise<string | undefined> {
     const stream = new Readable();

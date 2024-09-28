@@ -34,3 +34,8 @@
     transform: rotateZ(1turn);
   }
 }
+.confirmation_group {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+}

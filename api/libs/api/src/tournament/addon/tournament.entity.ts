@@ -25,7 +25,7 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static select({ teams = false, owner = false, grid = false }: Options = {}): Prisma.TournamentSelect {
+  static select({ teams = false, owner = false, grid = false }: Options = {}) {
     return {
       id: true,
       banner: true,

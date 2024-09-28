@@ -3,52 +3,52 @@ import { Role } from "@prisma/client";
 export const members = [
   {
     uid: 'system',
-    tid: 'feeders',
+    indent: 'feeders',
     role: Role.Carry
   },
   {
     uid: '2',
-    tid: 'feeders',
+    indent: 'feeders',
     role: Role.Offlane
   },
   {
     uid: '3',
-    tid: 'feeders',
+    indent: 'feeders',
     role: Role.FullSupport
   },
   {
     uid: '4',
-    tid: 'feeders',
+    indent: 'feeders',
     role: Role.Rotation
   },
   {
     uid: '5',
-    tid: 'feeders',
+    indent: 'feeders',
     role: Role.Carry
   },
   {
     uid: '6',
-    tid: 'champions',
+    indent: 'champions',
     role: Role.Carry
   },
   {
     uid: '7',
-    tid: 'champions',
+    indent: 'champions',
     role: Role.Mid
   },
   {
     uid: '8',
-    tid: 'champions',
+    indent: 'champions',
     role: Role.Offlane
   },
   {
     uid: '9',
-    tid: 'champions',
+    indent: 'champions',
     role: Role.SemiSupport
   },
   {
     uid: '10',
-    tid: 'champions',
+    indent: 'champions',
     role: Role.FullSupport
   }
 ];

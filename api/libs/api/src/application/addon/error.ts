@@ -18,10 +18,14 @@ export class UsernameNotProvided extends HttpException {
     super('username_not_provided', HttpStatus.CONFLICT);
   }
 }
-
 export class UsernameInvalidFormat extends HttpException {
   constructor() {
     super(λError.username_invalid_format, HttpStatus.CONFLICT);
+  }
+}
+export class UserNotFound extends HttpException {
+  constructor() {
+    super(λError.user_not_found, HttpStatus.NOT_FOUND);
   }
 }
 export class CodeNotProvided extends HttpException {
@@ -82,6 +86,21 @@ export class TeamIsFreeToJoin extends HttpException {
 export class TeamIsCloseToEveryone extends HttpException {
   constructor() {
     super('team_is_close_to_everyone', HttpStatus.CONFLICT)
+  };
+}
+export class TeamInviteNotFound extends HttpException {
+  constructor() {
+    super(λError.team_invite_not_found, HttpStatus.CONFLICT)
+  };
+}
+export class TeamInviteUsed extends HttpException {
+  constructor() {
+    super(λError.team_invite_used, HttpStatus.CONFLICT)
+  };
+}
+export class TeamInviteExpired extends HttpException {
+  constructor() {
+    super(λError.team_invite_expired, HttpStatus.CONFLICT)
   };
 }
 export class UnallowedFileFormat extends HttpException {

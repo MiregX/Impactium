@@ -4,7 +4,7 @@ import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto'
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { TeamGuard } from './addon/team.guard';
+import { TeamGuard, TeamReadonlyGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
@@ -15,6 +15,8 @@ import { UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
 import { TeamMember } from '@prisma/client';
+import { ConnectGuard } from '../auth/addon/connect.guard';
+import { TeamInviteEntity } from './addon/teamInvite.entity';
 
 @ApiTags('Team')
 @Controller('team')
@@ -47,8 +49,9 @@ export class TeamController {
       : this.teamService.findManyByTitleOrIndent(value);
   }
   
+  // Для удаления команды
   @Delete(':indent/delete')
-  @UseGuards(AdminGuard)
+  @UseGuards(TeamGuard)
   delete(
     @Param('indent') indent: string,
     @User() user: UserEntity,
@@ -56,6 +59,7 @@ export class TeamController {
     return this.teamService.delete(user, indent);
   }
 
+  // Для создания команды
   @Post(':indent/create')
   @UseGuards(AuthGuard)
   create(
@@ -66,6 +70,7 @@ export class TeamController {
     return this.teamService.create({ uid, indent }, team);
   }
 
+  // Для редактирования команды
   @Patch(':indent/edit')
   @UseGuards(TeamGuard)
   @UseInterceptors(FileInterceptor('logo', UploadFileDto.getConfig() as unknown as any))
@@ -77,6 +82,7 @@ export class TeamController {
     return this.teamService.update(team, body, logo);
   }
 
+  // Для изменения роли участника
   @Put(':indent/set/member-role')
   @UseGuards(TeamGuard)
   async setMemberRole(
@@ -88,6 +94,7 @@ export class TeamController {
     return this.teamService.findOneByIndent(team.indent);
   }
 
+  // Для изгнания участника
   @Delete(':indent/kick/:memberId')
   @UseGuards(TeamGuard)
   async kickMember(
@@ -99,6 +106,7 @@ export class TeamController {
     return this.teamService.findOneByIndent(team.indent);
   }
 
+  // Для полученя списка приглашений
   @Get(':indent/invite/list')
   @UseGuards(TeamGuard)
   invites(
@@ -107,6 +115,7 @@ export class TeamController {
     return this.teamService.invites(team);
   }
 
+  // Для создания нового приглашения
   @Post(':indent/invite/new')
   @UseGuards(TeamGuard)
   newInvite(
@@ -115,20 +124,47 @@ export class TeamController {
     return this.teamService.newInvite(team);
   }
 
+  // Для удаления приглашения
   @Delete(':indent/invite/delete/:id')
   @UseGuards(TeamGuard)
   deleteInvite(
     @Team() team: TeamEntity,
     @Param('id') id: string
-  ) {
+  ): Promise<TeamInviteEntity[]> {
     return this.teamService.deleteInvite(team, id);
   }
 
+  // Для проверки приглашения на валидность можно заменить на хеш
   @Get(':indent/invite/check/:id')
   checkInvite(
     @Param('indent') indent: string,
     @Param('id') id: string
   ) {
     return this.teamService.checkInvite(indent, id);
+  }
+
+  // ⚠️ NOT RELEASED | Для отклонения приглашения на валидность
+  // @Post(':indent/invite/decline/:id')
+  // @UseGuards(ConnectGuard)
+  // decline(
+  //   @Param('indent') indent: string,
+  //   @Param('id') id: string,
+  //   @User() user: UserEntity | null
+  // ) {
+  //   if (!user) return;
+
+  //   // Unreleased feature
+  //   return this.teamService.declineInvite(indent, id, user.uid);
+  // }
+
+  // Для присоенинения к команде
+  @Put(':indent/invite/join/:id')
+  @UseGuards(AuthGuard, TeamReadonlyGuard)
+  acceptInvite(
+    @Team() team: TeamEntity,
+    @Param('id') id: string,
+    @User() user: UserEntity
+  ) {
+    return this.teamService.acceptInvite(team.indent, id, user.uid)
   }
 }

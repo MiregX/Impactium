@@ -42,7 +42,7 @@ const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promi
 
   if (isSuccess && typeof options.toast === 'string') {
     useToast('', {}, options.toast)
-  } else {
+  } else if (options.toast) {
     λUtils.array(res.data?.message).map(m => useToast(m, {}, options.toast))
   }
 

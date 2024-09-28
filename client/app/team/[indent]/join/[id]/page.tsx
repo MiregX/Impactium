@@ -9,12 +9,15 @@ import React, { useMemo } from 'react';
 import { Icon } from '@/ui/Icon';
 import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
-import { TeamInviteStatus } from '@/dto/TeamInvite.dto';
+import { Separator } from '@/ui/Separator';
+import { useUser } from '@/context/User.context';
+import { λError } from '@impactium/pattern';
 
 export default function TeamJoinPage() {
   const { team } = useTeam();
   const { lang } = useLanguage();
-  const { valid } = useTeamJoin();
+  const { id, valid } = useTeamJoin();
+  const { user } = useUser();
 
   const Loading = useMemo(() => (
     <div className={s.node}>
@@ -54,20 +57,43 @@ export default function TeamJoinPage() {
   ), []);
 
   const Invalid = () => {
-    if (valid === TeamInviteStatus.NotFound) return NotFound;
-    if (valid === TeamInviteStatus.Expired) return Expired;
-    if (valid === TeamInviteStatus.Used) return Used;
+    if (valid === λError.team_invite_not_found) return NotFound;
+    if (valid === λError.team_invite_expired) return Expired;
+    if (valid === λError.team_invite_used) return Used;
   }
+
+  const decline = async () => {
+    api<boolean>(`/team/${team.indent}/decline/${id}`, {
+      method: 'POST'
+    });
+  }
+
+  const confirm = () => {
+    api<boolean>(`/team/${team.indent}/join/${id}`, {
+      method: 'PUT'
+    });
+  }
+
+  const ConfirmGroup = () => {
+    return (
+      <div className={s.confirmation_group}>
+        <Button variant='ghost' onClick={decline}>Decline</Button>
+        <Button onClick={confirm}>Присоеденится</Button>
+      </div>
+    )
+  };
 
   return (
     <PanelTemplate center>
       <Card className={s.card}>
         {!valid
           ? Loading
-          : valid === TeamInviteStatus.Valid
+          : typeof valid === 'object'
             ? (<React.Fragment>
               <p>Вас пригласили в команду</p>
+              <Separator />
               <Combination id={team.indent} src={team.logo} name={team.title} />
+              <ConfirmGroup />
               </React.Fragment>)
             : <Invalid />
         }

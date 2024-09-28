@@ -30,12 +30,13 @@ export function NewTeamInviteBanner({ team, setTeam }: NewTeamInviteBannerProps)
       body: NewTeamInviteRequest.create({ maxUses }),
       setLoading
     }).then(invite => {
+      const invites = Array.isArray(team.invites) ? team.invites : [];
       setTeam(team => ({
         ...team,
-        invites: [...(team.invites || []), invite]
+        invites: [...invites, invite]
       }));
 
-      team.invites = [...(team.invites || []), invite];
+      team.invites = [...invites, invite];
 
       spawnBanner(<TeamInviteBanner team={team} setTeam={setTeam} invite={invite} />)
     });

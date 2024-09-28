@@ -41,7 +41,7 @@ export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
         {current.map(index => (
           tournaments[index]
             ? <TournamentUnit key={index} tournament={tournaments[index]} />
-            : <TournamentUnitSkeleton />
+            : <TournamentUnitSkeleton key={index} />
         ))}
       </div>
       <Pagination

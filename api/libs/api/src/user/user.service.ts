@@ -3,9 +3,9 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
-import { UsernameTakenException } from '../application/addon/error';
+import { UsernameTakenException, UserNotFound } from '../application/addon/error';
 import { AuthPayload } from '../auth/addon/auth.entity';
-import { UpdateUserDto } from './addon/user.dto';
+import { FindUserDto, UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
 
 @Injectable()
@@ -42,28 +42,29 @@ export class UserService {
       select: UserEntity.select()
     });
   }
+  
+  public find = ({ search }: FindUserDto) => this.prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { contains: search } },
+        { displayName: { contains: search } },
+      ]
+    }
+  });
 
-  async setDisplayName(uid: string, displayName: string) {
-    const user = await this.prisma.user.update({
+  public impersonate = async (uid: string) => {
+    const user = await this.prisma.user.findUnique({
       where: { uid },
-      data: { displayName },
-      select: UserEntity.select()
+      select: {
+        uid: true,
+        email: true
+      }
     });
-    return UserEntity.fromPrisma(user);
+
+    return user ? this.signJWT(user.uid, user.email) : λthrow(UserNotFound);
   }
 
-  signJWT(uid: Required<AuthPayload['uid']>, email: AuthPayload['email']): string {
-    return this.jwt.sign({
-      uid,
-      email,
-    }, {
-      secret: process.env.JWT_SECRET,
-      expiresIn: '7d'
-    });
-  }
+  signJWT = (uid: Required<AuthPayload['uid']>, email: AuthPayload['email']): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });
 
-  decodeJWT(token: string) {
-    const data = this.jwt.decode(token);
-    return data || new ForbiddenException();
-  }
+  decodeJWT = (token: string) => this.jwt.decode(token) || λthrow(ForbiddenException);
 }

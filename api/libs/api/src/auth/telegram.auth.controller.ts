@@ -11,7 +11,6 @@ import { Cookie } from '../application/addon/cookie.decorator';
 import { AuthMethodController } from './addon/auth.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { Configuration } from '@impactium/config';
-import { JwtService } from '@nestjs/jwt';
 
 @ApiTags('Auth <Telegram>')
 @Controller('telegram')

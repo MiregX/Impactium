@@ -71,8 +71,8 @@ model TeamMember {
   id            String        @id @default(cuid())
   uid           String
   user          User          @relation(fields: [uid], references: [uid])
-  tid           String
-  team          Team          @relation(fields: [tid], references: [indent])
+  indent        String
+  team          Team          @relation(fields: [indent], references: [indent])
   role          Role?
 }
 
@@ -176,4 +176,5 @@ model TeamInvite {
   team          Team        @relation(fields: [indent], references: [indent])
   used          Int         @default(0)
   maxUses       Int         @default(4)
+  declines      Int         @default(0)
 }

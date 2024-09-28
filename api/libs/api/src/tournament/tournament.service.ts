@@ -19,7 +19,7 @@ export class TournamentService implements OnModuleInit {
   async pagination(
     limit: number = TournamentStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TournamentStandart.DEFAULT_PAGINATION_PAGE,
-  ): Promise<TournamentEntity<TournamentEntityWithTeams>[]> {
+  ) {
     const actual = TournamentEntity.findActual();
     return await this.prisma.tournament.findMany({
       select: TournamentEntity.select({ teams: true }),
