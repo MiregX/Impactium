@@ -2,7 +2,7 @@
 import { useLanguage } from "@/context/Language.context";
 import { useTeam } from "../team.context";
 import s from '../Team.module.css';
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { MainRole, Role, RoleIcons, SecondaryRole, SortRoles } from "@/dto/Role";
 import { Combination } from "@/ui/Combitation";
 import { Button } from "@/ui/Button";
@@ -34,19 +34,31 @@ export function MembersForTeam() {
   }
 
   const kickMember = (member: TeamMember) => {
-    api<Team>(`/team/${team.indent}/kick/${member.id}`, {
+    api<Team>(`/team/${team.indent}/kick/${member.uid}`, {
       method: 'DELETE',
       toast: 'member_kicked'
     }, team => team && setTeam(team));
+  }
+
+  const leave = () => {
+    api<Team>(`/team/${team.indent}/leave`, {
+      method: 'DELETE',
+    }, team => setTeam(team));
+  }
+
+  const join = () => {
+    api<Team>(`/team/${team.indent}/join`, {
+      method: 'POST',
+    }, team => setTeam(team));
   }
 
   const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} setTeam={setTeam} />)
 
   const EditTeamButton = <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>;
 
-  const LeaveTeamButton = <Button variant='secondary' img='UserMinus'>Leave team</Button>
+  const LeaveTeamButton = <Button variant='secondary' onClick={leave} img='UserMinus'>Leave team</Button>
 
-  const JoinTeamButton = <Button variant='secondary' img='UserPlus'>Join team</Button>
+  const JoinTeamButton = <Button variant='secondary' onClick={join} img='UserPlus'>Join team</Button>
 
   const AccentButton = () => {
     if (isUserAreTeamOwner(user, team) || isUserAdmin(user))

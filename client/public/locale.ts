@@ -844,6 +844,13 @@ const locale = {
       pl: 'Dziennik zmian'
     }
   },
+  impersonate: {
+    us: 'Impersonate',
+    ru: 'Осуществить вход от имени',
+    ua: 'Увійти від імені',
+    it: 'Impersonare',
+    pl: 'Podszyj się' 
+  },  
   balance: {
     top_up: {
       us: 'Top up balance',

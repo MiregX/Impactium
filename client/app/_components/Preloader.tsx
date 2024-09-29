@@ -1,7 +1,7 @@
 'use client'
 import s from './styles/Preloader.module.css'
 import { useUser } from '@/context/User.context';
-import { cookiePattern } from '@impactium/pattern';
+import { λCookie } from '@impactium/pattern';
 import {
     useCallback,
     useEffect,
@@ -50,7 +50,7 @@ export function Preloader() {
   }, [self, visitedBefore]);
 
   useEffect(() => {
-    if ((!isUserLoaded && cookie.get(cookiePattern.Authorization)) || blocker) {
+    if ((!isUserLoaded && cookie.get(λCookie.Authorization)) || blocker) {
       show();
     } else {
       hide();

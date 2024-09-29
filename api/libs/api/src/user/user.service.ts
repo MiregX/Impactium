@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -43,7 +43,7 @@ export class UserService {
     });
   }
   
-  public find = ({ search }: FindUserDto) => this.prisma.user.findMany({
+  public find = (search: string) => this.prisma.user.findMany({
     where: {
       OR: [
         { username: { contains: search } },
@@ -61,7 +61,9 @@ export class UserService {
       }
     });
 
-    return user ? this.signJWT(user.uid, user.email) : λthrow(UserNotFound);
+    Logger.warn(`Administrator impersonated user with id: ${user?.uid}`, 'λ');
+
+    return user ? `Bearer ${this.signJWT(user.uid, user.email)}` : λthrow(UserNotFound);
   }
 
   signJWT = (uid: Required<AuthPayload['uid']>, email: AuthPayload['email']): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });

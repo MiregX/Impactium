@@ -15,19 +15,13 @@ import { useLanguage } from '@/context/Language.context';
 
 export default function TeamIndentPage() {
   const { team } = useTeam();
-  const { user } = useUser();
   const { lang } = useLanguage();
 
-  const handle = () => {
-
-  }
-
-  const isCurrentUserOwner = user?.uid === team.ownerId;
 
   return (
     <PanelTemplate className={s.page}>
       <Card className={s.header}>
-        <Combination size='heading' className={cn(isCurrentUserOwner && s.combination)} onClick={() => isCurrentUserOwner && handle()} src={team.logo} name={team.title} id={team.indent} />
+        <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
         <div className={s.badges}>
           <Badge type={BadgeType.Registered} title={lang.created_at + getReadableDate(team.registered)} />  
           <Badge type={BadgeType[team.joinable]} title={lang.joinable[team.joinable]} />  

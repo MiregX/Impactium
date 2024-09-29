@@ -1,6 +1,14 @@
 .page {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.page > div {
+  width: min-content;
+  flex-grow: 1;
+  flex-basis: 40%;
+  min-width: 256px;
+  height: 100%;
 }
 .delete > div {
   display: flex;
@@ -37,4 +45,20 @@
   flex-direction: row;
   gap: 8px;
   align-items: center;
+}
+.input_group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.result_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.result_wrapper .unit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8px;
 }

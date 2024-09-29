@@ -1,22 +1,35 @@
-import { Body, Controller, Get, Post, Query, UseGuards, Patch, UploadedFile, UseInterceptors, Param, Delete, NotFoundException, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+  Patch,
+  UploadedFile,
+  UseInterceptors,
+  Param,
+  Delete,
+  NotFoundException,
+  Put
+} from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { TeamGuard, TeamReadonlyGuard } from './addon/team.guard';
+import { TeamGuard, TeamMemberGuard, TeamReadonlyGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
 import { ApiTags } from '@nestjs/swagger';
-import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 import { λthrow } from '@impactium/utils';
 import { UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
 import { TeamMember } from '@prisma/client';
-import { ConnectGuard } from '../auth/addon/connect.guard';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
+import { OrGuard } from '@nest-lab/or-guard';
 
 @ApiTags('Team')
 @Controller('team')
@@ -30,7 +43,7 @@ export class TeamController {
     @Query('limit') limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
     @Query('skip') skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
   ) {
-      return this.teamService.pagination(limit, skip);
+    return this.teamService.pagination(limit, skip);
   }
 
   @Get(':indent/get')
@@ -95,13 +108,37 @@ export class TeamController {
   }
 
   // Для изгнания участника
-  @Delete(':indent/kick/:memberId')
+  @Delete(':indent/kick/:uid')
   @UseGuards(TeamGuard)
   async kickMember(
     @Team() team: TeamEntity,
-    @Param('memberId') memberId: TeamMember['id']
+    @Param('uid') uid: UserEntity['uid']
   ) {
-    await this.teamService.kickMember(team, memberId);
+    await this.teamService.kickMember(team, uid);
+
+    return this.teamService.findOneByIndent(team.indent);
+  }
+
+  // Для присоединения к команде
+  @Delete(':indent/join')
+  @UseGuards(AuthGuard, TeamReadonlyGuard)
+  async join(
+    @Team() team: TeamEntity,
+    @User() user: UserEntity
+  ) {
+    await this.teamService.joinMember(team, user.uid);
+
+    return this.teamService.findOneByIndent(team.indent);
+  }
+
+  // Для ухода с команды
+  @Delete(':indent/leave')
+  @UseGuards(TeamMemberGuard)
+  async leave(
+    @Team() team: TeamEntity,
+    @User() user: UserEntity
+  ) {
+    await this.teamService.kickMember(team, user.uid);
 
     return this.teamService.findOneByIndent(team.indent);
   }

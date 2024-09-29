@@ -38,7 +38,7 @@ export const cookieSettings = {
   path: '/',
 }
 
-export enum cookiePattern {
+export enum λCookie {
   redirectedToBypass = 'redirectedToBypass',
   Authorization = 'Authorization',
   language = '_language'
@@ -54,5 +54,6 @@ export enum λError {
   team_invite_not_found = 'team_invite_not_found',
   team_invite_used = 'team_invite_used',
   team_invite_expired = 'team_invite_expired',
-  user_not_found = 'user_not_found'
+  user_not_found = 'user_not_found',
+  user_is_already_team_member = 'user_is_already_team_member'
 }

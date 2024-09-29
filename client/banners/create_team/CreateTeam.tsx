@@ -10,7 +10,7 @@ import { LogoInput } from './components/LogoInput';
 import { useApplication } from '@/context/Application.context';
 import { useLanguage } from '@/context/Language.context';
 import { authGuard } from '@/decorator/authGuard';
-import { LoginBanner } from '../login/LoginBanner';
+import { LoginBanner } from '../login/Login.banner';
 import { _server } from '@/decorator/api';
 import { Team } from '@/dto/Team';
 import { Banner } from '@/ui/Banner';

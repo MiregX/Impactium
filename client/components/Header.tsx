@@ -6,7 +6,7 @@ import { Button } from '@/ui/Button';
 import { useUser } from '@/context/User.context';
 import { UserComponent } from './User';
 import { useLanguage } from '@/context/Language.context';
-import { LoginBanner } from '@/banners/login/LoginBanner';
+import { LoginBanner } from '@/banners/login/Login.banner';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { cn } from '@/lib/utils';

@@ -5,7 +5,7 @@ import { Team } from "@/dto/Team";
 import { Tournament } from "@/dto/Tournament";
 import { User } from "@/dto/User";
 import locale, { Template } from "@/public/locale";
-import { cookiePattern } from "@impactium/pattern";
+import { λCookie } from "@impactium/pattern";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
 import { icons } from "lucide-react";
@@ -19,7 +19,7 @@ export function cn(...inputs: ClassValue[]) {
 
 type unresolwedArgument<T> = RequestInit & RequestOptions & { raw?: boolean} | Callback<T> | undefined;
 
-export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgument<T>) {
+export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgument<T>, _path: string) {
   let options: RequestInit & RequestOptions & { raw?: boolean } = {};
   let callback: Callback<T> | undefined;
 
@@ -35,7 +35,12 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
     }
   }
 
-  return { options, callback };
+  return {
+    options,
+    callback,
+    query: options.query ? `?${new URLSearchParams(options.query)}` : '',
+    path: _path.startsWith('/') ? _path : `/${_path}`
+  };
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -59,7 +64,7 @@ export const isUserAdmin = (user: User | null) => user?.uid === 'system';
 export const copy = (value: string) => {
   const cookie = new Cookies();
 
-  const key: keyof Template = cookie.get(cookiePattern.language) || 'us';
+  const key: keyof Template = cookie.get(λCookie.language) || 'us';
 
   navigator.clipboard.writeText(value);
   toast(locale.copied.title[key], {

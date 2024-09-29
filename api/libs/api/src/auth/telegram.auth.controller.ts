@@ -2,7 +2,7 @@ import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@ne
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { TelegramAuthService } from './telegram.auth.service';
-import { cookiePattern, cookieSettings } from '@impactium/pattern';
+import { λCookie, cookieSettings } from '@impactium/pattern';
 import { UUID, createHash, createHmac } from 'crypto';
 import { ConnectGuard } from './addon/connect.guard';
 import { UserEntity } from '@api/main/user/addon/user.entity';
@@ -60,7 +60,7 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
     }, uuid);
 
     response.clearCookie('uuid')
-    response.cookie(cookiePattern.Authorization, authorization, cookieSettings);
+    response.cookie(λCookie.Authorization, authorization, cookieSettings);
     return { url: Configuration.getClientLink() };
   }
 
@@ -75,7 +75,7 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
     const authorization = await this.telegramAuthService.postCallback(uuid, user?.uid);
 
     response.clearCookie('uuid')
-    response.cookie(cookiePattern.Authorization, authorization, cookieSettings);
+    response.cookie(λCookie.Authorization, authorization, cookieSettings);
     return authorization;
   }
 }

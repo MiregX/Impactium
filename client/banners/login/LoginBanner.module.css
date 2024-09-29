@@ -21,10 +21,6 @@
   color: var(--text-white);  
 }
 
-.method > img {
-  filter: brightness(1);
-}
-
 .discord,
 .discord:hover {
   background: #5165f6;

@@ -83,6 +83,11 @@ export class TeamIsFreeToJoin extends HttpException {
     super('team_is_free_to_join', HttpStatus.CONFLICT)
   };
 }
+export class UserIsAlreadyTeamMember extends HttpException {
+  constructor() {
+    super(λError.user_is_already_team_member, HttpStatus.CONFLICT)
+  };
+}
 export class TeamIsCloseToEveryone extends HttpException {
   constructor() {
     super('team_is_close_to_everyone', HttpStatus.CONFLICT)

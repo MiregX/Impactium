@@ -41,6 +41,39 @@ export class TeamGuard implements CanActivate {
 
 
 /**
+ * Для проверки, является ли пользователь сделавший реквест участником команды
+ * 
+ * Если пользователя нет, сначала проверит и добавит в реквест
+ * 
+ * Проверяет по базе данных где team.members.some(member => member.uid === user.uid)
+ * 
+ * Добавляет request.team которое доступно по @Team(): TeamEntity
+*/
+@Injectable()
+export class TeamMemberGuard implements CanActivate {
+  constructor(
+    private teamService: TeamService,
+    private authGuard: AuthGuard,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+
+    if (!request.user) {
+      await this.authGuard.canActivate(context); 
+    }
+
+    const { uid }: UserEntity = request.user
+
+    request.team = await this.teamService.findOneByIndent(request.params.indent);
+
+    if (!request.team?.members.some(member => member.uid === uid)) return false;
+
+    return !!request.team;
+  }
+}
+
+/**
  * Для проверки, существует ли команда по indent
  * 
  * Проходит без юзера

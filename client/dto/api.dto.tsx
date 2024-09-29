@@ -7,6 +7,7 @@ export interface RequestOptions {
   useNumericHost?: boolean;
   toast?: string | boolean;
   setLoading?: SetState<boolean>;
+  query?: Record<string, string> | string | URLSearchParams;
 };
 
 type RawTrueOptions<T> = RequestInit & { raw: true } & RequestOptions;

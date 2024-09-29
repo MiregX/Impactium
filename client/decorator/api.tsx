@@ -14,17 +14,17 @@ export function _server(v?: boolean) {
       : process.env.SYMBOLIC_HOST || 'http://localhost:3001'
 }
 
-const api: Api = async function <T>(path: string, arg2?: any, arg3?: any): Promise<λ<ResponseBase<T>> | T> {
-  const { options, callback } = parseApiOptions<T>(arg2, arg3);
+const api: Api = async function <T>(_path: string, arg2?: any, arg3?: any): Promise<λ<ResponseBase<T>> | T> {
+  const { options, callback, query, path } = parseApiOptions<T>(arg2, arg3, _path);
 
   soft(true, options.setLoading);
 
-  const response = await fetch(`${_server(options?.useNumericHost)}/api${path.startsWith('/') ? path : `/${path}`}`, {
+  const response = await fetch(`${_server(options?.useNumericHost)}/api${path}${query}`, {
     credentials: 'include',
     method: 'GET',
     cache: 'no-cache',
     ...options,
-    headers: options.headers
+    headers: options.headers,
   }).catch(() => undefined);
 
   const res = new λ(!response

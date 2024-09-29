@@ -4,7 +4,7 @@ import { Card } from "@/ui/Card";
 import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
 import { Button } from "@/ui/Button";
-import { LoginBanner } from "@/banners/login/LoginBanner";
+import { LoginBanner } from "@/banners/login/Login.banner";
 import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";

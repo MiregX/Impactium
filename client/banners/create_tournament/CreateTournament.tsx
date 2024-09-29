@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useApplication } from '@/context/Application.context';
 import { useLanguage } from '@/context/Language.context';
 import { authGuard } from '@/decorator/authGuard';
-import { LoginBanner } from '../login/LoginBanner';
+import { LoginBanner } from '../login/Login.banner';
 import Image from 'next/image'
 import { verifiedGuard } from '@/decorator/verifiedGuard';
 import { Icon } from '@/ui/Icon';

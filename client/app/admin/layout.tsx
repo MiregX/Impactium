@@ -1,13 +1,13 @@
 import { Children } from "@/types";
-import { cookiePattern, cookieSettings } from "@impactium/pattern";
+import { λCookie } from "@impactium/pattern";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { headers } from 'next/headers';
+import { redirect, useSearchParams } from "next/navigation";
 
-export default async function AdminLayout({ children }: Children) {
+interface AdminLayoutProps extends Children {}
+
+export default async function AdminLayout({ children }: AdminLayoutProps) {
   const cookie = cookies();
-  const headersList = headers();
-  const token = cookie.get('Authorization')?.value
+  const token = cookie.get(λCookie.Authorization)?.value
 
   const isAdmin = token ? await api<boolean>('/user/admin/is', {
     headers: {
@@ -15,9 +15,7 @@ export default async function AdminLayout({ children }: Children) {
     }
   }) : false;
 
-  const fullUrl = headersList.get('referer') || "";
-
-  if (!isAdmin && fullUrl.endsWith('/admin')) {
+  if (!isAdmin) {
     redirect('/');
   }
 

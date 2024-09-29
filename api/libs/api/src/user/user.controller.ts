@@ -10,7 +10,7 @@ import { ApiResponseConflict } from '@api/main/application/addon/response.confli
 import { DisplayNameIsSame, UsernameIsSame } from '../application/addon/error';
 import { createHash, createHmac } from 'crypto';
 import { Response } from 'express';
-import { cookiePattern, cookieSettings } from '@impactium/pattern';
+import { λCookie, cookieSettings } from '@impactium/pattern';
 import { ApplicationService } from '../application/application.service';
 import { λthrow } from '@impactium/utils';
 import { AdminGuard } from '../auth/addon/admin.guard';
@@ -38,13 +38,12 @@ export class UserController {
     return UserEntity.fromPrisma(userEntity, { teams, logins });
   }
 
-  @Get
-  ('find')
+  @Get('find')
   @UseGuards(AdminGuard)
-  async find(
-    @Body() body: FindUserDto,
+  find(
+    @Query('search') search: string,
   ) {
-    return this.userService.find(body);
+    return this.userService.find(search);
   }
 
   @Get('impersonate/:uid')
@@ -53,9 +52,11 @@ export class UserController {
     @Param('uid') uid: string,
     @Res() response: Response
   ) {
-    const Authorization = `Bearer ${await this.userService.impersonate(uid)}`;
-    response.cookie(cookiePattern.Authorization, Authorization, cookieSettings);
-    return Authorization;
+    const Authorization = await this.userService.impersonate(uid);
+
+    response.clearCookie(λCookie.Authorization, cookieSettings);
+    response.cookie(λCookie.Authorization, Authorization, cookieSettings);
+    response.end();
   }
 
   @Patch('edit')
@@ -90,7 +91,7 @@ export class UserController {
 
     const token = await this.applicationService.createSystemAccount();
 
-    res.cookie(cookiePattern.Authorization, token, cookieSettings)
+    res.cookie(λCookie.Authorization, token, cookieSettings)
 
     return token;
   }

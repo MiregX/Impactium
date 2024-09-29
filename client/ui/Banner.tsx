@@ -23,7 +23,7 @@ interface Options {
   center: boolean
 }
 
-interface BannerProps extends HTMLAttributes<HTMLDivElement> {
+interface BannerProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   children: React.ReactNode;
   footer?: Warner | {

@@ -6,7 +6,7 @@ import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamInviteExpired, TeamInviteNotFound, TeamInviteUsed, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes } from '../application/addon/error';
+import { TeamAlreadyExist, TeamInviteExpired, TeamInviteNotFound, TeamInviteUsed, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes, UserIsAlreadyTeamMember } from '../application/addon/error';
 import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
 import { TeamMemberEntity } from './addon/team.member.entity';
@@ -148,10 +148,25 @@ export class TeamService {
       data: { role }
     })
   }
+
+  async joinMember(team: TeamEntity, uid: UserEntity['uid']) {
+    const isExist = await this.prisma.teamMember.findFirst({
+      where: { uid, indent: team.indent }
+    });
+
+    if (isExist) λthrow(UserIsAlreadyTeamMember);
+
+    return this.prisma.teamMember.create({
+      data: {
+        uid,
+        indent: team.indent
+      }
+    });
+  }
   
-  kickMember(team: TeamEntity, id: TeamMemberEntity['id']) {
-    return this.prisma.teamMember.delete({
-      where: { id, team: { indent: team.indent } }
+  kickMember(team: TeamEntity, uid: UserEntity['uid']) {
+    return this.prisma.teamMember.deleteMany({
+      where: { uid, team: { indent: team.indent } }
     });
   }
 
