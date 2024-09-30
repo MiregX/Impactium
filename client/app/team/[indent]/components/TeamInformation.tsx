@@ -62,7 +62,7 @@ export function TeamInformation() {
       <h3>Основная информация</h3>
       <div className={s.node}>
         <p>Владелец:</p>
-        {team.owner ? <Combination id={team.owner.uid} src={team.owner.avatar} name={team.owner.displayName} /> : <CombinationSkeleton />}
+        {team.owner ? <Combination id={team.owner.username} src={team.owner.avatar} name={team.owner.displayName} /> : <CombinationSkeleton />}
       </div>
       <div className={s.pod}>
         <p>Выиграно турниров: {team.tournaments?.length}</p>

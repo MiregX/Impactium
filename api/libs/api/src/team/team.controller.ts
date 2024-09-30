@@ -11,7 +11,8 @@ import {
   Param,
   Delete,
   NotFoundException,
-  Put
+  Put,
+  ForbiddenException
 } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
@@ -91,17 +92,20 @@ export class TeamController {
     @Body() body: UpdateTeamDto,
     @Team() team: TeamEntity,
     @UploadedFile() logo?: Express.Multer.File,
-  ) {
+) {
     return this.teamService.update(team, body, logo);
   }
 
   // Для изменения роли участника
-  @Put(':indent/set/member-role')
-  @UseGuards(TeamGuard)
+  @Put(':indent/set/role')
+  @UseGuards(TeamMemberGuard)
   async setMemberRole(
     @Body() body: UpdateTeamMemberRoleDto,
-    @Team() team: TeamEntity
+    @Team() team: TeamEntity,
+    @User() user: UserEntity
   ) {
+    if (user.uid !== body.uid && user.uid !== team.ownerId) λthrow(ForbiddenException);
+
     await this.teamService.setMemberRole(team, body);
 
     return this.teamService.findOneByIndent(team.indent);
@@ -120,7 +124,7 @@ export class TeamController {
   }
 
   // Для присоединения к команде
-  @Delete(':indent/join')
+  @Post(':indent/join')
   @UseGuards(AuthGuard, TeamReadonlyGuard)
   async join(
     @Team() team: TeamEntity,

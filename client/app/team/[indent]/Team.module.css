@@ -160,3 +160,12 @@
   text-align: left;
   flex: 1;
 }
+.role {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 10px;
+}
+.role i {
+  flex: 1;
+}

@@ -8,11 +8,12 @@ export interface RequestOptions {
   toast?: string | boolean;
   setLoading?: SetState<boolean>;
   query?: Record<string, string> | string | URLSearchParams;
+  body?: Record<string, any> | RequestInit['body'];
 };
 
-type RawTrueOptions<T> = RequestInit & { raw: true } & RequestOptions;
-type RawFalseOptions<T> = RequestInit & { raw?: false } & RequestOptions;
-type AnyOptions<T> = RequestInit & { raw?: boolean } & RequestOptions;
+type RawTrueOptions<T> = Omit<RequestInit, 'body'> & { raw: true } & RequestOptions;
+type RawFalseOptions<T> = Omit<RequestInit, 'body'> & { raw?: false } & RequestOptions;
+type AnyOptions<T> = Omit<RequestInit, 'body'> & { raw?: boolean } & RequestOptions;
 
 export type Api = {
   /**

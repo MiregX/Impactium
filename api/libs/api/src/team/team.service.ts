@@ -128,21 +128,24 @@ export class TeamService {
     });
   }
 
-  async setMemberRole(team: TeamEntity, { id, role }: UpdateTeamMemberRoleDto) {
-    const isMemberWithExactRoleExist = team.members
-      ? team.members.some(member => member.id !== id && member.role === role)
+  async setMemberRole(team: TeamEntity, { uid, role }: UpdateTeamMemberRoleDto) {
+    const isMemberWithExactRoleExist = !role
+    ? false
+    : team.members
+      ? team.members.some(member => role !== null && member.uid !== uid && member.role === role)
       : await this.prisma.teamMember.findMany({
           where: { team: { indent: team.indent } },
           select: {
-            role: true
+            role: true,
+            uid: true
           }
-        }).then(members => members.some(member => member.role === role));
+        }).then(members => members.some(member => member.uid !== uid && member.role === role));
 
     if (isMemberWithExactRoleExist) λthrow(TeamMemberRoleExistException);
 
-    return await this.prisma.teamMember.update({
+    return await this.prisma.teamMember.updateMany({
       where: {
-        id,
+        uid,
         team: { indent: team.indent }
       },
       data: { role }
@@ -150,11 +153,7 @@ export class TeamService {
   }
 
   async joinMember(team: TeamEntity, uid: UserEntity['uid']) {
-    const isExist = await this.prisma.teamMember.findFirst({
-      where: { uid, indent: team.indent }
-    });
-
-    if (isExist) λthrow(UserIsAlreadyTeamMember);
+    if (team.members!.some(member => member.uid === uid)) λthrow(UserIsAlreadyTeamMember);
 
     return this.prisma.teamMember.create({
       data: {

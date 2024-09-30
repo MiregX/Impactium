@@ -35,6 +35,14 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
     }
   }
 
+  if (typeof options.body === 'object') {
+    options.headers = {
+      ...options.headers,
+      'Content-Type': 'application/json'
+    },
+    options.body = JSON.stringify(options.body);
+  }  
+
   return {
     options,
     callback,

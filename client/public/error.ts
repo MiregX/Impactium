@@ -134,6 +134,13 @@ const error = {
     it: 'Accesso negato',
     pl: 'Kurwa bober'
   },
+  'Forbidden': {
+    us: 'Forbidden resource',
+    ru: 'Отказано в доступе',
+    ua: 'Відмовлено в доступі',
+    it: 'Accesso negato',
+    pl: 'Kurwa bober'
+  },
   [λError.user_not_found]: {
     us: 'User not found',
     ru: 'Пользователь не найден',

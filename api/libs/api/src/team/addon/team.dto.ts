@@ -101,7 +101,7 @@ export class UploadFileDto {
 export class UpdateTeamMemberRoleDto {
   @IsNotEmpty()
   @IsString()
-  id!: TeamMemberEntity['id'];
+  uid!: TeamMemberEntity['uid'];
 
   @IsOptional()
   @IsEnum(Role, {

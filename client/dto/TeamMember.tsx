@@ -8,5 +8,3 @@ export interface TeamMember {
   role: Role | null;
   user: UserEntity
 }
-
-export const TeamMemberSetRoleRequest = (id: TeamMember['id'], role: Role | null) => JSON.stringify({ id, role })

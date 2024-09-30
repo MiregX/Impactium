@@ -1,4 +1,4 @@
-import { Api } from "@/dto/api.dto";
+import { Api, RequestOptions } from "@/dto/api.dto";
 import { λ } from "./λ.class";
 import { ResponseBase } from "@/dto/Response.dto";
 import { Configuration } from "@impactium/config";

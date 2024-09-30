@@ -9,7 +9,7 @@
   padding: 4px;
 }
 .banner {
-  width: min-content;
+  width: min-content !important;
 }
 .banner > div {
   display: flex;
