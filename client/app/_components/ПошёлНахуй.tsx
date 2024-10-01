@@ -25,21 +25,15 @@ export function ПошёлНахуй() {
         return <Tag key={i}>{word}</Tag>
       })}
       <Button asChild className={cn(s.button, s.tournaments)}>
-        <Link href='/tournaments'>
-          <Icon variant='black' name='Trophy' />
-          Турниры
-        </Link>
+        <Link href='/tournaments'>Турниры</Link>
       </Button>
       <Button asChild className={cn(s.button, s.teams)}>
-        <Link href='/teams'>
-          <Icon variant='black' name='Users' />
-          Команды
-        </Link>
+        <Link href='/teams'>Команды</Link>
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img='Medal'>
+      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)}>
         Создать турнир
       </Button>
-      <Button onClick={() => spawnBanner(<ManageTeamBanner />)} className={cn(s.button, s.create_team)} img='DiamondPlus'>
+      <Button onClick={() => spawnBanner(<ManageTeamBanner />)} className={cn(s.button, s.create_team)}>
         Создать команду
       </Button>
     </div>

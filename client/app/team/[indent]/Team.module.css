@@ -81,7 +81,11 @@
   width: 100%;
   display: flex;
   align-items: center;
+  gap: 8px;
   justify-content: space-between;
+}
+.heading h3 {
+  flex: 1;
 }
 .members_for_team {
   height: 100%;

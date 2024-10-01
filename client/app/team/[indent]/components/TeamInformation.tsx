@@ -67,7 +67,6 @@ export function TeamInformation() {
       </div>
       <div className={s.pod}>
         <p>Выиграно турниров: {team.tournaments?.length}</p>
-        <span></span>
       </div>
       <Separator />
       <div className={s.tournaments}>

@@ -5,15 +5,20 @@ interface Options {
   year?: boolean;
 }
 
-const fix = (number: number | false) => number ? number.toString().padStart(2, '0') : null;
+const fix = (number: number | false) => number.toString().padStart(2, '0');
 
 export const getReadableDate = (date: Date | number | string, options: Options = {}): string => {
   const { hour = true, day = true, month = true, year = true } = options;
   date = new Date(date);
-  const array = [
+
+  const dateParts = [
     day ? fix(date.getUTCDate()) : null,
     month ? fix(date.getUTCMonth() + 1) : null,
     year ? date.getUTCFullYear().toString() : null
-  ];
-  return `${fix(date.getUTCHours())}:${fix(date.getUTCMinutes()) || '00'} ` + array.filter(n => n).join('.');
+  ].filter(Boolean).join('.');
+
+  const time = hour ? `${fix(date.getUTCHours())}:${fix(date.getUTCMinutes())}` : '';
+
+  return `${time} ${dateParts}`.trim();
 }
+

@@ -55,4 +55,11 @@ export class UserEntity implements User {
   get username(): string {
     return this._username || this.login.id;
   }
+
+  public static normalize = (user: UserEntity) => ({
+    ...user,
+    avatar: user._avatar,
+    displayName: user._displayName,
+    username: user._username
+  })
 }

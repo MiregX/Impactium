@@ -23,7 +23,7 @@ export default function TeamIndentPage() {
       <Card className={s.header}>
         <Combination size='heading' src={team.logo} name={team.title} id={team.indent} />
         <div className={s.badges}>
-          <Badge type={BadgeType.Registered} title={lang.created_at + getReadableDate(team.registered)} />  
+          <Badge type={BadgeType.Registered} title={lang.created_at + getReadableDate(team.registered)} />
           <Badge type={BadgeType[team.joinable]} title={lang.joinable[team.joinable]} />  
         </div>
       </Card>

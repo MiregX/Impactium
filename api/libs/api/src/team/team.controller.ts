@@ -12,7 +12,8 @@ import {
   Delete,
   NotFoundException,
   Put,
-  ForbiddenException
+  ForbiddenException,
+  BadRequestException
 } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
@@ -30,9 +31,8 @@ import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
 import { Joinable, TeamMember } from '@prisma/client';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
-import { OrGuard } from '@nest-lab/or-guard';
-import { λError } from '@impactium/pattern';
 import { TeamIsCloseToEveryone } from '../application/addon/error';
+import { ConnectGuard } from '../auth/addon/connect.guard';
 
 @ApiTags('Team')
 @Controller('team')
@@ -41,7 +41,7 @@ export class TeamController {
     private readonly teamService: TeamService,
   ) {}
 
-  @Get('get')
+  @Get('list')
   async pagination(
     @Query('limit') limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
     @Query('skip') skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
@@ -56,13 +56,21 @@ export class TeamController {
     return await this.teamService.findOneByIndent(indent) || λthrow(NotFoundException);
   }
 
-  @Get('find/:value')
+  @Get('get')
+  @UseGuards(ConnectGuard)
   find(
-    @Param('value') value: string
+    @Query() query: Record<string, string>,
+    @User() user: UserEntity | null,
   ) {
-    return value.length === 25 && !value.includes(' ')
-      ? this.teamService.findManyByUid(value)
-      : this.teamService.findManyByTitleOrIndent(value);
+    if (query.title || query.indent) {
+      return this.teamService.findManyByTitleOrIndent(query.title || query.indent)
+    } else if (query.uid) {
+      return this.teamService.findManyByUid(query.uid)
+    } else if (user) {
+      return this.teamService.findManyByUid(user.uid)
+    }
+
+    λthrow(BadRequestException);
   }
   
   // Для удаления команды

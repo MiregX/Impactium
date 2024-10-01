@@ -17,6 +17,7 @@ import { useApplication } from "@/context/Application.context";
 import { Separator } from "@/ui/Separator";
 import { Team } from "@/dto/Team.dto";
 import { ManageTeamBanner } from "@/banners/manage_team/ManageTeam.banner";
+import { UserCombination } from "@/components/UserCombination";
 
 export function MembersForTeam() {
   const { user } = useUser();
@@ -43,16 +44,11 @@ export function MembersForTeam() {
 
   const spawnEditTeamBanner = () => spawnBanner(<ManageTeamBanner team={team} setTeam={setTeam} />)
 
-  const EditTeamButton = <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>;
-
   const LeaveTeamButton = <Button variant='secondary' onClick={leave} img='LogOut'>Leave team</Button>
 
   const JoinTeamButton = <Button variant='secondary' onClick={join} img='UserPlus'>Join team</Button>
 
   const AccentButton = () => {
-    if (isUserAreTeamOwner(user, team))
-      return EditTeamButton;
-
     if (isUserAreTeamMember(user, team))
       return LeaveTeamButton;
 
@@ -70,12 +66,13 @@ export function MembersForTeam() {
     <div className={s.members_wrapper}>
       <div className={s.heading}>
         <h3>{lang.team.members}<span>{(team.members?.length || 0)} / 7 участников</span></h3>
+        {isUserAreTeamOwner(user, team) && <Button variant='secondary' onClick={spawnEditTeamBanner} img='PenLine'>Edit team</Button>}
         <AccentButton />
       </div>
       <Card className={s.members_for_team}>
         {team.members && team.members.sort((a, b) => SortRoles(a.role, b.role)).map((member, index) => (
           <div key={member.id} className={s.role_unit}>
-            <Combination src={member.user.avatar} name={member.user.displayName} id={member.user.username} />
+            <UserCombination user={member.user} />
             {(isUserAreTeamOwner(user, team) || user?.uid === member.uid) ? <Select open={isSelectOpenArray[index]} onOpenChange={(isOpen) => handleSelectOpenChange(index, isOpen)} value={member.role || undefined} defaultValue={member.role || undefined}>
               <SelectTrigger className={s.trigger}>
                 <Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? capitalize(member.role) : 'Нет роли'}</i>

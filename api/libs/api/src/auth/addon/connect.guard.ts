@@ -9,7 +9,8 @@ export class ConnectGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = request.cookies.Authorization || request.headers.token
 
-    request.user = token ? await this.authService.login(token) : null;
+    request.user = token ? await this.authService.login(token) : undefined;
+
     return true;
   }
 }

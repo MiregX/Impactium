@@ -45,6 +45,11 @@ export class TeamService {
           connect: {
             uid,
           }
+        },
+        members: {
+          create: {
+            uid
+          }
         }
       }
     });

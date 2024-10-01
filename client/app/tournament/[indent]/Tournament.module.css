@@ -205,6 +205,16 @@
   flex-direction: row;
   gap: 8px;
 }
-.participate button {
+.participate > button {
   flex: 1;
+}
+.participate .group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.participate .choose {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
