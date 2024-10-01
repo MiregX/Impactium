@@ -1,6 +1,5 @@
 'use client'
-
-import CreateTeam from '@/banners/create_team/CreateTeam'
+import { ManageTeamBanner } from '@/banners/manage_team/ManageTeam.banner'
 import { useApplication } from '@/context/Application.context'
 import { useUser } from '@/context/User.context'
 import { Banner, WarnerTypes } from '@/ui/Banner'
@@ -41,7 +40,7 @@ export function ParticapateTournament() {
         </React.Fragment>
       ) : <p>Вы не состоите ни в одной команде</p>}
       <Button>Найти команду</Button>
-      <Button onClick={() => spawnBanner(<CreateTeam />)}>Создать команду</Button>
+      <Button onClick={() => spawnBanner(<ManageTeamBanner />)}>Создать команду</Button>
     </Banner>
   )
 }

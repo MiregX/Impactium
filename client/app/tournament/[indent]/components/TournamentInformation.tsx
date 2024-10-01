@@ -6,7 +6,7 @@ import s from '../Tournament.module.css';
 import { Separator } from '@/ui/Separator';
 import Countdown from 'react-countdown';
 import { Button } from '@/ui/Button';
-import { LoginBanner } from '@/banners/login/LoginBanner';
+import { LoginBanner } from '@/banners/login/Login.banner';
 import { ParticapateTournament } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';

@@ -1,40 +1,39 @@
 'use client'
-import { Joinable, JoinableIcons } from "@/dto/Joinable.dto";
-import { Team } from "@/dto/Team";
-import { Banner } from "@/ui/Banner";
-import { Icon } from "@/ui/Icon";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/ui/Select";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import s from './EditTeamBanner.module.css';
-import { Separator } from "@/ui/Separator";
-import { Button } from "@/ui/Button";
-import { EditTeamRequest } from "@/dto/EditTeamBody.request";
-import { Input } from "@/ui/Input";
-import { Combination } from "@/ui/Combitation";
-import { DisplayName, Identifier } from "@impactium/pattern";
-import { useLanguage } from "@/context/Language.context";
-import { toast } from "sonner";
-import { SetState } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useApplication } from "@/context/Application.context";
+import { Joinable, JoinableIcons } from '@/dto/Joinable.dto';
+import { ManageTeamRequest, Team } from '@/dto/Team.dto';
+import { Banner } from '@/ui/Banner';
+import { Icon } from '@/ui/Icon';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
+import { ChangeEvent, useEffect, useState } from 'react';
+import s from './ManageTeamBanner.module.css';
+import { Separator } from '@/ui/Separator';
+import { Button } from '@/ui/Button';
+import { Input } from '@/ui/Input';
+import { Combination } from '@/ui/Combitation';
+import { DisplayName, Identifier } from '@impactium/pattern';
+import { useLanguage } from '@/context/Language.context';
+import { toast } from 'sonner';
+import { SetState } from '@/lib/utils';
+import { useApplication } from '@/context/Application.context';
 
-interface EditTeamBannerProps {
-  team: Team;
-  setTeam: SetState<Team>
+interface ManageTeamBannerProps {
+  team?: Team;
+  setTeam?: SetState<Team>
 }
 
-export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
+export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
+  const isCreate = !team;
   const { destroyBanner } = useApplication();
   const { lang } = useLanguage();
   const [loading, setLoading] = useState<boolean>(false);
-  const [indent, setIndent] = useState<Team['indent']>(team.indent);
+  const [indent, setIndent] = useState<Team['indent']>(isCreate ? '' : team.indent);
   const [indentValid, setIndentValid] = useState<boolean>(true);
   
-  const [title, setTitle] = useState<Team['title']>(team.title);
+  const [title, setTitle] = useState<Team['title']>(isCreate ? '' : team.title);
   const [titleValid, setTitleValid] = useState<boolean>(true);
 
-  const [joinable, setJoinable] = useState<Team['joinable']>(team.joinable);
-  const [logo, setLogo] = useState<Team['logo']>(team.logo);
+  const [joinable, setJoinable] = useState<Team['joinable']>(isCreate ? Joinable.Invites : team.joinable);
+  const [logo, setLogo] = useState<Team['logo']>(isCreate ? '' : team.logo);
   const [rawLogo, setRawLogo] = useState<File | undefined>();
 
   const save = () => {
@@ -52,9 +51,17 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
 
     if (error) return;
 
-    api<Team>(`/team/${team.indent}/edit`, {
-      method: 'PATCH',
-      body: EditTeamRequest.create({
+    const path = isCreate
+      ? `/team/${indent}/create`
+      : `/team/${team.indent}/edit`
+
+    const method = isCreate
+      ? 'POST'
+      : 'PATCH'
+
+    api<Team>(path, {
+      method,
+      body: ManageTeamRequest.create({
         indent,
         title,
         joinable,
@@ -63,6 +70,8 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
       toast: true,
       setLoading
     }, setTeam).then(team => {
+      if (!team) return;
+
       typeof window !== 'undefined' && window.history.pushState(null, '', `/team/@${team.indent}`); 
       destroyBanner();
     });
@@ -97,7 +106,7 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
   }, [rawLogo]);
 
   return (
-    <Banner title='Edit team'>
+    <Banner title={isCreate ? 'Create team' : 'Edit team'}>
       <div className={s.preview}>
         <Combination size='heading' id={indent || 'example_id'} src={logo} name={title || 'Example Title'} />
       </div>
@@ -116,7 +125,7 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
       </div>
       <div className={s.node}>
         <p>Тип присоединения к команде</p>
-        <Select onValueChange={(joinable) => setJoinable(joinable as Joinable)}>
+        <Select onValueChange={(joinable) => setJoinable(joinable as Joinable)} value={joinable}>
           <SelectTrigger className={s.joinable} value={joinable}><Icon name={JoinableIcons[joinable]} />{lang.joinable[joinable]}</SelectTrigger>
           <SelectContent>
             {Object.values(Joinable).map(value => (
@@ -130,7 +139,7 @@ export function EditTeamBanner({ team, setTeam }: EditTeamBannerProps) {
       <Separator />
       <div className={s.node}>
         <span>Обязательные поля помечены звёздочкой</span>
-        <Button loading={loading} onClick={save} img='Save'>Сохранить</Button>
+        <Button loading={loading} onClick={save} img='Bookmark'>Сохранить</Button>
       </div>
     </Banner>
   )

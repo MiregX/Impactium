@@ -142,7 +142,7 @@ export function Grid() {
               <SelectGroup>
                 <SelectLabel>Режим отображения</SelectLabel>
                 {Object.values(AlignSettings).map(v => (
-                  <SelectItem value={AlignSettings[v]} className={s.item}>{lang.display_options[v]}</SelectItem>
+                  <SelectItem key={v} value={AlignSettings[v]} className={s.item}>{lang.display_options[v]}</SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>

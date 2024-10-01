@@ -1,5 +1,5 @@
 import { Grid } from "./Grid.dto";
-import { Team } from "./Team";
+import { Team } from "./Team.dto";
 
 export interface Battle {
   id: string;

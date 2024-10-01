@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
 import { Skeleton } from '@/ui/Skeleton';
 import { useState, useEffect } from 'react';
-import { Team } from '@/dto/Team';
+import { Team } from '@/dto/Team.dto';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 
 export function DeleteTeams() {

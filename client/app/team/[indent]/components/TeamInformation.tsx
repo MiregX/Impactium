@@ -5,22 +5,23 @@ import { useTeam } from '../team.context';
 import { Separator } from '@/ui/Separator';
 import { Button } from '@/ui/Button';
 import { useUser } from '@/context/User.context';
-import { useEffect, useMemo, useState } from 'react';
-import { isUserAreTeamOwner, isUserAdmin, isUserAreTeamMember, isUserCanJoinTeam } from '@/lib/utils';
+import { useMemo, useState } from 'react';
+import { isUserAreTeamOwner, isUserAreTeamMember, isUserCanJoinTeam } from '@/lib/utils';
 import { useApplication } from '@/context/Application.context';
 import { Joinable } from '@/dto/Joinable.dto';
 import { TeamInvitesBanner } from '@/banners/qrcode/TeamInvites.banner';
 import { TeamInviteBanner } from '@/banners/qrcode/TeamInvite.banner';
 import { TeamInvite } from '@/dto/TeamInvite.dto';
+import { UserCombination } from '@/components/UserCombination';
 
 export function TeamInformation() {
-  const { spawnBanner, application } = useApplication();
+  const { spawnBanner } = useApplication();
   const { user } = useUser();
-  const { team, setTeam } = useTeam();
+  const { team, setTeam, leave, join } = useTeam();
   const [loading, setLoading] = useState<boolean>(false);
 
   const requestQRCode = useMemo(() => async () => {
-    if (!isUserAreTeamOwner(user, team) && !isUserAdmin(user)) return;
+    if (!isUserAreTeamOwner(user, team)) return;
 
     if (team.joinable === Joinable.Invites) {
       if (!team.invites) {
@@ -42,12 +43,12 @@ export function TeamInformation() {
     ? null
     : <Button onClick={requestQRCode} loading={loading} img='QrCode'>Invite member</Button>;
 
-  const LeaveTeamButton = () => <Button img='LogOut'>Leave team</Button>;
+  const LeaveTeamButton = () => <Button onClick={leave} img='LogOut'>Leave team</Button>;
 
-  const JoinTeamButton = () => <Button img='UserPlus'>Join team</Button>;
+  const JoinTeamButton = () => <Button onClick={join} img='UserPlus'>Join team</Button>;
 
   const AccentButton = () => {
-    if (isUserAreTeamOwner(user, team) || isUserAdmin(user))
+    if (isUserAreTeamOwner(user, team))
       return <InviteMemberButton />;
 
     if (isUserAreTeamMember(user, team))
@@ -62,7 +63,7 @@ export function TeamInformation() {
       <h3>Основная информация</h3>
       <div className={s.node}>
         <p>Владелец:</p>
-        {team.owner ? <Combination id={team.owner.username} src={team.owner.avatar} name={team.owner.displayName} /> : <CombinationSkeleton />}
+        <UserCombination user={team.owner} />
       </div>
       <div className={s.pod}>
         <p>Выиграно турниров: {team.tournaments?.length}</p>

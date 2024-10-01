@@ -2,16 +2,15 @@
 import { Input } from '@/ui/Input'
 import s from './styles/SearchBar.module.css'
 import { useLanguage } from '@/context/Language.context'
-import { useState } from 'react';
 import { Button } from '@/ui/Button';
 import { useApplication } from '@/context/Application.context';
-import CreateTeam from '@/banners/create_team/CreateTeam'
 import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
 import { Tournament } from '@/dto/Tournament';
-import { Team } from '@/dto/Team';
+import { Team } from '@/dto/Team.dto';
 import { useApperand } from '@/decorator/useAperand';
 import { cn } from '@/lib/utils';
 import { TeamOrTournament } from '@/dto/TeamOrTournament.type';
+import { ManageTeamBanner } from '@/banners/manage_team/ManageTeam.banner';
 
 interface SearchBarProps {
   search: string,
@@ -71,7 +70,7 @@ export function SearchBar({ search, setSearch, setState, state, apiPath, loading
         onChange={handleSearchChange}
         loading={loading}
       />
-      <Button onClick={() => spawnBanner(apiPath === 'team' ? <CreateTeam /> : <CreateTournament />)}>{lang.create[apiPath]}</Button>
+      <Button onClick={() => spawnBanner(apiPath === 'team' ? <ManageTeamBanner /> : <CreateTournament />)}>{lang.create[apiPath]}</Button>
     </div>
   )
 }

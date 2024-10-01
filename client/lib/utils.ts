@@ -1,7 +1,8 @@
 import { λ } from "@/decorator/λ.class";
 import { RequestOptions } from "@/dto/api.dto"
+import { Joinable } from "@/dto/Joinable.dto";
 import { ResponseBase } from "@/dto/Response.dto";
-import { Team } from "@/dto/Team";
+import { Team } from "@/dto/Team.dto";
 import { Tournament } from "@/dto/Tournament";
 import { User } from "@/dto/User";
 import locale, { Template } from "@/public/locale";
@@ -35,7 +36,7 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
     }
   }
 
-  if (typeof options.body === 'object') {
+  if (typeof options.body === 'object' && !(options.body instanceof FormData)) {
     options.headers = {
       ...options.headers,
       'Content-Type': 'application/json'
@@ -65,7 +66,7 @@ export const isUserAreTeamOwner = (user: User | null, team: Team) => user?.uid =
 
 export const isUserAreTeamMember = (user: User | null, team: Team) => team.members?.some(member => user?.uid === member.uid);
 
-export const isUserCanJoinTeam = (team: Team) => team.members && team.members.length <= 7
+export const isUserCanJoinTeam = (team: Team) => team.joinable === Joinable.Free
 
 export const isUserAdmin = (user: User | null) => user?.uid === 'system';
 

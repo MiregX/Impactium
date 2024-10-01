@@ -90,7 +90,7 @@ export class UserIsAlreadyTeamMember extends HttpException {
 }
 export class TeamIsCloseToEveryone extends HttpException {
   constructor() {
-    super('team_is_close_to_everyone', HttpStatus.CONFLICT)
+    super(λError.team_is_close_to_everyone, HttpStatus.CONFLICT)
   };
 }
 export class TeamInviteNotFound extends HttpException {

@@ -1,7 +1,7 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { User, UserAddons, UserEntity } from "@/dto/User";
+import { User, UserEntity } from "@/dto/User";
 import { Children } from "@/types";
 import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
 import { λCookie } from "@impactium/pattern";
@@ -9,8 +9,8 @@ import { λCookie } from "@impactium/pattern";
 const UserContext = createContext<UserContext | undefined>(undefined);
 
 interface UserContext {
-  user: UserEntity<UserAddons> | null,
-  setUser: React.Dispatch<React.SetStateAction<UserEntity<UserAddons> | null>>,
+  user: UserEntity | null,
+  setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>,
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => Promise<void>,
@@ -21,10 +21,10 @@ interface UserContext {
 
 export const useUser = () => useContext(UserContext)!;
 
-export function UserProvider({ children, prefetched }: Children & { prefetched: User<UserAddons> | null }) {
+export function UserProvider({ children, prefetched }: Children & { prefetched: User | null }) {
   const cookie = new Cookies();
   const [isUserFetched, setIsUserFetched] = useState(!!prefetched);
-  const [user, setUser] = useState<UserEntity<UserAddons> | null>(prefetched ? new UserEntity<UserAddons>(prefetched) : null);
+  const [user, setUser] = useState<UserEntity | null>(prefetched ? new UserEntity(prefetched) : null);
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(!!prefetched);
 
   useEffect(() => {

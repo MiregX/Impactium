@@ -1,6 +1,6 @@
 import { TeamUnit } from "@/components/TeamUnit";
 import { Tournament } from "@/dto/Tournament";
-import { Team } from "@/dto/Team";
+import { Team } from "@/dto/Team.dto";
 import { TournamentUnit } from "@/components/TournamentUnit";
 import { TeamOrTournament } from "@/dto/TeamOrTournament.type";
 import { NotFound } from "@/components/NotFound";

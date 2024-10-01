@@ -4,7 +4,7 @@ import { useApplication } from '@/context/Application.context';
 import s from './styles/Description.module.css'
 import { useUser } from "@/context/User.context";
 import { Tournament } from '@/dto/Tournament';
-import { Team } from '@/dto/Team';
+import { Team } from '@/dto/Team.dto';
 import { EditDescription } from '@/banners/edit_team_description/EditDescription';
 import { Icon } from '@/ui/Icon';
 

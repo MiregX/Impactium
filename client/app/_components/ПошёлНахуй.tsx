@@ -4,11 +4,9 @@ import s from './styles/ПошёлНахуй.module.css';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
-import { useApplication } from '@/context/Application.context';
-import CreateTeam from '@/banners/create_team/CreateTeam';
-import Image from 'next/image';
-import { Medal, Users } from 'lucide-react';
+import { useApplication } from '@/context/Application.context';;
 import { Icon } from '@/ui/Icon';
+import { ManageTeamBanner } from '@/banners/manage_team/ManageTeam.banner';
 
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
@@ -41,7 +39,7 @@ export function ПошёлНахуй() {
       <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)} img='Medal'>
         Создать турнир
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTeam />)} className={cn(s.button, s.create_team)} img='DiamondPlus'>
+      <Button onClick={() => spawnBanner(<ManageTeamBanner />)} className={cn(s.button, s.create_team)} img='DiamondPlus'>
         Создать команду
       </Button>
     </div>

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 8px;
   overflow: hidden;
-  width: min-content;
+  width: min-content !important;
 }
 
 .method {
@@ -16,24 +16,24 @@
   flex-direction: row;
   font-weight: 500;
   align-items: center;
+  color: var(--text-white) !important;
   justify-content: flex-start;
   cursor: pointer;
-  color: var(--text-white);  
 }
 
 .discord,
 .discord:hover {
-  background: #5165f6;
+  background: #5165f6 !important;
 }
 
 .steam,
 .steam:hover {
-  background: #18305e;
+  background: #18305e !important;
 }
 
 .telegram,
 .telegram:hover {
-  background: linear-gradient(#2AABEE 0%, #229ED9 75%);
+  background: linear-gradient(#2AABEE 0%, #229ED9 75%) !important;
 }
 
 .disabled {

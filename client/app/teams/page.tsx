@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/Language.context';
 import { TeamUnit, TeamUnitSkeleton } from '../../components/TeamUnit';
 import s from './Teams.module.css';
 import { Panel } from '@/ui/Panel';
-import { Team } from '@/dto/Team';
+import { Team } from '@/dto/Team.dto';
 import { useUser } from '@/context/User.context';
 import React from 'react';
 import { useTeams } from './context';

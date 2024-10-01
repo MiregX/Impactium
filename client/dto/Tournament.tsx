@@ -1,6 +1,6 @@
 import { convertISOstringToValue } from "@/lib/utils";
 import { Grid } from "./Grid.dto";
-import { Team } from "./Team";
+import { Team } from "./Team.dto";
 import { User } from "./User";
 
 export interface Tournament {

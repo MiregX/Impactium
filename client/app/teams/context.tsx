@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, createContext, useContext } from "react";
-import { Team } from "@/dto/Team";
+import { Team } from "@/dto/Team.dto";
 import { Children } from "@/types";
 
 const TeamsContext = createContext<TeamsContext | undefined>(undefined);

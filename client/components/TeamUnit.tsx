@@ -1,5 +1,5 @@
 import s from './styles/_.module.css'
-import { Team } from '@/dto/Team'
+import { Team } from '@/dto/Team.dto'
 import { Card } from '@/ui/Card'
 import { Button } from '@/ui/Button'
 import Link from 'next/link'

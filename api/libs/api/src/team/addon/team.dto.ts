@@ -20,12 +20,13 @@ export class CreateTeamDto {
   })
   title!: TeamEntity['title'];
 
-  banner?: any;
-
   @IsEnum(Joinable, {
     message: λError.invalid_joinable_field
   })
   joinable!: Joinable;
+
+
+  logo?: TeamEntity['logo'];
 }
 
 export class Checkout {

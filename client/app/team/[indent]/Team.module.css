@@ -139,6 +139,8 @@
   top: 50%;
   transform: translateY(-50%);
   align-self: center;
+  text-align: center;
+  line-height: 24px;
   color: var(--text-dimmed);
 }
 .information .group {

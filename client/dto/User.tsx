@@ -1,7 +1,7 @@
 import { Login } from "./Login";
-import { Team } from "./Team";
+import { Team } from "./Team.dto";
 
-export type User<T = {}> = {
+export type User = {
   uid: string,
   register: string,
   email?: string,
@@ -11,22 +11,14 @@ export type User<T = {}> = {
   balance: number,
   login: Login
   teams?: Team[],
+  logins?: Login[],
   verified: boolean
-} & T;
-
-export interface Logins {
-  logins: Login[]
 };
 
-export type UserAddons = {
-  [key: string]: any;
-} | Logins;
-
-export class UserEntity<T extends UserAddons = {}> implements User {
+export class UserEntity implements User {
   uid: string;
   register: string;
   email?: string;
-  username: string;
   balance: number;
   login: Login;
   teams?: Team[] | undefined;
@@ -35,16 +27,18 @@ export class UserEntity<T extends UserAddons = {}> implements User {
   // privates
   private _avatar: string | null;
   private _displayName: string;
+  private _username: string;
+  
 
-  constructor(user: User<T>) {
+  constructor(user: User) {
     this.uid = user.uid;
     this.register = user.register;
     this.email = user.email;
-    this.username = user.username;
+    this._username = user.username;
     this._displayName = user.displayName;
     this._avatar = user.avatar;
     this.balance = user.balance;
-    this.login = user.login;
+    this.login = user.login || (user.logins ? user.logins[0] : null);
     this.logins = user.logins;
     this.teams = user.teams;
     this.verified = user.verified;
@@ -56,5 +50,9 @@ export class UserEntity<T extends UserAddons = {}> implements User {
 
   get displayName(): string {
     return this._displayName || this.login?.displayName;
+  }
+
+  get username(): string {
+    return this._username || this.login.id;
   }
 }

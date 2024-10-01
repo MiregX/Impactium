@@ -9,7 +9,7 @@ import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
-import { User, UserAddons, UserEntity } from "@/dto/User";
+import { User, UserEntity } from "@/dto/User";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/ui/Icon";
 
@@ -26,7 +26,7 @@ export function Connections() {
     useEffect(() => {
       (async () => {
         if (!fetched) {
-          await api<User<UserAddons>>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)));
+          await api<User>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)));
           setFetched(true);
         }
       })();

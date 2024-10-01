@@ -28,9 +28,11 @@ import { λthrow } from '@impactium/utils';
 import { UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
-import { TeamMember } from '@prisma/client';
+import { Joinable, TeamMember } from '@prisma/client';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
 import { OrGuard } from '@nest-lab/or-guard';
+import { λError } from '@impactium/pattern';
+import { TeamIsCloseToEveryone } from '../application/addon/error';
 
 @ApiTags('Team')
 @Controller('team')
@@ -76,12 +78,14 @@ export class TeamController {
   // Для создания команды
   @Post(':indent/create')
   @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('logo', UploadFileDto.getConfig() as unknown as any))
   create(
     @Body() team: CreateTeamDto,
     @User() { uid }: UserEntity,
-    @Param('indent', IndentValidationPipe) indent: string
+    @Param('indent', IndentValidationPipe) indent: string,
+    @UploadedFile() logo?: Express.Multer.File,
   ) {
-    return this.teamService.create({ uid, indent }, team);
+    return this.teamService.create({ uid, indent }, team, logo);
   }
 
   // Для редактирования команды
@@ -130,6 +134,8 @@ export class TeamController {
     @Team() team: TeamEntity,
     @User() user: UserEntity
   ) {
+    if (team.joinable !== Joinable.Free) λthrow(TeamIsCloseToEveryone);
+
     await this.teamService.joinMember(team, user.uid);
 
     return this.teamService.findOneByIndent(team.indent);

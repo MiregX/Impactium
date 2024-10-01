@@ -1,6 +1,6 @@
 'use client'
 import { useApplication } from "@/context/Application.context";
-import { Team } from "@/dto/Team";
+import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
 import { cn, SetState } from "@/lib/utils";
 import { Banner } from "@/ui/Banner";

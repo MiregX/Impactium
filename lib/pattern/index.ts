@@ -54,6 +54,7 @@ export enum λError {
   team_invite_not_found = 'team_invite_not_found',
   team_invite_used = 'team_invite_used',
   team_invite_expired = 'team_invite_expired',
+  team_is_close_to_everyone = 'team_is_close_to_everyone',
   user_not_found = 'user_not_found',
   user_is_already_team_member = 'user_is_already_team_member'
 }

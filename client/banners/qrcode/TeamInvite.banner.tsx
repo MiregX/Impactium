@@ -7,11 +7,11 @@ import { SetState, λcopy } from "@/lib/utils";
 import { useLanguage } from "@/context/Language.context";
 import React, { useState } from "react";
 import { useApplication } from "@/context/Application.context";
-import { EditTeamBanner } from "../edit_team/EditTeam.banner"
-import { Team } from "@/dto/Team";
+import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
 import Countdown from "react-countdown";
 import { TeamInvitesBanner } from "./TeamInvites.banner";
+import { ManageTeamBanner } from "../manage_team/ManageTeam.banner";
 
 interface TeamInviteBannerProps {
   team: Team;
@@ -26,7 +26,7 @@ export function TeamInviteBanner({ team, setTeam, invite }: TeamInviteBannerProp
 
   const url = `${process.env.NODE_ENV === 'production' ? application.localhost[2] : 'http://localhost:3000'}/team/@${team.indent}/join${invite?.id ? `/${invite.id}` : ''}`;
 
-  const spawnEditTeamBanner = () => spawnBanner(<EditTeamBanner team={team} setTeam={setTeam} />);
+  const spawnEditTeamBanner = () => spawnBanner(<ManageTeamBanner team={team} setTeam={setTeam} />);
 
   const deleteInvite = () => {
     api<TeamInvite[]>(`/team/${team.indent}/invite/delete/${invite!.id}`, {

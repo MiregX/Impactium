@@ -1,4 +1,4 @@
-import { Team } from "./Team";
+import { Team } from "./Team.dto";
 
 export interface TeamInvite {
   id: string;
