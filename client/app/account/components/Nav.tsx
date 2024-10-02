@@ -3,11 +3,12 @@ import { useLanguage } from "@/context/Language.context";
 import Link from "next/link";
 import s from '../Account.module.css';
 import { useEffect, useState } from "react";
+import { Locale } from "@/public/locale";
 
 export function Nav() {
   const { lang } = useLanguage();
   const [activeSection, setActiveSection] = useState('');
-  const sections = ['avatar', 'balance', 'displayName', 'username', 'email', 'connections'];
+  const sections: (keyof Locale['account'])[] = ['avatar', 'balance', 'displayName', 'username', 'email', 'connections'];
 
   useEffect(() => {
     const yOffset = -192;

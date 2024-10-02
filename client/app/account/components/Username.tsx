@@ -8,7 +8,6 @@ import { InputMin } from "@/ui/InputMin";
 import { Identifier } from '@impactium/pattern'
 import { useState } from "react";
 import { User } from "@/dto/User";
-import { UpdateUserRequest } from "@/dto/UpdateUser.request";
 
 export function Username() {
   const { lang } = useLanguage();
@@ -19,7 +18,7 @@ export function Username() {
   const send = async () => api<User>(`/user/edit`, {
     method: 'PATCH',
     toast: 'user_updated_successfully',
-    body: UpdateUserRequest.create({ username }),
+    body: { username },
     setLoading
   }, assignUser);
 

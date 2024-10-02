@@ -12,8 +12,10 @@ import { Separator } from '@/ui/Separator'
 import { useEffect, useState } from 'react'
 import s from '../Tournament.module.css';
 import Link from 'next/link'
+import { Tournament } from '@/dto/Tournament'
+import { TournamentContext, useTournament } from '../context'
 
-export function ParticapateTournamentBanner() {
+export function ParticapateTournamentBanner({ tournament, assignTournament }: Pick<TournamentContext, 'tournament' | 'assignTournament'>) {
   const { spawnBanner } = useApplication();
   const { user, setUser } = useUser();
   const [team, setTeam] = useState<Team | null>(null);
@@ -27,6 +29,14 @@ export function ParticapateTournamentBanner() {
       setTeam(teams[0] || null);
     });
   }, []);
+
+  const join = () => {
+    if (!team) return;
+
+    api<Tournament>(`/tournament/${tournament.code}/join/${team!.indent}`, {
+      method: 'POST'
+    }, assignTournament)
+  }
 
   return (
     <Banner title='Учавствовать в турнире' className={s.participate}>
@@ -54,7 +64,7 @@ export function ParticapateTournamentBanner() {
             Найти команду
           </Link>
         </Button>
-        <Button img='Check' variant={team ? 'default' : 'disabled'}>Учавствовать</Button>
+        <Button onClick={join} img='Check' variant={team ? 'default' : 'disabled'}>Учавствовать</Button>
       </div>
     </Banner>
   )

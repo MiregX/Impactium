@@ -76,7 +76,8 @@ export class TournamentService implements OnModuleInit {
             indent: team.indent
           }
         }
-      }
+      },
+      select: TournamentEntity.select({ teams: true })
     })
   }
 

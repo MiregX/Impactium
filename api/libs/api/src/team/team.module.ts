@@ -6,6 +6,7 @@ import { TeamController } from './team.controller';
 import { TeamService } from './team.service';
 import { Module } from '@nestjs/common';
 import { TeamInviteController } from './invite.controller';
+import { TeamExistanseGuard } from './addon/team.guard';
 
 @Module({
   imports: [
@@ -19,10 +20,12 @@ import { TeamInviteController } from './invite.controller';
     TeamInviteController
   ],
   providers: [
-    TeamService
+    TeamService,
+    TeamExistanseGuard
   ],
   exports: [
-    TeamService
+    TeamService,
+    TeamExistanseGuard
   ]
 })
 export class TeamModule {}

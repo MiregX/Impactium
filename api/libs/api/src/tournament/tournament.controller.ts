@@ -48,7 +48,7 @@ export class TournamentController {
   join(
     @Team() team: TeamEntity,
     @Tournament() tournament: TournamentEntity
-  ): Promise<TournamentEntity> {
+  ) {
     return this.tournamentService.join(tournament, team);
   }
 

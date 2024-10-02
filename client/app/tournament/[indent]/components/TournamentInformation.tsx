@@ -1,7 +1,7 @@
 'use client'
 import { Card } from '@/ui/Card';
 import { useTournament } from '../context';
-import { Combination, CombinationSkeleton } from '@/ui/Combitation';
+import { Combination } from '@/ui/Combitation';
 import s from '../Tournament.module.css';
 import { Separator } from '@/ui/Separator';
 import Countdown from 'react-countdown';
@@ -14,7 +14,7 @@ import { TournamentRules } from './TournamentRules.banner';
 import { getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
 
 export function TournamentInformation({}) {
-  const { tournament } = useTournament();
+  const { tournament, assignTournament } = useTournament();
   const { spawnBanner } = useApplication();
   const { user } = useUser();
 
@@ -55,7 +55,7 @@ export function TournamentInformation({}) {
       </div>
       <Separator />
       <div className={s.participate}>
-        <Button onClick={() => spawnBanner(user ? <ParticapateTournamentBanner /> : <LoginBanner />)}>Учавствовать</Button>
+        <Button onClick={() => spawnBanner(user ? <ParticapateTournamentBanner tournament={tournament} assignTournament={assignTournament} /> : <LoginBanner />)}>Учавствовать</Button>
         <Button variant='ghost' onClick={() => spawnBanner(<TournamentRules tournament={tournament} />)}>Регламент турнира</Button>
       </div>
     </Card>

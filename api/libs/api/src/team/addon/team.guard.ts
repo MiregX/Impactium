@@ -2,9 +2,28 @@ import { Injectable, CanActivate, ExecutionContext, NotFoundException } from '@n
 import { TeamService } from '../team.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
-import { AdminGuard } from '@api/main/auth/addon/admin.guard';
-import { λthrow } from '@impactium/utils';
 import { TeamEntity } from './team.entity';
+
+/**
+ * Для проверки, существует ли команда по indent
+ * 
+ * Проходит без юзера
+*/
+@Injectable()
+export class TeamExistanseGuard implements CanActivate {
+  constructor(
+    private teamService: TeamService,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+
+    request.team = await this.teamService.findOneByIndent(request.params.indent);
+
+    return !!request.team;
+  }
+}
+
 
 /**
  * Для проверки, является ли пользователь сделавший реквест владельцем команды
@@ -18,7 +37,6 @@ import { TeamEntity } from './team.entity';
 @Injectable()
 export class TeamGuard implements CanActivate {
   constructor(
-    private readonly teamService: TeamService,
     private readonly teamExistanseGuard: TeamExistanseGuard,
     private readonly authGuard: AuthGuard,
   ) {}
@@ -65,25 +83,5 @@ export class TeamMemberGuard implements CanActivate {
     const { members }: Required<TeamEntity> = request.team;
 
     return members!.some(member => member.uid === uid);
-  }
-}
-
-/**
- * Для проверки, существует ли команда по indent
- * 
- * Проходит без юзера
-*/
-@Injectable()
-export class TeamExistanseGuard implements CanActivate {
-  constructor(
-    private teamService: TeamService,
-  ) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-
-    request.team = await this.teamService.findOneByIndent(request.params.indent);
-
-    return !!request.team;
   }
 }

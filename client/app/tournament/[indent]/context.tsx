@@ -5,9 +5,10 @@ import { Children } from "@/types";
 
 const TournamentContext = createContext<TournamentContext | undefined>(undefined)!;
 
-interface TournamentContext {
+export interface TournamentContext {
   tournament: Tournament,
-  setTournament: (tournament: Tournament) => void
+  setTournament: (tournament: Tournament) => void,
+  assignTournament: (tournament: Tournament) => void,
 }
 
 export const useTournament = (): TournamentContext => useContext(TournamentContext) ?? (() => { throw new Error() })();
@@ -15,10 +16,13 @@ export const useTournament = (): TournamentContext => useContext(TournamentConte
 export function TournamentProvider({ children, prefetched }: Children & { prefetched: Tournament }) {
   const [tournament, setTournament] = useState(prefetched);
 
+  const assignTournament = (newTournament: Tournament) => setTournament(Object.assign({}, newTournament, tournament));
+
   return (
     <TournamentContext.Provider value={{
       tournament, 
-      setTournament
+      setTournament,
+      assignTournament
     }}>
       {children}
     </TournamentContext.Provider>
