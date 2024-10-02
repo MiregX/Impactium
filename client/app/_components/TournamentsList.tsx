@@ -8,15 +8,21 @@ import React from "react";
 import { PanelTemplate } from "@/components/PanelTempate";
 import { TournamentUnit, TournamentUnitSkeleton } from "@/components/TournamentUnit";
 import { ПошёлНахуй } from "./ПошёлНахуй";
-import { TeamOrTournamentUnitSkeleton } from "@/components/Skeletons";
 
-export function TournamentsList({ tournaments }: { tournaments: Tournament[]}) {
+export function TournamentsList({ tournaments: _tournaments }: { tournaments: Tournament[]}) {
+  const [tournaments, setTournaments] = useState<Tournament[]>(_tournaments);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const { page, total, setPage, getPageNumbers, current } = usePagination({
     totalItems: tournaments.length || 3,
     itemsPerPage: itemsPerPage,
     buttons: 5
   });
+
+  useEffect(() => {
+    if (tournaments.length) return;
+
+    api<Tournament[]>('/tournament/get', setTournaments);
+  }, [tournaments])
 
   useEffect(() => {
     const updateItemsPerPage = () => {

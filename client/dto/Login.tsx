@@ -1,9 +1,7 @@
-import { LoginTypes } from "./LoginTypes";
-
 export interface Login {
   id: string;
   uid: string;
-  type: LoginTypes;
+  type: 'discord' | 'steam' | 'telegram';
   avatar: string;
   displayName: string;
   on: Date;

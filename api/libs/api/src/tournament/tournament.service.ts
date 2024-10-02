@@ -5,6 +5,7 @@ import { TournamentEntity, TournamentEntityWithTeams } from './addon/tournament.
 import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
+import { TeamEntity } from '../team/addon/team.entity';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -62,6 +63,21 @@ export class TournamentService implements OnModuleInit {
       select: TournamentEntity.select({ teams: true, owner: true }),
       where: { code }
     });
+  }
+
+  join(tournament: TournamentEntity, team: TeamEntity) {
+    return this.prisma.tournament.update({
+      where: {
+        code: tournament.code
+      },
+      data: {
+        teams: {
+          connect: {
+            indent: team.indent
+          }
+        }
+      }
+    })
   }
 
   private async createBattleCup(date: Date) {

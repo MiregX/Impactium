@@ -7,7 +7,7 @@ import { Separator } from '@/ui/Separator';
 import Countdown from 'react-countdown';
 import { Button } from '@/ui/Button';
 import { LoginBanner } from '@/banners/login/Login.banner';
-import { ParticapateTournament } from './ParticapateTournament.banner';
+import { ParticapateTournamentBanner } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
@@ -37,7 +37,7 @@ export function TournamentInformation({}) {
         }
       </div>
       <Separator />
-      <div className={s.time}>
+      <div className={s.time} suppressHydrationWarning>
         <p>{getTournamentReadyState(tournament) === TournamentReadyState.Upcoming
           ? 'Начнётся через'
           : getTournamentReadyState(tournament) === TournamentReadyState.Ongoing
@@ -55,7 +55,7 @@ export function TournamentInformation({}) {
       </div>
       <Separator />
       <div className={s.participate}>
-        <Button onClick={() => spawnBanner(user ? <ParticapateTournament /> : <LoginBanner />)}>Учавствовать</Button>
+        <Button onClick={() => spawnBanner(user ? <ParticapateTournamentBanner /> : <LoginBanner />)}>Учавствовать</Button>
         <Button variant='ghost' onClick={() => spawnBanner(<TournamentRules tournament={tournament} />)}>Регламент турнира</Button>
       </div>
     </Card>

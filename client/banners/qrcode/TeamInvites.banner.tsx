@@ -6,7 +6,6 @@ import { cn, SetState } from "@/lib/utils";
 import { Banner } from "@/ui/Banner";
 import { Button } from "@/ui/Button";
 import s from './TeamInvites.module.css';
-import { useState } from "react";
 import QRCodeGenerator from 'react-qr-code';
 import React from "react";
 import { Separator } from "@/ui/Separator";

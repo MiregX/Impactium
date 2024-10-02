@@ -3,7 +3,7 @@ import { Button } from "@/ui/Button";
 import { Separator } from "@/ui/Separator";
 import QRCodeGenerator from 'react-qr-code';
 import s from './TeamInvites.module.css';
-import { SetState, λcopy } from "@/lib/utils";
+import { cn, SetState, λcopy } from "@/lib/utils";
 import { useLanguage } from "@/context/Language.context";
 import React, { useState } from "react";
 import { useApplication } from "@/context/Application.context";
@@ -60,7 +60,7 @@ export function TeamInviteBanner({ team, setTeam, invite }: TeamInviteBannerProp
         <Button className={s.button} img='Link' onClick={λcopy(url)}>{lang.copyUrl}</Button>
         {invite && <Button size='icon' loading={loading} variant='destructive' className={s.button} img='Trash2' onClick={deleteInvite} />}
       </div>
-      <Button className={s.button} onClick={spawnEditTeamBanner} variant='ghost'>{lang.team.settings}</Button>
+      <Button className={cn(s.button, s.settings)} onClick={spawnEditTeamBanner} variant='ghost'>{lang.team.settings}</Button>
       <span>{lang.warn_everyone_can_join}</span>
     </Banner>
   );

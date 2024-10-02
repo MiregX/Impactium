@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, NotFoundException, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,6 +8,11 @@ import { UserEntity } from '@api/main/user/addon/user.entity';
 import { CodeValidationPipe } from '@api/main/application/addon/code.validator';
 import { λthrow } from '@impactium/utils';
 import { TournamentEntity } from './addon/tournament.entity';
+import { TeamGuard } from '../team/addon/team.guard';
+import { Team } from '../team/addon/team.decorator';
+import { TeamEntity } from '../team/addon/team.entity';
+import { TournamentExistanseGuard } from './addon/tournament.guard';
+import { Tournament } from './addon/tournament.decorator';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -36,6 +41,15 @@ export class TournamentController {
     @User() user: UserEntity,
   ) {
     return this.tournamentService.delete(user, code);
+  }
+
+  @Post(':code/join/:indent')
+  @UseGuards(TeamGuard, TournamentExistanseGuard)
+  join(
+    @Team() team: TeamEntity,
+    @Tournament() tournament: TournamentEntity
+  ): Promise<TournamentEntity> {
+    return this.tournamentService.join(tournament, team);
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES)

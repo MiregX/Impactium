@@ -3,11 +3,11 @@ import { TournamentsList } from '@/app/_components/TournamentsList';
 import { Tournament } from '@/dto/Tournament';
 
 export default async function Main() {
-  const tournaments = await api<Tournament[]>('/tournament/get');
+  const tournaments = await api<Tournament[]>('/tournament/get') || [];
 
   return (
     <React.Fragment>
-      <TournamentsList tournaments={tournaments || []} />
+      <TournamentsList tournaments={tournaments} />
     </React.Fragment>
   );
 };

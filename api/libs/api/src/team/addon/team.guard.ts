@@ -4,6 +4,7 @@ import { UserEntity } from '@api/main/user/addon/user.entity';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 import { λthrow } from '@impactium/utils';
+import { TeamEntity } from './team.entity';
 
 /**
  * Для проверки, является ли пользователь сделавший реквест владельцем команды
@@ -17,22 +18,22 @@ import { λthrow } from '@impactium/utils';
 @Injectable()
 export class TeamGuard implements CanActivate {
   constructor(
-    private teamService: TeamService,
-    private authGuard: AuthGuard,
+    private readonly teamService: TeamService,
+    private readonly teamExistanseGuard: TeamExistanseGuard,
+    private readonly authGuard: AuthGuard,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    if (!request.user) {
-      await this.authGuard.canActivate(context); 
-    }
+    if (!request.user) await this.authGuard.canActivate(context);
+
+    if (!request.team) await this.teamExistanseGuard.canActivate(context);
 
     const { uid }: UserEntity = request.user
+    const { ownerId }: TeamEntity = request.team
 
-    request.team = (await this.teamService.findManyByUid(uid)).find(team => team.indent === request.params.indent);
-
-    return !!request.team;
+    return uid === ownerId;
   }
 }
 
@@ -49,24 +50,21 @@ export class TeamGuard implements CanActivate {
 @Injectable()
 export class TeamMemberGuard implements CanActivate {
   constructor(
-    private teamService: TeamService,
+    private readonly teamExistanseGuard: TeamExistanseGuard,
     private authGuard: AuthGuard,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    if (!request.user) {
-      await this.authGuard.canActivate(context); 
-    }
+    if (!request.team) await this.teamExistanseGuard.canActivate(context);
 
-    const { uid }: UserEntity = request.user
+    if (!request.user) await this.authGuard.canActivate(context); 
 
-    request.team = await this.teamService.findOneByIndent(request.params.indent);
+    const { uid }: UserEntity = request.user;
+    const { members }: Required<TeamEntity> = request.team;
 
-    if (!request.team?.members.some(member => member.uid === uid)) return false;
-
-    return !!request.team;
+    return members!.some(member => member.uid === uid);
   }
 }
 
@@ -76,7 +74,7 @@ export class TeamMemberGuard implements CanActivate {
  * Проходит без юзера
 */
 @Injectable()
-export class TeamReadonlyGuard implements CanActivate {
+export class TeamExistanseGuard implements CanActivate {
   constructor(
     private teamService: TeamService,
   ) {}
@@ -86,8 +84,6 @@ export class TeamReadonlyGuard implements CanActivate {
 
     request.team = await this.teamService.findOneByIndent(request.params.indent);
 
-    if (!request.team) λthrow(NotFoundException);
-
-    return true;
+    return !!request.team;
   }
 }

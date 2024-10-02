@@ -1,6 +1,5 @@
 'use client'
 import { useApplication } from "@/context/Application.context";
-import { NewTeamInviteRequest } from "@/dto/NewTeamInvite.request";
 import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
 import { SetState } from "@/lib/utils";
@@ -27,7 +26,7 @@ export function NewTeamInviteBanner({ team, setTeam }: NewTeamInviteBannerProps)
 
     api<TeamInvite>(`/team/${team.indent}/invite/new`, {
       method: 'POST',
-      body: NewTeamInviteRequest.create({ maxUses }),
+      body: { maxUses },
       setLoading
     }).then(invite => {
       const invites = Array.isArray(team.invites) ? team.invites : [];

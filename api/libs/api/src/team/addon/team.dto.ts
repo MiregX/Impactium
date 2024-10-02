@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { IsEnum, IsLowercase, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsInt, IsLowercase, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { FileFilterCallback } from 'multer';
 import { TeamStandart } from './team.standart';
 import { TeamMemberEntity } from './team.member.entity';
 import { Joinable, Role } from '@prisma/client';
 import { λError, Identifier, DisplayName } from '@impactium/pattern';
 import { TeamEntity } from './team.entity';
+import { TeamInviteEntity } from './teamInvite.entity';
 
 export class CreateTeamDto {
   @IsNotEmpty()
@@ -109,4 +110,12 @@ export class UpdateTeamMemberRoleDto {
     message: 'invalid_role'
   })
   role!: Role | null
+}
+
+export class CreateInviteDto {
+  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @Max(10)
+  maxUses?: TeamInviteEntity['maxUses'];
 }

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { PanelTemplate } from '@/components/PanelTempate';
 import { useLanguage } from '@/context/Language.context';
-import { TeamUnit, TeamUnitSkeleton } from '../../components/TeamUnit';
+import { TeamUnit } from '../../components/TeamUnit';
 import s from './Teams.module.css';
 import { Panel } from '@/ui/Panel';
 import { Team } from '@/dto/Team.dto';
@@ -11,7 +11,6 @@ import React from 'react';
 import { useTeams } from './context';
 import { SearchBar } from '@/components/SearchBar';
 import { UserEntity } from '@/dto/User';
-import { useApplication } from '@/context/Application.context';
 import { usePagination } from '@/decorator/usePagination';
 import { Pagination } from '@/components/Pagination';
 import { useItemsPerPage } from '@/decorator/useItemsPerPage';
@@ -27,7 +26,7 @@ export default function TeamsPage() {
   const [fetched, setFetched] = useState<boolean>(!!teams.length);
 
   useEffect(() => {
-    !fetched && api<Team[]>('/team/get', (teams) => setTeams(teams ? teams?.map(team => ({
+    !fetched && api<Team[]>('/team/list', (teams) => setTeams(teams ? teams?.map(team => ({
       ...team,
       members: team.members?.map(member =>({
         ...member,

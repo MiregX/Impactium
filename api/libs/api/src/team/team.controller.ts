@@ -20,7 +20,7 @@ import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto'
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { TeamGuard, TeamMemberGuard, TeamReadonlyGuard } from './addon/team.guard';
+import { TeamExistanseGuard, TeamGuard, TeamMemberGuard } from './addon/team.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
@@ -137,7 +137,7 @@ export class TeamController {
 
   // Для присоединения к команде
   @Post(':indent/join')
-  @UseGuards(AuthGuard, TeamReadonlyGuard)
+  @UseGuards(AuthGuard, TeamExistanseGuard)
   async join(
     @Team() team: TeamEntity,
     @User() user: UserEntity
@@ -159,67 +159,5 @@ export class TeamController {
     await this.teamService.kickMember(team, user.uid);
 
     return this.teamService.findOneByIndent(team.indent);
-  }
-
-  // Для полученя списка приглашений
-  @Get(':indent/invite/list')
-  @UseGuards(TeamGuard)
-  invites(
-    @Team() team: TeamEntity,
-  ) {
-    return this.teamService.invites(team);
-  }
-
-  // Для создания нового приглашения
-  @Post(':indent/invite/new')
-  @UseGuards(TeamGuard)
-  newInvite(
-    @Team() team: TeamEntity,
-  ) {
-    return this.teamService.newInvite(team);
-  }
-
-  // Для удаления приглашения
-  @Delete(':indent/invite/delete/:id')
-  @UseGuards(TeamGuard)
-  deleteInvite(
-    @Team() team: TeamEntity,
-    @Param('id') id: string
-  ): Promise<TeamInviteEntity[]> {
-    return this.teamService.deleteInvite(team, id);
-  }
-
-  // Для проверки приглашения на валидность можно заменить на хеш
-  @Get(':indent/invite/check/:id')
-  checkInvite(
-    @Param('indent') indent: string,
-    @Param('id') id: string
-  ) {
-    return this.teamService.checkInvite(indent, id);
-  }
-
-  // ⚠️ NOT RELEASED | Для отклонения приглашения на валидность
-  // @Post(':indent/invite/decline/:id')
-  // @UseGuards(ConnectGuard)
-  // decline(
-  //   @Param('indent') indent: string,
-  //   @Param('id') id: string,
-  //   @User() user: UserEntity | null
-  // ) {
-  //   if (!user) return;
-
-  //   // Unreleased feature
-  //   return this.teamService.declineInvite(indent, id, user.uid);
-  // }
-
-  // Для присоенинения к команде
-  @Put(':indent/invite/join/:id')
-  @UseGuards(AuthGuard, TeamReadonlyGuard)
-  acceptInvite(
-    @Team() team: TeamEntity,
-    @Param('id') id: string,
-    @User() user: UserEntity
-  ) {
-    return this.teamService.acceptInvite(team.indent, id, user.uid)
   }
 }

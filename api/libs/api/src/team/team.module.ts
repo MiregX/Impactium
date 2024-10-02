@@ -5,6 +5,7 @@ import { FileModule } from '@api/mcs/file/file.module';
 import { TeamController } from './team.controller';
 import { TeamService } from './team.service';
 import { Module } from '@nestjs/common';
+import { TeamInviteController } from './invite.controller';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { Module } from '@nestjs/common';
     RedisModule
   ],
   controllers: [
-    TeamController
+    TeamController,
+    TeamInviteController
   ],
   providers: [
     TeamService

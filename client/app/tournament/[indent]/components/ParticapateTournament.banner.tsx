@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react'
 import s from '../Tournament.module.css';
 import Link from 'next/link'
 
-export function ParticapateTournament() {
+export function ParticapateTournamentBanner() {
   const { spawnBanner } = useApplication();
   const { user, setUser } = useUser();
   const [team, setTeam] = useState<Team | null>(null);
@@ -33,7 +33,7 @@ export function ParticapateTournament() {
       {user ? (
         <div className={s.choose}>
           <Select onValueChange={indent => setTeam(user.teams!.find(team => team.indent === indent)!)} value={team?.indent}>
-            <SelectTrigger>
+            <SelectTrigger className={s.trigger}>
               {team ? <Combination id={team.indent} src={team.logo} name={team.title} /> : 'Команду не выбрано'}
             </SelectTrigger>
             <SelectContent>
@@ -44,18 +44,17 @@ export function ParticapateTournament() {
               ))}
             </SelectContent>
           </Select>
-          
-          <Button img='Check' variant={team ? 'default' : 'disabled'}>Учавствовать</Button>
         </div>
       ) : <p>Вы не состоите ни в одной команде</p>}
       <Separator><i>ИЛИ</i></Separator>
       <div className={s.group}>
-        <Button variant='secondary' onClick={() => spawnBanner(<ManageTeamBanner />)}>Создать команду</Button>
-        <Button asChild>
+        <Button variant='ghost' onClick={() => spawnBanner(<ManageTeamBanner />)}>Создать команду</Button>
+        <Button asChild variant={team ? 'ghost' : 'default'}>
           <Link href='/teams'>
             Найти команду
           </Link>
         </Button>
+        <Button img='Check' variant={team ? 'default' : 'disabled'}>Учавствовать</Button>
       </div>
     </Banner>
   )

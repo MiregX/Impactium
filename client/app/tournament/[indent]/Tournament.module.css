@@ -211,10 +211,14 @@
 .participate .group {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   gap: 8px;
 }
 .participate .choose {
   display: flex;
   flex-direction: row;
   gap: 8px;
+}
+.trigger {
+  height: 54px !important;
 }

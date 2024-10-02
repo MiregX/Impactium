@@ -75,7 +75,8 @@
   justify-content: space-between;
   width: 100%;
 }
-.general_buttons_group button:first-child {
+.general_buttons_group button:first-child,
+.settings {
   flex: 1;
 }
 .new_invite_banner > div {
