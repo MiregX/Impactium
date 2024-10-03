@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef, WheelEventHandler } from 'react';
 import { Card } from '@/ui/Card';
 import s from '../Tournament.module.css';
-import { CombinationSkeleton } from '@/ui/Combitation';
+import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '@/ui/Select';
@@ -46,9 +46,9 @@ export function Grid() {
   const Connectors = useCallback(({ current, next = 0 }: { current: number, next?: number }) => {
     useEffect(() => {
       const updateConnectors = () => {
-        const currentUnits = document.querySelectorAll(`.${s.unit}[data-length="${current}"]`) as unknown as HTMLElement[];
-        const nextUnits = document.querySelectorAll(`.${s.unit}[data-length="${next}"]`) as unknown as HTMLElement[];
-        const svg = document.querySelector(`.${s.connector}[data-current="${current}"]`) as SVGElement;
+        const currentUnits = document.querySelectorAll(`.${s.unit}[data-length='${current}']`) as unknown as HTMLElement[];
+        const nextUnits = document.querySelectorAll(`.${s.unit}[data-length='${next}']`) as unknown as HTMLElement[];
+        const svg = document.querySelector(`.${s.connector}[data-current='${current}']`) as SVGElement;
 
         if (!svg) return;
 
@@ -76,7 +76,7 @@ export function Grid() {
       return () => window.removeEventListener('resize', updateConnectors);
     }, [current, next]);
 
-    return <svg className={s.connector} data-current={current} xmlns="http://www.w3.org/2000/svg" />;
+    return <svg className={s.connector} data-current={current} xmlns='http://www.w3.org/2000/svg' />;
   }, []);
 
   const Iteration = useCallback(({ length, roundName, next }: { length: number; roundName: string; next?: number }) => {
@@ -90,9 +90,12 @@ export function Grid() {
         <div className={cn(s.units, s[align])}>
           {Array.from({ length }).map((_, index) => (
             <div key={index} className={cn(s.unit, length)} data-length={length}>
-              <CombinationSkeleton size="full" />
+              {tournament.teams[index]
+                ? <Combination size='full' id={tournament.teams[index].indent} src={tournament.teams[index].logo} name={tournament.teams[index].title} />
+                : <CombinationSkeleton size='full' />
+              }
               <Separator color='var(--accent-2)'><i>VS</i></Separator>
-              <CombinationSkeleton size="full" />
+              <CombinationSkeleton size='full' />
             </div>
           ))}
         </div>
@@ -111,7 +114,7 @@ export function Grid() {
       generatedIterations.push(
         <Iteration 
           key={current} 
-          length={current} 
+          length={current}
           roundName={getRoundName(round, Math.floor(Math.log2(length)))} 
           next={next}
         />
@@ -120,13 +123,13 @@ export function Grid() {
       round++;
     }
     
-    generatedIterations.push(<Iteration key={current} length={1} roundName="Финал" />);
+    generatedIterations.push(<Iteration key={current} length={1} roundName='Финал' />);
 
     setIterations(generatedIterations);
   }, [Iteration]);
 
   useEffect(() => {
-    renderIterations(tournament.grid?.max || 16);
+    renderIterations(tournament.grid?.max || tournament.teams.length);
   }, [tournament, align, renderIterations]);
 
   useEffect(() => document.documentElement.scroll(0, 0), [fullScreen])

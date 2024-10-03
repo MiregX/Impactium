@@ -38,6 +38,24 @@ export const cookieSettings = {
   path: '/',
 }
 
+export type λIteration = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
+
+export const λIterations: { [K in λIteration]: λIteration } = {
+1: 1,
+2: 2,
+4: 4,
+8: 8,
+16: 16,
+32: 32,
+64: 64,
+128: 128,
+256: 256,
+512: 512,
+1024: 1024,
+2048: 2048
+} as const;
+
+
 export enum λCookie {
   redirectedToBypass = 'redirectedToBypass',
   Authorization = 'Authorization',

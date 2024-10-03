@@ -1,30 +1,29 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
-import { Battle, Grid, Prisma } from "@prisma/client";
+import { Battle, Prisma } from "@prisma/client";
+import { IterationEntity } from "./iteration.entity";
 
 export class BattleEntity<T = {}> implements Battle {
   id!: string;
-  gid!: Grid['id'];
-  iteration!: number;
-  slot1!: TeamEntity['indent'] | null;
-  slot2!: TeamEntity['indent'] | null;
+  iid!: string;
   winner!: string | null;
-  start!: Date | null;
-  end!: Date | null;
+  slot1!: string;
+  slot2!: string | null;
+  createdAt!: Date;
+  iteration?: IterationEntity;
 
-  static select({ teams }: Options = {}): Prisma.BattleSelect {
-    return {
-      id: true,
-      gid: true,
-      iteration: true,
-      slot1: true,
-      slot2: true,
-      winner: true,
-      start: true,
-      end: true
-    };
-  }
+  static select = ({ iteration = false }: Options = {}) => ({
+    id: true,
+    winner: true,
+    slot1: true,
+    slot2: true,
+    createdAt: true,
+    iid: true,
+    iteration: iteration && {
+      select: IterationEntity.select({ battles: false })
+    }
+  })
 }
 
 interface Options {
-  teams?: boolean;
+  iteration?: boolean
 }

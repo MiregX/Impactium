@@ -6,6 +6,8 @@ import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
+import { λIteration, λIterations } from '@impactium/pattern';
+import { BattleFormat, EliminationType } from '@prisma/client';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -96,9 +98,31 @@ export class TournamentService implements OnModuleInit {
             uid: 'system'
           }
         },
-        gid: crypto.randomUUID(),
         live: 'https://twitch.tv/impactium',
-        prize: 50
+        prize: 50,
+        eliminationType: EliminationType.DOUBLE,
+        formats: {
+          createMany: {
+            data: [
+              {
+                n: λIterations[16],
+                format: BattleFormat.BO1
+              },
+              {
+                n: λIterations[8],
+                format: BattleFormat.BO1
+              },
+              {
+                n: λIterations[4],
+                format: BattleFormat.BO1
+              },
+              {
+                n: λIterations[2],
+                format: BattleFormat.BO3
+              },
+            ]
+          }
+        }
       }
     }).then(tournament => Logger.log(tournament));
   }

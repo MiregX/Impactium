@@ -1,7 +1,8 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
-import { Prisma, Role, Tournament } from "@prisma/client";
-import { GridEntity } from "./grid.entity";
+import { $Enums, Iteration, Prisma, Role, Tournament } from "@prisma/client";
+import { FormatEntity } from "./format.entity";
+import { IterationEntity } from "./iteration.entity";
 
 export class TournamentEntity<T = {}> implements Tournament {
   id!: string;
@@ -13,9 +14,12 @@ export class TournamentEntity<T = {}> implements Tournament {
   code!: string;
   rules!: Prisma.JsonValue | null;
   ownerId!: string;
-  gid!: string;
   live!: string | null;
   prize!: number;
+  createdAt!: Date;
+  eliminationType!: $Enums.EliminationType;
+  iterations?: Iteration[];
+  formats?: FormatEntity[];
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/tournaments/${filename}`
@@ -25,31 +29,31 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static select({ teams = false, owner = false, grid = false }: Options = {}) {
-    return {
-      id: true,
-      banner: true,
-      title: true,
-      start: true,
-      end: true,
-      description: true,
-      code: true,
-      rules: true,
-      ownerId: true,
-      gid: true,
-      grid: grid && {
-        select: GridEntity.select({ teams: true })
-      },
-      live: true,
-      prize: true,
-      teams: teams && {
-        select: TeamEntity.select({ members: true }),
-      },
-      owner: owner && {
-        select: UserEntity.select()
-      }
-    };
-  }
+  static select = ({ teams = false, owner = false, iterations = false, formats = true }: Options = {}) => ({
+    id: true,
+    banner: true,
+    title: true,
+    start: true,
+    end: true,
+    description: true,
+    code: true,
+    rules: true,
+    ownerId: true,
+    live: true,
+    prize: true,
+    teams: teams && {
+      select: TeamEntity.select({ members: true }),
+    },
+    owner: owner && {
+      select: UserEntity.select()
+    },
+    iterations: iterations && {
+      select: IterationEntity.select()
+    },
+    formats: formats && {
+      select: FormatEntity.select()
+    }
+  })
 
   static findActual() {
     return {
@@ -76,5 +80,6 @@ export interface TournamentEntityWithTeams {
 interface Options {
   teams?: boolean;
   owner?: boolean;
-  grid?: boolean;
+  iterations?: boolean;
+  formats?: boolean;
 }

@@ -109,42 +109,77 @@ enum Joinable {
 }
 
 model Tournament {
-  id          String      @id @default(cuid())
-  banner      String
-  title       String
-  start       DateTime
-  end         DateTime
-  description Json
-  code        String      @unique
-  rules       Json
-  ownerId     String
-  owner       User        @relation(fields: [ownerId], references: [uid])
-  teams       Team[]
-  gid         String
-  grid        Grid?
-  comments    Comment[]
-  live        String?
-  prize       Int         @default(0)
+  id                  String        @id @default(cuid())
+  banner              String
+  title               String
+  start               DateTime
+  end                 DateTime
+  description         Json
+  code                String        @unique
+  rules               Json
+  ownerId             String
+  owner               User          @relation(fields: [ownerId], references: [uid])
+  teams               Team[]
+  comments            Comment[]
+  live                String?
+  prize               Int           @default(0)
+  createdAt           DateTime      @default(now())
+  iterations          Iteration[]
+  formats             Format[]
+  eliminationType     EliminationType @default(SINGLE)
 }
 
-model Grid {
-  id            String      @id @default(cuid())
-  tid           String      @unique
-  tournament    Tournament  @relation(fields: [tid], references: [id])
-  max           Int?
+model Iteration {
+  id            String          @id @default(uuid())
+  tournament    Tournament      @relation(fields: [tid], references: [id])
+  tid           String
+  n             Int
+  bracketType   BracketType
   battles       Battle[]
 }
 
 model Battle {
-  id          String   @id @default(cuid())
-  gid         String
-  grid        Grid     @relation(fields: [gid], references: [id])
-  iteration   Int
-  slot1       String?
-  slot2       String?
-  winner      String?
-  start   DateTime?
-  end     DateTime?
+  id            String          @id @default(uuid())
+  iteration     Iteration       @relation(fields: [iid], references: [id])
+  iid           String
+  slot1         String
+  slot2         String?
+  winner        String?
+  games         Game[]
+  createdAt     DateTime        @default(now())
+}
+
+model Game {
+  id            String          @id @default(uuid())
+  battle        Battle      @relation(fields: [bid], references: [id])
+  bid           String
+  n             Int
+  matchId       String?   // С доты для анализа
+  winner        String?
+}
+
+model Format {
+  id             String          @id @default(uuid())
+  tournament     Tournament      @relation(fields: [tid], references: [id])
+  tid            String
+  n              Int          // Количество участников на стадии (например, 32, 16, 8) 
+  format         BattleFormat       // Формат для данной стадии (например, BO1, BO3, BO5)
+}
+
+enum BattleFormat {
+  BO1
+  BO3
+  BO5
+}
+
+enum EliminationType {
+  SINGLE
+  DOUBLE
+}
+
+enum BracketType {
+  UPPER
+  LOWER
 }
 
 enum TransactionStatus {
