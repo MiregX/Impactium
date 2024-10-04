@@ -5,8 +5,8 @@ export const teams = [
     title: 'Feeder Dream Team',
     indent: 'feeders',
     description: 'Залетаем на рофлотурики. От 5к птс',
-    ownerId: 'system',
-    joinable: Joinable.Free
+    ownerId: '1',
+    joinable: Joinable.Invites
   },
   {
     title: 'Champion Squad',

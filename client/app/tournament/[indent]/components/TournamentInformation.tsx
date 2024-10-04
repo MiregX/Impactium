@@ -1,7 +1,7 @@
 'use client'
 import { Card } from '@/ui/Card';
 import { useTournament } from '../context';
-import { Combination } from '@/ui/Combitation';
+import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import s from '../Tournament.module.css';
 import { Separator } from '@/ui/Separator';
 import Countdown from 'react-countdown';
@@ -11,29 +11,41 @@ import { ParticapateTournamentBanner } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
-import { getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
+import { getBiggestIteration, getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
+import { Fragment } from 'react';
 
 export function TournamentInformation({}) {
   const { tournament, assignTournament } = useTournament();
   const { spawnBanner } = useApplication();
   const { user } = useUser();
 
+  const max = getBiggestIteration(tournament);
+
   return (
     <Card className={s.information}>
       <h3>Основная информация</h3>
       <div className={s.node}>
         <p>Организатор:</p>
-        <Combination id={tournament.owner.uid} src={tournament.owner.avatar} name={tournament.owner.displayName} />
+        {tournament.owner
+          ? <Combination id={tournament.owner.uid} src={tournament.owner.avatar} name={tournament.owner.displayName} />
+          : <CombinationSkeleton />
+        }
       </div>
       <div className={s.pod}>
-        <p>Мест: {tournament.teams.length} / {tournament.grid?.max || '∞'}</p>
-        <span>(cвободно: {tournament.grid?.max ? tournament.grid?.max - tournament.teams.length : '∞'})</span>
+        {max > 0
+          ? (<Fragment>
+            <p>Мест: {tournament.teams?.length || '...'} / {max}</p>
+            <span>(cвободно: {max - (tournament.teams?.length || 0)})</span>
+          </Fragment>)
+          : <p></p>}
       </div>
       <Separator />
       <div className={s.members}>
-        {tournament.teams.length
-          ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
-          : <span>Все места свободны</span>
+        {tournament.teams
+          ? tournament.teams.length
+            ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
+            : <span>Все места свободны</span>
+          : Array.from({ length: max || 8 }).map((_, i) => <CombinationSkeleton key={i} />)
         }
       </div>
       <Separator />

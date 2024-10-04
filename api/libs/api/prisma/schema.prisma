@@ -126,27 +126,27 @@ model Tournament {
   createdAt           DateTime      @default(now())
   iterations          Iteration[]
   formats             Format[]
-  eliminationType     EliminationType @default(SINGLE)
+  has_lower_bracket   Boolean       @default(false)
 }
 
 model Iteration {
-  id            String          @id @default(uuid())
-  tournament    Tournament      @relation(fields: [tid], references: [id])
-  tid           String
-  n             Int
-  bracketType   BracketType
-  battles       Battle[]
+  id                  String          @id @default(uuid())
+  tournament          Tournament      @relation(fields: [tid], references: [id])
+  tid                 String
+  n                   Int
+  is_lower_bracket    Boolean
+  battles             Battle[]
 }
 
 model Battle {
-  id            String          @id @default(uuid())
-  iteration     Iteration       @relation(fields: [iid], references: [id])
-  iid           String
-  slot1         String
-  slot2         String?
-  winner        String?
-  games         Game[]
-  createdAt     DateTime        @default(now())
+  id                        String          @id @default(uuid())
+  iteration                 Iteration       @relation(fields: [iid], references: [id])
+  iid                       String
+  slot1                     String
+  slot2                     String?
+  is_slot_one_winner        Boolean?
+  games                     Game[]
+  createdAt                 DateTime        @default(now())
 }
 
 model Game {
@@ -159,32 +159,16 @@ model Game {
 }
 
 model Format {
-  id             String          @id @default(uuid())
-  tournament     Tournament      @relation(fields: [tid], references: [id])
+  id             String           @id @default(uuid())
+  tournament     Tournament       @relation(fields: [tid], references: [id])
   tid            String
-  n              Int          // Количество участников на стадии (например, 32, 16, 8) 
-  format         BattleFormat       // Формат для данной стадии (например, BO1, BO3, BO5)
-}
-
-enum BattleFormat {
-  BO1
-  BO3
-  BO5
-}
-
-enum EliminationType {
-  SINGLE
-  DOUBLE
-}
-
-enum BracketType {
-  UPPER
-  LOWER
+  n              Int
+  best_of        Int              @default(1)
 }
 
 enum TransactionStatus {
   success
-  pending // для пополнений и вывода
+  pending
   canceled
   error
 }

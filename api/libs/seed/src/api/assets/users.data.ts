@@ -1,5 +1,11 @@
 export const users = [
   {
+    uid: '1',
+    register: new Date().toISOString(),
+    email: 'userX@example.com',
+    displayName: 'Роберто Глок'
+  },
+  {
     uid: '2',
     register: new Date().toISOString(),
     email: 'user1@example.com',

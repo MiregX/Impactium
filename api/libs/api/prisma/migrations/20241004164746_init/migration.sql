@@ -43,7 +43,7 @@ CREATE TABLE "Team" (
     "description" STRING,
     "ownerId" STRING NOT NULL,
     "registered" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "joinable" "Joinable" NOT NULL DEFAULT 'Free',
+    "joinable" "Joinable" NOT NULL DEFAULT 'Invites',
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("indent")
 );
@@ -82,34 +82,55 @@ CREATE TABLE "Tournament" (
     "code" STRING NOT NULL,
     "rules" JSONB NOT NULL,
     "ownerId" STRING NOT NULL,
-    "gid" STRING NOT NULL,
     "live" STRING,
     "prize" INT4 NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "has_lower_bracket" BOOL NOT NULL,
 
     CONSTRAINT "Tournament_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Grid" (
+CREATE TABLE "Iteration" (
     "id" STRING NOT NULL,
     "tid" STRING NOT NULL,
-    "max" INT4,
+    "n" INT4 NOT NULL,
+    "is_lower_bracket" BOOL NOT NULL,
 
-    CONSTRAINT "Grid_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Iteration_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Battle" (
     "id" STRING NOT NULL,
-    "gid" STRING NOT NULL,
-    "iteration" INT4 NOT NULL,
-    "slot1" STRING,
+    "iid" STRING NOT NULL,
+    "slot1" STRING NOT NULL,
     "slot2" STRING,
     "winner" STRING,
-    "start" TIMESTAMP(3),
-    "end" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Battle_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Game" (
+    "id" STRING NOT NULL,
+    "bid" STRING NOT NULL,
+    "n" INT4 NOT NULL,
+    "matchId" STRING,
+    "winner" STRING,
+
+    CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Format" (
+    "id" STRING NOT NULL,
+    "tid" STRING NOT NULL,
+    "n" INT4 NOT NULL,
+    "best_of" INT4 NOT NULL DEFAULT 1,
+
+    CONSTRAINT "Format_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -169,9 +190,6 @@ CREATE INDEX "tournamentIndent" ON "Comment"("tournamentIndent");
 CREATE UNIQUE INDEX "Tournament_code_key" ON "Tournament"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Grid_tid_key" ON "Grid"("tid");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_TeamToTournament_AB_unique" ON "_TeamToTournament"("A", "B");
 
 -- CreateIndex
@@ -202,10 +220,16 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_tournamentIndent_fkey" FOREIGN KEY
 ALTER TABLE "Tournament" ADD CONSTRAINT "Tournament_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Grid" ADD CONSTRAINT "Grid_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Iteration" ADD CONSTRAINT "Iteration_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Battle" ADD CONSTRAINT "Battle_gid_fkey" FOREIGN KEY ("gid") REFERENCES "Grid"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Battle" ADD CONSTRAINT "Battle_iid_fkey" FOREIGN KEY ("iid") REFERENCES "Iteration"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Game" ADD CONSTRAINT "Game_bid_fkey" FOREIGN KEY ("bid") REFERENCES "Battle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Format" ADD CONSTRAINT "Format_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;

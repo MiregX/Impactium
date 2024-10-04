@@ -1,13 +1,15 @@
-import { Grid } from "./Grid.dto";
+import { Game } from "./Game.dto";
+import { Iteration } from "./Iteration.dto";
 import { Team } from "./Team.dto";
 
 export interface Battle {
   id: string;
-  gid: Grid['id'];
-  iteration: number;
-  slot1: Team['indent'] | null;
+  slot1: Team['indent'];
   slot2: Team['indent'] | null;
-  winner: string | null;
+  is_slot_one_winner: boolean | null;
   start: Date | null;
-  end: Date | null;
+  iteration?: Iteration;
+  iid: string;
+  games: Game[];
+  createdAt: Date;
 }

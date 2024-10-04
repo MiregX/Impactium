@@ -1,7 +1,8 @@
 import { convertISOstringToValue } from "@/lib/utils";
-import { Grid } from "./Grid.dto";
 import { Team } from "./Team.dto";
 import { User } from "./User";
+import { Format } from "./Format.dto";
+import { Iteration } from "./Iteration.dto";
 
 export interface Tournament {
   id: string,
@@ -13,13 +14,14 @@ export interface Tournament {
   code: string,
   rules: JSON,
   ownerId: string,
-  owner: User,
-  teams: Team[],
-  gid: string,
-  grid: Grid | null,
-  comments: Comment[],
-  live?: string,
-  prize: number
+  prize: number,
+  live: string | null,
+  createdAt: number,
+  has_lower_bracket: boolean,
+  owner: User | null,
+  formats: Format[] | null,
+  teams: Team[] | null,
+  iterations: Iteration[] | null,
 }
 
 export enum TournamentReadyState {
@@ -33,3 +35,7 @@ export const getTournamentReadyState = (tournament: Tournament): TournamentReady
   : (convertISOstringToValue(tournament.end) > Date.now()
     ? TournamentReadyState.Ongoing
     : TournamentReadyState.Finished);
+
+export const getBiggestIteration = (tournament: Tournament): number => tournament.formats
+  ? Math.max(...tournament.formats.map(format => format.n))
+  : 0
