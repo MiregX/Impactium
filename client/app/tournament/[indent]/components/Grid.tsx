@@ -9,11 +9,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { useTournament } from '../context';
 import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
-import { Loading } from '@/ui/Loading';
-
-interface GridProps {
-  length: number;
-}
+import { Team } from '@/dto/Team.dto';
+import { Battle } from '@/dto/Battle.dto';
+import { Pairs, λTournament } from '@/dto/Tournament';
 
 enum AlignSettings {
   top = 'top',
@@ -21,9 +19,17 @@ enum AlignSettings {
   center = 'center'
 }
 
+interface ConnectorsProps {
+  current: number,
+  next?: number,
+  lower?: boolean
+}
+
 function getRoundName(round: number, totalRounds: number) {
-  if (round === totalRounds) return 'Полуфинал';
-  if (round === totalRounds - 1) return 'Четвертьфинал';
+  console.log({ round, totalRounds})
+  if (round === 1) return 'Финал';
+  else if (round === totalRounds) return 'Полуфинал';
+  else if (round === totalRounds - 1) return 'Четвертьфинал';
   return `Раунд ${round}`;
 };
 
@@ -32,7 +38,6 @@ const getTopOffset = (element: HTMLElement) => element.offsetTop + element.clien
 const connectorPath = (startX: number, startY: number, endX: number, endY: number) => `M${startX} ${startY} C ${startX + 30} ${startY} ${endX - 30} ${endY} ${endX} ${endY}`;
 
 export function Grid() {
-  const [iterations, setIterations] = useState<React.JSX.Element[]>([]);
   const [align, setAlign] = useState<AlignSettings>(AlignSettings.middle);
   const [scrolled, setScrolled] = useState<number>(0);
   const [maxScroll, setMaxScroll] = useState<number>(0);
@@ -40,14 +45,15 @@ export function Grid() {
   const { tournament } = useTournament();
   const { lang } = useLanguage();
   
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => setScrolled((v) => Math.min((maxScroll), Math.max(0, v + event.deltaY)));
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => setScrolled((v) => Math.min(maxScroll, Math.max(0, v + event.deltaY)));
 
-  const Connectors = useCallback(({ current, next = 0 }: { current: number, next?: number }) => {
+  const Connectors = useCallback(({ current, next = 0, lower }: ConnectorsProps) => {
     useEffect(() => {
       const updateConnectors = () => {
-        const currentUnits = document.querySelectorAll(`.${s.unit}[data-length='${current}']`) as unknown as HTMLElement[];
-        const nextUnits = document.querySelectorAll(`.${s.unit}[data-length='${next}']`) as unknown as HTMLElement[];
-        const svg = document.querySelector(`.${s.connector}[data-current='${current}']`) as SVGElement;
+        const bracket = lower ? s.lower_bracket : s.upper_bracket;
+        const currentUnits = document.querySelectorAll(`.${bracket} .${s.unit}[data-length='${current}']`) as unknown as HTMLElement[];
+        const nextUnits = document.querySelectorAll(`.${bracket} .${s.unit}[data-length='${next}']`) as unknown as HTMLElement[];
+        const svg = document.querySelector(`.${bracket} .${s.connector}[data-current='${current}']`) as SVGElement;
 
         if (!svg) return;
 
@@ -78,30 +84,37 @@ export function Grid() {
     return <svg className={s.connector} data-current={current} xmlns='http://www.w3.org/2000/svg' />;
   }, []);
 
-  const Iteration = useCallback(({ length, roundName, next }: { length: number; roundName: string; next?: number }) => {
+  const Iteration = useCallback(({ length, roundName, next, lower }: { length: number; roundName: string; next?: number, lower?: boolean }) => {
     const self = useRef<HTMLDivElement>(null);
 
-    useEffect(() => { self.current && setMaxScroll(self.current.clientHeight)});
+    useEffect(() => { self.current && setMaxScroll(self.current.clientHeight) });
+
+    const battles: Array<Battle | undefined> = tournament.iterations?.find(i => i.n === length)?.battles || Array.from({ length });
+
+    const pairs: Pairs<Team> = tournament.iterations ? battles.map(battle => [tournament.teams!.find(team => team.indent === battle?.slot1), tournament.teams!.find(team => team.indent === battle?.slot2)]) : λTournament.pairs(tournament, length);
 
     return (
       <div ref={self} className={s.iteration}>
-        <div className={s.round}>{roundName}</div>
+        {!lower && <div className={s.round}>{roundName}</div>}
         <div className={cn(s.units, s[align])}>
-          {Array.from({ length }).map((_, index) => (
-            <div key={index} className={cn(s.unit, length)} data-length={length}>
-              {tournament.teams?.[index]
-                ? <Combination size='full' id={tournament.teams[index].indent} src={tournament.teams[index].logo} name={tournament.teams[index].title} />
+          {pairs.map((pair, index) => {
+            return <div key={index} className={cn(s.unit, length)} data-length={length}>
+              {pair[0]
+                ? <Combination size='full' id={pair[0].indent} src={pair[0].logo} name={pair[0].title} />
                 : <CombinationSkeleton size='full' />
               }
               <Separator><i>VS</i></Separator>
-              <CombinationSkeleton size='full' />
+              {pair[1]
+                ? <Combination size='full' id={pair[1].indent} src={pair[1].logo} name={pair[1].title} />
+                : <CombinationSkeleton size='full' />
+              }
             </div>
-          ))}
+          })}
         </div>
-        <Connectors current={length} next={next} />
+        <Connectors lower={lower} current={length} next={next} />
       </div>
     );
-  }, [align, Connectors]);
+  }, [align, Connectors, tournament.teams, tournament.iterations]);
 
   useEffect(() => document.documentElement.scroll(0, 0), [fullScreen])
 
@@ -125,19 +138,29 @@ export function Grid() {
         </div>
       </div>
       <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>
-      {tournament.formats ? tournament.formats.map((format, i) => (
-        <Iteration 
-          key={format.n} 
-          length={format.n}
-          roundName={getRoundName(format.n, Math.log2(tournament.formats[0].n))} 
-          next={tournament.formats[i + 1]?.n}
-        />
-      )) : <Loading variant='white' size='lg' />}
-      <Iteration 
-        key={1} 
-        length={1}
-        roundName={'Финал'} 
-      />
+        <div className={cn(s.brackets, s.upper_bracket)}>
+          {tournament.formats.map((format, i) => (
+            <Iteration 
+              key={format.n} 
+              length={format.n}
+              roundName={getRoundName(format.n, tournament.formats[0].n)} 
+              next={tournament.formats[i + 1]?.n}
+            />
+          ))}
+          </div>
+          <Separator />
+          {tournament.has_lower_bracket && 
+            <div className={cn(s.brackets, s.lower_bracket)}>
+            {tournament.formats.map((format, i) => (
+              <Iteration 
+                key={format.n / 2} 
+                length={format.n / 2}
+                roundName={getRoundName(format.n / 2, tournament.formats[0].n / 2)} 
+                next={tournament.formats[i + 1]?.n / 2}
+                lower
+              />
+            ))}
+          </div>}
       </Card>
     </div>
   );

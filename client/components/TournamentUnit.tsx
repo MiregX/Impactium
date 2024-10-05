@@ -1,9 +1,8 @@
 import { Card } from '@/ui/Card'
 import s from './styles/TournamentUnit.module.css'
 import { Badge, BadgeType } from '@/ui/Badge'
-import { getTournamentReadyState, Tournament } from '@/dto/Tournament'
+import { Tournament, λTournament } from '@/dto/Tournament'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getReadableDate } from '@/decorator/getReadableDate'
 import React from 'react'
 import { Button } from '@/ui/Button'
@@ -29,7 +28,7 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
         </Button>
       </div>
       <div className={s.container}>
-        <Badge type={BadgeType[getTournamentReadyState(tournament)]} title={capitalize(getTournamentReadyState(tournament))} />
+        <Badge type={BadgeType[λTournament.state(tournament)]} title={capitalize(λTournament.state(tournament))} />
         <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
         <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end, { year: false })} UTC</span>
       </div>

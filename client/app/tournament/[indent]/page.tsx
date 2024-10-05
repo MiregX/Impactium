@@ -9,7 +9,7 @@ import { Grid } from './components/Grid';
 import { TournamentInformation } from './components/TournamentInformation';
 import { Badge, BadgeType } from '@/ui/Badge';
 import { capitalize } from '@impactium/utils';
-import { getTournamentReadyState } from '@/dto/Tournament';
+import { λTournament } from '@/dto/Tournament';
 
 export default function TournamentIndentPage() {
   const { tournament } = useTournament();
@@ -19,7 +19,7 @@ export default function TournamentIndentPage() {
       <Card className={s.heading}>
         <Combination size='heading' src={tournament.banner} name={tournament.title} id={tournament.code} />
         <Description />
-        <Badge type={BadgeType[getTournamentReadyState(tournament)]} title={capitalize(getTournamentReadyState(tournament))} />
+        <Badge type={BadgeType[λTournament.state(tournament)]} title={capitalize(λTournament.state(tournament))} />
         <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
       </Card>
       <Grid />

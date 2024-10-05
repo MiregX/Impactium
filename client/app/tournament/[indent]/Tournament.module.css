@@ -34,7 +34,7 @@
 .grid > div {
   gap: 48px;
   padding-top: 0;
-  flex-direction: row;
+  flex-direction: column;
   height: max-content;
 }
 .grid .round::before {
@@ -221,4 +221,18 @@
 }
 .trigger {
   height: 54px !important;
+}
+.brackets {
+  gap: 48px;
+  padding-top: 0;
+  flex-direction: row;
+  height: max-content;
+  display: flex;
+}
+.upper_bracket {
+
+}
+
+.lower_bracket {
+  
 }

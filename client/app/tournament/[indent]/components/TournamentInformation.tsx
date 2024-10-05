@@ -11,16 +11,16 @@ import { ParticapateTournamentBanner } from './ParticapateTournament.banner';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
-import { getBiggestIteration, getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
+import { TournamentReadyState, λTournament } from '@/dto/Tournament';
 import { Fragment } from 'react';
-import { TeamCombinationSkeleton } from '@/components/TeamUnit';
+import { TeamUnitSkeleton } from '@/components/TeamUnit';
 
 export function TournamentInformation({}) {
   const { tournament, assignTournament } = useTournament();
   const { spawnBanner } = useApplication();
   const { user } = useUser();
 
-  const max = getBiggestIteration(tournament);
+  const max = λTournament.iteration(tournament);
 
   return (
     <Card className={s.information}>
@@ -46,14 +46,14 @@ export function TournamentInformation({}) {
           ? tournament.teams.length
             ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
             : <span>Все места свободны</span>
-          : <TeamCombinationSkeleton  />
+          : <TeamUnitSkeleton  />
         }
       </div>
       <Separator />
       <div className={s.time} suppressHydrationWarning>
-        <p>{getTournamentReadyState(tournament) === TournamentReadyState.Upcoming
+        <p>{λTournament.state(tournament) === TournamentReadyState.Upcoming
           ? 'Начнётся через'
-          : getTournamentReadyState(tournament) === TournamentReadyState.Ongoing
+          : λTournament.state(tournament) === TournamentReadyState.Ongoing
             ? 'Закончится через'
             : null}</p>
         <Countdown date={tournament.start}>

@@ -30,12 +30,21 @@ export enum TournamentReadyState {
   Finished = 'Finished'
 }
 
-export const getTournamentReadyState = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
-  ? TournamentReadyState.Upcoming
-  : (convertISOstringToValue(tournament.end) > Date.now()
-    ? TournamentReadyState.Ongoing
-    : TournamentReadyState.Finished);
+export type Pair<T = undefined> = [T | undefined , T | undefined];
+export type Pairs<T = undefined> = Pair<T>[];
 
-export const getBiggestIteration = (tournament: Tournament): number => tournament.formats
-  ? Math.max(...tournament.formats.map(format => format.n))
-  : 0
+export class λTournament {
+  public static pairs = (tournament: Tournament, length: number): Pairs<Team> => Array.from({ length }).map((_, i) => λTournament.iteration(tournament) === length ? λTournament.pair(tournament, i) : [undefined, undefined]);
+
+  public static pair = (tournament: Tournament, i: number): Pair<Team> => [tournament.teams![i * 2], tournament.teams![i * 2 + 1]]
+
+  public static iteration = (tournament: Tournament): number => tournament.formats
+    ? Math.max(...tournament.formats.map(format => format.n))
+    : 0;
+
+  public static state = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
+    ? TournamentReadyState.Upcoming
+    : (convertISOstringToValue(tournament.end) > Date.now()
+      ? TournamentReadyState.Ongoing
+      : TournamentReadyState.Finished);
+}

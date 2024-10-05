@@ -115,6 +115,10 @@ export class TournamentService implements OnModuleInit {
                 n: λIterations._2,
                 best_of: 2
               },
+              {
+                n: λIterations._1,
+                best_of: 3
+              },
             ]
           }
         }

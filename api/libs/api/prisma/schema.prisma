@@ -135,6 +135,7 @@ model Iteration {
   tid                 String
   n                   Int
   is_lower_bracket    Boolean
+  startsAt            DateTime
   battles             Battle[]
 }
 
