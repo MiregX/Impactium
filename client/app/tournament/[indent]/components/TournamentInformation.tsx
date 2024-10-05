@@ -13,6 +13,7 @@ import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
 import { getBiggestIteration, getTournamentReadyState, TournamentReadyState } from '@/dto/Tournament';
 import { Fragment } from 'react';
+import { TeamCombinationSkeleton } from '@/components/TeamUnit';
 
 export function TournamentInformation({}) {
   const { tournament, assignTournament } = useTournament();
@@ -45,7 +46,7 @@ export function TournamentInformation({}) {
           ? tournament.teams.length
             ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
             : <span>Все места свободны</span>
-          : Array.from({ length: max || 8 }).map((_, i) => <CombinationSkeleton key={i} />)
+          : <TeamCombinationSkeleton  />
         }
       </div>
       <Separator />

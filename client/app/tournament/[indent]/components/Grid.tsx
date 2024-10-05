@@ -93,7 +93,7 @@ export function Grid() {
                 ? <Combination size='full' id={tournament.teams[index].indent} src={tournament.teams[index].logo} name={tournament.teams[index].title} />
                 : <CombinationSkeleton size='full' />
               }
-              <Separator color='var(--accent-2)'><i>VS</i></Separator>
+              <Separator><i>VS</i></Separator>
               <CombinationSkeleton size='full' />
             </div>
           ))}

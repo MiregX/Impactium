@@ -15,6 +15,7 @@ import { useLanguage } from '@/context/Language.context';
 import { toast } from 'sonner';
 import { SetState } from '@/lib/utils';
 import { useApplication } from '@/context/Application.context';
+import { useUser } from '@/context/User.context';
 
 interface ManageTeamBannerProps {
   team?: Team;
@@ -25,6 +26,7 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
   const isCreate = !team;
   const { destroyBanner } = useApplication();
   const { lang } = useLanguage();
+  const { user, assignUser } = useUser();
   const [loading, setLoading] = useState<boolean>(false);
   const [indent, setIndent] = useState<Team['indent']>(isCreate ? '' : team.indent);
   const [indentValid, setIndentValid] = useState<boolean>(true);
@@ -72,7 +74,13 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
     }, setTeam).then(team => {
       if (!team) return;
 
-      typeof window !== 'undefined' && window.history.pushState(null, '', `/team/@${team.indent}`); 
+      assignUser({ teams: [...(user!.teams || []), team ] });
+
+      if (typeof window !== 'undefined') {
+        console.log('Current: ', window.history.state)
+        window.history.pushState(null, '', `/team/@${team.indent}`); 
+      }
+
       destroyBanner();
     });
   }

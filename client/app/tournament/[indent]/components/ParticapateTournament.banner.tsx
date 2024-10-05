@@ -6,17 +6,18 @@ import { Team } from '@/dto/Team.dto'
 import { UserEntity } from '@/dto/User'
 import { Banner } from '@/ui/Banner'
 import { Button } from '@/ui/Button'
-import { Combination } from '@/ui/Combitation'
+import { Combination, CombinationSkeleton } from '@/ui/Combitation'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select'
 import { Separator } from '@/ui/Separator'
 import { useEffect, useState } from 'react'
 import s from '../Tournament.module.css';
 import Link from 'next/link'
 import { Tournament } from '@/dto/Tournament'
-import { TournamentContext, useTournament } from '../context'
+import { TournamentContext } from '../context'
+import { TeamOrTournamentUnitSkeleton } from '@/components/Skeletons'
 
 export function ParticapateTournamentBanner({ tournament, assignTournament }: Pick<TournamentContext, 'tournament' | 'assignTournament'>) {
-  const { spawnBanner } = useApplication();
+  const { spawnBanner, destroyBanner } = useApplication();
   const { user, setUser } = useUser();
   const [team, setTeam] = useState<Team | null>(null);
   const [loaded, setLoaded] = useState<boolean>(!!user?.teams);
@@ -35,7 +36,9 @@ export function ParticapateTournamentBanner({ tournament, assignTournament }: Pi
 
     api<Tournament>(`/tournament/${tournament.code}/join/${team!.indent}`, {
       method: 'POST'
-    }, assignTournament)
+    }, assignTournament).then(() => {
+      destroyBanner()
+    })
   }
 
   return (
@@ -47,11 +50,10 @@ export function ParticapateTournamentBanner({ tournament, assignTournament }: Pi
               {team ? <Combination id={team.indent} src={team.logo} name={team.title} /> : 'Команду не выбрано'}
             </SelectTrigger>
             <SelectContent>
-              {user.teams?.length && user.teams?.map(team => (
-                <SelectItem key={team.indent} value={team.indent}>
-                  <Combination id={team.indent} src={team.logo} name={team.title} />
-                </SelectItem>
-              ))}
+              {user.teams
+                ? user.teams.map(team => <SelectItem key={team.indent} value={team.indent} children={<Combination id={team.indent} src={team.logo} name={team.title} />} />)
+                : <TeamOrTournamentUnitSkeleton type='team' length={2} />
+              }
             </SelectContent>
           </Select>
         </div>

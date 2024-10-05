@@ -14,7 +14,7 @@ interface UserContext {
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => Promise<void>,
-  assignUser: (user: User | null) => void,
+  assignUser: (user: Partial<User> | null) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
 }
@@ -53,7 +53,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     setIsUserLoaded(true);
   });
 
-  const assignUser = (user: User | null) => setUser((_user) => new UserEntity(Object.assign({}, _user, user)));
+  const assignUser = (user: Partial<User> | null) => setUser((_user) => new UserEntity(Object.assign({}, _user, user)));
 
   const userProps: UserContext = {
     user,
