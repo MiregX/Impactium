@@ -1,4 +1,4 @@
-import { $Enums, TeamInvite } from '@prisma/client';
+import { $Enums, Prisma, TeamInvite } from '@prisma/client';
 import { TeamEntity } from './team.entity';
 
 export class TeamInviteEntity implements TeamInvite {  
@@ -9,4 +9,13 @@ export class TeamInviteEntity implements TeamInvite {
   maxUses!: number;
   declines!: number;
   team?: TeamEntity;
+
+  public static select = (): Prisma.TeamInviteDefaultArgs => ({
+    select: {
+      id: true,
+      created: true,
+      used: true,
+      maxUses: true,
+    }
+  })
 }

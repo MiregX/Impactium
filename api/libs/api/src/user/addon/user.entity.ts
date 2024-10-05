@@ -38,28 +38,28 @@ export class UserEntity {
     return Object.assign(this, user);
   }
 
-  static select = ({ teams = false, logins = false }: Options = {}): Prisma.UserSelect => ({
-    uid: true,
-    email: true,
-    register: true,
-    displayName: true,
-    verified: true,
-    username: true,
-    avatar: true,
-    logins: logins ? true : {
-      orderBy: {
-        on: 'desc' as Prisma.SortOrder,
+  public static select = ({ teams = false, logins = false }: UserSelectOptions = {}): Prisma.UserDefaultArgs => ({
+    select: {
+      uid: true,
+      email: true,
+      register: true,
+      displayName: true,
+      verified: true,
+      username: true,
+      avatar: true,
+      logins: logins ? true : {
+        orderBy: {
+          on: 'desc' as Prisma.SortOrder,
+        },
+        take: 1,
       },
-      take: 1,
-    },
-    teams: teams && {
-      select: TeamEntity.select({ members: true })
+      teams: teams && TeamEntity.select({ members: true })
     }
   });
 
   static fromPrisma(
     user: UserEntity,
-    { teams, logins }: Options = {},
+    { teams, logins }: UserSelectOptions = {},
   ): UserEntity {
     return new UserEntity({
       uid: user.uid,
@@ -76,7 +76,7 @@ export class UserEntity {
   }
 }
 
-interface Options {
+export interface UserSelectOptions {
   logins?: boolean;
   teams?: boolean;
 }

@@ -1,16 +1,25 @@
 import { λIteration } from "@impactium/pattern";
-import { BattleFormat, Format } from "@prisma/client";
+import { Format, Prisma } from "@prisma/client";
 
 export class FormatEntity implements Format {
   id!: string;
   tid!: string;
   n!: λIteration;
-  format!: BattleFormat;
+  best_of!: number;
 
-  static select = () => ({
-    id: true,
-    tid: true,
-    n: true,
-    format: true
+  public static select = () => ({
+    select: {
+      id: true,
+      tid: true,
+      n: true,
+      best_of: true
+    },
+    ...this.sort()
+  });
+
+  private static sort = () => ({
+    orderBy: {
+      n: Prisma.SortOrder.desc
+    }
   })
 }

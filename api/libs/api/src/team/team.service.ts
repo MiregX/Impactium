@@ -71,7 +71,7 @@ export class TeamService {
     return this.prisma.team.update({
       where: { indent: team.indent },
       data: update,
-      select: TeamEntity.select({ members: true, owner: true, tournaments: true })
+      ...TeamEntity.select({ members: true, owner: true, tournaments: true })
     });
   }
   
@@ -102,7 +102,7 @@ export class TeamService {
 
   findOneByIndent(indent: TeamEntity['indent']) {
     return this.prisma.team.findUnique({
-      select: TeamEntity.select({ members: true, owner: true, tournaments: true }),
+      ...TeamEntity.select({ members: true, owner: true, tournaments: true }),
       where: {
         indent,
       },
@@ -117,7 +117,7 @@ export class TeamService {
           { indent: { contains: value.toLowerCase() } }
         ]
       },
-      select: TeamEntity.select({ members: true }),
+      ...TeamEntity.select({ members: true }),
       take: TeamStandart.DEFAULT_PAGINATION_LIMIT
     });
   }
@@ -127,7 +127,7 @@ export class TeamService {
     skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
   ) {
     return this.prisma.team.findMany({
-      select: TeamEntity.select({ members: true }),
+      ...TeamEntity.select({ members: true }),
       take: limit,
       skip: skip,
     });

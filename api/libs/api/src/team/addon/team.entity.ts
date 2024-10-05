@@ -1,7 +1,8 @@
-import { $Enums, Team } from '@prisma/client';
+import { $Enums, Prisma, Team } from '@prisma/client';
 import { TeamMemberEntity } from './team.member.entity';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TournamentEntity } from '@api/main/tournament/addon/tournament.entity';
+import { TeamInviteEntity } from './teamInvite.entity';
 
 export class TeamEntity implements Team {
   registered!: Date;
@@ -21,24 +22,20 @@ export class TeamEntity implements Team {
     };
   }
 
-  static select = ({ members = false, owner = false, tournaments = false, invites = false }: Options = {}) => ({
-    logo: true,
-    registered: true,
-    indent: true,
-    title: true,
-    ownerId: true,
-    description: true,
-    joinable: true,
-    members: members && {
-      select: TeamMemberEntity.select({ user: true }),
-    },
-    owner: owner && {
-      select: UserEntity.select()
-    },
-    tournaments: tournaments && {
-      select: TournamentEntity.select()
-    },
-    invites
+  public static select = ({ members = false, owner = false, tournaments = false, invites = false }: Options = {}): Prisma.TeamDefaultArgs => ({
+    select: {
+      logo: true,
+      registered: true,
+      indent: true,
+      title: true,
+      ownerId: true,
+      description: true,
+      joinable: true,
+      members: members && TeamMemberEntity.select({ user: true }),
+      owner: owner && UserEntity.select(),
+      tournaments: tournaments && TournamentEntity.select(),
+      invites: invites && TeamInviteEntity.select()
+    }
   });
 }
 

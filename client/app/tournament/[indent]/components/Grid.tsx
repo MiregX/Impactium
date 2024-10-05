@@ -1,16 +1,15 @@
 'use client'
-
-import React, { useState, useEffect, useCallback, useRef, WheelEventHandler } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Card } from '@/ui/Card';
 import s from '../Tournament.module.css';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '@/ui/Select';
-import { capitalize, ui } from '@impactium/utils';
 import { useTournament } from '../context';
 import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
+import { Loading } from '@/ui/Loading';
 
 interface GridProps {
   length: number;
@@ -90,7 +89,7 @@ export function Grid() {
         <div className={cn(s.units, s[align])}>
           {Array.from({ length }).map((_, index) => (
             <div key={index} className={cn(s.unit, length)} data-length={length}>
-              {tournament.teams[index]
+              {tournament.teams?.[index]
                 ? <Combination size='full' id={tournament.teams[index].indent} src={tournament.teams[index].logo} name={tournament.teams[index].title} />
                 : <CombinationSkeleton size='full' />
               }
@@ -103,34 +102,6 @@ export function Grid() {
       </div>
     );
   }, [align, Connectors]);
-
-  const renderIterations = useCallback((length: number) => {
-    let current = length;
-    let round = 1;
-    const generatedIterations = [];
-
-    while (current > 1) {
-      const next = Math.floor(current / 2);
-      generatedIterations.push(
-        <Iteration 
-          key={current} 
-          length={current}
-          roundName={getRoundName(round, Math.floor(Math.log2(length)))} 
-          next={next}
-        />
-      );
-      current = next;
-      round++;
-    }
-    
-    generatedIterations.push(<Iteration key={current} length={1} roundName='Финал' />);
-
-    setIterations(generatedIterations);
-  }, [Iteration]);
-
-  useEffect(() => {
-    renderIterations(tournament.grid?.max || tournament.teams.length);
-  }, [tournament, align, renderIterations]);
 
   useEffect(() => document.documentElement.scroll(0, 0), [fullScreen])
 
@@ -154,7 +125,19 @@ export function Grid() {
         </div>
       </div>
       <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>
-        {iterations}
+      {tournament.formats ? tournament.formats.map((format, i) => (
+        <Iteration 
+          key={format.n} 
+          length={format.n}
+          roundName={getRoundName(format.n, Math.log2(tournament.formats[0].n))} 
+          next={tournament.formats[i + 1]?.n}
+        />
+      )) : <Loading variant='white' size='lg' />}
+      <Iteration 
+        key={1} 
+        length={1}
+        roundName={'Финал'} 
+      />
       </Card>
     </div>
   );

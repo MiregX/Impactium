@@ -40,19 +40,19 @@ export const cookieSettings = {
 
 export type λIteration = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
 
-export const λIterations: { [K in λIteration]: λIteration } = {
-1: 1,
-2: 2,
-4: 4,
-8: 8,
-16: 16,
-32: 32,
-64: 64,
-128: 128,
-256: 256,
-512: 512,
-1024: 1024,
-2048: 2048
+export const λIterations: Record<`_${λIteration}`, λIteration> = {
+_1: 1,
+_2: 2,
+_4: 4,
+_8: 8,
+_16: 16,
+_32: 32,
+_64: 64,
+_128: 128,
+_256: 256,
+_512: 512,
+_1024: 1024,
+_2048: 2048
 } as const;
 
 

@@ -6,8 +6,8 @@ import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
-import { λIteration, λIterations } from '@impactium/pattern';
-import { BattleFormat, EliminationType } from '@prisma/client';
+import { λIterations } from '@impactium/pattern';
+
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -23,12 +23,10 @@ export class TournamentService implements OnModuleInit {
     limit: number = TournamentStandart.DEFAULT_PAGINATION_LIMIT,
     skip: number = TournamentStandart.DEFAULT_PAGINATION_PAGE,
   ) {
-    const actual = TournamentEntity.findActual();
     return await this.prisma.tournament.findMany({
-      select: TournamentEntity.select({ teams: true }),
+      ...TournamentEntity.select({ teams: true, actual: true }),
       take: limit,
       skip: skip,
-      ...actual
     });
   }
 
@@ -62,7 +60,7 @@ export class TournamentService implements OnModuleInit {
   
   findOneByCode(code: string) {
     return this.prisma.tournament.findUnique({
-      select: TournamentEntity.select({ teams: true, owner: true }),
+      ...TournamentEntity.select({ teams: true, owner: true }),
       where: { code }
     });
   }
@@ -79,7 +77,7 @@ export class TournamentService implements OnModuleInit {
           }
         }
       },
-      select: TournamentEntity.select({ teams: true })
+      ...TournamentEntity.select({ teams: true })
     })
   }
 
@@ -100,25 +98,22 @@ export class TournamentService implements OnModuleInit {
         },
         live: 'https://twitch.tv/impactium',
         prize: 50,
-        eliminationType: EliminationType.DOUBLE,
+        has_lower_bracket: true,
         formats: {
           createMany: {
             data: [
               {
-                n: λIterations[16],
-                format: BattleFormat.BO1
+                n: λIterations._16
               },
               {
-                n: λIterations[8],
-                format: BattleFormat.BO1
+                n: λIterations._8
               },
               {
-                n: λIterations[4],
-                format: BattleFormat.BO1
+                n: λIterations._4
               },
               {
-                n: λIterations[2],
-                format: BattleFormat.BO3
+                n: λIterations._2,
+                best_of: 2
               },
             ]
           }

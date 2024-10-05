@@ -5,21 +5,21 @@ import { IterationEntity } from "./iteration.entity";
 export class BattleEntity<T = {}> implements Battle {
   id!: string;
   iid!: string;
-  winner!: string | null;
   slot1!: string;
   slot2!: string | null;
+  is_slot_one_winner!: boolean | null;
   createdAt!: Date;
   iteration?: IterationEntity;
 
-  static select = ({ iteration = false }: Options = {}) => ({
-    id: true,
-    winner: true,
-    slot1: true,
-    slot2: true,
-    createdAt: true,
-    iid: true,
-    iteration: iteration && {
-      select: IterationEntity.select({ battles: false })
+  public static select = ({ iteration = false }: Options = {}): Prisma.BattleDefaultArgs => ({
+    select: {
+      id: true,
+      is_slot_one_winner: true,
+      slot1: true,
+      slot2: true,
+      createdAt: true,
+      iid: true,
+      iteration: iteration && IterationEntity.select({ battles: false })
     }
   })
 }

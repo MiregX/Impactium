@@ -1,5 +1,5 @@
 import { UserEntity } from "@api/main/user/addon/user.entity";
-import { $Enums, TeamMember } from "@prisma/client";
+import { $Enums, Prisma, TeamMember } from "@prisma/client";
 import { TeamEntity } from "./team.entity";
 
 export class TeamMemberEntity implements TeamMember {
@@ -9,14 +9,14 @@ export class TeamMemberEntity implements TeamMember {
   role!: $Enums.Role | null;
   user?: UserEntity;
 
-  static select = ({ user }: Options = {}) => ({
-    id: true,
-    indent: true,
-    uid: true,
-    role: true,
-    user: user && {
-      select: UserEntity.select()
-    },
+  public static select = ({ user }: Options = {}): Prisma.TeamMemberDefaultArgs => ({
+    select: {
+      id: true,
+      indent: true,
+      uid: true,
+      role: true,
+      user: user && UserEntity.select()
+    }
   });
 
   static create = ({ uid, indent }: CreateTeamMemberOptions) => ({

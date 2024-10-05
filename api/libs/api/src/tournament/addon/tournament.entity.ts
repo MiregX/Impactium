@@ -17,7 +17,7 @@ export class TournamentEntity<T = {}> implements Tournament {
   live!: string | null;
   prize!: number;
   createdAt!: Date;
-  eliminationType!: $Enums.EliminationType;
+  has_lower_bracket!: boolean;
   iterations?: Iteration[];
   formats?: FormatEntity[];
 
@@ -29,44 +29,46 @@ export class TournamentEntity<T = {}> implements Tournament {
     }
   }
 
-  static select = ({ teams = false, owner = false, iterations = false, formats = true }: Options = {}) => ({
-    id: true,
-    banner: true,
-    title: true,
-    start: true,
-    end: true,
-    description: true,
-    code: true,
-    rules: true,
-    ownerId: true,
-    live: true,
-    prize: true,
-    teams: teams && {
-      select: TeamEntity.select({ members: true }),
+  public static select = ({
+    teams = false,
+    owner = false,
+    iterations = false,
+    formats = true,
+    actual = false
+  }: Options = {}): Prisma.TournamentDefaultArgs => ({
+    select: {
+      id: true,
+      banner: true,
+      title: true,
+      start: true,
+      end: true,
+      description: true,
+      code: true,
+      rules: true,
+      ownerId: true,
+      live: true,
+      prize: true,
+      has_lower_bracket: true,
+      createdAt: true,
+      teams: teams && TeamEntity.select({ members: true }),
+      owner: owner && UserEntity.select(),
+      iterations: iterations && IterationEntity.select(),
+      formats: formats && FormatEntity.select()
     },
-    owner: owner && {
-      select: UserEntity.select()
-    },
-    iterations: iterations && {
-      select: IterationEntity.select()
-    },
-    formats: formats && {
-      select: FormatEntity.select()
-    }
+    ...(actual && this.sort())
   })
+  
 
-  static findActual() {
-    return {
-      where: {
-        end: {
-          gt: new Date().toISOString()
-        }
-      },
-      orderBy: {
-        start: 'asc' as Prisma.SortOrder,
-      },
-    };
-  }
+  public static sort = () => ({
+    where: {
+      end: {
+        gt: new Date().toISOString()
+      }
+    },
+    orderBy: {
+      start: Prisma.SortOrder.asc,
+    },
+  });
 }
 
 export interface TournamentEntityWithTeams {
@@ -82,4 +84,5 @@ interface Options {
   owner?: boolean;
   iterations?: boolean;
   formats?: boolean;
+  actual?: boolean;
 }

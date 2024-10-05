@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
-import { UserEntity } from './addon/user.entity';
+import { UserEntity, UserSelectOptions } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { UsernameTakenException, UserNotFound } from '../application/addon/error';
@@ -22,10 +22,10 @@ export class UserService {
     });
   }
 
-  findById(uid: string, select?: Prisma.UserSelect) {
+  findById(uid: string, options: UserSelectOptions = {}) {
     return this.prisma.user.findUnique({
       where: { uid },
-      select
+      ...UserEntity.select(options)
     });
   }
 
@@ -39,7 +39,7 @@ export class UserService {
     return this.prisma.user.update({
       where: { uid },
       data: { ...user },
-      select: UserEntity.select()
+      ...UserEntity.select()
     });
   }
   

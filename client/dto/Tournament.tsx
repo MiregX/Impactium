@@ -19,7 +19,7 @@ export interface Tournament {
   createdAt: number,
   has_lower_bracket: boolean,
   owner: User | null,
-  formats: Format[] | null,
+  formats: Format[],
   teams: Team[] | null,
   iterations: Iteration[] | null,
 }

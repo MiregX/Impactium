@@ -31,7 +31,7 @@ export class UserController {
     @Query('logins') logins?: boolean,
     @Query('teams') teams?: boolean,
   ) {
-    const userEntity = await this.userService.findById(user.uid, UserEntity.select({ teams, logins }));
+    const userEntity = await this.userService.findById(user.uid, { teams, logins });
 
     if (!userEntity) throw NotFoundException;
 
