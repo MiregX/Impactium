@@ -66,12 +66,17 @@ export function TeamInformation() {
         <UserCombination user={team.owner} />
       </div>
       <div className={s.pod}>
-        <p>Выиграно турниров: {team.tournaments?.length}</p>
+        <p>Выиграно турниров: {team.tournaments?.filter(tournament => tournament.winner === team.indent).length}</p>
       </div>
       <Separator />
       <div className={s.tournaments}>
         {team.tournaments?.length
-          ? team.tournaments.map(tournament => <Combination key={tournament.code} id={tournament.code} src={tournament.banner} name={tournament.title} />)
+          ? team.tournaments.map(tournament => (
+              <div className={s.participated_tournaments}>
+                <Combination key={tournament.code} id={tournament.code} src={tournament.banner} name={tournament.title} />
+                <Button variant='ghost'>Топ 8</Button>
+              </div>
+            ))
           : <span>Команда не учавствовала в турнирах</span>
         }
       </div>

@@ -36,13 +36,15 @@
   padding-top: 0;
   flex-direction: column;
   height: max-content;
+  width: fit-content;
 }
 .grid .round::before {
   position: absolute;
   content: '';
   height: calc(100% + 8px);
   width: 100%;
-  background: var(--meta-black);
+  background: var(--geist-background);
+  backdrop-filter: blur(3px) brightness(0.25);
   left: 0;
   top: 0;
   transform: translateY(calc(-100% - 8px));
@@ -61,12 +63,22 @@
   top: 0px;
   border-top: none;
   left: 0;
-  font-size: 16px;
   height: 32px;
-  text-align: center;
-  font-weight: 500;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.grid .round p {
+  font-size: 16px;
+  font-weight: 500;
+}
+.grid .round span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-dimmed);
+}
+
 .units {
   display: flex;
   flex-direction: column;
@@ -229,10 +241,14 @@
   height: max-content;
   display: flex;
 }
-.upper_bracket {
-
+.upper_bracket {}
+.lower_bracket {
+  margin-left: 304px;
 }
 
-.lower_bracket {
-  
+.team_unit {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: space-between;
 }

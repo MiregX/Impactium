@@ -12,6 +12,8 @@ import { Button } from '@/ui/Button';
 import { Team } from '@/dto/Team.dto';
 import { Battle } from '@/dto/Battle.dto';
 import { Pairs, λTournament } from '@/dto/Tournament';
+import { HOUR, λIteration } from '@impactium/pattern';
+import Countdown, { CountdownProps, CountdownRenderProps } from 'react-countdown';
 
 enum AlignSettings {
   top = 'top',
@@ -20,18 +22,17 @@ enum AlignSettings {
 }
 
 interface ConnectorsProps {
-  current: number,
-  next?: number,
+  target: λIteration,
+  next: λIteration,
   lower?: boolean
 }
 
-function getRoundName(round: number, totalRounds: number) {
-  console.log({ round, totalRounds})
-  if (round === 1) return 'Финал';
-  else if (round === totalRounds) return 'Полуфинал';
-  else if (round === totalRounds - 1) return 'Четвертьфинал';
-  return `Раунд ${round}`;
-};
+interface IterationProps {
+  roundName: string;
+  target: λIteration;
+  next: λIteration,
+  lower?: boolean
+}
 
 const getTopOffset = (element: HTMLElement) => element.offsetTop + element.clientHeight / 2;
 
@@ -45,15 +46,22 @@ export function Grid() {
   const { tournament } = useTournament();
   const { lang } = useLanguage();
   
+  const renderer = ({ days, hours, minutes, seconds }: CountdownRenderProps) => {
+      return <span>{`${days > 0 ? `${days}:` : ''}${hours > 0 ? `${hours.toString().padStart(2, '0')}:` : ''}${minutes}:${seconds}`}</span>;
+  };
+  
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => setScrolled((v) => Math.min(maxScroll, Math.max(0, v + event.deltaY)));
 
-  const Connectors = useCallback(({ current, next = 0, lower }: ConnectorsProps) => {
+  const selectBracket = (lower?: boolean) => `.${lower ? s.lower_bracket : s.upper_bracket}`;
+
+  const selectIteration = (size: λIteration, lower?: boolean) => selectBracket(lower) + ` .${s.unit}[data-length='${size}']`;
+
+  const Connectors = useCallback(({ target, next, lower }: ConnectorsProps) => {
     useEffect(() => {
       const updateConnectors = () => {
-        const bracket = lower ? s.lower_bracket : s.upper_bracket;
-        const currentUnits = document.querySelectorAll(`.${bracket} .${s.unit}[data-length='${current}']`) as unknown as HTMLElement[];
-        const nextUnits = document.querySelectorAll(`.${bracket} .${s.unit}[data-length='${next}']`) as unknown as HTMLElement[];
-        const svg = document.querySelector(`.${bracket} .${s.connector}[data-current='${current}']`) as SVGElement;
+        const currentUnits = document.querySelectorAll(selectIteration(target, lower)) as unknown as HTMLElement[];
+        const nextUnits = document.querySelectorAll(selectIteration(next, lower)) as unknown as HTMLElement[];
+        const svg = document.querySelector(selectBracket(lower) +  ` .${s.connector}[data-current='${target}']`) as SVGElement;
 
         if (!svg) return;
 
@@ -79,26 +87,33 @@ export function Grid() {
       window.addEventListener('resize', updateConnectors);
 
       return () => window.removeEventListener('resize', updateConnectors);
-    }, [current, next]);
+    }, [target, next]);
 
-    return <svg className={s.connector} data-current={current} xmlns='http://www.w3.org/2000/svg' />;
+    return <svg className={s.connector} data-current={target} xmlns='http://www.w3.org/2000/svg' />;
   }, []);
 
-  const Iteration = useCallback(({ length, roundName, next, lower }: { length: number; roundName: string; next?: number, lower?: boolean }) => {
+  const Iteration = useCallback(({ target, roundName, next, lower }: IterationProps) => {
     const self = useRef<HTMLDivElement>(null);
 
     useEffect(() => { self.current && setMaxScroll(self.current.clientHeight) });
 
-    const battles: Array<Battle | undefined> = tournament.iterations?.find(i => i.n === length)?.battles || Array.from({ length });
-
-    const pairs: Pairs<Team> = tournament.iterations ? battles.map(battle => [tournament.teams!.find(team => team.indent === battle?.slot1), tournament.teams!.find(team => team.indent === battle?.slot2)]) : λTournament.pairs(tournament, length);
+    const pairs: Pairs<Team> = λTournament.pairs(tournament, target);
 
     return (
       <div ref={self} className={s.iteration}>
-        {!lower && <div className={s.round}>{roundName}</div>}
+        {!lower && (
+          <div className={s.round}>
+            <p>{roundName}</p>
+            <Countdown renderer={renderer} date={λTournament.iteration(tournament, target)!.startsAt}>
+              <Countdown renderer={renderer} date={λTournament.iteration(tournament, target)!.startsAt.valueOf() + HOUR}>
+                <span>Раунд закончился</span>
+              </Countdown>  
+            </Countdown>
+          </div>
+        )}
         <div className={cn(s.units, s[align])}>
           {pairs.map((pair, index) => {
-            return <div key={index} className={cn(s.unit, length)} data-length={length}>
+            return <div key={index} className={cn(s.unit, target)} data-length={target}>
               {pair[0]
                 ? <Combination size='full' id={pair[0].indent} src={pair[0].logo} name={pair[0].title} />
                 : <CombinationSkeleton size='full' />
@@ -111,7 +126,7 @@ export function Grid() {
             </div>
           })}
         </div>
-        <Connectors lower={lower} current={length} next={next} />
+        <Connectors lower={lower} target={target} next={next} />
       </div>
     );
   }, [align, Connectors, tournament.teams, tournament.iterations]);
@@ -139,27 +154,36 @@ export function Grid() {
       </div>
       <Card onWheel={handleWheel} className={cn(s.grid, scrolled > 12 && s.border, fullScreen && s.fullscreen)}>
         <div className={cn(s.brackets, s.upper_bracket)}>
-          {tournament.formats.map((format, i) => (
-            <Iteration 
-              key={format.n} 
-              length={format.n}
-              roundName={getRoundName(format.n, tournament.formats[0].n)} 
-              next={tournament.formats[i + 1]?.n}
-            />
-          ))}
+          {λTournament.upper(tournament).map((iteration, i) => {
+            const next = λTournament.upper(tournament)[i + 1]?.n;
+
+            return (
+              <Iteration 
+                key={iteration.n} 
+                target={iteration.n}
+                roundName={λTournament.round(iteration.n, λTournament.size(tournament))} 
+                next={next}
+              />
+            )
+          })}
           </div>
           <Separator />
           {tournament.has_lower_bracket && 
             <div className={cn(s.brackets, s.lower_bracket)}>
-            {tournament.formats.map((format, i) => (
-              <Iteration 
-                key={format.n / 2} 
-                length={format.n / 2}
-                roundName={getRoundName(format.n / 2, tournament.formats[0].n / 2)} 
-                next={tournament.formats[i + 1]?.n / 2}
-                lower
-              />
-            ))}
+            {λTournament.lower(tournament).map((iteration, i) => {
+              const target = iteration.n / 2 as λIteration;
+              const next = λTournament.lower(tournament)[i + 1]?.n / 2 as λIteration;
+
+              return (
+                <Iteration 
+                  key={target} 
+                  target={target}
+                  roundName={λTournament.round(target, λTournament.size(tournament))} 
+                  next={next}
+                  lower
+                />
+              );
+            })}
           </div>}
       </Card>
     </div>

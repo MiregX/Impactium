@@ -154,7 +154,7 @@ export class ApplicationService implements OnModuleInit {
         uid: 'system',
         displayName: 'System',
         username: 'system',
-        avatar: 'https://cdn.impactium.fun/logo/impactium.svg',
+        avatar: 'https://cdn.impactium.fun/logo/system_avatar.jpg',
         email: 'admin@impactium.fun',
         verified: true
       },

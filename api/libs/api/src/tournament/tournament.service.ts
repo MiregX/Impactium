@@ -6,7 +6,7 @@ import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
-import { λIterations } from '@impactium/pattern';
+import { DAY, HOUR, λIterations } from '@impactium/pattern';
 
 
 @Injectable()
@@ -60,7 +60,7 @@ export class TournamentService implements OnModuleInit {
   
   findOneByCode(code: string) {
     return this.prisma.tournament.findUnique({
-      ...TournamentEntity.select({ teams: true, owner: true }),
+      ...TournamentEntity.select({ teams: true, owner: true, iterations: true }),
       where: { code }
     });
   }
@@ -99,25 +99,42 @@ export class TournamentService implements OnModuleInit {
         live: 'https://twitch.tv/impactium',
         prize: 50,
         has_lower_bracket: true,
-        formats: {
+        iterations: {
           createMany: {
             data: [
               {
-                n: λIterations._16
+                n: λIterations._8,
+                is_lower_bracket: false,
+                startsAt: new Date(Date.now() + HOUR),
+                best_of: 1
               },
               {
-                n: λIterations._8
+                n: λIterations._4,
+                is_lower_bracket: false,
+                startsAt: new Date(Date.now() + HOUR * 3)
               },
               {
-                n: λIterations._4
+                n: λIterations._4,
+                is_lower_bracket: true,
+                startsAt: new Date(Date.now() + HOUR * 3)
               },
               {
                 n: λIterations._2,
-                best_of: 2
+                is_lower_bracket: false,
+                best_of: 2,
+                startsAt: new Date(Date.now() + DAY)
+              },
+              {
+                n: λIterations._2,
+                is_lower_bracket: true,
+                best_of: 2,
+                startsAt: new Date(Date.now() + DAY)
               },
               {
                 n: λIterations._1,
-                best_of: 3
+                is_lower_bracket: false,
+                best_of: 3,
+                startsAt: new Date(Date.now() + DAY + HOUR * 3)
               },
             ]
           }

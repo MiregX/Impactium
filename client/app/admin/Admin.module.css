@@ -55,10 +55,14 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-y: scroll;
+  max-height: 258px;
+  padding: 1px;
 }
 .result_wrapper .unit {
   display: flex;
   flex-direction: row;
+  margin-right: 12px;
   justify-content: space-between;
   gap: 8px;
 }

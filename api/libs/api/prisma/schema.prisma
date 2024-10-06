@@ -125,18 +125,18 @@ model Tournament {
   prize               Int           @default(0)
   createdAt           DateTime      @default(now())
   iterations          Iteration[]
-  formats             Format[]
   has_lower_bracket   Boolean       @default(false)
 }
 
 model Iteration {
-  id                  String          @id @default(uuid())
-  tournament          Tournament      @relation(fields: [tid], references: [id])
-  tid                 String
-  n                   Int
   is_lower_bracket    Boolean
+  tournament          Tournament      @relation(fields: [tid], references: [id])
   startsAt            DateTime
   battles             Battle[]
+  best_of             Int             @default(1)
+  tid                 String
+  id                  String          @id @default(uuid())
+  n                   Int
 }
 
 model Battle {
@@ -157,14 +157,6 @@ model Game {
   n             Int
   matchId       String?   // С доты для анализа
   winner        String?
-}
-
-model Format {
-  id             String           @id @default(uuid())
-  tournament     Tournament       @relation(fields: [tid], references: [id])
-  tid            String
-  n              Int
-  best_of        Int              @default(1)
 }
 
 enum TransactionStatus {

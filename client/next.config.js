@@ -38,6 +38,11 @@ module.exports = {
         protocol: 'https',
         hostname: 'avatars.steamstatic.com',
         port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'robohash.org',
+        port: '',
       }
     ]
   },

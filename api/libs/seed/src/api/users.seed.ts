@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../api/src/prisma/prisma.service';
 import { OnSeed } from '..';
 import { users } from './assets/users.data';
@@ -13,6 +13,6 @@ export class UsersSeedService implements OnSeed {
     await this.prisma.user.createMany({
       skipDuplicates: true,
       data: users,
-    });
+    }).then(({ count }) => Logger.log(`${count} users has been inserted successfully`, 'SEED'));
   }
 }

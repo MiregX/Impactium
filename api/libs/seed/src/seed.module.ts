@@ -4,11 +4,12 @@ import { TeamsSeedService } from './api/teams.seed';
 import { PrismaModule } from '../../api/src/prisma/prisma.module';
 import { ChangelogsSeedService } from './api/changelog.seed';
 import { TeamMembersSeedService } from './api/teamMembers.seed';
+import { TournamentsSeedService } from './api/tournament.seed';
 
 @Module({
   imports: [PrismaModule],
-  providers: [UsersSeedService, TeamsSeedService, ChangelogsSeedService, TeamMembersSeedService],
-  exports: [UsersSeedService, TeamsSeedService, ChangelogsSeedService, TeamMembersSeedService],
+  providers: [UsersSeedService, TeamsSeedService, ChangelogsSeedService, TeamMembersSeedService, TournamentsSeedService],
+  exports: [UsersSeedService, TeamsSeedService, ChangelogsSeedService, TeamMembersSeedService, TournamentsSeedService],
 })
 export class SeedModule {
   constructor(
@@ -16,6 +17,7 @@ export class SeedModule {
     private readonly teamsSeedService: TeamsSeedService,
     private readonly changelogSeedService: ChangelogsSeedService,
     private readonly teamMembersSeedService: TeamMembersSeedService,
+    private readonly tournamentsSeedService: TournamentsSeedService,
   ) {}
 
   async seed() {
@@ -23,5 +25,6 @@ export class SeedModule {
     await this.teamsSeedService.seed();
     await this.changelogSeedService.seed();
     await this.teamMembersSeedService.seed();
+    await this.tournamentsSeedService.seed();
   }
 }

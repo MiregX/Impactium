@@ -1,7 +1,6 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
 import { $Enums, Iteration, Prisma, Role, Tournament } from "@prisma/client";
-import { FormatEntity } from "./format.entity";
 import { IterationEntity } from "./iteration.entity";
 
 export class TournamentEntity<T = {}> implements Tournament {
@@ -19,7 +18,6 @@ export class TournamentEntity<T = {}> implements Tournament {
   createdAt!: Date;
   has_lower_bracket!: boolean;
   iterations?: Iteration[];
-  formats?: FormatEntity[];
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/tournaments/${filename}`
@@ -33,7 +31,6 @@ export class TournamentEntity<T = {}> implements Tournament {
     teams = false,
     owner = false,
     iterations = false,
-    formats = true,
     actual = false
   }: Options = {}): Prisma.TournamentDefaultArgs => ({
     select: {
@@ -53,7 +50,6 @@ export class TournamentEntity<T = {}> implements Tournament {
       teams: teams && TeamEntity.select({ members: true }),
       owner: owner && UserEntity.select(),
       iterations: iterations && IterationEntity.select(),
-      formats: formats && FormatEntity.select()
     },
     ...(actual && this.sort())
   })
@@ -83,6 +79,5 @@ interface Options {
   teams?: boolean;
   owner?: boolean;
   iterations?: boolean;
-  formats?: boolean;
   actual?: boolean;
 }

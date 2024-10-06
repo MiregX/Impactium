@@ -10,6 +10,7 @@ type AvatarProps = HTMLAttributes<HTMLDivElement> & {
 }
 
 export function Avatar({ size, src, alt, className, style, ...props }: AvatarProps) {
+  size = parseInt(`${size}`) - 2;
   const [err, setErr] = useState<boolean>(!src);
 
   useEffect(() => setErr(false), [src]);

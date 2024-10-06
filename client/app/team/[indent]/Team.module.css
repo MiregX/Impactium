@@ -8,6 +8,9 @@
   max-height: var(--content-height);
   overflow: hidden;
 }
+.members_for_team {
+  overflow: scroll;
+}
 .members_for_team > div:nth-child(2) {
   padding: va(--gap);
   gap: var(--gap);
@@ -174,4 +177,10 @@
 }
 .role i {
   flex: 1;
+}
+.participated_tournaments {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
 }

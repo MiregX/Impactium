@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../api/src/prisma/prisma.service';
 import { OnSeed } from '..';
 import { changelogs } from './assets/changelog.data';
@@ -14,6 +14,6 @@ export class ChangelogsSeedService implements OnSeed {
         ...changelog,
         on: new Date(changelog.on).toISOString()
       })),
-    });
+    }).then(({ count }) => Logger.log(`${count} changelogs has been inserted successfully`, 'SEED'));
   };
 };

@@ -85,17 +85,19 @@ CREATE TABLE "Tournament" (
     "live" STRING,
     "prize" INT4 NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "has_lower_bracket" BOOL NOT NULL,
+    "has_lower_bracket" BOOL NOT NULL DEFAULT false,
 
     CONSTRAINT "Tournament_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Iteration" (
-    "id" STRING NOT NULL,
-    "tid" STRING NOT NULL,
-    "n" INT4 NOT NULL,
     "is_lower_bracket" BOOL NOT NULL,
+    "startsAt" TIMESTAMP(3) NOT NULL,
+    "best_of" INT4 NOT NULL DEFAULT 1,
+    "tid" STRING NOT NULL,
+    "id" STRING NOT NULL,
+    "n" INT4 NOT NULL,
 
     CONSTRAINT "Iteration_pkey" PRIMARY KEY ("id")
 );
@@ -106,7 +108,7 @@ CREATE TABLE "Battle" (
     "iid" STRING NOT NULL,
     "slot1" STRING NOT NULL,
     "slot2" STRING,
-    "winner" STRING,
+    "is_slot_one_winner" BOOL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Battle_pkey" PRIMARY KEY ("id")
@@ -121,16 +123,6 @@ CREATE TABLE "Game" (
     "winner" STRING,
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Format" (
-    "id" STRING NOT NULL,
-    "tid" STRING NOT NULL,
-    "n" INT4 NOT NULL,
-    "best_of" INT4 NOT NULL DEFAULT 1,
-
-    CONSTRAINT "Format_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -227,9 +219,6 @@ ALTER TABLE "Battle" ADD CONSTRAINT "Battle_iid_fkey" FOREIGN KEY ("iid") REFERE
 
 -- AddForeignKey
 ALTER TABLE "Game" ADD CONSTRAINT "Game_bid_fkey" FOREIGN KEY ("bid") REFERENCES "Battle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Format" ADD CONSTRAINT "Format_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;

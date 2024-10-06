@@ -14,13 +14,15 @@ import { TournamentRules } from './TournamentRules.banner';
 import { TournamentReadyState, λTournament } from '@/dto/Tournament';
 import { Fragment } from 'react';
 import { TeamUnitSkeleton } from '@/components/TeamUnit';
+import Link from 'next/link';
+import { Icon } from '@/ui/Icon';
 
 export function TournamentInformation({}) {
   const { tournament, assignTournament } = useTournament();
   const { spawnBanner } = useApplication();
   const { user } = useUser();
 
-  const max = λTournament.iteration(tournament);
+  const max = λTournament.size(tournament);
 
   return (
     <Card className={s.information}>
@@ -44,7 +46,17 @@ export function TournamentInformation({}) {
       <div className={s.members}>
         {tournament.teams
           ? tournament.teams.length
-            ? tournament.teams.map(team => <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />)
+            ? tournament.teams.map(team => (
+                <div className={s.team_unit}>
+                  <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />
+                  <Button variant='ghost' asChild>
+                    <Link prefetch={false} href={`/team/@${team.indent}`}>
+                      Открыть
+                      <Icon variant='dimmed' name='MoveRight' />
+                    </Link>
+                  </Button>
+                </div>
+              ))
             : <span>Все места свободны</span>
           : <TeamUnitSkeleton  />
         }
