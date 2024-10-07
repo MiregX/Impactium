@@ -22,6 +22,8 @@ export function TournamentInformation({}) {
   const { spawnBanner } = useApplication();
   const { user } = useUser();
 
+  console.log(tournament);
+
   const max = λTournament.size(tournament);
 
   return (
@@ -47,8 +49,8 @@ export function TournamentInformation({}) {
         {tournament.teams
           ? tournament.teams.length
             ? tournament.teams.map(team => (
-                <div className={s.team_unit}>
-                  <Combination key={team.indent} id={team.indent} src={team.logo} name={team.title} />
+                <div key={team.indent} className={s.team_unit}>
+                  <Combination id={team.indent} src={team.logo} name={team.title} />
                   <Button variant='ghost' asChild>
                     <Link prefetch={false} href={`/team/@${team.indent}`}>
                       Открыть

@@ -3,7 +3,7 @@ import { UserEntity } from "@api/main/user/addon/user.entity";
 import { $Enums, Iteration, Prisma, Role, Tournament } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
 
-export class TournamentEntity<T = {}> implements Tournament {
+export class TournamentEntity implements Tournament {
   id!: string;
   banner!: string;
   title!: string;
@@ -47,7 +47,7 @@ export class TournamentEntity<T = {}> implements Tournament {
       prize: true,
       has_lower_bracket: true,
       createdAt: true,
-      teams: teams && TeamEntity.select({ members: true }),
+      teams: teams && TeamEntity.select(),
       owner: owner && UserEntity.select(),
       iterations: iterations && IterationEntity.select(),
     },

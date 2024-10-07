@@ -63,6 +63,12 @@ export enum λError {
   user_is_already_team_member = 'user_is_already_team_member'
 }
 
+export enum λCache {
+  TeamList = 'team_list',
+  TeamIndentGet = 'team_indent_get',
+  TournamentCodeGet = 'tournament_code_get'
+}
+
 export const SECOND = 1000;
 export const MINUTE = SECOND * 60;
 export const HOUR = MINUTE * 60;

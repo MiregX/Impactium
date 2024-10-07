@@ -13,11 +13,17 @@ import { Team } from '../team/addon/team.decorator';
 import { TeamEntity } from '../team/addon/team.entity';
 import { TournamentExistanseGuard } from './addon/tournament.guard';
 import { Tournament } from './addon/tournament.decorator';
+import { RedisService } from '../redis/redis.service';
+import { λCache } from '@impactium/pattern';
+import { Cache } from '../application/addon/cache.decorator';
 
 @ApiTags('Tournament')
 @Controller('tournament')
 export class TournamentController {
-  constructor(private readonly tournamentService: TournamentService) {}
+  constructor(
+    private readonly tournamentService: TournamentService,
+    private readonly redis: RedisService
+  ) {}
 
   @Get('get')
   findAll(
@@ -28,10 +34,11 @@ export class TournamentController {
   }
   
   @Get(':code/get')
+  @Cache(λCache.TournamentCodeGet, 60)
   async findOneByIndent(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code']
   ) {
-    return await this.tournamentService.findOneByCode(code) || λthrow(NotFoundException);
+    return await this.tournamentService.findOneByCode(code);
   }
 
   @Delete(':code/delete')

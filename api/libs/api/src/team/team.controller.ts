@@ -33,12 +33,15 @@ import { Joinable, TeamMember } from '@prisma/client';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
 import { TeamIsCloseToEveryone } from '../application/addon/error';
 import { ConnectGuard } from '../auth/addon/connect.guard';
+import { RedisService } from '../redis/redis.service';
+import { λCache } from '@impactium/pattern';
 
 @ApiTags('Team')
 @Controller('team')
 export class TeamController {
   constructor(
     private readonly teamService: TeamService,
+    private readonly redis: RedisService,
   ) {}
 
   @Get('list')
@@ -46,14 +49,34 @@ export class TeamController {
     @Query('limit') limit: number = TeamStandart.DEFAULT_PAGINATION_LIMIT,
     @Query('skip') skip: number = TeamStandart.DEFAULT_PAGINATION_PAGE,
   ) {
-    return this.teamService.pagination(limit, skip);
+    const cache = await this.redis.get(λCache.TeamList);
+
+    if (!cache) {
+      const teams = await this.teamService.pagination(limit, skip);
+
+      await this.redis.setex(λCache.TeamList, 60, JSON.stringify(teams));
+
+      return teams;
+    }
+
+    return JSON.parse(cache); 
   }
 
   @Get(':indent/get')
   async findOneByIndent(
     @Param('indent', IndentValidationPipe) indent: string
   ) {
-    return await this.teamService.findOneByIndent(indent) || λthrow(NotFoundException);
+    const team = await this.redis.get(`${λCache.TeamIndentGet}:${indent}`);
+
+    if (!team) {
+      const team = await this.teamService.findOneByIndent(indent) || λthrow(NotFoundException);
+
+      await this.redis.setex(`${λCache.TeamIndentGet}:${indent}`, 15, JSON.stringify(team));
+
+      return team;
+    }
+
+    return team;
   }
 
   @Get('get')
