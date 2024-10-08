@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package analytics;
+package main;
 
-option go_package = "./analytics/grpc";
+option go_package = "./analytics";
 
 message RandomRequest {
     // ...

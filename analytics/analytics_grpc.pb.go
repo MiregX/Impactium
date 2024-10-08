@@ -4,7 +4,7 @@
 // - protoc             v5.29.0--rc1
 // source: .proto
 
-package grpc
+package analytics
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RandomService_GetRandom_FullMethodName = "/analytics.RandomService/GetRandom"
+	RandomService_GetRandom_FullMethodName = "/main.RandomService/GetRandom"
 )
 
 // RandomServiceClient is the client API for RandomService service.
@@ -108,7 +108,7 @@ func _RandomService_GetRandom_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RandomService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "analytics.RandomService",
+	ServiceName: "main.RandomService",
 	HandlerType: (*RandomServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
