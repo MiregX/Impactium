@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package analytics;
+
+option go_package = "./analytics/grpc";
+
+message RandomRequest {
+    // ...
+}
+
+message RandomResponse {
+    // ...
+}
+
+service RandomService {
+    rpc GetRandom(RandomRequest) returns (RandomResponse);
+}
