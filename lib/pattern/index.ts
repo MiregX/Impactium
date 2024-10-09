@@ -24,9 +24,10 @@ export const cookieSettings = {
   path: '/',
 }
 
-export type λIteration = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
+export type λIteration = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
 
 export const λIterations: Record<`_${λIteration}`, λIteration> = {
+_0: 0,
 _1: 1,
 _2: 2,
 _4: 4,
@@ -67,6 +68,25 @@ export enum λCache {
   TeamList = 'team_list',
   TeamIndentGet = 'team_indent_get',
   TournamentCodeGet = 'tournament_code_get'
+}
+
+export class PowerOfTwo { 
+  static is = (n: number): boolean => n > 0 && (n & (n - 1)) === 0;
+
+  static next(n: number): λIteration {
+    if (n <= 0) return 0;
+    
+    if (this.is(n)) return n as λIteration;
+    
+    let power = 1;
+    while (power < n) {
+      power <<= 1;
+    }
+    
+    return power as λIteration;
+  }
+
+  static prev = (n: λIteration): λIteration => (n >> 1) as λIteration;
 }
 
 export const SECOND = 1000;

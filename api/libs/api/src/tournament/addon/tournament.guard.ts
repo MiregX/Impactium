@@ -19,7 +19,7 @@ export class TournamentExistanseGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    request.tournament = await this.tournamentService.findOneByCode(request.params.code);
+    request.tournament = await this.tournamentService.find(request.params.code);
 
     return !!request.tournament;
   }

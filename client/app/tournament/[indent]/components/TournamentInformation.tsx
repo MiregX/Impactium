@@ -1,4 +1,4 @@
-'use client'
+  'use client'
 import { Card } from '@/ui/Card';
 import { useTournament } from '../context';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
@@ -12,7 +12,6 @@ import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { TournamentRules } from './TournamentRules.banner';
 import { TournamentReadyState, λTournament } from '@/dto/Tournament';
-import { Fragment } from 'react';
 import { TeamUnitSkeleton } from '@/components/TeamUnit';
 import Link from 'next/link';
 import { Icon } from '@/ui/Icon';
@@ -25,6 +24,8 @@ export function TournamentInformation({}) {
   console.log(tournament);
 
   const max = λTournament.size(tournament);
+  
+  const joinable = λTournament.joinable(tournament)
 
   return (
     <Card className={s.information}>
@@ -38,30 +39,24 @@ export function TournamentInformation({}) {
       </div>
       <div className={s.pod}>
         {max > 0
-          ? (<Fragment>
-            <p>Мест: {tournament.teams?.length || '...'} / {max}</p>
-            <span>(cвободно: {max - (tournament.teams?.length || 0)})</span>
-          </Fragment>)
+          ? <p>Мест: {max - ((tournament.teams?.length || 0))} / {max}</p>
           : <p></p>}
       </div>
       <Separator />
       <div className={s.members}>
-        {tournament.teams
-          ? tournament.teams.length
-            ? tournament.teams.map(team => (
-                <div key={team.indent} className={s.team_unit}>
-                  <Combination id={team.indent} src={team.logo} name={team.title} />
-                  <Button variant='ghost' asChild>
-                    <Link prefetch={false} href={`/team/@${team.indent}`}>
-                      Открыть
-                      <Icon variant='dimmed' name='MoveRight' />
-                    </Link>
-                  </Button>
-                </div>
-              ))
-            : <span>Все места свободны</span>
+        {(tournament.teams || Array.from({ length: λTournament.size(tournament)})).map(team => (
+          team
+          ? <div key={team.indent} className={s.team_unit}>
+              <Combination id={team.indent} src={team.logo} name={team.title} />
+              <Button variant='ghost' asChild>
+                <Link prefetch={false} href={`/team/@${team.indent}`}>
+                  Открыть
+                  <Icon variant='dimmed' name='MoveRight' />
+                </Link>
+              </Button>
+            </div>
           : <TeamUnitSkeleton  />
-        }
+        ))}
       </div>
       <Separator />
       <div className={s.time} suppressHydrationWarning>

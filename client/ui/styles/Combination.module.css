@@ -9,6 +9,8 @@
   height: 36px;
   justify-content: space-evenly;
   flex-direction: column;
+  max-width: 100%;
+  overflow: hidden;
 }
 .group p {
   overflow: hidden;

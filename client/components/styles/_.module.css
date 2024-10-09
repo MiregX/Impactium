@@ -14,3 +14,16 @@
 .team_combination {
   flex: 1;
 }
+.winner {
+  /* border-left: 6px solid #00cc00;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  padding-left: 8px; */
+}
+.loser {
+  opacity: 0.2;
+  /* border-left: 6px solid #ff3a0080;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  padding-left: 8px; */
+}

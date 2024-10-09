@@ -9,6 +9,7 @@ export class IterationEntity implements Iteration {
   best_of!: number;
   is_lower_bracket!: boolean;
   startsAt!: Date;
+  battles?: BattleEntity[]
 
   public static select = ({ battles = true }: Options = {}): Prisma.IterationDefaultArgs => ({
     select: {

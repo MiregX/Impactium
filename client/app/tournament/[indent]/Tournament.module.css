@@ -47,20 +47,18 @@
   backdrop-filter: blur(3px) brightness(0.25);
   left: 0;
   top: 0;
-  transform: translateY(calc(-100% - 8px));
+  transform: translateY(-8px);
   transition: all 0.3s var(--transition);
   border-radius: 0 0 12px 12px;
   border: var(--geist-border);
   border-top: none;
   z-index: -1;
 }
-.grid.border .round::before {
-  transform: translateY(-8px);
-}
 .grid .round {
   padding: 8px 12px;
   position: sticky;
-  top: 0px;
+  gap: 10px;
+  top: 0;
   border-top: none;
   left: 0;
   height: 32px;
@@ -68,6 +66,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 256px;
 }
 .grid .round p {
   font-size: 16px;
@@ -75,8 +74,12 @@
 }
 .grid .round span {
   font-size: 12px;
+  text-align: right;
   font-weight: 400;
   color: var(--text-dimmed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .units {

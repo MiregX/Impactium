@@ -7,7 +7,9 @@ import { Readable } from 'stream';
 export class FtpService extends Client implements OnModuleInit, OnModuleDestroy {
   private readonly options: AccessOptions = JSON.parse(process.env.FTP);
 
-  onModuleInit = async () => await this.access(this.options).catch(_ => console.error('[Fail] FTP Connection'));
+  onModuleInit = () => {
+    this.access(this.options).catch(_ => console.error('[Fail] FTP Connection'));
+  }
 
   onModuleDestroy = () => this.close();
 

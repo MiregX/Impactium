@@ -2,7 +2,7 @@ import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { Battle, Prisma } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
 
-export class BattleEntity<T = {}> implements Battle {
+export class BattleEntity implements Battle {
   id!: string;
   iid!: string;
   slot1!: string;

@@ -1,13 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { TournamentStandart } from './addon/tournament.standart';
-import { TournamentEntity, TournamentEntityWithTeams } from './addon/tournament.entity';
+import { TournamentEntity } from './addon/tournament.entity';
 import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
-import { DAY, HOUR, λIterations } from '@impactium/pattern';
-
+import { DAY, HOUR, PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -52,17 +51,20 @@ export class TournamentService implements OnModuleInit {
     }
   }
 
-  delete(user: UserEntity, id: string) {
+  delete(user: UserEntity, code: string) {
     return this.prisma.tournament.delete({
-      where: { id, ownerId: user.uid }
+      where: { code, ownerId: user.uid },
+      include: {
+        iterations: true
+      }
     });
   }
   
-  findOneByCode(code: string) {
+  async find(code: string) {
     return this.prisma.tournament.findUnique({
       ...TournamentEntity.select({ teams: true, owner: true, iterations: true }),
       where: { code }
-    });
+    }).then(TournamentEntity.normalize);
   }
 
   join(tournament: TournamentEntity, team: TeamEntity) {
@@ -79,6 +81,36 @@ export class TournamentService implements OnModuleInit {
       },
       ...TournamentEntity.select({ teams: true })
     })
+  }
+
+  grid = async (tournament: TournamentEntity, iteration: λIteration = PowerOfTwo.next(tournament.teams?.length || 0), lower: boolean = false) => {
+    const exist = await this.prisma.iteration.findFirst({
+      where: {
+        tid: tournament.code,
+        is_lower_bracket: lower,
+        n: iteration
+      }
+    });
+
+    if (exist) {
+      return; ///////
+    }
+
+    await this.prisma.iteration.create({
+      data: {
+        is_lower_bracket: lower,
+        tid: tournament.code,
+        battles: {
+          create: []
+        },
+        n: iteration,
+        startsAt: tournament.start
+      }
+    });
+
+    if (iteration > 1) {
+      this.grid(tournament, PowerOfTwo.prev(iteration), lower);
+    }
   }
 
   private async createBattleCup(date: Date) {

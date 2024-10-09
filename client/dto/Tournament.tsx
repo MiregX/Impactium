@@ -1,8 +1,10 @@
 import { convertISOstringToValue } from "@/lib/utils";
-import { Team } from "./Team.dto";
+import { Team, λTeam } from "./Team.dto";
 import { User } from "./User";
 import { Iteration } from "./Iteration.dto";
 import { λIteration } from "@impactium/pattern";
+import { Joinable } from "./Joinable.dto";
+import { Battle } from "./Battle.dto";
 
 export interface Tournament {
   id: string,
@@ -34,21 +36,54 @@ export type Pair<T = undefined> = [T | undefined , T | undefined];
 export type Pairs<T = undefined> = Pair<T>[];
 
 export class λTournament {
-  public static pairs = (tournament: Tournament, length: number): Pairs<Team> => Array.from({ length }).map((_, i) => λTournament.size(tournament) === length ? λTournament.pair(tournament, i) : [undefined, undefined]);
+  public static pairs = (tournament: Tournament, iteration: Iteration): any => {
+    const length = λTournament.size(tournament) / 2;
 
-  public static pair = (tournament: Tournament, i: number): Pair<Team> => [tournament.teams![i * 2], tournament.teams![i * 2 + 1]]
+    console.log(iteration.n)
+
+    return Array.from({ length }).map((_, i) => {
+      const battle = iteration.battles?.[i];
+      if (battle) {
+        return λTournament.pair(tournament, battle)
+      }
+      if (length / 2 === iteration.n) {
+        return λTournament.pair(tournament, i)
+      }
+      return [undefined, undefined];
+    })
+  }
+
+  public static pair = (tournament: Tournament, i: number | Battle): Pair<Team> => {
+    if (tournament.teams) {
+      if (typeof i !== 'number') {
+        return [λTeam.find(tournament.teams, i.slot1), λTeam.find(tournament.teams, i.slot2)]
+      } else {
+        return [tournament.teams![i * 2], tournament.teams![i * 2 + 1]];
+      }
+    }
+    return [undefined, undefined];  
+  }
 
   public static size = (tournament: Tournament): number => tournament.iterations
-    ? Math.max(...tournament.iterations.map(iteration => iteration.n))
+    ? Math.max(...tournament.iterations.map(iteration => iteration.n)) * 2
     : 0;
 
-  public static iteration = (use: Tournament | Iteration[], iteration: λIteration): Iteration | undefined => λTournament.use(use).find(i => i.n === iteration);
+  public static joinable = (tournament: Tournament): Joinable => λTournament.size(tournament) > ((tournament.teams?.length || 0))
+    ? Joinable.Free
+    : Joinable.Closed;
+
+  public static iteration = (use: Tournament | Iteration[], iteration: λIteration, isLowerBracket: boolean = false): Iteration | undefined => λTournament.bracket(use, isLowerBracket).find(i => i.n === iteration);
+
+  public static next = (use: Tournament | Iteration[], iteration: Iteration): Iteration | undefined => {
+    const bracket = λTournament.bracket(use, iteration.is_lower_bracket);
+    return bracket[bracket.findIndex(i => i.n === iteration.n) + 1];
+  }
 
   public static upper = (use: Tournament | Iteration[]): Iteration[] => λTournament.use(use).filter(i => !i.is_lower_bracket);
 
   public static lower = (use: Tournament | Iteration[]): Iteration[] => λTournament.use(use).filter(i => i.is_lower_bracket);
 
-  public static bracket = (tournament: Tournament, lower?: boolean): Iteration[] => lower ? λTournament.lower(tournament) : λTournament.upper(tournament)
+  public static bracket = (tournament: Tournament | Iteration[], isLowerBracket: boolean): Iteration[] => isLowerBracket ? λTournament.lower(tournament) : λTournament.upper(tournament)
 
   public static sort = (iterations: Iteration[]): Iteration[] => iterations.sort((a, b) => b.n - a.n);
 

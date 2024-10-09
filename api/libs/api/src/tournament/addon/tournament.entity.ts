@@ -1,7 +1,8 @@
 import { TeamEntity } from "@api/main/team/addon/team.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
-import { $Enums, Iteration, Prisma, Role, Tournament } from "@prisma/client";
+import { Iteration, Prisma, Role, Tournament } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
+import { BattleEntity } from "./battle.entity";
 
 export class TournamentEntity implements Tournament {
   id!: string;
@@ -17,7 +18,8 @@ export class TournamentEntity implements Tournament {
   prize!: number;
   createdAt!: Date;
   has_lower_bracket!: boolean;
-  iterations?: Iteration[];
+  iterations?: IterationEntity[];
+  teams?: TeamEntity[];
 
   static getLogoPath(filename: string) {
     const ftp = `/public/uploads/tournaments/${filename}`
@@ -65,15 +67,41 @@ export class TournamentEntity implements Tournament {
       start: Prisma.SortOrder.asc,
     },
   });
-}
 
-export interface TournamentEntityWithTeams {
-  teams: {
-    avatar: string;
-    role: Role;
-    uid: string;
-  }[];
-};
+  public static normalize = (tournament: TournamentEntity | null) => {
+    if (!tournament || !tournament.iterations) return null;
+  
+    tournament.iterations = tournament.iterations.map((iteration, i) => {
+      if (!i || !iteration.battles) return iteration; // Пропускаем первую итерацию
+
+      const prev = tournament.iterations!.find(_iteration => _iteration.n === (iteration.n * 2) && _iteration.is_lower_bracket === iteration.is_lower_bracket)!;
+
+      if (!prev) return iteration;
+  
+      const battles: BattleEntity[] = new Array(iteration.battles.length);
+  
+      iteration.battles.forEach(battle => {
+        const index = Math.floor(prev.battles!.findIndex(prevBattle =>
+          prevBattle.slot1 === battle.slot1
+          || prevBattle.slot2 === battle.slot2
+          || prevBattle.slot2 === battle.slot1
+          || prevBattle.slot1 === battle.slot2) / 2);
+
+        if (battles[index]) {
+          console.log(index);
+          console.log(battle);
+          console.log(battles)
+        }
+
+        battles[index] = battle;
+      });
+  
+      return { ...iteration, battles }; // Возвращаем новую итерацию с отсортированными битвами
+    });
+  
+    return tournament; // Возвращаем нормализованный турнир
+  }  
+}
 
 interface Options {
   teams?: boolean;

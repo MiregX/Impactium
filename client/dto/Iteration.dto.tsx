@@ -7,6 +7,6 @@ export interface Iteration {
   n: λIteration;
   is_lower_bracket: boolean;
   best_of: number;
-  startsAt: Date;
+  startsAt: number;
   battles: Battle[];
 }

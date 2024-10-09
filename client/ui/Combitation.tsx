@@ -22,7 +22,7 @@ const combinationVariants = cva(combination, {
   },
 });
 
-type CombinationProps = CombinationSkeletonProps & {
+export type CombinationProps = CombinationSkeletonProps & {
   src: string | null | undefined;
   name: string;
   id: string

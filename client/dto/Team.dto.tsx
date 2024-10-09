@@ -29,3 +29,7 @@ export class ManageTeamRequest {
     return form
   }
 }
+
+export class λTeam {
+  public static find = (teams: Team[], indent: Team['indent'] | null) => teams.find(team => team.indent === indent);
+}

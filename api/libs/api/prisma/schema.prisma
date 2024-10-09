@@ -11,8 +11,6 @@ datasource db {
 // refers to: client\context\User.tsx
 enum LoginType {
   discord
-  google
-  github
   telegram
   steam
 }
@@ -21,21 +19,12 @@ model User {
   uid           String       @id @default(cuid())
   register      DateTime     @default(now())
   email         String?      @unique
-  // Отображаемый аватар, если пользователь захочет поставить свой, вместо того, что отображается после последнего логина
   avatar        String?
-  // Никнейм который отображается в UI сайта для удобного идентифицирования
-  // Герасимчук Марк
-  // Вскукарачиватель
-  // PRO100RUBIK
   displayName   String?
   // Юзернейм: <Без @>
-  // @mireg
-  // @admin
-  // @system
   username      String?      @unique
   verified      Boolean      @default(false)
   logins        Login[]
-  comments      Comment[]
   teams         Team[]
   participate   TeamMember[]
   tournaments   Tournament[]
@@ -63,7 +52,6 @@ model Team {
   joinable      Joinable     @default(Invites)
   tournaments   Tournament[]
   members       TeamMember[]
-  comments      Comment[]
   invites       TeamInvite[]
 }
 
@@ -74,22 +62,6 @@ model TeamMember {
   indent        String
   team          Team          @relation(fields: [indent], references: [indent])
   role          Role?
-}
-
-model Comment {
-  cid          String    @id @default(cuid())
-  uid          String
-  user         User      @relation(fields: [uid], references: [uid])
-  content      String
-  date         DateTime  @default(now())
-  likes        Int       @default(0)
-  teamIndent   String?
-  team         Team?     @relation(fields: [teamIndent], references: [indent])
-  tournamentIndent String?
-  tournament   Tournament? @relation(fields: [tournamentIndent], references: [code])
-
-  @@index([teamIndent], name: "teamIndent")
-  @@index([tournamentIndent], name: "tournamentIndent")
 }
 
 enum Role {
@@ -109,18 +81,16 @@ enum Joinable {
 }
 
 model Tournament {
-  id                  String        @id @default(cuid())
   banner              String
   title               String
   start               DateTime
   end                 DateTime
   description         Json
-  code                String        @unique
+  code                String        @id @unique
   rules               Json
   ownerId             String
   owner               User          @relation(fields: [ownerId], references: [uid])
   teams               Team[]
-  comments            Comment[]
   live                String?
   prize               Int           @default(0)
   createdAt           DateTime      @default(now())
@@ -130,7 +100,7 @@ model Tournament {
 
 model Iteration {
   is_lower_bracket    Boolean
-  tournament          Tournament      @relation(fields: [tid], references: [id])
+  tournament          Tournament      @relation(fields: [tid], references: [code])
   startsAt            DateTime
   battles             Battle[]
   best_of             Int             @default(1)
@@ -173,12 +143,6 @@ model Transaction {
   coins         Int
   date          DateTime  @default(now())
   status        TransactionStatus
-}
-
-model Changelog {
-  id            String      @id @default(cuid())
-  on            DateTime    @default(now())
-  new           String
 }
 
 model TeamInvite {

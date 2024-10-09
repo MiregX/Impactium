@@ -34,11 +34,11 @@ export class TournamentController {
   }
   
   @Get(':code/get')
-  @Cache(λCache.TournamentCodeGet, 60)
+  // @Cache(λCache.TournamentCodeGet, 60)
   async findOneByIndent(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code']
   ) {
-    return await this.tournamentService.findOneByCode(code);
+    return await this.tournamentService.find(code);
   }
 
   @Delete(':code/delete')

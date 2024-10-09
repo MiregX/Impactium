@@ -16,8 +16,8 @@ export function DeleteTournaments() {
     if (!tournaments) reloadTournaments();
   }, [tournaments])
 
-  const deleteTournament = (id: string) => {
-    api(`/tournament/delete/${id}`, {
+  const deleteTournament = (code: string) => {
+    api(`/tournament/${code}/delete`, {
       method: 'DELETE'
     }, reloadTournaments)
   }
@@ -29,7 +29,7 @@ export function DeleteTournaments() {
         ? tournaments?.map(t => (
           <div className={s.unit}>
             <Combination id={t.code} size='full' src={t.banner} name={t.title} />
-            <Button img='Trash2' size='icon' variant='ghost' onClick={() => deleteTournament(t.id)} />
+            <Button img='Trash2' size='icon' variant='ghost' onClick={() => deleteTournament(t.code)} />
           </div>
         ))
         : Array.from({ length: 4}).map((_, i) => <CombinationSkeleton button size='full' key={i} />)
