@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, NotFoundException, OnModuleInit, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
@@ -19,11 +19,18 @@ import { Cache } from '../application/addon/cache.decorator';
 
 @ApiTags('Tournament')
 @Controller('tournament')
-export class TournamentController {
+export class TournamentController implements OnModuleInit {
   constructor(
     private readonly tournamentService: TournamentService,
     private readonly redis: RedisService
   ) {}
+
+  onModuleInit = () => this.scheduler();
+  
+  @Cron(CronExpression.EVERY_HOUR)
+  async scheduler() {
+    await this.tournamentService.scheduler();
+  }
 
   @Get('get')
   findAll(

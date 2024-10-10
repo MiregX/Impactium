@@ -14,6 +14,11 @@
 .team_combination {
   flex: 1;
 }
+.winner > div,
+.loser > div {
+  max-width: 100%;
+  overflow: hidden;
+}
 .winner {
   /* border-left: 6px solid #00cc00;
   border-top-left-radius: 2px;

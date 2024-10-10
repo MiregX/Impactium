@@ -31,5 +31,5 @@ export class ManageTeamRequest {
 }
 
 export class λTeam {
-  public static find = (teams: Team[], indent: Team['indent'] | null) => teams.find(team => team.indent === indent);
+  public static find = (teams: Team[], indent: Team['indent'] | null | undefined) => teams.find(team => team.indent === indent);
 }

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 interface TeamCombinationProps extends Omit<CombinationProps, 'id' | 'src' | 'name'> {
   team: Team | undefined | null;
-  winner: boolean | null
+  winner: boolean | null | undefined
 }
 
 export function TeamCombination({ team, winner, className, ...props }: TeamCombinationProps) {

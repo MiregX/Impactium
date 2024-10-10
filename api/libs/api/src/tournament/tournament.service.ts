@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { TournamentStandart } from './addon/tournament.standart';
 import { TournamentEntity } from './addon/tournament.entity';
@@ -7,6 +7,8 @@ import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
 import { DAY, HOUR, PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
+import { BattleEntity } from './addon/battle.entity';
+import { λthrow } from '@impactium/utils';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -83,25 +85,78 @@ export class TournamentService implements OnModuleInit {
     })
   }
 
-  grid = async (tournament: TournamentEntity, iteration: λIteration = PowerOfTwo.next(tournament.teams?.length || 0), lower: boolean = false) => {
+  private timers: Map<TournamentEntity['code'], NodeJS.Timeout> = new Map();
+
+  async upcoming() {
+    const currentTime = new Date();
+    const oneHourLater = new Date();
+    oneHourLater.setHours(oneHourLater.getHours() + 1);
+
+    return this.prisma.tournament.findMany({
+      where: {
+        start: {
+          gte: currentTime,
+          lte: oneHourLater,
+        },
+      },
+      ...TournamentEntity.select({ teams: true })
+    });
+  }
+
+  descheduler() {
+    this.timers.forEach(timer => clearTimeout(timer));
+    this.timers.clear();
+  }
+
+  async scheduler() {
+    this.descheduler();
+    const tournaments = await this.upcoming();
+
+    tournaments.forEach(tournament => {
+      const delay = new Date(tournament.start).getTime() - Date.now();
+
+      const timerId = setTimeout(() => {
+        this.grid(tournament);
+      }, delay);
+
+      this.timers.set(tournament.code, timerId);
+      Logger.log(`Scheduled tournament ${tournament.code} to start in ${delay} ms`);
+    });
+  }
+
+  pairs = (arr: Array<string | null>) => arr.reduce((acc, _, i, arr) => {
+    if (i % 2 === 0) acc.push({
+      slot1: arr[i]!, 
+      slot2: arr[i + 1]
+    });
+    return acc;
+  }, [] as Pick<BattleEntity, 'slot1' | 'slot2'>[]);
+
+  grid = async (tournament: TournamentEntity, iteration?: λIteration, lower: boolean = false) => {
+    if (!tournament.teams) λthrow(InternalServerErrorException);
+
+    iteration = iteration ?? PowerOfTwo.next(tournament.teams.length);
+
     const exist = await this.prisma.iteration.findFirst({
       where: {
         tid: tournament.code,
         is_lower_bracket: lower,
-        n: iteration
+        n: iteration / 2
       }
     });
 
     if (exist) {
-      return; ///////
+      return;
     }
+
+    const isFirstIteration = iteration === PowerOfTwo.next(tournament.teams?.length || 0);
 
     await this.prisma.iteration.create({
       data: {
         is_lower_bracket: lower,
         tid: tournament.code,
         battles: {
-          create: []
+          create: isFirstIteration ? this.pairs(tournament.teams.map(team => team.indent)) : []
         },
         n: iteration,
         startsAt: tournament.start
@@ -111,6 +166,8 @@ export class TournamentService implements OnModuleInit {
     if (iteration > 1) {
       this.grid(tournament, PowerOfTwo.prev(iteration), lower);
     }
+
+    Logger.log(`Generated grid for ${tournament.code}`, TournamentService.name);
   }
 
   private async createBattleCup(date: Date) {

@@ -36,36 +36,18 @@ export type Pair<T = undefined> = [T | undefined , T | undefined];
 export type Pairs<T = undefined> = Pair<T>[];
 
 export class λTournament {
-  public static pairs = (tournament: Tournament, iteration: Iteration): any => {
-    const length = λTournament.size(tournament) / 2;
-
-    console.log(iteration.n)
-
-    return Array.from({ length }).map((_, i) => {
-      const battle = iteration.battles?.[i];
-      if (battle) {
-        return λTournament.pair(tournament, battle)
-      }
-      if (length / 2 === iteration.n) {
-        return λTournament.pair(tournament, i)
-      }
-      return [undefined, undefined];
-    })
-  }
-
-  public static pair = (tournament: Tournament, i: number | Battle): Pair<Team> => {
+  public static pair = (tournament: Tournament, i: number): Battle | undefined => {
     if (tournament.teams) {
-      if (typeof i !== 'number') {
-        return [λTeam.find(tournament.teams, i.slot1), λTeam.find(tournament.teams, i.slot2)]
-      } else {
-        return [tournament.teams![i * 2], tournament.teams![i * 2 + 1]];
-      }
+      return {
+        slot1: tournament.teams?.[i * 2]?.indent,
+        slot2: tournament.teams?.[i * 2 + 1]?.indent
+      } as Battle;
     }
-    return [undefined, undefined];  
+    return undefined;  
   }
 
-  public static size = (tournament: Tournament): number => tournament.iterations
-    ? Math.max(...tournament.iterations.map(iteration => iteration.n)) * 2
+  public static size = (use: Tournament): number => use.iterations
+    ? Math.max(...use.iterations.map(iteration => iteration.n))
     : 0;
 
   public static joinable = (tournament: Tournament): Joinable => λTournament.size(tournament) > ((tournament.teams?.length || 0))

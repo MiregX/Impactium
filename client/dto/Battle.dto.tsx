@@ -17,5 +17,5 @@ export interface Battle {
 export class λBattle {
   public static winner = (battle: Battle) => λBattle.finished(battle) ? (battle.is_slot_one_winner ? battle.slot1 : battle.slot2) : null;
 
-  public static finished = (battle: Battle) => typeof battle.is_slot_one_winner === 'boolean';
+  public static finished = (battle: Battle) => typeof battle?.is_slot_one_winner === 'boolean';
 }

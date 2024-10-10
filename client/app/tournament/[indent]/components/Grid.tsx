@@ -12,7 +12,7 @@ import { Button } from '@/ui/Button';
 import { Team, λTeam } from '@/dto/Team.dto';
 import { Battle, λBattle } from '@/dto/Battle.dto';
 import { Pairs, TournamentReadyState, λTournament } from '@/dto/Tournament';
-import { HOUR, λIteration } from '@impactium/pattern';
+import { HOUR, λIteration, λIterations } from '@impactium/pattern';
 import Countdown, { CountdownProps, CountdownRenderProps } from 'react-countdown';
 import { Iteration } from '@/dto/Iteration.dto';
 import { TeamCombination } from '@/components/TeamCombination';
@@ -23,12 +23,16 @@ enum AlignSettings {
   center = 'center'
 }
 
-interface ConnectorsProps {
+interface ConnectorsUnitProps {
   iteration: Iteration,
 }
 
-interface IterationProps {
+interface IterationUnitProps {
   iteration: Iteration;
+}
+
+interface BattleUnitProps {
+  battle?: Battle;
 }
 
 const getTopOffset = (element: HTMLElement) => element.offsetTop + element.clientHeight / 2;
@@ -79,7 +83,7 @@ export function Grid() {
 
   const selectIteration = (iteration: Iteration) => selectBracket(iteration.is_lower_bracket) + ` .${s.unit}[data-length='${iteration.n}']`;
 
-  const Connectors = useCallback(({ iteration }: ConnectorsProps) => {
+  const Connectors = useCallback(({ iteration }: ConnectorsUnitProps) => {
     useEffect(() => {
       const updateConnectors = () => {
         const currentUnits = document.querySelectorAll(selectIteration(iteration)) as unknown as HTMLElement[];
@@ -101,7 +105,7 @@ export function Grid() {
           
           if (!nextUnit) return;
 
-          const starts = typeof battle.is_slot_one_winner === 'boolean'
+          const starts = typeof battle?.is_slot_one_winner === 'boolean'
             ? [battle.is_slot_one_winner ? getTopOffset(unit) - 28 : getTopOffset(unit) + 32]
             : [getTopOffset(unit) - 28, getTopOffset(unit) + 32];
 
@@ -129,10 +133,27 @@ export function Grid() {
     return <svg className={s.connector} data-current={iteration.n} xmlns='http://www.w3.org/2000/svg' />;
   }, []);
 
-  const Iteration = useCallback(({ iteration }: IterationProps) => {
+  const IterationUnit = useCallback(({ iteration }: IterationUnitProps) => {
     const self = useRef<HTMLDivElement>(null);
 
     const round = λTournament.round(iteration.n, λTournament.size(tournament) / 2);
+
+    const BattleUnit = ({ battle }: BattleUnitProps) => (
+      <div
+        className={s.unit}
+        data-length={iteration.n}
+        data-winner={battle && typeof battle.is_slot_one_winner === 'boolean'
+          ? (battle.is_slot_one_winner
+            ? battle.slot1
+            : battle.slot2)
+          : null}
+        data-one={battle?.slot1}
+        data-two={battle?.slot2}>
+        <TeamCombination size='full' team={λTeam.find(tournament.teams || [], battle?.slot1)} winner={battle ? battle.is_slot_one_winner : undefined} />
+        <Separator><i>VS</i></Separator>
+        <TeamCombination size='full' team={λTeam.find(tournament.teams || [], battle?.slot2)} winner={battle ? !battle.is_slot_one_winner : undefined} />
+      </div>
+    );
 
     return (
       <div ref={self} className={s.iteration}>
@@ -143,23 +164,7 @@ export function Grid() {
           </div>
         )}
         <div className={cn(s.units, s[align])}>
-          {iteration.battles.map((battle, index) => (
-            <div
-              key={index}
-              className={s.unit}
-              data-length={iteration.n}
-              data-winner={typeof battle.is_slot_one_winner === 'boolean'
-                ? (battle.is_slot_one_winner
-                  ? battle.slot1
-                  : battle.slot2)
-                : null}
-              data-one={battle.slot1}
-              data-two={battle.slot2}>
-              <TeamCombination size='full' team={λTeam.find(tournament.teams || [], battle.slot1)} winner={battle.is_slot_one_winner} />
-              <Separator><i>VS</i></Separator>
-              <TeamCombination size='full' team={λTeam.find(tournament.teams || [], battle.slot2)} winner={!battle.is_slot_one_winner} />
-            </div>
-          ))}
+          {Array.from({ length: iteration.n }).map((_, index) => <BattleUnit key={index} battle={iteration.battles[index] || λTournament.size(tournament) === iteration.n ? λTournament.pair(tournament, index) : undefined} />)}
         </div>
         <Connectors iteration={iteration} />
       </div>
@@ -189,12 +194,12 @@ export function Grid() {
       </div>
       <Card className={cn(s.grid, fullScreen && s.fullscreen)}>
         <div className={cn(s.brackets, s.upper_bracket)}>
-          {λTournament.upper(tournament).map(iteration => <Iteration key={iteration.n} iteration={iteration} />)}
+          {λTournament.upper(tournament).map(iteration => <IterationUnit key={iteration.n} iteration={iteration} />)}
         </div>
         <Separator />
         {tournament.has_lower_bracket &&
           <div className={cn(s.brackets, s.lower_bracket)}>
-            {λTournament.lower(tournament).map(iteration => <Iteration key={iteration.n} iteration={iteration} />)}
+            {λTournament.lower(tournament).map(iteration => <IterationUnit key={iteration.n} iteration={iteration} />)}
           </div>
         }
       </Card>

@@ -5,13 +5,12 @@ import { IterationEntity } from "./iteration.entity";
 import { BattleEntity } from "./battle.entity";
 
 export class TournamentEntity implements Tournament {
-  id!: string;
+  code!: string;
   banner!: string;
   title!: string;
   start!: Date;
   end!: Date;
   description!: Prisma.JsonValue | null;
-  code!: string;
   rules!: Prisma.JsonValue | null;
   ownerId!: string;
   live!: string | null;
@@ -36,13 +35,12 @@ export class TournamentEntity implements Tournament {
     actual = false
   }: Options = {}): Prisma.TournamentDefaultArgs => ({
     select: {
-      id: true,
+      code: true,
       banner: true,
       title: true,
       start: true,
       end: true,
       description: true,
-      code: true,
       rules: true,
       ownerId: true,
       live: true,
