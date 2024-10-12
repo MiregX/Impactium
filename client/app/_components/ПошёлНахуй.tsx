@@ -3,10 +3,9 @@ import { Button } from '@/ui/Button';
 import s from './styles/ПошёлНахуй.module.css';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { CreateTournament } from '@/banners/create_tournament/CreateTournament';
+import { ManageTournamentBanner } from '@/banners/ManageTournament.banner';
 import { useApplication } from '@/context/Application.context';;
-import { Icon } from '@/ui/Icon';
-import { ManageTeamBanner } from '@/banners/manage_team/ManageTeam.banner';
+import { ManageTeamBanner } from '@/banners/ManageTeam.banner';
 
 export function ПошёлНахуй() {
   const { spawnBanner, application } = useApplication();
@@ -30,7 +29,7 @@ export function ПошёлНахуй() {
       <Button asChild className={cn(s.button, s.teams)}>
         <Link href='/teams'>Команды</Link>
       </Button>
-      <Button onClick={() => spawnBanner(<CreateTournament />)} className={cn(s.button, s.create_tournament)}>
+      <Button onClick={() => spawnBanner(<ManageTournamentBanner />)} className={cn(s.button, s.create_tournament)}>
         Создать турнир
       </Button>
       <Button onClick={() => spawnBanner(<ManageTeamBanner />)} className={cn(s.button, s.create_team)}>

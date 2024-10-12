@@ -3,6 +3,7 @@
   align-items: center;
   height: 36px;
   width: 100%;
+  cursor: text;
   border-radius: var(--border-s);
   border: 1px solid var(--accent-2);
   background-color: var(--soft-black);
@@ -22,16 +23,17 @@
 .image input {
   padding: 8px 12px 8px 0;
   flex: 1;
-  cursor: pointer;
 }
 
 .input::file {
+  cursor: pointer;
   border: 0;
   background-color: transparent;
   font-weight: 500;
 }
 
-.input::placeholder {
+.input::placeholder,
+.input input::placeholder {
   color: var(--text-dimmed);
 }
 

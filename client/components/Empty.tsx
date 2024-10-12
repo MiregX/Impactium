@@ -1,11 +1,11 @@
 'use client'
-import { CreateTournament } from "@/banners/create_tournament/CreateTournament";
+import { CreateTournament } from "@/banners/ManageTournament.banner";
 import { useApplication } from "@/context/Application.context";
 import { useLanguage } from "@/context/Language.context";
 import { Button } from "@/ui/Button";
 import s from './styles/_.module.css';
 import { TeamOrTournamentProp } from "@/dto/TeamOrTournament.type";
-import { ManageTeamBanner } from "@/banners/manage_team/ManageTeam.banner";
+import { ManageTeamBanner } from "@/banners/ManageTeam.banner";
 
 export const Empty = ({ type }: TeamOrTournamentProp) => {
   const { lang } = useLanguage();

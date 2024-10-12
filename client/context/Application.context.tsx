@@ -9,6 +9,7 @@ import { Application, ws } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
+import { λError } from '@impactium/pattern';
 
 const ApplicationContext = createContext<ApplicationContextProps | undefined>(undefined);
 
@@ -57,11 +58,32 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast(`${text} ${lang.copiedMessage}`);
+      toast(`${text} ${lang.copied.title}`, {
+        description: lang.copied.description
+      });
     } catch (_) {
       toast('Error copying to clipboard');
     }
   };
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === λError.data_scroll_locked) {
+          document.body.removeAttribute(λError.data_scroll_locked);
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: [λError.data_scroll_locked],
+    });
+
+    document.body.removeAttribute(λError.data_scroll_locked);
+
+    return observer.disconnect;
+  }, []);
 
   const props: ApplicationContextProps = {
     copy,

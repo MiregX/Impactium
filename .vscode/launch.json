@@ -11,13 +11,6 @@
     },
     {
       "type": "node-terminal",
-      "name": "Start API λ",
-      "request": "launch",
-      "command": "npm run start:debug",
-      "cwd": "${workspaceFolder}/api"
-    },
-    {
-      "type": "node-terminal",
       "name": "Start CLIENT",
       "request": "launch",
       "command": "npm run start:debug",

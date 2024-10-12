@@ -61,7 +61,8 @@ export enum λError {
   team_invite_expired = 'team_invite_expired',
   team_is_close_to_everyone = 'team_is_close_to_everyone',
   user_not_found = 'user_not_found',
-  user_is_already_team_member = 'user_is_already_team_member'
+  user_is_already_team_member = 'user_is_already_team_member',
+  data_scroll_locked = 'data-scroll-locked'
 }
 
 export enum λCache {

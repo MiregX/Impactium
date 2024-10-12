@@ -30,7 +30,7 @@ export class CreateTeamDto {
   logo?: TeamEntity['logo'];
 }
 
-export class Checkout {
+export class TeamCheckout {
   uid!: string;
   indent!: string;
 }

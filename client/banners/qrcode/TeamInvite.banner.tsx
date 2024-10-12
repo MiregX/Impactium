@@ -11,7 +11,7 @@ import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
 import Countdown from "react-countdown";
 import { TeamInvitesBanner } from "./TeamInvites.banner";
-import { ManageTeamBanner } from "../manage_team/ManageTeam.banner";
+import { ManageTeamBanner } from "../ManageTeam.banner";
 
 interface TeamInviteBannerProps {
   team: Team;

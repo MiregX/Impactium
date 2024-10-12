@@ -40,23 +40,23 @@
   line-clamp: 1;
 }
 .scroll {
-  background: var(--soft-black);
+  background: var(--meta-black);
   display: flex;
   width: 100%;
   z-index: 5;
-  left: 0;
   cursor: default;
+  left: 0;
   align-items: center;
   justify-content: center;
-  padding-top: 4px;
-  padding-bottom: 4px;
   position: absolute;
 }
 .up {
   top: 0;
+  border-bottom: 1px solid var(--accent-2);
 }
 .down {
   bottom: 0;
+  border-top: 1px solid var(--accent-2);
 }
 .content {
   position: relative;

@@ -1,7 +1,7 @@
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { Checkout, CreateTeamDto, UpdateTeamDto, UpdateTeamMemberRoleDto } from './addon/team.dto';
+import { TeamCheckout, CreateTeamDto, UpdateTeamDto, UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
@@ -22,7 +22,7 @@ export class TeamService {
   ) {}
 
   async create(
-    { indent, uid }: Checkout,
+    { indent, uid }: TeamCheckout,
     team: CreateTeamDto,
     logo?: Express.Multer.File
   ) {

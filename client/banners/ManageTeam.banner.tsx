@@ -5,7 +5,7 @@ import { Banner } from '@/ui/Banner';
 import { Icon } from '@/ui/Icon';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
 import { ChangeEvent, useEffect, useState } from 'react';
-import s from './ManageTeamBanner.module.css';
+import s from './Manager.module.css';
 import { Separator } from '@/ui/Separator';
 import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
@@ -115,9 +115,7 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
 
   return (
     <Banner title={isCreate ? 'Create team' : 'Edit team'}>
-      <div className={s.preview}>
-        <Combination size='heading' id={indent || 'example_id'} src={logo} name={title || 'Example Title'} />
-      </div>
+      <Combination size='heading' id={indent || 'example_id'} src={logo} name={title || 'Example Title'} />
       <Separator />
       <div className={s.node}>
         <p>Название команды*</p>

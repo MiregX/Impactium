@@ -19,16 +19,32 @@
   max-width: 100%;
   overflow: hidden;
 }
-.winner {
-  /* border-left: 6px solid #00cc00;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  padding-left: 8px; */
-}
+.winner {}
 .loser {
   opacity: 0.2;
-  /* border-left: 6px solid #ff3a0080;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  padding-left: 8px; */
+}
+.chooser {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+.chooser * {
+  transition: all .125s var(--transition);
+}
+.chooser p {
+  flex: 1;
+  color: var(--text-dimmed);
+  font-size: 14px;
+}
+.chooser p:first-child {
+  text-align: right;
+}
+.chooser p:last-child {
+  text-align: left;
+}
+.chooser .active {
+  color: var(--text-white);
+  font-weight: 500;
 }

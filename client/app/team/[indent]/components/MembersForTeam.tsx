@@ -16,7 +16,7 @@ import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam, SetState } 
 import { useApplication } from "@/context/Application.context";
 import { Separator } from "@/ui/Separator";
 import { Team } from "@/dto/Team.dto";
-import { ManageTeamBanner } from "@/banners/manage_team/ManageTeam.banner";
+import { ManageTeamBanner } from "@/banners/ManageTeam.banner";
 import { UserCombination } from "@/components/UserCombination";
 
 export function MembersForTeam() {

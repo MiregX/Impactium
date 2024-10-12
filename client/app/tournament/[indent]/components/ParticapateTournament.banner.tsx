@@ -1,5 +1,5 @@
 'use client'
-import { ManageTeamBanner } from '@/banners/manage_team/ManageTeam.banner'
+import { ManageTeamBanner } from '@/banners/ManageTeam.banner'
 import { useApplication } from '@/context/Application.context'
 import { useUser } from '@/context/User.context'
 import { Team } from '@/dto/Team.dto'

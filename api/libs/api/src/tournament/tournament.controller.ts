@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, NotFoundException, OnModuleInit, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, OnModuleInit, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,6 +16,10 @@ import { Tournament } from './addon/tournament.decorator';
 import { RedisService } from '../redis/redis.service';
 import { λCache } from '@impactium/pattern';
 import { Cache } from '../application/addon/cache.decorator';
+import { AuthGuard } from '../auth/addon/auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadFileDto } from '../team/addon/team.dto';
+import { CreateTournamentDto } from './addon/tournament.dto';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -41,7 +45,7 @@ export class TournamentController implements OnModuleInit {
   }
   
   @Get(':code/get')
-  // @Cache(λCache.TournamentCodeGet, 60)
+  @Cache(λCache.TournamentCodeGet, 60)
   async findOneByIndent(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code']
   ) {
@@ -64,6 +68,18 @@ export class TournamentController implements OnModuleInit {
     @Tournament() tournament: TournamentEntity
   ) {
     return this.tournamentService.join(tournament, team);
+  }
+  
+  @Post(':code/create')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
+  create(
+    @Body() tournament: CreateTournamentDto,
+    @User() { uid }: UserEntity,
+    @Param('code', CodeValidationPipe) code: string,
+    @UploadedFile() banner?: Express.Multer.File,
+  ) {
+    return this.tournamentService.create({ uid, code }, tournament, banner);
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES)
