@@ -62,3 +62,8 @@
   height: 36px !important;
   width: 100% !important;
 }
+.bypass {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}

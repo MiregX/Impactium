@@ -34,7 +34,8 @@ interface BannerProps extends React.HTMLAttributes<HTMLDivElement> {
   options?: Partial<Options>
 }
 
-export function Banner({ title, children, footer, onClose, options, className, ...props }: BannerProps) {
+export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
+  ({ title, children, footer, onClose, options, className, ...props }, ref) => {
   const { destroyBanner } = useApplication();
 
   useEffect(() => {
@@ -83,4 +84,4 @@ export function Banner({ title, children, footer, onClose, options, className, .
       </div>
     </div>
   );
-}
+});

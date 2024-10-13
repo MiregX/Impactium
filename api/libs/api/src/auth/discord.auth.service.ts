@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Redirect } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { AuthPayload, AuthResult } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
