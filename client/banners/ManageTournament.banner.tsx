@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, Fragment, useCallback, useState } from 'react';
 import { Banner } from '@/ui/Banner';
 import { useApplication } from '@/context/Application.context';
 import { useLanguage } from '@/context/Language.context';
@@ -13,6 +13,7 @@ import { Tournament } from '@/dto/Tournament';
 import { Combination } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
+import { λIcon } from '@/lib/utils';
 
 export function ManageTournamentBanner() {
   const { lang } = useLanguage();
@@ -41,35 +42,96 @@ export function ManageTournamentBanner() {
       ...s,
       [iteration]: parseInt(event.target.value) || 1,
     }));
-
-    console.log(iteration, event.target.value);
   }
 
   const Settings = useCallback(() => {
-    const units = [];
+    const upper_bracket = [];
     const lower_bracket = [];
 
+    const predefined: Record<string, Record<λIteration, 1 | 2 | 3>> = {
+      standart: {
+        0: 2,
+        1: 1,
+        2: 1,
+        4: 1,
+        8: 1,
+        16: 1,
+        32: 1,
+        64: 1,
+        128: 1,
+        256: 1,
+        512: 1,
+        1024: 1,
+        2048: 1
+      },
+      professional: {
+        0: 3,
+        1: 2,
+        2: 2,
+        4: 1,
+        8: 1,
+        16: 1,
+        32: 1,
+        64: 1,
+        128: 1,
+        256: 1,
+        512: 1,
+        1024: 1,
+        2048: 1
+      },
+    }
+
+    const predefinedMaterials: Record<keyof typeof predefined, {
+      title: string,
+      description: string,
+      icon: λIcon
+    }> = {
+      standart: {
+        title: 'Стандартный формат',
+        description: 'Для любительских турниров, только финалисты играют до 2 побед',
+        icon: 'LayoutGrid'
+      },
+      professional: {
+        title: 'Професиональный турнир',
+        description: 'Финал до 3 побед, Топ 2 и Топ 4 играют до 2 побед. Остальные - до одной',
+        icon: 'Trophy'
+      }
+    }
+
     for (let iteration = iterations; iteration >= 1; iteration = PowerOfTwo.prev(iteration)) {
-      units.push(
+      upper_bracket.push(
         <div className={s.node}>
           <p>{iteration}</p>
           <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
         </div>
       );
-
-      if (tournament.has_lower_bracket && iteration !== iterations && iteration !== 1) {
-        units.push(
-          <div className={s.node}>
-            <p>{iteration}</p>
-            <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
-          </div>
-        )
-      }
     }
 
     return (
       <div className={s.settings}>
-        {units}
+        <div className={s.predefined}>
+          <p>До скольки побед играют команды в каждой из стадий</p>
+          <Select>
+            <SelectTrigger>
+
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem className={s.option} value='standart'>
+                <p>{predefinedMaterials.standart.title}</p>
+                <span>{predefinedMaterials.standart.description}</span>
+              </SelectItem>
+              <SelectItem className={s.option} value='professional'>
+                <p>{predefinedMaterials.professional.title}</p>
+                <span>{predefinedMaterials.professional.description}</span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {upper_bracket && (
+          <div className={s.upper_bracket}>
+            {upper_bracket}
+          </div>
+        )}
       </div>
     );
   }, [iterations, settings, tournament.has_lower_bracket]);

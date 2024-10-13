@@ -18,3 +18,29 @@
 .joinable {
   width: min-content;
 }
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.predefined {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.upper_bracket,
+.lower_bracket {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.option > span {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+.option p {
+  font-size: 14px;
+  font-weight: 500;
+}

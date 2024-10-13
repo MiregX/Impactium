@@ -25,7 +25,7 @@ const combinationVariants = cva(combination, {
 export type CombinationProps = CombinationSkeletonProps & {
   src: string | null | undefined;
   name: string;
-  id: string
+  id: string;
 };
 
 interface CombinationSkeletonProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof combinationVariants> {
