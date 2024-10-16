@@ -1,7 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { IsEnum, IsInt, IsLowercase, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
-import { FileFilterCallback } from 'multer';
-import { TeamStandart } from './team.standart';
 import { TeamMemberEntity } from './team.member.entity';
 import { Joinable, Role } from '@prisma/client';
 import { λError, Identifier, DisplayName } from '@impactium/pattern';
@@ -25,14 +22,6 @@ export class CreateTeamDto {
     message: λError.invalid_joinable_field
   })
   joinable!: Joinable;
-
-
-  logo?: TeamEntity['logo'];
-}
-
-export class TeamCheckout {
-  uid!: string;
-  indent!: string;
 }
 
 export class UpdateTeamDto implements Partial<CreateTeamDto> {
@@ -75,30 +64,6 @@ export class FindManyTeamsByIndentDto {
 }
 
 export type FindTeamDto = FindOneTeamByIndentDto | FindManyTeamsByIndentDto
-
-export class UploadFileDto {
-  static getConfig() {
-    return {
-      fileFilter: (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-        // Проверяем тип mime
-        if (!['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.mimetype)) {
-          return cb(new Error('Unsupported file type') as unknown as null, false);
-        }
-
-        // Проверяем размер файла
-        if (file.size > TeamStandart.LOGO_BYTE_SIZE) {
-          return cb(new Error('File too large') as unknown as null, false);
-        }
-
-        // Если все ок
-        cb(null, true);
-      },
-      limits: {
-        fileSize: TeamStandart.LOGO_BYTE_SIZE, // Лимит на размер файла
-      },
-    };
-  }
-}
 
 export class UpdateTeamMemberRoleDto {
   @IsNotEmpty()

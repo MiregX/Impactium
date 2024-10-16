@@ -16,25 +16,25 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto,  UpdateTeamDto,  UploadFileDto } from './addon/team.dto';
+import { CreateTeamDto,  UpdateTeamDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TeamExistanseGuard, TeamGuard, TeamMemberGuard } from './addon/team.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { IndentValidationPipe } from '@api/main/application/addon/indent.validator';
 import { TeamStandart } from './addon/team.standart';
 import { ApiTags } from '@nestjs/swagger';
 import { λthrow } from '@impactium/utils';
 import { UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
-import { Joinable, TeamMember } from '@prisma/client';
-import { TeamInviteEntity } from './addon/teamInvite.entity';
-import { TeamIsCloseToEveryone } from '../application/addon/error';
+import { Joinable } from '@prisma/client';
+import { TeamIsCloseToEveryone, UnallowedFileFormat, UnallowedFileSize } from '../application/addon/error';
 import { ConnectGuard } from '../auth/addon/connect.guard';
 import { RedisService } from '../redis/redis.service';
 import { λCache } from '@impactium/pattern';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImageValidator } from '../application/addon/image.validator';
+import { IndentValidationPipe } from './addon/indent.validator';
 
 @ApiTags('Team')
 @Controller('team')
@@ -100,7 +100,7 @@ export class TeamController {
   @Delete(':indent/delete')
   @UseGuards(TeamGuard)
   delete(
-    @Param('indent') indent: string,
+    @Param('indent', IndentValidationPipe) indent: TeamEntity['indent'],
     @User() user: UserEntity,
   ) {
     return this.teamService.delete(user, indent);
@@ -109,25 +109,24 @@ export class TeamController {
   // Для создания команды
   @Post(':indent/create')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('logo', UploadFileDto.getConfig() as unknown as any))
+  @ImageValidator('logo')
   create(
     @Body() team: CreateTeamDto,
     @User() { uid }: UserEntity,
-    @Param('indent', IndentValidationPipe) indent: string,
     @UploadedFile() logo?: Express.Multer.File,
   ) {
-    return this.teamService.create({ uid, indent }, team, logo);
+    return this.teamService.create(uid, team, logo);
   }
 
   // Для редактирования команды
   @Patch(':indent/edit')
   @UseGuards(TeamGuard)
-  @UseInterceptors(FileInterceptor('logo', UploadFileDto.getConfig() as unknown as any))
+  @ImageValidator('logo')
   edit(
     @Body() body: UpdateTeamDto,
     @Team() team: TeamEntity,
     @UploadedFile() logo?: Express.Multer.File,
-) {
+  ) {
     return this.teamService.update(team, body, logo);
   }
 

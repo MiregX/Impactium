@@ -24,6 +24,17 @@ export const cookieSettings = {
   path: '/',
 }
 
+export const FileExtensionBase: RegExp = /\.(jpg|jpeg|png|gif)$/;
+export class FileExtension {
+  static base: RegExp = FileExtensionBase;
+
+  static test(value: string): boolean {
+    return FileExtension.base.test(value);
+  }
+
+  static acceptable = (size: number): boolean => size ? size <= 1024 * 1024 : false;
+}
+
 export type λIteration = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
 
 export const λIterations: Record<`_${λIteration}`, λIteration> = {
@@ -62,7 +73,9 @@ export enum λError {
   team_is_close_to_everyone = 'team_is_close_to_everyone',
   user_not_found = 'user_not_found',
   user_is_already_team_member = 'user_is_already_team_member',
-  data_scroll_locked = 'data-scroll-locked'
+  data_scroll_locked = 'data-scroll-locked',
+  multiple_files_error = 'multiple_files_error',
+  file_invalid_format_or_size = "file_invalid_format_or_size"
 }
 
 export enum λCache {

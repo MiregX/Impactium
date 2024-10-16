@@ -90,3 +90,10 @@
 .active {
   background-color: var(--gray24);
 }
+.submit {
+  align-self: flex-end;
+}
+.preview {
+  max-height: 200px;
+  overflow-y: auto;
+}

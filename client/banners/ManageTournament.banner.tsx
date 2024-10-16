@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs';
 import { Icon } from '@/ui/Icon';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/Tooltip';
 import { Card } from '@/ui/Card';
+import { Button } from '@/ui/Button';
 
 type SettingsMode = 'standart' | 'professional' | 'custom';
 
@@ -62,12 +63,12 @@ export function ManageTournamentBanner() {
 
     const predefined: Record<SettingsMode, Partial<Record<λIteration, 1 | 2 | 3>>> = {
       standart: {
-        0: 2
+        1: 3,
       },
       professional: {
-        0: 3,
-        1: 2,
-        2: 2
+        1: 3,
+        2: 2,
+        4: 2
       },
       custom: {}
     }
@@ -100,16 +101,16 @@ export function ManageTournamentBanner() {
     const lower_bracket = [];
 
     for (let iteration = iterations; iteration >= 1; iteration = PowerOfTwo.prev(iteration)) {
-      upper_bracket.push(
-        <div className={s.node}>
+      upper_bracket.unshift(
+        <div key={iteration} className={s.node}>
           <p>Топ {iteration}</p>
           <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
         </div>
       );
 
       if (tournament.has_lower_bracket && iteration > 1 && iteration < iterations) {
-        lower_bracket.push(
-          <div className={s.node}>
+        lower_bracket.unshift(
+          <div key={iteration} className={s.node}>
             <p>Топ {iteration}</p>
             <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
           </div>
@@ -161,6 +162,16 @@ export function ManageTournamentBanner() {
     </div>
   ), []);
 
+  const handleCreate = () => {
+    api<Tournament>('/tournament/create', {
+      method: 'POST',
+      body: {
+        tournament,
+        settings
+      }
+    }, console.log);
+  }
+
   return (
     <Banner className={s.banner} title={lang.create.tournament}>
       <Combination size='heading' id={tournament.code || 'identifier'} src={tournament.banner} name={tournament.title || 'Название турнира'} />
@@ -194,6 +205,7 @@ export function ManageTournamentBanner() {
         checked={tournament.has_lower_bracket}
         onCheckedChange={checked => setTournament((t) => ({ ...t, has_lower_bracket: checked}))} />
       <Settings />
+      <Button className={s.submit} img='Plus' onClick={handleCreate}>Создать турнир</Button>
     </Banner>
   );
 };

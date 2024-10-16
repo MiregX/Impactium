@@ -123,6 +123,11 @@ export class UnallowedFileMetadata extends HttpException {
     super('unallowed_file_metadata', HttpStatus.NOT_ACCEPTABLE)
   };
 }
+export class MultipleFilesError extends HttpException {
+  constructor() {
+    super(λError.multiple_files_error, HttpStatus.CONFLICT)
+  };
+}
 export class EnvironmentKeyNotProvided extends Error {
   constructor(key: string) {
     super(`Ключ ${key} не был передан в .env файле. Проверь его ещё раз`);

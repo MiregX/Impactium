@@ -9,7 +9,7 @@ import { TeamEntity } from '../team/addon/team.entity';
 import { DAY, HOUR, PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
 import { BattleEntity } from './addon/battle.entity';
 import { λthrow } from '@impactium/utils';
-import { CreateTournamentDto, TournamentCheckout } from './addon/tournament.dto';
+import { CreateTournamentDto } from './addon/tournament.dto';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -86,7 +86,7 @@ export class TournamentService implements OnModuleInit {
     })
   }
 
-  create({ uid, code }: TournamentCheckout, tournament: CreateTournamentDto, banner?: Express.Multer.File) {
+  create(uid: UserEntity['uid'], tournament: CreateTournamentDto, banner?: Express.Multer.File) {
 
   }
 

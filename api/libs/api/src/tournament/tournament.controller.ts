@@ -5,8 +5,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '@api/main/auth/addon/admin.guard';
 import { User } from '@api/main/user/addon/user.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { CodeValidationPipe } from '@api/main/application/addon/code.validator';
-import { λthrow } from '@impactium/utils';
 import { TournamentEntity } from './addon/tournament.entity';
 import { TeamGuard } from '../team/addon/team.guard';
 import { Team } from '../team/addon/team.decorator';
@@ -17,9 +15,9 @@ import { RedisService } from '../redis/redis.service';
 import { λCache } from '@impactium/pattern';
 import { Cache } from '../application/addon/cache.decorator';
 import { AuthGuard } from '../auth/addon/auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadFileDto } from '../team/addon/team.dto';
 import { CreateTournamentDto } from './addon/tournament.dto';
+import { ImageValidator } from '../application/addon/image.validator';
+import { CodeValidationPipe } from './addon/code.validator';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -55,7 +53,7 @@ export class TournamentController implements OnModuleInit {
   @Delete(':code/delete')
   @UseGuards(AdminGuard)
   delete(
-    @Param('code') code: TournamentEntity['code'],
+    @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
     @User() user: UserEntity,
   ) {
     return this.tournamentService.delete(user, code);
@@ -72,14 +70,13 @@ export class TournamentController implements OnModuleInit {
   
   @Post(':code/create')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('banner', UploadFileDto.getConfig() as unknown as any))
+  @ImageValidator('banner')
   create(
     @Body() tournament: CreateTournamentDto,
     @User() { uid }: UserEntity,
-    @Param('code', CodeValidationPipe) code: string,
     @UploadedFile() banner?: Express.Multer.File,
   ) {
-    return this.tournamentService.create({ uid, code }, tournament, banner);
+    return this.tournamentService.create(uid, tournament, banner);
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES)

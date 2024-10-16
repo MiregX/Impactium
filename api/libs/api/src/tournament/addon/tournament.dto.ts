@@ -2,11 +2,6 @@ import { DisplayName, Identifier, λError } from "@impactium/pattern";
 import { IsNotEmpty, Matches } from "class-validator";
 import { TournamentEntity } from "./tournament.entity";
 
-export class TournamentCheckout {
-  uid!: string;
-  code!: string;
-}
-
 export class CreateTournamentDto {
   @IsNotEmpty()
   @Matches(Identifier.Code, {
@@ -19,7 +14,5 @@ export class CreateTournamentDto {
     message: λError.username_invalid_format
   })
   title!: TournamentEntity['title'];
-
-  banner?: TournamentEntity['banner'];
 }
 

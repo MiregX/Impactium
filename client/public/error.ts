@@ -85,6 +85,13 @@ const error = {
     it: 'Il file è troppo grande. Carica un file più piccolo di 1 MB',
     pl: 'Plik za duży. Prześlij plik mniejszy niż 1 MB'
   },
+  'File too large': {
+    us: 'File too large. Please upload a file smaller than 1 MB.',
+    ru: 'Ого какой большой. Загрузи в меня файл меньше 1 мегабайта',
+    ua: 'Ого який великий. Завантажте файл менший за 1 мегабайт',
+    it: 'Il file è troppo grande. Carica un file più piccolo di 1 MB',
+    pl: 'Plik za duży. Prześlij plik mniejszy niż 1 MB'
+  },
   unallowed_file_metadata: {
     us: 'Images must be up to 512x512 pixels.',
     ru: 'Картинки принимаются только до 512 на 512 пикселей',

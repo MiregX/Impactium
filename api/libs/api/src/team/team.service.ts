@@ -1,7 +1,7 @@
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '@api/main/redis/redis.service';
 import { FtpService } from '@api/mcs/file/ftp.service';
-import { TeamCheckout, CreateTeamDto, UpdateTeamDto, UpdateTeamMemberRoleDto } from './addon/team.dto';
+import { CreateTeamDto, UpdateTeamDto, UpdateTeamMemberRoleDto } from './addon/team.dto';
 import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
@@ -22,7 +22,7 @@ export class TeamService {
   ) {}
 
   async create(
-    { indent, uid }: TeamCheckout,
+    uid: UserEntity['uid'],
     team: CreateTeamDto,
     logo?: Express.Multer.File
   ) {
@@ -31,16 +31,16 @@ export class TeamService {
         if (teams.length >= 3) throw new TeamLimitException();
       })
     
-    await this.findOneByIndent(indent).then(team => {
+    await this.findOneByIndent(team.indent).then(team => {
       if (team) throw new TeamAlreadyExist();
     });
 
     return this.prisma.team.create({
       data: {
         title: team.title,
-        indent,
+        indent: team.indent,
         joinable: team.joinable,
-        logo: await this.uploadLogo(indent, logo),
+        logo: await this.uploadLogo(team.indent, logo),
         owner: {
           connect: {
             uid,

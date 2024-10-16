@@ -5,7 +5,12 @@ import { randomUUID } from 'crypto';
 @Injectable()
 export class RequestMiddleware implements NestMiddleware {
   use(req: Request, _: Response, next: NextFunction) {
-    req['custom'] = { timestamp: Date.now(), req_id: typeof req.headers['req_id'] === 'string' ? req.headers['req_id'] === 'string' : randomUUID() };
+    req['custom'] = {
+      timestamp: Date.now(),
+      req_id: typeof req.headers['req_id'] === 'string'
+        ? req.headers['req_id']
+        : randomUUID()
+    };
     next();
   }
 }

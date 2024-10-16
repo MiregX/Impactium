@@ -1,5 +1,5 @@
 'use client'
-import { CreateTournament } from "@/banners/ManageTournament.banner";
+import { ManageTournamentBanner } from "@/banners/ManageTournament.banner";
 import { useApplication } from "@/context/Application.context";
 import { useLanguage } from "@/context/Language.context";
 import { Button } from "@/ui/Button";
@@ -14,7 +14,7 @@ export const Empty = ({ type }: TeamOrTournamentProp) => {
   return (
     <div className={s.center}>
       <p>{lang[type].empty}</p>
-      <Button onClick={() => spawnBanner(type === 'team' ? <ManageTeamBanner /> : <CreateTournament />)}>{lang.create[type]}</Button>
+      <Button onClick={() => spawnBanner(type === 'team' ? <ManageTeamBanner /> : <ManageTournamentBanner />)}>{lang.create[type]}</Button>
     </div>
   );
 }
