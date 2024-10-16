@@ -4,6 +4,8 @@ import { UserEntity } from '@api/main/user/addon/user.entity';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { TeamEntity } from './team.entity';
 import { Identifier } from '@impactium/pattern';
+import { IndentInvalidFormat, IndentNotProvided } from '@api/main/application/addon/error';
+import { λthrow } from '@impactium/utils';
 
 /**
  * Для проверки, существует ли команда по indent
@@ -19,9 +21,9 @@ export class TeamExistanseGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    if (!request.params.indent) return false;
+    if (!request.params.indent) λthrow(IndentNotProvided);
 
-    if (!Identifier.test(request.params.indent)) return false;
+    if (!Identifier.test(request.params.indent)) λthrow(IndentInvalidFormat);
 
     request.team = await this.teamService.findOneByIndent(request.params.indent);
 
