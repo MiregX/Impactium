@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package main;
 
-option go_package = "./analytics";
+option go_package = "./analytics/controller";
 
 message RandomRequest {
     // ...

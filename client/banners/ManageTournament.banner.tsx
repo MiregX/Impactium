@@ -13,7 +13,19 @@ import { Tournament } from '@/dto/Tournament';
 import { Combination } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
-import { λIcon } from '@/lib/utils';
+import { cn, λIcon } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs';
+import { Icon } from '@/ui/Icon';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/Tooltip';
+import { Card } from '@/ui/Card';
+
+type SettingsMode = 'standart' | 'professional' | 'custom';
+
+interface Material {
+  title: string,
+  description: string,
+  icon: λIcon
+}
 
 export function ManageTournamentBanner() {
   const { lang } = useLanguage();
@@ -22,6 +34,7 @@ export function ManageTournamentBanner() {
   const [rawBanner, setRawBanner] = useState<File>();
   const [iterations, setIterations] = useState<λIteration>(32);
   const [settings, setSettings] = useState<Partial<Record<λIteration, 1 | 2 | 3>>>({});
+  const [settingsMode, setSettingsMode] = useState<SettingsMode>('standart');
 
   !authGuard({
     useRedirect: false
@@ -46,98 +59,110 @@ export function ManageTournamentBanner() {
 
   const Settings = useCallback(() => {
     const upper_bracket = [];
-    const lower_bracket = [];
 
-    const predefined: Record<string, Record<λIteration, 1 | 2 | 3>> = {
+    const predefined: Record<SettingsMode, Partial<Record<λIteration, 1 | 2 | 3>>> = {
       standart: {
-        0: 2,
-        1: 1,
-        2: 1,
-        4: 1,
-        8: 1,
-        16: 1,
-        32: 1,
-        64: 1,
-        128: 1,
-        256: 1,
-        512: 1,
-        1024: 1,
-        2048: 1
+        0: 2
       },
       professional: {
         0: 3,
         1: 2,
-        2: 2,
-        4: 1,
-        8: 1,
-        16: 1,
-        32: 1,
-        64: 1,
-        128: 1,
-        256: 1,
-        512: 1,
-        1024: 1,
-        2048: 1
+        2: 2
       },
+      custom: {}
     }
 
-    const predefinedMaterials: Record<keyof typeof predefined, {
-      title: string,
-      description: string,
-      icon: λIcon
-    }> = {
+    const handleTabsChange = (key: SettingsMode) => {
+      setSettingsMode(key);
+      const newSettings = predefined[key];
+      setSettings(newSettings);
+      console.log(newSettings);
+    }
+
+    const materials: Record<SettingsMode, Material> = {
       standart: {
         title: 'Стандартный формат',
         description: 'Для любительских турниров, только финалисты играют до 2 побед',
-        icon: 'LayoutGrid'
+        icon: 'CircleHelp'
       },
       professional: {
         title: 'Професиональный турнир',
         description: 'Финал до 3 побед, Топ 2 и Топ 4 играют до 2 побед. Остальные - до одной',
         icon: 'Trophy'
+      },
+      custom: {
+        title: 'Пользовательские настройки',
+        description: 'Настройка параметров ВО в ручном режиме',
+        icon: 'Wrench'
       }
     }
+
+    const lower_bracket = [];
 
     for (let iteration = iterations; iteration >= 1; iteration = PowerOfTwo.prev(iteration)) {
       upper_bracket.push(
         <div className={s.node}>
-          <p>{iteration}</p>
+          <p>Топ {iteration}</p>
           <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
         </div>
       );
+
+      if (tournament.has_lower_bracket && iteration > 1 && iteration < iterations) {
+        lower_bracket.push(
+          <div className={s.node}>
+            <p>Топ {iteration}</p>
+            <Input type='number' value={settings[iteration] || 1} onChange={ev => handleSettingsValueChange(iteration, ev)} />
+          </div>
+        );
+      }
     }
 
     return (
       <div className={s.settings}>
-        <div className={s.predefined}>
-          <p>До скольки побед играют команды в каждой из стадий</p>
-          <Select>
-            <SelectTrigger>
-
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem className={s.option} value='standart'>
-                <p>{predefinedMaterials.standart.title}</p>
-                <span>{predefinedMaterials.standart.description}</span>
-              </SelectItem>
-              <SelectItem className={s.option} value='professional'>
-                <p>{predefinedMaterials.professional.title}</p>
-                <span>{predefinedMaterials.professional.description}</span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        {upper_bracket && (
-          <div className={s.upper_bracket}>
-            {upper_bracket}
+        <Tabs onValueChange={(key) => handleTabsChange(key as SettingsMode)}>
+          <TabsList className={s.list} defaultValue={settingsMode}>
+            {Object.keys(predefined).map((key, i) => (
+              <Fragment key={key}>
+                {!!i && <Separator orientation='vertical' />}
+                <TabsTrigger value={key} className={cn(key === settingsMode && s.active)}>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        {materials[key as SettingsMode].title}<Icon name={materials[key as SettingsMode].icon} />
+                      </TooltipTrigger>
+                      <TooltipContent className={s.tooltip}>
+                        {materials[key as SettingsMode].description}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TabsTrigger>
+              </Fragment>
+            ))}
+          </TabsList>
+          <div className={s.preview_wrapper}>
+            <Card className={s.preview}>
+              <h3><Icon name='ArrowUp' />Верхняя сетка</h3>
+              {upper_bracket}
+            </Card>
+            <Card className={s.preview}>
+              <h3><Icon name='ArrowDown' />Нижняя сетка</h3>
+              {lower_bracket.length ? lower_bracket : <NoBracket />}
+            </Card>
           </div>
-        )}
+        </Tabs>
       </div>
     );
   }, [iterations, settings, tournament.has_lower_bracket]);
 
+  const NoBracket = useCallback(() => (
+    <div className={s.no_bracket}>
+      <Icon name='CircleOff' />
+      <p>Нижняя сетка не нужна</p>
+    </div>
+  ), []);
+
   return (
-    <Banner title={lang.create.tournament}>
+    <Banner className={s.banner} title={lang.create.tournament}>
       <Combination size='heading' id={tournament.code || 'identifier'} src={tournament.banner} name={tournament.title || 'Название турнира'} />
       <Separator />
       <div className={s.node}>

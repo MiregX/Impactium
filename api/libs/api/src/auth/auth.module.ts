@@ -1,5 +1,4 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { RouterModule } from '@nestjs/core';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './addon/auth.guard';
@@ -15,6 +14,7 @@ import { DiscordAuthService } from './discord.auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { AdminGuard } from './addon/admin.guard';
 import { TelegramModule } from '@api/mcs/telegram/telegram.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
