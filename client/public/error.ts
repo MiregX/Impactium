@@ -1,31 +1,40 @@
 import { λError } from "@impactium/pattern"
 
 const error = {
-  not_inplemented_title: {
-    us: 'This feature is not yet implemented',
-    ru: 'Этот функционал ещё не готов',
-    ua: 'Ця функція ще не реалізована',
-    it: 'Questa funzionalità non è ancora implementata',
-    pl: 'Ta funkcja nie jest jeszcze zaimplementowana'
-    },
-  not_inplemented_description: {
-    us: 'Expected release date: later.',
-    ru: 'Ожидаемая дата релиза: потом.',
-    ua: 'Очікувана дата релізу: пізніше.',
-    it: 'Data di rilascio prevista: più tardi.',
-    pl: 'Oczekiwana data wydania: później.'
+  // Identifier
+  username_not_provided: {
+    us: 'Oops! You forgot to provide a username. Even superheroes have names!',
+    ru: 'Ой! Ты забыл ввести имя пользователя. Даже у супергероев есть имена!',
+    ua: 'Ой! Ви забули ввести ім\'я користувача. Навіть у супергероїв є імена!',
+    it: 'Ops! Hai dimenticato di fornire un nome utente. Anche i supereroi hanno nomi!',
+    pl: 'Ups! Zapomniałeś podać nazwę użytkownika. Nawet superbohaterowie mają imiona!'
   },
-  displayName_invalid_format: {
-    us: 'Bad nickname. Don\'t cause us trouble, or we\'ll bite.',
-    ru: 'Хреновый никнейм. Не создавай нам проблем, а то откусим яйца.',
-    ua: 'Паршивий нікнейм. Не створюй нам проблем, а то ми відкусимо яйця.',
-    it: 'Brutto soprannome. Non crearci problemi, o morderemo.',
-    pl: 'Zły pseudonim. Nie sprawiaj nam problemów, bo cię ugryziemy.'
+  username_taken: {
+    us: 'This username is already taken. Try something more unique, like "SuperPudge123"!',
+    ru: 'Это имя пользователя уже занято. Попробуй что-то более уникальное, например "СуперПадж123"!',
+    ua: 'Це ім\'я користувача вже зайняте. Спробуйте щось більш унікальне, наприклад "СуперПадж123"!',
+    it: 'Questo nome utente è già preso. Prova qualcosa di più unico, come "SuperPudge123"!',
+    pl: 'Ta nazwa użytkownika jest już zajęta. Spróbuj czegoś bardziej unikalnego, jak "SuperPudge123"!'
   },
+  username_invalid_format: {
+    us: 'The username you entered is the same as the current one.',
+    ru: 'Имя пользователя не подходит. Попробуй ещё раз, но на этот раз с чувством, с толком, с расстановкой!',
+    ua: 'Ім\'я користувача не підходить. Спробуй ще раз, але на цей раз зі свідомістю, з розумінням, з розстановкою!',
+    it: 'Il nome utente non è adatto. Prova ancora, ma questa volta con consapevolezza, con chiarezza, con disposizione!',
+    pl: 'Nazwa użytkownika nie pasuje. Spróbuj ponownie, ale tym razem z świadomością, z rozumem, z rozstawieniem!',
+  },
+  username_is_same: {
+    us: 'The username you entered is the same as the current one.',
+    ru: 'Введённое вами имя пользователя совпадает с текущим.',
+    ua: 'Введене вами ім\'я користувача є таким же, як і поточне.',
+    it: 'Il nome utente che hai inserito è lo stesso di quello attuale.',
+    pl: 'Wprowadzona nazwa użytkownika jest taka sama jak aktualna.'
+  },
+
   indent_not_provided: {
     us: 'It seems you forgot to provide an ID.',
     ru: 'Кажется ты забыл ввести айди',
-    ua: 'Здається, ви забули ввести ідентифікатор',
+    ua: 'Здається ви забули ввести ідентифікатор',
     it: 'Sembra che tu abbia dimenticato di fornire un ID',
     pl: 'Wygląda na to, że zapomniałeś podać identyfikator'
   },
@@ -35,6 +44,58 @@ const error = {
     ua: 'Поганий формат ідентифікатора. Це тобі не Інстаграм, тут є стандарти',
     it: 'Formato ID non valido. Questo non è Instagram, qui abbiamo standard',
     pl: 'Nieprawidłowy format identyfikatora. To nie Instagram, mamy tu standardy'
+  },
+  indent_taken: {
+    us: 'A team with this ID already exists, please come up with something new.',
+    ru: 'Команда с таким айди уже существует, придумайте что-то новое',
+    ua: 'Команда з таким ідентифікатором вже існує, придумайте щось нове',
+    it: 'Un team con questo ID esiste già, per favore pensa a qualcosa di nuovo',
+    pl: 'Zespół z takim identyfikatorem już istnieje, wymyśl coś nowego'
+  },
+
+  code_not_provided: {
+    us: 'Oops! You forgot to provide a tournament code. Even Techies remember to plant their mines!',
+    ru: 'Ой! Ты забыл ввести код турнира. Даже Течис не забывает ставить мины!',
+    ua: 'Ой! Ви забули ввести код турніру. Навіть Течіс не забуває ставити міни!',
+    it: 'Ops! Hai dimenticato di fornire un codice torneo. Anche Techies ricordano di piazzare le loro mine!',
+    pl: 'Ups! Zapomniałeś podać kod turnieju. Nawet Techies pamiętają, żeby postawić swoje miny!'
+  },
+  code_invalid_format: {
+    us: 'Invalid tournament code format. This isn’t a random pub game, we have standards here!',
+    ru: 'Неправильный формат кода турнира. Это не случайная паб игра, у нас тут стандарты!',
+    ua: 'Неправильний формат коду турніру. Це не випадкова паб гра, у нас тут стандарти!',
+    it: 'Formato del codice torneo non valido. Questo non è un gioco pub casuale, qui abbiamo standard!',
+    pl: 'Nieprawidłowy format kodu turnieju. To nie jest losowa gra pubowa, mamy tu standardy!'
+  },
+  code_taken: {
+    us: 'A tournament with this code already exists. Try something more unique, like "PudgeHookMaster"!',
+    ru: 'Турнир с таким кодом уже существует. Попробуй что-то более уникальное, например "PudgeHookMaster"!',
+    ua: 'Турнір з таким кодом вже існує. Спробуйте щось більш унікальне, наприклад "PudgeHookMaster"!',
+    it: 'Un torneo con questo codice esiste già. Prova qualcosa di più unico, come "PudgeHookMaster"!',
+    pl: 'Turniej z takim kodem już istnieje. Spróbuj czegoś bardziej unikalnego, jak "PudgeHookMaster"!'
+  },
+
+  // DisplayName
+  display_name_invalid_format: {
+    us: 'Bad nickname. Don\'t cause us trouble, or we\'ll bite.',
+    ru: 'Хреновый никнейм. Не создавай нам проблем, а то откусим яйца.',
+    ua: 'Паршивий нікнейм. Не створюй нам проблем, а то ми відкусимо яйця.',
+    it: 'Brutto soprannome. Non crearci problemi, o morderemo.',
+    pl: 'Zły pseudonim. Nie sprawiaj nam problemów, bo cię ugryziemy.'
+  },
+  display_name_is_same: {
+    us: 'The display name you entered is the same as the current one.',
+    ru: 'Введённое вами имя пользователя совпадает с текущим.',
+    ua: 'Введене вами ім\'я користувача є таким же, як і поточне.',
+    it: 'Il nome visualizzato che hai inserito è lo stesso di quello attuale.',
+    pl: 'Wprowadzona nazwa wyświetlana jest taka sama jak aktualna.'
+  },
+  not_inplemented_description: {
+    us: 'Expected release date: later.',
+    ru: 'Ожидаемая дата релиза: потом.',
+    ua: 'Очікувана дата релізу: пізніше.',
+    it: 'Data di rilascio prevista: più tardi.',
+    pl: 'Oczekiwana data wydania: później.'
   },
   team_already_exists: {
     us: 'A team with this ID already exists, please come up with something new.',
@@ -105,34 +166,6 @@ const error = {
     ua: 'Помилка завантаження файлу в хмару. Якщо це справді помилка - пишіть йому: @MiregX',
     it: 'Errore durante il caricamento del file sul cloud. Se questo è un errore effettivo, contatta @MiregX',
     pl: 'Błąd przesyłania pliku do chmury. Jeśli to faktyczny błąd, skontaktuj się z @MiregX'
-  },
-  username_invalid_format: {
-    us: 'The username you entered does not meet the required format.',
-    ru: 'Введённое вами имя пользователя не соответствует требуемому формату.',
-    ua: 'Введене вами ім\'я користувача не відповідає потрібному формату.',
-    it: 'Il nome utente inserito non rispetta il formato richiesto.',
-    pl: 'Wprowadzona nazwa użytkownika nie spełnia wymaganego formatu.'
-  },
-  username_not_provided: {
-    us: 'You must enter a username.',
-    ru: 'Вы должны ввести имя пользователя.',
-    ua: 'Вам потрібно ввести ім\'я користувача.',
-    it: 'Devi inserire un nome utente.',
-    pl: 'Musisz wpisać nazwę użytkownika.'
-  },
-  username_taken_exception: {
-    us: 'This username is already taken.',
-    ru: 'Это имя пользователя уже занято.',
-    ua: 'Це ім\'я користувача вже зайняте.',
-    it: 'Questo nome utente è già stato preso.',
-    pl: 'Ta nazwa użytkownika jest już zajęta.'
-  },
-  username_is_same: {
-    us: 'The username you entered is the same as the current one.',
-    ru: 'Введённое вами имя пользователя совпадает с текущим.',
-    ua: 'Введене вами ім\'я користувача є таким же, як і поточне.',
-    it: 'Il nome utente che hai inserito è lo stesso di quello attuale.',
-    pl: 'Wprowadzona nazwa użytkownika jest taka sama jak aktualna.'
   },
   'Forbidden resource': {
     us: 'Forbidden resource',

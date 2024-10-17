@@ -3,19 +3,22 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class IndentNotProvided extends HttpException {
   constructor() {
-    super('indent_not_provided', HttpStatus.CONFLICT);
+    super(λError.indent_not_provided, HttpStatus.CONFLICT);
   }
 }
-
 export class IndentInvalidFormat extends HttpException {
   constructor() {
     super(λError.indent_invalid_format, HttpStatus.CONFLICT);
   }
 }
-
+export class IndentTaken extends HttpException {
+  constructor() {
+    super(λError.indent_taken, HttpStatus.CONFLICT);
+  }
+}
 export class UsernameNotProvided extends HttpException {
   constructor() {
-    super('username_not_provided', HttpStatus.CONFLICT);
+    super(λError.username_not_provided, HttpStatus.CONFLICT);
   }
 }
 export class UsernameInvalidFormat extends HttpException {
@@ -23,64 +26,79 @@ export class UsernameInvalidFormat extends HttpException {
     super(λError.username_invalid_format, HttpStatus.CONFLICT);
   }
 }
-export class UserNotFound extends HttpException {
+export class UsernameTaken extends HttpException {
+  constructor() {
+    super(λError.username_taken, HttpStatus.CONFLICT);
+  }
+}
+export class UserNotFound extends HttpException { 
   constructor() {
     super(λError.user_not_found, HttpStatus.NOT_FOUND);
   }
 }
 export class CodeNotProvided extends HttpException {
   constructor() {
-    super('code_not_provided', HttpStatus.CONFLICT);
+    super(λError.code_not_provided, HttpStatus.CONFLICT);
   }
 }
 export class CodeInvalidFormat extends HttpException {
   constructor() {
-    super('code_invalid_format', HttpStatus.CONFLICT);
+    super(λError.code_invalid_format, HttpStatus.CONFLICT);
   }
 }
-export class UsernameTakenException extends HttpException {
+export class CodeTaken extends HttpException {
   constructor() {
-    super('username_taken_exception', HttpStatus.CONFLICT);
+    super(λError.code_taken, HttpStatus.CONFLICT);
   }
 }
 export class UsernameIsSame extends HttpException {
   constructor() {
-    super('username_is_same', HttpStatus.CONFLICT);
+    super(λError.username_is_same, HttpStatus.CONFLICT);
   }
 }
 export class DisplayNameIsSame extends HttpException {
   constructor() {
-    super(λError.displayName_is_same, HttpStatus.CONFLICT);
+    super(λError.display_name_is_same, HttpStatus.CONFLICT);
   }
 }
 export class DisplayNameInvalidFormat extends HttpException {
   constructor() {
-    super(λError.displayName_invalid_format, HttpStatus.CONFLICT);
+    super(λError.display_name_invalid_format, HttpStatus.CONFLICT);
   }
 }
 export class TeamAlreadyExist extends HttpException {
   constructor() {
-    super('team_already_exists', HttpStatus.CONFLICT)
+    super(λError.team_already_exists, HttpStatus.CONFLICT)
   };
 }
-export class TeamLimitException extends HttpException {
+export class TournamentAlreadyExist extends HttpException {
   constructor() {
-    super('team_limit_exception', HttpStatus.CONFLICT)
+    super(λError.tournament_already_exists, HttpStatus.CONFLICT)
+  };
+}
+export class TeamLimit extends HttpException {
+  constructor() {
+    super(λError.team_limit, HttpStatus.CONFLICT)
+  };
+}
+export class TournamentLimit extends HttpException {
+  constructor() {
+    super(λError.tournament_limit, HttpStatus.CONFLICT)
   };
 }
 export class TeamMemberRoleExistException extends HttpException {
   constructor() {
-    super('team_member_with_exact_role_already_exist', HttpStatus.CONFLICT)
+    super(λError.team_member_with_exact_role_already_exist, HttpStatus.CONFLICT)
   };
 }
 export class TooManyQRCodes extends HttpException {
   constructor() {
-    super('too_many_qrcodes', HttpStatus.TOO_MANY_REQUESTS)
+    super(λError.too_many_qrcodes, HttpStatus.TOO_MANY_REQUESTS)
   };
 }
 export class TeamIsFreeToJoin extends HttpException {
   constructor() {
-    super('team_is_free_to_join', HttpStatus.CONFLICT)
+    super(λError.team_is_free_to_join, HttpStatus.CONFLICT)
   };
 }
 export class UserIsAlreadyTeamMember extends HttpException {

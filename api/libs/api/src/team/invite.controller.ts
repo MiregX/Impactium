@@ -19,6 +19,7 @@ import { TeamEntity } from './addon/team.entity';
 import { Team } from './addon/team.decorator';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
 import { CreateInviteDto } from './addon/team.dto';
+import { λParam } from '@impactium/pattern';
 
 @ApiTags('Invites')
 @Controller('team/:indent/invite')
@@ -58,7 +59,7 @@ export class TeamInviteController {
   // Для проверки приглашения на валидность можно заменить на хеш
   @Get('check/:id')
   checkInvite(
-    @Param('indent') indent: string,
+    @Param('indent') indent: λParam.Indent,
     @Param('id') id: string
   ) {
     return this.teamService.checkInvite(indent, id);

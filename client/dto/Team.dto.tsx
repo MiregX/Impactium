@@ -19,8 +19,10 @@ export interface Team {
   invites?: TeamInvite[]
 }
 
-export class ManageTeamRequest {
-  public static create = ({ indent, title, logo, joinable, rawLogo }: Partial<Team> & { rawLogo?: File}) => {
+export class λTeam {
+  public static find = (teams: Team[], indent: Team['indent'] | null | undefined) => teams.find(team => team.indent === indent);
+  
+  public static create = ({ indent, title, joinable, rawLogo }: Partial<Team> & { rawLogo?: File}) => {
     const form = new FormData();
     indent && form.append('indent', indent);
     title && form.append('title', title);
@@ -28,8 +30,4 @@ export class ManageTeamRequest {
     rawLogo && form.append('logo', rawLogo);
     return form
   }
-}
-
-export class λTeam {
-  public static find = (teams: Team[], indent: Team['indent'] | null | undefined) => teams.find(team => team.indent === indent);
 }

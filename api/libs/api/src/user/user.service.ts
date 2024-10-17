@@ -3,10 +3,11 @@ import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity, UserSelectOptions } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
-import { UsernameTakenException, UserNotFound } from '../application/addon/error';
+import { UsernameTaken, UserNotFound } from '../application/addon/error';
 import { AuthPayload } from '../auth/addon/auth.entity';
 import { FindUserDto, UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
+import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class UserService {
@@ -22,18 +23,18 @@ export class UserService {
     });
   }
 
-  findById(uid: string, options: UserSelectOptions = {}) {
+  findById(uid: λParam.Username, options: UserSelectOptions = {}): Promise<UserEntity | null> {
     return this.prisma.user.findUnique({
       where: { uid },
       ...UserEntity.select(options)
-    });
+    }) as Promise<UserEntity | null>;
   }
 
   async update(uid: string, user: UpdateUserDto) {
     if (user.username) {
       await this.prisma.user.findFirst({
         where: { username: user.username }
-      }) && λthrow(UsernameTakenException);
+      }) && λthrow(UsernameTaken);
     }
 
     return this.prisma.user.update({

@@ -19,7 +19,7 @@ export class CreateTeamDto {
   title!: TeamEntity['title'];
 
   @IsEnum(Joinable, {
-    message: λError.invalid_joinable_field
+    message: λError.joinable_invalid_field
   })
   joinable!: Joinable;
 }
@@ -40,7 +40,7 @@ export class UpdateTeamDto implements Partial<CreateTeamDto> {
   title?: TeamEntity['title'];
 
   @IsEnum(Joinable, {
-    message: λError.invalid_joinable_field
+    message: λError.joinable_invalid_field
   })
   joinable?: Joinable;
 

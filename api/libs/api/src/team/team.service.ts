@@ -6,12 +6,13 @@ import { TeamEntity } from './addon/team.entity';
 import { Injectable } from '@nestjs/common';
 import { Readable } from 'stream';
 import { TeamStandart } from './addon/team.standart';
-import { TeamAlreadyExist, TeamInviteExpired, TeamInviteNotFound, TeamInviteUsed, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimitException, TeamMemberRoleExistException, TooManyQRCodes, UserIsAlreadyTeamMember } from '../application/addon/error';
+import { TeamAlreadyExist, TeamInviteExpired, TeamInviteNotFound, TeamInviteUsed, TeamIsCloseToEveryone, TeamIsFreeToJoin, TeamLimit, TeamMemberRoleExistException, TooManyQRCodes, UserIsAlreadyTeamMember } from '../application/addon/error';
 import { UserEntity } from '../user/addon/user.entity';
 import { λthrow } from '@impactium/utils';
 import { TeamMemberEntity } from './addon/team.member.entity';
 import { $Enums, Joinable, TeamInvite } from '@prisma/client';
 import { TeamInviteEntity } from './addon/teamInvite.entity';
+import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class TeamService {
@@ -26,20 +27,17 @@ export class TeamService {
     team: CreateTeamDto,
     logo?: Express.Multer.File
   ) {
-    await this.findManyByUid(uid)
-      .then(teams => {
-        if (teams.length >= 3) throw new TeamLimitException();
-      })
+    await this.findManyByUid(uid).then(teams => {
+      if (teams.length >= 3) λthrow(TeamLimit);
+    });
     
     await this.findOneByIndent(team.indent).then(team => {
-      if (team) throw new TeamAlreadyExist();
+      if (team) λthrow(TeamAlreadyExist);
     });
 
     return this.prisma.team.create({
       data: {
-        title: team.title,
-        indent: team.indent,
-        joinable: team.joinable,
+        ...team,
         logo: await this.uploadLogo(team.indent, logo),
         owner: {
           connect: {
@@ -75,13 +73,17 @@ export class TeamService {
     });
   }
   
-  delete(user: UserEntity, indent: string) {
+  async delete(indent: λParam.Indent) {
+    await this.prisma.teamMember.deleteMany({
+      where: { indent }
+    });
+
     return this.prisma.team.delete({
-      where: { indent, ownerId: user.uid }
+      where: { indent }
     })
   }
 
-  async setLogo(indent: string, logo: Express.Multer.File) {
+  async setLogo(indent: λParam.Indent, logo: Express.Multer.File) {
     return this.prisma.team.update({
       where: {
         indent
@@ -92,12 +94,12 @@ export class TeamService {
     })
   }
 
-  findManyByUid(uid: string): Promise<TeamEntity[]> {
+  findManyByUid(uid: λParam.Username): Promise<TeamEntity[]> {
     return this.prisma.team.findMany({
       where: {
         ownerId: uid
       }
-    })
+    }) as Promise<TeamEntity[]>;
   }
 
   findOneByIndent(indent: TeamEntity['indent']) {

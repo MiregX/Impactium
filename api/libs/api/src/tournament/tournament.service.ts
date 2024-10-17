@@ -6,15 +6,19 @@ import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
-import { DAY, HOUR, PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
+import { DAY, Grid, HOUR, PowerOfTwo, λIteration, λIterations, λParam } from '@impactium/pattern';
 import { BattleEntity } from './addon/battle.entity';
 import { λthrow } from '@impactium/utils';
-import { CreateTournamentDto } from './addon/tournament.dto';
+import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto';
+import { FtpService } from '@api/mcs/file/ftp.service';
+import { TournamentAlreadyExist, TournamentLimit } from '../application/addon/error';
+import { Readable } from 'stream';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
   constructor(
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly ftpService: FtpService
   ) {}
 
   async onModuleInit() {
@@ -70,6 +74,11 @@ export class TournamentService implements OnModuleInit {
     }).then(TournamentEntity.normalize);
   }
 
+  findByUser = (uid: UserEntity['uid']) => this.prisma.tournament.findMany({
+    ...TournamentEntity.select(),
+    where: { ownerId: uid }
+  });
+
   join(tournament: TournamentEntity, team: TeamEntity) {
     return this.prisma.tournament.update({
       where: {
@@ -86,8 +95,37 @@ export class TournamentService implements OnModuleInit {
     })
   }
 
-  create(uid: UserEntity['uid'], tournament: CreateTournamentDto, banner?: Express.Multer.File) {
+  async create(uid: λParam.Username, tournament: CreateTournamentDto, banner: Express.Multer.File) {
+    await this.findByUser(uid).then(tournaments => {
+      if (tournaments.length >= 3) λthrow(TournamentLimit);
+    });
 
+    await this.find(tournament.code).then(tournament => {
+      if (tournament) λthrow(TournamentAlreadyExist);
+    });
+
+    const createdTournament = await this.prisma.tournament.create({
+      data: {
+        ...tournament,
+        has_lower_bracket: tournament.has_lower_bracket === 'true',
+        iterations: {},
+        banner: await this.uploadBanner(tournament.code, banner),
+        owner: {
+          connect: {
+            uid
+          }
+        },
+        end: addDays(tournament.start, 1),
+        description: tournament.description || '$tournament.default_description',
+        rules: tournament.rules || '$tournament.default_rules',
+      }
+    });
+
+    const grid = await this.grid(createdTournament, tournament.iterations, tournament.has_lower_bracket === 'true', JSON.parse(tournament.settings));
+  }
+
+  update(uid: λParam.Username, tournament: UpdateTournamentDto, banner?: Express.Multer.File) {
+    
   }
 
   private timers: Map<TournamentEntity['code'], NodeJS.Timeout> = new Map();
@@ -137,10 +175,8 @@ export class TournamentService implements OnModuleInit {
     return acc;
   }, [] as Pick<BattleEntity, 'slot1' | 'slot2'>[]);
 
-  grid = async (tournament: TournamentEntity, iteration?: λIteration, lower: boolean = false) => {
-    if (!tournament.teams) λthrow(InternalServerErrorException);
-
-    iteration = iteration ?? PowerOfTwo.next(tournament.teams.length);
+  grid = async (tournament: TournamentEntity, iteration?: λIteration, lower: boolean = false, settings: Grid = {}) => {
+    iteration = iteration ?? PowerOfTwo.next(tournament.teams?.length || 0);
 
     const exist = await this.prisma.iteration.findFirst({
       where: {
@@ -161,18 +197,31 @@ export class TournamentService implements OnModuleInit {
         is_lower_bracket: lower,
         tid: tournament.code,
         battles: {
-          create: isFirstIteration ? this.pairs(tournament.teams.map(team => team.indent)) : []
+          create: isFirstIteration && tournament.teams ? this.pairs(tournament.teams.map(team => team.indent)) : []
         },
+        best_of: settings[iteration],
         n: iteration,
         startsAt: tournament.start
       }
     });
 
     if (iteration > 1) {
-      this.grid(tournament, PowerOfTwo.prev(iteration), lower);
+      this.grid(tournament, PowerOfTwo.prev(iteration), lower, settings);
     }
 
     Logger.log(`Generated grid for ${tournament.code}`, TournamentService.name);
+  }
+
+  private async uploadBanner(code: TournamentEntity['code'], banner: Express.Multer.File): Promise<string> {
+    const stream = new Readable();
+    stream.push(banner.buffer);
+    stream.push(null);
+
+    const extension = banner.originalname.split('.').pop();
+    const { ftp, cdn } = TournamentEntity.getLogoPath(`${code}.${extension}`);
+    await this.ftpService.uploadFile(ftp, stream);
+
+    return cdn;
   }
 
   private async createBattleCup(date: Date) {

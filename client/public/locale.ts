@@ -860,7 +860,7 @@ const locale = {
       pl: 'Doładuj saldo'
     }    
   },
-  error: error,
+  error,
   success,
   landing
 }

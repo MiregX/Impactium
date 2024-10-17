@@ -31,7 +31,7 @@ import { Joinable } from '@prisma/client';
 import { TeamIsCloseToEveryone, UnallowedFileFormat, UnallowedFileSize } from '../application/addon/error';
 import { ConnectGuard } from '../auth/addon/connect.guard';
 import { RedisService } from '../redis/redis.service';
-import { λCache } from '@impactium/pattern';
+import { λCache, λParam } from '@impactium/pattern';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageValidator } from '../application/addon/image.validator';
 import { IndentValidationPipe } from './addon/indent.validator';
@@ -64,7 +64,7 @@ export class TeamController {
 
   @Get(':indent/get')
   async findOneByIndent(
-    @Param('indent', IndentValidationPipe) indent: string
+    @Param('indent', IndentValidationPipe) indent: λParam.Indent
   ) {
     const team = await this.redis.get(`${λCache.TeamIndentGet}:${indent}`);
 
@@ -88,7 +88,7 @@ export class TeamController {
     if (query.title || query.indent) {
       return this.teamService.findManyByTitleOrIndent(query.title || query.indent)
     } else if (query.uid) {
-      return this.teamService.findManyByUid(query.uid)
+      return this.teamService.findManyByUid(query.uid as λParam.Username)
     } else if (user) {
       return this.teamService.findManyByUid(user.uid)
     }
@@ -100,14 +100,13 @@ export class TeamController {
   @Delete(':indent/delete')
   @UseGuards(TeamGuard)
   delete(
-    @Param('indent', IndentValidationPipe) indent: TeamEntity['indent'],
-    @User() user: UserEntity,
+    @Param('indent', IndentValidationPipe) indent: TeamEntity['indent']
   ) {
-    return this.teamService.delete(user, indent);
+    return this.teamService.delete(indent);
   }
 
   // Для создания команды
-  @Post(':indent/create')
+  @Post('create')
   @UseGuards(AuthGuard)
   @ImageValidator('logo')
   create(

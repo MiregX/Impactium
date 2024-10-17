@@ -9,16 +9,18 @@ import s from './Manager.module.css';
 import { Input } from '@/ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
 import { Chooser } from '@/components/Chooser';
-import { Tournament } from '@/dto/Tournament';
+import { Tournament, λTournament } from '@/dto/Tournament';
 import { Combination } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
-import { PowerOfTwo, λIteration, λIterations } from '@impactium/pattern';
+import { DisplayName, Identifier, PowerOfTwo, λError, λIteration, λIterations, Grid } from '@impactium/pattern';
 import { cn, λIcon } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs';
 import { Icon } from '@/ui/Icon';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/Tooltip';
 import { Card } from '@/ui/Card';
 import { Button } from '@/ui/Button';
+import { toast } from 'sonner';
+import { λ } from '@/decorator/λ.class';
 
 type SettingsMode = 'standart' | 'professional' | 'custom';
 
@@ -32,14 +34,28 @@ export function ManageTournamentBanner() {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
   const [tournament, setTournament] = useState<Partial<Tournament>>({});
-  const [rawBanner, setRawBanner] = useState<File>();
+  const [rawBanner, setRawBanner] = useState<File | undefined>();
   const [iterations, setIterations] = useState<λIteration>(32);
-  const [settings, setSettings] = useState<Partial<Record<λIteration, 1 | 2 | 3>>>({});
+  const [settings, setSettings] = useState<Grid>({});
   const [settingsMode, setSettingsMode] = useState<SettingsMode>('standart');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [titleValid, setTitleValid] = useState<boolean>(true);
+  const [codeValid, setCodeValid] = useState<boolean>(true);
 
   !authGuard({
     useRedirect: false
   }) && spawnBanner(<LoginBanner />);
+
+  const handleCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTournament(t => ({ ...t, code: event.target.value }));
+  }
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const title = event.target.value;
+
+    setTitleValid(title.length >= 3);
+    setTournament(t => ({ ...t, title: event.target.value }));
+  }
 
   const bannerInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -75,9 +91,7 @@ export function ManageTournamentBanner() {
 
     const handleTabsChange = (key: SettingsMode) => {
       setSettingsMode(key);
-      const newSettings = predefined[key];
-      setSettings(newSettings);
-      console.log(newSettings);
+      setSettings(predefined[key]);
     }
 
     const materials: Record<SettingsMode, Material> = {
@@ -162,13 +176,28 @@ export function ManageTournamentBanner() {
     </div>
   ), []);
 
-  const handleCreate = () => {
+  const submit = () => {
+    if (!Identifier.test(tournament.code || '')) {
+      setCodeValid(false);
+      return toast(lang.error.code_invalid_format);
+    }
+    if (!DisplayName.test(tournament.title || '')) {
+      setTitleValid(false);
+      return toast(lang.error.display_name_invalid_format);
+    }
+
     api<Tournament>('/tournament/create', {
       method: 'POST',
-      body: {
-        tournament,
+      body: λTournament.create({
+        code: tournament.code,
+        title: tournament.title,
+        banner: rawBanner,
+        has_lower_bracket: tournament.has_lower_bracket,
+        iterations,
         settings
-      }
+      }),
+      toast: true,
+      setLoading
     }, console.log);
   }
 
@@ -178,11 +207,11 @@ export function ManageTournamentBanner() {
       <Separator />
       <div className={s.node}>
         <p>Название*</p>
-        <Input img='Quote' placeholder='Название турнира' />
+        <Input img='Quote' placeholder='Название турнира' onChange={handleTitleChange} value={tournament.title} valid={titleValid} />
       </div>
       <div className={s.node}>
         <p>Идентификатор*</p>
-        <Input img='AtSign' placeholder='Идентификатор турнира' />
+        <Input img='AtSign' placeholder='Идентификатор турнира' onChange={handleCodeChange} value={tournament.code} valid={codeValid} />
       </div>
       <div className={s.node}>
         <p>Ореол турнира*</p>
@@ -205,7 +234,7 @@ export function ManageTournamentBanner() {
         checked={tournament.has_lower_bracket}
         onCheckedChange={checked => setTournament((t) => ({ ...t, has_lower_bracket: checked}))} />
       <Settings />
-      <Button className={s.submit} img='Plus' onClick={handleCreate}>Создать турнир</Button>
+      <Button className={s.submit} img='Plus' onClick={submit} loading={loading} disabled={!titleValid || !codeValid}>Создать турнир</Button>
     </Banner>
   );
 };

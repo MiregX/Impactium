@@ -8,6 +8,7 @@ import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
+import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class AuthService {
@@ -86,6 +87,7 @@ export class AuthService {
 
   private createUser(data: AuthPayload, email?: AuthPayload['email']): Promise<UserEntity> {
     delete data.email;
+    
     return this.prisma.user.create({
       data: {
         email,
@@ -100,6 +102,6 @@ export class AuthService {
           }
         }
       }
-    })
+    }) as unknown as Promise<UserEntity>;
   }
 }

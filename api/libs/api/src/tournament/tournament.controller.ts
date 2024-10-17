@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, OnModuleInit, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, OnModuleInit, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
@@ -15,7 +15,7 @@ import { RedisService } from '../redis/redis.service';
 import { λCache } from '@impactium/pattern';
 import { Cache } from '../application/addon/cache.decorator';
 import { AuthGuard } from '../auth/addon/auth.guard';
-import { CreateTournamentDto } from './addon/tournament.dto';
+import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto';
 import { ImageValidator } from '../application/addon/image.validator';
 import { CodeValidationPipe } from './addon/code.validator';
 
@@ -68,15 +68,26 @@ export class TournamentController implements OnModuleInit {
     return this.tournamentService.join(tournament, team);
   }
   
-  @Post(':code/create')
+  @Post('create')
   @UseGuards(AuthGuard)
   @ImageValidator('banner')
   create(
     @Body() tournament: CreateTournamentDto,
     @User() { uid }: UserEntity,
-    @UploadedFile() banner?: Express.Multer.File,
+    @UploadedFile() banner: Express.Multer.File,
   ) {
     return this.tournamentService.create(uid, tournament, banner);
+  }
+
+  @Put(':code/update')
+  @UseGuards(AuthGuard)
+  @ImageValidator('banner')
+  update(
+    @Body() tournament: UpdateTournamentDto,
+    @User() { uid }: UserEntity,
+    @UploadedFile() banner?: Express.Multer.File,
+  ) {
+    return this.tournamentService.update(uid, tournament, banner);
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES)

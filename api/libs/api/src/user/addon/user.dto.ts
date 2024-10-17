@@ -17,7 +17,7 @@ export class UpdateUserDto implements Prisma.UserUpdateInput {
 
   @IsOptional()
   @Matches(DisplayName.base, {
-    message: λError.displayName_invalid_format
+    message: λError.display_name_invalid_format
   })
   displayName?: string
 }

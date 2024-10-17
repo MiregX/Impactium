@@ -1,6 +1,6 @@
 'use client'
 import { Joinable, JoinableIcons } from '@/dto/Joinable.dto';
-import { ManageTeamRequest, Team } from '@/dto/Team.dto';
+import { Team, λTeam } from '@/dto/Team.dto';
 import { Banner } from '@/ui/Banner';
 import { Icon } from '@/ui/Icon';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { SetState } from '@/lib/utils';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
+import { useRouter } from 'next/navigation';
 
 interface ManageTeamBannerProps {
   team?: Team;
@@ -26,10 +27,11 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
   const isCreate = !team;
   const { destroyBanner } = useApplication();
   const { lang } = useLanguage();
-  const { user, assignUser } = useUser();
+  const { refreshUser } = useUser();
   const [loading, setLoading] = useState<boolean>(false);
   const [indent, setIndent] = useState<Team['indent']>(isCreate ? '' : team.indent);
   const [indentValid, setIndentValid] = useState<boolean>(true);
+  const router = useRouter();
   
   const [title, setTitle] = useState<Team['title']>(isCreate ? '' : team.title);
   const [titleValid, setTitleValid] = useState<boolean>(true);
@@ -39,22 +41,17 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
   const [rawLogo, setRawLogo] = useState<File | undefined>();
 
   const save = () => {
-    let error: string | number = 0;
-
     if (!Identifier.test(indent)) {
       setIndentValid(false);
-      error = toast(lang.error.indent_invalid_format);
-      
+      return toast(lang.error.indent_invalid_format);
     }
     if (!DisplayName.test(title)) {
       setTitleValid(false);
-      error = toast(lang.error.displayName_invalid_format);
+      return toast(lang.error.display_name_invalid_format);
     }
 
-    if (error) return;
-
     const path = isCreate
-      ? `/team/${indent}/create`
+      ? `/team/create`
       : `/team/${team.indent}/edit`
 
     const method = isCreate
@@ -63,7 +60,7 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
 
     api<Team>(path, {
       method,
-      body: ManageTeamRequest.create({
+      body: λTeam.create({
         indent,
         title,
         joinable,
@@ -71,14 +68,15 @@ export function ManageTeamBanner({ team, setTeam }: ManageTeamBannerProps) {
       }),
       toast: true,
       setLoading
-    }, setTeam).then(team => {
+    }, setTeam).then(async team => {
       if (!team) return;
 
-      assignUser({ teams: [...(user!.teams || []), team ] });
+      await refreshUser();
 
       if (typeof window !== 'undefined') {
         console.log('Current: ', window.history.state)
-        window.history.pushState(null, '', `/team/@${team.indent}`); 
+        window.history.pushState(null, '', `/team/@${team.indent}`);
+        router.push(`/team/@${team.indent}`);
       }
 
       destroyBanner();

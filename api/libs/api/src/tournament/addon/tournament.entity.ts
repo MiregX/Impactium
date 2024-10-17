@@ -70,7 +70,7 @@ export class TournamentEntity implements Tournament {
     if (!tournament || !tournament.iterations) return null;
   
     tournament.iterations = tournament.iterations.map((iteration, i) => {
-      if (!i || !iteration.battles) return iteration; // Пропускаем первую итерацию
+      if (!i || !iteration.battles) return iteration;
 
       const prev = tournament.iterations!.find(_iteration => _iteration.n === (iteration.n * 2) && _iteration.is_lower_bracket === iteration.is_lower_bracket)!;
 
@@ -94,10 +94,10 @@ export class TournamentEntity implements Tournament {
         battles[index] = battle;
       });
   
-      return { ...iteration, battles }; // Возвращаем новую итерацию с отсортированными битвами
+      return { ...iteration, battles };
     });
   
-    return tournament; // Возвращаем нормализованный турнир
+    return tournament;
   }  
 }
 

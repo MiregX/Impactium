@@ -2,7 +2,7 @@ import { convertISOstringToValue } from "@/lib/utils";
 import { Team, λTeam } from "./Team.dto";
 import { User } from "./User";
 import { Iteration } from "./Iteration.dto";
-import { λIteration } from "@impactium/pattern";
+import { Grid, λIteration } from "@impactium/pattern";
 import { Joinable } from "./Joinable.dto";
 import { Battle } from "./Battle.dto";
 
@@ -82,5 +82,16 @@ export class λTournament {
     else if (round === 2) return 'Полуфинал';
     else if (round === 4) return 'Четвертьфинал';
     return `Раунд ${totalRounds / round}`;
+  }
+
+  public static create = ({ code, title, banner: rawBanner, has_lower_bracket, iterations, settings }: Partial<Omit<Tournament, 'banner' | 'iterations' | 'settings'>> & { banner?: File, iterations?: λIteration, settings?: Grid }) => {
+    const form = new FormData();
+    code && form.append('code', code);
+    title && form.append('title', title);
+    rawBanner && form.append('banner', rawBanner);
+    has_lower_bracket && form.append('has_lower_bracket', String(has_lower_bracket));
+    iterations && form.append('iterations', String(iterations));
+    settings && form.append('settings', JSON.stringify(settings));
+    return form
   }
 }

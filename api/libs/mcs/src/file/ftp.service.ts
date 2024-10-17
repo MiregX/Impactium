@@ -1,6 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Client, AccessOptions } from 'basic-ftp';
-import { createReadStream } from 'fs';
 import { Readable } from 'stream';
 
 @Injectable()

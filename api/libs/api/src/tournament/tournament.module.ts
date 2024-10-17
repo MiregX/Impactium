@@ -5,6 +5,7 @@ import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { AuthModule } from '@api/main/auth/auth.module';
 import { TeamModule } from '../team/team.module';
 import { RedisModule } from '../redis/redis.module';
+import { FileModule } from '@api/mcs/file/file.module';
 
 @Module({
   controllers: [TournamentController],
@@ -12,7 +13,8 @@ import { RedisModule } from '../redis/redis.module';
     PrismaModule,
     AuthModule,
     TeamModule,
-    RedisModule
+    RedisModule,
+    FileModule
   ],
   providers: [TournamentService],
 })
