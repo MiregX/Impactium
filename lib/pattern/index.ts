@@ -35,7 +35,7 @@ export class FileExtension {
   static acceptable = (size: number): boolean => size ? size <= 1024 * 1024 : false;
 }
 
-export type λIteration = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048;
+export type λIteration = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 64 // | 128 | 256 | 512 | 1024 | 2048;
 
 export const λIterations: Record<`_${λIteration}`, λIteration> = {
 _0: 0,
@@ -46,14 +46,16 @@ _8: 8,
 _16: 16,
 _32: 32,
 _64: 64,
-_128: 128,
-_256: 256,
-_512: 512,
-_1024: 1024,
-_2048: 2048
-} as const;
+// _128: 128,
+// _256: 256,
+// _512: 512,
+// _1024: 1024,
+// _2048: 2048
+};
 
 export type Grid = Partial<Record<λIteration, 1 | 2 | 3>>;
+
+export type Optional<T = string> = T | null;
 
 export enum λCookie {
   redirectedToBypass = 'redirectedToBypass',
@@ -146,3 +148,13 @@ export const DAY = HOUR * 24;
 export const WEEK = DAY * 7;
 export const MONTH = DAY * 30;
 export const YEAR = MONTH * 12;
+
+export class λLogger {
+  static red = (text?: Optional<string>) => `\x1b[31m${text}\x1b[0m`;
+  static green = (text?: Optional<string>) => `\x1b[32m${text}\x1b[0m`;
+  static yellow = (text?: Optional<string>) => `\x1b[33m${text}\x1b[0m`;
+  static blue = (text?: Optional<string>) => `\x1b[34m${text}\x1b[0m`;
+  static magenta = (text?: Optional<string>) => `\x1b[35m${text}\x1b[0m`;
+  static cyan = (text?: Optional<string>) => `\x1b[36m${text}\x1b[0m`;
+  static white = (text?: Optional<string>) => `\x1b[37m${text}\x1b[0m`;
+}

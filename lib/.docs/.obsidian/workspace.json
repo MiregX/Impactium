@@ -13,11 +13,11 @@
             "state": {
               "type": "canvas",
               "state": {
-                "file": "Architecture.canvas",
+                "file": "Без назви.canvas",
                 "viewState": {
-                  "x": 508.4868416682409,
-                  "y": 1792.0774300050703,
-                  "zoom": 0.5199999816894524
+                  "x": 80.010578309089,
+                  "y": 1665.5682388228586,
+                  "zoom": -0.15999985351561863
                 }
               }
             }
@@ -88,7 +88,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Architecture.canvas",
+                "file": "Без назви.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +105,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Architecture.canvas",
+                "file": "Без назви.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +128,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Architecture.canvas"
+                "file": "Без назви.canvas"
               }
             }
           }
@@ -150,5 +150,8 @@
     }
   },
   "active": "6c779484235a477d",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Architecture.canvas",
+    "Без назви.canvas"
+  ]
 }

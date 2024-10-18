@@ -50,13 +50,13 @@ export class UserController {
   @UseGuards(AdminGuard)
   async impersonate(
     @Param('uid') uid: string,
-    @Res() response: Response
+    @Res({ passthrough: true }) response: Response
   ) {
     const Authorization = await this.userService.impersonate(uid);
 
     response.clearCookie(λCookie.Authorization, cookieSettings);
     response.cookie(λCookie.Authorization, Authorization, cookieSettings);
-    response.end();
+    return Authorization;
   }
 
   @Patch('edit')
@@ -87,7 +87,7 @@ export class UserController {
 
     const hash = createHmac('sha256', createHash('sha256').digest()).update(keypass).digest('hex');
 
-    hash !== '0c32d321ba68759dbc4da379be4d412099e8781f3fe742be227952cb32b03668' && λthrow(ForbiddenException);
+    hash !== 'e639e6fda92901cfaa855bdf591fb9685ec4b3db4ebd469df579beb9fc7ee207' && λthrow(ForbiddenException);
 
     const token = await this.applicationService.createSystemAccount();
 

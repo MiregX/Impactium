@@ -6,7 +6,7 @@ import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
 import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
-import { DAY, Grid, HOUR, PowerOfTwo, λIteration, λIterations, λParam } from '@impactium/pattern';
+import { DAY, Grid, HOUR, PowerOfTwo, λCache, λIteration, λIterations, λParam } from '@impactium/pattern';
 import { BattleEntity } from './addon/battle.entity';
 import { λthrow } from '@impactium/utils';
 import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto';
@@ -58,20 +58,22 @@ export class TournamentService implements OnModuleInit {
     }
   }
 
-  delete(user: UserEntity, code: string) {
+  delete(user: UserEntity, code: TournamentEntity['code']) {
     return this.prisma.tournament.delete({
       where: { code, ownerId: user.uid },
       include: {
         iterations: true
       }
-    });
+    }).then(TournamentEntity.normalize);
   }
   
-  async find(code: string) {
-    return this.prisma.tournament.findUnique({
+  async find(code: TournamentEntity['code']) {
+    const tournament = await this.prisma.tournament.findUnique({
       ...TournamentEntity.select({ teams: true, owner: true, iterations: true }),
       where: { code }
     }).then(TournamentEntity.normalize);
+
+    return TournamentEntity.fulfill(tournament);
   }
 
   findByUser = (uid: UserEntity['uid']) => this.prisma.tournament.findMany({
@@ -92,7 +94,7 @@ export class TournamentService implements OnModuleInit {
         }
       },
       ...TournamentEntity.select({ teams: true })
-    })
+    }).then(TournamentEntity.normalize);
   }
 
   async create(uid: λParam.Username, tournament: CreateTournamentDto, banner: Express.Multer.File) {
@@ -119,7 +121,9 @@ export class TournamentService implements OnModuleInit {
         description: tournament.description || '$tournament.default_description',
         rules: tournament.rules || '$tournament.default_rules',
       }
-    });
+    }).then(TournamentEntity.normalize);
+
+    if (!createdTournament) λthrow(InternalServerErrorException);
 
     const grid = await this.grid(createdTournament, tournament.iterations, tournament.has_lower_bracket === 'true', JSON.parse(tournament.settings));
   }
@@ -143,7 +147,7 @@ export class TournamentService implements OnModuleInit {
         },
       },
       ...TournamentEntity.select({ teams: true })
-    });
+    }).then(TournamentEntity.normalize);
   }
 
   descheduler() {

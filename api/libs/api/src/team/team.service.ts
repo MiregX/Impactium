@@ -74,6 +74,10 @@ export class TeamService {
   }
   
   async delete(indent: λParam.Indent) {
+    await this.prisma.teamInvite.deleteMany({
+      where: { indent }
+    });
+
     await this.prisma.teamMember.deleteMany({
       where: { indent }
     });

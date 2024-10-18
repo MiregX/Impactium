@@ -15,11 +15,15 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
   constructor(
     private readonly authService: AuthService
   ) {
-    super(process.env.DISCORD_ID && process.env.DISCORD_SECRET ? {
+    if (!process.env.DISCORD_ID) throw new EnvironmentKeyNotProvided('DISCORD_ID');
+    
+    if (!process.env.DISCORD_SECRET) throw new EnvironmentKeyNotProvided('DISCORD_SECRET');
+
+    super({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
       redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
-    } : (() => { throw new EnvironmentKeyNotProvided('DISCORD_ID || DISCORD_SECRET') })());
+    });
   }
 
   async callback(code: string, uuid?: UUID): Promise<AuthResult> {

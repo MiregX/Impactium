@@ -14,13 +14,13 @@ import { Combination } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { DisplayName, Identifier, PowerOfTwo, λError, λIteration, λIterations, Grid } from '@impactium/pattern';
 import { cn, λIcon } from '@/lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/Tabs';
 import { Icon } from '@/ui/Icon';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/Tooltip';
 import { Card } from '@/ui/Card';
 import { Button } from '@/ui/Button';
 import { toast } from 'sonner';
-import { λ } from '@/decorator/λ.class';
+import { Calendar } from '@/ui/Calendar';
 
 type SettingsMode = 'standart' | 'professional' | 'custom';
 
@@ -47,14 +47,17 @@ export function ManageTournamentBanner() {
   }) && spawnBanner(<LoginBanner />);
 
   const handleCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTournament(t => ({ ...t, code: event.target.value }));
+    const code = event.target.value;
+    setCodeValid(code.length >= 5);
+
+    setTournament(t => ({ ...t, code: code }));
   }
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
 
     setTitleValid(title.length >= 3);
-    setTournament(t => ({ ...t, title: event.target.value }));
+    setTournament(t => ({ ...t, title }));
   }
 
   const bannerInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +69,11 @@ export function ManageTournamentBanner() {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const start = event.target.value;
+    setTournament(t => ({ ...t, start }));
+  }
 
   const handleSettingsValueChange = (iteration: λIteration, event: ChangeEvent<HTMLInputElement>) => {
     setSettings(s => ({
@@ -198,7 +206,7 @@ export function ManageTournamentBanner() {
       }),
       toast: true,
       setLoading
-    }, console.log);
+    });
   }
 
   return (
@@ -211,11 +219,15 @@ export function ManageTournamentBanner() {
       </div>
       <div className={s.node}>
         <p>Идентификатор*</p>
-        <Input img='AtSign' placeholder='Идентификатор турнира' onChange={handleCodeChange} value={tournament.code} valid={codeValid} />
+        <Input img='AtSign' placeholder='identifier' onChange={handleCodeChange} value={tournament.code} valid={codeValid} />
       </div>
       <div className={s.node}>
         <p>Ореол турнира*</p>
         <Input img='ImageUp' onChange={bannerInputHandler} type='file' accept='.png, .jpg, .jpeg, .svg, .webm' />
+      </div>
+      <div className={s.node}>
+        <p>Начало турнира (UTC)</p>
+        <Calendar />
       </div>
       <Separator><i>Настройки сетки</i></Separator>
       <div className={s.node}>

@@ -8,9 +8,10 @@ import { Separator } from '@/ui/Separator';
 import { Configuration } from '@impactium/config';
 import { Input } from '@/ui/Input';
 import { useUser } from '@/context/User.context';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useRef, useState } from 'react';
 import { Button } from '@/ui/Button';
 import { useApplication } from '@/context/Application.context';
+import { useRouter } from 'next/navigation';
 
 interface LoginBanner {
   connect?: true
@@ -25,6 +26,7 @@ export function LoginBanner({ connect }: LoginBanner) {
   const self = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [key, setKey] = useState<string>('');
+  const router = useRouter();
 
   const handleKeyPress = (event: KeyboardEvent) => {
     const handle = event.key === 'F12'
@@ -48,21 +50,22 @@ export function LoginBanner({ connect }: LoginBanner) {
   }, []);
 
   const submit = async () => {
-    setLoading(true);
     const token = await api<string>('/user/admin', {
       query: { key },
       setLoading
-    });
+    })
 
     if (!token) return setValid(false);
 
     await refreshUser();
     destroyBanner();
+    router.push('/account');
   }
 
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setKey(event.currentTarget.value)
-    setValid(true)};
+    setValid(true)
+  };
 
   return (
     <Banner ref={self} className={s._} title={connect ? lang.account.connect : lang.login.title}>
@@ -72,7 +75,7 @@ export function LoginBanner({ connect }: LoginBanner) {
       <Separator />
       <LoginMethod type='steam' />
       {extended && (
-        <>
+        <Fragment>
           <Separator><i>Администаторам</i></Separator>
           <div className={s.bypass}>
             <Input
@@ -86,7 +89,7 @@ export function LoginBanner({ connect }: LoginBanner) {
               loading={loading}
               variant={key.length && valid ? 'default' : 'disabled'} onClick={submit}>Войти</Button>
           </div>
-        </>
+        </Fragment>
       )}
     </Banner>
   )

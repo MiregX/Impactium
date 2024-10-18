@@ -7,7 +7,7 @@ import { UsernameTaken, UserNotFound } from '../application/addon/error';
 import { AuthPayload } from '../auth/addon/auth.entity';
 import { FindUserDto, UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
-import { λParam } from '@impactium/pattern';
+import { Optional, λLogger, λParam } from '@impactium/pattern';
 
 @Injectable()
 export class UserService {
@@ -57,17 +57,19 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { uid },
       select: {
-        uid: true,
-        email: true
+        email: true,
+        username: true,
       }
     });
 
-    Logger.warn(`Administrator impersonated user with id: ${user?.uid}`, 'λ');
+    if (!user) λthrow(UserNotFound);
 
-    return user ? `Bearer ${this.signJWT(user.uid, user.email)}` : λthrow(UserNotFound);
+    Logger.warn(`Administrator impersonated user: ${λLogger.blue(user.username)}`, 'λ');
+
+    return `Bearer ${this.signJWT(uid, user.email)}`;
   }
 
-  signJWT = (uid: Required<AuthPayload['uid']>, email: AuthPayload['email']): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });
+  signJWT = (uid: Required<AuthPayload['uid']>, email?: Optional<AuthPayload['email']>): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });
 
   decodeJWT = (token: string) => this.jwt.decode(token) || λthrow(ForbiddenException);
 }

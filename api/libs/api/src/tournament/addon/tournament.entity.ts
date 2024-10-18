@@ -3,9 +3,11 @@ import { UserEntity } from "@api/main/user/addon/user.entity";
 import { Iteration, Prisma, Role, Tournament } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
 import { BattleEntity } from "./battle.entity";
+import { λParam } from "@impactium/pattern";
+import { Arrayed } from "@impactium/utils";
 
 export class TournamentEntity implements Tournament {
-  code!: string;
+  code!: λParam.Code;
   banner!: string;
   title!: string;
   start!: Date;
@@ -66,7 +68,13 @@ export class TournamentEntity implements Tournament {
     },
   });
 
-  public static normalize = (tournament: TournamentEntity | null) => {
+  public static normalize = <T extends Arrayed<Tournament> | null>(tournaments: T) => (Array.isArray(tournaments)
+    ? tournaments as TournamentEntity[]
+    : tournaments) as T extends Tournament[]
+      ? TournamentEntity[]
+      : TournamentEntity | null;
+
+  public static fulfill = (tournament: TournamentEntity | null) => {
     if (!tournament || !tournament.iterations) return null;
   
     tournament.iterations = tournament.iterations.map((iteration, i) => {
@@ -84,12 +92,6 @@ export class TournamentEntity implements Tournament {
           || prevBattle.slot2 === battle.slot2
           || prevBattle.slot2 === battle.slot1
           || prevBattle.slot1 === battle.slot2) / 2);
-
-        if (battles[index]) {
-          console.log(index);
-          console.log(battle);
-          console.log(battles)
-        }
 
         battles[index] = battle;
       });

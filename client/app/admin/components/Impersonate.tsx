@@ -8,6 +8,7 @@ import { ChangeEvent, useState } from 'react';
 import { useUser } from '@/context/User.context';
 import { Input } from '@/ui/Input';
 import { Button } from '@/ui/Button';
+import { useRouter } from 'next/navigation';
 
 export function Impersonate() {
   const { lang } = useLanguage();
@@ -15,11 +16,12 @@ export function Impersonate() {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const impersonate = (uid: UserEntity['uid']) => {
     api<string>(`/user/impersonate/${uid}`, {
       toast: 'user_impersonated_successfully'
-    }, refreshUser);
+    }, refreshUser).then(() => router.push('/account'));
   }
 
   const find = () => api<User[]>(`/user/find`, {
