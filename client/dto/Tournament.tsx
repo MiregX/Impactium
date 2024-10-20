@@ -43,7 +43,7 @@ export class λTournament {
         slot2: tournament.teams?.[i * 2 + 1]?.indent
       } as Battle;
     }
-    return undefined;  
+    return undefined;
   }
 
   public static size = (use: Tournament): number => use.iterations

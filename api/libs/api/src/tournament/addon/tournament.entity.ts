@@ -3,8 +3,8 @@ import { UserEntity } from "@api/main/user/addon/user.entity";
 import { Iteration, Prisma, Role, Tournament } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
 import { BattleEntity } from "./battle.entity";
-import { λParam } from "@impactium/pattern";
-import { Arrayed } from "@impactium/utils";
+import { PowerOfTwo, λParam } from "@impactium/pattern";
+import { Arrayed, λthrow } from "@impactium/utils";
 
 export class TournamentEntity implements Tournament {
   code!: λParam.Code;
@@ -100,7 +100,50 @@ export class TournamentEntity implements Tournament {
     });
   
     return tournament;
-  }  
+  }
+
+  public static new_iteration = (prev_iteration: IterationEntity): [BattleEntity[], BattleEntity[]] => {
+    const n = PowerOfTwo.prev(prev_iteration.n);
+
+    const sorting: {
+      winners: string[]
+      losers: string[]
+    } = {
+      winners: [],
+      losers: []
+    };
+
+    prev_iteration.battles?.forEach(battle => {
+      if (typeof battle.is_slot_one_winner !== 'boolean') return;
+
+      sorting.winners.push(battle.is_slot_one_winner ? battle.slot1 : battle.slot2!);
+      sorting.losers.push(battle.is_slot_one_winner ? battle.slot2! : battle.slot1);
+    });
+
+    const upper_bracket: BattleEntity[] = [];
+
+    sorting.winners.forEach((indent, i) => {
+      if (i % 2 !== 0) return;
+
+      upper_bracket.push({
+        slot1: indent,
+        slot2: sorting.winners[i++],
+      } as unknown as BattleEntity)
+    });
+
+    const lower_bracket: BattleEntity[] = [];
+
+    sorting.losers.forEach((indent, i) => {
+      if (i % 2 !== 0) return;
+
+      lower_bracket.push({
+        slot1: indent,
+        slot2: sorting.losers[i++],
+      } as unknown as BattleEntity)
+    });
+
+    return [upper_bracket, lower_bracket]
+  }
 }
 
 interface Options {

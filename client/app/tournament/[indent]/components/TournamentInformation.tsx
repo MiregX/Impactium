@@ -78,7 +78,7 @@ export function TournamentInformation({}) {
       <Separator />
       <div className={s.participate}>
         <Button onClick={() => spawnBanner(user ? <ParticapateTournamentBanner tournament={tournament} assignTournament={assignTournament} /> : <LoginBanner />)}>Учавствовать</Button>
-        <Button variant='ghost' onClick={() => spawnBanner(<TournamentRules tournament={tournament} />)}>Регламент турнира</Button>
+        <Button variant='ghost' onClick={() => spawnBanner(<TournamentRules assignTournament={assignTournament} tournament={tournament} />)}>Регламент турнира</Button>
       </div>
     </Card>
   )

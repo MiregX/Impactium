@@ -13,7 +13,7 @@ import { TournamentExistanseGuard } from './addon/tournament.guard';
 import { Tournament } from './addon/tournament.decorator';
 import { RedisService } from '../redis/redis.service';
 import { λCache } from '@impactium/pattern';
-import { Cache } from '../application/addon/cache.decorator';
+import { Cache, Recache } from '../application/addon/cache.decorator';
 import { AuthGuard } from '../auth/addon/auth.guard';
 import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto';
 import { ImageValidator } from '../application/addon/image.validator';
@@ -43,7 +43,7 @@ export class TournamentController implements OnModuleInit {
   }
   
   @Get(':code/get')
-  @Cache(λCache.TournamentCodeGet, 60)
+  // @Cache(λCache.TournamentCodeGet, 60)
   async findOneByIndent(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
   ) {
@@ -77,6 +77,33 @@ export class TournamentController implements OnModuleInit {
     @UploadedFile() banner: Express.Multer.File,
   ) {
     return this.tournamentService.create(uid, tournament, banner);
+  }
+
+  @Post(':code/generate-iteration')
+  @UseGuards(AdminGuard, TournamentExistanseGuard)
+  @Recache(λCache.TournamentCodeGet)
+  generateIteration(
+    @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
+  ) {
+    console.log(code);
+    return this.tournamentService.generateIteration(code);
+  }
+
+  @Post(':code/insert-team')
+  @UseGuards(AdminGuard, TournamentExistanseGuard)
+  @Recache(λCache.TournamentCodeGet)
+  insertTeam(
+    @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
+  ) {
+    return this.tournamentService.insertTeam(code);
+  }
+
+  @Post(':code/process-iteration')
+  @UseGuards(AdminGuard, TournamentExistanseGuard)
+  processIteration(
+    @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
+  ) {
+    return this.tournamentService.processIteration(code);
   }
 
   @Put(':code/update')

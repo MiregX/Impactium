@@ -16,7 +16,7 @@ export const useTournament = (): TournamentContext => useContext(TournamentConte
 export function TournamentProvider({ children, prefetched }: Children & { prefetched: Tournament }) {
   const [tournament, setTournament] = useState(prefetched);
 
-  const assignTournament = (newTournament: Tournament) => setTournament(Object.assign({}, newTournament, tournament));
+  const assignTournament = (newTournament: Tournament) => setTournament(Object.assign(tournament, newTournament));
 
   return (
     <TournamentContext.Provider value={{

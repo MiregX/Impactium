@@ -132,6 +132,96 @@ export class TournamentService implements OnModuleInit {
     
   }
 
+  async generateIteration(code: TournamentEntity['code']) {
+    const teams = await this.prisma.team.findMany({
+      where: {
+        tournaments: {
+          some: {
+            code
+          }
+        }
+      }
+    });
+
+    const last_iteration = await this.prisma.iteration.findFirst({
+      where: { tid: code },
+      orderBy: { n: 'desc' },
+      select: {
+        battles: true,
+        n: true
+      }
+    });
+
+    const n = last_iteration ? PowerOfTwo.prev(last_iteration.n as λIteration) : PowerOfTwo.next(teams.length);
+
+    await this.prisma.iteration.create({
+      data: {
+        tid: code,
+        n,
+        is_lower_bracket: false,
+        best_of: 1,
+        startsAt: new Date(),
+        battles: {
+          createMany: {
+            data: this.pairs(teams.map(team => team.indent))
+          }
+        }
+      }
+    });
+  }
+
+  async insertTeam(code: TournamentEntity['code']) {
+    const team = await this.prisma.team.findFirst({
+      where: {
+        tournaments: {
+          none: {
+            code
+          }
+        }
+      }
+    });
+
+    if (!team) λthrow(InternalServerErrorException);
+
+    return this.prisma.tournament.update({
+      where: { code },
+      data: {
+        teams: {
+          connect: {
+            indent: team.indent
+          }
+        }
+      },
+      ...TournamentEntity.select({ teams: true })
+    });
+  }
+
+  async processIteration(code: TournamentEntity['code']) {
+    const iteration = await this.prisma.iteration.findFirst({
+      where: { tid: code },
+      select: {
+        id: true,
+        battles: true,
+        n: true
+      },
+      orderBy: { n: 'desc' },
+    });
+
+    if (!iteration) λthrow(InternalServerErrorException);
+
+    const battles = await Promise.all(iteration.battles.map(async battle => {
+      return await this.prisma.battle.update({
+        where: { id: battle.id },
+        data: {
+          is_slot_one_winner: battle.slot2 ? Math.random() > 0.5 : true,
+          iid: iteration.id
+        }
+      });
+    }));
+
+    return battles;
+  }
+
   private timers: Map<TournamentEntity['code'], NodeJS.Timeout> = new Map();
 
   async upcoming() {
