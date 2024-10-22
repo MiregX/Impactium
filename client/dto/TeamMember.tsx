@@ -1,5 +1,5 @@
 import { Role } from './Role'
-import { UserEntity } from "./User"
+import { UserEntity } from "./User.dto"
 
 export interface TeamMember {
   id: string

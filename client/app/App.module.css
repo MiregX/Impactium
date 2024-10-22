@@ -24,33 +24,30 @@
   align-items: center;
   justify-content: center;
 }
-.panel[data-splitter='true'] > img {
-  width: calc(100% - 32px);
-  transform: translateY(50%);
-  bottom: 0;
-  display: block;
-  position: absolute;
-}
 .panel .title_wrapper {
   position: absolute;
   display: flex;
+  gap: 12px;
   top: 64px;
   left: 0;
   width: 100%;
+  align-items: center;
   border-bottom: 1px solid var(--accent-2);
   height: 128px;
   background: var(--black);
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+.panel .title_wrapper a {
+  align-self: flex-start;
 }
 .panel .title {
   font-family: var(--font-mono);
-  width: 100%;
+  width: min-content;
   max-width: var(--width-limit);
   font-size: 2rem;
   font-weight: 500;
-  position: absolute;
-  padding: 0 16px;
+  padding: 0;
 }
 .fullscreen {
   max-width: 100%;

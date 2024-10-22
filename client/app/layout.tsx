@@ -9,7 +9,7 @@ import { UserProvider } from '@/context/User.context';
 import { Preloader } from './_components/Preloader';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/Footer';
-import { User } from '@/dto/User';
+import { User } from '@/dto/User.dto';
 export { metadata } from '@/dto/Metadata';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';

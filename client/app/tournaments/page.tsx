@@ -7,7 +7,7 @@ import s from './Tournaments.module.css';
 import { Tournament } from "@/dto/Tournament";
 import { usePagination } from "@/decorator/usePagination";
 import { Pagination } from "@/components/Pagination";
-import { UserEntity } from "@/dto/User";
+import { UserEntity } from "@/dto/User.dto";
 import { useItemsPerPage } from "@/decorator/useItemsPerPage";
 import { PostProcessing } from "@/decorator/PostProcessing";
 

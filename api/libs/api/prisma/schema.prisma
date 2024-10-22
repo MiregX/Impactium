@@ -26,6 +26,7 @@ model User {
   verified      Boolean      @default(false)
   logins        Login[]
   teams         Team[]
+  inventory     Item[]
   participate   TeamMember[]
   tournaments   Tournament[]
   transactions  Transaction[]
@@ -39,6 +40,26 @@ model Login {
   on          DateTime  @default(now())
   avatar      String?
   displayName String?
+}
+
+model Item {
+  id          String    @id @default(uuid())
+  uid         String
+  user        User      @relation(fields: [uid], references: [uid])
+  imprint     String
+  amount      Int
+  item        Blueprint @relation(fields: [imprint], references: [imprint])
+}
+
+model Blueprint {
+  imprint       String    @unique
+  category      Category
+  inventories   Item[]
+}
+
+enum Category {
+  Skin
+  Ticket
 }
 
 model Team {

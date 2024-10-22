@@ -1,12 +1,15 @@
 .separator {
-  height: 1px;
-  width: 1px;
+  height: 1.5px;
+  width: 1.5px;
   background: var(--accent-2);
+  shape-rendering: crispEdges;
 }
 .horizontal {
   width: 100%;
+  max-height: 1.5px;
 }
 .vertical {
+  max-width: 1.5px;
   height: 100%;
 }
 .separator {

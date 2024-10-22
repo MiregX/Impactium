@@ -9,7 +9,7 @@ import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
-import { User, UserEntity } from "@/dto/User";
+import { User, UserEntity } from "@/dto/User.dto";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/ui/Icon";
 

@@ -10,7 +10,7 @@ import { useUser } from '@/context/User.context';
 import React from 'react';
 import { useTeams } from './context';
 import { SearchBar } from '@/components/SearchBar';
-import { UserEntity } from '@/dto/User';
+import { UserEntity } from '@/dto/User.dto';
 import { usePagination } from '@/decorator/usePagination';
 import { Pagination } from '@/components/Pagination';
 import { useItemsPerPage } from '@/decorator/useItemsPerPage';

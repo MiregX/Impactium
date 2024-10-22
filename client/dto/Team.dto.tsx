@@ -2,7 +2,7 @@ import { Joinable } from "./Joinable.dto";
 import { TeamInvite } from "./TeamInvite.dto";
 import { TeamMember } from "./TeamMember";
 import { Tournament } from "./Tournament";
-import { User } from "./User";
+import { User } from "./User.dto";
 
 export interface Team {
   indent: string,

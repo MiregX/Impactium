@@ -4,7 +4,7 @@ import { NoComments } from './NoComments';
 import { useLanguage } from '@/context/Language.context';
 import { LeaveComment } from './LeaveComment';
 import { useUser } from '@/context/User.context';
-import { UserEntity } from '@/dto/User';
+import { UserEntity } from '@/dto/User.dto';
 import { Avatar } from '../ui/Avatar';
 import { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';

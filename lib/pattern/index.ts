@@ -120,6 +120,9 @@ export namespace λParam {
 
   const Username = Symbol('Username');
   export type Username = string & { readonly [Username]: unique symbol };
+
+  const Imprint = Symbol('Imprint');
+  export type Imprint = string & { readonly [Imprint]: unique symbol };
 }
 
 export class PowerOfTwo { 

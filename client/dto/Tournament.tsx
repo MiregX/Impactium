@@ -1,6 +1,6 @@
 import { convertISOstringToValue } from "@/lib/utils";
 import { Team, λTeam } from "./Team.dto";
-import { User } from "./User";
+import { User } from "./User.dto";
 import { Iteration } from "./Iteration.dto";
 import { Grid, λIteration } from "@impactium/pattern";
 import { Joinable } from "./Joinable.dto";

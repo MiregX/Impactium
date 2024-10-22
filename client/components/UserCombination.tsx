@@ -1,4 +1,4 @@
-import { User, UserEntity } from "@/dto/User";
+import { User, UserEntity } from "@/dto/User.dto";
 import { Combination, CombinationSkeleton } from "@/ui/Combitation";
 
 interface UserCombinationProps {

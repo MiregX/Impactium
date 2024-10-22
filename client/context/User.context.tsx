@@ -1,10 +1,10 @@
 'use client'
 import Cookies from "universal-cookie";
 import { useState, useEffect, createContext, useContext } from "react";
-import { User, UserEntity } from "@/dto/User";
+import { User, UserEntity } from "@/dto/User.dto";
 import { Children } from "@/types";
-import { OAuth2Callback } from "@/dto/OAuth2Callback.dto";
 import { λCookie } from "@impactium/pattern";
+import { Item } from "@/dto/Item.dto";
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
@@ -14,6 +14,7 @@ interface UserContext {
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => Promise<void>,
+  refreshInventory: () => Promise<Item[]>;
   assignUser: (user: Partial<User> | null) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -34,7 +35,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
   const getUser = () => api<User>('/user/get');
 
   if (cookie.get('uuid')) {
-    api<OAuth2Callback>('/oauth2/telegram/callback', {
+    api<string>('/oauth2/telegram/callback', {
       method: 'POST'
     }).then(token => {
       cookie.set('Authorization', token);
@@ -53,6 +54,8 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     setIsUserLoaded(true);
   });
 
+  const refreshInventory = () => api<Item[]>('/user/inventory', inventory => assignUser({ inventory }));
+
   const assignUser = (user: Partial<User> | null) => setUser((_user) => new UserEntity(Object.assign({}, _user, user)));
 
   const userProps: UserContext = {
@@ -61,6 +64,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     logout,
     getUser,
     refreshUser,
+    refreshInventory,
     isUserLoaded,
     setIsUserLoaded,
     assignUser,

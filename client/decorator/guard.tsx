@@ -1,6 +1,6 @@
 'use client'
 import { redirect } from 'next/navigation'
-import { User } from '@/dto/User';
+import { User } from '@/dto/User.dto';
 import { useUser } from '@/context/User.context';
 
 interface _Options extends Options {

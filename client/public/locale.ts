@@ -1,8 +1,6 @@
 import { error } from './error';
 import { success, SuccessLocale } from './success';
 import { landing } from './landing';
-import Cookies from 'universal-cookie';
-import { title } from 'process';
 
 export interface Template {
   ua: string;
@@ -203,6 +201,13 @@ const locale = {
     ua: 'Налаштування облікового запису',
     it: 'Impostazioni dell\'account',
     pl: 'Ustawienia konta'
+  },
+  _inventory: {
+    us: 'Inventory',
+    ru: 'Инвентарь',
+    ua: 'Інвентар',
+    it: 'Inventario',
+    pl: 'Inwentarz'
   },
   account: {
     avatar: {

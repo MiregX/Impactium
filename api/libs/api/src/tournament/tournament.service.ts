@@ -152,21 +152,27 @@ export class TournamentService implements OnModuleInit {
       }
     });
 
-    const n = last_iteration ? PowerOfTwo.prev(last_iteration.n as λIteration) : PowerOfTwo.next(teams.length);
+    if (!last_iteration) λthrow(InternalServerErrorException);
 
-    await this.prisma.iteration.create({
-      data: {
+    const n = last_iteration
+      ? PowerOfTwo.prev(last_iteration.n as λIteration)
+      : PowerOfTwo.next(teams.length);
+
+    const brackets = TournamentEntity.new_iteration(n, last_iteration.battles);
+
+    await this.prisma.iteration.createMany({
+      data: brackets.map((bracket, i) => ({
         tid: code,
         n,
-        is_lower_bracket: false,
+        is_lower_bracket: Boolean(i),
         best_of: 1,
         startsAt: new Date(),
         battles: {
           createMany: {
-            data: this.pairs(teams.map(team => team.indent))
+            data: bracket
           }
         }
-      }
+      })),
     });
   }
 

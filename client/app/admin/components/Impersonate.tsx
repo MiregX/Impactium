@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language.context';
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
 import { Combination } from '@/ui/Combitation';
-import { User, UserEntity } from '@/dto/User';
+import { User, UserEntity } from '@/dto/User.dto';
 import { ChangeEvent, useState } from 'react';
 import { useUser } from '@/context/User.context';
 import { Input } from '@/ui/Input';

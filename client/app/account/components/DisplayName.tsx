@@ -7,7 +7,7 @@ import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
-import { User } from "@/dto/User";
+import { User } from "@/dto/User.dto";
 
 export function DisplayName() {
   const { lang } = useLanguage();

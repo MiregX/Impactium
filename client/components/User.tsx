@@ -8,6 +8,7 @@ import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { Avatar } from '../ui/Avatar';
 import { Icon } from '@/ui/Icon';
+import { Separator } from '@/ui/Separator';
 
 export function UserComponent() {
   const { user, logout } = useUser();
@@ -45,7 +46,11 @@ export function UserComponent() {
           {lang._account}
           <Icon name='Settings' variant='dimmed' />
         </Link>
-        <hr />
+        <Link href='/account/inventory' onClick={toggle}>
+          {lang._inventory}
+          <Icon name='PackageOpen' variant='dimmed' />
+        </Link>
+        <Separator />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
           <span>{user!.balance | 0}<Icon name='DollarSign' variant='dimmed' /></span>
@@ -54,7 +59,7 @@ export function UserComponent() {
           {lang.choose.language}
           <Icon name='Globe' variant='dimmed' />
         </button>
-        <hr />
+        <Separator />
         <button onClick={() => handle(logout)}>
           {lang.logout}
           <Icon variant='dimmed' name='LogOut' />

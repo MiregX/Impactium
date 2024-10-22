@@ -4,7 +4,7 @@ import { Joinable } from "@/dto/Joinable.dto";
 import { ResponseBase } from "@/dto/Response.dto";
 import { Team } from "@/dto/Team.dto";
 import { Tournament } from "@/dto/Tournament";
-import { User } from "@/dto/User";
+import { User } from "@/dto/User.dto";
 import locale, { Template } from "@/public/locale";
 import { λCookie } from "@impactium/pattern";
 import { Callback } from "@impactium/types";
