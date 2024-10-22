@@ -9,6 +9,7 @@ import { AuthService } from '@api/main/auth/auth.service';
 import { ws, type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
 import { AuthResult } from '../auth/addon/auth.entity';
+import { Blueprint } from '@prisma/client';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -70,6 +71,8 @@ export class ApplicationService implements OnModuleInit {
     return await this.redisService.get(dataset.status)
       .then(data => data ? JSON.parse(data) : []);
   }
+
+  blueprints = (): Promise<Blueprint[]> => this.prisma.blueprint.findMany();
 
   async handle() {
     const existStatus = await this.status();

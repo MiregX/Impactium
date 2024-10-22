@@ -3,8 +3,9 @@ import { Login, Prisma, Team, User } from '@prisma/client';
 import { LoginEntity } from './login.entity';
 import { TeamEntity } from '@api/main/team/addon/team.entity';
 import { λParam } from '@impactium/pattern';
+import { ItemEntity } from './item.entity';
 
-export class UserEntity {
+export class UserEntity implements User {
   @ApiProperty({ example: crypto.randomUUID(), description: 'User ID from database' })
   uid!: λParam.Username;
 
@@ -35,11 +36,14 @@ export class UserEntity {
   @ApiProperty({ type: [TeamEntity], description: 'Teams the user belongs to', nullable: true })
   teams?: TeamEntity[];
 
+  @ApiProperty({ type: [ItemEntity], description: 'Inventory on the user', nullable: true })
+  inventory?: ItemEntity[];
+
   constructor(user: UserEntity) {
     return Object.assign(this, user);
   }
 
-  public static select = ({ teams = false, logins = false }: UserSelectOptions = {}): Prisma.UserDefaultArgs => ({
+  public static select = ({ teams = false, logins = false, inventory = false }: UserSelectOptions = {}): Prisma.UserDefaultArgs => ({
     select: {
       uid: true,
       email: true,
@@ -80,4 +84,5 @@ export class UserEntity {
 export interface UserSelectOptions {
   logins?: boolean;
   teams?: boolean;
+  inventory?: boolean
 }

@@ -53,6 +53,7 @@ model Item {
 
 model Blueprint {
   imprint       String    @unique
+  rare          Rare
   category      Category
   inventories   Item[]
 }
@@ -60,6 +61,18 @@ model Blueprint {
 enum Category {
   Skin
   Ticket
+  Resourse
+  Collection
+}
+
+enum Rare {
+  Common
+  Uncommon
+  Rare
+  Epic
+  Legendary
+  Ancient
+  Divine
 }
 
 model Team {

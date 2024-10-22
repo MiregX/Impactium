@@ -108,7 +108,8 @@ export enum λError {
 export enum λCache {
   TeamList = 'team_list',
   TeamIndentGet = 'team_indent_get',
-  TournamentCodeGet = 'tournament_code_get'
+  TournamentCodeGet = 'tournament_code_get',
+  Blueprints = "blueprints"
 }
 
 export namespace λParam {
