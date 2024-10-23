@@ -24,7 +24,7 @@ export const cookieSettings = {
   path: '/',
 }
 
-export const FileExtensionBase: RegExp = /\.(jpg|jpeg|png|gif)$/;
+export const FileExtensionBase: RegExp = /\.(jpg|jpeg|png|gif|webp)$/;
 export class FileExtension {
   static base: RegExp = FileExtensionBase;
 
@@ -56,6 +56,11 @@ _64: 64,
 export type Grid = Partial<Record<λIteration, 1 | 2 | 3>>;
 
 export type Optional<T = string> = T | null;
+
+export enum λWebSocket {
+  updateApplicationInfo = 'updateApplicationInfo',
+  blueprints = "blueprints"
+}
 
 export enum λCookie {
   redirectedToBypass = 'redirectedToBypass',
@@ -122,8 +127,21 @@ export namespace λParam {
   const Username = Symbol('Username');
   export type Username = string & { readonly [Username]: unique symbol };
 
-  const Imprint = Symbol('Imprint');
-  export type Imprint = string & { readonly [Imprint]: unique symbol };
+  const Imprint = {
+    cannon: 'cannon',
+    coin: 'coin',
+    map: 'map',
+    gem: 'gem',
+    obsidian: 'obsidian',
+    ruby: 'ruby',
+    potion: 'potion',
+    knife: 'knife',
+    pistol: 'pistol',
+    chest: 'chest',
+    bottle: 'bottle',
+    beer: 'beer'
+  };
+  export type Imprint = keyof typeof Imprint;
 }
 
 export class PowerOfTwo { 

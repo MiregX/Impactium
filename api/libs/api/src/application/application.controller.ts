@@ -1,7 +1,6 @@
-import { Controller, ForbiddenException, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApplicationService } from './application.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Configuration } from '@impactium/config';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../auth/addon/admin.guard';
 import { Cache } from './addon/cache.decorator';
@@ -29,9 +28,8 @@ export class ApplicationController {
   }
 
   @Get('blueprints')
-  @Cache(λCache.Blueprints, HOUR)
   blueprints() {
-    return this.applicationService.blueprints()
+    return this.applicationService.getBlueprints();
   }
 
   @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always

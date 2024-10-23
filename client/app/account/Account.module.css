@@ -148,3 +148,16 @@
     display: none;
   }
 }
+
+.inventory {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.inventory .unit {
+  aspect-ratio: 1 / 1;
+}
+.inventory img {
+  width: 100%;
+  object-fit: contain;
+  backdrop-filter: blur(8px);
+}

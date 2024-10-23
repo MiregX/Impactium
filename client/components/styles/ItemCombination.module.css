@@ -1,0 +1,28 @@
+.unit {
+  transition: border 0.125s var(--transition);
+}
+.Rare:hover {
+  border: 1px solid #cb4dff;
+}
+.Rare .rare {
+  color: #cb4dff;
+}
+.unit .title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  height: 16px;
+}
+
+.unit .h5 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-white);
+}
+
+.rare {
+  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}

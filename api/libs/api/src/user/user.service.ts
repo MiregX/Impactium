@@ -69,6 +69,10 @@ export class UserService {
     return `Bearer ${this.signJWT(uid, user.email)}`;
   }
 
+  public inventory = (uid: string) => this.prisma.item.findMany({
+    where: { user: { uid } }
+  });
+
   signJWT = (uid: Required<AuthPayload['uid']>, email?: Optional<AuthPayload['email']>): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });
 
   decodeJWT = (token: string) => this.jwt.decode(token) || λthrow(ForbiddenException);

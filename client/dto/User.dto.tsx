@@ -66,4 +66,6 @@ export class UserEntity implements User {
     displayName: user._displayName,
     username: user._username
   })
+
+  assign = (user: Partial<User>) => Object.assign(this, user);
 }

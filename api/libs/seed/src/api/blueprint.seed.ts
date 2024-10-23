@@ -10,7 +10,7 @@ export class BlueprintSeedService implements OnSeed {
   async seed(): Promise<void> {
     await this.prisma.blueprint.createMany({
       skipDuplicates: true,
-      data: blueprints,
+      data: Object.values(blueprints),
     }).then(({ count }) => Logger.log(`${count} blueprints has been inserted successfully`, 'SEED'));
   };
 };

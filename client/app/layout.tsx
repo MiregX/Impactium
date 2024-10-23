@@ -18,6 +18,7 @@ import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
 import { Children } from '@/types';
 import { Application, ApplicationBase } from '@impactium/types';
+import { Blueprint } from '@/dto/Blueprint.dto';
 
 declare global {
   var api: Api;
@@ -37,13 +38,14 @@ export default async function RootLayout({ children }: Children) {
   }) : null;
 
   const application = await api<Application>('/application/info') || ApplicationBase;
+  const blueprints = await api<Blueprint[]>('/application/blueprints') || [];
 
   return (
     <html style={{'--font-mono' : GeistMono.style.fontFamily, '--font-sans' : GeistSans.style.fontFamily}}>
       <body style={{ backgroundColor: '#000000' }} data-scroll-locked='0'>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user}>
-            <ApplicationProvider application={application}>
+            <ApplicationProvider application={application} blueprints={blueprints}>
               <Header />
               <Preloader />
               <main>

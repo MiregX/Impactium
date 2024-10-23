@@ -59,6 +59,12 @@ export class UserController {
     return Authorization;
   }
 
+  @Get('inventory')
+  @UseGuards(AuthGuard)
+  getInventory(@User() user: UserEntity) {
+    return this.userService.inventory(user.uid);
+  }
+
   @Patch('edit')
   @UseGuards(AuthGuard)
   @ApiResponseSuccess(UserEntity)

@@ -23,7 +23,7 @@ export default function TournamentPage() {
       teams: tournament.teams?.map(team =>({
         ...team,
         members: team.members ? team.members.map(member => ({ ...member, user: new UserEntity(member.user)})) : []
-      }))
+      })) || []
     })) : []));;
   }, [tournaments]);
 

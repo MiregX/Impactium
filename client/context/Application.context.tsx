@@ -5,11 +5,12 @@ import '@/decorator/useOptionStyling';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
-import { Application, ws } from '@impactium/types';
+import { Application } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
-import { λError } from '@impactium/pattern';
+import { λError, λWebSocket } from '@impactium/pattern';
+import { Blueprint } from '@/dto/Blueprint.dto';
 
 const ApplicationContext = createContext<ApplicationContextProps | undefined>(undefined);
 
@@ -20,15 +21,18 @@ interface ApplicationContextProps {
   spawnBanner: (banner: React.ReactNode) => void,
   destroyBanner: () => void,
   application: Application,
-  setApplication: (application: Application) => void
+  setApplication: (application: Application) => void,
+  blueprints: Blueprint[]
 }
 
 interface ApplicationProviderProps extends Children {
   application: Application;
+  blueprints: Blueprint[];
 }
 
-export const ApplicationProvider = ({ children, application: λapplication }: Children & ApplicationProviderProps) => {
+export const ApplicationProvider = ({ children, application: λapplication, blueprints: λblueprints }: Children & ApplicationProviderProps) => {
   const [application, setApplication] = useState<Application>(λapplication);
+  const [blueprints, setBlueprints] = useState<Blueprint[]>(λblueprints);
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
   const [socket, setSocket] = useState<Socket>();
@@ -40,12 +44,19 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
   }, []);
   
   useEffect(() => {
-    socket?.on(ws.updateApplicationInfo, setApplication);
+    socket?.on(λWebSocket.updateApplicationInfo, setApplication);
+    socket?.on(λWebSocket.blueprints, setBlueprints);
   
     return () => {
       socket?.disconnect()
     };
   }, [socket]);
+
+  useEffect(() => {
+    if (!blueprints.length && socket) {
+      socket.emit(λWebSocket.blueprints);
+    }
+  }, [blueprints, socket]);
 
   const spawnBanner = (element: React.ReactNode) => {
     setBanner(element);
@@ -87,6 +98,7 @@ export const ApplicationProvider = ({ children, application: λapplication }: Ch
 
   const props: ApplicationContextProps = {
     copy,
+    blueprints,
     spawnBanner,
     destroyBanner,
     application,

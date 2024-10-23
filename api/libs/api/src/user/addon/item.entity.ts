@@ -1,4 +1,4 @@
-import { Item, Prisma, Rare } from "@prisma/client";
+import { Item, Prisma } from "@prisma/client";
 
 export class ItemEntity implements Item {
   imprint!: string;

@@ -6,13 +6,15 @@ import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
-import { ws, type Application } from '@impactium/types';
+import { type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
 import { AuthResult } from '../auth/addon/auth.entity';
 import { Blueprint } from '@prisma/client';
+import { HOUR, λWebSocket } from '@impactium/pattern';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
+  blueprints: Blueprint[] = [];
   constructor(
     @Inject(forwardRef(() => SocketGateway))
     private readonly webSocket: SocketGateway,
@@ -34,7 +36,7 @@ export class ApplicationService implements OnModuleInit {
     await this.redisService.set(dataset.isSafeMode, toggled);
     const info = await this._reloadInfo();
 
-    this.webSocket.server.emit(ws.updateApplicationInfo, info);
+    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, info);
     return info;
   }
 
@@ -72,7 +74,13 @@ export class ApplicationService implements OnModuleInit {
       .then(data => data ? JSON.parse(data) : []);
   }
 
-  blueprints = (): Promise<Blueprint[]> => this.prisma.blueprint.findMany();
+  async getBlueprints(): Promise<Blueprint[]> {
+    if (!this.blueprints.length) {
+      this.blueprints = await this.prisma.blueprint.findMany();
+      setTimeout(() => this.blueprints = [], HOUR);
+    }
+    return this.blueprints;
+  }
 
   async handle() {
     const existStatus = await this.status();

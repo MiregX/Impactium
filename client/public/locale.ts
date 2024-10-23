@@ -1,6 +1,7 @@
 import { error } from './error';
 import { success, SuccessLocale } from './success';
 import { landing } from './landing';
+import { item } from './item';
 
 export interface Template {
   ua: string;
@@ -867,7 +868,8 @@ const locale = {
   },
   error,
   success,
-  landing
+  landing,
+  item
 }
 
 export default locale;

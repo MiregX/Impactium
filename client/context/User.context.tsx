@@ -15,7 +15,7 @@ interface UserContext {
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => Promise<void>,
   refreshInventory: () => Promise<Item[]>;
-  assignUser: (user: Partial<User> | null) => void,
+  assignUser: (user: Partial<User>) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
 }
@@ -56,7 +56,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
 
   const refreshInventory = () => api<Item[]>('/user/inventory', inventory => assignUser({ inventory }));
 
-  const assignUser = (user: Partial<User> | null) => setUser((_user) => new UserEntity(Object.assign({}, _user, user)));
+  const assignUser = (user: Partial<User>) => setUser((_user) => _user!.assign(user));
 
   const userProps: UserContext = {
     user,

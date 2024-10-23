@@ -7,8 +7,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ApplicationService } from '../application/application.service';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
+import { λWebSocket } from '@impactium/pattern';
 
 @Injectable()
 @WebSocketGateway({
@@ -29,8 +30,12 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
   afterInit(server: Server) {}
 
-  handleConnection(client: Socket) {
-    client.emit('stateUpdate', this.applicationService.info());
+  async handleConnection(client: Socket) {
+    client.emit(λWebSocket.updateApplicationInfo, await this.applicationService.info());
+
+    client.on(λWebSocket.blueprints, async () => {
+      client.emit(λWebSocket.blueprints, await this.applicationService.getBlueprints());
+    });
   }
 
   handleDisconnect(client: Socket) {}
