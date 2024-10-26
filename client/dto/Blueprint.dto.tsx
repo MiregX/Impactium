@@ -7,14 +7,6 @@ export interface Blueprint {
   category: Category;
 }
 
-export class λBlueprint {
-  imprint!: λParam.Imprint;
-  rare!: Rare;
-  category!: Category;
-
-  static rare = (blueprints: Blueprint[], item: Item): Rare => blueprints.find((blueprint) => blueprint.imprint === item.imprint)?.rare ?? Rare.Common;
-}
-
 export enum Rare {
   Common = 'Common',
   Uncommon = 'Uncommon',

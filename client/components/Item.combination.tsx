@@ -1,35 +1,27 @@
-'use client';
+'use client'
 import { cn } from "@/lib/utils";
-import { λBlueprint } from "@/dto/Blueprint.dto";
-import { Item } from "@/dto/Item.dto";
+import { Item, λItem } from "@/dto/Item.dto";
 import { useLanguage } from "@/context/Language.context";
 import { useApplication } from "@/context/Application.context";
 import { Card } from "@/ui/Card";
 import s from './styles/ItemCombination.module.css';
-import Image from "next/image";
-import { ui } from "@impactium/utils";
-import { Badge, BadgeType } from "@/ui/Badge";
 import { Separator } from "@/ui/Separator";
+import { useMemo } from "react";
 
 interface ItemCombinationProps {
   item: Item;
+  icon: string;
 }
 
-export function ItemCombination({ item }: ItemCombinationProps) {
+export function ItemCombination({ item, icon }: ItemCombinationProps) {
   const { lang } = useLanguage();
   const { blueprints } = useApplication();
 
-  const rare = λBlueprint.rare(blueprints, item);
+  const rare = useMemo(() => λItem.rare(blueprints, item), [blueprints, item]);
 
   return (
     <Card className={cn(s.unit, s[rare])} key={item.id}>
-      <Image
-        priority
-        src={ui(`/item/${item.imprint}`)}
-        alt={lang.item[item.imprint]}
-        width={96}
-        height={96}
-      />
+      {icon && <div className={s.icon} dangerouslySetInnerHTML={{ __html: icon }} />}
       <div className={s.title}>
         <h5>{lang.item[item.imprint]}</h5>
         <Separator orientation='vertical' />
@@ -38,3 +30,6 @@ export function ItemCombination({ item }: ItemCombinationProps) {
     </Card>
   )
 }
+
+
+

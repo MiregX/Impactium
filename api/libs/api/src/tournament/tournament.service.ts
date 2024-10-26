@@ -50,7 +50,7 @@ export class TournamentService implements OnModuleInit {
       await this.prisma.tournament.findFirst({
         where: {
           ownerId: 'system',
-          start: friday,
+          code: `battle-cup_${getMonth(friday) + 1}-${friday.getDate()}`,
         },
       }).then((battleCup) => {
         !battleCup && this.createBattleCup(friday);

@@ -1,11 +1,17 @@
 .unit {
   transition: border 0.125s var(--transition);
+  flex: 0;
+  width: max-content;
+}
+.Rare {
+  box-shadow: inset 0px 0px 8px var(--rare);
 }
 .Rare:hover {
-  border: 1px solid #cb4dff;
+  box-shadow: inset 0px 0px 16px var(--rare);
+  border: 1px solid var(--rare);
 }
 .Rare .rare {
-  color: #cb4dff;
+  color: var(--rare);
 }
 .unit .title {
   display: flex;
@@ -14,7 +20,6 @@
   gap: 4px;
   height: 16px;
 }
-
 .unit .h5 {
   font-size: 14px;
   font-weight: 500;

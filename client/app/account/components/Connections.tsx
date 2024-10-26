@@ -40,7 +40,7 @@ export function Connections() {
       <h6>{lang.account.connections}</h6>
       <p>{lang.account.connections_content}</p>
       <section>
-        {(user!.logins || []).map((login: Login) => (
+        {(user.logins || []).map((login: Login) => (
           <Unit key={login.id} login={login} />
         ))}
       </section>

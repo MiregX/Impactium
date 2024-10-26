@@ -14,6 +14,10 @@ export class OmitObject {
 
 export class λUtils {
   public static array = <K extends unknown>(unknown: Arrayed<K>): K[] => Array.isArray(unknown) ? unknown : (typeof unknown === 'undefined' ? [] : [unknown]);
+
+  public static var = (str: string) => `var(--${str})`;
+
+  public static image = async (str: string, fs: typeof import('fs'), path: typeof import('path')): Promise<string> => fs.promises.readFile(path.join(process.cwd(), str), 'utf-8') || '';
 }
 
 export type Arrayed<K> = K | K[];

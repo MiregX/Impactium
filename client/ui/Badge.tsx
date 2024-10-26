@@ -4,6 +4,7 @@ import s from './styles/Badge.module.css'
 import { cn, λIcon } from '@/lib/utils'
 import { Icon } from './Icon'
 import { HTMLAttributes } from 'react'
+import { λUtils } from '@impactium/utils'
 
 enum _BadgeDirections {
   default = 'default',
@@ -122,25 +123,32 @@ export function Badge({ className, ...options }: BadgeProps) {
       color: '#c0c0c0'
     },
     [BadgeType.Common]: {
-      color: '#c0c0c0'
+      color: '#c0c0c0',
+      title: 'Common'
     },
     [BadgeType.Uncommon]: {
-      color: '#4af379'
+      color: '#4af379',
+      title: 'Uncommon'
     },
     [BadgeType.Rare]: {
-      color: '#cb4dff'
+      color: λUtils.var('rare'),
+      title: 'Rare'
     },
     [BadgeType.Epic]: {
-      color: '#0078d4'
+      color: λUtils.var('epic'),
+      title: 'Epic'
     },
     [BadgeType.Legendary]: {
-      color: '#f3e000'
+      color: λUtils.var('legendary'),
+      title: 'Legendary'
     },
     [BadgeType.Ancient]: {
-      color: '#d41d14'
+      color: λUtils.var('ancient'),
+      title: 'Ancient'
     },
     [BadgeType.Divine]: {
-      color: '#00f9ff'
+      color: λUtils.var('divine'),
+      title: 'Divine'
     }
   };
 

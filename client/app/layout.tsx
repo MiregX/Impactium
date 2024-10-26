@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: Children) {
     <html style={{'--font-mono' : GeistMono.style.fontFamily, '--font-sans' : GeistSans.style.fontFamily}}>
       <body style={{ backgroundColor: '#000000' }} data-scroll-locked='0'>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
-          <UserProvider prefetched={user}>
+          <UserProvider prefetched={user!}>
             <ApplicationProvider application={application} blueprints={blueprints}>
               <Header />
               <Preloader />

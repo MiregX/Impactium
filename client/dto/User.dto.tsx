@@ -24,7 +24,6 @@ export class UserEntity implements User {
   balance: number;
   login: Login;
   teams?: Team[];
-  inventory?: Item[];
   verified: boolean;
   logins?: Login[]
   // privates
@@ -44,7 +43,6 @@ export class UserEntity implements User {
     this.login = user.login || (user.logins ? user.logins[0] : null);
     this.logins = user.logins;
     this.teams = user.teams;
-    this.inventory = user.inventory;
     this.verified = user.verified;
   }
 

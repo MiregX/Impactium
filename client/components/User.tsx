@@ -31,12 +31,12 @@ export function UserComponent() {
         <Avatar
           className={s.wrapper}
           size={36}
-          alt={user!.displayName}
-          src={user!.avatar}
+          alt={user.displayName}
+          src={user.avatar}
           onClick={toggle} />
       <nav className={s.menu}>
-        <p className={s.name}>{user!.email || user!.displayName}</p>
-        {user!.uid === 'system' && (
+        <p className={s.name}>{user.email || user.displayName}</p>
+        {user.uid === 'system' && (
           <Link href='/admin' onClick={toggle}>
             {lang._admin_panel}
             <Icon name='Fingerprint' />
@@ -53,7 +53,7 @@ export function UserComponent() {
         <Separator />
         <Link href='/account#balance' onClick={toggle}>
           {lang.balance.top_up}
-          <span>{user!.balance | 0}<Icon name='DollarSign' variant='dimmed' /></span>
+          <span>{user.balance | 0}<Icon name='DollarSign' variant='dimmed' /></span>
         </Link>
         <button onClick={() => handle(() => spawnBanner(<LanguageChooser />))}>
           {lang.choose.language}

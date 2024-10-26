@@ -12,7 +12,7 @@ import { User } from "@/dto/User.dto";
 export function Username() {
   const { lang } = useLanguage();
   const { user, assignUser } = useUser();
-  const [ username, setUsername ] = useState<string>(user!.username);
+  const [ username, setUsername ] = useState<string>(user.username);
   const [ loading, setLoading ] = useState<boolean>(false);
 
   const send = async () => api<User>(`/user/edit`, {
@@ -24,7 +24,7 @@ export function Username() {
 
   const button = <Button
     loading={loading}
-    variant={user!.username !== username && Identifier.test(username) ? 'default' : 'disabled'}
+    variant={user.username !== username && Identifier.test(username) ? 'default' : 'disabled'}
     onClick={send}>{lang._save}</Button>;
 
   return (

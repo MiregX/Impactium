@@ -7,19 +7,12 @@ import { Locale } from '@/public/locale';
 
 interface Panel {
   children: any;
-  // Можно передать стили в масиве или один стиль стрингой
   className?: string[] | string;
-  // Ставит заголовок страницы как у /account
   title?: string
-  // Разворачивает панель на весь екран
   fullscreen?: true;
-  // Ставит контент в колонну
   useColumn?: true;
-  // Центрирует контент
   center?: true;
-  // Включить AuthGuard?
   useAuthGuard?: true;
-  // Смещает контент в левый верхний угол
   useStart?: true
   prev?: ReactElement
 }

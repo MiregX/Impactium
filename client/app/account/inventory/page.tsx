@@ -1,30 +1,33 @@
 'use client'
 import { PanelTemplate } from "@/components/PanelTempate";
-import s from './../Account.module.css';
+import s from './Inventory.module.css';
 import { useUser } from "@/context/User.context";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/ui/Button";
 import { useLanguage } from "@/context/Language.context";
 import Link from "next/link";
 import { Icon } from "@/ui/Icon";
-import { Card } from "@/ui/Card";
-import Image from "next/image";
-import { ui } from "@impactium/utils";
 import { cn } from "@/lib/utils";
-import { useApplication } from "@/context/Application.context";
-import { λBlueprint } from "@/dto/Blueprint.dto";
+import { FilterOptions } from "./components/FilterOptions";
+import { ItemFilter, λItem } from "@/dto/Item.dto";
 import { ItemCombination } from "@/components/Item.combination";
+import { useApplication } from "@/context/Application.context";
+import { useInventory } from "./inventory.context";
+
+export type FilterKey = 'rare' | 'category';
 
 export default function AccountPage() {
   const { blueprints } = useApplication();
-  const { user, refreshInventory } = useUser();
+  const { inventory, refreshInventory, icons } = useInventory();
+  const [filter, setFilter] = useState<ItemFilter>({
+    rare: [],
+    category: []
+  });
   const { lang } = useLanguage();
 
   useEffect(() => {
-    if (user?.inventory) return;
-
-    refreshInventory();
-  }, [user]);
+    if (!inventory.length) refreshInventory();
+  }, [inventory]);
 
   const prev = useMemo(() => (
     <Button variant='ghost' asChild>
@@ -33,11 +36,16 @@ export default function AccountPage() {
         <Icon name='CornerUpLeft' variant='dimmed' />
       </Link>
     </Button>
-  ), []);
+  ), [lang]);
+
+  console.log(icons, icons['obsidian']);
 
   return (
     <PanelTemplate className={cn(s.page, s.inventory)} title={lang._inventory} useAuthGuard={true} prev={prev}>
-      {user?.inventory?.map((item) => <ItemCombination key={item.id} item={item} />)}
+      <FilterOptions setFilter={setFilter} filter={filter} />
+      <div className={s.list}>
+        {λItem.filter(blueprints, inventory, filter).map((item) => <ItemCombination key={item.id} item={item} icon={icons[item.imprint] || ''} />)}
+      </div>
     </PanelTemplate>
   );
 };

@@ -14,7 +14,6 @@ interface UserContext {
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
   refreshUser: () => Promise<void>,
-  refreshInventory: () => Promise<Item[]>;
   assignUser: (user: Partial<User>) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -54,8 +53,6 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     setIsUserLoaded(true);
   });
 
-  const refreshInventory = () => api<Item[]>('/user/inventory', inventory => assignUser({ inventory }));
-
   const assignUser = (user: Partial<User>) => setUser((_user) => _user!.assign(user));
 
   const userProps: UserContext = {
@@ -64,7 +61,6 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     logout,
     getUser,
     refreshUser,
-    refreshInventory,
     isUserLoaded,
     setIsUserLoaded,
     assignUser,

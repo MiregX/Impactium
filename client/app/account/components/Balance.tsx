@@ -25,7 +25,7 @@ export function Balance() {
         <h6>{lang.account.balance}</h6>
         <p>{lang.account.balance_content}</p>
       </div>
-      <div className={s.balance_amount}>{user!.balance || 0} $</div>
+      <div className={s.balance_amount}>{user.balance || 0} $</div>
     </Card>
   );
 }

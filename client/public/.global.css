@@ -63,11 +63,14 @@
   --accent-7: #777;
   --accent-8: #888;
 
-  --geist-green: #31dd59;
-  --geist-blue: #0070f3;
-  --geist-sky: #52a8ff;
-  --geist-yellow: #f3c600;
-  --geist-red: #f30000;
+  /* Rarity */
+  --common: #c0c0c0;
+  --uncommon: #4af379;
+  --rare: #0078d4;
+  --epic: #cb4dff;
+  --legendary: #f3e000;
+  --ancient: #d41d14;
+  --divine: #00f9ff;
 
   /* PADDING */
   --padding: 24px;
