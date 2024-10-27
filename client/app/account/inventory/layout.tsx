@@ -1,12 +1,13 @@
 'use server'
-import { Item } from "@/dto/Item.dto";
-import { λCookie } from "@impactium/pattern";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { InventoryProvider } from "./inventory.context";
-import { λUtils } from "@impactium/utils";
-import path from "path";
+import { Item, λItem } from '@/dto/Item.dto';
+import { λCookie } from '@impactium/pattern';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { InventoryContextProps, InventoryProvider } from './inventory.context';
+import { ui, λUtils } from '@impactium/utils';
+import path from 'path';
 import fs from 'fs';
+import Image from 'next/image';
 
 export default async function InventoryLayout({ children }: { children: React.ReactNode }) {
   const cookie = cookies();
@@ -25,11 +26,10 @@ export default async function InventoryLayout({ children }: { children: React.Re
     redirect('/');
   }
 
-  const icons: Partial<Record<Item['imprint'], string>> = {};
+  const icons: InventoryContextProps['icons'] = {};
 
   await Promise.all(inventory.map(async (item) => {
-    const svg = await λUtils.image(`public/item/${item.imprint}.svg`, fs, path);
-    icons[item.imprint] = svg;
+    icons[item.imprint] = <Image priority src={ui(`item/${item.imprint}.png`)} alt={item.imprint} width={128} height={128} />;
   }));
 
   return (

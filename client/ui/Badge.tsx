@@ -123,11 +123,11 @@ export function Badge({ className, ...options }: BadgeProps) {
       color: '#c0c0c0'
     },
     [BadgeType.Common]: {
-      color: '#c0c0c0',
+      color: λUtils.var('common'),
       title: 'Common'
     },
     [BadgeType.Uncommon]: {
-      color: '#4af379',
+      color: λUtils.var('uncommon'),
       title: 'Uncommon'
     },
     [BadgeType.Rare]: {

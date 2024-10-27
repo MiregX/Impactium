@@ -8,18 +8,22 @@ export interface Blueprint {
 }
 
 export enum Rare {
-  Common = 'Common',
-  Uncommon = 'Uncommon',
-  Rare = 'Rare',
-  Epic = 'Epic',
-  Legendary = 'Legendary',
+  Divine = 'Divine',
   Ancient = 'Ancient',
-  Divine = 'Divine'
+  Legendary = 'Legendary',
+  Epic = 'Epic',
+  Rare = 'Rare',
+  Uncommon = 'Uncommon',
+  Common = 'Common'
 };
 
 export enum Category {
-  Skin = 'Skin',
-  Ticket = 'Ticket',
   Resourse = 'Resourse',
-  Collection = 'Collection'
+  Scroll = 'Scroll',
+  Spellbook = 'Spellbook',
+  Book = 'Book',
+  Ingot = 'Ingot',
+  Crystal = 'Crystal',
+  Skin = 'Skin',
+  Ticket = 'Ticket'
 };

@@ -1,15 +1,16 @@
 'use client'
 import { useState, createContext, useContext } from "react";
-import { Item } from "@/dto/Item.dto";
+import { Item, λItem } from "@/dto/Item.dto";
+import { useApplication } from "@/context/Application.context";
 
-interface InventoryContext {
-  icons: Partial<Record<Item['imprint'], string>>;
+export interface InventoryContextProps {
+  icons: Partial<Record<Item['imprint'], JSX.Element>>;
   inventory: Item[];
   setInventory: React.Dispatch<React.SetStateAction<Item[]>>;
   refreshInventory: (indent?: string) => void;
 }
 
-const InventoryContext = createContext<InventoryContext | undefined>(undefined);
+const InventoryContext = createContext<InventoryContextProps | undefined>(undefined);
 
 export const useInventory = () => {
   return useContext(InventoryContext) || (() => { throw new Error('Обнаружена попытка использовать InventoryContext вне области досягаемости') })();
@@ -22,14 +23,15 @@ export const InventoryProvider = ({
   }: {
     children: React.ReactNode,
     prefetched: Item[],
-    icons: Partial<Record<Item['imprint'], string>>
+    icons: InventoryContextProps['icons']
   }) => {
-  const [inventory, setInventory] = useState(prefetched);
+  const { blueprints } = useApplication();
+  const [inventory, setInventory] = useState(λItem.sort(blueprints, prefetched));
   const [icons, setIcons] = useState(_icons);
 
   const refreshInventory = () => api<Item[]>(`/user/inventory`, setInventory);
   
-  const props: InventoryContext = {
+  const props: InventoryContextProps = {
     icons,
     inventory,
     setInventory,

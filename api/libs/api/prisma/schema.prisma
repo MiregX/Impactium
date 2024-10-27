@@ -59,10 +59,12 @@ model Blueprint {
 }
 
 enum Category {
-  Skin
-  Ticket
   Resourse
-  Collection
+  Scroll
+  Spellbook
+  Book
+  Ingot
+  Crystal
 }
 
 enum Rare {

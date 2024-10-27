@@ -31,6 +31,10 @@ export class λItem {
     items.filter((item) =>
       (filter.rare && filter.rare.length ? filter.rare.includes(λItem.rare(blueprints, item)) : true) &&
       (filter.category && filter.category.length ? filter.category.includes(λItem.category(blueprints, item)) : true));
+
+  static sort = (blueprints: Blueprint[], items: Item[]): Item[] =>
+    items.sort((a, b) =>
+      Object.values(Rare).indexOf(λItem.rare(blueprints, a)) - Object.values(Rare).indexOf(λItem.rare(blueprints, b)));
 }
 
 export interface ItemFilter {

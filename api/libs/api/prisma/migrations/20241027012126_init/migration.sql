@@ -1,5 +1,11 @@
 -- CreateEnum
-CREATE TYPE "LoginType" AS ENUM ('discord', 'google', 'github', 'telegram', 'steam');
+CREATE TYPE "LoginType" AS ENUM ('discord', 'telegram', 'steam');
+
+-- CreateEnum
+CREATE TYPE "Category" AS ENUM ('Resourse', 'Scroll', 'Spellbook', 'Book', 'Ingot', 'Crystal');
+
+-- CreateEnum
+CREATE TYPE "Rare" AS ENUM ('Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Ancient', 'Divine');
 
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Carry', 'Mid', 'Offlane', 'SemiSupport', 'FullSupport', 'Rotation', 'Coach');
@@ -36,6 +42,23 @@ CREATE TABLE "Login" (
 );
 
 -- CreateTable
+CREATE TABLE "Item" (
+    "id" STRING NOT NULL,
+    "uid" STRING NOT NULL,
+    "imprint" STRING NOT NULL,
+    "amount" INT4 NOT NULL,
+
+    CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Blueprint" (
+    "imprint" STRING NOT NULL,
+    "rare" "Rare" NOT NULL,
+    "category" "Category" NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Team" (
     "indent" STRING NOT NULL,
     "logo" STRING,
@@ -59,21 +82,7 @@ CREATE TABLE "TeamMember" (
 );
 
 -- CreateTable
-CREATE TABLE "Comment" (
-    "cid" STRING NOT NULL,
-    "uid" STRING NOT NULL,
-    "content" STRING NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "likes" INT4 NOT NULL DEFAULT 0,
-    "teamIndent" STRING,
-    "tournamentIndent" STRING,
-
-    CONSTRAINT "Comment_pkey" PRIMARY KEY ("cid")
-);
-
--- CreateTable
 CREATE TABLE "Tournament" (
-    "id" STRING NOT NULL,
     "banner" STRING NOT NULL,
     "title" STRING NOT NULL,
     "start" TIMESTAMP(3) NOT NULL,
@@ -87,7 +96,7 @@ CREATE TABLE "Tournament" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "has_lower_bracket" BOOL NOT NULL DEFAULT false,
 
-    CONSTRAINT "Tournament_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Tournament_pkey" PRIMARY KEY ("code")
 );
 
 -- CreateTable
@@ -137,15 +146,6 @@ CREATE TABLE "Transaction" (
 );
 
 -- CreateTable
-CREATE TABLE "Changelog" (
-    "id" STRING NOT NULL,
-    "on" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "new" STRING NOT NULL,
-
-    CONSTRAINT "Changelog_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "TeamInvite" (
     "id" STRING NOT NULL,
     "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -170,13 +170,10 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Blueprint_imprint_key" ON "Blueprint"("imprint");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Team_indent_key" ON "Team"("indent");
-
--- CreateIndex
-CREATE INDEX "teamIndent" ON "Comment"("teamIndent");
-
--- CreateIndex
-CREATE INDEX "tournamentIndent" ON "Comment"("tournamentIndent");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tournament_code_key" ON "Tournament"("code");
@@ -191,6 +188,12 @@ CREATE INDEX "_TeamToTournament_B_index" ON "_TeamToTournament"("B");
 ALTER TABLE "Login" ADD CONSTRAINT "Login_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Item" ADD CONSTRAINT "Item_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Item" ADD CONSTRAINT "Item_imprint_fkey" FOREIGN KEY ("imprint") REFERENCES "Blueprint"("imprint") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -200,19 +203,10 @@ ALTER TABLE "TeamMember" ADD CONSTRAINT "TeamMember_uid_fkey" FOREIGN KEY ("uid"
 ALTER TABLE "TeamMember" ADD CONSTRAINT "TeamMember_indent_fkey" FOREIGN KEY ("indent") REFERENCES "Team"("indent") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_teamIndent_fkey" FOREIGN KEY ("teamIndent") REFERENCES "Team"("indent") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_tournamentIndent_fkey" FOREIGN KEY ("tournamentIndent") REFERENCES "Tournament"("code") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Tournament" ADD CONSTRAINT "Tournament_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Iteration" ADD CONSTRAINT "Iteration_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Iteration" ADD CONSTRAINT "Iteration_tid_fkey" FOREIGN KEY ("tid") REFERENCES "Tournament"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Battle" ADD CONSTRAINT "Battle_iid_fkey" FOREIGN KEY ("iid") REFERENCES "Iteration"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -230,4 +224,4 @@ ALTER TABLE "TeamInvite" ADD CONSTRAINT "TeamInvite_indent_fkey" FOREIGN KEY ("i
 ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("indent") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_B_fkey" FOREIGN KEY ("B") REFERENCES "Tournament"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_TeamToTournament" ADD CONSTRAINT "_TeamToTournament_B_fkey" FOREIGN KEY ("B") REFERENCES "Tournament"("code") ON DELETE CASCADE ON UPDATE CASCADE;

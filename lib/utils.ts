@@ -23,7 +23,7 @@ export class λUtils {
 export type Arrayed<K> = K | K[];
 
 export function ui(path: string) {
-  return `https://cdn.impactium.fun/ui/${path}.svg`
+  return `https://cdn.impactium.fun/ui/${path}${path.split('.').pop() ? '' : '.svg'}`
 }
 
 export function home() {

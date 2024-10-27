@@ -33,22 +33,22 @@
   display: inline-flex;
 }
 .good {
-  color: var(--geist-green);
+  color: var(--uncommon);
 }
 .good span::after {
-  background-color: var(--geist-green);
+  background-color: var(--uncommon);
 }
 .warn {
-  color: var(--geist-yellow);
+  color: var(--legendary);
 }
 .warn span::after {
-  background-color: var(--geist-yellow);
+  background-color: var(--legendary);
 }
 .error {
-  color: var(--geist-red);
+  color: var(--ancient);
 }
 .error span::after {
-  background-color: var(--geist-red);
+  background-color: var(--ancient);
 }
 .unit p {
   justify-self: flex-end;

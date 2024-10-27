@@ -1,17 +1,39 @@
 .unit {
-  transition: border 0.125s var(--transition);
-  flex: 0;
-  width: max-content;
+  transition: all 0.125s var(--transition);
+  display: flex;
+  aspect-ratio: 1 / 1.2;
+  overflow: hidden;
 }
-.Rare {
-  box-shadow: inset 0px 0px 8px var(--rare);
+.unit > div {
+  padding: 16px;
+}
+.Common:hover {
+  border: 1px solid var(--common);
+  box-shadow: inset 0px 0px 12px 0px var(--common);
+}
+.Uncommon:hover {
+  border: 1px solid var(--uncommon);
+  box-shadow: inset 0px 0px 12px 0px var(--uncommon);
 }
 .Rare:hover {
-  box-shadow: inset 0px 0px 16px var(--rare);
   border: 1px solid var(--rare);
+  box-shadow: inset 0px 0px 12px 0px var(--rare);
 }
-.Rare .rare {
-  color: var(--rare);
+.Epic:hover {
+  border: 1px solid var(--epic);
+  box-shadow: inset 0px 0px 12px 0px var(--epic);
+}
+.Legendary:hover {
+  border: 1px solid var(--legendary);
+  box-shadow: inset 0px 0px 12px 0px var(--legendary);
+}
+.Ancient:hover {
+  border: 1px solid var(--ancient);
+  box-shadow: inset 0px 0px 12px 0px var(--ancient);
+}
+.Divine:hover {
+  border: 1px solid var(--divine);
+  box-shadow: inset 0px 0px 12px 0px var(--divine);
 }
 .unit .title {
   display: flex;
@@ -20,14 +42,45 @@
   gap: 4px;
   height: 16px;
 }
-.unit .h5 {
+.title h5 {
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-white);
-}
-
-.rare {
-  font-size: 14px;
-  font-family: var(--font-mono);
   font-weight: 600;
+  color: var(--text-white);
+  line-height: 16px;
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 16px;
+  aspect-ratio: 1 / 1;
+  width: 80%;
+  left: 10%;
+}
+.icon img:first-child {
+  position: absolute;
+  z-index: 0;
+  padding: 16px;
+  width: 100%;
+  height: 100%;
+  filter: blur(24px);
+}
+.icon img:last-child {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.rare {
+  font-size: 10px !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 600 !important;
+  top: -1px;
+  right: -1px;
+  border-radius: 0 var(--border-m);
+  background: var(--geist-background) !important;
+  border: var(--geist-border);
+  backdrop-filter: blur(4px);
+  position: absolute;
+  z-index: 1;
 }

@@ -7,25 +7,29 @@ import { Card } from "@/ui/Card";
 import s from './styles/ItemCombination.module.css';
 import { Separator } from "@/ui/Separator";
 import { useMemo } from "react";
+import { useInventory } from "@/app/account/inventory/inventory.context";
+import { Badge, BadgeType } from "@/ui/Badge";
 
 interface ItemCombinationProps {
   item: Item;
-  icon: string;
 }
 
-export function ItemCombination({ item, icon }: ItemCombinationProps) {
+export function ItemCombination({ item }: ItemCombinationProps) {
   const { lang } = useLanguage();
   const { blueprints } = useApplication();
+  const { icons } = useInventory();
 
   const rare = useMemo(() => λItem.rare(blueprints, item), [blueprints, item]);
 
   return (
     <Card className={cn(s.unit, s[rare])} key={item.id}>
-      {icon && <div className={s.icon} dangerouslySetInnerHTML={{ __html: icon }} />}
+      <div className={s.icon}>
+        {icons[item.imprint]}
+        {icons[item.imprint]}
+      </div>
       <div className={s.title}>
-        <h5>{lang.item[item.imprint]}</h5>
-        <Separator orientation='vertical' />
-        <span className={s.rare}>{rare}</span>
+        <h5>{lang.item[item.imprint]} x{item.amount}</h5>
+        <Badge type={BadgeType[rare]} className={s.rare}>{rare}</Badge>
       </div>
     </Card>
   )

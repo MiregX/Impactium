@@ -40,7 +40,7 @@
   height: 8px;
   width: 8px;
   display: inline-flex;
-  background: var(--geist-blue);
+  background: var(--rare);
   border-radius: var(--round);;
 }
 .operational a {
@@ -48,7 +48,7 @@
   align-items: center;
   gap: 8px;
   border-radius: var(--border-s);
-  color: var(--geist-blue);
+  color: var(--rare);
   font-weight: 500;
   font-size: var(--text-small);
   font-family: var(--font-mono);

@@ -3,7 +3,6 @@ import banner from './styles/Banner.module.css';
 import React, { HTMLAttributes, useEffect } from 'react';
 import { useApplication } from '@/context/Application.context';
 import { cn } from '@/lib/utils';
-import { ui } from '@impactium/utils';
 import { Button } from './Button';
 
 export enum WarnerTypes {
