@@ -1,6 +1,5 @@
 'use client'
-import { ServiceList } from "@/dto/Status"
-import { useStatus } from '../context'
+import { ServiceList, useStatus } from '../context'
 import s from '../Status.module.css'
 import { useLanguage } from "@/context/Language.context"
 import { Graph } from "./Graph"

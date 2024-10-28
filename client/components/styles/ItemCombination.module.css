@@ -43,7 +43,7 @@
   height: 16px;
 }
 .title h5 {
-  font-size: 14px;
+  font-size: 80%;
   font-weight: 600;
   color: var(--text-white);
   line-height: 16px;
@@ -83,4 +83,12 @@
   backdrop-filter: blur(4px);
   position: absolute;
   z-index: 1;
+}
+.amount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 10px !important;
+  font-weight: 600;
+  color: var(--text-white);
 }

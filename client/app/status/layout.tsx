@@ -1,6 +1,5 @@
 import { Children } from '@/types';
-import { StatusProvider } from './context'
-import { Status } from '@/dto/Status';
+import { Status, StatusProvider } from './context'
 
 export default async function StatusLayout({ children }: Children) {
   const status = await api<Status[]>('/application/status');

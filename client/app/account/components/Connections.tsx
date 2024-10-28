@@ -7,7 +7,7 @@ import { Button } from "@/ui/Button";
 import { LoginBanner } from "@/banners/login/Login.banner";
 import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
-import { useUser } from "@/context/User.context";
+import { UserRequiredContext, useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
 import { User, UserEntity } from "@/dto/User.dto";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ import { Icon } from "@/ui/Icon";
 export function Connections() {
   const { lang } = useLanguage();
   const { spawnBanner } = useApplication();
-  const { user, setUser } = useUser();
+  const { user, setUser } = useUser<UserRequiredContext>();
   const [fetched, setFetched] = useState<boolean>(!!user?.logins);
 
   const button = <Button

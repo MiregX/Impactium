@@ -81,7 +81,8 @@ export function Badge({ className, ...options }: BadgeProps) {
     },
     [BadgeType.verified]: {
       title: lang._verified,
-      color: '#52a8ff'
+      color: '#52a8ff',
+      icon: 'ShieldCheck'
     },
     [BadgeType.selected]: {
       title: lang._selected,

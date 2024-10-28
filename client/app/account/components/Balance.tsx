@@ -2,7 +2,7 @@
 import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User.context";
+import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { _server } from "@/decorator/api";
 import { toast } from "sonner";
@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 
 export function Balance() {
   const { lang } = useLanguage();
-  const { user } = useUser();
+  const { user } = useUser<UserRequiredContext>();
 
-  const button = <Button variant='default' onClick={() => toast(lang.error.not_inplemented_title, {
+  const button = <Button variant='default' onClick={() => toast(lang.error.Forbidden, {
     description: lang.error.not_inplemented_description
   })}>{lang.balance.top_up}</Button>
 

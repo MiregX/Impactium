@@ -2,7 +2,7 @@
 import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User.context";
+import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { DisplayNameBase } from "@impactium/pattern";
@@ -11,7 +11,7 @@ import { User } from "@/dto/User.dto";
 
 export function DisplayName() {
   const { lang } = useLanguage();
-  const { user, refreshUser, assignUser } = useUser();
+  const { user, assignUser } = useUser<UserRequiredContext>();
   const [ displayName, setDisplayName ] = useState<string>(user.displayName);
   const [ loading, setLoading ] = useState<boolean>(false);
 
@@ -36,7 +36,7 @@ export function DisplayName() {
         setState={setDisplayName}
         regExp={{
           test: DisplayNameBase,
-          message: lang.error.displayName_invalid_format
+          message: lang.error.display_name_invalid_format
       }} />
     </Card>
   );

@@ -8,7 +8,7 @@ import { Item } from "@/dto/Item.dto";
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
-interface UserContext {
+export interface UserContext {
   user: UserEntity | null,
   setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>,
   logout: () => void,
@@ -19,7 +19,11 @@ interface UserContext {
   setIsUserLoaded: (value: boolean) => void,
 }
 
-export const useUser = () => useContext(UserContext)!;
+export interface UserRequiredContext extends UserContext {
+  user: UserEntity,
+}
+
+export const useUser = <T extends UserContext = UserContext>() => useContext(UserContext)! as T;
 
 export function UserProvider({ children, prefetched }: Children & { prefetched: User | null }) {
   const cookie = new Cookies();

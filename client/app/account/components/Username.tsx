@@ -2,7 +2,7 @@
 import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User.context";
+import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Button } from "@/ui/Button";
 import { InputMin } from "@/ui/InputMin";
 import { Identifier } from '@impactium/pattern'
@@ -11,7 +11,7 @@ import { User } from "@/dto/User.dto";
 
 export function Username() {
   const { lang } = useLanguage();
-  const { user, assignUser } = useUser();
+  const { user, assignUser } = useUser<UserRequiredContext>();
   const [ username, setUsername ] = useState<string>(user.username);
   const [ loading, setLoading ] = useState<boolean>(false);
 

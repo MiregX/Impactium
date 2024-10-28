@@ -2,12 +2,12 @@
 import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
-import { useUser } from "@/context/User.context";
+import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Badge, BadgeType } from "@/ui/Badge";
 
 export function Email() {
   const { lang } = useLanguage();
-  const { user } = useUser();
+  const { user } = useUser<UserRequiredContext>();
 
   return (
     <Card className={s.account} id='email' description={lang.account.email_description}>

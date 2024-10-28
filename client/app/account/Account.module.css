@@ -1,13 +1,15 @@
 .page {
   align-items: flex-start !important;
   flex-direction: row;
+
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-s);
+  gap: var(--padding-l);
   flex: 1;
+  max-width: 720px;
 }
 
 .nav {
@@ -40,6 +42,10 @@
   gap: 24px;
 }
 
+.account {
+  overflow: hidden;
+}
+
 .account .avatar {
   position: absolute;
   right: 24px;
@@ -67,8 +73,8 @@
 }
 .group {
   display: flex;
-  flex-direction: row;
-  gap: var(--padding-s);
+  flex-direction: column;
+  gap: var(--padding-l);
 }
 .account .unit > img {
   height: 32px;
@@ -120,11 +126,6 @@
   flex-direction: column;
   gap: 24px;
 }
-@media all and (max-width: 1366px) {
-  .group {
-    flex-direction: column;
-  }
-}
 @media all and (max-width: 768px) {
   .page {
     flex-direction: column;
@@ -147,4 +148,14 @@
   .account .unit code img  {
     display: none;
   }
+}
+.overview > div {
+  flex-direction: row;
+}
+.badges {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
 }

@@ -3,13 +3,12 @@ import s from './styles/TournamentUnit.module.css'
 import { Badge, BadgeType } from '@/ui/Badge'
 import { Tournament, λTournament } from '@/dto/Tournament'
 import Link from 'next/link'
-import { getReadableDate } from '@/decorator/getReadableDate'
+import { λUtils } from '@impactium/utils'
 import React from 'react'
 import { Button } from '@/ui/Button'
 import { Combination, CombinationSkeleton } from '../ui/Combitation'
 import { Skeleton } from '@/ui/Skeleton'
 import { Icon } from '@/ui/Icon'
-import { capitalize } from '@impactium/utils'
 
 interface TournamentUnitProps {
   tournament: Tournament;
@@ -28,9 +27,9 @@ export function TournamentUnit({ tournament }: TournamentUnitProps) {
         </Button>
       </div>
       <div className={s.container}>
-        <Badge type={BadgeType[λTournament.state(tournament)]} title={capitalize(λTournament.state(tournament))} />
+        <Badge type={BadgeType[λTournament.state(tournament)]} title={λUtils.capitalize(λTournament.state(tournament))} />
         <Badge type={BadgeType.prize} title={`$${tournament.prize}.00`} />
-        <span>{getReadableDate(tournament.start, { year: false })} - {getReadableDate(tournament.end, { year: false })} UTC</span>
+        <span>{λUtils.readableDate(tournament.start, { year: false })} - {λUtils.readableDate(tournament.end, { year: false })} UTC</span>
       </div>
     </Card>
   );

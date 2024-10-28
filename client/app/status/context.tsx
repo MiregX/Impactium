@@ -1,7 +1,19 @@
 'use client'
 import { useState, createContext, useContext } from "react";
-import { Status } from "@/dto/Status";
 import { Children } from "@/types";
+
+export enum ServiceList {
+  redis = 'redis',
+  cockroachdb = 'cockroachdb',
+  telegram = 'telegram'
+}
+
+export type Status = {
+  [key in ServiceList]: {
+    ping: number;
+    info: Record<string, any>;
+  }
+}
 
 const StatusContext = createContext<StatusContext | undefined>(undefined)!;
 

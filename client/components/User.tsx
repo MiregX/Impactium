@@ -1,6 +1,6 @@
 'use client'
 import { useLanguage } from '@/context/Language.context';
-import { useUser } from '@/context/User.context';
+import { UserRequiredContext, useUser } from '@/context/User.context';
 import s from './styles/User.module.css'
 import Link from "next/link";
 import { useState } from 'react';
@@ -11,7 +11,7 @@ import { Icon } from '@/ui/Icon';
 import { Separator } from '@/ui/Separator';
 
 export function UserComponent() {
-  const { user, logout } = useUser();
+  const { user, logout } = useUser<UserRequiredContext>();
   const { spawnBanner } = useApplication();
   const { lang } = useLanguage();
   const [active, setActive] = useState<boolean>(false);

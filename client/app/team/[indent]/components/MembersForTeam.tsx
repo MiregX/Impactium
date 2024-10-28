@@ -4,13 +4,11 @@ import { useTeam } from "../team.context";
 import s from '../Team.module.css';
 import React, { useState } from "react";
 import { MainRole, Role, RoleIcons, SecondaryRole, SortRoles } from "@/dto/Role";
-import { Combination } from "@/ui/Combitation";
 import { Button } from "@/ui/Button";
 import { useUser } from "@/context/User.context";
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger } from "@/ui/Select";
 import { Icon } from "@/ui/Icon";
 import { Card } from "@/ui/Card";
-import { capitalize } from "@impactium/utils";
 import { TeamMember } from "@/dto/TeamMember";
 import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam, SetState } from "@/lib/utils";
 import { useApplication } from "@/context/Application.context";
@@ -18,6 +16,7 @@ import { Separator } from "@/ui/Separator";
 import { Team } from "@/dto/Team.dto";
 import { ManageTeamBanner } from "@/banners/ManageTeam.banner";
 import { UserCombination } from "@/components/UserCombination";
+import { λUtils } from "@impactium/utils";
 
 export function MembersForTeam() {
   const { user } = useUser();
@@ -75,7 +74,7 @@ export function MembersForTeam() {
             <UserCombination user={member.user} />
             {(isUserAreTeamOwner(user, team) || user?.uid === member.uid) ? <Select open={isSelectOpenArray[index]} onOpenChange={(isOpen) => handleSelectOpenChange(index, isOpen)} value={member.role || undefined} defaultValue={member.role || undefined}>
               <SelectTrigger className={s.trigger}>
-                <Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? capitalize(member.role) : 'Нет роли'}</i>
+                <Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? λUtils.capitalize(member.role) : 'Нет роли'}</i>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup className={s.cluster}>
@@ -94,7 +93,7 @@ export function MembersForTeam() {
                   {(isUserAreTeamOwner(user, team)) && <Button variant='destructive' onClick={() => kickMember(member.uid)} img='UserX'>Исключить</Button>}
                 </SelectGroup>
               </SelectContent>
-            </Select> : <span className={s.role}><Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? capitalize(member.role) : 'Нет роли'}</i></span>}
+            </Select> : <span className={s.role}><Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? λUtils.capitalize(member.role) : 'Нет роли'}</i></span>}
           </div>
         ))}
       </Card>

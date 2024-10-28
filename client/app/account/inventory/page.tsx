@@ -38,13 +38,11 @@ export default function AccountPage() {
     </Button>
   ), [lang]);
 
-  console.log(icons, icons['obsidian']);
-
   return (
     <PanelTemplate className={cn(s.page, s.inventory)} title={lang._inventory} useAuthGuard={true} prev={prev}>
       <FilterOptions setFilter={setFilter} filter={filter} />
       <div className={s.list}>
-        {λItem.filter(blueprints, inventory, filter).map((item) => <ItemCombination key={item.id} item={item} icon={icons[item.imprint] || ''} />)}
+        {λItem.filter(blueprints, inventory, filter).map((item) => <ItemCombination key={item.id} item={item} />)}
       </div>
     </PanelTemplate>
   );

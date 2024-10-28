@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/Language.context';
 import Link from 'next/link';
 import { Icon } from '@/ui/Icon';
-import { Icons } from '@/lib/utils';
+import { λIcon } from '@/lib/utils';
 
 interface MapType {
-  [key: string]: { image: Icons };
+  [key: string]: { image: λIcon };
 }
 
 export function Nav() {

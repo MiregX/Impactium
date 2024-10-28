@@ -28,7 +28,8 @@ export function ItemCombination({ item }: ItemCombinationProps) {
         {icons[item.imprint]}
       </div>
       <div className={s.title}>
-        <h5>{lang.item[item.imprint]} x{item.amount}</h5>
+        <h5>{lang.item[item.imprint]}</h5>
+        <p className={s.amount}>x{item.amount}</p>
         <Badge type={BadgeType[rare]} className={s.rare}>{rare}</Badge>
       </div>
     </Card>

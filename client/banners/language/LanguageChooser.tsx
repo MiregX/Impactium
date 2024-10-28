@@ -39,7 +39,7 @@ export function LanguageChooser() {
   };
 
   const footer = {
-    left: [<Button variant='link'><Link href='https://t.me/impactium'>{lang.found_a_translation_error}</Link></Button>],
+    left: [<Button variant='link'><Link href='https://t.me/impactium'>{lang.found_a_Template_error}</Link></Button>],
     right: [<Button img='Check' onClick={destroyBanner}>{lang._save}</Button>]
   };
   
