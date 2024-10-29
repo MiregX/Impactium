@@ -48,6 +48,8 @@ export class λUtils {
   public static home = () => ({ url: Configuration.getClientLink() });
   
   public static capitalize = (str: string) => str?.substring(0, 1).toUpperCase() + str?.substring(1);
+
+  public static between = (num: number, min: number, max: number) => num >= min && num <= max;
 }
 
 export type Arrayed<K> = K | K[];

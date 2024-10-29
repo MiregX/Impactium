@@ -1,7 +1,6 @@
 import '@/decorator/api';
-import '@/decorator/useClasses';
 import '@/decorator/useOptionStyling';
-import React, { ReactNode } from 'react'
+import React from 'react'
 import '@/public/.global.css';
 import LanguageProvider from '@/context/Language.context';
 import { ApplicationProvider } from '@/context/Application.context';
@@ -22,7 +21,6 @@ import { Blueprint } from '@/dto/Blueprint.dto';
 
 declare global {
   var api: Api;
-  var useClasses: (...classNames: Array<string | Array<string | string[]> | undefined | boolean>) => string;
   var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
 

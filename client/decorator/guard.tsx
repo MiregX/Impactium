@@ -1,10 +1,10 @@
 'use client'
 import { redirect } from 'next/navigation'
-import { User } from '@/dto/User.dto';
+import { UserEntity } from '@/dto/User.dto';
 import { useUser } from '@/context/User.context';
 
 interface _Options extends Options {
-  key: keyof User;
+  key: keyof UserEntity;
 }
 
 export interface Options {
