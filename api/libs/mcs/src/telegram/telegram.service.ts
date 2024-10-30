@@ -20,8 +20,8 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
   async onModuleInit() {
     try {
-      await this.telegram.getMe();
-      this.setupBotCommands();
+      // await this.telegram.getMe();
+      // this.setupBotCommands();
       this.isActive = true;
     } catch (_) {
       this.isActive = false;

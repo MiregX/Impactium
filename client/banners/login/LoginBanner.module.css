@@ -1,6 +1,6 @@
 ._ {
   display: flex;
-  border: 1px solid var(--accent-2);
+  border: 1px solid var(--accent-3);
   border-radius: var(--border-s);
   background: var(--soft-black);
   flex-direction: column;

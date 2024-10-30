@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 6px;
-  border: 1px solid var(--accent-2);
+  border: 1px solid var(--accent-3);
   background-color: var(--soft-black);
   gap: 10px;
   padding: 8px 12px;
@@ -52,11 +52,11 @@
 }
 .up {
   top: 0;
-  border-bottom: 1px solid var(--accent-2);
+  border-bottom: 1px solid var(--accent-3);
 }
 .down {
   bottom: 0;
-  border-top: 1px solid var(--accent-2);
+  border-top: 1px solid var(--accent-3);
 }
 .content {
   position: relative;
@@ -65,7 +65,7 @@
   min-width: 128px;
   overflow: hidden;
   border-radius: 6px;
-  border: 1px solid var(--accent-2);
+  border: 1px solid var(--accent-3);
   background-color: var(--soft-black);
   color: var(--white);
   display: flex;

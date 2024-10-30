@@ -5,6 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../auth/addon/admin.guard';
 import { Cache } from './addon/cache.decorator';
 import { HOUR, λCache } from '@impactium/pattern';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @ApiTags('Application')
 @Controller('application')

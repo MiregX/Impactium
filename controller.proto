@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package analytics;
+
+option go_package = "./analytics/controller";
+
+import "google/protobuf/any.proto";
+
+service AnalyticsService {
+  rpc GetData(GetDataRequest) returns (GetDataResponse);
+}
+
+message GetDataRequest {
+  string req_id = 1;
+}
+
+message GetDataResponse {
+  string req_id = 1;
+  int64 timestamp = 2;
+  int32 status = 3;
+  map<string, google.protobuf.Any> data = 4;
+}

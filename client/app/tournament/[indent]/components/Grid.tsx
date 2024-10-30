@@ -115,7 +115,7 @@ export function Grid() {
           starts.forEach((n) => {
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path.setAttribute('d', connectorPath(0, n, 48, end));
-            path.setAttribute('stroke', 'var(--accent-2)');
+            path.setAttribute('stroke', 'var(--accent-3)');
             path.setAttribute('stroke-width', '1');
             path.setAttribute('fill', 'transparent');
             svg.appendChild(path);

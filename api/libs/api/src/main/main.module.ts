@@ -8,8 +8,10 @@ import { TransactionModule } from '@api/main/transaction/transaction.module';
 import { TournamentModule } from '@api/main/tournament/tournament.module';
 import { SocketModule } from '../socket/socket.module';
 import { TelegramModule } from '@api/mcs/telegram/telegram.module';
+import { AnalyticsController } from './analytics.controller';
 
 @Module({
+  controllers: [AnalyticsController],
   imports: [
     ApplicationModule,
     AuthModule,
@@ -19,7 +21,7 @@ import { TelegramModule } from '@api/mcs/telegram/telegram.module';
     TournamentModule,
     TransactionModule,
     TelegramModule,
-    SocketModule,
+    SocketModule
   ]
 })
 export class MainModule {}

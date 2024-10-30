@@ -5,12 +5,25 @@ import * as cookieParser from 'cookie-parser';
 import { Configuration } from '@impactium/config';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { MainModule } from '@api/main/main/main.module';
 
 async function run() {
   const api = await NestFactory.create<NestExpressApplication>(
     ApiModule,
     new ExpressAdapter(),
   );
+
+  const analytics = await NestFactory.createMicroservice<MicroserviceOptions>(MainModule, {
+    transport: Transport.GRPC,
+    options: {
+      package: 'analytics',
+      protoPath: '../controller.proto',
+    },
+  });
+  
+  await analytics.listen();
 
   api.setGlobalPrefix('api');
 

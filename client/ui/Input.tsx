@@ -30,25 +30,22 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, revert, valid = true, variant, type, itemRef, size, img, ...props }, ref) => {
+    const classes = cn(
+      inputVariants({ variant, size, className }),
+      s.input,
+      img || type === 'file' ? s.image : null,
+      revert && s.revert,
+      !valid && s.invalid
+    );
+
     return img || type === 'file' ? (
-      <div className={cn(
-        inputVariants({ variant, size, className }),
-        s.input,
-        s.image,
-        revert && s.revert,
-        !valid && s.invalid
-      )}
-      ref={ref}>
+      <div className={classes} ref={ref}>
         <Icon variant='dimmed' name={img || 'ImageUp'} />
         <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />
       </div>
     ) : (
       <input
-        className={cn(
-          inputVariants({ variant, size, className }),
-          s.input,
-          img && s.image
-        )}
+        className={classes}
         type={variant === 'color' ? 'color' : type}
         ref={ref}
         {...props}
