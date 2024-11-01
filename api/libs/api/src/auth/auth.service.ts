@@ -1,5 +1,4 @@
-import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
-import DiscordOauth2 = require('discord-oauth2');
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { AuthPayload, AuthResult, RequiredAuthPayload } from './addon/auth.entity';
@@ -8,7 +7,6 @@ import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
-import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class AuthService {

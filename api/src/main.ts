@@ -25,7 +25,7 @@ async function run() {
   
   await analytics.listen();
 
-  api.setGlobalPrefix('api');
+  // api.setGlobalPrefix('api');
 
   api.enableCors({
     origin: Configuration.getClientLink() || 'http://localhost:3001',

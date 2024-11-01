@@ -2,69 +2,46 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"net/http"
-	"time"
+	"net"
+	"os"
 
 	pb "analytics/controller"
-	"analytics/exceptions"
-	"analytics/middlewares"
 
-	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
-// Создаем gRPC клиент
-func newGRPCClient() (pb.AnalyticsServiceClient, *grpc.ClientConn, error) {
-	conn, err := grpc.Dial("localhost:3001", grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	client := pb.NewAnalyticsServiceClient(conn)
-	return client, conn, nil
+// AnalyticsServer реализует сервис AnalyticsService
+type AnalyticsServer struct {
+	pb.UnimplementedAnalyticsServiceServer
 }
 
-func dataHandler(c *gin.Context) {
-	client, conn, err := newGRPCClient()
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
-	defer conn.Close()
-
-	req := &pb.GetDataRequest{
-		ReqId: "",
+// GetData реализует метод GetData на AnalyticsServer
+func (s *AnalyticsServer) GetData(ctx context.Context, req *pb.GetDataRequest) (*pb.GetDataResponse, error) {
+	// Пример произвольных данных
+	data := map[string]*anypb.Any{
+		"exampleString": {Value: []byte(`{"message": "Hello, Go!"}`)},
+		"exampleNumber": {Value: []byte(`12345`)},
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	resp, err := client.GetData(ctx, req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": resp.Data})
+	return &pb.GetDataResponse{Data: data}, nil
 }
 
 func main() {
-	handler := gin.Default()
-	λ := handler.Group("/api/v2")
+	port := os.Getenv("GO_PORT")
 
-	λ.Use(middlewares.RequestMiddleware())
-	λ.Use(middlewares.ResponseWrapper())
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		log.Fatalf("Failed to listen: %v", err)
+	}
 
-	λ.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "PONG")
-	})
+	grpcServer := grpc.NewServer()
+	pb.RegisterAnalyticsServiceServer(grpcServer, &AnalyticsServer{})
 
-	λ.GET("/error", func(c *gin.Context) {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "An error occurred"})
-	})
-
-	λ.GET("/data", dataHandler)
-
-	handler.NoRoute(exceptions.NotFound)
-	handler.Run(":3002")
+	fmt.Println(`gRPC server is running on port`, port)
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("Failed to serve: %v", err)
+	}
 }

@@ -10,13 +10,8 @@ service AnalyticsService {
   rpc GetData(GetDataRequest) returns (GetDataResponse);
 }
 
-message GetDataRequest {
-  string req_id = 1;
-}
+message GetDataRequest {}
 
 message GetDataResponse {
-  string req_id = 1;
-  int64 timestamp = 2;
-  int32 status = 3;
   map<string, google.protobuf.Any> data = 4;
 }

@@ -27,6 +27,14 @@
     },
     {
       "type": "node-terminal",
+      "name": "Start GO",
+      "request": "launch",
+      "command": "air",
+      "cwd": "${workspaceFolder}/analytics",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node-terminal",
       "name": "Start TEST",
       "request": "launch",
       "command": "npm run test",
