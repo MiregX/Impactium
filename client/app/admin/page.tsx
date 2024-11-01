@@ -5,6 +5,7 @@ import { DeleteTeams } from "./components/DeleteTeams";
 import { ToggleLanding } from "./components/ToggleLanding";
 import s from './Admin.module.css';
 import { Impersonate } from "./components/Impersonate";
+import { Console } from "./components/Console";
 
 export default function AdminPage() {
   return (
@@ -13,6 +14,7 @@ export default function AdminPage() {
       <DeleteTeams />
       <ToggleLanding />
       <Impersonate />
+      <Console />
     </PanelTemplate>
   )
 }

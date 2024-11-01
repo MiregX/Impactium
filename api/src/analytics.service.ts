@@ -1,21 +1,7 @@
-// analytics.service.ts
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-
-
-// grpc-client.options.ts
-import { ClientOptions, Transport } from '@nestjs/microservices';
-
-export const GrpcClientOptions: ClientOptions = {
-  transport: Transport.GRPC,
-  options: {
-    package: 'analytics',
-    protoPath: '../controller.proto',
-    url: 'localhost:3002',
-  },
-};
-
+import { Transport } from '@nestjs/microservices';
 
 interface AnalyticsServiceClient {
   getData(data: {}): Observable<any>;
@@ -23,24 +9,33 @@ interface AnalyticsServiceClient {
 
 @Injectable()
 export class AnalyticsService implements OnModuleInit {
-  @Client(GrpcClientOptions)
+  @Client({
+    transport: Transport.GRPC,
+    options: {
+      package: 'analytics',
+      protoPath: '../controller.proto',
+      url: 'localhost:3002',
+    },
+  })
   private client!: ClientGrpc;
 
   private analyticsService!: AnalyticsServiceClient;
 
   onModuleInit() {
     this.analyticsService = this.client.getService<AnalyticsServiceClient>('AnalyticsService');
-    this.startPeriodicRequest();
+    this.request();
   }
 
-  private startPeriodicRequest() {
-    setInterval(async () => {
-      try {
-        const response = await this.analyticsService.getData({}).toPromise();
-        console.log('Получен ответ от Go сервера:', response);
-      } catch (error) {
-        console.error('Ошибка при отправке gRPC запроса:', error);
-      }
-    }, 2000);
+  private request() {
+    try {
+      const observer = this.analyticsService.getData({});
+      // observer.subscribe(this.parse)
+    } catch (error) {
+      Logger.error(error, 'Analytics')
+    }
+  }
+
+  private parse = <T = any>(res: T) => {
+    console.log(res);
   }
 }

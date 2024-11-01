@@ -15,17 +15,7 @@ async function run() {
     new ExpressAdapter(),
   );
 
-  const analytics = await NestFactory.createMicroservice<MicroserviceOptions>(MainModule, {
-    transport: Transport.GRPC,
-    options: {
-      package: 'analytics',
-      protoPath: '../controller.proto',
-    },
-  });
-  
-  await analytics.listen();
-
-  // api.setGlobalPrefix('api');
+  api.setGlobalPrefix('api');
 
   api.enableCors({
     origin: Configuration.getClientLink() || 'http://localhost:3001',
