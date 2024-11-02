@@ -1,5 +1,5 @@
-import { DisplayName, Grid, Identifier, λError, λIteration, λIterations } from "@impactium/pattern";
-import { IsBoolean, IsBooleanString, isBooleanString, IsDate, IsEnum, IsJSON, IsNotEmpty, IsObject, IsOptional, IsString, Matches } from "class-validator";
+import { DisplayName, Identifier, λError, λIteration, λIterations } from "@impactium/pattern";
+import { IsBooleanString, isBooleanString, IsDate, IsEnum, IsJSON, IsNotEmpty, IsObject, IsOptional, IsString, Matches } from "class-validator";
 import { TournamentEntity } from "./tournament.entity";
 
 export class CreateTournamentDto {

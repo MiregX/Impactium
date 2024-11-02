@@ -1,12 +1,13 @@
-import { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import s from './styles/Console.module.css';
 import { cn } from '@/lib/utils';
 import { useApplication } from '@/context/Application.context';
-import { λCookie, λWebSocket } from '@impactium/pattern';
+import { λCookie, λParam, λWebSocket } from '@impactium/pattern';
 import Cookies from 'universal-cookie';
 import { History } from '@impactium/types';
 import Image from 'next/image';
 import { useUser } from '@/context/User.context';
+import { Noise } from '@/ui/Noise';
 
 enum DotButtonType {
   Close = 'close',
@@ -20,6 +21,7 @@ interface DotButtonProps extends HTMLAttributes<HTMLButtonElement> {
 
 interface ConsoleProps extends HTMLAttributes<HTMLDivElement> {
   history: History[];
+  noise?: boolean;
   onClose?: () => void;
 }
 
@@ -29,10 +31,12 @@ export function Console({ className, history, children, content, ...props }: Con
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(480);
   const [hidden, setHidden] = useState(false);
+  const [commands, setCommands] = useState<λParam.Command[]>([]);
   const { socket } = useApplication();
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState<λParam.Command | number>(λParam.Command(''));
   const { refreshUser } = useUser();
   const self = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLInputElement>(null);
 
   const DotButton = useCallback(({ type, ...props }: DotButtonProps) => {
     return <span className={cn(s.button, s[type])} {...props} />;
@@ -84,26 +88,54 @@ export function Console({ className, history, children, content, ...props }: Con
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  const keypressHandler = (event: KeyboardEvent) => {
-    const token = new Cookies().get(λCookie.Authorization);
-    switch (event.key) {
-      case 'Enter':
-        socket.emit(λWebSocket.command, { token, command });
-        setCommand('');
-        break;
-    }
-  }
+  const toggleScroll = useCallback((anable: boolean) => {
+    document.body.style.overflow = anable ? 'auto' : 'hidden';
+    document.documentElement.style.overflow = anable ? 'auto' : 'hidden';
+  }, []);
 
   useEffect(() => {
-    self.current?.addEventListener('keypress', keypressHandler);
-    socket.on(λWebSocket.login, token => {
-      console.log(token);
+    console.log(commands, command);
+    const keypressHandler = (event: KeyboardEvent) => {
+      const token = new Cookies().get(λCookie.Authorization);
+      switch (event.key) {
+        case 'Enter':
+          socket.emit(λWebSocket.command, { token, command: typeof command === 'number' ? commands[command] : command });
+          if (typeof command === 'string') setCommands((c) => [...c, command]);
+          setCommand(λParam.Command(''));
+          break;
+        case 'ArrowUp':
+          setCommand((prevCommand) =>
+            typeof prevCommand === 'number'
+              ? Math.max(prevCommand - 1, 0)
+              : commands.length - 1
+          );
+          break;
+        case 'ArrowDown':
+          setCommand((prevCommand) =>
+            typeof prevCommand === 'number'
+              ? Math.min(prevCommand + 1, commands.length - 1)
+              : 0
+          );
+          break;
+        default:
+          break;
+      }
+    };
+
+    const login = (token: string) => {
       new Cookies().set(λCookie.Authorization, token);
       refreshUser(token);
-    });
+    }
 
-    return () => self.current?.removeEventListener('keypress', keypressHandler);
-  })
+    socket.on(λWebSocket.login, login);
+  
+    document.addEventListener('keydown', keypressHandler);
+  
+    return () => {
+      document.removeEventListener('keydown', keypressHandler);
+      socket.off(λWebSocket.login, login);
+    };
+  }, [command, commands, socket]);
 
   const colorCodes: Record<string, string | null> = {
     '[32m': 'log',
@@ -116,24 +148,63 @@ export function Console({ className, history, children, content, ...props }: Con
     '[0m': null
   };
 
-  const hide = (value: boolean) => () => setHidden(value);
+  useEffect(() => {
+    const content = self.current?.getElementsByClassName(s.content).item(0)!;
+
+    content?.scrollTo({ behavior: 'instant', top: content.scrollHeight });
+  }, [history, command]);
+
+  const [fullscreen, setFullscreen] = useState<[number, number, number, number] | null>(null);
+  const open = () => {
+    toggleScroll(!!fullscreen);
+    setHidden(false);
+    setFullscreen(fullscreen ? null : [height, width, top, left]);
+    setHeight(fullscreen ? fullscreen[0] : window.innerHeight);
+    setWidth(fullscreen ? fullscreen[1] : window.innerWidth);
+    setTop(fullscreen ? fullscreen[2] : 0);
+    setLeft(fullscreen ? fullscreen[3] : 0);
+  };
+
+  const hide = () => setHidden(h => !h);
+
+  useEffect(() => {
+    if (hidden) {
+      toggleScroll(true);
+    }
+  }, [hidden]);
+
+  const close = () => {
+    open();
+    if (props.onClose) {
+      props.onClose();
+    }
+  }
+
+  const onMouseDownContentHandler = (event: React.MouseEvent) => {
+    if (window.getSelection()?.toString())
+      event.preventDefault();
+    input.current?.focus();
+  }
+
+  const onClickContentHandler = () => !window.getSelection()?.toString() && input.current?.focus();
 
   return (
     <div
       ref={self}
-      className={cn(s.console, hidden && s.hidden)}
+      className={cn(s.console, hidden && s.hidden, fullscreen && s.fullscreen)}
       style={{ top, left, width, height }}
       {...props}>
       <div className={s.heading} onMouseDown={onMouseDownMove}>
-        <DotButton type={DotButtonType.Close} onClick={props.onClose} />
-        <DotButton type={DotButtonType.Hide} onClick={hide(true)} />
-        <DotButton type={DotButtonType.Open} onClick={hide(false)} />
+        <DotButton type={DotButtonType.Close} onClick={close} />
+        <DotButton type={DotButtonType.Hide} onClick={hide} />
+        <DotButton type={DotButtonType.Open} onClick={open} />
         <div className={s.title}>
           <Image priority src='https://cdn.impactium.fun/logo/impactium.svg' height={0} width={0} alt='' />
           <h1>Impactium</h1>
         </div>
       </div>
-      <div className={cn(s.content, className)}>
+      <div onMouseDown={onMouseDownContentHandler} onClick={onClickContentHandler} className={cn(s.content, className)}>
+        <Noise />
         {history.map(h => <span className={s[h.level]}>{((message: string) => {
           const parts = message.split('');
           const parsedParts: JSX.Element[] = [];
@@ -155,17 +226,12 @@ export function Console({ className, history, children, content, ...props }: Con
         })(h.message)}</span>)} 
         <div className={s.command}>
           <span>C:\Mireg\Impactium{'>'}</span>
-          <input value={command} autoFocus onChange={e => setCommand(e.target.value)} />
+          <input ref={input} value={Number.isInteger(command) ? commands[command as number] : command} autoFocus onChange={e => setCommand(λParam.Command(e.target.value))} />
         </div>
       </div>
-      <div className={cn(s.resizeable, s.top)} onMouseDown={() => onMouseDownResize('top')} />
-      <div className={cn(s.resizeable, s.left)} onMouseDown={() => onMouseDownResize('left')} />
-      <div className={cn(s.resizeable, s.right)} onMouseDown={() => onMouseDownResize('right')} />
-      <div className={cn(s.resizeable, s.bottom)} onMouseDown={() => onMouseDownResize('bottom')} />
-      <div className={cn(s.resizeable, s.top, s.left)} onMouseDown={() => onMouseDownResize('top left')} />
-      <div className={cn(s.resizeable, s.top, s.right)} onMouseDown={() => onMouseDownResize('top right')} />
-      <div className={cn(s.resizeable, s.bottom, s.left)} onMouseDown={() => onMouseDownResize('bottom left')} />
-      <div className={cn(s.resizeable, s.bottom, s.right)} onMouseDown={() => onMouseDownResize('bottom right')} />
+      {['top', 'left', 'right', 'bottom', 'top left', 'top right', 'bottom left', 'bottom right'].map(resize => (
+        <div key={resize} className={cn(s.resizeable, ...resize.split(' ').map(r => s[r]))} onMouseDown={() => onMouseDownResize(resize)} />
+      ))}
     </div>
   );
 }

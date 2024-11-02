@@ -16,6 +16,7 @@ import { AuthService } from '../auth/auth.service';
 import { Logger } from '../application/addon/logger.service';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/addon/user.entity';
+import { help } from './help.file';
 
 @Injectable()
 @WebSocketGateway({
@@ -74,8 +75,21 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
       return;
     };
 
+    Logger.push('C:\\Mireg\\Impactium>' + command);
+
     switch (true) {
       case command === 'history': 
+        break;
+        
+      case command === '':
+        break;
+
+      case command === 'help':
+        Logger.push(help)
+        break;
+        
+      case command === 'cls' || command === 'clear':
+        Logger.clear()
         break;
 
       case command.startsWith('/login'):
@@ -86,9 +100,8 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         Logger.error(`User ${λLogger.bold(user!.uid)} has executed unknown command ${λLogger.bold(command)}`, SocketGateway.name);
         client.emit(λWebSocket.history, Logger.history());
         return;
-    }    
+    }
 
-    Logger.log(`User ${λLogger.bold(user!.uid)} has executed command ${λLogger.bold(command)}`, SocketGateway.name)
     client.emit(λWebSocket.history, Logger.history());
   }
 }

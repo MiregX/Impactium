@@ -49,11 +49,15 @@ export class Logger extends NestLogger {
       : super.fatal(message);
   }
 
-  private static store(level: LogLevel, message: string, context?: string, trace?: string) {
+  public static store(level: LogLevel, message: string, context?: string, trace?: string) {
     Logger.messages.push({ level, message: Logger.format(level, message, context, trace) });
   }
 
   public static history = () => Logger.messages;
+
+  public static clear = () => Logger.messages = [];
+
+  public static push = (message: string) => Logger.messages.push({ level: 'fatal', message });
 
   private static preformat: Record<LogLevel, string> = {
     log: 'green',

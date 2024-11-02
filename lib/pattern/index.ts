@@ -111,6 +111,10 @@ export enum λError {
   tournament_iterations_invalid_format = "tournament_iterations_invalid_format",
   tournament_already_exists = "tournament_already_exists",
   tournament_limit = "tournament_limit",
+  unallowed_file_format = "unallowed_file_format",
+  unallowed_file_size = "unallowed_file_size",
+  unallowed_file_metadata = "unallowed_file_metadata",
+  ftp_upload_error = "ftp_upload_error",
 }
 
 export enum λCache {
@@ -121,19 +125,25 @@ export enum λCache {
 }
 
 export namespace λParam {
-  const Code = Symbol('Code');
-  export type Code = string & { readonly [Code]: unique symbol };
+  const convert = <T>(): (str: string) => T => (str: string) => str as T;
 
-  const Indent = Symbol('Indent');
-  export type Indent = string & { readonly [Indent]: unique symbol };
+  const λCode = Symbol('Code');
+  export type Code = string & { readonly [λCode]: unique symbol };
+  export const Code = convert<Code>();
 
-  const Username = Symbol('Username');
-  export type Username = string & { readonly [Username]: unique symbol };
+  const λIndent = Symbol('Indent');
+  export type Indent = string & { readonly [λIndent]: unique symbol };
+  export const Indent = convert<Indent>();
+
+  const λUsername = Symbol('Username');
+  export type Username = string & { readonly [λUsername]: unique symbol };
+  export const Username = convert<Username>();
 
   export type Imprint = 'advanced_scroll' | 'darkness_spellbook' | 'glowshroom' | 'moondust' | 'thunder_crystal' | 'advanced_spellbook' | 'dryed_nightshade' | 'gold_ingot' | 'moonlit_pearl' | 'thunder_scroll' | 'ancient_tablet' | 'earth_crystal' | 'golden_apple' | 'mythril_ingot' | 'thunder_spellbook' | 'apple' | 'earth_scroll' | 'griffin_wing' | 'ogre_toenail' | 'troll_tooth' | 'basic_book' | 'earth_spellbook' | 'holy_book' | 'old_book' | 'water' | 'basic_scroll' | 'earthbound_rock' | 'ice_crystal' | 'parchment' | 'water_berry' | 'basic_spellbook' | 'elven_dew' | 'ice_scroll' | 'phoenix_feather' | 'water_crystal' | 'basilisk_scale' | 'enchanted_obsidian' | 'ice_spellbook' | 'royal_book' | 'water_scroll' | 'bone' | 'fabric' | 'light_crystal' | 'shadow_root' | 'wind_crystal' | 'bronze_ingot' | 'fairy_pollen' | 'light_scroll' | 'silk' | 'wind_scroll' | 'colorful_coral' | 'fire_berry' | 'light_spellbook' | 'silver_ingot' | 'wind_spellbook' | 'crab_claw' | 'fire_crystal' | 'magestone' | 'siren_scale' | 'wolf_fur' | 'dark_mushroom' | 'fire_scroll' | 'mandrake_root' | 'slime_ball' | 'darkness_crystal' | 'fire_spellbook' | 'medicinal_herb' | 'sprite_wing' | 'darkness_scroll' | 'ghost_essence' | 'milk_bottle' | 'sugar_cane';
 
-  const Command = Symbol('Command');
-  export type Command = ('kick' | 'history') & { readonly [Command]: unique symbol };
+  const λCommand = Symbol('Command');
+  export type Command = string & { readonly [λCommand]: unique symbol };
+  export const Command = convert<Command>();
 }
 
 export class PowerOfTwo { 

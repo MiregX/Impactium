@@ -1,5 +1,5 @@
 .console {
-  position: absolute;
+  position: fixed;
   background: var(--geist-background);
   backdrop-filter: blur(16px) brightness(0.33);
   border: var(--geist-border);
@@ -8,6 +8,9 @@
   height: min-content;
   z-index: 9;
 }
+.fullscreen {
+  border-radius: 0;
+}
 .hidden {
   bottom: 0 !important;
   top: unset !important;
@@ -15,6 +18,7 @@
   left: 128px !important;
   width: 256px !important;
   transform: translateY(calc(100% - 24px));
+  border-radius: var(--border-m);
 }
 .console * {
   font-size: 14px;
@@ -22,6 +26,10 @@
   white-space: break-spaces;
   word-break: break-all;
   line-height: 1.25;
+  user-select: text;
+}
+.console *::selection {
+  background-color: var(--gray48);
 }
 .heading {
   width: 100%;
@@ -45,6 +53,10 @@
   justify-content: center;
   gap: 6px;
 }
+.title * {
+  user-select: none !important;
+  pointer-events: none;
+}
 .title img {
   height: 14px;
   width: 10px;
@@ -52,7 +64,7 @@
 .title h1 {
   font-size: 14px;
   font-weight: 400;
-  height: 14px;
+  height: 16px;
   font-family: var(--font-nunito);
 }
 .content {

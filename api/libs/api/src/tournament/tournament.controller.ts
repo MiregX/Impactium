@@ -43,7 +43,7 @@ export class TournamentController implements OnModuleInit {
   }
   
   @Get(':code/get')
-  // @Cache(λCache.TournamentCodeGet, 60)
+  @Cache(λCache.TournamentCodeGet, 60)
   async findOneByIndent(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
   ) {
