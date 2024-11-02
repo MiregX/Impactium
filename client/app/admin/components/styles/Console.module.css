@@ -1,5 +1,5 @@
 .console {
-  position: fixed;
+  position: absolute;
   background: var(--geist-background);
   backdrop-filter: blur(16px) brightness(0.33);
   border: var(--geist-border);
@@ -11,6 +11,9 @@
 .console * {
   font-size: 14px;
   font-family: var(--font-mono);
+  white-space: break-spaces;
+  word-break: break-all;
+  line-height: 1.25;
 }
 .heading {
   width: 100%;
@@ -23,6 +26,8 @@
 }
 .content {
   padding: var(--padding-s);
+  max-height: calc(100% - 24px);
+  overflow: auto;
 }
 .button {
   cursor: pointer;
@@ -95,4 +100,25 @@
 .resizeable.top.right,
 .resizeable.bottom.left {
   cursor: nesw-resize;
+}
+.command {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+.command input {
+  flex: 1;
+  min-width: 0px;
+}
+.log {
+  color: #0dbc79;
+}
+.verbose {
+  color: #20a2d9;
+}
+.warn {
+  color: #ccd013
+}
+.white {
+  color: var(--white);
 }

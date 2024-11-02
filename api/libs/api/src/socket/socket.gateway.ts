@@ -7,9 +7,11 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ApplicationService } from '../application/application.service';
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { λWebSocket } from '@impactium/pattern';
+import { Logger } from '../application/addon/logger.service';
+import { WebSocketEmitDefinitions, WebSocketOnDefinitions } from '@impactium/types';
 
 @Injectable()
 @WebSocketGateway({
@@ -26,16 +28,20 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     private readonly applicationService: ApplicationService
   ) {}
 
-  @WebSocketServer() server!: Server;
+  @WebSocketServer() server!: Server<WebSocketOnDefinitions, WebSocketEmitDefinitions>;
 
   afterInit(server: Server) {}
 
-  async handleConnection(client: Socket) {
-    client.emit(λWebSocket.updateApplicationInfo, await this.applicationService.info());
-
-    client.on(λWebSocket.blueprints, async () => {
-      client.emit(λWebSocket.blueprints, await this.applicationService.getBlueprints());
+  async handleConnection(client: Socket<WebSocketOnDefinitions, WebSocketEmitDefinitions>) {
+    client.on(λWebSocket.updateApplicationInfo, async () => {
+      const application = await this.applicationService.info()
+      client.emit(λWebSocket.updateApplicationInfo, application);
+      return application;
     });
+
+    // client.on(λWebSocket.blueprints, await this.applicationService.getBlueprints());
+
+    client.on(λWebSocket.command, () => client.emit(λWebSocket.history, (() => Logger.history())()));
   }
 
   handleDisconnect(client: Socket) {}

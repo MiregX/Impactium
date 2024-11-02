@@ -4,7 +4,6 @@ import { TournamentStandart } from './addon/tournament.standart';
 import { TournamentEntity } from './addon/tournament.entity';
 import { addWeeks, addDays, getMonth } from 'date-fns';
 import { UserEntity } from '../user/addon/user.entity';
-import { Logger } from '@nestjs/common';
 import { TeamEntity } from '../team/addon/team.entity';
 import { DAY, Grid, HOUR, PowerOfTwo, λCache, λIteration, λIterations, λParam } from '@impactium/pattern';
 import { BattleEntity } from './addon/battle.entity';
@@ -13,6 +12,7 @@ import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto
 import { FtpService } from '@api/mcs/file/ftp.service';
 import { TournamentAlreadyExist, TournamentLimit } from '../application/addon/error';
 import { Readable } from 'stream';
+import { Logger } from '../application/addon/logger.service';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {

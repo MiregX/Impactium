@@ -1,4 +1,13 @@
+import { λParam, λWebSocket } from "@impactium/pattern";
+
 export type Callback<T> = (data: T) => void;
+
+export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
+
+export interface History {
+  level: LogLevel;
+  message: string;
+}
 
 export interface Application {
   status: number;
@@ -14,6 +23,7 @@ export interface Application {
       tournaments_count: number;
   };
   isSafeMode: 0 | 1;
+  history: History[]
 }
 
 export const ApplicationBase: Application = {
@@ -29,6 +39,24 @@ export const ApplicationBase: Application = {
     teams_count: 0,
     tournaments_count: 0
   },
-  isSafeMode: 1
+  isSafeMode: 1,
+  history: []
 }
 
+export interface WebSocketEmitDefinitions {
+  [λWebSocket.updateApplicationInfo]: any,
+  [λWebSocket.history]: any,
+}
+
+export interface WebSocketOnDefinitions {
+  [λWebSocket.updateApplicationInfo]: () => Promise<Application>,
+  [λWebSocket.blueprints]: Array<{
+    imprint: string;
+    rare: any;
+    category: any;
+  }>
+  [λWebSocket.command]: ({ token, command }: {
+    token: string;
+    command: λParam.Command
+  }) => void
+}

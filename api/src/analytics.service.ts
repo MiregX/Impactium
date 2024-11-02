@@ -1,7 +1,8 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { Transport } from '@nestjs/microservices';
+import { Logger } from '@api/main/application/addon/logger.service';
 
 interface AnalyticsServiceClient {
   getData(data: {}): Observable<any>;

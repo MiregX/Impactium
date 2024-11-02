@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
@@ -11,6 +11,7 @@ import { SocketGateway } from '../socket/socket.gateway';
 import { AuthResult } from '../auth/addon/auth.entity';
 import { Blueprint } from '@prisma/client';
 import { HOUR, λWebSocket } from '@impactium/pattern';
+import { Logger } from './addon/logger.service';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -24,7 +25,7 @@ export class ApplicationService implements OnModuleInit {
     private readonly authService: AuthService,
   ) {}
 
-  async info() {
+  async info(): Promise<Application> {
     return await this._getInfo()
       .catch(async _ => {
         return await this._reloadInfo();
@@ -65,7 +66,8 @@ export class ApplicationService implements OnModuleInit {
         teams_count,
         tournaments_count,
       },
-      isSafeMode: parseInt(isSafeMode || '1') 
+      isSafeMode: parseInt(isSafeMode || '1'),
+      history: Logger.history()
     } as Application
   }
 

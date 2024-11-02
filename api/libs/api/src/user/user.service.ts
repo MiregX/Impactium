@@ -1,13 +1,14 @@
-import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity, UserSelectOptions } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { UsernameTaken, UserNotFound } from '../application/addon/error';
 import { AuthPayload } from '../auth/addon/auth.entity';
-import { FindUserDto, UpdateUserDto } from './addon/user.dto';
+import { UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
 import { Optional, λLogger, λParam } from '@impactium/pattern';
+import { Logger } from '../application/addon/logger.service';
 
 @Injectable()
 export class UserService {

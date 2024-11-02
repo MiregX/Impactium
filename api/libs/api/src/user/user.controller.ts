@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, ForbiddenException, forwardRef, Get, Inject, Logger, NotAcceptableException, NotFoundException, Param, Patch, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, forwardRef, Get, Inject, NotFoundException, Param, Patch, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { User } from './addon/user.decorator';

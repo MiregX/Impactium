@@ -4,7 +4,7 @@ import '@/decorator/useOptionStyling';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
-import { Application } from '@impactium/types';
+import { Application, WebSocketEmitDefinitions, WebSocketOnDefinitions } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
@@ -19,6 +19,7 @@ interface ApplicationContextProps {
   copy: (text: string) => PromiseLike<void>,
   spawnBanner: (banner: React.ReactNode) => void,
   destroyBanner: () => void,
+  socket: Socket,
   application: Application,
   setApplication: (application: Application) => void,
   blueprints: Blueprint[]
@@ -45,6 +46,11 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
   useEffect(() => {
     socket?.on(λWebSocket.updateApplicationInfo, setApplication);
     socket?.on(λWebSocket.blueprints, setBlueprints);
+    socket?.on(λWebSocket.history, history => setApplication(application => ({
+        ...application,
+        history
+      })
+    ));
   
     return () => {
       socket?.disconnect()
@@ -97,6 +103,7 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
 
   const props: ApplicationContextProps = {
     copy,
+    socket: socket!,
     blueprints,
     spawnBanner,
     destroyBanner,
