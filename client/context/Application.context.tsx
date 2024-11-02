@@ -10,6 +10,7 @@ import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
 import { λError, λWebSocket } from '@impactium/pattern';
 import { Blueprint } from '@/dto/Blueprint.dto';
+import { Console } from '@/app/admin/components/Console';
 
 const ApplicationContext = createContext<ApplicationContextProps | undefined>(undefined);
 
@@ -36,6 +37,7 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
   const [socket, setSocket] = useState<Socket>();
+  const [isConosoleOpen, setIsConoleOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setSocket(io(_server(), {
@@ -96,9 +98,20 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
       attributeFilter: [λError.data_scroll_locked],
     });
 
-    document.body.removeAttribute(λError.data_scroll_locked);
+    const keypressHandler = (e: KeyboardEvent) => {
+      if (e.key === 'λ') {
+        e.preventDefault();
+        setIsConoleOpen(true);
+      }
+    }
 
-    return observer.disconnect;
+    document.body.removeAttribute(λError.data_scroll_locked);
+    document.addEventListener('keypress', keypressHandler)
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('keypress', keypressHandler)
+    };
   }, []);
 
   const props: ApplicationContextProps = {
@@ -115,6 +128,7 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
     <ApplicationContext.Provider value={props}>
       {children}
       {banner}
+      {isConosoleOpen && <Console onClose={() => setIsConoleOpen(false)} history={application.history || []} />}
     </ApplicationContext.Provider>
   );
 };

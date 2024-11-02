@@ -12,6 +12,7 @@ import { AuthResult } from '../auth/addon/auth.entity';
 import { Blueprint } from '@prisma/client';
 import { HOUR, λWebSocket } from '@impactium/pattern';
 import { Logger } from './addon/logger.service';
+import { UserEntity } from '../user/addon/user.entity';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
@@ -25,11 +26,15 @@ export class ApplicationService implements OnModuleInit {
     private readonly authService: AuthService,
   ) {}
 
-  async info(): Promise<Application> {
-    return await this._getInfo()
+  async info(username?: UserEntity['username']): Promise<Application> {
+    const info = await this._getInfo()
       .catch(async _ => {
         return await this._reloadInfo();
       })
+
+    if (username === 'system') info.history = Logger.history();
+
+    return info;
   }
 
   async toggleSafeMode() {
@@ -67,7 +72,7 @@ export class ApplicationService implements OnModuleInit {
         tournaments_count,
       },
       isSafeMode: parseInt(isSafeMode || '1'),
-      history: Logger.history()
+      history: []
     } as Application
   }
 

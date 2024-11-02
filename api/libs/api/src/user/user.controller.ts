@@ -18,11 +18,7 @@ import { AdminGuard } from '../auth/addon/admin.guard';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    @Inject(forwardRef(() => ApplicationService))
-    private readonly applicationService: ApplicationService
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('get')
   @UseGuards(AuthGuard)
@@ -91,11 +87,7 @@ export class UserController {
   ) {
     if (!keypass) throw new BadRequestException();
 
-    const hash = createHmac('sha256', createHash('sha256').digest()).update(keypass).digest('hex');
-
-    hash !== 'e639e6fda92901cfaa855bdf591fb9685ec4b3db4ebd469df579beb9fc7ee207' && λthrow(ForbiddenException);
-
-    const token = await this.applicationService.createSystemAccount();
+    const token = await this.userService.admin(keypass);
 
     res.cookie(λCookie.Authorization, token, cookieSettings)
 

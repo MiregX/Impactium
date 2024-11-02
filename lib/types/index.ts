@@ -46,15 +46,16 @@ export const ApplicationBase: Application = {
 export interface WebSocketEmitDefinitions {
   [λWebSocket.updateApplicationInfo]: any,
   [λWebSocket.history]: any,
+  [λWebSocket.login]: any
 }
 
 export interface WebSocketOnDefinitions {
   [λWebSocket.updateApplicationInfo]: () => Promise<Application>,
-  [λWebSocket.blueprints]: Array<{
+  [λWebSocket.blueprints]: () => Promise<Array<{
     imprint: string;
     rare: any;
     category: any;
-  }>
+  }>>;
   [λWebSocket.command]: ({ token, command }: {
     token: string;
     command: λParam.Command

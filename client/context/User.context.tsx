@@ -13,7 +13,7 @@ export interface UserContext {
   setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>,
   logout: () => void,
   getUser: (authorization?: string) => Promise<User | null>,
-  refreshUser: () => Promise<void>,
+  refreshUser: (token?: string) => Promise<void>,
   assignUser: (user: Partial<User>) => void,
   isUserLoaded: boolean,
   setIsUserLoaded: (value: boolean) => void,
@@ -35,7 +35,11 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     !isUserFetched && cookie.get(λCookie.Authorization) && refreshUser()
   }, [isUserFetched]);
 
-  const getUser = () => api<User>('/user/get');
+  const getUser = (token?: string) => api<User>('/user/get', {
+    headers: {
+      [λCookie.Authorization]: token || ''
+    }
+  });
 
   if (cookie.get('uuid')) {
     api<string>('/oauth2/telegram/callback', {
@@ -51,7 +55,7 @@ export function UserProvider({ children, prefetched }: Children & { prefetched: 
     refreshUser();
   };
 
-  const refreshUser = async () => await getUser().then(user => {
+  const refreshUser = async (token?: string) => await getUser(token).then(user => {
     setUser(user ? new UserEntity(user) : null);
     setIsUserFetched(true);
     setIsUserLoaded(true);

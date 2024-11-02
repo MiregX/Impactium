@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { UserEntity, UserSelectOptions } from './addon/user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -9,11 +9,15 @@ import { UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
 import { Optional, λLogger, λParam } from '@impactium/pattern';
 import { Logger } from '../application/addon/logger.service';
+import { ApplicationService } from '../application/application.service';
+import { createHash, createHmac } from 'crypto';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => ApplicationService))
+    private readonly applicationService: ApplicationService,
     private readonly jwt: JwtService,
   ) {}
 
@@ -24,7 +28,7 @@ export class UserService {
     });
   }
 
-  findById(uid: λParam.Username, options: UserSelectOptions = {}): Promise<UserEntity | null> {
+  findById(uid: string, options: UserSelectOptions = {}): Promise<UserEntity | null> {
     return this.prisma.user.findUnique({
       where: { uid },
       ...UserEntity.select(options)
@@ -70,11 +74,23 @@ export class UserService {
     return `Bearer ${this.signJWT(uid, user.email)}`;
   }
 
+  public admin = async (keypass: string, throwable: boolean = true) => {
+    const hash = createHmac('sha256', createHash('sha256').digest()).update(keypass).digest('hex');
+
+    // if (hash !== 'e639e6fda92901cfaa855bdf591fb9685ec4b3db4ebd469df579beb9fc7ee207') {
+    if (hash !== '59c1a72ebf069768ce56f31a608d1787fa7b89b2c4c778e2ff21bde7870b0777') {
+      if (throwable) λthrow(ForbiddenException);
+      return;
+    }
+
+    return this.applicationService.createSystemAccount();
+  }
+
   public inventory = (uid: string) => this.prisma.item.findMany({
     where: { user: { uid } }
   });
 
   signJWT = (uid: Required<AuthPayload['uid']>, email?: Optional<AuthPayload['email']>): string => this.jwt.sign({ uid, email }, { secret: process.env.JWT_SECRET, expiresIn: '7d' });
 
-  decodeJWT = (token: string) => this.jwt.decode(token) || λthrow(ForbiddenException);
+  decodeJWT = (token: string): { uid: string, email?: string } => this.jwt.decode(token) || λthrow(ForbiddenException);
 }

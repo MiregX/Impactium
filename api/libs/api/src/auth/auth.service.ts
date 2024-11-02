@@ -17,7 +17,7 @@ export class AuthService {
     private readonly redisService: RedisService,
   ) {}
 
-  async login(token: string): Promise<UserEntity | undefined> {
+  async login(token?: string): Promise<UserEntity | undefined> {
     if (!token) return undefined;
     
     const { email, uid } = this.userService.decodeJWT(this.unparseToken(token));

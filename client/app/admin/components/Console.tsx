@@ -5,6 +5,8 @@ import { useApplication } from '@/context/Application.context';
 import { λCookie, λWebSocket } from '@impactium/pattern';
 import Cookies from 'universal-cookie';
 import { History } from '@impactium/types';
+import Image from 'next/image';
+import { useUser } from '@/context/User.context';
 
 enum DotButtonType {
   Close = 'close',
@@ -12,28 +14,33 @@ enum DotButtonType {
   Open = 'open'
 }
 
-interface DotButtonProps {
+interface DotButtonProps extends HTMLAttributes<HTMLButtonElement> {
   type: DotButtonType;
 }
 
 interface ConsoleProps extends HTMLAttributes<HTMLDivElement> {
-  history: History[]
+  history: History[];
+  onClose?: () => void;
 }
 
 export function Console({ className, history, children, content, ...props }: ConsoleProps) {
   const [left, setLeft] = useState(100);
   const [top, setTop] = useState(100);
-  const [width, setWidth] = useState(300);
-  const [height, setHeight] = useState(200);
+  const [width, setWidth] = useState(960);
+  const [height, setHeight] = useState(480);
+  const [hidden, setHidden] = useState(false);
   const { socket } = useApplication();
   const [command, setCommand] = useState('');
+  const { refreshUser } = useUser();
   const self = useRef<HTMLDivElement>(null);
 
-  const DotButton = useCallback(({ type }: DotButtonProps) => {
-    return <span className={cn(s.button, s[type])} />;
+  const DotButton = useCallback(({ type, ...props }: DotButtonProps) => {
+    return <span className={cn(s.button, s[type])} {...props} />;
   }, []);
 
   const onMouseDownMove = () => {
+    if (hidden) return;
+
     const onMouseMove = (event: MouseEvent) => {
       setTop(top => Math.min(Math.max(top + event.movementY, 0), window.innerHeight - self.current!.clientHeight));
       setLeft(left => Math.min(Math.max(left + event.movementX, 0), window.innerWidth - self.current!.clientWidth));
@@ -49,6 +56,8 @@ export function Console({ className, history, children, content, ...props }: Con
   };
 
   const onMouseDownResize = (direction: string) => {
+    if (hidden) return;
+
     const onMouseMove = (e: MouseEvent) => {
       if (direction.includes('bottom')) {
         setHeight(height => Math.max(height + e.movementY, 50));
@@ -87,6 +96,11 @@ export function Console({ className, history, children, content, ...props }: Con
 
   useEffect(() => {
     self.current?.addEventListener('keypress', keypressHandler);
+    socket.on(λWebSocket.login, token => {
+      console.log(token);
+      new Cookies().set(λCookie.Authorization, token);
+      refreshUser(token);
+    });
 
     return () => self.current?.removeEventListener('keypress', keypressHandler);
   })
@@ -98,20 +112,26 @@ export function Console({ className, history, children, content, ...props }: Con
     '[34m': 'debug',
     '[36m': 'verbose',
     '[37m': 'white',
-    '[35m': 'fatal',
+    '[1m': 'bold',
     '[0m': null
   };
+
+  const hide = (value: boolean) => () => setHidden(value);
 
   return (
     <div
       ref={self}
-      className={s.console}
+      className={cn(s.console, hidden && s.hidden)}
       style={{ top, left, width, height }}
       {...props}>
       <div className={s.heading} onMouseDown={onMouseDownMove}>
-        {DotButton({ type: DotButtonType.Close })}
-        {DotButton({ type: DotButtonType.Hide })}
-        {DotButton({ type: DotButtonType.Open })}
+        <DotButton type={DotButtonType.Close} onClick={props.onClose} />
+        <DotButton type={DotButtonType.Hide} onClick={hide(true)} />
+        <DotButton type={DotButtonType.Open} onClick={hide(false)} />
+        <div className={s.title}>
+          <Image priority src='https://cdn.impactium.fun/logo/impactium.svg' height={0} width={0} alt='' />
+          <h1>Impactium</h1>
+        </div>
       </div>
       <div className={cn(s.content, className)}>
         {history.map(h => <span className={s[h.level]}>{((message: string) => {
@@ -135,7 +155,7 @@ export function Console({ className, history, children, content, ...props }: Con
         })(h.message)}</span>)} 
         <div className={s.command}>
           <span>C:\Mireg\Impactium{'>'}</span>
-          <input value={command} onChange={e => setCommand(e.target.value)} />
+          <input value={command} autoFocus onChange={e => setCommand(e.target.value)} />
         </div>
       </div>
       <div className={cn(s.resizeable, s.top)} onMouseDown={() => onMouseDownResize('top')} />
