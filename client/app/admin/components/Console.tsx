@@ -32,6 +32,7 @@ export function Console({ className, history, children, content, ...props }: Con
   const [height, setHeight] = useState(480);
   const [hidden, setHidden] = useState(false);
   const [commands, setCommands] = useState<λParam.Command[]>([]);
+  const [noise, setNoise] = useState<boolean>(true);
   const { socket } = useApplication();
   const [command, setCommand] = useState<λParam.Command | number>(λParam.Command(''));
   const { refreshUser } = useUser();
@@ -94,13 +95,14 @@ export function Console({ className, history, children, content, ...props }: Con
   }, []);
 
   useEffect(() => {
-    console.log(commands, command);
     const keypressHandler = (event: KeyboardEvent) => {
       const token = new Cookies().get(λCookie.Authorization);
       switch (event.key) {
         case 'Enter':
-          socket.emit(λWebSocket.command, { token, command: typeof command === 'number' ? commands[command] : command });
-          if (typeof command === 'string') setCommands((c) => [...c, command]);
+          const cmd = typeof command === 'number' ? commands[command] : command;
+          if (cmd === 'noise') return setNoise(v => !v);
+          socket.emit(λWebSocket.command, { token, command: cmd });
+          if (typeof command === 'string') setCommands((c) => [...c, cmd]);
           setCommand(λParam.Command(''));
           break;
         case 'ArrowUp':
@@ -170,11 +172,13 @@ export function Console({ className, history, children, content, ...props }: Con
   useEffect(() => {
     if (hidden) {
       toggleScroll(true);
+    } else if (fullscreen) {
+      toggleScroll(false);
     }
   }, [hidden]);
 
   const close = () => {
-    open();
+    toggleScroll(true);
     if (props.onClose) {
       props.onClose();
     }
@@ -204,7 +208,7 @@ export function Console({ className, history, children, content, ...props }: Con
         </div>
       </div>
       <div onMouseDown={onMouseDownContentHandler} onClick={onClickContentHandler} className={cn(s.content, className)}>
-        <Noise />
+        {noise && <Noise />}
         {history.map(h => <span className={s[h.level]}>{((message: string) => {
           const parts = message.split('');
           const parsedParts: JSX.Element[] = [];

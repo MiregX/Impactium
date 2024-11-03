@@ -1,0 +1,11 @@
+.noise {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  mix-blend-mode: overlay;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  filter: brightness(0.3);
+}

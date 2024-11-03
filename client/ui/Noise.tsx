@@ -1,33 +1,25 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
+import s from './styles/Noise.module.css';
 
 export function Noise() {
-  const [seed, setSeed] = useState<number>(1);
-  
+  const [index, setIndex] = useState(0);
+
+  const noises = useMemo(() => Array.from({ length: 8 }, (_, i) => (
+    <svg key={i} className={s.noise}>
+      <filter id={`noiseFilter-${i}`}>
+        <feTurbulence seed={i + 1} type="fractalNoise" baseFrequency={0.3} />
+      </filter>
+      <rect width="100%" height="100%" filter={`url(#noiseFilter-${i})`} />
+    </svg>
+  )), []);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeed(Math.round(Math.random() * 10));
+      setIndex((prevIndex) => (prevIndex + 1) % noises.length);
     }, 128);
-    return () => clearInterval(interval);
-  }, []);
 
-  const Noise = useCallback(() => (
-    <svg style={{
-      position: 'absolute',
-      height: '100%',
-      width: '100%',
-      mixBlendMode: 'overlay',
-      top: 0,
-      left: 0,
-      pointerEvents: 'none',
-      opacity: 0.1,
-      filter: 'brightness(0.3)',
-    }}>
-      <filter id="noiseFilter">
-        <feTurbulence seed={seed} type="fractalNoise" baseFrequency={0.3} />
-      </filter>
-      <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-    </svg>
-  ), [seed]);
-  
-  return <Noise />
+    return () => clearInterval(interval);
+  }, [noises.length]);
+
+  return noises[index];
 }
