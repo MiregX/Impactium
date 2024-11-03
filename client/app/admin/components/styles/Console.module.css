@@ -42,6 +42,10 @@
   box-shadow: var(--shadow-border);
   position: relative;
 }
+.noise {
+  top: 24px !important;
+  height: calc(100% - 24px) !important;
+}
 .title {
   position: absolute;
   width: 100%;

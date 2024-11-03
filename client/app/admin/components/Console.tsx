@@ -25,14 +25,14 @@ interface ConsoleProps extends HTMLAttributes<HTMLDivElement> {
   onClose?: () => void;
 }
 
-export function Console({ className, history, children, content, ...props }: ConsoleProps) {
+export function Console({ className, noise, history, children, ...props }: ConsoleProps) {
   const [left, setLeft] = useState(100);
   const [top, setTop] = useState(100);
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(480);
   const [hidden, setHidden] = useState(false);
   const [commands, setCommands] = useState<λParam.Command[]>([]);
-  const [noise, setNoise] = useState<boolean>(true);
+  const [isNoiseEnable, setIsNoiseEnable] = useState<boolean>(Boolean(noise));
   const { socket } = useApplication();
   const [command, setCommand] = useState<λParam.Command | number>(λParam.Command(''));
   const { refreshUser } = useUser();
@@ -100,7 +100,7 @@ export function Console({ className, history, children, content, ...props }: Con
       switch (event.key) {
         case 'Enter':
           const cmd = typeof command === 'number' ? commands[command] : command;
-          if (cmd === 'noise') return setNoise(v => !v);
+          if (cmd === 'noise') return setIsNoiseEnable(v => !v);
           socket.emit(λWebSocket.command, { token, command: cmd });
           if (command && typeof command === 'string') setCommands((c) => [...c, cmd]);
           setCommand(λParam.Command(''));
@@ -208,7 +208,7 @@ export function Console({ className, history, children, content, ...props }: Con
         </div>
       </div>
       <div onMouseDown={onMouseDownContentHandler} onClick={onClickContentHandler} className={cn(s.content, className)}>
-        {noise && <Noise />}
+        <Noise enable={isNoiseEnable} className={s.noise} />
         {history.map(h => <span className={s[h.level]}>{((message: string) => {
           const parts = message.split('');
           const parsedParts: JSX.Element[] = [];

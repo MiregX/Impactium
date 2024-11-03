@@ -1,6 +1,7 @@
 .noise {
-  position: absolute;
+  position: fixed;
   height: 100%;
+  flex: 1;
   width: 100%;
   mix-blend-mode: overlay;
   top: 0;
