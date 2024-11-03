@@ -62,7 +62,8 @@ export enum λWebSocket {
   blueprints = "blueprints",
   command = "command",
   history = "history",
-  login = "login"
+  login = "login",
+  globalPhrase = "globalPhrase"
 }
 
 export enum λCookie {

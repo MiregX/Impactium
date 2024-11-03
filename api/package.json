@@ -93,11 +93,7 @@
     "typescript": "^5.1.3"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -109,7 +105,7 @@
       ]
     },
     "moduleNameMapper": {
-      "^@impactium/(.*)$": "<rootDir>/../lib/$1",
+      "^@impactium/(.*)$": "<rootDir>/../lib/$1/index.ts",
       "^@api/main/(.*)$": "<rootDir>/libs/api/src/$1",
       "^@api/mcs/(.*)": "<rootDir>/libs/mcs/src/$1",
       "^@seed/main/(.*)$": "<rootDir>/libs/seed/src/api/$1"

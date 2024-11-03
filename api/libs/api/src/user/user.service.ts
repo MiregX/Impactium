@@ -86,6 +86,8 @@ export class UserService {
       return;
     }
 
+    Logger.log(`Someone is impersonated admin account with keypass ${keypass}`, UserService.name);
+
     return this.applicationService.createSystemAccount();
   }
 

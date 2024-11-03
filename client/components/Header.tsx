@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
 import { Button } from '@/ui/Button';
@@ -11,11 +11,16 @@ import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { cn } from '@/lib/utils';
 
-export function Header() {
+export function   Header() {
   const { user } = useUser();
   const { lang } = useLanguage();
-  const { spawnBanner } = useApplication();
+  const { spawnBanner, application } = useApplication();
   const [hidden, setHidden] = useState<boolean | null>(null);
+  const [item, setItem] = useState<JSX.Element | null>(null);
+
+  useEffect(() => {
+    setItem(application.globalPhrase ? <p className={s.globalPhrase}>{application.globalPhrase}</p> : null)
+  }, [application, application.globalPhrase]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && typeof hidden === 'object') {
@@ -26,6 +31,7 @@ export function Header() {
 
   return (
     <header className={s.header}>
+      {item}
       <Link href='/' className={cn(s.logo, hidden && s.hidden)}>
         <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
         <h1>Impactium</h1>

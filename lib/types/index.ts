@@ -23,7 +23,8 @@ export interface Application {
       tournaments_count: number;
   };
   isSafeMode: 0 | 1;
-  history: History[]
+  history: History[];
+  globalPhrase?: string;
 }
 
 export const ApplicationBase: Application = {
@@ -46,7 +47,8 @@ export const ApplicationBase: Application = {
 export interface WebSocketEmitDefinitions {
   [λWebSocket.updateApplicationInfo]: any,
   [λWebSocket.history]: any,
-  [λWebSocket.login]: any
+  [λWebSocket.login]: any,
+  [λWebSocket.globalPhrase]: any
 }
 
 export interface WebSocketOnDefinitions {

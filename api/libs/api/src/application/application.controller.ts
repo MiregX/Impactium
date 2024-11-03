@@ -16,12 +16,6 @@ export class ApplicationController {
   info() {
     return this.applicationService.info();
   }
-
-  @UseGuards(AdminGuard)
-  @Get('toggle/safe')
-  toggleSafeMode() {
-    return this.applicationService.toggleSafeMode();
-  }
   
   @Get('status')
   status() {
@@ -33,6 +27,6 @@ export class ApplicationController {
     return this.applicationService.getBlueprints();
   }
 
-  @Cron(CronExpression.EVERY_5_MINUTES) // Production & Always
+  @Cron(CronExpression.EVERY_5_MINUTES)
   handle() { this.applicationService.handle() };
 }

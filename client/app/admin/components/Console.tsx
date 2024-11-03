@@ -102,7 +102,7 @@ export function Console({ className, history, children, content, ...props }: Con
           const cmd = typeof command === 'number' ? commands[command] : command;
           if (cmd === 'noise') return setNoise(v => !v);
           socket.emit(λWebSocket.command, { token, command: cmd });
-          if (typeof command === 'string') setCommands((c) => [...c, cmd]);
+          if (command && typeof command === 'string') setCommands((c) => [...c, cmd]);
           setCommand(λParam.Command(''));
           break;
         case 'ArrowUp':

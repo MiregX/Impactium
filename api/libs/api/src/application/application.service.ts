@@ -40,11 +40,20 @@ export class ApplicationService implements OnModuleInit {
   async toggleSafeMode() {
     const toggled = await this._getIsSafeMode() ? 0 : 1;
     await this.redisService.set(dataset.isSafeMode, toggled);
-    const info = await this._reloadInfo();
 
-    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, info);
-    return info;
+    return await this.sync(await this._reloadInfo());
   }
+
+  async setGlobalPhrase(phrase?: string) {
+    if (phrase) {
+      await this.redisService.set(dataset.phrase, phrase);
+    } else {
+      await this.redisService.del(dataset.phrase);
+    }
+
+    return await this.sync(await this._reloadInfo());
+  }
+
 
   private _getInfo = () => this.redisService.get(dataset.info).then(data => data ? JSON.parse(data) : Promise.reject());
 
@@ -55,11 +64,12 @@ export class ApplicationService implements OnModuleInit {
   } 
 
   private async _generateInfo(): Promise<Application> {
-    const [users_count, teams_count, tournaments_count, isSafeMode] = await Promise.all([
+    const [users_count, teams_count, tournaments_count, isSafeMode, globalPhrase] = await Promise.all([
       await this.prisma.user.count(),
       await this.prisma.team.count(),
       await this.prisma.tournament.count(),
-      await this.redisService.get(dataset.isSafeMode)
+      await this.redisService.get(dataset.isSafeMode),
+      await this.redisService.get(dataset.phrase)
     ]);
 
     return {
@@ -72,13 +82,19 @@ export class ApplicationService implements OnModuleInit {
         tournaments_count,
       },
       isSafeMode: parseInt(isSafeMode || '1'),
-      history: []
+      history: [],
+      globalPhrase
     } as Application
   }
 
   async status(): Promise<StatusEntity[]> {
     return await this.redisService.get(dataset.status)
       .then(data => data ? JSON.parse(data) : []);
+  }
+
+  async sync(application: Application) {
+    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, application);
+    return application;
   }
 
   async getBlueprints(): Promise<Blueprint[]> {

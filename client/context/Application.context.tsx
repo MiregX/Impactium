@@ -44,11 +44,11 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
       path: '/api/ws'
     }));
   }, []);
-  
+
   useEffect(() => {
-    socket?.on(λWebSocket.updateApplicationInfo, setApplication);
+    socket?.on(λWebSocket.updateApplicationInfo, a => setApplication(application => Object.assign(application, a)));
     socket?.on(λWebSocket.blueprints, setBlueprints);
-    socket?.on(λWebSocket.history, history => setApplication(application => ({
+    socket?.on(λWebSocket.history, history => setApplication(application => Object.assign({
         ...application,
         history
       })

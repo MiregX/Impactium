@@ -4,5 +4,6 @@ export enum dataset {
   connections = 'connections',
   status = 'status',
   info = 'info',
-  isSafeMode = 'isSafeMode'
+  isSafeMode = 'isSafeMode',
+  phrase = "phrase"
 }

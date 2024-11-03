@@ -61,12 +61,12 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     token: string | undefined,
     command: λParam.Command
   }, client: Socket<WebSocketOnDefinitions, WebSocketEmitDefinitions>) {
-    let user: UserEntity | null | undefined;
-    if (token) {
-      user = await this.authService.login(token);
-    } else if (command.startsWith('/login')) {
-      token = await this.userService.admin(command.split(' ')[1], false);
-      user = await this.authService.login(token);
+    let user = await this.authService.login(token);
+
+    if (command.startsWith('/login ')) {
+      user = await this.authService.login(token = await this.userService.admin(command.split(' ')[1], false));
+      client.emit(λWebSocket.login, token);
+      return;
     }
 
     if (!user) {
@@ -77,27 +77,33 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     Logger.push('C:\\Mireg\\Impactium>' + command);
 
+    const cast = (...strings: string[]) => strings.map(str => command === str).some(v => v);
+
     switch (true) {
-      case command === 'history': 
-        break;
-        
-      case command === '':
+      case cast(''): 
         break;
 
-      case command === 'help':
+      case cast('help'):
         Logger.push(help)
         break;
+
+      case cast('toggle'):
+        Logger.log(`${λLogger.bold(user.uid)} изменил состояние безопасности приложения`, SocketGateway.name)
+        await this.applicationService.toggleSafeMode();
+        break;
         
-      case command === 'cls' || command === 'clear':
+      case cast('cls', 'clear'):
         Logger.clear()
         break;
 
-      case command.startsWith('/login'):
-        client.emit(λWebSocket.login, token);
+      case command.startsWith('/say '):
+        const phrase = command.slice(5);
+        Logger.log(`${λLogger.bold(user.uid)} установил новую фразу дня: ${λLogger.bold(phrase)}`)
+        this.applicationService.setGlobalPhrase(phrase);
         break;
     
       default:
-        Logger.error(`User ${λLogger.bold(user!.uid)} has executed unknown command ${λLogger.bold(command)}`, SocketGateway.name);
+        Logger.error(`User ${λLogger.bold(user.uid)} выполнил неизвестную комманду ${λLogger.bold(command)}`, SocketGateway.name);
         client.emit(λWebSocket.history, Logger.history());
         return;
     }
