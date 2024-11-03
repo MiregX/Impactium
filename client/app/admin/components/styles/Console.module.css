@@ -38,7 +38,7 @@
   gap: 6px;
   align-items: center;
   padding: 0 8px;
-  background: #3b3b3980;
+  background: #3b3b39db;
   box-shadow: var(--shadow-border);
   position: relative;
 }
@@ -69,8 +69,10 @@
 }
 .content {
   padding: var(--padding-s);
+  height: calc(100% - 24px);
   max-height: calc(100% - 24px);
   overflow: auto;
+  position: relative;
 }
 .button {
   cursor: pointer;

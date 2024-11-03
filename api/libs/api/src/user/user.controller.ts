@@ -14,6 +14,7 @@ import { λCookie, cookieSettings } from '@impactium/pattern';
 import { ApplicationService } from '../application/application.service';
 import { λthrow } from '@impactium/utils';
 import { AdminGuard } from '../auth/addon/admin.guard';
+import { Logger } from '../application/addon/logger.service';
 
 @ApiTags('User')
 @Controller('user')
@@ -85,7 +86,10 @@ export class UserController {
     @Res({ passthrough: true }) res: Response,
     @Query('key') keypass: string
   ) {
-    if (!keypass) throw new BadRequestException();
+    if (!keypass) {
+      Logger.warn('Someone is requested /user/admin', UserController.name);
+      λthrow(BadRequestException)
+    };
 
     const token = await this.userService.admin(keypass);
 
