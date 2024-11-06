@@ -1,9 +1,7 @@
 import { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 import s from './Console.module.css';
-import Image from 'next/image';
 import { twMerge } from 'tailwind-merge'
 import { type ClassValue, clsx } from 'clsx'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
 
@@ -26,7 +24,7 @@ interface OptionalProps {
 interface RequiredProps {
   history: History[];
   title: string;
-  icon: string | StaticImport;
+  icon: string | React.ReactElement<HTMLImageElement> | React.ReactElement<SVGSVGElement>;
   prefix: string;
 }
 
@@ -208,7 +206,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
         <span className={cn(s.button, s.hide)} onClick={hide} />
         <span className={cn(s.button, s.open)} onClick={open} />
         <div className={s.title}>
-          <Image priority src={icon} height={0} width={0} alt='' />
+          {typeof icon === 'string' ? <img src={icon} alt='' /> : icon}
           <h1>{title}</h1>
         </div>
       </div>
