@@ -19,12 +19,14 @@ interface OptionalProps {
   onClose?: () => void;
   onCommand?: (command: string) => any;
   defaultCommand?: string;
+  defaultOpen?: boolean;
+  trigger?: string;
 }
 
 interface RequiredProps {
   history: History[];
   title: string;
-  icon: string | React.ReactElement<HTMLImageElement> | React.ReactElement<SVGSVGElement>;
+  icon?: string | React.ReactElement<HTMLImageElement> | React.ReactElement<SVGSVGElement>;
   prefix: string;
 }
 
@@ -34,14 +36,15 @@ export interface NoiseProps extends HTMLAttributes<SVGSVGElement> {
   enable?: boolean;
 }
 
-export function Console({ className, noise, onCommand, title = 'Command Shell', icon, defaultCommand, prefix, history, children, ...props }: ConsoleProps) {
+export function Console({ className, noise, onCommand, title = 'Command Shell', icon, defaultCommand, prefix, history, defaultOpen, children, trigger, ...props }: ConsoleProps) {
   const [left, setLeft] = useState(100);
   const [top, setTop] = useState(100);
   const [width, setWidth] = useState(960);
   const [height, setHeight] = useState(480);
   const [hidden, setHidden] = useState(false);
   const [commands, setCommands] = useState<string[]>([]);
-  const [command, setCommand] = useState<string | number>(String(defaultCommand));
+  const [command, setCommand] = useState<string | number>(defaultCommand || '');
+  const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
   const self = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
 
@@ -142,6 +145,22 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
     };
   }, [command, commands]);
 
+  useEffect(() => {
+    const keypressHandler = (e: KeyboardEvent) => {
+      if (e.key === (trigger ?? 'λ')) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    }
+
+    document.addEventListener('keypress', keypressHandler)
+
+    return () => {
+      document.removeEventListener('keypress', keypressHandler)
+    };
+  }, [self]);
+
+
   const colorCodes: Record<string, string | null> = {
     '[32m': 'log',
     '[33m': 'warn',
@@ -160,7 +179,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
   }, [history, command]);
 
   const [fullscreen, setFullscreen] = useState<[number, number, number, number] | null>(null);
-  const open = () => {
+  const toggleOpen = () => {
     toggleScroll(!!fullscreen);
     setHidden(false);
     setFullscreen(fullscreen ? null : [height, width, top, left]);
@@ -195,7 +214,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
 
   const onClickContentHandler = () => !window.getSelection()?.toString() && input.current?.focus();
 
-  return (
+  return open ? (
     <div
       ref={self}
       className={cn(s.console, hidden && s.hidden, fullscreen && s.fullscreen)}
@@ -204,7 +223,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
       <div className={s.heading} onMouseDown={onMouseDownMove}>
         <span className={cn(s.button, s.close)} onClick={close} />
         <span className={cn(s.button, s.hide)} onClick={hide} />
-        <span className={cn(s.button, s.open)} onClick={open} />
+        <span className={cn(s.button, s.open)} onClick={toggleOpen} />
         <div className={s.title}>
           {typeof icon === 'string' ? <img src={icon} alt='' /> : icon}
           <h1>{title}</h1>
@@ -240,5 +259,5 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
         <div key={resize} className={cn(s.resizeable, ...resize.split(' ').map(r => s[r]))} onMouseDown={() => onMouseDownResize(resize)} />
       ))}
     </div>
-  );
+  ) : null;
 }

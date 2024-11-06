@@ -1,9 +1,23 @@
-.console {
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.console {  
+  --font-nunito: 'Nunito', sans-serif;
+  --shadow-border: 0 0 0 1px hsla(0, 0%, 100%, .145);
+  --white: #e8e8e8;
+  --round: 100px;
+  --border-small: 6px;
+  --border-medium: 12px;
+  --geist-border: 1px solid hsla(0,0%,100%,.07);
+  --transition: cubic-bezier(.21,.29,0,.94);
+  --geist-background: radial-gradient(100% 100% at 50% 0,hsla(0,0%,100%,.07) 0,hsla(0,0%,100%,0) 100%),linear-gradient(103.94deg,hsla(0,0%,100%,.05) 7.66%,hsla(0,0%,100%,.02) 32.57%,hsla(0,0%,100%,.008) 72.45%,hsla(0,0%,100%,.05) 96.25%);
+  --padding: 16px;
+  --gap: 6px;
+  
   position: fixed;
   background: var(--geist-background);
   backdrop-filter: blur(16px) brightness(0.33);
   border: var(--geist-border);
-  border-radius: var(--border-m);
+  border-radius: var(--border-medium);
   overflow: hidden;
   height: min-content;
   z-index: 9;
@@ -30,18 +44,18 @@
   left: 128px !important;
   width: 256px !important;
   transform: translateY(calc(100% - 24px));
-  border-radius: var(--border-m);
+  border-radius: var(--border-medium);
 }
 .console * {
   font-size: 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), Menlo, Monaco, "Courier New", monospace;
   white-space: break-spaces;
   word-break: break-all;
   line-height: 1.25;
   user-select: text;
 }
 .console *::selection {
-  background-color: var(--gray48);
+  background-color: #484848;
 }
 .heading {
   width: 100%;
@@ -50,7 +64,7 @@
   gap: 6px;
   align-items: center;
   padding: 0 8px;
-  background: #3b3b39db|;
+  background: #3b3b39db;
   box-shadow: var(--shadow-border);
   position: relative;
 }
@@ -84,7 +98,7 @@
   font-family: var(--font-nunito);
 }
 .content {
-  padding: var(--padding-s);
+  padding: var(--padding);
   height: calc(100% - 24px);
   max-height: calc(100% - 24px);
   overflow: auto;
@@ -158,7 +172,7 @@
   max-height: 12px;
   max-width: 12px;
   z-index: 3;
-  border-radius: var(--border-s);
+  border-radius: var(--border-small);
 }
 .resizeable.top.left,
 .resizeable.top.right {
@@ -207,5 +221,5 @@
 }
 .bold {
   font-weight: 800;
-  color: white;
+  color: var(--white);
 }
