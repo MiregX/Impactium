@@ -8,6 +8,18 @@
   height: min-content;
   z-index: 9;
 }
+.noise {
+  position: fixed;
+  height: 100%;
+  flex: 1;
+  width: 100%;
+  mix-blend-mode: overlay;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  filter: brightness(0.3);
+}
 .fullscreen {
   border-radius: 0;
 }

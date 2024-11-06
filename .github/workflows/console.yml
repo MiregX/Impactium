@@ -1,0 +1,36 @@
+name: Publish Console Package
+
+on:
+  push:
+    paths:
+      - 'lib/console/*'
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Подготовка к деплою
+        uses: actions/checkout@v3
+
+      - name: Установка Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Установка зависимостей
+        working-directory: lib/console
+        run: npm install
+
+      - name: Сборка пакета
+        working-directory: lib/console
+        run: npm run build
+
+      - name: Публикация в npm-hub
+        working-directory: lib/console
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public

@@ -1,13 +1,6 @@
-import { λParam, λWebSocket } from "@impactium/pattern";
+import { λParam, λWebSocket } from "../pattern";
 
 export type Callback<T> = (data: T) => void;
-
-export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
-
-export interface History {
-  level: LogLevel;
-  message: string;
-}
 
 export interface Application {
   status: number;
