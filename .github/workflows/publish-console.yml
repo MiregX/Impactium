@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache-dependency-path: lib/console/package-lock.json
-          node-version: '20'
+          node-version: 20
           cache: 'npm'
 
       - name: Установка зависимостей
@@ -36,6 +36,7 @@ jobs:
       - name: Установка Node.js
         uses: actions/setup-node@v3
         with:
+          cache-dependency-path: lib/console/package-lock.json
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
