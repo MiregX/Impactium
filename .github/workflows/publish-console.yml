@@ -18,6 +18,7 @@ jobs:
       - name: Установка Node.js
         uses: actions/setup-node@v3
         with:
+          cache-dependency-path: lib/console/package-lock.json
           node-version: '20'
           cache: 'npm'
 
