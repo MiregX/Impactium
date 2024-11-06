@@ -6,7 +6,7 @@ on:
       - 'lib/console/**'
     branches:
       - main
-  workflow_dispatch: true
+  workflow_dispatch:
 
 jobs:
   build:
