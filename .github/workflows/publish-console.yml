@@ -23,7 +23,7 @@ jobs:
 
       - name: Установка зависимостей
         working-directory: lib/console
-        run: npm ci
+        run: npm install
 
   publish-npm:
     needs: build
