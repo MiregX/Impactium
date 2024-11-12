@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
-import { AuthPayload, AuthResult } from './addon/auth.entity';
+import { AuthPayload, Token } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
@@ -26,7 +26,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
     });
   }
 
-  async callback(code: string, uuid?: UUID): Promise<AuthResult> {
+  async callback(code: string, uuid?: UUID): Promise<Token> {
     const token: any | null = await this.tokenRequest({
       code: code,
       grantType: 'authorization_code',

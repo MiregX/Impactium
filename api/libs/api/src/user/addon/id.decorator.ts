@@ -1,9 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { UserRequestDto } from './user.dto'
 
-
-export const User = createParamDecorator(
+export const Id = createParamDecorator(
   async (_, context: ExecutionContext): Promise<UserRequestDto> => {
-    return context.switchToHttp().getRequest().user;
+    return context.switchToHttp().getRequest().user?.uid;
   },
 );

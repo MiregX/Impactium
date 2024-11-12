@@ -3,14 +3,13 @@ import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express
 import { ApiModule } from './api.module';
 import * as cookieParser from 'cookie-parser';
 import { Configuration } from '@impactium/config';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@api/main/application/addon/logger.service';
 
 async function run() {
   const api = await NestFactory.create<NestExpressApplication>(
     ApiModule,
-    new ExpressAdapter()
+    new ExpressAdapter(),
   );
 
   api.setGlobalPrefix('api');

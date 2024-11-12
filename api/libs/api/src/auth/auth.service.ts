@@ -1,36 +1,31 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { UserService } from '@api/main/user/user.service';
 import { UserEntity } from '@api/main/user/addon/user.entity';
-import { AuthPayload, AuthResult, RequiredAuthPayload } from './addon/auth.entity';
+import { AuthPayload, Token, Payload, RequiredAuthPayload } from './addon/auth.entity';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
 import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
+import { JwtService } from '@nestjs/jwt';
+import { Optional, λLogger, λParam } from '@impactium/pattern';
+import { λthrow } from '@impactium/utils';
+import { Logger } from '../application/addon/logger.service';
+import { UserNotFound } from '../application/addon/error';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService,
+    
     private readonly prisma: PrismaService,
     private readonly redisService: RedisService,
+    private readonly jwt: JwtService,
   ) {}
 
-  async login(token?: string): Promise<UserEntity | undefined> {
-    if (!token) return undefined;
-    
-    const { email, uid } = this.userService.decodeJWT(this.unparseToken(token));
+  login = (token: Token): Payload => this.decodeJWT(token);
 
-    if (uid) {
-      return await this.userService.findById(uid) as UserEntity;
-    }
-    else if (email) {
-      return await this.userService.findByEmail(email) as UserEntity;
-    }
-  }
-
-  async register({ uid, id, type, avatar, displayName, email }: AuthPayload): Promise<AuthResult> {
+  async register({ uid, id, type, avatar, displayName, email }: AuthPayload): Promise<Token> {
     const login = await this.prisma.login.findUnique({
       where: { id, type },
     })
@@ -41,7 +36,7 @@ export class AuthService {
         : await this.createUser({ id, type, avatar, displayName, on: new Date() }, email)
       )
     )
-    return this.parseToken(this.userService.signJWT(result.uid, email));
+    return this.signJWT({ uid: result.uid as λParam.Id });
   }
       
   async getPayload<T extends string | AuthPayload = AuthPayload>(uuid?: UUID): Promise<T | null> {
@@ -63,10 +58,10 @@ export class AuthService {
   async delPayload(uuid: UUID) {
     await this.redisService.del(this.getCacheFolder(uuid));
   }
-  
-  parseToken = (token: string): AuthResult => token.startsWith('Bearer ') ? token as AuthResult : `Bearer ${token}`
 
-  unparseToken = (token: string): string => token.startsWith('Bearer ') ? token.substring(7) : token
+  signJWT = (payload: Payload): Token => `Bearer ${this.jwt.sign(payload, { secret: process.env.JWT_SECRET, expiresIn: '7d' })}`;
+
+  decodeJWT = (token: Token): Payload => this.jwt.decode(token.startsWith('Bearer ') ? token.substring(7) : token) || λthrow(ForbiddenException);
   
   private getCacheFolder(uuid: UUID) {
     return `${dataset.connections}:${uuid}`
@@ -101,5 +96,24 @@ export class AuthService {
         }
       }
     }) as unknown as Promise<UserEntity>;
+  }
+
+  public impersonate = async (uid: λParam.Id) => {
+    const user = await this.prisma.user.findUnique({
+      where: { uid },
+      select: {
+        email: true,
+        username: true,
+      }
+    });
+
+    if (!user) {
+      Logger.warn(`Administrator tried impersonat user: ${λLogger.blue(uid)}`, 'λ');
+      λthrow(UserNotFound)
+    };
+
+    Logger.warn(`Administrator impersonated user: ${λLogger.blue(user.username)}`, 'λ');
+
+    return `Bearer ${this.signJWT({ uid })}`;
   }
 }

@@ -1,17 +1,18 @@
 import { UUID } from "crypto";
-import { AuthPayload, AuthResult } from "./auth.entity";
+import { AuthPayload, Payload, Token } from "./auth.entity";
 import { UserEntity } from "@api/main/user/addon/user.entity";
 import { Response, Request } from 'express'
+import { λParam } from "@impactium/pattern";
 
 export interface AuthMethodService {
   getUrl: (uuid?: UUID) => Promise<URL> | URL | Promise<string> | string ;
-  callback: (code: string | UUID | Request | AuthPayload | any, uuid: string | UUID | any ) => Promise<AuthResult> | AuthResult | any
+  callback: (code: string | UUID | Request | AuthPayload | any, uuid: string | UUID | any ) => Promise<Token> | Token | any
 }
 
 export interface AuthMethodController {
   getUrl: (
     income: Response,
-    user: UserEntity | undefined,
+    uid: λParam.Id | undefined,
   ) => Promise<{ url: string }> | { url: string };
-  callback: (...args: any[]) => PromiseLike<void | { url: string } | AuthResult>;
+  callback: (...args: any[]) => PromiseLike<void | { url: string } | Token>;
 }

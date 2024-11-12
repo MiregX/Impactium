@@ -1,6 +1,7 @@
 import DiscordOauth2 = require('discord-oauth2');
 import { CreateLoginDto } from '@api/main/user/addon/login.dto';
 import { Optional } from '@impactium/pattern';
+import { UserEntity } from '@api/main/user/addon/user.entity';
 
 interface GoogleAuthParams {
   locale: string;
@@ -27,4 +28,8 @@ export interface AuthPayload extends CreateLoginDto {
 
 export type RequiredAuthPayload<T extends keyof AuthPayload> = Omit<AuthPayload, T> & Required<Pick<AuthPayload, T>>;
 
-export type AuthResult = `Bearer ${string}`
+export type Payload = {
+  uid: UserEntity['uid'];
+}
+
+export type Token = `Bearer ${string}`

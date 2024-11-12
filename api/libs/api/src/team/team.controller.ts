@@ -7,7 +7,6 @@ import {
   UseGuards,
   Patch,
   UploadedFile,
-  UseInterceptors,
   Param,
   Delete,
   NotFoundException,
@@ -18,7 +17,7 @@ import {
 import { TeamService } from './team.service';
 import { CreateTeamDto,  UpdateTeamDto } from './addon/team.dto';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
-import { User } from '@api/main/user/addon/user.decorator';
+import { Id } from '@api/main/user/addon/id.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TeamExistanseGuard, TeamGuard, TeamMemberGuard } from './addon/team.guard';
 import { TeamStandart } from './addon/team.standart';
@@ -35,6 +34,7 @@ import { λCache, λParam } from '@impactium/pattern';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageValidator } from '../application/addon/image.validator';
 import { IndentValidationPipe } from './addon/indent.validator';
+import { Payload } from '../auth/addon/auth.entity';
 
 @ApiTags('Team')
 @Controller('team')
@@ -83,14 +83,14 @@ export class TeamController {
   @UseGuards(ConnectGuard)
   find(
     @Query() query: Record<string, string>,
-    @User() user: UserEntity | null,
+    @Id() uid: λParam.Id | null,
   ) {
     if (query.title || query.indent) {
       return this.teamService.findManyByTitleOrIndent(query.title || query.indent)
     } else if (query.uid) {
-      return this.teamService.findManyByUid(query.uid as λParam.Username)
-    } else if (user) {
-      return this.teamService.findManyByUid(user.uid)
+      return this.teamService.findManyByUid(query.uid as λParam.Id)
+    } else if (uid) {
+      return this.teamService.findManyByUid(uid)
     }
 
     λthrow(BadRequestException);
@@ -111,7 +111,7 @@ export class TeamController {
   @ImageValidator('logo')
   create(
     @Body() team: CreateTeamDto,
-    @User() { uid }: UserEntity,
+    @Id() { uid }: UserEntity,
     @UploadedFile() logo?: Express.Multer.File,
   ) {
     return this.teamService.create(uid, team, logo);
@@ -135,9 +135,9 @@ export class TeamController {
   async setMemberRole(
     @Body() body: UpdateTeamMemberRoleDto,
     @Team() team: TeamEntity,
-    @User() user: UserEntity
+    @Id() uid: λParam.Id
   ) {
-    if (user.uid !== body.uid && user.uid !== team.ownerId) λthrow(ForbiddenException);
+    if (uid !== body.uid && uid !== team.ownerId) λthrow(ForbiddenException);
 
     await this.teamService.setMemberRole(team, body);
 
@@ -161,11 +161,11 @@ export class TeamController {
   @UseGuards(AuthGuard, TeamExistanseGuard)
   async join(
     @Team() team: TeamEntity,
-    @User() user: UserEntity
+    @Id() uid: λParam.Id
   ) {
     if (team.joinable !== Joinable.Free) λthrow(TeamIsCloseToEveryone);
 
-    await this.teamService.joinMember(team, user.uid);
+    await this.teamService.joinMember(team, uid);
 
     return this.teamService.findOneByIndent(team.indent);
   }
@@ -175,9 +175,9 @@ export class TeamController {
   @UseGuards(TeamMemberGuard)
   async leave(
     @Team() team: TeamEntity,
-    @User() user: UserEntity
+    @Id() uid: λParam.Id
   ) {
-    await this.teamService.kickMember(team, user.uid);
+    await this.teamService.kickMember(team, uid);
 
     return this.teamService.findOneByIndent(team.indent);
   }

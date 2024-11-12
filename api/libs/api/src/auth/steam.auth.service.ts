@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { AuthPayload, AuthResult } from './addon/auth.entity';
+import { AuthPayload, Token } from './addon/auth.entity';
 import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
@@ -20,7 +20,7 @@ export class SteamAuthService extends SteamAuth implements AuthMethodService {
 
   getUrl = (): Promise<string> => this.getRedirectUrl()
 
-  async callback(request: Request, uuid: string): Promise<AuthResult> {
+  async callback(request: Request, uuid: string): Promise<Token> {
     const payload: AuthPayload = await this.authenticate(request).then(user => ({
       id: user.steamid,
       lang: 'ru',

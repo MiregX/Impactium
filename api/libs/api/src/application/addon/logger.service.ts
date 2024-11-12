@@ -1,10 +1,10 @@
 import { Injectable, Logger as NestLogger } from '@nestjs/common';
-import { History, LogLevel } from '@impactium/types';
+import { Console } from '@impactium/console';
 import { λLogger } from '@impactium/pattern';
 
 @Injectable()
 export class Logger extends NestLogger {
-  protected static messages: History[] = [];
+  protected static messages: Console.History[] = [];
 
   static log(message: any, context?: string) {
     Logger.store('log', message, context);
@@ -49,7 +49,7 @@ export class Logger extends NestLogger {
       : super.fatal(message);
   }
 
-  public static store(level: LogLevel, message: string, context?: string, trace?: string) {
+  public static store(level: Console.LogLevel, message: string, context?: string, trace?: string) {
     Logger.messages.push({ level, message: Logger.format(level, message, context, trace) });
   }
 
@@ -59,7 +59,7 @@ export class Logger extends NestLogger {
 
   public static push = (message: string) => Logger.messages.push({ level: 'fatal', message });
 
-  private static preformat: Record<LogLevel, string> = {
+  private static preformat: Record<Console.LogLevel, string> = {
     log: 'green',
     warn: 'yellow',
     error: 'red',
@@ -68,7 +68,7 @@ export class Logger extends NestLogger {
     fatal: 'white'
   }
 
-  private static format(level: LogLevel, message: any, context?: string, trace?: string) {
+  private static format(level: Console.LogLevel, message: any, context?: string, trace?: string) {
     const timestamp = new Date().toISOString();
     const pid = process.pid;
     const contextInfo = context ? `[${context}] ` : '';

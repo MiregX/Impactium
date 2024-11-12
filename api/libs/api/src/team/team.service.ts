@@ -98,7 +98,7 @@ export class TeamService {
     })
   }
 
-  findManyByUid(uid: λParam.Username): Promise<TeamEntity[]> {
+  findManyByUid(uid: λParam.Id): Promise<TeamEntity[]> {
     return this.prisma.team.findMany({
       where: {
         ownerId: uid

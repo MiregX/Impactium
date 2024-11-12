@@ -13,6 +13,7 @@ import { FtpService } from '@api/mcs/file/ftp.service';
 import { TournamentAlreadyExist, TournamentLimit } from '../application/addon/error';
 import { Readable } from 'stream';
 import { Logger } from '../application/addon/logger.service';
+import { Payload } from '../auth/addon/auth.entity';
 
 @Injectable()
 export class TournamentService implements OnModuleInit {
@@ -58,9 +59,9 @@ export class TournamentService implements OnModuleInit {
     }
   }
 
-  delete(user: UserEntity, code: TournamentEntity['code']) {
+  delete(uid: λParam.Id, code: TournamentEntity['code']) {
     return this.prisma.tournament.delete({
-      where: { code, ownerId: user.uid },
+      where: { code, ownerId: uid },
       include: {
         iterations: true
       }
@@ -97,7 +98,7 @@ export class TournamentService implements OnModuleInit {
     }).then(TournamentEntity.normalize);
   }
 
-  async create(uid: λParam.Username, tournament: CreateTournamentDto, banner: Express.Multer.File) {
+  async create(uid: λParam.Id, tournament: CreateTournamentDto, banner: Express.Multer.File) {
     await this.findByUser(uid).then(tournaments => {
       if (tournaments.length >= 3) λthrow(TournamentLimit);
     });
@@ -128,7 +129,7 @@ export class TournamentService implements OnModuleInit {
     const grid = await this.grid(createdTournament, tournament.iterations, tournament.has_lower_bracket === 'true', JSON.parse(tournament.settings));
   }
 
-  update(uid: λParam.Username, tournament: UpdateTournamentDto, banner?: Express.Multer.File) {
+  update(uid: λParam.Id, tournament: UpdateTournamentDto, banner?: Express.Multer.File) {
     
   }
 

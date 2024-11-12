@@ -8,9 +8,9 @@ import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
 import { type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
-import { AuthResult } from '../auth/addon/auth.entity';
+import { Token } from '../auth/addon/auth.entity';
 import { Blueprint } from '@prisma/client';
-import { HOUR, λWebSocket } from '@impactium/pattern';
+import { HOUR, λParam, λWebSocket } from '@impactium/pattern';
 import { Logger } from './addon/logger.service';
 import { UserEntity } from '../user/addon/user.entity';
 
@@ -179,7 +179,7 @@ export class ApplicationService implements OnModuleInit {
     await this.createSystemAccount();
   }
 
-  async createSystemAccount(): Promise<AuthResult> {
+  async createSystemAccount(): Promise<Token> {
     const system = await this.prisma.user.upsert({
       where: {
         uid: 'system'
@@ -194,7 +194,7 @@ export class ApplicationService implements OnModuleInit {
       },
       update: {}
     });
-    const token = this.authService.parseToken(this.userService.signJWT(system.uid, system.email));
+    const token = this.authService.signJWT({ uid: system.uid as λParam.Id });
     Logger.verbose(token, 'λ');
     return token;
   }

@@ -122,7 +122,8 @@ export enum λCache {
   TeamList = 'team_list',
   TeamIndentGet = 'team_indent_get',
   TournamentCodeGet = 'tournament_code_get',
-  Blueprints = "blueprints"
+  Blueprints = "blueprints",
+  UserGet = "UserGet"
 }
 
 export namespace λParam {
@@ -139,6 +140,10 @@ export namespace λParam {
   const λUsername = Symbol('Username');
   export type Username = string & { readonly [λUsername]: unique symbol };
   export const Username = convert<Username>();
+
+  const λId = Symbol('Id');
+  export type Id = string & { readonly [λId]: unique symbol };
+  export const Id = convert<Id>();
 
   export type Imprint = 'advanced_scroll' | 'darkness_spellbook' | 'glowshroom' | 'moondust' | 'thunder_crystal' | 'advanced_spellbook' | 'dryed_nightshade' | 'gold_ingot' | 'moonlit_pearl' | 'thunder_scroll' | 'ancient_tablet' | 'earth_crystal' | 'golden_apple' | 'mythril_ingot' | 'thunder_spellbook' | 'apple' | 'earth_scroll' | 'griffin_wing' | 'ogre_toenail' | 'troll_tooth' | 'basic_book' | 'earth_spellbook' | 'holy_book' | 'old_book' | 'water' | 'basic_scroll' | 'earthbound_rock' | 'ice_crystal' | 'parchment' | 'water_berry' | 'basic_spellbook' | 'elven_dew' | 'ice_scroll' | 'phoenix_feather' | 'water_crystal' | 'basilisk_scale' | 'enchanted_obsidian' | 'ice_spellbook' | 'royal_book' | 'water_scroll' | 'bone' | 'fabric' | 'light_crystal' | 'shadow_root' | 'wind_crystal' | 'bronze_ingot' | 'fairy_pollen' | 'light_scroll' | 'silk' | 'wind_scroll' | 'colorful_coral' | 'fire_berry' | 'light_spellbook' | 'silver_ingot' | 'wind_spellbook' | 'crab_claw' | 'fire_crystal' | 'magestone' | 'siren_scale' | 'wolf_fur' | 'dark_mushroom' | 'fire_scroll' | 'mandrake_root' | 'slime_ball' | 'darkness_crystal' | 'fire_spellbook' | 'medicinal_herb' | 'sprite_wing' | 'darkness_scroll' | 'ghost_essence' | 'milk_bottle' | 'sugar_cane';
 

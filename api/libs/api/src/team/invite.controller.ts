@@ -11,8 +11,7 @@ import {
 } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
-import { User } from '@api/main/user/addon/user.decorator';
-import { UserEntity } from '@api/main/user/addon/user.entity';
+import { Id } from '@api/main/user/addon/id.decorator';
 import { TeamExistanseGuard, TeamGuard } from './addon/team.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { TeamEntity } from './addon/team.entity';
@@ -71,7 +70,7 @@ export class TeamInviteController {
   // decline(
   //   @Param('indent') indent: string,
   //   @Param('id') id: string,
-  //   @User() user: UserEntity | null
+  //   @Id() uid: λParam.Id | null
   // ) {
   //   if (!user) return;
 
@@ -85,8 +84,8 @@ export class TeamInviteController {
   acceptInvite(
     @Team() team: TeamEntity,
     @Param('id') id: string,
-    @User() user: UserEntity
+    @Id() uid: λParam.Id
   ) {
-    return this.teamService.acceptInvite(team.indent, id, user.uid)
+    return this.teamService.acceptInvite(team.indent, id, uid)
   }
 }

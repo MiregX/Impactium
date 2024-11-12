@@ -36,11 +36,15 @@
 }
 .fullscreen {
   border-radius: 0;
+  top: 0px !important;
+  left: 0px !important;
+  height: 100dvh !important;
+  width: 100dvw !important;
 }
 .hidden {
   bottom: 0 !important;
   top: unset !important;
-  height: 48px !important;
+  height: 56px !important;
   left: 128px !important;
   width: 256px !important;
   transform: translateY(calc(100% - 24px));
@@ -88,8 +92,8 @@
   pointer-events: none;
 }
 .title img {
-  height: 14px;
-  width: 10px;
+  height: 14px !important;
+  object-fit: contain;
 }
 .title h1 {
   font-size: 14px;

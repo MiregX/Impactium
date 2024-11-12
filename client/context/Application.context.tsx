@@ -1,15 +1,18 @@
 'use client'
 import '@/decorator/api';
 import '@/decorator/useOptionStyling';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
 import { Application } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
-import { λError, λWebSocket } from '@impactium/pattern';
+import { λCookie, λError, λWebSocket } from '@impactium/pattern';
 import { Blueprint } from '@/dto/Blueprint.dto';
+import { Console } from '@impactium/console';
+import Cookies from 'universal-cookie';
+import { useUser } from './User.context';
 
 const ApplicationContext = createContext<ApplicationContextProps | undefined>(undefined);
 
@@ -36,6 +39,7 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
   const [socket, setSocket] = useState<Socket>();
+  const { refreshUser } = useUser();
 
   useEffect(() => {
     setSocket(io(_server(), {
@@ -51,6 +55,10 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
         history
       })
     ));
+    socket?.on(λWebSocket.login, (token) => {
+      new Cookies().set(λCookie.Authorization, token);
+      refreshUser(token);
+    })
   
     return () => {
       socket?.disconnect()
@@ -111,12 +119,24 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
     destroyBanner,
     application,
     setApplication
-  } 
+  }
+
+  const onCommand = useCallback((cmd: string) => {
+    const token = new Cookies().get(λCookie.Authorization);
+    socket?.emit(λWebSocket.command, { token, command: cmd });
+  }, [socket]);
 
   return (
     <ApplicationContext.Provider value={props}>
       {children}
       {banner}
+      <Console
+        onCommand={onCommand}
+        history={application.history}
+        title='Impactium'
+        trigger='λ'
+        icon='https://cdn.impactium.fun/logo/impactium.svg'
+        prefix='C:\Mireg\Impactium>' />
     </ApplicationContext.Provider>
   );
 };

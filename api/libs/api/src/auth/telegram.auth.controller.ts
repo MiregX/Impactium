@@ -2,15 +2,15 @@ import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@ne
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { TelegramAuthService } from './telegram.auth.service';
-import { λCookie, cookieSettings } from '@impactium/pattern';
-import { UUID, createHash, createHmac } from 'crypto';
+import { λCookie, cookieSettings, λParam } from '@impactium/pattern';
+import { UUID } from 'crypto';
 import { ConnectGuard } from './addon/connect.guard';
-import { UserEntity } from '@api/main/user/addon/user.entity';
-import { User } from '@api/main/user/addon/user.decorator';
+import { Id } from '@api/main/user/addon/id.decorator';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { AuthMethodController } from './addon/auth.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { Configuration } from '@impactium/config';
+import { Payload } from './addon/auth.entity';
 
 @ApiTags('Auth <Telegram>')
 @Controller('telegram')
@@ -25,13 +25,13 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
   @Redirect()
   async getUrl(
     @Res({ passthrough: true }) response: Response,
-    @User() user: UserEntity | undefined,
+    @Id() uid: λParam.Id | undefined,
   ) {
     const uuid = crypto.randomUUID();
     response.cookie('uuid', uuid, cookieSettings);
     
-    if (user) {
-      await this.authService.setPayload(uuid, user.uid);
+    if (uid) {
+      await this.authService.setPayload(uuid, uid);
     }
 
     const url = await this.telegramAuthService.getUrl(uuid)
@@ -45,7 +45,7 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
     @Res({ passthrough: true }) response: Response,
     @Query() query: Record<string, string> = {},
     @Cookie('uuid') uuid: UUID | undefined,
-    @User() user: UserEntity,
+    @Id() uid: λParam.Id | undefined,
   ) {
     const isValid = query ? this.telegramAuthService.validate(query) : true;
 
@@ -56,7 +56,7 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
       type: 'telegram',
       avatar: query.photo_url,
       displayName: query.username || query.first_name,
-      uid: user ? user.uid : undefined
+      uid
     }, uuid);
 
     response.clearCookie('uuid')
@@ -69,10 +69,10 @@ export class TelegramAuthController implements Omit<AuthMethodController, 'getUr
   async pastCallback(
     @Res({ passthrough: true }) response: Response,
     @Cookie('uuid') uuid: UUID | null,
-    @User() user: UserEntity | null,
+    @Id() uid?: λParam.Id,
   ) {
     if (!uuid) return { url: Configuration.getClientLink() }
-    const authorization = await this.telegramAuthService.postCallback(uuid, user?.uid);
+    const authorization = await this.telegramAuthService.postCallback(uuid, uid);
 
     response.clearCookie('uuid')
     response.cookie(λCookie.Authorization, authorization, cookieSettings);

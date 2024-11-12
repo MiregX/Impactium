@@ -1,34 +1,40 @@
 import { BadRequestException, Body, Controller, ForbiddenException, forwardRef, Get, Inject, NotFoundException, Param, Patch, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
-import { User } from './addon/user.decorator';
+import { Id } from './addon/id.decorator';
 import { UserEntity } from './addon/user.entity';
-import { FindUserDto, UpdateUserDto } from './addon/user.dto';
+import { UpdateUserDto } from './addon/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseSuccess } from '@api/main/application/addon/responce.success.decorator';
 import { ApiResponseConflict } from '@api/main/application/addon/response.conflict.decorator';
 import { DisplayNameIsSame, UsernameIsSame } from '../application/addon/error';
-import { createHash, createHmac } from 'crypto';
 import { Response } from 'express';
-import { λCookie, cookieSettings } from '@impactium/pattern';
-import { ApplicationService } from '../application/application.service';
+import { λCookie, cookieSettings, λParam, λCache } from '@impactium/pattern';
 import { λthrow } from '@impactium/utils';
 import { AdminGuard } from '../auth/addon/admin.guard';
 import { Logger } from '../application/addon/logger.service';
+import { AuthService } from '../auth/auth.service';
+import { Cache } from '../application/addon/cache.decorator';
+import { RedisService } from '../redis/redis.service';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly redis: RedisService,
+  ) {}
 
   @Get('get')
   @UseGuards(AuthGuard)
+  @Cache(λCache.UserGet, 15)
   async getUserById(
-    @User() user: UserEntity,
+    @Id() uid: λParam.Id,
     @Query('logins') logins?: boolean,
     @Query('teams') teams?: boolean,
   ) {
-    const userEntity = await this.userService.findById(user.uid, { teams, logins });
+    const userEntity = await this.userService.findById(uid, { teams, logins });
 
     if (!userEntity) throw NotFoundException;
 
@@ -46,10 +52,10 @@ export class UserController {
   @Get('impersonate/:uid')
   @UseGuards(AdminGuard)
   async impersonate(
-    @Param('uid') uid: string,
+    @Param('uid') uid: λParam.Id,
     @Res({ passthrough: true }) response: Response
   ) {
-    const Authorization = await this.userService.impersonate(uid);
+    const Authorization = await this.authService.impersonate(uid);
 
     response.clearCookie(λCookie.Authorization, cookieSettings);
     response.cookie(λCookie.Authorization, Authorization, cookieSettings);
@@ -58,27 +64,31 @@ export class UserController {
 
   @Get('inventory')
   @UseGuards(AuthGuard)
-  getInventory(@User() user: UserEntity) {
-    return this.userService.inventory(user.uid);
+  getInventory(@Id() uid: λParam.Id) {
+    return this.userService.inventory(uid);
   }
 
   @Patch('edit')
   @UseGuards(AuthGuard)
   @ApiResponseSuccess(UserEntity)
   @ApiResponseConflict()
-  setUsername(
+  async setUsername(
     @Body() body: UpdateUserDto,
-    @User() user: UserEntity
+    @Id() uid: λParam.Id
   ) {
-    if (user.username === body.username) throw new UsernameIsSame();
-    if (user.displayName === body.displayName) throw new DisplayNameIsSame()
+    const user = await this.userService.findById(uid);
+
+    if (!user) λthrow(ForbiddenException);
+
+    if (user.username === body.username) λthrow(UsernameIsSame);
+    if (user.displayName === body.displayName) λthrow(DisplayNameIsSame);
     return this.userService.update(user.uid, body);
   }
 
   @Get('admin/is')
   @UseGuards(AuthGuard)
-  isAdmin(@User() user: UserEntity) {
-    return user.username === 'system'; 
+  isAdmin(@Id() uid: λParam.Id) {
+    return uid === 'system'; 
   }
 
   @Get('admin')

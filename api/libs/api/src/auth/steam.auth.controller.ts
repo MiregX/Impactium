@@ -2,13 +2,11 @@ import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@ne
 import { Configuration } from '@impactium/config';
 import { Response, Request } from 'express';
 import { SteamAuthService } from './steam.auth.service';
-import { cookieSettings } from '@impactium/pattern';
-import { User } from '../user/addon/user.decorator';
-import { UserEntity } from '../user/addon/user.entity';
+import { cookieSettings, λParam } from '@impactium/pattern';
+import { Id } from '../user/addon/id.decorator';
 import { AuthService } from './auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { Cookie } from '../application/addon/cookie.decorator';
-import { UUID } from 'crypto';
 import { AuthMethodController } from './addon/auth.interface';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -25,11 +23,11 @@ export class SteamAuthController implements AuthMethodController {
   @Redirect()
   async getUrl(
     @Res({ passthrough: true }) response: Response,
-    @User() user: UserEntity | undefined,
+    @Id() uid: λParam.Id | undefined,
   ) {
-    const uuid = user && crypto.randomUUID();
+    const uuid = uid && crypto.randomUUID();
     if (uuid) {
-      await this.authService.setPayload(uuid, user.uid);
+      await this.authService.setPayload(uuid, uid);
       response.cookie('uuid', uuid, cookieSettings);
     }
 

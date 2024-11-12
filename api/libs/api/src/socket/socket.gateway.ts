@@ -7,16 +7,15 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ApplicationService } from '../application/application.service';
-import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { λLogger, λParam, λWebSocket } from '@impactium/pattern';
-import { History, WebSocketEmitDefinitions, WebSocketOnDefinitions } from '@impactium/types';
-import { λthrow } from '@impactium/utils';
+import { WebSocketEmitDefinitions, WebSocketOnDefinitions } from '@impactium/types';
 import { AuthService } from '../auth/auth.service';
 import { Logger } from '../application/addon/logger.service';
 import { UserService } from '../user/user.service';
-import { UserEntity } from '../user/addon/user.entity';
 import { help } from './help.file';
+import { Token } from '../auth/addon/auth.entity';
 
 @Injectable()
 @WebSocketGateway({
@@ -58,21 +57,27 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     token,
     command
   }: {
-    token: string | undefined,
+    token: Token | undefined,
     command: λParam.Command
   }, client: Socket<WebSocketOnDefinitions, WebSocketEmitDefinitions>) {
-    let user = await this.authService.login(token);
+    let user = token ? this.authService.login(token) : null;
+
+    const err = () => {
+      Logger.error(`Client ${λLogger.bold(client.id)} попробовал выполнить неизвестную команду ${λLogger.bold(command)} с авторизацией ${λLogger.bold(token || '')}. ${λLogger.bold(λLogger.bold_red('Этот инцидент будет сохранён для анализа'))}`, SocketGateway.name);
+      client.emit(λWebSocket.history, [Logger.history().pop()]);
+    }
 
     if (command.startsWith('/login ')) {
-      user = await this.authService.login(token = await this.userService.admin(command.split(' ')[1], false));
-      client.emit(λWebSocket.login, token);
-      return;
+      try {
+        user = this.authService.login(token = (await this.userService.admin(command.split(' ')[1], false) as Token));
+        client.emit(λWebSocket.login, token);
+      } catch (_) {
+        return err();
+      }
     }
 
     if (!user) {
-      Logger.error(`Client ${λLogger.bold(client.id)} tried to execute ${λLogger.bold(command)} with token ${λLogger.bold(token || '')}. ${λLogger.bold(λLogger.bold_red('This incident will be reported'))}`, SocketGateway.name);
-      client.emit(λWebSocket.history, [Logger.history().pop()]);
-      return;
+      return err();
     };
 
     Logger.push('C:\\Mireg\\Impactium>' + command);
@@ -103,7 +108,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         break;
     
       default:
-        Logger.error(`User ${λLogger.bold(user.uid)} выполнил неизвестную комманду ${λLogger.bold(command)}`, SocketGateway.name);
+        Logger.warn(`Пользователь ${λLogger.bold(user.uid)} выполнил неизвестную комманду ${λLogger.bold(command)}`, SocketGateway.name);
         client.emit(λWebSocket.history, Logger.history());
         return;
     }

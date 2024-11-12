@@ -7,7 +7,7 @@ import { ItemEntity } from './item.entity';
 
 export class UserEntity implements User {
   @ApiProperty({ example: crypto.randomUUID(), description: 'User ID from database' })
-  uid!: λParam.Username;
+  uid!: λParam.Id;
 
   @ApiProperty({ example: new Date().toISOString(), description: 'Registration date of the user' })
   register!: Date;

@@ -5,6 +5,7 @@ import { createHash, createHmac, UUID } from 'crypto';
 import { AuthPayload } from './addon/auth.entity';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
 import { λUtils } from '@impactium/utils';
+import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class TelegramAuthService implements AuthMethodService {
@@ -28,7 +29,7 @@ export class TelegramAuthService implements AuthMethodService {
     return this.authService.register(payload);
   }
 
-  async postCallback(uuid: UUID, uid?: string) {
+  async postCallback(uuid: UUID, uid?: λParam.Id) {
     const payload = await this.telegramService.getPayload(uuid);
 
     if (typeof payload === 'boolean') return λUtils.home();

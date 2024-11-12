@@ -3,7 +3,7 @@ import { TournamentService } from './tournament.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '@api/main/auth/addon/admin.guard';
-import { User } from '@api/main/user/addon/user.decorator';
+import { Id } from '@api/main/user/addon/id.decorator';
 import { UserEntity } from '@api/main/user/addon/user.entity';
 import { TournamentEntity } from './addon/tournament.entity';
 import { TeamGuard } from '../team/addon/team.guard';
@@ -12,12 +12,13 @@ import { TeamEntity } from '../team/addon/team.entity';
 import { TournamentExistanseGuard } from './addon/tournament.guard';
 import { Tournament } from './addon/tournament.decorator';
 import { RedisService } from '../redis/redis.service';
-import { λCache } from '@impactium/pattern';
+import { λCache, λParam } from '@impactium/pattern';
 import { Cache, Recache } from '../application/addon/cache.decorator';
 import { AuthGuard } from '../auth/addon/auth.guard';
 import { CreateTournamentDto, UpdateTournamentDto } from './addon/tournament.dto';
 import { ImageValidator } from '../application/addon/image.validator';
 import { CodeValidationPipe } from './addon/code.validator';
+import { Payload } from '../auth/addon/auth.entity';
 
 @ApiTags('Tournament')
 @Controller('tournament')
@@ -54,9 +55,9 @@ export class TournamentController implements OnModuleInit {
   @UseGuards(AdminGuard)
   delete(
     @Param('code', CodeValidationPipe) code: TournamentEntity['code'],
-    @User() user: UserEntity,
+    @Id() uid: λParam.Id,
   ) {
-    return this.tournamentService.delete(user, code);
+    return this.tournamentService.delete(uid, code);
   }
 
   @Post(':code/join/:indent')
@@ -73,7 +74,7 @@ export class TournamentController implements OnModuleInit {
   @ImageValidator('banner')
   create(
     @Body() tournament: CreateTournamentDto,
-    @User() { uid }: UserEntity,
+    @Id() { uid }: Payload,
     @UploadedFile() banner: Express.Multer.File,
   ) {
     return this.tournamentService.create(uid, tournament, banner);
@@ -111,7 +112,7 @@ export class TournamentController implements OnModuleInit {
   @ImageValidator('banner')
   update(
     @Body() tournament: UpdateTournamentDto,
-    @User() { uid }: UserEntity,
+    @Id() { uid }: Payload,
     @UploadedFile() banner?: Express.Multer.File,
   ) {
     return this.tournamentService.update(uid, tournament, banner);

@@ -1,54 +1,74 @@
-import { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import s from './Console.module.css';
 import { twMerge } from 'tailwind-merge'
 import { type ClassValue, clsx } from 'clsx'
 
-export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
+export namespace Console {
+  export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
 
-export interface History {
-  level: LogLevel;
-  message: string;
+  export interface History {
+    level: LogLevel;
+    message: string;
+  }
+
+  export type PositionOptions = {
+    top?: number; 
+    left?: number;
+  }
+
+  export type SizeOptions = {
+    height?: number; 
+    width?: number;
+  }
+
+  type NumericOptions = [number, number];
+
+  export interface OptionalProps {
+    noise?: boolean;
+    onCommand?: (command: string) => any;
+    defaultCommand?: string;
+    defaultOpen?: boolean;
+    trigger?: string;
+    size?: SizeOptions | NumericOptions;
+    position?: PositionOptions | NumericOptions;
+  }
+  
+  export interface RequiredProps {
+    history: History[];
+    title: string;
+    icon?: string | React.ReactElement<HTMLImageElement> | React.ReactElement<SVGSVGElement>;
+    prefix: string;
+  }
+
+  export interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'prefix' | 'title'>, RequiredProps, OptionalProps {}
+
+  export interface NoiseProps extends HTMLAttributes<SVGSVGElement> {
+    enable?: boolean;
+  }
 }
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-interface OptionalProps {
-  noise?: boolean;
-  onClose?: () => void;
-  onCommand?: (command: string) => any;
-  defaultCommand?: string;
-  defaultOpen?: boolean;
-  trigger?: string;
-}
-
-interface RequiredProps {
-  history: History[];
-  title: string;
-  icon?: string | React.ReactElement<HTMLImageElement> | React.ReactElement<SVGSVGElement>;
-  prefix: string;
-}
-
-export interface ConsoleProps extends Omit<HTMLAttributes<HTMLDivElement>, 'prefix' | 'title'>, RequiredProps, OptionalProps {}
-
-export interface NoiseProps extends HTMLAttributes<SVGSVGElement> {
-  enable?: boolean;
-}
-
-export function Console({ className, noise, onCommand, title = 'Command Shell', icon, defaultCommand, prefix, history, defaultOpen, children, trigger, ...props }: ConsoleProps) {
-  const [left, setLeft] = useState(100);
-  const [top, setTop] = useState(100);
-  const [width, setWidth] = useState(960);
-  const [height, setHeight] = useState(480);
-  const [hidden, setHidden] = useState(false);
-  const [commands, setCommands] = useState<string[]>([]);
-  const [command, setCommand] = useState<string | number>(defaultCommand || '');
-  const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
+export function Console({ className, noise, onCommand, title = 'Command Shell', icon, defaultCommand, prefix, history, defaultOpen, children, trigger = '/', ...props }: Console.Props) {
   const self = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
+  const [settings, setSettings] = useState<Required<Console.SizeOptions & Console.PositionOptions>>({
+    top: (Array.isArray(props.position) ? props.position[0] : props.position?.top) || 100,
+    left: (Array.isArray(props.position) ? props.position[1] : props.position?.left) || 100,
+    height: (Array.isArray(props.size) ? props.size[0] : props.size?.height) || 480,
+    width: (Array.isArray(props.size) ? props.size[1] : props.size?.width) || 960,
+  });
 
-  function Noise({ className, enable, ...props }: NoiseProps) {
+  const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const [hidden, setHidden] = useState(false);
+
+  const [commands, setCommands] = useState<string[]>([]);
+  const [command, setCommand] = useState<string | number>(defaultCommand || '');
+
+  function Noise({ className, enable, ...props }: Console.NoiseProps) {
     const Noise = useCallback(() => enable ? (
       <svg className={cn(className, s.noise)} {...props}>
         <filter id='noise'>
@@ -65,8 +85,11 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
     if (hidden) return;
 
     const onMouseMove = (event: MouseEvent) => {
-      setTop(top => Math.min(Math.max(top + event.movementY, 0), window.innerHeight - self.current!.clientHeight));
-      setLeft(left => Math.min(Math.max(left + event.movementX, 0), window.innerWidth - self.current!.clientWidth));
+      setSettings(settings => ({
+        ...settings,
+        top: Math.min(Math.max(settings.top + event.movementY, 0), window.innerHeight - self.current!.clientHeight),
+        left: Math.min(Math.max(settings.left + event.movementX, 0), window.innerWidth - self.current!.clientWidth)
+      }));
     };
 
     const onMouseUp = () => {
@@ -83,18 +106,30 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
 
     const onMouseMove = (e: MouseEvent) => {
       if (direction.includes('bottom')) {
-        setHeight(height => Math.max(height + e.movementY, 50));
+        setSettings(settings => ({
+          ...settings,
+          height: Math.max(settings.height + e.movementY, 50)
+        }));
       }
       if (direction.includes('left')) {
-        setWidth(width => Math.max(width - e.movementX, 50));
-        setLeft(left => left + e.movementX);
+        setSettings(settings => ({
+          ...settings,
+          width: Math.max(settings.width - e.movementX, 50),
+          left: settings.left + e.movementX
+        }));
       }
       if (direction.includes('right')) {
-        setWidth(width => Math.max(width + e.movementX, 50));
+        setSettings(settings => ({
+          ...settings,
+          width: Math.max(settings.width + e.movementX, 50),
+        }));
       }
       if (direction.includes('top')) {
-        setHeight(height => Math.max(height - e.movementY, 50));
-        setTop(top => top + e.movementY);
+        setSettings(settings => ({
+          ...settings,
+          height: Math.max(settings.height - e.movementY, 50),
+          top: settings.top + e.movementY
+        }));
       }
     };
 
@@ -107,18 +142,25 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  const toggleScroll = useCallback((anable: boolean) => {
-    document.body.style.overflow = anable ? 'auto' : 'hidden';
-    document.documentElement.style.overflow = anable ? 'auto' : 'hidden';
+  const toggleScroll = useCallback((enable: boolean) => {
+    document.body.style.overflow = enable ? 'auto' : 'hidden';
+    document.documentElement.style.overflow = enable ? 'auto' : 'hidden';
   }, []);
 
   useEffect(() => {
     const keypressHandler = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'Enter':
-          const cmd = typeof command === 'number' ? commands[command] : command;
-          if (onCommand) onCommand(cmd);
-          if (command && typeof command === 'string') setCommands((c) => [...c, cmd]);
+          const cmd = typeof command === 'number'
+            ? commands[command]
+            : command;
+
+          if (onCommand)
+            onCommand(cmd);
+
+          if (command && typeof command === 'string')
+            setCommands((c) => [...c, cmd]);
+
           setCommand('');
           break;
         case 'ArrowUp':
@@ -147,7 +189,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
 
   useEffect(() => {
     const keypressHandler = (e: KeyboardEvent) => {
-      if (e.key === (trigger ?? 'λ')) {
+      if (e.key === trigger) {
         e.preventDefault();
         setOpen(true);
       }
@@ -158,8 +200,19 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
     return () => {
       document.removeEventListener('keypress', keypressHandler)
     };
-  }, [self]);
+  }, [self, trigger]);
 
+  useEffect(() => {
+    if (!open)
+      return toggleScroll(true);
+
+    if (fullscreen && !hidden) {
+      return toggleScroll(false)
+    } else {
+      return toggleScroll(true);
+    }
+
+  }, [open, fullscreen, hidden]);
 
   const colorCodes: Record<string, string | null> = {
     '[32m': 'log',
@@ -176,35 +229,14 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
     const content = self.current?.getElementsByClassName(s.content).item(0)!;
 
     content?.scrollTo({ behavior: 'instant', top: content.scrollHeight });
-  }, [history, command]);
+  }, [history, command, open]);
 
-  const [fullscreen, setFullscreen] = useState<[number, number, number, number] | null>(null);
   const toggleOpen = () => {
-    toggleScroll(!!fullscreen);
-    setHidden(false);
-    setFullscreen(fullscreen ? null : [height, width, top, left]);
-    setHeight(fullscreen ? fullscreen[0] : window.innerHeight);
-    setWidth(fullscreen ? fullscreen[1] : window.innerWidth);
-    setTop(fullscreen ? fullscreen[2] : 0);
-    setLeft(fullscreen ? fullscreen[3] : 0);
+    setFullscreen(!fullscreen);
+    setHidden(false)
   };
 
-  const hide = () => setHidden(h => !h);
-
-  useEffect(() => {
-    if (hidden) {
-      toggleScroll(true);
-    } else if (fullscreen) {
-      toggleScroll(false);
-    }
-  }, [hidden]);
-
-  const close = () => {
-    toggleScroll(true);
-    if (props.onClose) {
-      props.onClose();
-    }
-  }
+  const close = () => setOpen(false);
 
   const onMouseDownContentHandler = (event: React.MouseEvent) => {
     if (window.getSelection()?.toString())
@@ -214,15 +246,15 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
 
   const onClickContentHandler = () => !window.getSelection()?.toString() && input.current?.focus();
 
-  return open ? (
+  const Console = useMemo(() => open ? (
     <div
       ref={self}
       className={cn(s.console, hidden && s.hidden, fullscreen && s.fullscreen)}
-      style={{ top, left, width, height }}
+      style={settings}
       {...props}>
       <div className={s.heading} onMouseDown={onMouseDownMove}>
         <span className={cn(s.button, s.close)} onClick={close} />
-        <span className={cn(s.button, s.hide)} onClick={hide} />
+        <span className={cn(s.button, s.hide)} onClick={() => setHidden(h => !h)} />
         <span className={cn(s.button, s.open)} onClick={toggleOpen} />
         <div className={s.title}>
           {typeof icon === 'string' ? <img src={icon} alt='' /> : icon}
@@ -259,5 +291,7 @@ export function Console({ className, noise, onCommand, title = 'Command Shell', 
         <div key={resize} className={cn(s.resizeable, ...resize.split(' ').map(r => s[r]))} onMouseDown={() => onMouseDownResize(resize)} />
       ))}
     </div>
-  ) : null;
+  ) : null, [history, open, fullscreen, input, self, settings, noise, title, icon, defaultCommand, prefix, defaultOpen, trigger, onCommand, className, noise, props]);
+
+  return Console;
 }

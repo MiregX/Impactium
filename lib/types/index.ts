@@ -1,3 +1,4 @@
+import { Console } from "@impactium/console";
 import { λParam, λWebSocket } from "../pattern";
 
 export type Callback<T> = (data: T) => void;
@@ -16,7 +17,7 @@ export interface Application {
       tournaments_count: number;
   };
   isSafeMode: 0 | 1;
-  history: History[];
+  history: Console.History[];
   globalPhrase?: string;
 }
 
@@ -52,7 +53,7 @@ export interface WebSocketOnDefinitions {
     category: any;
   }>>;
   [λWebSocket.command]: ({ token, command }: {
-    token: string;
+    token: `Bearer ${string}`;
     command: λParam.Command
   }) => void
 }
