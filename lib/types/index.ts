@@ -1,4 +1,4 @@
-import { Console } from "@impactium/console";
+import { Console } from '@impactium/console';
 import { λParam, λWebSocket } from "../pattern";
 
 export type Callback<T> = (data: T) => void;
