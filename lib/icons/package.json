@@ -1,11 +1,11 @@
 {
   "name": "@impactium/icons",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "gen": "npx ts-node generate.ts",
+    "generate": "npx ts-node generate.ts",
     "deploy": "npm publish --access public"
   },
   "files": [
@@ -48,7 +48,7 @@
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "lucide-react": "^0.460.0",
-    "class-variance-authority": "^0.7.0"
+    "class-variance-authority": "^0.7.0",
+    "lucide-react": "^0.460.0"
   }
 }

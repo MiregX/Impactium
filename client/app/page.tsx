@@ -8,7 +8,6 @@ export default async function Main() {
 
   return (
     <React.Fragment>
-      <Icon name='FunctionGo' />
       <TournamentsList tournaments={tournaments} />
     </React.Fragment>
   );

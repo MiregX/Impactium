@@ -19,7 +19,7 @@ function parse(content: string): IconNode {
     const attrs: Record<string, any> = {};
 
     Array.from(element.attributes).forEach((attr) => {
-      if (['data-testid', 'style'].includes(attr.name)) return;
+      if (['data-testid', 'style', 'stroke'].includes(attr.name)) return;
 
       if (attr.name === 'fill') {
         attrs.stroke = 'none';
