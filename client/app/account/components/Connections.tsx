@@ -11,7 +11,7 @@ import { UserRequiredContext, useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
 import { User, UserEntity } from "@/dto/User.dto";
 import { cn } from "@/lib/utils";
-import { Icon } from "@/ui/Icon";
+import { Icon } from "@impactium/icons";
 
 export function Connections() {
   const { lang } = useLanguage();

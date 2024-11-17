@@ -2,7 +2,7 @@
 import { Joinable, JoinableIcons } from '@/dto/Joinable.dto';
 import { Team, λTeam } from '@/dto/Team.dto';
 import { Banner } from '@/ui/Banner';
-import { Icon } from '@/ui/Icon';
+import { Icon } from '@impactium/icons';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
 import { ChangeEvent, useEffect, useState } from 'react';
 import s from './Manager.module.css';

@@ -23,7 +23,6 @@ function parse(content: string): IconNode {
 
       if (attr.name === 'fill') {
         attrs.stroke = 'none';
-        attrs.color = 'unset';
       }
 
       attrs[attr.name.replace(/-([a-z])/g, (_, char) => char.toUpperCase())] = attr.value;

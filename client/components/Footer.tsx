@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
 import { Button } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
+import { Icon } from '@impactium/icons';
 
 export function Footer() {
   const { lang } = useLanguage();

@@ -6,7 +6,7 @@ import { useTeamJoin } from './join.context';
 import s from './Join.module.css';
 import { Combination } from '@/ui/Combitation';
 import React, { useMemo } from 'react';
-import { Icon } from '@/ui/Icon';
+import { Icon } from '@impactium/icons';
 import { useLanguage } from '@/context/Language.context';
 import { Button } from '@/ui/Button';
 import { Separator } from '@/ui/Separator';

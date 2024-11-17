@@ -8,7 +8,7 @@ import React from 'react'
 import { Button } from '@/ui/Button'
 import { Combination, CombinationSkeleton } from '../ui/Combitation'
 import { Skeleton } from '@/ui/Skeleton'
-import { Icon } from '@/ui/Icon'
+import { Icon } from '@impactium/icons'
 
 interface TournamentUnitProps {
   tournament: Tournament;

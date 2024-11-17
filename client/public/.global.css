@@ -83,12 +83,12 @@
   --gapX2: 24px;
 }
 
-* {
+*:not(svg, path) {
   -webkit-tap-highlight-color: transparent;
   font-family: var(--font-sans);
   font-size: 14px;
+  color: var(--text-white);
   -webkit-user-select: none;
-  color: var(--white);
   scroll-behavior: smooth;
   -moz-user-select: none;
   box-sizing: border-box;

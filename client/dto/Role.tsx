@@ -1,4 +1,4 @@
-import { λIcon } from "@/lib/utils";
+import { Icon } from '@impactium/icons';
 
 export enum Role {
   Carry = 'Carry',
@@ -10,7 +10,7 @@ export enum Role {
   Coach = 'Coach'
 }
 
-export const RoleIcons: Record<Role, λIcon> = {
+export const RoleIcons: Record<Role, Icon.Name> = {
   [Role.Carry]: 'Sword',
   [Role.Mid]: 'Crosshair',
   [Role.Offlane]: 'Shield',

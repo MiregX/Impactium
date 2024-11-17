@@ -14,7 +14,7 @@ import { TournamentRules } from './TournamentRules.banner';
 import { TournamentReadyState, λTournament } from '@/dto/Tournament';
 import { TeamUnitSkeleton } from '@/components/TeamUnit';
 import Link from 'next/link';
-import { Icon } from '@/ui/Icon';
+import { Icon } from '@impactium/icons';
 
 export function TournamentInformation({}) {
   const { tournament, assignTournament } = useTournament();

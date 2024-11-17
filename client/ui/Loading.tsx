@@ -1,11 +1,11 @@
 'use client'
 import { useLanguage } from "@/context/Language.context"
-import { Icon, IconProps } from "./Icon";
+import { Icon } from "@impactium/icons";
 import { ButtonProps } from "./Button";
 import React from "react";
 
 interface LoadingProps {
-  variant: IconProps['variant'],
+  variant: Icon.Variant,
   size: ButtonProps['size']
 }
 

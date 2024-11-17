@@ -7,7 +7,7 @@ import { MainRole, Role, RoleIcons, SecondaryRole, SortRoles } from "@/dto/Role"
 import { Button } from "@/ui/Button";
 import { useUser } from "@/context/User.context";
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger } from "@/ui/Select";
-import { Icon } from "@/ui/Icon";
+import { Icon } from "@impactium/icons";
 import { Card } from "@/ui/Card";
 import { TeamMember } from "@/dto/TeamMember";
 import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam, SetState } from "@/lib/utils";

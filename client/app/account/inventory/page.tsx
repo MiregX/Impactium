@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/ui/Button";
 import { useLanguage } from "@/context/Language.context";
 import Link from "next/link";
-import { Icon } from "@/ui/Icon";
+import { Icon } from "@impactium/icons";
 import { cn } from "@/lib/utils";
 import { FilterOptions } from "./components/FilterOptions";
 import { ItemFilter, λItem } from "@/dto/Item.dto";

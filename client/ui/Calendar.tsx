@@ -4,7 +4,7 @@ import s from './styles/Calendar.module.css';
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/ui/Button'
-import { Icon } from '@/ui/Icon'
+import { Icon } from '@impactium/icons'
 import { ChevronLeft } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 

@@ -1,6 +1,6 @@
 {
   "name": "@impactium/icons",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
@@ -29,9 +29,9 @@
   "author": "Mireg",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Mireg/Impactium/issues"
+    "url": "https://github.com/Mireg/Mireg/issues"
   },
-  "homepage": "https://github.com/Mireg/Impactium#readme",
+  "homepage": "https://dev.impactium.fun/icons",
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "lucide-react": "^0.460.0"

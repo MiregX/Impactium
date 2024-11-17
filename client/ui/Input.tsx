@@ -1,8 +1,8 @@
 import React from "react"
 import s from './styles/Input.module.css' 
 import { cva, type VariantProps } from "class-variance-authority"; 
-import { cn, λIcon } from "@/lib/utils";
-import { Icon } from "./Icon";
+import { cn } from "@/lib/utils";
+import { Icon } from "@impactium/icons";
 
 const inputVariants = cva(s.button, {
   variants: {
@@ -22,7 +22,7 @@ const inputVariants = cva(s.button, {
 });
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>, VariantProps<typeof inputVariants> {
-  img?: λIcon
+  img?: Icon.Name
   revert?: boolean
   valid?: boolean
   loading?: boolean

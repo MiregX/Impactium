@@ -6,7 +6,6 @@ import locale, { Template } from "@/public/locale";
 import { λCookie } from "@impactium/pattern";
 import { Callback } from "@impactium/types";
 import { type ClassValue, clsx } from "clsx"
-import { icons } from "lucide-react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge"
 import Cookies from "universal-cookie";
@@ -54,8 +53,6 @@ export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 export function soft<T>(value: T, func?: SetState<T>) {
   if (func) func((_: T) => value as T);
 }
-
-export type λIcon = keyof typeof icons;
 
 export const convertISOstringToValue = (date: string) => new Date(date).valueOf();
 

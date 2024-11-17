@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { Avatar } from '../ui/Avatar';
-import { Icon } from '@/ui/Icon';
+import { Icon } from '@impactium/icons';
 import { Separator } from '@/ui/Separator';
 
 export function UserComponent() {

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn, λIcon } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import s from "./styles/Button.module.css";
 import { Loading } from "./Loading";
-import { Icon, IconProps } from "./Icon";
+import { Icon } from "@impactium/icons";
 
 const buttonVariants = cva(s.button, {
   variants: {
@@ -36,7 +36,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  img?: λIcon;
+  img?: Icon.Name;
   revert?: boolean;
   loading?: boolean;
 }
@@ -72,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): IconProps['variant'] => ({
+const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): Icon.Variant => ({
   default: 'black',
   destructive: 'white',
   outline: 'dimmed',
@@ -82,6 +82,6 @@ const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): Ic
   disabled: 'dimmed',
   hardline: 'white',
   glass: 'dimmed'
-} as Record<NonNullable<ButtonProps['variant']>, IconProps['variant']>)[variant!] ?? 'black';
+} as Record<NonNullable<ButtonProps['variant']>, Icon.Props['variant']>)[variant!] ?? 'black';
 
 export { Button, buttonVariants };

@@ -18,7 +18,6 @@ export const iconVariants = cva('', {
 export function Icon({
   name = 'Box',
   variant,
-  color,
   size = 20,
   ...props
 }: Icon.Props) {
@@ -27,20 +26,29 @@ export function Icon({
   if (!Component) {
     return null;
   }
+  
+  if (name in custom_icons && !(name in lucide_icons)) {
+    props.viewBox = '0 0 16 16';
+    props.style = {
+      ...props.style,
+      color: props.color ?? iconVariants({ variant })}
+  }
 
   return (
     <Component
       {...props}
       width={size}
       height={size}
-      viewBox={name in custom_icons && '0 0 16 16' || undefined}
-      stroke={color || iconVariants({ variant })}
+      stroke={props.color ?? iconVariants({ variant })}
     />
   );
 }
 
 export namespace Icon {
-  export const icons = Object.assign(custom_icons, lucide_icons);
+  export const icons = {
+    ...custom_icons,
+    ...lucide_icons
+  }
 
   export type Name = keyof typeof icons;
 

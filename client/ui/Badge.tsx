@@ -1,8 +1,8 @@
 'use client'
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
-import { cn, λIcon } from '@/lib/utils'
-import { Icon } from './Icon'
+import { cn } from '@/lib/utils'
+import { Icon } from '@impactium/icons'
 import { HTMLAttributes } from 'react'
 import { λUtils } from '@impactium/utils'
 
@@ -13,7 +13,7 @@ enum _BadgeDirections {
 
 interface _CustomBadge {
   title?: string,
-  icon?: λIcon,
+  icon?: Icon.Name,
   direction?: _BadgeDirections,
   color?: string
   dot?: boolean
