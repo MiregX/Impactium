@@ -16,7 +16,7 @@ export const iconVariants = cva('', {
 });
 
 export function Icon({
-  name = 'Box',
+  name,
   variant,
   size = 20,
   ...props
