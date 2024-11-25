@@ -169,7 +169,7 @@
   flex-direction: row;
   gap: 8px;
   justify-content: space-between;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   padding: 8px 12px;
   border-radius: 6px;
   align-items: center;

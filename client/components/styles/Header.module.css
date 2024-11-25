@@ -49,7 +49,7 @@
   height: 64px;
   width: 100vw;
   background-color: var(--soft-black);
-  border-bottom: 1px solid var(--accent-3);
+  border-bottom: 1px solid var(--gray-alpha-400);
   position: fixed;
 }
 .wrapper {

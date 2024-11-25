@@ -16,7 +16,7 @@
   height: min-content;
   border-radius: var(--border-l);
   background: var(--meta-black);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -45,7 +45,7 @@
 }
 
 .footer {
-  border-top: 1px solid var(--accent-3);
+  border-top: 1px solid var(--gray-alpha-400);
   background: var(--soft-black);
   display: flex;
   justify-content: space-between;

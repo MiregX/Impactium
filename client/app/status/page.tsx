@@ -2,42 +2,54 @@
 import { PanelTemplate } from "@/components/PanelTempate";
 import React, { useState } from 'react';
 import s from './Status.module.css'
-import { Service } from "./components/Service";
 import { Stack } from "@/ui/Stack";
-import { Side } from "@impactium/types";
 import { Button } from "@/ui/Button";
+import { λ } from "@/decorator/λ.class";
+import { Service } from "./components/Service";
+import { ResponseBase } from "@/dto/Response.dto";
+import { Icon } from "@impactium/icons";
+
 
 export default function StatusPage() {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const runPerformanceTest = () => {
-    setLoading(true);
-    
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-  }
+  const services: Service.Props[] = [
+    {
+      type: 'frontend',
+      path: 'http://localhost:3000/',
+      icon: 'AcronymPage',
+      name: "Next.JS"
+    },
+    {
+      type: 'backend',
+      path: 'http://localhost:3001/api',
+      icon: 'AcronymApi',
+      name: "Nest.JS"
+    },
+    {
+      type: 'backend',
+      path: 'http://localhost:3002/api/v2',
+      icon: 'AcronymApi',
+      name: "Go"
+    },
+    {
+      type: 'database',
+      path: 'http://localhost:3002/api/v2',
+      icon: 'Database',
+      name: "CockroachDB"
+    }
+  ]
 
   return (
     <PanelTemplate className={s.panel} useColumn>
-      <Stack gap={64}>
-        <Stack dir='column' gap={64}>
-          <Service type='frontend' icon='LogoNext' name='Next.JS' dots={[Side.RIGHT]} />
+      <Stack gap={0} className={s.wrapper} dir='column'>
+        <Stack>
+          <Button variant='outline' img='SettingsSliders'></Button>
         </Stack>
-        <Stack dir='column' gap={64}>
-          <Service type='middleware' icon='LogoNginx' name='Nginx' dots={[Side.RIGHT, Side.LEFT]} />
-        </Stack>
-        <Stack dir='column' gap={64}>
-          <Service icon='LogoNest' name='Nest.JS' type='backend' dots={[Side.RIGHT, Side.LEFT, Side.BOTTOM]} />
-          <Service icon='LogoGo' size={32} name='Go' type='backend' dots={[Side.RIGHT, Side.LEFT, Side.TOP]} />
-        </Stack>
-        <Stack dir='column' gap={64}>
-          <Service icon='LogoRedis' name='Redis' type='database' dots={[Side.LEFT]} />
-          <Service icon='Postgres' name='CockroachDB' type='database' dots={[Side.LEFT]} />
-        </Stack>
+        {services.map(service => (
+          <Service {...service} />
+        ))}
       </Stack>
       <Stack jc='center' ai='center'>
-        <Button variant='glass' loading={loading} onClick={runPerformanceTest} img='Sparkles'>Run performance test</Button>
+        {/* <Button variant='glass' loading={loading} img='Sparkles'>Run performance test</Button> */}
       </Stack>
     </PanelTemplate>
   )

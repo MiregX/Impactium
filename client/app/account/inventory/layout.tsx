@@ -4,7 +4,7 @@ import { λCookie } from '@impactium/pattern';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { InventoryContextProps, InventoryProvider } from './inventory.context';
-import { λUtils } from '@impactium/utils';
+import { Utils } from '@impactium/utils';
 import path from 'path';
 import fs from 'fs';
 import Image from 'next/image';
@@ -29,7 +29,7 @@ export default async function InventoryLayout({ children }: { children: React.Re
   const icons: InventoryContextProps['icons'] = {};
 
   await Promise.all(inventory.map(async (item) => {
-    icons[item.imprint] = <Image priority src={λUtils.ui(`item/${item.imprint}.png`)} alt={item.imprint} width={128} height={128} />;
+    icons[item.imprint] = <Image priority src={Utils.ui(`item/${item.imprint}.png`)} alt={item.imprint} width={128} height={128} />;
   }));
 
   return (

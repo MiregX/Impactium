@@ -58,7 +58,7 @@
 .account section {
   background: var(--black);
   padding: 24px 16px;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   border-radius: var(--border-s);
   display: flex;
   gap: var(--gap);
@@ -95,7 +95,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   gap: 8px;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   border-radius: var(--border-s);
   align-items: center;
 }
@@ -139,7 +139,7 @@
     padding: 8px;
     width: calc(100% + 32px);
     background-color: var(--black);
-    border-bottom: 1px solid var(--accent-3);
+    border-bottom: 1px solid var(--gray-alpha-400);
   }
   .account .unit code {
     display: unset;
@@ -166,10 +166,10 @@
 }
 .before {
   padding: 8px 12px;
-  height: 36px;
+  height: 32px;
   background: var(--gray16);
   border-radius: var(--border-s) 0 0 var(--border-s);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   border-right: none;
   font-size: 14px;
   font-weight: 600;
@@ -179,7 +179,7 @@
   font-family: var(--font-mono);
 }
 .account input {
-  line-height: 36px;
+  line-height: 32px;
   background: var(--black);
   font-weight: 500;
   box-shadow: none !important;

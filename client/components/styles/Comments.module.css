@@ -13,7 +13,7 @@
   font-size: var(--text-medium-height);
   margin-bottom: 1em;
   width: 100%;
-  border-bottom: 1px solid var(--accent-3);
+  border-bottom: 1px solid var(--gray-alpha-400);
   padding: 0.75em;
   background: var(--black);
 }
@@ -25,7 +25,7 @@
   font-size: var(--text-small);
 }
 .leave {
-  border-top: 1px solid var(--accent-3);
+  border-top: 1px solid var(--gray-alpha-400);
   background: var(--black);
   display: flex;
   flex-direction: row;

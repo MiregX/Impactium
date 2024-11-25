@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  border-top: 1px solid var(--accent-3);
+  border-top: 1px solid var(--gray-alpha-400);
 }
 .content {
   max-width: var(--width-limit);

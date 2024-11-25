@@ -7,7 +7,7 @@ import { LoginMethod as LoginMethods } from '@/types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/ui/Button';
 import Image from 'next/image';
-import { λUtils } from '@impactium/utils';
+import { Utils } from '@impactium/utils';
 
 interface LoginMethodProps {
   type: LoginMethods,
@@ -23,7 +23,7 @@ export function LoginMethod({ type, disabled }: LoginMethodProps) {
         className={cn(s.method, disabled && s.disabled, s[type])}>
         <Image src={`https://cdn.impactium.fun/tech/${type}.svg`} width={20} height={20} alt='' />
         {disabled && <Badge type={BadgeType.Soon} />}
-        Login with {λUtils.capitalize(type)}
+        Login with {Utils.capitalize(type)}
       </Link>
     </Button>
   )

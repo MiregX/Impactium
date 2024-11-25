@@ -1,6 +1,6 @@
 ._ {
   background: var(--meta-black);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   border-radius: var(--border-m);
   width: 100%;
   overflow: hidden;
@@ -8,7 +8,7 @@
 
 ._ > h4 {
   height: 40px;
-  border-bottom: 1px solid var(--accent-3);
+  border-bottom: 1px solid var(--gray-alpha-400);
   display: flex;
   line-height: 1px;
   align-items: center;

@@ -3,95 +3,47 @@
   align-items: center;
 }
 
-.unit {
+.wrapper {
+  background: var(--soft-black);
+  width: 60vw;
+  padding: 16px;
+  display: flex;
+  border-radius: var(--border-m);
+  border: 1px solid var(--gray-alpha-400);
+  background-clip: padding-box;
+  flex: 1;
+}
+
+.status {
   display: grid;
-  width: 100%;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid var(--accent-3);
-  padding: 1em;
-}
-
-.unit img {
-  height: 32px;
-}
-
-.unit h6 {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  font-size: var(--text-medium);
-}
-
-.unit span::after {
-  content: "";
-  height: 8px;
-  width: 8px;
-  display: inline-flex;
-  border-radius: var(--round);;
-}
-.unit span {
-  display: inline-flex;
-}
-.good {
-  color: var(--uncommon);
-}
-.good span::after {
-  background-color: var(--uncommon);
-}
-.warn {
-  color: var(--legendary);
-}
-.warn span::after {
-  background-color: var(--legendary);
-}
-.error {
-  color: var(--ancient);
-}
-.error span::after {
-  background-color: var(--ancient);
-}
-.unit p {
-  justify-self: flex-end;
-  display: flex;
-  gap: 8px;
-  border-radius: var(--border-l);
-  font-weight: 500;
-  font-size: var(--text-small);
-  padding: 8px;
-  align-items: center;
-}
-.unit:hover p {
-  background: var(--gray16);
-}
-
-.graph {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 3px;
-  height: 32px;
-  justify-self: center;
-  position: relative;
-}
-.graph code {
-  width: 3px;
-  min-height: 3px;
-  border-radius: var(--round);
-}
-.graph s {
-  padding: 8px 12px;
-  white-space: nowrap;
-  font-size: var(--text-small);
-  position: absolute;
+  place-content: center;
+  width: 28px;
+  height: 16px;
+  border-radius: 4px;
+  font-weight: 400;
   font-family: var(--font-mono);
-  border: 1px solid var(--accent-3);
-  border-radius: var(--border-s);
+  font-size: 11px;
+  color: var(--text-dimmed);
+  line-height: 16px;
+  flex: none;
+  border: 1px solid var(--gray-400);
 }
-.graph s:first-child {
-  left: 0;
-  transform: translateX(calc(-100% - 8px));
+.service * {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: currentColor;
 }
-.graph s:last-child {
-  right: 0;
-  transform: translateX(calc(100% + 8px));
+.service {
+  min-height: 18px;
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+}
+.service.error {
+  background: var(--red-100);
+  color: var(--red-900)
+}
+.status.error {
+  border-color: var(--red-400);
+  color: var(--red-800)
 }

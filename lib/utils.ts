@@ -19,10 +19,38 @@ interface Options {
   year?: boolean;
 }
 
-export class λUtils {
-  public static array = <K extends unknown>(unknown: Arrayed<K>): K[] => Array.isArray(unknown) ? unknown : (typeof unknown === 'undefined' ? [] : [unknown]);
+export namespace DesignSystem {
+  export class Color extends String {
+    constructor(value: string) {
+      super(Color.toVar(value));
+    }
+  
+    minus = (tone: number = 1) => this.change(-tone);
+  
+    plus = (tone: number = 1) => this.change(tone);
 
-  public static var = (str: string) => `var(--${str})`;
+    private change = (tone: number) => new Color(this.prefix() + (this.suffix() + tone * 100));
+  
+    private prefix = (): string => Color.fromVar(this).slice(0, -3);
+
+    private suffix(): number {
+      return parseInt(Color.fromVar(this).slice(-3));
+    }
+
+    static isVar = (str: string | Color) => str.startsWith('var(--') && str.endsWith(')');
+
+    static toVar = (str: string | Color) => Color.isVar(str) ? str : `var(--${str})`;
+
+    static fromVar = (str: string | Color) => Color.isVar(str) ? str.slice(6, -1) : str;
+    
+    toString(): string {
+      return this.valueOf();
+    }
+  }
+}
+
+export class Utils {
+  public static array = <K extends unknown>(unknown: Arrayed<K>): K[] => Array.isArray(unknown) ? unknown : (typeof unknown === 'undefined' ? [] : [unknown]);
 
   public static image = async (str: string, fs: typeof import('fs'), path: typeof import('path')): Promise<string> => fs.promises.readFile(path.join(process.cwd(), str), 'utf-8') || '';
   

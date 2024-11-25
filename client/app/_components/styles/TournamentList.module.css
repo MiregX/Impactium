@@ -17,7 +17,7 @@
   border-radius: var(--border-m);
   overflow: hidden;
   width: 100%;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   background: var(--geist-background);
   height: 100%;
 }
@@ -58,7 +58,7 @@
 }
 .fill ul {
   font-size: 18px;
-  padding: 0 36px;
+  padding: 0 32px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -86,7 +86,7 @@
 }
 .left h4,
 .right h4 {
-  font-size: 36px;
+  font-size: 32px;
   width: 100%;
 }
 .left h4 {
@@ -135,7 +135,7 @@
 }
 .card .icon {
   background-color: black;
-  min-width: 36px;
+  min-width: 32px;
 }
 .card .icon img {
   filter: var(--filter-to-white);
@@ -151,7 +151,7 @@
 .card .heading h3 {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 32px;
   font-weight: 500;
 }
 .card p {

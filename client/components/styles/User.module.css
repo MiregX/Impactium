@@ -63,7 +63,7 @@
 .menu button:hover,
 .menu a:hover div {
   color: var(--white);
-  background: var(--accent-3);
+  background: var(--gray-alpha-400);
 }
 
 .menu p svg,

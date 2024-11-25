@@ -1,3 +1,4 @@
+import { _server } from "@/decorator/api";
 import { RequestOptions } from "@/dto/api.dto"
 import { Joinable } from "@/dto/Joinable.dto";
 import { Team } from "@/dto/Team.dto";
@@ -38,13 +39,16 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
       'Content-Type': 'application/json'
     },
     options.body = JSON.stringify(options.body);
-  }  
+  }
+
+  const path = _path.startsWith('/') ? _path : `/${_path}`;
 
   return {
     options,
     callback,
     query: options.query ? `?${new URLSearchParams(options.query)}` : '',
-    path: _path.startsWith('/') ? _path : `/${_path}`
+    path,
+    endpoint: _server(options.useNumericHost, path.startsWith('/v2'))
   };
 }
 

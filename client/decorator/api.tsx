@@ -4,22 +4,22 @@ import { ResponseBase } from "@/dto/Response.dto";
 import { Configuration } from "@impactium/config";
 import { parseApiOptions, soft } from "@/lib/utils";
 import { useToast } from "@/ui/Toaster";
-import { λUtils } from "@impactium/utils";
+import { Utils } from "@impactium/utils";
 
-export function _server(v?: boolean) {
+export function _server(v?: boolean, v2?: boolean) {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
     ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
     : v
-      ? process.env.NUMERIC_HOST || 'http://0.0.0.0:3001'
-      : process.env.SYMBOLIC_HOST || 'http://localhost:3001'
+      ? v2 ? 'http://0.0.0.0:3002' : 'http://0.0.0.0:3001'
+      : v2 ? 'http://localhost:3002' : 'http://localhost:3001'
 }
 
 const api: Api = async function <T>(_path: string, arg2?: any, arg3?: any): Promise<λ<ResponseBase<T>> | T> {
-  const { options, callback, query, path } = parseApiOptions<T>(arg2, arg3, _path);
+  const { options, callback, query, path, endpoint } = parseApiOptions<T>(arg2, arg3, _path);
 
   soft(true, options.setLoading);
 
-  const response = await fetch(`${_server(options?.useNumericHost)}/api${path}${query}`, {
+  const response = await fetch(`${endpoint}/api${path}${query}`, {
     credentials: 'include',
     method: 'GET',
     cache: 'no-cache',
@@ -43,7 +43,7 @@ const api: Api = async function <T>(_path: string, arg2?: any, arg3?: any): Prom
   if (isSuccess && typeof options.toast === 'string') {
     useToast('', {}, options.toast)
   } else if (options.toast) {
-    λUtils.array(res.data?.message).map(m => useToast(m, {}, options.toast))
+    Utils.array(res.data?.message).map(m => useToast(m, {}, options.toast))
   }
 
   if (isSuccess && callback) {

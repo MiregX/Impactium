@@ -32,7 +32,7 @@
   left: 0;
   width: 100%;
   align-items: center;
-  border-bottom: 1px solid var(--accent-3);
+  border-bottom: 1px solid var(--gray-alpha-400);
   height: 128px;
   background: var(--black);
   justify-content: space-between;

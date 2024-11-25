@@ -35,12 +35,12 @@
 }
 .list {
   display: inline-flex;
-  height: 36px;
+  height: 32px;
   align-items: center;
   justify-content: center;
   border-radius: var(--border-s);
   background-color: var(--soft-black);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   position: relative;
   padding: 4px 3px;
   color: var(--text-dimmed);

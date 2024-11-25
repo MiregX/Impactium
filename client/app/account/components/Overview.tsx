@@ -8,7 +8,7 @@ import { UserRequiredContext } from '@/context/User.context';
 import { UserCombination } from '@/components/UserCombination';
 import { Badge } from '@/ui/Badge';
 import { BadgeType } from '@/ui/Badge';
-import { λUtils } from '@impactium/utils';
+import { Utils } from '@impactium/utils';
 
 export function Overview() {
   const { user } = useUser<UserRequiredContext>();
@@ -21,7 +21,7 @@ export function Overview() {
       <UserCombination size='heading' user={user} />
       <div className={s.badges}>
         {user.verified && <Badge type={BadgeType.verified} />}
-        {user.register && <Badge type={BadgeType.Registered} title={lang.created_at + λUtils.readableDate(user.register)} />}
+        {user.register && <Badge type={BadgeType.Registered} title={lang.created_at + Utils.readableDate(user.register)} />}
       </div>
     </Card>
   );

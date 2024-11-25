@@ -1,11 +1,11 @@
 .input {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 32px;
   width: 100%;
   cursor: text;
   border-radius: var(--border-s);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   background-color: var(--soft-black);
   padding: 8px 12px;
   outline-offset: var(--white);

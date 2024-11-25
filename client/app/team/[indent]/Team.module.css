@@ -55,7 +55,7 @@
   flex-direction: row;
   gap: 9px;
   border-radius: 4px;
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
   align-items: center;
   justify-content: center;
   width: min-content;
@@ -80,7 +80,7 @@
   gap: 16px;
 }
 .heading {
-  height: 36px;
+  height: 32px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -123,7 +123,7 @@
   align-items: center;
   padding: 8px 12px;
   border-radius: var(--border-s);
-  border: 1px solid var(--accent-3);
+  border: 1px solid var(--gray-alpha-400);
 }
 .tournaments {
   flex: 1;

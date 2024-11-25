@@ -11,7 +11,6 @@ export interface StackProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   ({
-    className,
     flex = 'inherit',
     gap = 8,
     dir: flexDirection = 'row',

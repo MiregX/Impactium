@@ -19,7 +19,7 @@ export function Icon({
   name,
   variant,
   from,
-  size = 20,
+  size = 16,
   ...props
 }: Icon.Props) {
   const Component = !from

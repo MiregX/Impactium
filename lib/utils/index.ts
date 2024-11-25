@@ -12,7 +12,7 @@ export class OmitObject {
   }
 }
 
-export class λUtils {
+export class Utils {
   public static array = <K extends unknown>(unknown: Arrayed<K>): K[] => Array.isArray(unknown) ? unknown : (typeof unknown === 'undefined' ? [] : [unknown]);
 }
 
