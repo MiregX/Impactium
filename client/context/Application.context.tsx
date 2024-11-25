@@ -121,9 +121,9 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
     setApplication
   }
 
-  const onCommand = useCallback((cmd: string) => {
+  const onCommand = useCallback((command: string) => {
     const token = new Cookies().get(λCookie.Authorization);
-    socket?.emit(λWebSocket.command, { token, command: cmd });
+    socket?.emit(λWebSocket.command, { token, command });
   }, [socket]);
 
   return (

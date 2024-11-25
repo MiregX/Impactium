@@ -4,7 +4,7 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npx ts-node generate.ts && tsc",
     "generate": "npx ts-node generate.ts",
     "deploy": "npm publish --access public"
   },

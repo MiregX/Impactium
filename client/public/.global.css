@@ -83,7 +83,7 @@
   --gapX2: 24px;
 }
 
-*:not(svg, path) {
+*:not(svg, path, g) {
   -webkit-tap-highlight-color: transparent;
   font-family: var(--font-sans);
   font-size: 14px;

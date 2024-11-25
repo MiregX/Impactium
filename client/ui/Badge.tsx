@@ -5,16 +5,12 @@ import { cn } from '@/lib/utils'
 import { Icon } from '@impactium/icons'
 import { HTMLAttributes } from 'react'
 import { λUtils } from '@impactium/utils'
-
-enum _BadgeDirections {
-  default = 'default',
-  reverse = 'reverse',
-} 
+import { capitalize } from 'lodash'
 
 interface _CustomBadge {
   title?: string,
   icon?: Icon.Name,
-  direction?: _BadgeDirections,
+  revert?: boolean,
   color?: string
   dot?: boolean
 }
@@ -24,6 +20,8 @@ export enum BadgeType {
   frontend = 'frontend',
   backend = 'backend',
   devops = 'devops',
+  database = 'database',
+  middleware = 'middleware',
   primary = 'primary',
   verified = 'verified',
   selected = 'selected',
@@ -59,16 +57,6 @@ export function Badge({ className, ...options }: BadgeProps) {
       title: 'Cookies',
       icon: 'Cookie',
       color: '#d17724'
-    },
-    [BadgeType.frontend]: {
-      title: 'Frontend',
-      icon: 'Leaf',
-      color: '#449d5d'
-    },
-    [BadgeType.backend]: {
-      title: 'Backend',
-      icon: 'Cloud',
-      color: '#9162c0'
     },
     [BadgeType.devops]: {
       title: 'DevOps',
@@ -120,7 +108,7 @@ export function Badge({ className, ...options }: BadgeProps) {
     },
     [BadgeType.Registered]: {
       icon: 'CircleCheck',
-      
+
       color: '#c0c0c0'
     },
     [BadgeType.Common]: {
@@ -150,12 +138,33 @@ export function Badge({ className, ...options }: BadgeProps) {
     [BadgeType.Divine]: {
       color: λUtils.var('divine'),
       title: 'Divine'
+    },
+    [BadgeType.frontend]: {
+      title: 'Frontend',
+      icon: 'Monitor',
+      color: '#28C940'
+    },
+    [BadgeType.backend]: {
+      title: capitalize(BadgeType.backend),
+      icon: 'AcronymApi',
+      color: '#08bdff'
+    },
+    [BadgeType.database]: {
+      icon: 'Database',
+      title: capitalize(BadgeType.database),
+      color: '#FF5F57'
+    },
+    [BadgeType.middleware]: {
+      icon: 'FunctionMiddleware',
+      title: capitalize(BadgeType.middleware),
+      color: '#FFBD2E'
     }
   };
 
-  const { title, icon, direction, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
+  const { title, icon, revert, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
+
   return (
-    <div className={cn(s.badge, icon && s.icon, className)} data-color={color} style={{background: color + '30', color}} data-direction={direction} {...options}>
+    <div className={cn(s.badge, icon && s.icon, className, revert && s.revert)} data-color={color} style={{background: color + '30', color}} {...options}>
       {icon && <Icon size={16} color={color} name={icon} />}
       {dot && <span style={{background: color}} />}
       {options.title || title}

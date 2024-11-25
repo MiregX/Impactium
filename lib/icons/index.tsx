@@ -18,20 +18,30 @@ export const iconVariants = cva('', {
 export function Icon({
   name,
   variant,
+  from,
   size = 20,
   ...props
 }: Icon.Props) {
-  const Component = Icon.icons[name];
+  const Component = !from
+    ? Icon.icons[name]
+    : from === 'geist'
+      ? custom_icons[name as keyof typeof custom_icons]
+      : lucide_icons[name as keyof typeof lucide_icons]
 
   if (!Component) {
     return null;
   }
   
-  if (name in custom_icons && !(name in lucide_icons)) {
+  if (from === 'geist' || name in custom_icons && !(name in lucide_icons)) {
     props.viewBox = '0 0 16 16';
-    props.style = {
-      ...props.style,
-      color: props.color ?? iconVariants({ variant })}
+    props.fill = 'none';
+    props.color = props.color ?? iconVariants({ variant });
+  } else {
+    props.stroke = props.color ?? iconVariants({ variant });
+  }
+
+  if (name.startsWith('Acronym')) {
+    props.viewBox = '0 0 20 16';
   }
 
   return (
@@ -39,7 +49,6 @@ export function Icon({
       {...props}
       width={size}
       height={size}
-      stroke={props.color ?? iconVariants({ variant })}
     />
   );
 }
@@ -50,11 +59,16 @@ export namespace Icon {
     ...lucide_icons
   }
 
+  export type From = 'geist' | 'lucide';
   export type Name = keyof typeof icons;
+  
+  export type Attributes = Record<string, string>;
+  export type Node = [name: string, attrs: Attributes, ...childrens: Node[]];
 
   export interface Props extends React.SVGProps<SVGSVGElement>, VariantProps<typeof iconVariants> {
     name: Name;
     size?: number;
+    from?: From;
   }
 
   export type Variant = Icon.Props['variant'];

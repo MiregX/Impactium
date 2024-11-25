@@ -1,0 +1,11 @@
+.service {
+  background: var(--geist-background) !important;
+  backdrop-filter: blur(8px) !important;
+  height: 128px;
+  min-width: 256px;
+  border: var(--geist-border) !important;
+}
+
+.service p {
+  font-size: 16px !important;
+}

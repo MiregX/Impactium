@@ -1,4 +1,4 @@
-import { Configuration } from "@impactium/config";
+import { Configuration } from "../config";
 
 export class OmitObject {
   static omit<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {

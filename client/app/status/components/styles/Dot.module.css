@@ -1,0 +1,18 @@
+.dot {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  transform: translate(-50%, -50%);
+  background: var(--black);
+  border-radius: var(--round);
+  box-shadow: inset var(--shadow-border);
+}
+.dot hr {
+  display: flex;
+  height: 3px;
+  width: 3px;
+  border-radius: var(--round);
+}

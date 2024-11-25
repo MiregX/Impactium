@@ -38,6 +38,24 @@ export const ApplicationBase: Application = {
   history: []
 }
 
+export enum Side {
+  TOP = 'top',
+  RIGHT = 'right',
+  BOTTOM = 'bottom',
+  LEFT = 'left'
+}
+
+type Color_Var = `var(--${string})`;
+type Color_Hex =
+  | `#${string}`
+  | `#${string}${string}`
+  | `#${string}${string}${string}`
+  | `#${string}${string}${string}${string}`
+  | `#${string}${string}${string}${string}${string}`
+  | `#${string}${string}${string}${string}${string}${string}`;
+
+export type Color = Color_Hex | Color_Var
+
 export interface WebSocketEmitDefinitions {
   [λWebSocket.updateApplicationInfo]: any,
   [λWebSocket.history]: any,

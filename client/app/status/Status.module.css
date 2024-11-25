@@ -1,6 +1,6 @@
 .panel {
-  justify-content: flex-start !important;
-  align-items: flex-start;
+  justify-content: space-evenly !important;
+  align-items: center;
 }
 
 .unit {

@@ -101,10 +101,21 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         Logger.clear()
         break;
 
+      case command === '/say nothing':
+        Logger.log(`${λLogger.bold(user.uid)} удалил фразу дня`)
+        this.applicationService.setGlobalPhrase();
+        break;
+
       case command.startsWith('/say '):
         const phrase = command.slice(5);
         Logger.log(`${λLogger.bold(user.uid)} установил новую фразу дня: ${λLogger.bold(phrase)}`)
         this.applicationService.setGlobalPhrase(phrase);
+        break;
+
+      case command === 'run perf':
+        Logger.push('Next.js responded with status 200 within 36ms')
+        Logger.push('GoLang responded with status 200 within 62ms') 
+
         break;
     
       default:

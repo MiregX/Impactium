@@ -1,63 +1,67 @@
-import fs from 'fs';
-import { IconNode } from 'lucide-react';
-import path from 'path';
 import { JSDOM } from 'jsdom';
+import fs from 'fs';
+import path from 'path';
+import { Icon } from './index';
 
-const dir = path.join(__dirname, 'lib');
+const attributes = (element: Element): Icon.Attributes => {
+  const attrs: Icon.Attributes = {};
 
-function parse(content: string): IconNode {
-  const dom = new JSDOM(content);
-  const nodes: IconNode = [];
+  Array.from(element.attributes).forEach(({ name, value }) => {
+    const attrName = name.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
 
-  dom.window.document.querySelectorAll('*').forEach((element) => {
-    const name = element.tagName
-      .toLowerCase()
-      .replace('clippath', 'clipPath')
-      .replace('lineargradient', 'linearGradient')
-      .replace('radialgradient', 'radialGradient')
-      .replace('stroke-linejoin', 'strokeLinejoin') as IconNode[0][0];
-    const attrs: Record<string, any> = {};
+    if (['data-testid', 'style'].includes(name)) return;
+    if (name === 'color' && value === 'currentColor') return;
 
-    Array.from(element.attributes).forEach((attr) => {
-      if (['data-testid', 'style', 'stroke'].includes(attr.name)) return;
-
-      if (attr.name === 'fill') {
-        attrs.stroke = 'none';
-      }
-
-      attrs[attr.name.replace(/-([a-z])/g, (_, char) => char.toUpperCase())] = attr.value;
-    });
-
-    if (!['html', 'body', 'head', 'svg'].includes(name)) {
-      nodes.push([name, attrs]);
-    }
+    if (value) attrs[attrName] = value;
   });
 
-  return nodes;
-}
+  return attrs;
+};
 
-const icons = fs.readdirSync(dir).map((file) => {
-  const name = path.basename(file, '.svg');
-  const content = fs.readFileSync(path.join(dir, file), 'utf-8');
-  return {
-    name,
-    node: parse(content),
-  };
-});
+const element = (element: Element): Icon.Node => {
+  const tagName = element.tagName.replace(/([A-Z])/g, (c) => c.toLowerCase());
+  const attrs = attributes(element);
+  const childrens = children(element);
+  return [tagName, attrs, ...childrens];
+};
 
-fs.writeFileSync(
-  './compilation.tsx',
-  `import { createLucideIcon } from 'lucide-react';
+const children = (e: Element): Icon.Node[] => {
+  return Array.from(e.children).map((child) => {
+    if (child.tagName === 'defs') {
+      return [
+        'defs', attributes(e),
+        ...Array.from(child.children).map((childDef) => element(childDef)),
+      ];
+    }
+    return element(child);
+  });
+};
 
-${icons
-  .map(({ name, node }) => `const ${name} = createLucideIcon('${name}', ${JSON.stringify(node)});`)
-  .join('\n')}
 
-const icons = {
+export const parse = (content: string): Icon.Node[] => {
+  const svg = new JSDOM(content).window.document.querySelector('svg')!;
+
+  return children(svg);
+};
+
+const dirPath = './lib';
+
+const icons = fs.readdirSync(dirPath)
+  .filter((file) => file.endsWith('.svg'))
+  .map((file) => ({
+    name: path.basename(file, '.svg'),
+    node: parse(fs.readFileSync(path.join(dirPath, file), 'utf-8')),
+  }));
+
+const output = `import { create } from './create';
+
+${icons.map(({ name, node }) => `export const ${name} = create('${name}', ${JSON.stringify(node, null, 2)});`).join('\n')}
+
+export const icons = {
   ${icons.map(({ name }) => name).join(',\n  ')}
 };
 
-export { icons };
 export default icons;
-`
-);
+`;
+
+fs.writeFileSync('./compilation.tsx', output);
