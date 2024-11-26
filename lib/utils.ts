@@ -21,7 +21,7 @@ interface Options {
 
 export namespace DesignSystem {
   export class Color extends String {
-    constructor(value: string) {
+    constructor(value: string | Color) {
       super(Color.toVar(value));
     }
   

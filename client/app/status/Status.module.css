@@ -33,6 +33,14 @@
   font-family: var(--font-mono);
   color: currentColor;
 }
+.service svg {
+  flex-shrink: 0;
+}
+.path {
+  max-width: 172px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .service {
   min-height: 18px;
   width: 100%;

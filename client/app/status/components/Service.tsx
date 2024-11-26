@@ -1,14 +1,11 @@
 import { Icon } from '@impactium/icons';
 import s from '../Status.module.css';
 import { Stack } from '@/ui/Stack';
-import { Badge, BadgeType } from '@/ui/Badge';
-import { capitalize } from 'lodash';
 import { λ } from '@/decorator/λ.class';
 import { useEffect, useState } from 'react';
-import { ResponseBase } from '@/dto/Response.dto';
 import { Skeleton } from '@/ui/Skeleton';
-import { DesignSystem } from '@impactium/utils';
-import { format, formatDate } from 'date-fns';
+import { DesignSystem, Utils } from '@impactium/utils';
+import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 export namespace Service {
@@ -25,7 +22,7 @@ export namespace Service {
   
 }
 
-export function Service({ type, path, icon }: Service.Props) {
+export function Service({ path, icon }: Service.Props) {
   const [response, setResponse] = useState<Response>();
   const [startAt, setStartAt] = useState<number>(0);
   const [responseTime, setResponseTime] = useState<number>(0);
@@ -58,18 +55,32 @@ export function Service({ type, path, icon }: Service.Props) {
       </span>
     )
   }
+
+  const iconsProps: Icon.Props = {
+    name: icon,
+    color: 'currentColor'
+  }
+
+  if (iconsProps.name === 'AcronymPage') {
+    iconsProps.viewBox = '0 0 28 16';
+    iconsProps.width = '28';
+  }
+
+  const parseFullUrlToPath = (path: string) => {
+    return path.split('/').slice(3).join('/');
+  }
   
   return (
     <Skeleton show={loading} width='full' height='unset'>
-      <Stack flex={0} className={cn(s.service, response?.ok !== true && s.error)}>
-        <p>{format(startAt, 'HH:mm.SS')}</p>
-        <Stack style={{ padding: '0 12px'}}>
-          <Status value={response?.status || 0} />
-          <p>{responseTime / 1000 > 1 && Math.round(responseTime / 1000) + 's'}{(responseTime / 1000).toString().split('.')[1].replace('0', '')}ms</p>
-        </Stack>
-        <Icon name={icon} color='currentColor' />
+      <Stack flex={0} className={cn(s.service, (response?.status || 0) > 499 && s.error)}>
         <Method value={'GET'} />
-        <span>{path}</span>
+        <p>{format(startAt, 'HH:mm.SS')}</p>
+        <Stack style={{ padding: '0 12px', minWidth: 96 }}>
+          <Status value={response?.status || 0} />
+          {responseTime && <p>{responseTime / 1000 > 1 && Math.round(responseTime / 1000) + 's'}{(responseTime / 1000).toString().split('.')[1].replaceAll('0', '')}ms</p>}
+        </Stack>
+        <Stack jc='start'><Icon {...iconsProps} /></Stack>
+        <span className={s.path}>/{parseFullUrlToPath(path)}</span>
     </Stack>
     </Skeleton>
   )
@@ -80,19 +91,25 @@ export interface StatusProps {
 }
 
 function Status({ value }: StatusProps) {
-  const color = new DesignSystem.Color(value >= 200 && value <= 299
-    ? 'green-800'
-    : value >= 300 && value <= 399
-      ? 'blue-800'
-      : value >= 400 && value <= 499
-        ? 'amber-800'
-        : 'red-800'
-  ).valueOf();
+  const getStatusColor = (value: number) => {
+    switch (true) {
+      case Utils.between(value, 200, 299):
+        return 'green-800';
+      case Utils.between(value, 300, 399):
+        return 'blue-800';
+      case Utils.between(value, 400, 499):
+        return 'amber-800';
+      default:
+        return 'red-800';
+    }
+  }
+
+  const color = new DesignSystem.Color(getStatusColor(value));
 
   const borderColor = new DesignSystem.Color(color).minus(4).valueOf();
 
   return (
-    <span className={cn(s.status, value > 499 && s.error)} style={{ borderColor, color }}>
+    <span className={cn(s.status, Utils.between(value, 500, 599) && s.error)} style={{ borderColor, color: color.valueOf() }}>
       {value}
     </span>
   )

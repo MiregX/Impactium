@@ -20,20 +20,20 @@ export default function StatusPage() {
     },
     {
       type: 'backend',
-      path: 'http://localhost:3001/api',
-      icon: 'AcronymApi',
+      path: 'http://localhost:3001/api/ping',
+      icon: 'FunctionNest',
       name: "Nest.JS"
     },
     {
       type: 'backend',
-      path: 'http://localhost:3002/api/v2',
-      icon: 'AcronymApi',
+      path: 'http://localhost:3002/api/v2/ping',
+      icon: 'FunctionGo',
       name: "Go"
     },
     {
       type: 'database',
       path: 'http://localhost:3002/api/v2',
-      icon: 'Database',
+      icon: 'FunctionSquare',
       name: "CockroachDB"
     }
   ]

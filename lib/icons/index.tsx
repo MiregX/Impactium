@@ -42,13 +42,17 @@ export function Icon({
 
   if (name.startsWith('Acronym')) {
     props.viewBox = '0 0 20 16';
+    if (name === 'AcronymPage') {
+      props.viewBox = '0 0 28 16';
+      props.width = '28px'
+    }
   }
 
   return (
     <Component
-      {...props}
       width={size}
       height={size}
+      {...props}
     />
   );
 }
