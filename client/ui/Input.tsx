@@ -39,12 +39,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
 
     return img || type === 'file' ? (
-      <div className={classes} ref={ref}>
-        <Icon variant='dimmed' name={img || 'ImageUp'} />
-        <input ref={ref} type={variant === 'color' ? 'color' : type} {...props} />
+      <div className={classes} datatype='input-wrapper' ref={ref}>
+        <Icon variant='dimmed' datatype='input-icon' name={img || 'ImageUp'} />
+        <input ref={ref} datatype='input-content' type={variant === 'color' ? 'color' : type} {...props} />
       </div>
     ) : (
       <input
+        datatype='input-wrapper'
         className={classes}
         type={variant === 'color' ? 'color' : type}
         ref={ref}

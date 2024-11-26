@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getDomains() string {
+func getDomain() string {
 	x := os.Getenv("X")
 	if x == "" {
 		x = "0"
@@ -43,7 +43,7 @@ func getDomains() string {
 }
 
 func settleCors(handler *gin.Engine) {
-	domain := getDomains()
+	domain := getDomain()
 
 	handler.Use(cors.New(cors.Config{
 		AllowMethods:     []string{"*"},

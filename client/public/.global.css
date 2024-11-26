@@ -237,7 +237,6 @@
   -webkit-tap-highlight-color: transparent;
   font-family: var(--font-sans);
   font-size: 14px;
-  color: var(--text-white);
   -webkit-user-select: none;
   scroll-behavior: smooth;
   -moz-user-select: none;

@@ -1,44 +1,52 @@
 'use client'
 import { PanelTemplate } from "@/components/PanelTempate";
-import React, { useState } from 'react';
+import React from 'react';
 import s from './Status.module.css'
 import { Stack } from "@/ui/Stack";
 import { Button } from "@/ui/Button";
 import { Service } from "./components/Service";
+import { Input } from "@/ui/Input";
 
 export default function StatusPage() {
   const services: Service.Props[] = [
     {
-      type: 'frontend',
       path: 'http://localhost:3000/',
       icon: 'AcronymPage',
       name: "Next.JS"
     },
     {
-      type: 'backend',
-      path: 'http://localhost:3001/api/ping',
+      path: 'http://localhost:3001/api/application/info',
       icon: 'FunctionNest',
       name: "Nest.JS"
     },
     {
-      type: 'backend',
       path: 'http://localhost:3002/api/v2/ping',
       icon: 'FunctionGo',
       name: "Go"
     },
     {
-      type: 'database',
-      path: 'http://localhost:3002/api/v2',
+      path: 'https://cdn.impactium.fun/logo/impactium.png',
       icon: 'FunctionSquare',
-      name: "CockroachDB"
+      name: "CDN",
+      params: {
+        mode: 'no-cors'
+      }
     }
   ]
 
   return (
     <PanelTemplate className={s.panel} useColumn>
       <Stack gap={0} className={s.wrapper} dir='column'>
-        <Stack>
-          <Button variant='ghost' img='SettingsSliders'></Button>
+        <Stack gap={16} style={{ marginBottom: 12, width: '100%' }}>
+          <Button variant='outline' img='SettingsSliders' />
+          <Input img='Search' placeholder='2.7M logs total found...' />
+          <Button variant='outline' img='MoreHorizontal' />
+        </Stack>
+        <Stack className={s.description} style={{ width: '100%', marginBottom: 6 }}>
+          <p>Time</p>
+          <p>Host</p>
+          <p>Response</p>
+          <p>Message</p>
         </Stack>
         {services.map(service => (
           <Service {...service} />

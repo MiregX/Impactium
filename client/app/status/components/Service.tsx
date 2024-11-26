@@ -7,22 +7,21 @@ import { Skeleton } from '@/ui/Skeleton';
 import { DesignSystem, Utils } from '@impactium/utils';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { RequestOptions } from '@/dto/api.dto';
 
 export namespace Service {
-  export type Name = 'Next.JS' | 'Nest.JS' | 'Go' | 'CockroachDB' | 'Redis' | 'Nginx';
-
-  export type Type = 'frontend' | 'backend' | 'database' | 'middleware';
+  export type Name = 'Next.JS' | 'Nest.JS' | 'Go' | 'CockroachDB' | 'Redis' | 'CDN';
 
   export interface Props {
-    type: Type;
     path: string;
     icon: Icon.Name;
     name: Name;
+    params?: any
   }
   
 }
 
-export function Service({ path, icon }: Service.Props) {
+export function Service({ path, icon, params }: Service.Props) {
   const [response, setResponse] = useState<Response>();
   const [startAt, setStartAt] = useState<number>(0);
   const [responseTime, setResponseTime] = useState<number>(0);
@@ -37,7 +36,10 @@ export function Service({ path, icon }: Service.Props) {
       setStartAt(startAt);
       
       try {
-        const res = await fetch(path);
+        const res = await fetch(path, {
+          cache: 'reload',
+          ...params
+        });
         setResponse(res);
       } catch (error) {
         setResponse(new λ() as unknown as Response);
@@ -50,7 +52,7 @@ export function Service({ path, icon }: Service.Props) {
 
   function Method({ value }: MethodProps) {
     return (
-      <span className={cn(s.status, (response?.status || 0) > 499 && s.error)}>
+      <span className={cn(s.status, (response?.status || 500) > 499 && s.error)}>
         {value}
       </span>
     )
@@ -58,7 +60,6 @@ export function Service({ path, icon }: Service.Props) {
 
   const iconsProps: Icon.Props = {
     name: icon,
-    color: 'currentColor'
   }
 
   if (iconsProps.name === 'AcronymPage') {
@@ -72,15 +73,15 @@ export function Service({ path, icon }: Service.Props) {
   
   return (
     <Skeleton show={loading} width='full' height='unset'>
-      <Stack flex={0} className={cn(s.service, (response?.status || 0) > 499 && s.error)}>
-        <Method value={'GET'} />
+      <Stack flex={0} className={cn(s.service, (response?.status || 500) > 499 && s.error)}>
+        <Status value={response?.status || 500} />
         <p>{format(startAt, 'HH:mm.SS')}</p>
         <Stack style={{ padding: '0 12px', minWidth: 96 }}>
-          <Status value={response?.status || 0} />
-          {responseTime && <p>{responseTime / 1000 > 1 && Math.round(responseTime / 1000) + 's'}{(responseTime / 1000).toString().split('.')[1].replaceAll('0', '')}ms</p>}
+          <Method value={'GET'} />
+          {responseTime && <p>{responseTime / 1000 > 1 ? Math.fround(responseTime / 1000) + 's' : (responseTime / 1000).toString().split('.')[1].replaceAll('0', '') + 'ms'}</p>}
         </Stack>
-        <Stack jc='start'><Icon {...iconsProps} /></Stack>
-        <span className={s.path}>/{parseFullUrlToPath(path)}</span>
+        <Icon {...iconsProps} color={(response?.status || 500) > 499 ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
+        <p className={s.path}>/{parseFullUrlToPath(path)}</p>
     </Stack>
     </Skeleton>
   )
