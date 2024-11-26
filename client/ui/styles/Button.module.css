@@ -45,9 +45,6 @@
   border: 1px solid var(--white);
   color: var(--white);
 }
-.outline:hover svg {
-  stroke: var(--white);
-}
 
 .hardline {
   border: 1px solid var(--white);
@@ -72,9 +69,6 @@
   background-color: var(--gray16);
   color: var(--white);
 }
-.ghost:hover svg {
-  stroke: var(--white);
-}
 
 .link {
   color: var(--white);
@@ -98,9 +92,6 @@
 }
 .glass:hover {
   color: var(--white);
-}
-.glass:hover svg {
-  stroke: var(--white);
 }
 
 .defaultSize {

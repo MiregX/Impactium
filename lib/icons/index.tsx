@@ -5,26 +5,27 @@ import { icons as lucide_icons } from 'lucide-react';
 export const iconVariants = cva('', {
   variants: {
     variant: {
+      default: 'currentColor',
       white: '#e8e8e8',
       dimmed: '#a1a1a1',
       black: '#0d0d0d',
     },
   },
   defaultVariants: {
-    variant: 'white',
+    variant: 'default',
   },
 });
 
 export function Icon({
   name,
   variant,
-  from,
+  fromGeist,
   size = 16,
   ...props
 }: Icon.Props) {
-  const Component = !from
+  const Component = typeof fromGeist === 'undefined'
     ? Icon.icons[name]
-    : from === 'geist'
+    : fromGeist
       ? custom_icons[name as keyof typeof custom_icons]
       : lucide_icons[name as keyof typeof lucide_icons]
 
@@ -32,7 +33,7 @@ export function Icon({
     return null;
   }
   
-  if (from === 'geist' || name in custom_icons && !(name in lucide_icons)) {
+  if (fromGeist || name in custom_icons && !(name in lucide_icons)) {
     props.viewBox = '0 0 16 16';
     props.fill = 'none';
     props.color = props.color ?? iconVariants({ variant });
@@ -63,7 +64,6 @@ export namespace Icon {
     ...lucide_icons
   }
 
-  export type From = 'geist' | 'lucide';
   export type Name = keyof typeof icons;
   
   export type Attributes = Record<string, string>;
@@ -72,7 +72,7 @@ export namespace Icon {
   export interface Props extends React.SVGProps<SVGSVGElement>, VariantProps<typeof iconVariants> {
     name: Name;
     size?: number;
-    from?: From;
+    fromGeist?: boolean;
   }
 
   export type Variant = Icon.Props['variant'];

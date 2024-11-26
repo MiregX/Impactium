@@ -4,11 +4,7 @@ import React, { useState } from 'react';
 import s from './Status.module.css'
 import { Stack } from "@/ui/Stack";
 import { Button } from "@/ui/Button";
-import { λ } from "@/decorator/λ.class";
 import { Service } from "./components/Service";
-import { ResponseBase } from "@/dto/Response.dto";
-import { Icon } from "@impactium/icons";
-
 
 export default function StatusPage() {
   const services: Service.Props[] = [
@@ -42,7 +38,7 @@ export default function StatusPage() {
     <PanelTemplate className={s.panel} useColumn>
       <Stack gap={0} className={s.wrapper} dir='column'>
         <Stack>
-          <Button variant='outline' img='SettingsSliders'></Button>
+          <Button variant='ghost' img='SettingsSliders'></Button>
         </Stack>
         {services.map(service => (
           <Service {...service} />

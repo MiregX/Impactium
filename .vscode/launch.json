@@ -48,6 +48,14 @@
       "command": "npm run prisma:seed",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
-    }
+    },
+    {
+      "type": "node-terminal",
+      "name": "Build @impactium/icons",
+      "request": "launch",
+      "command": "npm run build",
+      "cwd": "${workspaceFolder}/lib/icons",
+      "envFile": "${workspaceFolder}/.env"
+    },
   ]
 }

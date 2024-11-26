@@ -1,12 +1,12 @@
 {
   "name": "@impactium/icons",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npx ts-node generate.ts && tsc",
     "generate": "npx ts-node generate.ts",
-    "deploy": "npm publish --access public"
+    "build": "npm run generate && tsc",
+    "deploy": "npm run build && npm publish --access public"
   },
   "files": [
     "dist",
