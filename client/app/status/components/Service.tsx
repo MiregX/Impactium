@@ -22,7 +22,7 @@ export namespace Service {
 }
 
 export function Service({ path, icon, params }: Service.Props) {
-  const [response, setResponse] = useState<Response>();
+  const [response, setResponse] = useState<Partial<Response>>();
   const [startAt, setStartAt] = useState<number>(0);
   const [responseTime, setResponseTime] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,10 +37,11 @@ export function Service({ path, icon, params }: Service.Props) {
       
       try {
         const res = await fetch(path, {
-          cache: 'reload',
           ...params
         });
-        setResponse(res);
+        setResponse(res.status > 0 ? res : {
+          status: 301,
+        });
       } catch (error) {
         setResponse(new λ() as unknown as Response);
       }
@@ -71,16 +72,23 @@ export function Service({ path, icon, params }: Service.Props) {
     return path.split('/').slice(3).join('/');
   }
   
+  const parseFullUrlToDomain = (path: string) => {
+    return path.split('/').slice(2, 3).join('/').split(':')[0];
+  }
+  
   return (
     <Skeleton show={loading} width='full' height='unset'>
       <Stack flex={0} className={cn(s.service, (response?.status || 500) > 499 && s.error)}>
         <Status value={response?.status || 500} />
-        <p>{format(startAt, 'HH:mm.SS')}</p>
-        <Stack style={{ padding: '0 12px', minWidth: 96 }}>
+        <p className={s.domain}>{parseFullUrlToDomain(path)}</p>
+        <Stack>
           <Method value={'GET'} />
-          {responseTime && <p>{responseTime / 1000 > 1 ? Math.fround(responseTime / 1000) + 's' : (responseTime / 1000).toString().split('.')[1].replaceAll('0', '') + 'ms'}</p>}
+          <p>{format(startAt, 'HH:mm:SS') + `.${new Date(startAt).getMilliseconds()}`}</p>
         </Stack>
-        <Icon {...iconsProps} color={(response?.status || 500) > 499 ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
+        <Stack style={{ minWidth: 72 }}>
+          <Icon {...iconsProps} color={(response?.status || 500) > 499 ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
+          {responseTime && <p>{responseTime / 1000 > 1 ? (responseTime / 1000).toFixed(2) + 's' : (responseTime / 1000).toString().split('.')[1].replaceAll('0', '') + 'ms'}</p>}
+        </Stack>
         <p className={s.path}>/{parseFullUrlToPath(path)}</p>
     </Stack>
     </Skeleton>

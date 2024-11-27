@@ -3,7 +3,7 @@ import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express
 import { ApiModule } from './api.module';
 import * as cookieParser from 'cookie-parser';
 import { Configuration } from '@impactium/config';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function run() {

@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+############ DATABASE ############
+  analytics-mongodb:
+    container_name: analytics-mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - ${ANALYTICS_MONGODB_PORT}:27017

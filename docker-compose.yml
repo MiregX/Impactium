@@ -69,6 +69,17 @@ services:
       - development
       - production
 
+  analytics-mongodb:
+    extends:
+      file: ./analytics/compose-service.yml
+      service: analytics-mongodb
+    container_name: analytics-mongodb
+    networks:
+      - backend
+    profiles:
+      - development
+      - production
+
 networks:
   backend:
     driver: bridge

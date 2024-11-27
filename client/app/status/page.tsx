@@ -26,7 +26,7 @@ export default function StatusPage() {
     },
     {
       path: 'https://cdn.impactium.fun/logo/impactium.png',
-      icon: 'FunctionSquare',
+      icon: 'AcronymCdn',
       name: "CDN",
       params: {
         mode: 'no-cors'

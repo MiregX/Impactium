@@ -13,12 +13,26 @@ export class ResponseMiddleware implements NestMiddleware {
       res.setHeader('Content-Type', 'application/json');
       res.locals.wrapped = true;
 
-      return {
+      const wrap = {
         timestamp: Date.now(),
         req_id: req['custom']?.req_id || '',
         status: res.statusCode,
         data,
       };
+      
+      try {
+        fetch('http://localhost:3002/api/v2/log', {
+          method: 'POST',
+          body: JSON.stringify({
+            ...wrap,
+            took: Date.now() - wrap.timestamp,
+            path: req.url,
+            method: req.method
+          })
+        }) 
+      } catch (_) { }
+
+      return wrap
     };
 
     res.json = (body) => _json(wrap(body));

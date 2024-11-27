@@ -18,6 +18,7 @@
   font-size: 11px;
   font-family: var(--font-mono);
   color: currentColor;
+  font-weight: 400;
 }
 .status {
   display: grid;
@@ -69,4 +70,10 @@
 .description p:last-child {
   text-align: end;
   flex: 1;
+}
+.domain {
+  width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }

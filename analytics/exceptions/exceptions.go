@@ -32,3 +32,17 @@ func InternalServerError(c *gin.Context, msgs ...string) {
 		"code": code,
 	})
 }
+
+// TODO: TraceLogs
+func BadRequest(c *gin.Context, e ...string) {
+	var msg string
+	if len(e) > 0 {
+		msg = e[0]
+	}
+
+	if msg == "" {
+		msg = "bad_request"
+	}
+
+	c.String(http.StatusBadRequest, msg)
+}

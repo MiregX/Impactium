@@ -1,65 +1,21 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
 
 	"analytics/exceptions"
+	"analytics/logger"
 	"analytics/middlewares"
+	"analytics/runner"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
-
-func getDomain() string {
-	x := os.Getenv("X")
-	if x == "" {
-		x = "0"
-	}
-
-	parsedEnvitonmentXValue, err := strconv.Atoi(x)
-	if err != nil {
-		log.Fatalf("Failed to convert enivronment value X to Int")
-	}
-
-	isProduction := parsedEnvitonmentXValue > 0
-
-	domain := os.Getenv("LOCALHOST")
-	if isProduction {
-		domain = os.Getenv("DOMAIN")
-	}
-
-	if domain == "" {
-		domain = "http://localhost"
-		if isProduction {
-			domain = "http://impactium.fun"
-		}
-	}
-
-	return domain
-}
-
-func settleCors(handler *gin.Engine) {
-	domain := getDomain()
-
-	handler.Use(cors.New(cors.Config{
-		AllowMethods:     []string{"*"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return strings.HasPrefix(origin, domain)
-		},
-	}))
-}
 
 func main() {
 	handler := gin.Default()
 
-	settleCors(handler)
+	runner.Cors(handler)
 
 	λ := handler.Group("/api/v2/")
 
@@ -71,6 +27,38 @@ func main() {
 	})
 
 	λ.GET("/error", exceptions.NotFound)
+
+	λ.POST("/log", func(context *gin.Context) {
+		result, err := logger.Insert(context, nil)
+		if err != nil {
+			exceptions.InternalServerError(context)
+			return
+		}
+		context.JSON(http.StatusCreated, result)
+	})
+
+	λ.GET("/log/get", func(context *gin.Context) {
+		log, err := logger.Find()
+		if err != nil {
+			exceptions.InternalServerError(context)
+		}
+
+		context.JSON(http.StatusOK, log)
+	})
+
+	λ.GET("/log/get/:req_id", func(context *gin.Context) {
+		req_id, found := context.Params.Get("req_id")
+		if !found {
+			exceptions.BadRequest(context, "Bad request. Expected /api/v2/log/find/${req_id}")
+		}
+
+		log, err := logger.FindByReqId(req_id)
+		if err != nil {
+			exceptions.NotFound(context)
+		}
+
+		context.JSON(http.StatusOK, log)
+	})
 
 	port := os.Getenv("GO_PORT")
 	if port == "" {
