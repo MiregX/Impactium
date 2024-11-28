@@ -28,23 +28,9 @@ func main() {
 
 	λ.GET("/error", exceptions.NotFound)
 
-	λ.POST("/log", func(context *gin.Context) {
-		result, err := logger.Insert(context, nil)
-		if err != nil {
-			exceptions.InternalServerError(context)
-			return
-		}
-		context.JSON(http.StatusCreated, result)
-	})
+	λ.POST("/log", logger.InsertHandler)
 
-	λ.GET("/log/get", func(context *gin.Context) {
-		log, err := logger.Find()
-		if err != nil {
-			exceptions.InternalServerError(context)
-		}
-
-		context.JSON(http.StatusOK, log)
-	})
+	λ.GET("/logs", logger.FindHandler)
 
 	λ.GET("/log/get/:req_id", func(context *gin.Context) {
 		req_id, found := context.Params.Get("req_id")

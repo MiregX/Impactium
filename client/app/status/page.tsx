@@ -1,4 +1,4 @@
-'use client'
+'use server'
 import { PanelTemplate } from "@/components/PanelTempate";
 import React from 'react';
 import s from './Status.module.css'
@@ -6,33 +6,10 @@ import { Stack } from "@/ui/Stack";
 import { Button } from "@/ui/Button";
 import { Service } from "./components/Service";
 import { Input } from "@/ui/Input";
+import { Analytics } from '@impactium/analytics';
 
-export default function StatusPage() {
-  const services: Service.Props[] = [
-    {
-      path: 'http://localhost:3000/',
-      icon: 'AcronymPage',
-      name: "Next.JS"
-    },
-    {
-      path: 'http://localhost:3001/api/application/info',
-      icon: 'FunctionNest',
-      name: "Nest.JS"
-    },
-    {
-      path: 'http://localhost:3002/api/v2/ping',
-      icon: 'FunctionGo',
-      name: "Go"
-    },
-    {
-      path: 'https://cdn.impactium.fun/logo/impactium.png',
-      icon: 'AcronymCdn',
-      name: "CDN",
-      params: {
-        mode: 'no-cors'
-      }
-    }
-  ]
+export default async  function StatusPage() {
+  const logs = await api<Analytics.Logs>('/v2/logs');
 
   return (
     <PanelTemplate className={s.panel} useColumn>
@@ -48,8 +25,8 @@ export default function StatusPage() {
           <p>Response</p>
           <p>Message</p>
         </Stack>
-        {services.map(service => (
-          <Service {...service} />
+        {logs.map(log => (
+          <Service log={log} />
         ))}
       </Stack>
       <Stack jc='center' ai='center'>

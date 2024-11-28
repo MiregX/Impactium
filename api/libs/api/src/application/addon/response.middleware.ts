@@ -1,5 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { Analytics } from '@impactium/analytics';
 
 @Injectable()
 export class ResponseMiddleware implements NestMiddleware {
@@ -19,18 +20,13 @@ export class ResponseMiddleware implements NestMiddleware {
         status: res.statusCode,
         data,
       };
-      
-      try {
-        fetch('http://localhost:3002/api/v2/log', {
-          method: 'POST',
-          body: JSON.stringify({
-            ...wrap,
-            took: Date.now() - wrap.timestamp,
-            path: req.url,
-            method: req.method
-          })
-        }) 
-      } catch (_) { }
+
+      new Analytics.LogEntity({
+        ...wrap,
+        took: wrap.timestamp - req['custom']?.initialized,
+        path: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+        method: req.method as Analytics.Method,
+      }).send();
 
       return wrap
     };

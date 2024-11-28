@@ -23,10 +23,11 @@ func connectToMongo() (*mongo.Client, error) {
 	return client, nil
 }
 
-func GetMongoConnection() *mongo.Client {
+func GetMongoCollection() *mongo.Collection {
 	client, err := connectToMongo()
 	if err != nil {
 		log.Fatal("Failed to connect to MongoDB:", err)
 	}
-	return client
+
+	return client.Database("testdb").Collection("logs")
 }

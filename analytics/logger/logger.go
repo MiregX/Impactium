@@ -2,9 +2,12 @@ package logger
 
 import (
 	"analytics/controller"
-	"analytics/exceptions"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -14,8 +17,8 @@ import (
 )
 
 type Log struct {
+	Timestamp int64       `json:"timestamp" validate:"required"`
 	Status    int         `json:"status" validate:"required"`
-	Timestamp int         `json:"timestamp" validate:"required"`
 	Took      int         `json:"took"`
 	Path      string      `json:"path" validate:"required"`
 	Req_id    string      `json:"req_id" validate:"required"`
@@ -24,51 +27,112 @@ type Log struct {
 	Data      interface{} `json:"data"`
 }
 
-func create(context *gin.Context) (*Log, error) {
-	var log Log
-
-	if err := context.ShouldBindJSON(&log); err != nil {
-		exceptions.InternalServerError(context)
-		return &log, err
-	}
-
-	validate := validator.New()
-	if err := validate.Struct(log); err != nil {
-		exceptions.BadRequest(context)
-		return nil, err
-	}
-
-	return &log, nil
+type SelectOptions struct {
+	Skip  int64
+	Limit int64
 }
 
-func Insert(context *gin.Context, log *Log) (*mongo.InsertOneResult, error) {
-	client := controller.GetMongoConnection()
+func (s *SelectOptions) FromContext(c *gin.Context) {
+	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
+	if err != nil {
+		skip = 0
+	}
 
-	collection := client.Database("testdb").Collection("logs")
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if err != nil {
+		limit = 10
+	}
 
-	if log == nil {
-		var err error
-		if log, err = create(context); err != nil {
-			return nil, err
+	s.Skip = int64(skip)
+	s.Limit = int64(limit)
+}
+
+func validate(log Log) (bool, error) {
+	validate := validator.New()
+	err := validate.Struct(log)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func parse(context *gin.Context) []Log {
+	var logs []Log
+
+	body, err := io.ReadAll(context.Request.Body)
+	if err != nil {
+		return logs
+	}
+
+	if err := json.Unmarshal(body, &logs); err != nil {
+		var log Log
+		if err := json.Unmarshal(body, &log); err != nil {
+			return logs
+		}
+		logs = append(logs, log)
+	}
+
+	return logs
+}
+
+func create(context *gin.Context) (*[]Log, error) {
+	logs := parse(context)
+
+	var invalidLogs []string
+	var validLogs []Log
+	for _, log := range logs {
+		valid, err := validate(log)
+		if valid {
+			validLogs = append(validLogs, log)
+		} else {
+			invalidLogs = append(invalidLogs, err.Error())
 		}
 	}
 
-	result, err := collection.InsertOne(context, log)
+	return &validLogs, fmt.Errorf("received invalid logs: %s", strings.Join(invalidLogs, ", "))
+}
+
+func Insert(context *gin.Context) (*[]Log, error) {
+	collection := controller.GetMongoCollection()
+
+	logs, err := create(context)
+	if logs == nil {
+		return nil, err
+	}
+
+	var data []interface{}
+	for _, log := range *logs {
+		data = append(data, log)
+	}
+
+	_, err = collection.InsertMany(context, data)
 	if err != nil {
-		fmt.Println("Error inserting document:", err)
-		return Insert(context, log)
+		fmt.Println("Error inserting documents:", err)
+		return Insert(context)
+	}
+	return logs, err
+}
+
+func Do(log Log) (*mongo.InsertOneResult, error) {
+	collection := controller.GetMongoCollection()
+
+	result, err := collection.InsertOne(context.TODO(), log)
+	if err != nil {
+		fmt.Printf("error doing log %s", err.Error())
 	}
 	return result, nil
 }
 
-func Find() ([]Log, error) {
-	client := controller.GetMongoConnection()
+func Find(so SelectOptions) ([]Log, error) {
+	collection := controller.GetMongoCollection()
 
-	collection := client.Database("testdb").Collection("logs")
-
-	var result []Log
+	var logs []Log
 	filter := bson.M{}
-	options := options.Find().SetProjection(bson.M{"data": 0})
+	options := options.Find().
+		SetProjection(bson.M{"data": 0}).
+		SetSort(bson.M{"timestamp": -1}).
+		SetSkip(so.Skip).
+		SetLimit(so.Skip)
 
 	cursor, err := collection.Find(context.TODO(), filter, options)
 	if err != nil {
@@ -81,20 +145,18 @@ func Find() ([]Log, error) {
 		if err := cursor.Decode(&log); err != nil {
 			return nil, fmt.Errorf("failed to decode log: %w", err)
 		}
-		result = append(result, log)
+		logs = append(logs, log)
 	}
 
 	if err := cursor.Err(); err != nil {
 		return nil, fmt.Errorf("cursor iteration error: %w", err)
 	}
 
-	return result, nil
+	return logs, nil
 }
 
 func FindByReqId(req_id string) (*Log, error) {
-	client := controller.GetMongoConnection()
-
-	collection := client.Database("testdb").Collection("logs")
+	collection := controller.GetMongoCollection()
 
 	var result Log
 	filter := bson.M{"req_id": req_id}

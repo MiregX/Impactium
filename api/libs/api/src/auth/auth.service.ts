@@ -61,7 +61,7 @@ export class AuthService {
 
   signJWT = (payload: Payload): Token => `Bearer ${this.jwt.sign(payload, { secret: process.env.JWT_SECRET, expiresIn: '7d' })}`;
 
-  decodeJWT = (token: Token): Payload => this.jwt.decode(token.startsWith('Bearer ') ? token.substring(7) : token) || λthrow(ForbiddenException);
+  decodeJWT = (token: Token): Payload => this.jwt.decode(token && token.startsWith('Bearer ') ? token.substring(7) : token) || λthrow(ForbiddenException);
   
   private getCacheFolder(uuid: UUID) {
     return `${dataset.connections}:${uuid}`

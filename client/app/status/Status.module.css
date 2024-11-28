@@ -5,8 +5,8 @@
 
 .wrapper {
   background: var(--soft-black);
-  width: 60vw;
-  max-width: 512px;
+  width: 80vw;
+  max-width: 720px;
   padding: 16px;
   display: flex;
   border-radius: var(--border-m);
@@ -19,26 +19,12 @@
   font-family: var(--font-mono);
   color: currentColor;
   font-weight: 400;
-}
-.status {
-  display: grid;
-  place-content: center;
-  height: 16px;
-  border-radius: 4px;
-  font-weight: 400;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--gray-800);
-  line-height: 16px;
-  flex: none;
-  border: 1px solid var(--gray-400);
-  padding: 0 4px;
+  white-space: nowrap;
 }
 .service svg {
   flex-shrink: 0;
 }
 .path {
-  max-width: 172px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -51,10 +37,6 @@
 .service.error {
   background: var(--red-100);
   color: var(--red-900)
-}
-.status.error {
-  border-color: var(--red-400);
-  color: var(--red-800)
 }
 .description * {
   color: var(--text-dimmed);
