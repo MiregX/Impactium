@@ -13,7 +13,7 @@ export function Status({ value, color }: Status.Props) {
   const borderColor = new DesignSystem.Color(color).minus(4).valueOf();
 
   return (
-    <span className={cn(s.status, )} style={{ borderColor, color: color.valueOf() }}>
+    <span className={s.status} style={{ borderColor, color: color.valueOf() }}>
       {value}
     </span>
   )

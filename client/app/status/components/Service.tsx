@@ -15,7 +15,6 @@ export namespace Service {
   export interface Props {
     log: Analytics.Log
   }
-  
 }
 
 export function Service({ log }: Service.Props) {
@@ -30,11 +29,7 @@ export function Service({ log }: Service.Props) {
     iconsProps.width = '28';
   }
 
-  const parseFullUrlToPath = (path: string) => {
-    console.log(path);
-
-    return path.split('/').slice(3).join('/');
-  }
+  const parseFullUrlToPath = (path: string) => path.split('/').slice(3).join('/');
   
   const parseFullUrlToDomain = (path: string) => {
     return path.split('/').slice(2, 3).join('/').split(':')[0];
@@ -72,21 +67,21 @@ export function Service({ log }: Service.Props) {
   const Method = useCallback(() => <Status color={new DesignSystem.Color(logEntity.isFatal() ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
   
   return (
-    <Skeleton show={false} width='full' height='unset'>
-      <Stack flex={0} className={cn(s.service, logEntity.isFatal() && s.error)}>
+    <Stack noShrink flex={0} gap={12} className={cn(s.service, logEntity.isFatal() && s.error)}>
+      <Stack>
         <Status color={new DesignSystem.Color(getStatusColor(log.status))} value={log.status} />
         <p className={s.domain}>{parseFullUrlToDomain(log.path)}</p>
-        <Stack style={{ minWidth: 144 }}>
-          <Method />
-          <p>{format(log.timestamp, 'HH:mm:SS') + `.${new Date(log.timestamp).getMilliseconds()}`}</p>
-        </Stack>
-        <Stack style={{ minWidth: 72 }}>
-          <Icon name={getIconNameByPath()} color={logEntity.isFatal() ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
-          <TimeTook value={log.took} />
-        </Stack>
-        <p className={s.path}>/{parseFullUrlToPath(log.path)}</p>
+      </Stack>
+      <Stack style={{ minWidth: 156 }} jc='space-between'>
+        <Method />
+        <p>{format(log.timestamp, 'HH:mm:SS') + `.${new Date(log.timestamp).getMilliseconds()}`}</p>
+      </Stack>
+      <Stack style={{ minWidth: 108 }}>
+        <Icon name={getIconNameByPath()} color={logEntity.isFatal() ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
+        <TimeTook value={log.took} />
+      </Stack>
+      <p className={s.path}>/{parseFullUrlToPath(log.path)}</p>
     </Stack>
-    </Skeleton>
   )
 }
 

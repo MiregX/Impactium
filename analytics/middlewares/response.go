@@ -4,6 +4,7 @@ import (
 	"analytics/logger"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -45,18 +46,35 @@ func ResponseWrapper() gin.HandlerFunc {
 			"data":      responseData,
 		}
 
-		go logger.Do(logger.Log{
-			Req_id:    response["req_id"].(string),
-			Timestamp: timestamp,
-			Data:      nil,
-			Took:      1,
-			Method:    c.Request.Method,
-			Status:    status,
-			Path:      c.Request.Proto + "://" + c.Request.Host + c.Request.URL.Path + c.Request.URL.RawQuery,
-		})
+		now := time.Now().UnixMilli()
+
+		protocol := "http"
+		if c.Request.TLS != nil {
+			protocol = "https"
+		}
+
+		path := fmt.Sprintf("%s://%s%s",
+			protocol,
+			c.Request.Host,
+			c.Request.RequestURI,
+		)
 
 		c.Writer = rbw.ResponseWriter
 		c.Header("Content-Type", "application/json")
 		c.JSON(rbw.Status(), response)
+
+		if logger.IsIgnored(c) {
+			return
+		}
+
+		go logger.Do(logger.Log{
+			Req_id:    response["req_id"].(string),
+			Timestamp: timestamp,
+			Data:      nil,
+			Took:      now - timestamp,
+			Method:    c.Request.Method,
+			Status:    status,
+			Path:      path,
+		})
 	}
 }

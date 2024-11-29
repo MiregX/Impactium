@@ -7,6 +7,7 @@ export interface StackProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   jc?: React.CSSProperties['justifyContent'];
   ai?: React.CSSProperties['alignItems'];
   flex?: React.CSSProperties['flex'] | boolean;
+  noShrink?: boolean;
 }
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
@@ -18,6 +19,7 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     style,
     jc: justifyContent = 'normal',
     ai: alignItems = 'center',
+    noShrink,
     ...props
   }, ref) => {
     return (
@@ -30,6 +32,7 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
         justifyContent,
         alignItems,
         position,
+        flexShrink: noShrink ? 0 : 1
       }} ref={ref} {...props} />
     )
   }

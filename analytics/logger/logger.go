@@ -19,7 +19,7 @@ import (
 type Log struct {
 	Timestamp int64       `json:"timestamp" validate:"required"`
 	Status    int         `json:"status" validate:"required"`
-	Took      int         `json:"took"`
+	Took      int64       `json:"took"`
 	Path      string      `json:"path" validate:"required"`
 	Req_id    string      `json:"req_id" validate:"required"`
 	Method    string      `json:"method" validate:"required"`
@@ -132,7 +132,7 @@ func Find(so SelectOptions) ([]Log, error) {
 		SetProjection(bson.M{"data": 0}).
 		SetSort(bson.M{"timestamp": -1}).
 		SetSkip(so.Skip).
-		SetLimit(so.Skip)
+		SetLimit(so.Limit)
 
 	cursor, err := collection.Find(context.TODO(), filter, options)
 	if err != nil {

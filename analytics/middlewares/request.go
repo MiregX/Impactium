@@ -16,7 +16,7 @@ func RequestMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("req_id", reqID)
-		c.Set("timestamp", time.Now().Unix())
+		c.Set("timestamp", time.Now().UnixMilli())
 		c.Next()
 	}
 }
