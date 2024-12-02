@@ -26,6 +26,8 @@ func InsertHandler(context *gin.Context) {
 }
 
 func FindHandler(context *gin.Context) {
+	Ignore(context)
+
 	settings := SelectOptions{}
 	settings.FromContext(context)
 

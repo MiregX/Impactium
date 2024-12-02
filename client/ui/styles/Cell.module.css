@@ -1,0 +1,9 @@
+.cell {
+  position: absolute;
+  height: var(--cell-size);
+  width: var(--cell-size);
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  border: 1px solid;
+}

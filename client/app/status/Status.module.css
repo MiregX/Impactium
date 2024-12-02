@@ -8,17 +8,17 @@
   max-width: var(--width-limit);
   padding: 16px;
   display: flex;
-  border-radius: var(--border-m);
-  border: 1px solid var(--gray-alpha-400);
+  border: 1px solid var(--gray-400);
   background-clip: padding-box;
   flex: 1;
 }
 .content {
-  max-height: 60vh;
+  max-height: 50vh;
   min-width: 512px;
   overflow: auto;
   width: 100%;
   padding-right: 8px;
+  border-radius: var(--border-m);
   mask-image: linear-gradient(0deg,transparent 0,#000 40%);
 }
 .service p {

@@ -126,7 +126,7 @@ func Do(log Log) (*mongo.InsertOneResult, error) {
 func Find(so SelectOptions) ([]Log, error) {
 	collection := controller.GetMongoCollection()
 
-	var logs []Log
+	var logs []Log = []Log{}
 	filter := bson.M{}
 	options := options.Find().
 		SetProjection(bson.M{"data": 0}).
