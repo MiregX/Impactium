@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import s from './styles/Skeleton.module.css'
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -68,7 +68,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(({
         ...style,
         height: height as ChadNumber,
         width: width as ChadNumber,
-        ['--delay' as string]: (typeof delay === 'undefined' || typeof delay === 'number' || delay === true) && `-${Math.random() * Math.abs(Number(delay || 1))}s`
+        ['--delay' as string]: (typeof delay === 'undefined' || typeof delay === 'number' || delay === true) && `-${useMemo(() => Math.random() * Math.abs(Number(delay || 1)), [])}s`
       }}
       
       className={skeletonVariants({

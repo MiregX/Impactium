@@ -44,13 +44,11 @@ func (s *SelectOptions) FromContext(c *gin.Context) {
 		limit = 10
 	}
 
-	filterStr := "{status: >400} || ({status: >300 && <400} && {timestamp: >=1633036800})"
-	parsedFilter := ParseFilter(filterStr)
-	fmt.Printf("Parsed Filter: %+v\n", parsedFilter)
+	filter := c.Query("body")
 
 	s.Skip = int64(skip)
 	s.Limit = int64(limit)
-	s.Filter = parsedFilter
+	s.Filter = ParseFilter(filter)
 }
 
 func validate(log Log) (bool, error) {

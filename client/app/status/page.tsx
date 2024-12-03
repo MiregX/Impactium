@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 export default function StatusPage() {
   const [logs, setLogs] = useState<Analytics.Logs>([])
   const [requested, setRequested] = useState(0);
-  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState<boolean>(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState<boolean>(true);
 
   const increaseRequested = () => setRequested(requested => requested + 10);
 
@@ -40,12 +40,14 @@ export default function StatusPage() {
     <PanelTemplate className={s.panel} useColumn>
       <Stack gap={12} className={s.wrapper} dir='column' pos='relative'>
         <Cell top right background={color} />
-        <Cell right bottom background={color} />
+        <Cell right bottom background={color}>
+          <Button img='PlayCircle' variant='ghost' onClick={() => setIsAnalyticsOpen(v => !v)} />
+        </Cell>
         <Cell top left background={color} />
         <Cell bottom left background={color}>
           <Button img='ChartPie' variant='ghost' onClick={() => setIsAnalyticsOpen(v => !v)} />
         </Cell>
-        <Graph className={cn(isAnalyticsOpen && s.graphOpen)} />
+        <Graph aria-open={isAnalyticsOpen} />
         <Stack gap={16} style={{ width: '100%' }}>
           <Button variant='outline' img='SettingsSliders' />
           <Input img='Search' placeholder='2.7M logs total found...' />
