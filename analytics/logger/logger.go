@@ -28,8 +28,9 @@ type Log struct {
 }
 
 type SelectOptions struct {
-	Skip  int64
-	Limit int64
+	Skip   int64
+	Limit  int64
+	Filter bson.M
 }
 
 func (s *SelectOptions) FromContext(c *gin.Context) {
@@ -43,8 +44,13 @@ func (s *SelectOptions) FromContext(c *gin.Context) {
 		limit = 10
 	}
 
+	filterStr := "{status: >400} || ({status: >300 && <400} && {timestamp: >=1633036800})"
+	parsedFilter := ParseFilter(filterStr)
+	fmt.Printf("Parsed Filter: %+v\n", parsedFilter)
+
 	s.Skip = int64(skip)
 	s.Limit = int64(limit)
+	s.Filter = parsedFilter
 }
 
 func validate(log Log) (bool, error) {
@@ -127,14 +133,13 @@ func Find(so SelectOptions) ([]Log, error) {
 	collection := controller.GetMongoCollection()
 
 	var logs []Log = []Log{}
-	filter := bson.M{}
 	options := options.Find().
 		SetProjection(bson.M{"data": 0}).
 		SetSort(bson.M{"timestamp": -1}).
 		SetSkip(so.Skip).
 		SetLimit(so.Limit)
 
-	cursor, err := collection.Find(context.TODO(), filter, options)
+	cursor, err := collection.Find(context.TODO(), so.Filter, options)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute find query: %w", err)
 	}

@@ -7,3 +7,11 @@
   display: flex;
   border: 1px solid;
 }
+.cell > * {
+  height: 100%;
+  width: 100%;
+}
+.cell svg {
+  height: 24px;
+  width: 24px;
+}

@@ -9,10 +9,14 @@ import { Input } from "@/ui/Input";
 import { Analytics } from '@impactium/analytics';
 import { Skeleton } from "@/ui/Skeleton";
 import { Cell } from '@/ui/Cell';
+import { DesignSystem } from "@impactium/utils";
+import { Graph } from "./components/Graph";
+import { cn } from "@/lib/utils";
 
 export default function StatusPage() {
   const [logs, setLogs] = useState<Analytics.Logs>([])
   const [requested, setRequested] = useState(0);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState<boolean>(false);
 
   const increaseRequested = () => setRequested(requested => requested + 10);
 
@@ -30,13 +34,18 @@ export default function StatusPage() {
     }
   }, [requested]);
 
+  const color = new DesignSystem.Color('soft-black');
+
   return (
     <PanelTemplate className={s.panel} useColumn>
       <Stack gap={12} className={s.wrapper} dir='column' pos='relative'>
-        <Cell top right />
-        <Cell right bottom />
-        <Cell bottom left />
-        <Cell left top />
+        <Cell top right background={color} />
+        <Cell right bottom background={color} />
+        <Cell top left background={color} />
+        <Cell bottom left background={color}>
+          <Button img='ChartPie' variant='ghost' onClick={() => setIsAnalyticsOpen(v => !v)} />
+        </Cell>
+        <Graph className={cn(isAnalyticsOpen && s.graphOpen)} />
         <Stack gap={16} style={{ width: '100%' }}>
           <Button variant='outline' img='SettingsSliders' />
           <Input img='Search' placeholder='2.7M logs total found...' />

@@ -1,0 +1,4 @@
+.graph {
+  position: absolute;
+  border: var(--cell-border);
+}

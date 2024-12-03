@@ -13,12 +13,11 @@
   flex: 1;
 }
 .content {
-  max-height: 50vh;
+  height: 50vh;
   min-width: 512px;
   overflow: auto;
   width: 100%;
   padding-right: 8px;
-  border-radius: var(--border-m);
   mask-image: linear-gradient(0deg,transparent 0,#000 40%);
 }
 .service p {
@@ -38,7 +37,6 @@
   width: 172px;
 }
 .service {
-  min-height: 18px;
   width: 100%;
   flex-shrink: 0;
   padding: 6px;

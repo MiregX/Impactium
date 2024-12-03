@@ -10,6 +10,7 @@ export namespace Cell {
   export interface Props extends DivProps {
     size?: ChadNumber;
     accent?: DesignSystem.Color;
+    background?: DesignSystem.Color;
     top?: boolean;
     right?: boolean;
     bottom?: boolean;
@@ -21,7 +22,7 @@ export namespace Cell {
   }
 }
 
-export function Cell({ className, size, accent = new DesignSystem.Color('gray-400'), ...props }: Cell.Props) {
+export function Cell({ className, size, accent = new DesignSystem.Color('gray-400'), background, ...props }: Cell.Props) {
   const basic = 88;
 
   const style = {
@@ -32,6 +33,7 @@ export function Cell({ className, size, accent = new DesignSystem.Color('gray-40
     right: props.right ? -(size ?? basic) : void 0,
     bottom: props.bottom ? -(size ?? basic) : void 0,
     left: props.left ? -(size ?? basic) : void 0,
+    background: background?.toString()
   }
 
   return (
