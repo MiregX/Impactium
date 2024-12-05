@@ -1,17 +1,18 @@
 'use client'
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
-import { cn } from '@/lib/utils'
+import { cn } from '@impactium/utils'
 import { Icon } from '@impactium/icons'
 import { HTMLAttributes } from 'react'
-import { DesignSystem, Utils } from '@impactium/utils'
 import { capitalize } from 'lodash'
+import { Color } from '@impactium/design'
 
 interface _CustomBadge {
   title?: string,
   icon?: Icon.Name,
   revert?: boolean,
-  color?: DesignSystem.Color | string;
+  // @ts-ignore
+  color?: Color | string;
   dot?: boolean
 }
 
@@ -112,59 +113,59 @@ export function Badge({ className, ...options }: BadgeProps) {
       color: '#c0c0c0'
     },
     [BadgeType.Common]: {
-      color: DesignSystem.Color.toVar('common'),
+      color: Color.toVar('common'),
       title: 'Common'
     },
     [BadgeType.Uncommon]: {
-      color: DesignSystem.Color.toVar('uncommon'),
+      color: Color.toVar('uncommon'),
       title: 'Uncommon'
     },
     [BadgeType.Rare]: {
-      color: DesignSystem.Color.toVar('rare'),
+      color: Color.toVar('rare'),
       title: 'Rare'
     },
     [BadgeType.Epic]: {
-      color: DesignSystem.Color.toVar('epic'),
+      color: Color.toVar('epic'),
       title: 'Epic'
     },
     [BadgeType.Legendary]: {
-      color: DesignSystem.Color.toVar('legendary'),
+      color: Color.toVar('legendary'),
       title: 'Legendary'
     },
     [BadgeType.Ancient]: {
-      color: DesignSystem.Color.toVar('ancient'),
+      color: Color.toVar('ancient'),
       title: 'Ancient'
     },
     [BadgeType.Divine]: {
-      color: DesignSystem.Color.toVar('divine'),
+      color: Color.toVar('divine'),
       title: 'Divine'
     },
     [BadgeType.frontend]: {
       title: 'Frontend',
       icon: 'Monitor',
-      color: new DesignSystem.Color('green-600')
+      color: new Color('green-600')
     },
     [BadgeType.backend]: {
       title: capitalize(BadgeType.backend),
       icon: 'AcronymApi',
-      color: new DesignSystem.Color('blue-600'),
+      color: new Color('blue-600'),
     },
     [BadgeType.database]: {
       icon: 'Database',
       title: capitalize(BadgeType.database),
-      color: new DesignSystem.Color('red-600'),
+      color: new Color('red-600'),
     },
     [BadgeType.middleware]: {
       icon: 'FunctionMiddleware',
       title: capitalize(BadgeType.middleware),
-      color: new DesignSystem.Color('amber-600'),
+      color: new Color('amber-600'),
     }
   };
 
   const { title, icon, revert, color, dot } = 'type' in options && !!map[options.type] ? map[options.type] : options as _CustomBadge;
 
   return (
-    <div className={cn(s.badge, icon && s.icon, className, revert && s.revert)} style={{background: color instanceof DesignSystem.Color ? color.minus(5).valueOf() : color + '30', color: color?.toString()}}>
+    <div className={cn(s.badge, icon && s.icon, className, revert && s.revert)} style={{background: color instanceof Color ? color.minus(5).valueOf() : color + '30', color: color?.toString()}}>
       {icon && <Icon size={16} color={color?.valueOf()} name={icon} />}
       {dot && <span style={{background: color?.valueOf()}} />}
       {options.title || title}

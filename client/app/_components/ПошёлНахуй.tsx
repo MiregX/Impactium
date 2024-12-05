@@ -1,8 +1,8 @@
 'use client'
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import s from './styles/ПошёлНахуй.module.css';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import { ManageTournamentBanner } from '@/banners/ManageTournament.banner';
 import { useApplication } from '@/context/Application.context';;
 import { ManageTeamBanner } from '@/banners/ManageTeam.banner';

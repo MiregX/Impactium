@@ -12,6 +12,6 @@
   },
   "aliases": {
     "components": "@/ui/..",
-    "utils": "@/lib/utils"
+    "utils": "@impactium/utils"
   }
 }

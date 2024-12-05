@@ -4,7 +4,7 @@ import { useLanguage } from '@/context/Language.context';
 import { Tournament } from '@/dto/Tournament';
 import { useState, useEffect } from 'react';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 
 export function DeleteTournaments() {
   const { lang } = useLanguage();

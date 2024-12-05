@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -8,75 +9,73 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func ParseFilter(filter string) bson.M {
+func ParseFilter(filter string) (bson.M, error) {
 	filter = strings.TrimSpace(filter)
 
 	if strings.Contains(filter, "||") {
-		orFilters := strings.Split(filter, "||")
-		orConditions := bson.A{}
-
-		for _, f := range orFilters {
-			f = strings.TrimSpace(f)
-			parsedFilter := ParseFilter(f) // Рекурсивный вызов
-			if parsedFilter != nil {
-				orConditions = append(orConditions, parsedFilter)
-			}
-		}
-
-		return bson.M{"$or": orConditions}
+		return parseLogicalFilter(filter, "||", "$or")
 	}
 
 	if strings.Contains(filter, "&&") {
-		andFilters := strings.Split(filter, "&&")
-		andConditions := bson.A{}
-
-		for _, f := range andFilters {
-			f = strings.TrimSpace(f)
-			parsedFilter := ParseFilter(f)
-			if parsedFilter != nil {
-				andConditions = append(andConditions, parsedFilter)
-			}
-		}
-
-		return bson.M{"$and": andConditions}
+		return parseLogicalFilter(filter, "&&", "$and")
 	}
 
 	return parseCondition(filter)
 }
 
-func parseCondition(condition string) bson.M {
-	condition = strings.Trim(condition, "{}")
+func parseLogicalFilter(filter, separator, mongoOp string) (bson.M, error) {
+	parts := strings.Split(filter, separator)
+	conditions := bson.A{}
 
+	for _, part := range parts {
+		parsed, err := ParseFilter(strings.TrimSpace(part))
+		if err != nil {
+			return nil, err
+		}
+		conditions = append(conditions, parsed)
+	}
+
+	return bson.M{mongoOp: conditions}, nil
+}
+
+func parseCondition(condition string) (bson.M, error) {
 	re := regexp.MustCompile(`^(\w+):\s*([><=]{1,2})\s*([^\s]+)$`)
-	matches := re.FindStringSubmatch(condition)
+	matches := re.FindStringSubmatch(strings.Trim(condition, "{}"))
+
 	if len(matches) != 4 {
-		return nil
+		return nil, errors.New("invalid filter condition: " + condition)
 	}
 
-	field := matches[1]
-	operator := matches[2]
-	value := matches[3]
+	field, operator, value := matches[1], matches[2], matches[3]
+	parsedValue := parseValue(value)
+	mongoOperator, err := convertOperator(operator)
+	if err != nil {
+		return nil, err
+	}
 
-	var parsedValue interface{}
+	return bson.M{field: bson.M{mongoOperator: parsedValue}}, nil
+}
+
+func parseValue(value string) interface{} {
 	if intValue, err := strconv.Atoi(value); err == nil {
-		parsedValue = intValue
-	} else {
-		parsedValue = value
+		return intValue
 	}
+	return value
+}
 
-	var mongoOperator string
-	switch operator {
+func convertOperator(op string) (string, error) {
+	switch op {
 	case ">":
-		mongoOperator = "$gt"
+		return "$gt", nil
 	case ">=":
-		mongoOperator = "$gte"
+		return "$gte", nil
 	case "<":
-		mongoOperator = "$lt"
+		return "$lt", nil
 	case "<=":
-		mongoOperator = "$lte"
+		return "$lte", nil
+	case "=":
+		return "$eq", nil
 	default:
-		mongoOperator = "$eq"
+		return "", errors.New("invalid operator: " + op)
 	}
-
-	return bson.M{field: bson.M{mongoOperator: parsedValue}}
 }

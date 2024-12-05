@@ -1,0 +1,30 @@
+{
+  "name": "@impactium/utils",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "tsc && npm publish --access public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "geist",
+    "vercel",
+    "impactium",
+    "utils",
+    "capitalize",
+    "cn"
+  ],
+  "author": "Mireg",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@impactium/types": "^1.0.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5"
+  }
+}

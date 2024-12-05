@@ -1,7 +1,7 @@
 import React from "react"
 import s from './styles/Input.module.css' 
 import { cva, type VariantProps } from "class-variance-authority"; 
-import { cn } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 import { Icon } from "@impactium/icons";
 
 const inputVariants = cva(s.button, {

@@ -1,7 +1,7 @@
 import { Switch } from "@/ui/Switch";
 import { SwitchProps } from "@radix-ui/react-switch";
 import s from './styles/_.module.css';
-import { cn } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 
 interface ChooserProps extends SwitchProps {
   values: [string, string];

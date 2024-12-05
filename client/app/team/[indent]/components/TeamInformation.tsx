@@ -3,16 +3,16 @@ import s from '../Team.module.css';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import { useTeam } from '../team.context';
 import { Separator } from '@/ui/Separator';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { useUser } from '@/context/User.context';
 import { useMemo, useState } from 'react';
-import { isUserAreTeamOwner, isUserAreTeamMember, isUserCanJoinTeam } from '@/lib/utils';
 import { useApplication } from '@/context/Application.context';
 import { Joinable } from '@/dto/Joinable.dto';
 import { TeamInvitesBanner } from '@/banners/qrcode/TeamInvites.banner';
 import { TeamInviteBanner } from '@/banners/qrcode/TeamInvite.banner';
 import { TeamInvite } from '@/dto/TeamInvite.dto';
 import { UserCombination } from '@/components/UserCombination';
+import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam } from '@/lib/utils';
 
 export function TeamInformation() {
   const { spawnBanner } = useApplication();

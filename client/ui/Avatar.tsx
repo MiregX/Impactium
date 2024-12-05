@@ -1,15 +1,17 @@
 import Image from 'next/image';
 import s from './styles/Avatar.module.css';
 import { HTMLAttributes, useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
-type AvatarProps = HTMLAttributes<HTMLDivElement> & {
-  size: number | `${number}`
-  src: string | null | undefined;
-  alt: string
+export namespace Avatar {
+  export interface Props extends HTMLAttributes<HTMLDivElement> {
+    size: number | `${number}`
+    src: string | null | undefined;
+    alt: string
+  }
 }
 
-export function Avatar({ size, src, alt, className, style, ...props }: AvatarProps) {
+export function Avatar({ size, src, alt, className, style, ...props }: Avatar.Props) {
   size = parseInt(`${size}`) - 2;
   const [err, setErr] = useState<boolean>(!src);
 

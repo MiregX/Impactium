@@ -4,7 +4,6 @@ import '@/decorator/useOptionStyling';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/context/Language.context';
 import { Children } from '@/types';
-import { Application } from '@impactium/types';
 import { toast } from 'sonner';
 import { io, Socket } from 'socket.io-client';
 import { _server } from '@/decorator/api';
@@ -23,18 +22,18 @@ interface ApplicationContextProps {
   spawnBanner: (banner: React.ReactNode) => void,
   destroyBanner: () => void,
   socket: Socket,
-  application: Application,
-  setApplication: (application: Application) => void,
+  application: any,
+  setApplication: (application: any) => void,
   blueprints: Blueprint[]
 }
 
 interface ApplicationProviderProps extends Children {
-  application: Application;
+  application: any;
   blueprints: Blueprint[];
 }
 
 export const ApplicationProvider = ({ children, application: λapplication, blueprints: λblueprints }: Children & ApplicationProviderProps) => {
-  const [application, setApplication] = useState<Application>(λapplication);
+  const [application, setApplication] = useState<any>(λapplication || {});
   const [blueprints, setBlueprints] = useState<Blueprint[]>(λblueprints);
   const { lang } = useLanguage();
   const [banner, setBanner] = useState<React.ReactNode>(null);
@@ -48,9 +47,9 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
   }, []);
 
   useEffect(() => {
-    socket?.on(λWebSocket.updateApplicationInfo, a => setApplication(application => Object.assign(application, a)));
+    socket?.on(λWebSocket.updateApplicationInfo, a => setApplication((application: any) => Object.assign(application, a)));
     socket?.on(λWebSocket.blueprints, setBlueprints);
-    socket?.on(λWebSocket.history, history => setApplication(application => Object.assign({
+    socket?.on(λWebSocket.history, history => setApplication((application: object) => Object.assign({
         ...application,
         history
       })
@@ -132,7 +131,7 @@ export const ApplicationProvider = ({ children, application: λapplication, blue
       {banner}
       <Console
         onCommand={onCommand}
-        history={application.history}
+        history={application?.history || []}
         title='Impactium'
         trigger='λ'
         icon='https://cdn.impactium.fun/logo/impactium.svg'

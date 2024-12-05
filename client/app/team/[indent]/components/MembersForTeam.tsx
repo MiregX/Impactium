@@ -4,19 +4,20 @@ import { useTeam } from "../team.context";
 import s from '../Team.module.css';
 import React, { useState } from "react";
 import { MainRole, Role, RoleIcons, SecondaryRole, SortRoles } from "@/dto/Role";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { useUser } from "@/context/User.context";
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger } from "@/ui/Select";
 import { Icon } from "@impactium/icons";
 import { Card } from "@/ui/Card";
 import { TeamMember } from "@/dto/TeamMember";
-import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam, SetState } from "@/lib/utils";
+import { type SetState } from "@impactium/types";
 import { useApplication } from "@/context/Application.context";
 import { Separator } from "@/ui/Separator";
 import { Team } from "@/dto/Team.dto";
 import { ManageTeamBanner } from "@/banners/ManageTeam.banner";
 import { UserCombination } from "@/components/UserCombination";
-import { Utils } from "@impactium/utils";
+import { isUserAreTeamMember, isUserAreTeamOwner, isUserCanJoinTeam } from "@/lib/utils";
+import { capitalize } from "@impactium/utils";
 
 export function MembersForTeam() {
   const { user } = useUser();
@@ -74,7 +75,7 @@ export function MembersForTeam() {
             <UserCombination user={member.user} />
             {(isUserAreTeamOwner(user, team) || user?.uid === member.uid) ? <Select open={isSelectOpenArray[index]} onOpenChange={(isOpen) => handleSelectOpenChange(index, isOpen)} value={member.role || undefined} defaultValue={member.role || undefined}>
               <SelectTrigger className={s.trigger}>
-                <Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? Utils.capitalize(member.role) : 'Нет роли'}</i>
+                <Icon name={member.role ? RoleIcons[member.role] : 'Boxes'} /><i>{member.role ? capitalize(member.role) : 'Нет роли'}</i>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup className={s.cluster}>
@@ -89,11 +90,11 @@ export function MembersForTeam() {
                     Вторичные роли
                   </SelectLabel>
                   {SecondaryRole.filter(role => team.members?.every(member => member.role !== role)).map(role => <Button key={role} onClick={() => setMemberRole(member.uid, role, () => handleSelectOpenChange(index, false))} img={RoleIcons[role]} variant={team.members?.some(m => m.role === role) ? 'disabled' : 'ghost'}>{role}</Button>)}
-                  <Button variant='ghost' onClick={() => setMemberRole(member.uid, null, () => handleSelectOpenChange(index, false))} img='BoxSelect'>Без роли</Button>
+                  <Button variant='ghost' onClick={() => setMemberRole(member.uid, null, () => handleSelectOpenChange(index, false))} img='Boxes'>Без роли</Button>
                   {(isUserAreTeamOwner(user, team)) && <Button variant='destructive' onClick={() => kickMember(member.uid)} img='UserX'>Исключить</Button>}
                 </SelectGroup>
               </SelectContent>
-            </Select> : <span className={s.role}><Icon name={member.role ? RoleIcons[member.role] : 'BoxSelect'} /><i>{member.role ? Utils.capitalize(member.role) : 'Нет роли'}</i></span>}
+            </Select> : <span className={s.role}><Icon name={member.role ? RoleIcons[member.role] : 'Boxes'} /><i>{member.role ? capitalize(member.role) : 'Нет роли'}</i></span>}
           </div>
         ))}
       </Card>

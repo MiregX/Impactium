@@ -1,4 +1,4 @@
-import { cn, SetState } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 import s from "../Inventory.module.css";
 import { Checkbox } from "@/ui/Checkbox";
 import { Card } from "@/ui/Card";
@@ -8,8 +8,9 @@ import { Rare, Category } from "@/dto/Blueprint.dto";
 import { Separator } from "@/ui/Separator";
 import { ItemFilter, λItem } from "@/dto/Item.dto";
 import { useApplication } from "@/context/Application.context";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { useInventory } from "../inventory.context";
+import { SetState } from "@impactium/types";
 
 interface FilterOptionsProps {
   filter: ItemFilter;

@@ -1,3 +1,4 @@
+import { MaybeArray } from "@impactium/types";
 import { Utils } from "@impactium/utils";
 
 export namespace Analytics {
@@ -47,21 +48,14 @@ export namespace Analytics {
     }
   }
 
-  export function send(logs: LogEntity | LogEntity[]) {
-    if (!Array.isArray(logs)) {
-      logs = Array(logs)
-    }
-
+  export function send(logs: MaybeArray<LogEntity>) {
     try {
       fetch('http://localhost:3002/api/v2/log', {
         method: 'POST',
         body: JSON.stringify(logs)
       })
     } catch (err) {
-      console.error("Failed to send analytics package, retry in 3 seconds...");
-      setTimeout(() => {
-        send(logs);
-      }, 3000);
+      console.error("Failed to send analytics package");
     }
   }
 }

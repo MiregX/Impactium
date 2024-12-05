@@ -1,5 +1,5 @@
 'use client'
-import { cn } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 import { Item, λItem } from "@/dto/Item.dto";
 import { useLanguage } from "@/context/Language.context";
 import { useApplication } from "@/context/Application.context";

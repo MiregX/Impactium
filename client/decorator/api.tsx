@@ -1,10 +1,10 @@
-import { Api, RequestOptions } from "@/dto/api.dto";
+import { Api } from "@/dto/api.dto";
 import { λ } from "./λ.class";
 import { ResponseBase } from "@/dto/Response.dto";
 import { Configuration } from "@impactium/config";
-import { parseApiOptions, soft } from "@/lib/utils";
+import { parseApiOptions, soft } from '@/lib/utils';
 import { useToast } from "@/ui/Toaster";
-import { Utils } from "@impactium/utils";
+import { toArray } from "@impactium/utils";
 
 export function _server(v?: boolean, v2?: boolean) {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
@@ -43,7 +43,7 @@ const api: Api = async function <T>(_path: string, arg2?: any, arg3?: any): Prom
   if (isSuccess && typeof options.toast === 'string') {
     useToast('', {}, options.toast)
   } else if (options.toast) {
-    Utils.array(res.data?.message).map(m => useToast(m, {}, options.toast))
+    toArray(res.data?.message).map(m => useToast(m, {}, options.toast))
   }
 
   if (isSuccess && callback) {

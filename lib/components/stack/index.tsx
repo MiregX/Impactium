@@ -6,6 +6,7 @@ export interface StackProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   pos?: React.CSSProperties['position'];
   jc?: React.CSSProperties['justifyContent'];
   ai?: React.CSSProperties['alignItems'];
+  ac?: React.CSSProperties['alignContent'];
   flex?: React.CSSProperties['flex'] | boolean;
   noShrink?: boolean;
 }

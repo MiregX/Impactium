@@ -6,7 +6,6 @@ import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
 import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
-import { type Application } from '@impactium/types';
 import { SocketGateway } from '../socket/socket.gateway';
 import { Token } from '../auth/addon/auth.entity';
 import { Blueprint } from '@prisma/client';
@@ -26,7 +25,7 @@ export class ApplicationService implements OnModuleInit {
     private readonly authService: AuthService,
   ) {}
 
-  async info(username?: UserEntity['username']): Promise<Application> {
+  async info(username?: UserEntity['username']): Promise<any> {
     const info = await this._getInfo()
       .catch(async _ => {
         return await this._reloadInfo();
@@ -57,13 +56,13 @@ export class ApplicationService implements OnModuleInit {
 
   private _getInfo = () => this.redisService.get(dataset.info).then(data => data ? JSON.parse(data) : Promise.reject());
 
-  private async _reloadInfo(data?: Application) {
+  private async _reloadInfo(data?: any) {
     const info = data || await this._generateInfo()
     await this.redisService.setex(dataset.info, 600, JSON.stringify(info));
     return info;
   } 
 
-  private async _generateInfo(): Promise<Application> {
+  private async _generateInfo(): Promise<any> {
     const [users_count, teams_count, tournaments_count, isSafeMode, globalPhrase] = await Promise.all([
       await this.prisma.user.count(),
       await this.prisma.team.count(),
@@ -84,7 +83,7 @@ export class ApplicationService implements OnModuleInit {
       isSafeMode: parseInt(isSafeMode || '1'),
       history: [],
       globalPhrase
-    } as Application
+    } as any
   }
 
   async status(): Promise<StatusEntity[]> {
@@ -92,9 +91,9 @@ export class ApplicationService implements OnModuleInit {
       .then(data => data ? JSON.parse(data) : []);
   }
 
-  async sync(application: Application) {
-    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, application);
-    return application;
+  async sync(any: any) {
+    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, any);
+    return any;
   }
 
   async getBlueprints(): Promise<Blueprint[]> {

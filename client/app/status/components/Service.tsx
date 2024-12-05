@@ -1,10 +1,9 @@
 import { Icon } from '@impactium/icons';
 import s from '../Status.module.css';
-import { Stack } from '@/ui/Stack';
-import { Skeleton } from '@/ui/Skeleton';
-import { DesignSystem, Utils } from '@impactium/utils';
+import { Stack } from '@impactium/components';
+import { Color } from '@impactium/design';
 import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { between, cn } from '@impactium/utils';
 import { Status } from '@/ui/Status';
 import { Analytics } from '@impactium/analytics';
 import { useCallback } from 'react';
@@ -37,11 +36,11 @@ export function Service({ log }: Service.Props) {
 
   const getStatusColor = (value: number) => {
     switch (true) {
-      case Utils.between(value, 200, 299):
+      case between(value, 200, 299):
         return 'green-800';
-      case Utils.between(value, 300, 399):
+      case between(value, 300, 399):
         return 'blue-800';
-      case Utils.between(value, 400, 499):
+      case between(value, 400, 499):
         return 'amber-800';
       default:
         return 'red-800';
@@ -64,12 +63,12 @@ export function Service({ log }: Service.Props) {
     }
   }
   
-  const Method = useCallback(() => <Status color={new DesignSystem.Color(logEntity.isFatal() ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
+  const Method = useCallback(() => <Status color={new Color(logEntity.isFatal() ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
   
   return (
     <Stack noShrink flex={0} gap={12} className={cn(s.service, logEntity.isFatal() && s.error)}>
       <Stack>
-        <Status color={new DesignSystem.Color(getStatusColor(log.status))} value={log.status} />
+        <Status color={new Color(getStatusColor(log.status))} value={log.status} />
         <p className={s.domain}>{parseFullUrlToDomain(log.path)}</p>
       </Stack>
       <Stack style={{ minWidth: 156 }} jc='space-between'>
@@ -77,7 +76,7 @@ export function Service({ log }: Service.Props) {
         <p>{format(log.timestamp, 'HH:mm:SS') + `.${new Date(log.timestamp).getMilliseconds()}`}</p>
       </Stack>
       <Stack style={{ minWidth: 108 }}>
-        <Icon name={getIconNameByPath()} color={logEntity.isFatal() ? 'currentColor' : DesignSystem.Color.toVar('text-dimmed').toString()} />
+        <Icon name={getIconNameByPath()} color={logEntity.isFatal() ? 'currentColor' : Color.toVar('text-dimmed').toString()} />
         <TimeTook value={log.took} />
       </Stack>
       <p className={s.path}>/{parseFullUrlToPath(log.path)}</p>

@@ -7,7 +7,7 @@ import { User, UserEntity } from '@/dto/User.dto';
 import { ChangeEvent, useState } from 'react';
 import { useUser } from '@/context/User.context';
 import { Input } from '@/ui/Input';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { useRouter } from 'next/navigation';
 
 export function Impersonate() {

@@ -7,16 +7,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/ui/Select';
 import { ChangeEvent, useEffect, useState } from 'react';
 import s from './Manager.module.css';
 import { Separator } from '@/ui/Separator';
-import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
 import { Combination } from '@/ui/Combitation';
 import { DisplayName, Identifier } from '@impactium/pattern';
 import { useLanguage } from '@/context/Language.context';
 import { toast } from 'sonner';
-import { SetState } from '@/lib/utils';
+import { SetState } from '@impactium/types';
 import { useApplication } from '@/context/Application.context';
 import { useUser } from '@/context/User.context';
 import { useRouter } from 'next/navigation';
+import { Button } from '@impactium/components';
 
 interface ManageTeamBannerProps {
   team?: Team;

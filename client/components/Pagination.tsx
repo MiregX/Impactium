@@ -1,8 +1,8 @@
 'use client'
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import s from './styles/Pagination.module.css';
 import { HTMLAttributes } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 type PaginationComponentProps = HTMLAttributes<HTMLDivElement> & {
   page: number;

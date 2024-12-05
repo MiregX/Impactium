@@ -10,7 +10,6 @@ import { ApplicationService } from '../application/application.service';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Configuration } from '@impactium/config';
 import { λLogger, λParam, λWebSocket } from '@impactium/pattern';
-import { WebSocketEmitDefinitions, WebSocketOnDefinitions } from '@impactium/types';
 import { AuthService } from '../auth/auth.service';
 import { Logger } from '../application/addon/logger.service';
 import { UserService } from '../user/user.service';
@@ -35,11 +34,11 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     
   ) {}
 
-  @WebSocketServer() server!: Server<WebSocketOnDefinitions, WebSocketEmitDefinitions>;
+  @WebSocketServer() server!: Server;
 
   afterInit(server: Server) {}
 
-  async handleConnection(client: Socket<WebSocketOnDefinitions, WebSocketEmitDefinitions>) {
+  async handleConnection(client: Socket) {
     client.on(λWebSocket.updateApplicationInfo, async () => {
     const application = await this.applicationService.info()
       client.emit(λWebSocket.updateApplicationInfo, application);
@@ -59,7 +58,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   }: {
     token: Token | undefined,
     command: λParam.Command
-  }, client: Socket<WebSocketOnDefinitions, WebSocketEmitDefinitions>) {
+  }, client: Socket) {
     let user = token ? this.authService.login(token) : null;
 
     const err = () => {

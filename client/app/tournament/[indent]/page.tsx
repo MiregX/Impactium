@@ -8,7 +8,6 @@ import { Card } from '@/ui/Card';
 import { Grid } from './components/Grid';
 import { TournamentInformation } from './components/TournamentInformation';
 import { Badge, BadgeType } from '@/ui/Badge';
-import { Utils } from '@impactium/utils';
 import { λTournament } from '@/dto/Tournament';
 import { capitalize } from 'lodash';
 

@@ -4,7 +4,7 @@ import { Iteration, Prisma, Role, Tournament } from "@prisma/client";
 import { IterationEntity } from "./iteration.entity";
 import { BattleEntity } from "./battle.entity";
 import { PowerOfTwo, λIteration, λParam } from "@impactium/pattern";
-import { Arrayed, λthrow } from "@impactium/utils";
+import { MaybeArray } from "@impactium/types";
 
 export class TournamentEntity implements Tournament {
   code!: λParam.Code;
@@ -68,7 +68,7 @@ export class TournamentEntity implements Tournament {
     },
   });
 
-  public static normalize = <T extends Arrayed<Tournament> | null>(tournaments: T) => (Array.isArray(tournaments)
+  public static normalize = <T extends MaybeArray<Tournament> | null>(tournaments: T) => (Array.isArray(tournaments)
     ? tournaments as TournamentEntity[]
     : tournaments) as T extends Tournament[]
       ? TournamentEntity[]

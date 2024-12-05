@@ -13,12 +13,12 @@ import { Tournament, λTournament } from '@/dto/Tournament';
 import { Combination } from '@/ui/Combitation';
 import { Separator } from '@/ui/Separator';
 import { DisplayName, Identifier, PowerOfTwo, λError, λIteration, λIterations, Grid } from '@impactium/pattern';
-import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from '@/ui/Tabs';
 import { Icon } from '@impactium/icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/ui/Tooltip';
 import { Card } from '@/ui/Card';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
+import { cn } from '@impactium/utils';
 import { toast } from 'sonner';
 import { Calendar } from '@/ui/Calendar';
 

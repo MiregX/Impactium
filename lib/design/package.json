@@ -1,0 +1,16 @@
+{
+  "name": "@impactium/design",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && npm run copy",
+    "copy": "copyfiles **/*.css dist",
+    "deploy": "npm publish --access public"
+  },
+  "author": "Mireg",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  }
+}

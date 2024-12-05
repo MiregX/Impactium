@@ -2,14 +2,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { useUser } from '@/context/User.context';
 import { UserComponent } from './User';
 import { useLanguage } from '@/context/Language.context';
 import { LoginBanner } from '@/banners/login/Login.banner';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 export function   Header() {
   const { user } = useUser();
@@ -20,7 +20,7 @@ export function   Header() {
 
   useEffect(() => {
     setItem(application.globalPhrase ? <p className={s.globalPhrase}>{application.globalPhrase}</p> : null)
-  }, [application, application.globalPhrase]);
+  }, [application]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && typeof hidden === 'object') {

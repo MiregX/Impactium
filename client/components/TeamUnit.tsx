@@ -1,7 +1,7 @@
 import s from './styles/_.module.css'
 import { Team } from '@/dto/Team.dto'
 import { Card } from '@/ui/Card'
-import { Button } from '@/ui/Button'
+import { Button } from '@impactium/components'
 import Link from 'next/link'
 import { Icon } from '@impactium/icons';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation'

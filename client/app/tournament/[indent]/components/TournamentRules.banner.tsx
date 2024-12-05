@@ -1,6 +1,6 @@
 import { Tournament } from "@/dto/Tournament";
 import { Banner } from "@/ui/Banner";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 
 interface TournamentRulesProps {
   tournament: Tournament;

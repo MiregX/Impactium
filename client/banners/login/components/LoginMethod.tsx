@@ -4,8 +4,8 @@ import { _server } from '@/decorator/api'
 import Link from 'next/link';
 import { Badge, BadgeType } from '@/ui/Badge';
 import { LoginMethod as LoginMethods } from '@/types';
-import { cn } from '@/lib/utils';
-import { Button } from '@/ui/Button';
+import { cn } from '@impactium/utils';
+import { Button } from '@impactium/components';
 import Image from 'next/image';
 import { Utils } from '@impactium/utils';
 

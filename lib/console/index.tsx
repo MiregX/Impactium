@@ -1,7 +1,6 @@
 import { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import s from './Console.module.css';
-import { twMerge } from 'tailwind-merge'
-import { type ClassValue, clsx } from 'clsx'
+import { cn } from '@impactium/utils';
 
 export namespace Console {
   export type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'fatal';
@@ -45,10 +44,6 @@ export namespace Console {
   export interface NoiseProps extends HTMLAttributes<SVGSVGElement> {
     enable?: boolean;
   }
-}
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
 }
 
 export function Console({ className, noise, onCommand, title = 'Command Shell', icon, defaultCommand, prefix, history, defaultOpen, children, trigger = '/', ...props }: Console.Props) {

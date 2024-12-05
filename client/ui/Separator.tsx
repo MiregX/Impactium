@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import s from './styles/Separator.module.css';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 type SeparatorPrimitive = React.ElementRef<typeof SeparatorPrimitive.Root>;
 type ComponentPropsWithoutRef = React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>

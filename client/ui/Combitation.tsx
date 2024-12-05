@@ -1,4 +1,4 @@
-import { Skeleton } from '@/ui/Skeleton';
+import { Skeleton } from '@impactium/components';
 import { Avatar } from './Avatar'
 import s from './styles/Combination.module.css'
 import { cva, VariantProps } from 'class-variance-authority';

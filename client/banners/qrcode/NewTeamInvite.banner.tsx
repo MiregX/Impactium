@@ -2,9 +2,9 @@
 import { useApplication } from "@/context/Application.context";
 import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
-import { SetState } from "@/lib/utils";
+import { SetState } from "@impactium/utils";
 import { Banner } from "@/ui/Banner";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { ChangeEvent, useState } from "react";
 import { TeamInviteBanner } from "./TeamInvite.banner";
 import { Input } from "@/ui/Input";

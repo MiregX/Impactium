@@ -3,7 +3,7 @@ import { useLanguage } from '@/context/Language.context';
 import _language from './Language.module.css';
 import { Banner } from '@/ui/Banner';
 import Cookies from 'universal-cookie';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { Badge, BadgeType } from '@/ui/Badge';
 import Image from 'next/image'
 import Link from 'next/link';

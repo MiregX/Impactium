@@ -1,9 +1,9 @@
 'use client'
 import banner from './styles/Banner.module.css';
-import React, { HTMLAttributes, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useApplication } from '@/context/Application.context';
-import { cn } from '@/lib/utils';
-import { Button } from './Button';
+import { Button } from '@impactium/components';
+import { cn } from '@impactium/utils';
 
 export enum WarnerTypes {
   note,

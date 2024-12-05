@@ -2,8 +2,8 @@ import React from 'react'
 import { CaptionLabel, DayPicker } from 'react-day-picker'
 import s from './styles/Calendar.module.css';
 
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/ui/Button'
+import { cn } from '@impactium/utils'
+import { buttonVariants } from '@impactium/components'
 import { Icon } from '@impactium/icons'
 import { ChevronLeft } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';

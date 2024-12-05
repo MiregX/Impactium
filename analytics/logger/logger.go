@@ -33,7 +33,7 @@ type SelectOptions struct {
 	Filter bson.M
 }
 
-func (s *SelectOptions) FromContext(c *gin.Context) {
+func (s *SelectOptions) FromContext(c *gin.Context) error {
 	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
 	if err != nil {
 		skip = 0
@@ -44,11 +44,19 @@ func (s *SelectOptions) FromContext(c *gin.Context) {
 		limit = 10
 	}
 
-	filter := c.Query("body")
+	var filter bson.M
+	raw := c.DefaultQuery("filter", "")
+	if raw != "" {
+		filter, err = ParseFilter(raw)
+		if err != nil {
+			return err
+		}
+	}
 
 	s.Skip = int64(skip)
 	s.Limit = int64(limit)
-	s.Filter = ParseFilter(filter)
+	s.Filter = filter
+	return nil
 }
 
 func validate(log Log) (bool, error) {

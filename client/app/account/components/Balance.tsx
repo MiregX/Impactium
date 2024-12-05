@@ -3,10 +3,10 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { UserRequiredContext, useUser } from "@/context/User.context";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { _server } from "@/decorator/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 
 export function Balance() {
   const { lang } = useLanguage();

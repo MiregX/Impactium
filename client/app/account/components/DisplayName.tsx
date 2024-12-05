@@ -3,7 +3,7 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css'
 import { UserRequiredContext, useUser } from "@/context/User.context";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
 import { User } from "@/dto/User.dto";

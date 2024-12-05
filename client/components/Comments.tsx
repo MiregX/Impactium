@@ -7,7 +7,7 @@ import { useUser } from '@/context/User.context';
 import { UserEntity } from '@/dto/User.dto';
 import { Avatar } from '../ui/Avatar';
 import { HTMLAttributes } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 interface CommentsProps extends HTMLAttributes<HTMLDivElement> {
   comments: Comment[]

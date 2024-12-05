@@ -1,9 +1,9 @@
 import { Banner } from "@/ui/Banner";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { Separator } from "@/ui/Separator";
 import QRCodeGenerator from 'react-qr-code';
 import s from './TeamInvites.module.css';
-import { cn, SetState, λcopy } from "@/lib/utils";
+import { cn, SetState, λcopy } from "@impactium/utils";
 import { useLanguage } from "@/context/Language.context";
 import React, { useState } from "react";
 import { useApplication } from "@/context/Application.context";

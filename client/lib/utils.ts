@@ -6,14 +6,8 @@ import { User } from "@/dto/User.dto";
 import locale, { Template } from "@/public/locale";
 import { λCookie } from "@impactium/pattern";
 import { Callback } from "@impactium/types";
-import { type ClassValue, clsx } from "clsx"
 import { toast } from "sonner";
-import { twMerge } from "tailwind-merge"
 import Cookies from "universal-cookie";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 type unresolwedArgument<T> = RequestInit & RequestOptions & { raw?: boolean} | Callback<T> | undefined;
 

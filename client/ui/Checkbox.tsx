@@ -2,7 +2,7 @@
 import React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import s from './styles/Checkbox.module.css';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons';
 
 const Checkbox = React.forwardRef<

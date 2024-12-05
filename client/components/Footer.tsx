@@ -2,7 +2,7 @@
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { Icon } from '@impactium/icons';
 
 export function Footer() {
@@ -13,7 +13,7 @@ export function Footer() {
       <div className={s.left}>
         <img src='https://cdn.impactium.fun/logo/impactium_thin.svg' alt='' />
         <p>© {new Date(Date.now()).getFullYear()}</p>
-        <Link href='/status' className={s.status}>
+        <Link href='/status'>
           {lang.status.ok}
         </Link>
       </div>

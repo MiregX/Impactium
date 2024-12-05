@@ -1,5 +1,5 @@
 'use client'
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { Input } from "@/ui/Input";
 import { useEffect, useRef, useState } from "react";
 import s from '@/app/admin/Admin.module.css';
@@ -14,10 +14,9 @@ export default function BypassBanner() {
   const button_ref = useRef<HTMLButtonElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const submit = () => api<never>(`/user/admin/bypass?key=${passkey}`, {
-    raw: true,
+  const submit = () => api(`/user/admin/bypass?key=${passkey}`, {
     setLoading
-  }, refreshUser).then(r => r.isSuccess() && router.push('/admin'));
+  }, refreshUser).then(r => router.push('/admin'));
 
   const handler = (event: KeyboardEvent) => event.key === 'Enter' && submit();
 

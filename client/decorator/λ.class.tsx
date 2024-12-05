@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
 import { ResponseBase, ResponseError, ResponseSuccess } from "@/dto/Response.dto";
-import { Utils } from "@impactium/utils";
+import { between } from "@impactium/utils";
 
 export class λ<T extends ResponseBase<any>> {
   status: number;
@@ -19,10 +19,10 @@ export class λ<T extends ResponseBase<any>> {
   }
   
   isError(): this is ResponseError {
-    return Utils.between(this.status, 300, 500);
+    return between(this.status, 300, 500);
   }
 
   isSuccess(): this is λ<ResponseSuccess<T['data']>> {
-    return Utils.between(this.status, 200, 299);
+    return between(this.status, 200, 299);
   }
 }

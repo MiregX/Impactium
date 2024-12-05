@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
 import s from './styles/Cell.module.css';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import { ChadNumber } from './Skeleton';
 import { DesignSystem } from '@impactium/utils';
 

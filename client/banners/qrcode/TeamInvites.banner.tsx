@@ -2,9 +2,9 @@
 import { useApplication } from "@/context/Application.context";
 import { Team } from "@/dto/Team.dto";
 import { TeamInvite } from "@/dto/TeamInvite.dto";
-import { cn, SetState } from "@/lib/utils";
+import { cn, SetState } from "@impactium/utils";
 import { Banner } from "@/ui/Banner";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import s from './TeamInvites.module.css';
 import QRCodeGenerator from 'react-qr-code';
 import React from "react";

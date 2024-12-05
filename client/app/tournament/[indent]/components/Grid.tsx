@@ -3,11 +3,11 @@ import React, { useState, useEffect, useCallback, useRef, Fragment } from 'react
 import { Card } from '@/ui/Card';
 import s from '../Tournament.module.css';
 import { Separator } from '@/ui/Separator';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '@/ui/Select';
 import { useTournament } from '../context';
 import { useLanguage } from '@/context/Language.context';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { λTeam } from '@/dto/Team.dto';
 import { Battle, λBattle } from '@/dto/Battle.dto';
 import { TournamentReadyState, λTournament } from '@/dto/Tournament';

@@ -3,14 +3,14 @@ import { useLanguage } from "@/context/Language.context";
 import { Card } from "@/ui/Card";
 import s from '../Account.module.css';
 import { Login } from "@/dto/Login";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import { LoginBanner } from "@/banners/login/Login.banner";
 import { useApplication } from "@/context/Application.context";
 import { Avatar } from "@/ui/Avatar";
 import { UserRequiredContext, useUser } from "@/context/User.context";
 import { useEffect, useState } from "react";
 import { User, UserEntity } from "@/dto/User.dto";
-import { cn } from "@/lib/utils";
+import { cn } from "@impactium/utils";
 import { Icon } from "@impactium/icons";
 
 export function Connections() {

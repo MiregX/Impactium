@@ -8,7 +8,7 @@ import { Combination } from '@/ui/Combitation';
 import React, { useMemo } from 'react';
 import { Icon } from '@impactium/icons';
 import { useLanguage } from '@/context/Language.context';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { Separator } from '@/ui/Separator';
 import { useUser } from '@/context/User.context';
 import { λError } from '@impactium/pattern';

@@ -2,7 +2,7 @@
 import { ManageTournamentBanner } from "@/banners/ManageTournament.banner";
 import { useApplication } from "@/context/Application.context";
 import { useLanguage } from "@/context/Language.context";
-import { Button } from "@/ui/Button";
+import { Button } from "@impactium/components";
 import s from './styles/_.module.css';
 import { TeamOrTournamentProp } from "@/dto/TeamOrTournament.type";
 import { ManageTeamBanner } from "@/banners/ManageTeam.banner";

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import s from './styles/Skeleton.module.css'
+import s from './Skeleton.module.css'
 import { cva, VariantProps } from 'class-variance-authority';
 
 const { avatar, short, badge, button, long, low, high } = s;

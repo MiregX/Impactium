@@ -2,13 +2,13 @@
 import { Input } from '@/ui/Input'
 import s from './styles/SearchBar.module.css'
 import { useLanguage } from '@/context/Language.context'
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { useApplication } from '@/context/Application.context';
 import { ManageTournamentBanner } from '@/banners/ManageTournament.banner';
 import { Tournament } from '@/dto/Tournament';
 import { Team } from '@/dto/Team.dto';
 import { useApperand } from '@/decorator/useAperand';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import { TeamOrTournament } from '@/dto/TeamOrTournament.type';
 import { ManageTeamBanner } from '@/banners/ManageTeam.banner';
 

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import _ from './styles/Panel.module.css'
 
 interface Panel {

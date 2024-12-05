@@ -51,10 +51,10 @@
     },
     {
       "type": "node-terminal",
-      "name": "Build @impactium/icons",
+      "name": "Build LIBRARIES",
       "request": "launch",
-      "command": "npm run build",
-      "cwd": "${workspaceFolder}/lib/icons",
+      "command": "cd icons ;; npm run build ;; cd .. ;; cd components ;; npm run build ;; cd .. ;; cd design ;; npm run build ;; cd .. ;; cd types ;; npm run build ;; cd .. ;; cd utils ;; npm run build ;; cd .. ",
+      "cwd": "${workspaceFolder}/lib",
       "envFile": "${workspaceFolder}/.env"
     },
   ]

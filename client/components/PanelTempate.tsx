@@ -4,7 +4,7 @@ import s from '@/app/App.module.css';
 import { useLanguage } from '@/context/Language.context';
 import { authGuard } from '@/decorator/authGuard';
 import { Locale } from '@/public/locale';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 interface Panel {
   children: any;

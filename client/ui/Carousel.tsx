@@ -4,8 +4,8 @@ import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/ui/Button"
+import { cn } from "@impactium/utils"
+import { Button } from "@impactium/components"
 import s from './styles/Carousel.module.css'
 
 type CarouselApi = UseEmblaCarouselType[1]

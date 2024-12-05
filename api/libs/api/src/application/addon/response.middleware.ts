@@ -21,12 +21,16 @@ export class ResponseMiddleware implements NestMiddleware {
         data,
       };
 
-      new Analytics.LogEntity({
-        ...wrap,
-        took: wrap.timestamp - req['custom']?.initialized,
-        path: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-        method: req.method as Analytics.Method,
-      }).send();
+      try {
+        new Analytics.LogEntity({
+          ...wrap,
+          took: wrap.timestamp - req['custom']?.initialized,
+          path: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+          method: req.method as Analytics.Method,
+        }).send();  
+      } catch (error) {
+        
+      }
 
       return wrap
     };

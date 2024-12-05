@@ -1,7 +1,7 @@
 import { Team } from '@/dto/Team.dto';
 import { Combination, CombinationProps, CombinationSkeleton } from '@/ui/Combitation';
 import s from './styles/_.module.css';
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 
 interface TeamCombinationProps extends Omit<CombinationProps, 'id' | 'src' | 'name'> {
   team: Team | undefined | null;

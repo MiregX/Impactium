@@ -2,11 +2,9 @@ package logger
 
 import (
 	"analytics/exceptions"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func InsertHandler(context *gin.Context) {
@@ -31,13 +29,16 @@ func FindHandler(context *gin.Context) {
 	Ignore(context)
 
 	settings := SelectOptions{}
-	settings.FromContext(context)
-
-	fmt.Println("Parsed Filter:", bson.M(settings.Filter))
+	err := settings.FromContext(context)
+	if err != nil {
+		exceptions.BadRequest(context, err.Error())
+		return
+	}
 
 	logs, err := Find(settings)
 	if err != nil {
 		exceptions.InternalServerError(context)
+		return
 	}
 
 	context.JSON(http.StatusOK, logs)

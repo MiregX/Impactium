@@ -9,7 +9,7 @@ import { Configuration } from '@impactium/config';
 import { Input } from '@/ui/Input';
 import { useUser } from '@/context/User.context';
 import { ChangeEvent, Fragment, useEffect, useRef, useState } from 'react';
-import { Button } from '@/ui/Button';
+import { Button } from '@impactium/components';
 import { useApplication } from '@/context/Application.context';
 import { useRouter } from 'next/navigation';
 

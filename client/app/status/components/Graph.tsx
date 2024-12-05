@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@impactium/utils';
 import s from './styles/Graph.module.css';
 import { HTMLAttributes } from 'react';
 

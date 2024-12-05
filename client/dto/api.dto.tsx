@@ -1,7 +1,6 @@
 import { λ } from "@/decorator/λ.class";
 import { ResponseBase } from "./Response.dto";
-import { Callback } from '@impactium/types'
-import { SetState } from "@/lib/utils";
+import { type Callback, type SetState } from '@impactium/types'
 
 export interface RequestOptions {
   useNumericHost?: boolean;

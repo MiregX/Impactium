@@ -1,4 +1,3 @@
-import { convertISOstringToValue } from "@/lib/utils";
 import { Team, λTeam } from "./Team.dto";
 import { User } from "./User.dto";
 import { Iteration } from "./Iteration.dto";
@@ -71,11 +70,12 @@ export class λTournament {
 
   private static use = (use: Tournament | Iteration[]): Iteration[] => Array.isArray(use) ? use : (use.iterations || []);
 
-  public static state = (tournament: Tournament): TournamentReadyState => convertISOstringToValue(tournament.start) > Date.now()
+  public static state = (tournament: Tournament): TournamentReadyState => parseInt(tournament.start) > Date.now()
     ? TournamentReadyState.Upcoming
-    : (convertISOstringToValue(tournament.end) > Date.now()
+    // @ts-ignore
+    : tournament.end > Date.now()
       ? TournamentReadyState.Ongoing
-      : TournamentReadyState.Finished);
+      : TournamentReadyState.Finished;
 
   public static round(round: number, totalRounds: number) {
     if (round === 1) return 'Финал';
