@@ -166,6 +166,17 @@ func Find(so SelectOptions) ([]Log, error) {
 	return logs, nil
 }
 
+func Count(so SelectOptions) int64 {
+	collection := controller.GetMongoCollection()
+	count, err := collection.CountDocuments(context.TODO(), so.Filter)
+	if err != nil {
+		fmt.Printf("error in logger.Count func %s", err)
+		return 0
+	}
+
+	return count
+}
+
 func FindByReqId(req_id string) (*Log, error) {
 	collection := controller.GetMongoCollection()
 

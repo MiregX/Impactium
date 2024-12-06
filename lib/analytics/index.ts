@@ -1,5 +1,5 @@
 import { MaybeArray } from "@impactium/types";
-import { Utils } from "@impactium/utils";
+import { between } from "@impactium/utils";
 
 export namespace Analytics {
   export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'OPTIONS' | 'DELETE' | 'TRACE' | 'CONNECT' | 'HEAD'
@@ -44,7 +44,7 @@ export namespace Analytics {
     send = () => send(this);
 
     isFatal() {
-      return Utils.between(this.status, 500, 599)
+      return between(this.status, 500, 599)
     }
   }
 
@@ -56,6 +56,24 @@ export namespace Analytics {
       })
     } catch (err) {
       console.error("Failed to send analytics package");
+    }
+  }
+
+  export function Count(options: Record<string, string>): Promise<number> | number {
+    const params = new URLSearchParams(options);
+  
+    try {
+      const amount = fetch(`http://localhost:3002/api/v2/logs/count?${params}`, {
+        method: 'GET',
+      }).then(async res => {
+        const body = await res.json();
+
+        return body.data;
+      });
+
+      return amount;
+    } catch (err) {
+      return 0;
     }
   }
 }

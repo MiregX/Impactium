@@ -43,3 +43,14 @@ func FindHandler(context *gin.Context) {
 
 	context.JSON(http.StatusOK, logs)
 }
+
+func CountHandler(context *gin.Context) {
+	Ignore(context)
+
+	settings := SelectOptions{}
+	settings.FromContext(context)
+
+	count := Count(settings)
+
+	context.JSON(http.StatusOK, count)
+}

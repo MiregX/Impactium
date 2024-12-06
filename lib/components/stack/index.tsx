@@ -1,17 +1,19 @@
 import * as React from "react";
 
-export interface StackProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
-  gap?: React.CSSProperties['gap'];
-  dir?: React.CSSProperties['flexDirection'];
-  pos?: React.CSSProperties['position'];
-  jc?: React.CSSProperties['justifyContent'];
-  ai?: React.CSSProperties['alignItems'];
-  ac?: React.CSSProperties['alignContent'];
-  flex?: React.CSSProperties['flex'] | boolean;
-  noShrink?: boolean;
+export namespace Stack {
+  export interface Props extends React.ButtonHTMLAttributes<HTMLDivElement> {
+    gap?: React.CSSProperties['gap'];
+    dir?: React.CSSProperties['flexDirection'];
+    pos?: React.CSSProperties['position'];
+    jc?: React.CSSProperties['justifyContent'];
+    ai?: React.CSSProperties['alignItems'];
+    ac?: React.CSSProperties['alignContent'];
+    flex?: React.CSSProperties['flex'] | boolean;
+    noShrink?: boolean;
+  }
 }
 
-const Stack = React.forwardRef<HTMLDivElement, StackProps>(
+const Stack = React.forwardRef<HTMLDivElement, Stack.Props>(
   ({
     flex = 'inherit',
     gap = 8,

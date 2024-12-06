@@ -1,34 +1,79 @@
-import React, { HTMLAttributes } from 'react';
-import card from './styles/Card.module.css'
-import { cn } from '@impactium/utils';
+import * as React from "react"
+import s from './styles/card.module.css';
+import { cn } from "@impactium/utils"
 
-interface DescriptionOptions {
-  text: string;
-  button: JSX.Element
-}
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      s.card,
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
 
-export interface Card extends HTMLAttributes<HTMLDivElement> {
-  description?: string | DescriptionOptions;
-}
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(s.header, className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
 
-export function Card({ description, children, className, ...props }: Card) {
-  return (
-    <div className={cn(className, card._)} {...props}>
-      <div className={card.content}>
-        {children}
-      </div>
-      {description && (
-        <div className={card.description}>
-          {typeof description === 'string'
-            ? <p>{description}</p>
-            : (
-              <React.Fragment>
-                <p>{description.text}</p>
-                {description.button}
-              </React.Fragment>
-            )}
-        </div>
-      )}
-    </div>
-  )
-}
+const CardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      s.title,
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(s.description, className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn(s.content, className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(s.footer, s.content, className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

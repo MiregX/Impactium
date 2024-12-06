@@ -76,3 +76,9 @@
   text-overflow: ellipsis;
   flex-shrink: 0;
 }
+.graph {
+  padding: 16px;
+}
+.chart {
+  min-width: 200px;
+}

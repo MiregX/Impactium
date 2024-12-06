@@ -1,6 +1,6 @@
 'use client'
 import { PanelTemplate } from "@/components/PanelTempate";
-import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import React, { ChangeEvent, UIEventHandler, useEffect, useReducer, useState } from 'react';
 import s from './Status.module.css'
 import { Service } from "./components/Service";
 import { Input } from "@/ui/Input";
@@ -9,6 +9,13 @@ import { Skeleton, Button, Stack, Cell } from "@impactium/components";
 import { Graph } from "./components/Graph";
 import { cn } from "@impactium/utils";
 import { Color } from '@impactium/design';
+import { ChartConfig, ChartContainer } from "@/ui/chart";
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from "recharts";
+
+interface Unit {
+  path: string,
+  count: number
+}
 
 export default function StatusPage() {
   const [logs, setLogs] = useState<Analytics.Logs>([])
@@ -19,11 +26,15 @@ export default function StatusPage() {
   const filterRegexp = /^(\w+):\s*([><=]{1,2})\s*([^\s]+)$/;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const increaseRequested = () => setRequested(requested => requested + 10);
+
+  const [isGraphLoading, setIsGraphLoading] = useState<boolean>(false);
+  const [counts, setCounts] = useState<Unit[]>([]);
+
+  const increaseRequested = () => setRequested(requested => requested + 50);
 
   const insertLogs = (newLogs: Analytics.Logs = []) => setLogs(logs => [...logs, ...newLogs]);
 
-  const fetchLogs = () => api<Analytics.Logs>(`/v2/logs?skip=${requested}${filter ? `&filter=${filter}` : ''}`, {
+  const fetchLogs = () => api<Analytics.Logs>(`/v2/logs?limit=50&skip=${filter ? 0 : requested}${filter ? `&filter=${filter}` : ''}`, {
     setLoading
   }, insertLogs).then(data => {
     if (!data) {
@@ -58,6 +69,25 @@ export default function StatusPage() {
 
   const color = new Color('soft-black').toString();
 
+  const statusHoverHandler = async (path: string) => {
+    const amount = counts.find(c => c.path === path);
+
+    if (amount) return;
+
+    setIsGraphLoading(true);
+
+    const count = await Analytics.Count({ path });
+
+    setCounts(c => [...c, { path, count }]);
+    setIsGraphLoading(false);
+  }
+
+  const contentScrollHandler = (event: React.UIEvent<HTMLDivElement>) => {
+    if (Math.round(event.currentTarget.scrollTop) >= event.currentTarget.scrollHeight - event.currentTarget.clientHeight) {
+      increaseRequested();
+    }
+  }
+
   return (
     <PanelTemplate className={s.panel} useColumn>
       <Stack gap={12} className={cn(s.wrapper, isAnalyticsOpen && s.translate)} dir='column' pos='relative'>
@@ -69,7 +99,8 @@ export default function StatusPage() {
         <Cell bottom left background={color}>
           <Button img='ChartPie' variant='ghost' onClick={() => setIsAnalyticsOpen(v => !v)} />
         </Cell>
-        <Graph aria-open={isAnalyticsOpen} />
+        <Graph data-open={isAnalyticsOpen} className={s.graph} loading={isGraphLoading}>
+        </Graph>
         <Stack gap={16} style={{ width: '100%' }}>
           <Button variant='outline' img='SettingsSliders' />
           <Input valid={isFilterValid} value={filter} onChange={changeInputFilterHandler} img='Search' placeholder='2.7M logs total found...' />
@@ -81,8 +112,8 @@ export default function StatusPage() {
           <p>Response</p>
           <p>Message</p>
         </Stack>
-        <Stack dir='column' gap={0} className={s.content}>
-          {logs.map(log => <Service log={log} />)}
+        <Stack dir='column' gap={0} className={s.content} onScroll={contentScrollHandler}>
+          {logs.map(log => <Service onMouseEnter={() => statusHoverHandler(log.path)} log={log} />)}
           {Array.from({ length: requested - logs.length }).map((_, i) => <Skeleton width='full' style={{ flexShrink: 0 }} height={28} />)}
         </Stack>
       </Stack>

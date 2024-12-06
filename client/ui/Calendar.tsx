@@ -1,12 +1,9 @@
 import React from 'react'
-import { CaptionLabel, DayPicker } from 'react-day-picker'
+import { DayPicker } from 'react-day-picker'
 import s from './styles/Calendar.module.css';
-
+import { buttonVariants } from '@impactium/components';
 import { cn } from '@impactium/utils'
-import { buttonVariants } from '@impactium/components'
-import { Icon } from '@impactium/icons'
-import { ChevronLeft } from 'lucide-react';
-import { ChevronRight } from 'lucide-react';
+import { Icon } from '@impactium/icons';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
  
@@ -51,8 +48,8 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        PreviousMonthButton: ({ ...props }) => <ChevronLeft className={s.icon} />,
-        NextMonthButton: ({ ...props }) => <ChevronRight className={s.icon} />,
+        PreviousMonthButton: ({ ...props }) => <Icon className={s.icon} name='ChevronRight' />,
+        NextMonthButton: ({ ...props }) => <Icon className={s.icon} name='ChevronLeft' />,
       }}
       {...props}
     />

@@ -32,6 +32,8 @@ func main() {
 
 	λ.GET("/logs", logger.FindHandler)
 
+	λ.GET("/logs/count", logger.CountHandler)
+
 	λ.GET("/log/get/:req_id", func(context *gin.Context) {
 		req_id, found := context.Params.Get("req_id")
 		if !found {

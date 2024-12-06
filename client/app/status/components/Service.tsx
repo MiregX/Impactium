@@ -6,17 +6,17 @@ import { format } from 'date-fns';
 import { between, cn } from '@impactium/utils';
 import { Status } from '@/ui/Status';
 import { Analytics } from '@impactium/analytics';
-import { useCallback } from 'react';
+import { HTMLAttributes, useCallback } from 'react';
 
 export namespace Service {
   export type Name = 'Next.JS' | 'Nest.JS' | 'Go' | 'CockroachDB' | 'Redis' | 'CDN';
 
-  export interface Props {
+  export interface Props extends Stack.Props {
     log: Analytics.Log
   }
 }
 
-export function Service({ log }: Service.Props) {
+export function Service({ log, ...props }: Service.Props) {
   const logEntity = new Analytics.LogEntity(log);
 
   const iconsProps: Icon.Props = {
@@ -66,7 +66,7 @@ export function Service({ log }: Service.Props) {
   const Method = useCallback(() => <Status color={new Color(logEntity.isFatal() ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
   
   return (
-    <Stack noShrink flex={0} gap={12} className={cn(s.service, logEntity.isFatal() && s.error)}>
+    <Stack noShrink flex={0} gap={12} className={cn(s.service, logEntity.isFatal() && s.error)} {...props}>
       <Stack>
         <Status color={new Color(getStatusColor(log.status))} value={log.status} />
         <p className={s.domain}>{parseFullUrlToDomain(log.path)}</p>

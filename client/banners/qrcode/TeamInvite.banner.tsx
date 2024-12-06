@@ -3,7 +3,8 @@ import { Button } from "@impactium/components";
 import { Separator } from "@/ui/Separator";
 import QRCodeGenerator from 'react-qr-code';
 import s from './TeamInvites.module.css';
-import { cn, SetState, λcopy } from "@impactium/utils";
+import { cn } from "@impactium/utils";
+import { type SetState } from '@impactium/types';
 import { useLanguage } from "@/context/Language.context";
 import React, { useState } from "react";
 import { useApplication } from "@/context/Application.context";
@@ -12,6 +13,7 @@ import { TeamInvite } from "@/dto/TeamInvite.dto";
 import Countdown from "react-countdown";
 import { TeamInvitesBanner } from "./TeamInvites.banner";
 import { ManageTeamBanner } from "../ManageTeam.banner";
+import { λcopy } from "@/lib/utils";
 
 interface TeamInviteBannerProps {
   team: Team;

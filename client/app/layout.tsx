@@ -17,6 +17,8 @@ import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
 import { Children } from '@/types';
 import { Blueprint } from '@/dto/Blueprint.dto';
+import { Analytics } from '@impactium/analytics';
+import { randomUUID } from 'crypto';
 
 declare global {
   var api: Api;

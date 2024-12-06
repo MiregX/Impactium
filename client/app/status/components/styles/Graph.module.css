@@ -18,9 +18,19 @@
 .content {
   width: var(--graph-width);
   flex-shrink: 0;
+  display: flex;
 }
 
-.graph[aria-open = 'true'] {
+.graph[data-open = 'true'] {
   width: var(--graph-width);
   height: 100%;
+}
+.loading {
+  height: 100%;
+  width: 100%;
+  display: ;
+}
+.loading svg {
+  height: 32px !important;
+  width: 32px !important;
 }
