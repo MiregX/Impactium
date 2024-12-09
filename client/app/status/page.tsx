@@ -62,7 +62,9 @@ export default function StatusPage() {
   const changeInputFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
 
-    setIsFilterValid(filterRegexp.test(value));
+    if (value.length > 3) {
+      setIsFilterValid(filterRegexp.test(value));
+    }
 
     setFilter(value);
   }

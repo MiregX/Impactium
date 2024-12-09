@@ -19,7 +19,12 @@ export class UserService {
     private readonly applicationService: ApplicationService,
   ) {}
 
-  findById(uid: λParam.Id, options: UserSelectOptions = {}): Promise<UserEntity | null> {
+  findById(uid: λParam.Id, options: UserSelectOptions = {}): Promise<UserEntity | null> | null {
+    if (typeof uid !== 'string') {
+      Logger.error(`Recieved uid: ${uid} as \${${typeof uid}}`)
+      return null;
+    }
+
     return this.prisma.user.findUnique({
       where: { uid },
       ...UserEntity.select(options)

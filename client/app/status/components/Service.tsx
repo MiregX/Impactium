@@ -49,17 +49,17 @@ export function Service({ log, ...props }: Service.Props) {
 
   const getIconNameByPath = (): Icon.Name => {
     switch (true) {
-      case log.path.includes('/api/v2'):
+      case log.path.startsWith('/api/v2'):
         return 'FunctionGo'
         
-      case log.path.includes('/api'):
+      case log.path.startsWith('/api'):
         return 'FunctionNest'
         
       case log.path.startsWith('https://cdn'):
         return 'AcronymCdn'
 
       default:
-        return 'FunctionSquare'
+        return 'AcronymPage'
     }
   }
   
@@ -89,17 +89,18 @@ interface TimeTookProps {
 }
 
 function TimeTook({ value }: TimeTookProps) {
-  if (!value || value < 1) {
-    return <p>{'<1ms'}</p>
+  if (typeof value !== 'number') {
+    return <p>?</p>;
   }
 
-  const getSeconds = () => (value / 1000).toFixed(2) + 's';
-
-  const getMilliseconds = () => parseMilliseconds((value / 1000).toString().split('.')) + 'ms'
-
-  const parseMilliseconds = (value: string[]) => value[1].replaceAll('0', '');
-
-  return (
-    <p>{value / 1000 > 1 ? getSeconds() : getMilliseconds()}</p>
-  )
+  switch (true) {
+    case value < 1000:
+      return <p>{value}ns</p>;
+    case value < 1000000:
+      return <p>{(value / 1000).toFixed(2)}µs</p>;
+    case value < 1000000000:
+      return <p>{(value / 1000000).toFixed(2)}ms</p>;
+    default:
+      return <p>{(value / 1000000000).toFixed(2)}s</p>;
+  }
 }

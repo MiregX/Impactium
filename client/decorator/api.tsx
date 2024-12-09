@@ -6,12 +6,10 @@ import { parseApiOptions, soft } from '@/lib/utils';
 import { useToast } from "@/ui/Toaster";
 import { toArray } from "@impactium/utils";
 
-export function _server(v?: boolean, v2?: boolean) {
+export function _server(v?: boolean) {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
     ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
-    : v
-      ? v2 ? 'http://0.0.0.0:3002' : 'http://0.0.0.0:3001'
-      : v2 ? 'http://localhost:3002' : 'http://localhost:3001'
+    : "http://localhost"
 }
 
 const api: Api = async function <T>(_path: string, arg2?: any, arg3?: any): Promise<λ<ResponseBase<T>> | T> {

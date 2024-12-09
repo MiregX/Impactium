@@ -1,0 +1,13 @@
+{
+  "self": "/api/v2",
+  "routes": [
+    {
+      "prefix": "/api/",
+      "target": "http://localhost:3001"
+    },
+    {
+      "prefix": "/",
+      "target": "http://localhost:3000"
+    }
+  ]
+}

@@ -176,20 +176,3 @@ func Count(so SelectOptions) int64 {
 
 	return count
 }
-
-func FindByReqId(req_id string) (*Log, error) {
-	collection := controller.GetMongoCollection()
-
-	var result Log
-	filter := bson.M{"req_id": req_id}
-
-	err := collection.FindOne(context.TODO(), filter).Decode(&result)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, fmt.Errorf("no log found with req_id: %s", req_id)
-		}
-		return nil, fmt.Errorf("failed to find log: %w", err)
-	}
-
-	return &result, nil
-}
