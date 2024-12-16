@@ -5,20 +5,18 @@ import { Color } from '@impactium/design';
 import { format } from 'date-fns';
 import { between, cn } from '@impactium/utils';
 import { Status } from '@/ui/Status';
-import { Analytics } from '@impactium/analytics';
+import { Anapod } from '@impactium/anapod';
 import { HTMLAttributes, useCallback } from 'react';
 
 export namespace Service {
   export type Name = 'Next.JS' | 'Nest.JS' | 'Go' | 'CockroachDB' | 'Redis' | 'CDN';
 
   export interface Props extends Stack.Props {
-    log: Analytics.Log
+    log: Anapod.Log
   }
 }
 
 export function Service({ log, ...props }: Service.Props) {
-  const logEntity = new Analytics.LogEntity(log);
-
   const iconsProps: Icon.Props = {
     name: 'AcronymApi',
   }
@@ -64,28 +62,28 @@ export function Service({ log, ...props }: Service.Props) {
       case log.path.includes('/api'):
         return 'FunctionNest'
         
-      case log.path.includes('cdn.impactium'):
-        return 'AcronymCdn'
+      case log.path.includes('cdn.impactium') || log.path.includes('_next'):
+        return 'FunctionMiddleware'
 
       default:
         return 'AcronymPage'
     }
   }
   
-  const Method = useCallback(() => <Status color={new Color(logEntity.isFatal() ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
+  const Method = useCallback(() => <Status color={new Color(between(log.status, 500, 599) ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
   
   return (
-    <Stack noShrink flex={0} gap={12} className={cn(s.service, logEntity.isFatal() && s.error)} {...props}>
+    <Stack noShrink flex={0} gap={12} className={cn(s.service, between(log.status, 500, 599) && s.error)} {...props}>
       <Stack>
         <Status color={new Color(getStatusColor(log.status))} value={log.status} />
         <p className={s.domain}>{parseFullUrlToDomain(log.path)}</p>
       </Stack>
       <Stack style={{ minWidth: 156 }} jc='space-between'>
         <Method />
-        <p>{format(log.timestamp, 'HH:mm:SS') + `.${new Date(log.timestamp).getMilliseconds()}`}</p>
+        <Timestamp value={log.timestamp} />
       </Stack>
       <Stack style={{ minWidth: 108 }}>
-        <Icon name={getIconNameByPath()} color={logEntity.isFatal() ? 'currentColor' : Color.toVar('text-dimmed').toString()} />
+        <Icon name={getIconNameByPath()} color={between(log.status, 500, 599) ? 'currentColor' : Color.toVar('text-dimmed').toString()} />
         <TimeTook value={log.took} />
       </Stack>
       <p className={s.path}>/{parseFullUrlToPath(log.path)}</p>
@@ -94,7 +92,7 @@ export function Service({ log, ...props }: Service.Props) {
 }
 
 interface TimeTookProps {
-  value: Analytics.Log['took'];
+  value: Anapod.Log['took'];
 }
 
 function TimeTook({ value }: TimeTookProps) {
@@ -112,4 +110,27 @@ function TimeTook({ value }: TimeTookProps) {
     default:
       return <p>{(value / 1000000000).toFixed(2)}s</p>;
   }
+}
+
+function Timestamp({ value }: TimeTookProps) {
+  if (!value) {
+    return <p>N/A</p>
+  }
+
+  const parts: string[] = [];
+
+  const date = new Date(value);
+
+  // hours
+  parts.push(date.getHours().toString().padStart(2, '0'));
+  parts.push(':');
+  parts.push(date.getMinutes().toString().padStart(2, '0'));
+  parts.push(':');
+  parts.push(date.getSeconds().toString().padStart(2, '0'));
+  parts.push('.');
+  parts.push(date.getMilliseconds().toString().padStart(3, '0'));
+
+  return (
+    <p>{parts.join('')}</p>
+  )
 }
