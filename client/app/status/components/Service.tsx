@@ -26,6 +26,15 @@ export function Service({ log, ...props }: Service.Props) {
   if (iconsProps.name === 'AcronymPage') {
     iconsProps.viewBox = '0 0 28 16';
     iconsProps.width = '28';
+}
+
+  if (iconsProps.name === 'AcronymCdn') {
+    iconsProps.viewBox = '0 0 16 16';
+    iconsProps.style = {
+      ...iconsProps.style,
+      scale: 1.3,
+      width: 20
+    }
   }
 
   const parseFullUrlToPath = (path: string) => path.split('/').slice(3).join('/');
@@ -49,13 +58,13 @@ export function Service({ log, ...props }: Service.Props) {
 
   const getIconNameByPath = (): Icon.Name => {
     switch (true) {
-      case log.path.startsWith('/api/v2'):
+      case log.path.includes('/api/v2'):
         return 'FunctionGo'
         
-      case log.path.startsWith('/api'):
+      case log.path.includes('/api'):
         return 'FunctionNest'
         
-      case log.path.startsWith('https://cdn'):
+      case log.path.includes('cdn.impactium'):
         return 'AcronymCdn'
 
       default:

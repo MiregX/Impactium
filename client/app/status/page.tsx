@@ -1,6 +1,6 @@
 'use client'
 import { PanelTemplate } from "@/components/PanelTempate";
-import React, { ChangeEvent, UIEventHandler, useEffect, useReducer, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import s from './Status.module.css'
 import { Service } from "./components/Service";
 import { Input } from "@/ui/Input";
@@ -9,62 +9,62 @@ import { Skeleton, Button, Stack, Cell } from "@impactium/components";
 import { Graph } from "./components/Graph";
 import { cn } from "@impactium/utils";
 import { Color } from '@impactium/design';
-import { ChartConfig, ChartContainer } from "@/ui/chart";
-import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from "recharts";
+import { MaybeArray } from "@impactium/types";
+import { DetailedPathInformation } from "./components/DetailedPathInformation";
 
 interface Unit {
-  path: string,
   count: number
 }
 
 export default function StatusPage() {
   const [logs, setLogs] = useState<Analytics.Logs>([])
-  const [requested, setRequested] = useState(0);
-  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState<boolean>(true);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("");
-  const [isFilterValid, setIsFilterValid] = useState<boolean>(true);
-  const filterRegexp = /^(\w+):\s*([><=]{1,2})\s*([^\s]+)$/;
   const [loading, setLoading] = useState<boolean>(false);
-
-
   const [isGraphLoading, setIsGraphLoading] = useState<boolean>(false);
-  const [counts, setCounts] = useState<Unit[]>([]);
+  const [counts, setCounts] = useState<Map<string, Unit>>(new Map());
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [target, setTarget] = useState<string | null>(null);
 
-  const increaseRequested = () => setRequested(requested => requested + 50);
+  useEffect(() => {
+    Analytics.Initialize({
+      url: '/api/v2'
+    });
+  }, []);
+
+  const enterButtonKeyboardHandler = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') runQuery();
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', enterButtonKeyboardHandler);
+
+    return () => {
+      window.removeEventListener('keydown', enterButtonKeyboardHandler)
+    }
+  }, []);
 
   const insertLogs = (newLogs: Analytics.Logs = []) => setLogs(logs => [...logs, ...newLogs]);
 
-  const fetchLogs = () => api<Analytics.Logs>(`/v2/logs?limit=50&skip=${filter ? 0 : requested}${filter ? `&filter=${filter}` : ''}`, {
-    setLoading
-  }, insertLogs).then(data => {
-    if (!data) {
-      setIsFilterValid(false);
-    }
-  }) || [];
-
   useEffect(() => {
-    increaseRequested();
-  }, [])
-
-  useEffect(() => {
-    if (requested > 0) {
-      fetchLogs();
+    if (totalCount === 0) {
+      Analytics.Count()
     }
-  }, [requested]);
+  }, [totalCount]);
+
+  
+  useEffect(() => {
+    Analytics.Fetch().then(insertLogs);
+  }, []);
 
   const runQuery = () => {
     setLogs([]);
-    setRequested(0);
 
-    fetchLogs();
+    Analytics.Fetch().then(insertLogs);
   }
 
   const changeInputFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
-
-    if (value.length > 3) {
-      setIsFilterValid(filterRegexp.test(value));
-    }
 
     setFilter(value);
   }
@@ -72,23 +72,75 @@ export default function StatusPage() {
   const color = new Color('soft-black').toString();
 
   const statusHoverHandler = async (path: string) => {
-    const amount = counts.find(c => c.path === path);
+    const amount = counts.get(path);
 
     if (amount) return;
 
     setIsGraphLoading(true);
 
-    const count = await Analytics.Count({ path });
+    const count = await Analytics.Count(`path=${path.toWellFormed()}`);
 
-    setCounts(c => [...c, { path, count }]);
+    setTarget(path);
+    setCounts(c => {
+      c.set(path, { count });
+
+      return c
+    });
+
     setIsGraphLoading(false);
   }
 
   const contentScrollHandler = (event: React.UIEvent<HTMLDivElement>) => {
     if (Math.round(event.currentTarget.scrollTop) >= event.currentTarget.scrollHeight - event.currentTarget.clientHeight) {
-      increaseRequested();
+      Analytics.Fetch().then(insertLogs);
     }
   }
+
+  const [ws, setWs] = useState<WebSocket | null>(null);
+
+  const wsMessageHandler = (event: MessageEvent) => {
+    try {
+      let newLogs: MaybeArray<Analytics.Log> = JSON.parse(event.data);
+
+      if (!Array.isArray(newLogs)) {
+        newLogs = [newLogs];
+      }
+
+      setTotalCount(c => c + newLogs.length);
+
+      setLogs(prevLogs => {
+        const logsMap: Map<Analytics.RequestID, Analytics.Log> = new Map();
+
+        prevLogs.forEach(log => {
+          logsMap.set(log.req_id, log);
+        });
+  
+        newLogs.forEach(log => {
+          logsMap.set(log.req_id, log);
+        });
+
+        return Array.from(logsMap.values()).sort((a, b) => b.timestamp  - a.timestamp);
+      });
+    } catch (error) {
+      console.error("Failed to parse WebSocket message:", error);
+    }
+  };
+
+  useEffect(() => {
+    setWs(Analytics.WS());
+
+    return () => {
+      setWs(null);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!ws) return;
+
+    ws.addEventListener('open', () => ws.addEventListener('message', wsMessageHandler));
+
+    return () => ws.removeEventListener('message', wsMessageHandler);
+  }, [ws]);
 
   return (
     <PanelTemplate className={s.panel} useColumn>
@@ -102,10 +154,11 @@ export default function StatusPage() {
           <Button img='ChartPie' variant='ghost' onClick={() => setIsAnalyticsOpen(v => !v)} />
         </Cell>
         <Graph data-open={isAnalyticsOpen} className={s.graph} loading={isGraphLoading}>
+          {target ? <DetailedPathInformation data={counts.get(target)} /> : null}
         </Graph>
         <Stack gap={16} style={{ width: '100%' }}>
           <Button variant='outline' img='SettingsSliders' />
-          <Input valid={isFilterValid} value={filter} onChange={changeInputFilterHandler} img='Search' placeholder='2.7M logs total found...' />
+          <Input value={filter} onChange={changeInputFilterHandler} img='Search' placeholder={`${totalCount} logs total found...`} />
           <Button variant='outline' img='MoreHorizontal' />
         </Stack>
         <Stack className={s.description} style={{ width: '100%', marginBottom: 6 }}>
@@ -116,7 +169,6 @@ export default function StatusPage() {
         </Stack>
         <Stack dir='column' gap={0} className={s.content} onScroll={contentScrollHandler}>
           {logs.map(log => <Service onMouseEnter={() => statusHoverHandler(log.path)} log={log} />)}
-          {Array.from({ length: requested - logs.length }).map((_, i) => <Skeleton width='full' style={{ flexShrink: 0 }} height={28} />)}
         </Stack>
       </Stack>
     </PanelTemplate>
