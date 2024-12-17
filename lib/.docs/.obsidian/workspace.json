@@ -120,16 +120,44 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Бюджет.md",
+                "file": "Бюджет за 750€.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Бюджет"
+              "title": "Бюджет за 750€"
+            }
+          },
+          {
+            "id": "3251b45430bed6dc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Бюджет за 550€.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Бюджет за 550€"
+            }
+          },
+          {
+            "id": "43bb20eac24a1144",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Бизнес модель ГАДалкина.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Бизнес модель ГАДалкина"
             }
           }
         ],
-        "currentTab": 7
+        "currentTab": 9
       }
     ],
     "direction": "vertical"
@@ -270,10 +298,12 @@
       "command-palette:Відкрити меню команд": false
     }
   },
-  "active": "3dd0ecf1ec4cfde7",
+  "active": "43bb20eac24a1144",
   "lastOpenFiles": [
+    "Бюджет за 550€.md",
+    "Бизнес модель ГАДалкина.md",
+    "Бюджет за 750€.md",
     "Бюджет 2024-25.md",
-    "Бюджет.md",
     "Libraries.md",
     "Architecture.canvas",
     "Архитектура номер 2.md",
