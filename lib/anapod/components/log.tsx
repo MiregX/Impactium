@@ -1,22 +1,20 @@
 import { Icon } from '@impactium/icons';
-import s from '../Status.module.css';
-import { Stack } from '@impactium/components';
+import s from './styles/log.module.css';
+import { Stack, Status } from '@impactium/components';
 import { Color } from '@impactium/design';
-import { format } from 'date-fns';
 import { between, cn } from '@impactium/utils';
-import { Status } from '@/ui/Status';
-import { Anapod } from '@impactium/anapod';
-import { HTMLAttributes, useCallback } from 'react';
+import { Anapod } from '..';
+import { useCallback } from 'react';
 
-export namespace Service {
-  export type Name = 'Next.JS' | 'Nest.JS' | 'Go' | 'CockroachDB' | 'Redis' | 'CDN';
+export namespace Log {
+  export type Name = string;
 
   export interface Props extends Stack.Props {
     log: Anapod.Log
   }
 }
 
-export function Service({ log, ...props }: Service.Props) {
+export function Log({ log, ...props }: Log.Props) {
   const iconsProps: Icon.Props = {
     name: 'AcronymApi',
   }
@@ -24,15 +22,6 @@ export function Service({ log, ...props }: Service.Props) {
   if (iconsProps.name === 'AcronymPage') {
     iconsProps.viewBox = '0 0 28 16';
     iconsProps.width = '28';
-}
-
-  if (iconsProps.name === 'AcronymCdn') {
-    iconsProps.viewBox = '0 0 16 16';
-    iconsProps.style = {
-      ...iconsProps.style,
-      scale: 1.3,
-      width: 20
-    }
   }
 
   const parseFullUrlToPath = (path: string) => path.split('/').slice(3).join('/');
@@ -113,22 +102,24 @@ function TimeTook({ value }: TimeTookProps) {
 }
 
 function Timestamp({ value }: TimeTookProps) {
-  if (!value) {
-    return <p>N/A</p>
-  }
+  if (!value)
+    return <p>N/A</p>;
 
   const parts: string[] = [];
 
   const date = new Date(value);
 
-  // hours
-  parts.push(date.getHours().toString().padStart(2, '0'));
-  parts.push(':');
-  parts.push(date.getMinutes().toString().padStart(2, '0'));
-  parts.push(':');
-  parts.push(date.getSeconds().toString().padStart(2, '0'));
-  parts.push('.');
-  parts.push(date.getMilliseconds().toString().padStart(3, '0'));
+  const fix = (num: number, pad: number = 2) => num.toString().padStart(pad, '0');
+
+  parts.push(
+    fix(date.getHours()),
+    ':',
+    fix(date.getMinutes()),
+    ':',
+    fix(date.getSeconds()),
+    '.',
+    fix(date.getMilliseconds(), 3),
+  );
 
   return (
     <p>{parts.join('')}</p>

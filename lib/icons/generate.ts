@@ -18,31 +18,34 @@ const attributes = (element: Element): Icon.Attributes => {
   return attrs;
 };
 
-const element = (element: Element): Icon.Node => {
+const element = (element: Element, keyPrefix: string = ''): Icon.Node => {
   const tagName = element.tagName.replace(/([A-Z])/g, (c) => c.toLowerCase());
   const attrs = attributes(element);
-  const childrens = children(element);
-  return [tagName, attrs, ...childrens];
+  const childrens = children(element, keyPrefix);
+  return [tagName, { key: `${keyPrefix}-${tagName}`, ...attrs }, ...childrens];
 };
 
-const children = (e: Element): Icon.Node[] => {
-  return Array.from(e.children).map((child) => {
+const children = (e: Element, keyPrefix: string): Icon.Node[] => {
+  return Array.from(e.children).map((child, index) => {
+    const childKeyPrefix = `${keyPrefix}-${index}`;
     if (child.tagName === 'defs') {
       return [
-        'defs', attributes(e),
-        ...Array.from(child.children).map((childDef) => element(childDef)),
+        'defs',
+        { key: `${childKeyPrefix}-defs`, ...attributes(e) },
+        ...Array.from(child.children).map((childDef, defIndex) =>
+          element(childDef, `${childKeyPrefix}-def-${defIndex}`)
+        ),
       ];
     }
-    return element(child);
+    return element(child, childKeyPrefix);
   });
 };
 
-
 export const parse = (content: string): Icon.Node[] => {
   const svg = new JSDOM(content).window.document.querySelector('svg')!;
-
-  return children(svg);
+  return children(svg, 'root');
 };
+
 
 const dirPath = './lib';
 

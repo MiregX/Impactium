@@ -1,0 +1,42 @@
+.paths {
+  background: var(--soft-black);
+  border: 1px solid var(--gray-400);
+  padding: 6px;
+}
+.path {
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 6px;
+  background-color: var(--soft-black);
+}
+.path .name {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  white-space: nowrap;
+  flex: 1;
+}
+.path .total {
+  font-family: var(--font-mono);
+  color: var(--text-dimmed);
+  font-size: 11px;
+}
+.path:nth-child(odd) {
+  background-color: var(--gray-100);
+}
+.fill {
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  transition: all 0.125s;
+  min-width: 32px;
+  background-color: var(--gray-alpha-500);
+  opacity: 0.3;
+  border-radius: 4px;
+  position: absolute;
+}
+.path:nth-child(odd) .fill {
+  background-color: var(--gray-alpha-300) !important;
+}

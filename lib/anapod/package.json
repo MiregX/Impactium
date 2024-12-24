@@ -1,0 +1,39 @@
+{
+  "name": "@impactium/anapod",
+  "version": "0.0.1",
+  "description": "An analytics library that used to visualize logs and requests",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Impactium/anapod-client.git"
+  },
+  "keywords": [
+    "anapod",
+    "impactium",
+    "next",
+    "react",
+    "logs",
+    "requests",
+    "analytics"
+  ],
+  "author": "Mireg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Impactium/anapod-client/issues"
+  },
+  "homepage": "https://github.com/Impactium/anapod-client#readme",
+  "dependencies": {
+    "@impactium/components": "^1.0.4",
+    "@impactium/design": "^1.0.1",
+    "@impactium/icons": "^1.1.1",
+    "@impactium/types": "^1.0.0",
+    "@impactium/utils": "^1.0.2",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2"
+  }
+}

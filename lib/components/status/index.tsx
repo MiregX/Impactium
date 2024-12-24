@@ -1,4 +1,4 @@
-import s from './styles/Status.module.css';
+import s from './status.module.css';
 import { Color } from '@impactium/design';
 
 export namespace Status {

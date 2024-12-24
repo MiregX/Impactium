@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "**/*.d.ts"
-  ],
+, "../lib/components/status/index.tsx"  ],
   "exclude": ["node_modules"]
 }

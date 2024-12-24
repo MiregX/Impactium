@@ -4,7 +4,7 @@
   height: 16px;
   border-radius: 4px;
   font-weight: 400;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono, --font-geist-mono, 'Mono');
   font-size: 11px;
   line-height: 16px;
   flex: none;

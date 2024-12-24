@@ -52,6 +52,7 @@ const variant: Icon.Variant = "white";
 - **1.1.0**:
   1. Decreased package-size from 2MB to 1.2MB.
   2. Licence improvements.
+- **1.1.1**: More icons.
 
 ### TODO
 - **Suggested Improvement**: Enhance the algorithm to enable the compiler to preserve key icon settings, such as `viewBox` and `width`.
