@@ -3,13 +3,20 @@
   border: 1px solid var(--gray-400);
   padding: 6px;
 }
+.separator {
+  position: relative;
+  top: -6px;
+  height: calc(100% + 12px);
+  width: 1px;
+  background-color: var(--gray-400);
+}
 .path {
   height: 28px;
   flex-shrink: 0;
   border-radius: 4px;
   width: 100%;
   padding: 0 6px;
-  background-color: var(--soft-black);
+  background-color: #21212180;
 }
 .path .name {
   font-size: 11px;
@@ -24,7 +31,7 @@
   font-size: 11px;
 }
 .path:nth-child(odd) {
-  background-color: var(--gray-100);
+  background-color: var(--meta-black);
 }
 .fill {
   left: 0px;
@@ -32,11 +39,11 @@
   height: 100%;
   transition: all 0.125s;
   min-width: 32px;
-  background-color: var(--gray-alpha-500);
+  background-color: var(--gray-alpha-300);
   opacity: 0.3;
   border-radius: 4px;
   position: absolute;
 }
 .path:nth-child(odd) .fill {
-  background-color: var(--gray-alpha-300) !important;
+  background-color: var(--gray-alpha-400) !important;
 }

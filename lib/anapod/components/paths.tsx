@@ -1,6 +1,6 @@
 'use client'
 import { Stack } from '@impactium/components';
-import { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, memo, useEffect, useRef, useState } from 'react';
 import { Anapod } from '..';
 import s from './styles/paths.module.css';
 import { cn } from '@impactium/utils';
@@ -28,9 +28,16 @@ export function Paths({
     }
   }, []);
 
+  const Separator = () => {
+    return (
+      <hr className={s.separator} />
+    )
+  }
+
   return (
-    <Stack ai='flex-start' className={s.paths} dir='row' {...props}>
+    <Stack ai='flex-start' pos='relative' className={s.paths} dir='row' {...props}>
       <List />
+      <Separator />
       <Detailed />
     </Stack>
   );
