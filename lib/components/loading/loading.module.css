@@ -1,9 +1,5 @@
-.loading svg {
+.icon {
   animation: spin 1s linear infinite;
-}
-.loading p {
-  font-size: 12px;
-  font-family: var(--font-sans);
 }
 @keyframes spin {
   100% {

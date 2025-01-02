@@ -32,16 +32,18 @@ const buttonVariants = cva(s.button, {
   },
 });
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-  img?: Icon.Name;
-  revert?: boolean;
-  loading?: boolean;
+export namespace Button {
+  export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+    asChild?: boolean;
+    img?: Icon.Name;
+    revert?: boolean;
+    loading?: boolean;
+  }
+
+  export type Variant = Props['variant'];
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
   ({ className, variant, size, img, revert, disabled, loading, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const paddingClass = img ? (props.children ? (revert ? s.revert : s.withImage) : s.onlyImage) : null;
@@ -61,10 +63,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}>
         {asChild ? props.children : (loading
           ? <Loading variant={λvariant} size={size} />
-        : <React.Fragment>
+          : <>
               {img && <Icon name={img} />}
               {children}
-            </React.Fragment>
+            </>
         )}
       </Comp>
     )
@@ -72,7 +74,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): Icon.Variant => ({
+const convertButtonVariantToImageVariant = (variant: Button.Variant): Icon.Variant => ({
   default: 'black',
   destructive: 'white',
   outline: 'dimmed',
@@ -82,6 +84,6 @@ const convertButtonVariantToImageVariant = (variant: ButtonProps['variant']): Ic
   disabled: 'dimmed',
   hardline: 'white',
   glass: 'dimmed'
-} as Record<NonNullable<ButtonProps['variant']>, Icon.Props['variant']>)[variant!] ?? 'black';
+} as Record<NonNullable<Button.Variant>, Icon.Variant>)[variant!] ?? 'black';
 
 export { Button, buttonVariants };

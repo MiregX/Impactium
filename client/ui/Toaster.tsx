@@ -26,12 +26,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
 export { Toaster }
 
-const keyNotFound = (key: string, target: string) => {
-  console.warn(`Key ${key} not found`);
-
-  return target
-}
-
 export function useToast(key: string, data: ExternalToast = {}, onSuccess?: string | boolean) {
   const l: keyof Template = new Cookies().get('_language') || 'us'
   const error = locale.error as any
