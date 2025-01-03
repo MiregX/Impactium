@@ -8,14 +8,24 @@ import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Label } from "@/ui/Label";
 import { Combination } from "@/ui/Combitation";
 import { useApplication } from "@/context/Application.context";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ChangePasswordBanner } from "./ChangePasswordBanner";
 import { Separator } from "@/ui/Separator";
+import { redirect } from "next/navigation";
+import { Identifier } from "@impactium/pattern";
 
 export default function AccountMinecraftPage() {
   const { user } = useUser<UserRequiredContext>();
+  const [username, setUsername] = useState<string>(user.username);
+  const [isUsernameValid, setIsUsernameValid] = useState<boolean>(true);
   const { spawnBanner } = useApplication();
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user === null) {
+      redirect('/')
+    }
+  }, [user]);
 
   const fallback = (
     <img src='https://cdn.impactium.fun/skin/steve_icon.png' alt='' />
@@ -23,6 +33,31 @@ export default function AccountMinecraftPage() {
 
   const changePassword = () => {
     spawnBanner(<ChangePasswordBanner />);
+  }
+
+  const submit = () => {
+    api<boolean>('/user/edit/minecraft', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: user.username
+      })
+    });
+  }
+
+  const usernameInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    if (value.length >= 3) {
+      setIsUsernameValid(Identifier.Username.test(value));
+    } else {
+      setIsUsernameValid(true);
+    }
+
+    setUsername(value);
+  }
+
+  const skinInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
   }
 
   return (
@@ -34,17 +69,17 @@ export default function AccountMinecraftPage() {
           <Button img='KeyRound' variant='ghost' onClick={changePassword} />
         </Cell>
         <Cell background={Color.toVar('soft-black')} bottom right>
-          <Button img='Check' variant='glass' loading={loading} />
+          <Button disabled={username.length < 3 || !isUsernameValid} img='Check' variant='glass' loading={loading} onClick={submit} />
         </Cell>
         <Combination className={s.combination} size='heading' id={user.uid} src={`https://cdn.impactium.fun/skin/${user.username}`} fallback={fallback} name={user.username} />
         <Separator />
-        <Stack style={{ width: '100%' }} gap={16}>
+        <Stack dir='column' style={{ width: '100%' }} gap={16}>
           <Label htmlFor='username'>Никнейм:</Label> 
-          <Input id='username' img='User' placeholder='Введите новый никнейм' value={user.username} />
+          <Input id='username' value={username} onChange={usernameInputChangeHandler} img='User' placeholder='Введите новый никнейм' />
         </Stack>
-        <Stack style={{ width: '100%' }} gap={16}>
-          <Label className={s.label} htmlFor='skin_field'>Cкин:</Label> 
-          <Input className={s.label} id='skin_field' type='file' />
+        <Stack dir='column' style={{ width: '100%' }} gap={16}>
+          <Label className={s.label} htmlFor='skin_field'>Cкин:</Label>
+          <Input className={s.label} id='skin_field' onChange={skinInputChangeHandler} type='file' />
         </Stack>
       </Stack>
     </Stack>

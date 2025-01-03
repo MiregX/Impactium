@@ -42,7 +42,7 @@ export function parseApiOptions<T>(a: unresolwedArgument<T>, b: unresolwedArgume
     callback,
     query: options.query ? `?${new URLSearchParams(options.query)}` : '',
     path,
-    endpoint: _server(options.useNumericHost, path.startsWith('/v2'))
+    endpoint: _server(options.useNumericHost)
   };
 }
 
