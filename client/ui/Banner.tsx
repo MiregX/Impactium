@@ -55,10 +55,7 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
   return (
     <div className={banner.background} {...props}>
       <div className={cn(banner._, useOptionStyling(options, banner), className)}>
-        <h4>
-          {title}
-          <Button variant='ghost' img='X' onClick={destroyBanner} />
-        </h4>
+        <h4>{title}</h4>
         <div className={banner.content}>{children}</div>
         {footer ? (
           <div className={banner.footer}>

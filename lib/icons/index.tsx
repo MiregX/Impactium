@@ -76,4 +76,6 @@ export namespace Icon {
   }
 
   export type Variant = Icon.Props['variant'];
+
+  export type Size = Icon.Props['size'];
 }

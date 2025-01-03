@@ -2,6 +2,7 @@ import { Skeleton } from '@impactium/components';
 import { Avatar } from './Avatar'
 import s from './styles/Combination.module.css'
 import { cva, VariantProps } from 'class-variance-authority';
+import { ReactNode } from 'react';
 
 const { heading, combination, full } = s;
 
@@ -26,16 +27,17 @@ export type CombinationProps = CombinationSkeletonProps & {
   src: string | null | undefined;
   name: string;
   id: string;
+  fallback?: ReactNode;
 };
 
 interface CombinationSkeletonProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof combinationVariants> {
   button?: boolean
 };
 
-export function Combination({ src, name, className, onClick, size, id, children, ...props }: CombinationProps) {
+export function Combination({ src, name, className, onClick, fallback, size, id, children, ...props }: CombinationProps) {
   return (
     <div className={combinationVariants({ className, size })} {...props}>
-      <Avatar size={size === 'heading' ? 64 : 36} onClick={onClick} src={src} alt={name} />
+      <Avatar size={size === 'heading' ? 64 : 36} onClick={onClick} src={src} alt={name} fallback={fallback} />
       <div className={s.group}>
         <p className={s.name}>{name}</p>
         {id && <p className={s.id}>@{id}</p>}

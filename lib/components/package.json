@@ -25,13 +25,12 @@
   "description": "",
   "dependencies": {
     "@impactium/design": "^1.0.1",
-    "@impactium/icons": "^1.0.7",
+    "@impactium/icons": "^1.1.3",
     "@impactium/utils": "^1.0.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.1"
   },
   "peerDependencies": {
-    "@impactium/icons": "^1.0.7",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

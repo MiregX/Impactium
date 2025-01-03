@@ -14,7 +14,7 @@
   border: 1px solid transparent;
   gap: 8px;
 }
-.round {
+.rounded {
   border-radius: var(--round) !important;
 }
 .button:focus-visible {

@@ -38,13 +38,16 @@ export namespace Button {
     img?: Icon.Name;
     revert?: boolean;
     loading?: boolean;
+    rounded?: boolean;
   }
 
   export type Variant = Props['variant'];
+
+  export type Size = Props['size'];
 }
 
 const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
-  ({ className, variant, size, img, revert, disabled, loading, asChild = false, ...props }, ref) => {
+  ({ className, variant, rounded, size, img, revert, disabled, loading, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const paddingClass = img ? (props.children ? (revert ? s.revert : s.withImage) : s.onlyImage) : null;
 
@@ -55,16 +58,17 @@ const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
     }
 
     const λvariant = convertButtonVariantToImageVariant(variant);
+    const λsize = convertButtonVariantToIconSize(size);
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant: disabled ? 'disabled' : variant, size, className }), paddingClass, loading && s.loading)}
+        className={cn(buttonVariants({ variant: disabled ? 'disabled' : variant, size, className }), paddingClass, loading && s.loading, rounded && s.rounded)}
         ref={ref}
         {...props}>
         {asChild ? props.children : (loading
           ? <Loading variant={λvariant} size={size} />
           : <>
-              {img && <Icon name={img} />}
+              {img && <Icon name={img} size={λsize} />}
               {children}
             </>
         )}
@@ -85,5 +89,13 @@ const convertButtonVariantToImageVariant = (variant: Button.Variant): Icon.Varia
   hardline: 'white',
   glass: 'dimmed'
 } as Record<NonNullable<Button.Variant>, Icon.Variant>)[variant!] ?? 'black';
+
+const convertButtonVariantToIconSize = (size: Button.Size): Icon.Size => ({
+  default: 16,
+  sm: 12,
+  lg: 20,
+  icon: 16,
+} as Record<NonNullable<Button.Size>, Icon.Size>)[size || 'default'];
+
 
 export { Button, buttonVariants };
