@@ -54,6 +54,9 @@ const variant: Icon.Variant = "white";
   2. Licence improvements.
 - **1.1.1**: More icons.
 - **1.1.2**: Fixed `unique key error`.
+- **1.1.3**: Cause i want to.
+- **1.1.4**: Fixed colors for PrismColor icon.
+- **1.1.5**: Fixed icons order.
 
 ### TODO
 - **Suggested Improvement**: Enhance the algorithm to enable the compiler to preserve key icon settings, such as `viewBox` and `width`.

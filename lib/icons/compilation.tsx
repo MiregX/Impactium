@@ -6591,7 +6591,7 @@ export const LogoTurbopack = create('LogoTurbopack', [
         "width": "9",
         "height": "9",
         "rx": "0.5",
-        "stroke": "var(--ds-gray-1000)",
+        "stroke": "var(--gray-1000)",
         "strokeWidth": "4",
         "mask": "url(#path-2-inside-1_872_3187)"
       }
@@ -6678,7 +6678,7 @@ export const LogoTurborepo = create('LogoTurborepo', [
         "width": "7",
         "height": "7",
         "rx": "3.5",
-        "stroke": "var(--ds-gray-1000)",
+        "stroke": "var(--gray-1000)",
         "strokeWidth": "2"
       }
     ]
@@ -7825,7 +7825,7 @@ export const PrismColor = create('PrismColor', [
     {
       "key": "root-0-path",
       "d": "M9 7L12.5 2.5",
-      "stroke": "var(--ds-red-700)",
+      "stroke": "var(--red-700)",
       "strokeWidth": "1.5"
     }
   ],
@@ -7834,7 +7834,7 @@ export const PrismColor = create('PrismColor', [
     {
       "key": "root-1-path",
       "d": "M10.5 9.5L15.75 10.5",
-      "stroke": "var(--ds-blue-600)",
+      "stroke": "var(--blue-600)",
       "strokeWidth": "1.5"
     }
   ],
@@ -7843,7 +7843,7 @@ export const PrismColor = create('PrismColor', [
     {
       "key": "root-2-path",
       "d": "M10 8L15.75 6",
-      "stroke": "var(--ds-teal-600)",
+      "stroke": "var(--teal-600)",
       "strokeWidth": "1.5"
     }
   ],

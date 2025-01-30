@@ -4,7 +4,7 @@
     <mask id="path-2-inside-1_872_3187" fill="white">
       <rect x="3.5" y="3.5" width="9" height="9" rx="0.5"></rect>
     </mask>
-    <rect x="3.5" y="3.5" width="9" height="9" rx="0.5" stroke="var(--ds-gray-1000)" stroke-width="4" mask="url(#path-2-inside-1_872_3187)"></rect>
+    <rect x="3.5" y="3.5" width="9" height="9" rx="0.5" stroke="var(--gray-1000)" stroke-width="4" mask="url(#path-2-inside-1_872_3187)"></rect>
   </g>
   <defs>
     <linearGradient id="paint0_linear_872_3187" x1="8.68832" y1="1.98437" x2="1.79792" y2="8.82805" gradientUnits="userSpaceOnUse">
