@@ -3,27 +3,50 @@ import fs from 'fs';
 import path from 'path';
 import { Icon } from './index';
 
+const toCamelCase = (str: string): string => str.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+
+const element = (element: Element, keyPrefix: string): Icon.Node => {
+  const tagName = element.tagName.toLowerCase();
+  const attrs = attributes(element);
+  const childrens = children(element, `${keyPrefix}-${tagName}`);
+  return [tagName, { key: `${keyPrefix}-${tagName}`, ...attrs }, ...childrens];
+};
+
+export const parse = (content: string): Icon.Node => {
+  const svg = new JSDOM(content).window.document.querySelector('svg')!;
+  return element(svg, 'root');
+};
+
 const attributes = (element: Element): Icon.Attributes => {
   const attrs: Icon.Attributes = {};
 
   Array.from(element.attributes).forEach(({ name, value }) => {
-    const attrName = name.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+    const attrName = toCamelCase(name);
 
-    if (['data-testid', 'style'].includes(name)) return;
-    if (name === 'color' && value === 'currentColor') return;
+    if (name === 'data-testid') return;
 
-    if (value) attrs[attrName] = value;
+    if (name === 'style') {
+      const styles: Record<string, string> = {};
+      value.split(';').forEach((style) => {
+        const [rawKey, val] = style.split(':').map((s) => s.trim());
+        
+        const key: string = toCamelCase(rawKey);
+
+        if (key === 'width' || key === 'height') {
+          return;
+        }
+
+        styles[key] = val;
+      });
+      attrs.style = styles;
+    } else {
+      attrs[attrName] = value;
+    }
   });
 
   return attrs;
 };
 
-const element = (element: Element, keyPrefix: string = ''): Icon.Node => {
-  const tagName = element.tagName.replace(/([A-Z])/g, (c) => c.toLowerCase());
-  const attrs = attributes(element);
-  const childrens = children(element, keyPrefix);
-  return [tagName, { key: `${keyPrefix}-${tagName}`, ...attrs }, ...childrens];
-};
 
 const children = (e: Element, keyPrefix: string): Icon.Node[] => {
   return Array.from(e.children).map((child, index) => {
@@ -40,12 +63,6 @@ const children = (e: Element, keyPrefix: string): Icon.Node[] => {
     return element(child, childKeyPrefix);
   });
 };
-
-export const parse = (content: string): Icon.Node[] => {
-  const svg = new JSDOM(content).window.document.querySelector('svg')!;
-  return children(svg, 'root');
-};
-
 
 const dirPath = './lib';
 

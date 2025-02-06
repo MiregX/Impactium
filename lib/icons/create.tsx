@@ -7,14 +7,21 @@ export const renderChildren = ([name, attrs, ...children]: Icon.Node): React.Rea
   children.map(renderChildren)
 )
 
-export const create = (name: string, children: Icon.Node[]) => {
+export const create = (name: string, node: Icon.Node) => {
   const Component = forwardRef<SVGSVGElement, RefAttributes<SVGSVGElement> & Partial<SVGProps<SVGSVGElement>>>(
-    (props, ref) => createElement('svg', {
-      ref,
-      name,
-      ...props,
-      children: children.map(renderChildren),
-    })
+    (props, ref) => {
+      const [tag, attrs, ...children] = node;
+      return createElement(
+        tag,
+        {
+          ...attrs,
+          ...props,
+          ref,
+          name,
+        },
+        children.map(renderChildren)
+      );
+    }
   );
   
   Component.displayName = name;

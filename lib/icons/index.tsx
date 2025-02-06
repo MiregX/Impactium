@@ -29,25 +29,10 @@ export function Icon({
       ? custom_icons[name as keyof typeof custom_icons]
       : lucide_icons[name as keyof typeof lucide_icons]
 
-  if (!Component) {
-    return null;
-  }
-  
-  if (fromGeist || name in custom_icons && !(name in lucide_icons)) {
-    props.viewBox = '0 0 16 16';
-    props.fill = 'none';
-    props.color = props.color ?? iconVariants({ variant });
-  } else {
-    props.stroke = props.color ?? iconVariants({ variant });
-  }
+  if (!Component) return null;
 
-  if (name.startsWith('Acronym')) {
-    props.viewBox = '0 0 20 16';
-    if (name === 'AcronymPage') {
-      props.viewBox = '0 0 28 16';
-      props.width = '28px'
-    }
-  }
+  if (!props.fill)
+    props.fill = 'none';
 
   return (
     <Component
@@ -60,14 +45,15 @@ export function Icon({
 
 export namespace Icon {
   export const icons = {
-    ...custom_icons,
-    ...lucide_icons
+    ...lucide_icons,
+    ...custom_icons
   }
 
   export type Name = keyof typeof icons;
   
-  export type Attributes = Record<string, string>;
+  export type Attributes = Record<string, string | Record<string, string>>;
   export type Node = [name: string, attrs: Attributes, ...childrens: Node[]];
+
 
   export interface Props extends React.SVGProps<SVGSVGElement>, VariantProps<typeof iconVariants> {
     name: Name;

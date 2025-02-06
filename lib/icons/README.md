@@ -57,6 +57,9 @@ const variant: Icon.Variant = "white";
 - **1.1.3**: Cause i want to.
 - **1.1.4**: Fixed colors for PrismColor icon.
 - **1.1.5**: Fixed icons order.
+- **1.1.6**: Added new logo.
+- **1.1.7**: Fixed new logo.
+- **1.1.7**: Added new logo.
 
 ### TODO
 - **Suggested Improvement**: Enhance the algorithm to enable the compiler to preserve key icon settings, such as `viewBox` and `width`.

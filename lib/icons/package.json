@@ -1,6 +1,6 @@
 {
   "name": "@impactium/icons",
-  "version": "1.1.5",
+  "version": "1.1.8",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {

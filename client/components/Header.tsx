@@ -10,6 +10,7 @@ import { LoginBanner } from '@/banners/login/Login.banner';
 import { useApplication } from '@/context/Application.context';
 import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { cn } from '@impactium/utils';
+import { Icon } from '@impactium/icons/dist';
 
 export function   Header() {
   const { user } = useUser();
@@ -33,7 +34,7 @@ export function   Header() {
     <header className={s.header}>
       {item}
       <Link href='/' className={cn(s.logo, hidden && s.hidden)}>
-        <img src="https://cdn.impactium.fun/logo/impactium.svg" alt='' />
+        <Icon name='LogoImpactium' />
         <h1>Impactium</h1>
       </Link>
       {user?.uid ? (
