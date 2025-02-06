@@ -60,6 +60,9 @@ const variant: Icon.Variant = "white";
 - **1.1.6**: Added new logo.
 - **1.1.7**: Fixed new logo.
 - **1.1.7**: Added new logo.
+- **1.1.8**: Fixed new logo.
+- **1.1.9**: Fixed colors for Python icon.
+- **1.2.0**: Added Impactium logo and better icon generation algorhythm.
 
 ### TODO
 - **Suggested Improvement**: Enhance the algorithm to enable the compiler to preserve key icon settings, such as `viewBox` and `width`.
