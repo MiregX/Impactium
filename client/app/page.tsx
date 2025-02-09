@@ -40,7 +40,6 @@ export default function Main() {
         <MinecraftAccount />
         <Button onClick={roffleButtonClickHandler} img='Coins' rounded size='lg'>Купить</Button>
         <Button onClick={roffleButtonClickHandler} img='CreditCard' rounded size='lg' variant='secondary'>Продать</Button>
-        {Object.keys(Icon.icons).map(n => <Icon name={n as Icon.Name} color='red' />)}
       </Stack>
     </Stack>
   );

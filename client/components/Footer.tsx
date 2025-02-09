@@ -11,7 +11,7 @@ export function Footer() {
   const Operational = () => 
     <div className={s.operational}>
       <div className={s.left}>
-        <img src='https://cdn.impactium.fun/logo/impactium_thin.svg' alt='' />
+        <Icon name='LogoImpactium' size={32} />
         <p>© {new Date(Date.now()).getFullYear()}</p>
         <Link href='/status'>
           {lang.status.ok}

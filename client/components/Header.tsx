@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
 import { Button } from '@impactium/components';
@@ -12,16 +12,11 @@ import { LanguageChooser } from '@/banners/language/LanguageChooser';
 import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons/dist';
 
-export function   Header() {
+export function Header() {
   const { user } = useUser();
   const { lang } = useLanguage();
   const { spawnBanner, application } = useApplication();
   const [hidden, setHidden] = useState<boolean | null>(null);
-  const [item, setItem] = useState<JSX.Element | null>(null);
-
-  useEffect(() => {
-    setItem(application.globalPhrase ? <p className={s.globalPhrase}>{application.globalPhrase}</p> : null)
-  }, [application]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && typeof hidden === 'object') {
@@ -32,17 +27,16 @@ export function   Header() {
 
   return (
     <header className={s.header}>
-      {item}
       <Link href='/' className={cn(s.logo, hidden && s.hidden)}>
-        <Icon name='LogoImpactium' />
+        <Icon name='LogoImpactium' size={32} />
         <h1>Impactium</h1>
       </Link>
       {user?.uid ? (
         <UserComponent />
       ) : (
         <div className={s.wrapper}>
-          <Button variant='outline' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
-          <Button size='icon' img='Globe' variant='outline' onClick={() => spawnBanner(<LanguageChooser />)} />
+          <Button rounded variant='secondary' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
+          <Button rounded img='Globe' variant='secondary' onClick={() => spawnBanner(<LanguageChooser />)} />
         </div>
       )}
     </header>

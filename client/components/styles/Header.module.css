@@ -12,33 +12,6 @@
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
 }
-.globalPhrase {
-  position: fixed;
-  z-index: 2;
-  background: var(--soft-black);
-  box-shadow: var(--ring);
-  font-family: var(--font-mono);
-  letter-spacing: 1.3px;
-  border: 1px solid var(--accent-2);
-  backdrop-filter: blur(8px) brightness(0.125);
-  color: var(--white);
-  text-align: center;
-  text-shadow: 0 0 2px var(--gray48);
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  font-size: 12px;
-  width: unset;
-  padding: 0 8px;
-  justify-self: center;
-  align-self: center;
-  border-radius: var(--border-s);
-  left: 50%;
-  transform: translateX(-50%);
-  top: 72px;
-}
 .header * {
   z-index: 1;
 }
@@ -65,7 +38,7 @@
   filter: unset;
 }
 .logo {
-  gap: 16px;
+  gap: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
