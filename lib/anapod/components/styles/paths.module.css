@@ -17,6 +17,11 @@
   width: 100%;
   padding: 0 6px;
   background-color: #21212180;
+  cursor: pointer;
+  transition: all 0.125s var(--transition);
+}
+.path.focused {
+  background: var(--geist-background);
 }
 .path .name {
   font-size: 11px;
@@ -46,4 +51,10 @@
 }
 .path:nth-child(odd) .fill {
   background-color: var(--gray-alpha-400) !important;
+}
+.detailed {
+  width: 100%;
+}
+.detailed .header {
+  width: 100%;
 }

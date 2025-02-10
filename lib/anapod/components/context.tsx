@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, Dispatch, SetStateAction } from "react";
 import { λthrow } from '@impactium/utils';
 import { Anapod } from '../index';
 import s from './styles/context.module.css';
@@ -13,6 +13,8 @@ export namespace Context {
     logs: Anapod.Log[],
     setLogs: React.Dispatch<React.SetStateAction<Anapod.Log[]>>,
     updateOverall: () => Promise<Anapod.Overall[]>;
+    focus: string | null,
+    setFocus: Dispatch<SetStateAction<string | null>>;
   }
 
   class UnexpectedUsageException extends Error{
@@ -28,6 +30,7 @@ export namespace Context {
   export function Provider({ children }: Context.Props) {
     const [logs, setLogs] = useState<Anapod.Log[]>([]);
     const [overall, setOverall] = useState<Anapod.Overall[]>([]);
+    const [focus, setFocus] = useState<string | null>(null);
 
     const updateOverall = async () => {
       const overall = await Anapod.Services();
@@ -40,7 +43,9 @@ export namespace Context {
     const props: Context.Export = {
       logs,
       setLogs,
-      updateOverall
+      updateOverall,
+      focus,
+      setFocus
     }
   
     return (

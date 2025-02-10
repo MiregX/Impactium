@@ -1,6 +1,6 @@
 'use client'
 import { Stack } from '@impactium/components';
-import { HTMLAttributes, memo, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, useEffect, useRef, useState } from 'react';
 import { Anapod } from '..';
 import s from './styles/paths.module.css';
 import { cn } from '@impactium/utils';
@@ -15,7 +15,6 @@ export function Paths({
   ...props  
 }: Paths.Props) {
   Anapod.Grid.apply(props);
-
   const { updateOverall } = Anapod.Context.use();
 
   useEffect(() => {
@@ -67,6 +66,7 @@ export namespace Path {
 
 export function Path({ path, total, percentage, className, ...props }: Path.Props) {
   const self = useRef<HTMLDivElement>(null);
+  const { focus, setFocus } = Anapod.Context.use();
   const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export function Path({ path, total, percentage, className, ...props }: Path.Prop
   }, [percentage, width, setWidth, self]);
 
   return (
-    <Stack ref={self} pos='relative' className={cn(className, s.path)} {...props}>
+    <Stack ref={self} pos='relative' className={cn(className, s.path, path === focus && s.focused)} onClick={() => setFocus(path)} {...props}>
       <Fill width={width} />
       <p className={s.name}>{path}</p>
       <p className={s.total}>{total}</p>
@@ -98,9 +98,21 @@ export function Fill({ width }: Fill.Props) {
 }
 
 export function Detailed() {
-  return (
-    <Stack>
+  const { focus } = Anapod.Context.use();
+  const [detailedFocusPath, setDetailedFocusPath] = useState<any>({});
 
+  useEffect(() => {
+    // Anapod.GetDetailedByPath()
+  }, [focus])
+
+  return (
+    <Stack dir='column' className={s.detailed}>
+      <Stack className={s.header}>
+        <h4>{focus}</h4>
+        <Stack flex />
+        <p>Total: 5782</p>
+      </Stack>
+      
     </Stack>
   );
 }
