@@ -2,23 +2,25 @@
 import { useLanguage } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
-import { Button } from '@impactium/components';
+import { Button, Stack } from '@impactium/components';
 import { Icon } from '@impactium/icons';
+import { Color } from '@impactium/design';
 
 export function Footer() {
   const { lang } = useLanguage();
 
   const Operational = () => 
-    <div className={s.operational}>
-      <div className={s.left}>
-        <Icon name='LogoImpactium' size={32} />
-        <p>© {new Date(Date.now()).getFullYear()}</p>
+    <Stack className={s.operational}>
+      <Icon name='LogoImpactium' size={32} color={Color.toVar('text-dimmed')} />
+      <p>© {new Date(Date.now()).getFullYear()}</p>
+      <Button asChild style={{ color: Color.toVar('blue-800') }} variant='ghost'>
         <Link href='/status'>
+          <Icon name='Status' />
           {lang.status.ok}
         </Link>
-      </div>
-      <div className={s.right} />
-    </div>;
+      </Button>
+      
+    </Stack>;
 
   const Addictional = () => 
     <div className={s.addictional}>
@@ -34,24 +36,40 @@ export function Footer() {
           </Link>
         </Button>
       </div>
-      <div className={s.navigation}>
-        <Link href='/teams'>{lang.footer.teams}</Link>
-        <Link href='/tournaments'>{lang.footer.tournaments}</Link>
-        <Link href='/documentation'>{lang.footer.documentation}</Link>
-        <Link href='/services'>{lang.footer.services}</Link>
-        <Link href='/developers'>{lang.footer.developers}</Link>
-        <Link href='/privacy-policy'>{lang.footer.privacy}</Link>
-        <Link href='/terms-of-service'>{lang.footer.terms}</Link>
-        <Link href='/changelog'>{lang.footer.changelog}</Link>
-      </div>
+      <Stack jc='space-between' style={{ flexWrap: 'wrap' }}>
+        <Button asChild variant='ghost'>
+          <Link href='/teams'>{lang.footer.teams}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/tournaments'>{lang.footer.tournaments}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/documentation'>{lang.footer.documentation}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/services'>{lang.footer.services}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/developers'>{lang.footer.developers}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/privacy-policy'>{lang.footer.privacy}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/terms-of-service'>{lang.footer.terms}</Link>
+        </Button>
+        <Button asChild variant='ghost'>
+          <Link href='/changelog'>{lang.footer.changelog}</Link>
+        </Button>
+      </Stack>
     </div>;
 
   return (
     <footer className={s.wrapper}>
-      <div className={s.content}>
+      <Stack className={s.content} dir='column' ai='stretch'>
         <Operational />
         <Addictional />
-      </div>
+      </Stack>
     </footer>
   )
 }

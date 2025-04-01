@@ -4,18 +4,13 @@
     {
       "label": "start-engine",
       "type": "shell",
-      "command": "copy .env api/.env; cd api; npm run prisma:generate; npm run prisma:deploy; rm .env",
-      "dependsOn": "recreate"
+      "command": "copy .env api\\.env ;; cd api ;; npm run prisma:generate ;; npm run prisma:deploy ;; del .env",
+      "dependsOn": "recreate",
     },
     {
       "label": "recreate",
       "type": "shell",
-      "command": "docker compose --profile development up -d"
-    },
-    {
-      "label": "stop-engine",
-      "type": "shell",
-      "command": "docker compose down"
+      "command": "docker compose --profile development up -d",
     }
   ]
 }

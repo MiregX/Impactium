@@ -80,3 +80,47 @@
     flex-direction: column;
   }
 }
+.wrapper {
+  width: 100%;
+}
+.init {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.init p {
+  transition: all 0.33s ease-in-out;
+}
+.init button {
+  transition: all 0.33s ease-in-out;
+}
+.init.disable {
+  pointer-events: none;
+}
+.init.disable p {
+  transform: translateY(-100%);
+  filter: blur(5px);
+  opacity: 0;
+}
+.init.init.disable button {
+  transform: translateY(-100%);
+  filter: blur(5px);
+  transition-delay: 0.2s;
+  opacity: 0;
+}
+.dashboard {
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+  padding: 16px;
+}
+.dashboard.active {
+  opacity: 1;
+  pointer-events: all;
+  height: 100%;
+  width: 100%;
+}
+.wrapper > div {
+  border-radius: 6px;
+}

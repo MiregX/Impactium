@@ -1,8 +1,0 @@
-.page {
-  padding: 87px;
-  display: grid;
-  gap: 86.5px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  max-height: var(--content-height);
-}

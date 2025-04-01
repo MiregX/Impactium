@@ -1,0 +1,26 @@
+.svg {
+  overflow: visible;
+  stroke-linecap: round;
+  shape-rendering: geometricPrecision;
+}
+.track {
+  --offset-factor-secondary: calc(1 - var(--offset-factor));
+  --track-percent: calc(100 - var(--stroke-percent) - var(--gap-percent) - var(--gap-percent));
+  stroke-dasharray: calc(var(--track-percent)* var(--percent-to-px)) var(--circumference);
+  transform: rotate(calc(1turn - 90deg - calc(var(--gap-percent) * 3.6deg))) scaleY(-1);
+  transition: all 1s ease;
+  transform-origin: calc(var(--circle-size) / 2) calc(var(--circle-size) / 2);
+}
+.progress {
+  stroke-dasharray: calc(var(--stroke-percent)* var(--percent-to-px)) var(--circumference);
+  transition: var(--transition-length)ease var(--delay), stroke var(--transition-length)ease var(--delay);
+  transition-property: stroke-dasharray, transform;
+  transform: rotate(calc(-90deg + var(--gap-percent)* var(--offset-factor)* 3.6deg));
+  transition: all 1s ease;
+  transform-origin: calc(var(--circle-size) / 2) calc(var(--circle-size) / 2);
+}
+.label {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}

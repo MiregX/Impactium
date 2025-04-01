@@ -5,7 +5,6 @@ import '@/public/.global.css';
 import LanguageProvider from '@/context/Language.context';
 import { ApplicationProvider } from '@/context/Application.context';
 import { UserProvider } from '@/context/User.context';
-import { Preloader } from './_components/Preloader';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/Footer';
 import { User } from '@/dto/User.dto';
@@ -17,8 +16,6 @@ import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
 import { Children } from '@/types';
 import { Blueprint } from '@/dto/Blueprint.dto';
-import { Analytics } from '@impactium/anapod';
-import { randomUUID } from 'crypto';
 
 declare global {
   var api: Api;
@@ -47,7 +44,6 @@ export default async function RootLayout({ children }: Children) {
           <UserProvider prefetched={user!}>
             <ApplicationProvider application={application} blueprints={blueprints}>
               <Header />
-              <Preloader />
               <main>
                 {children}
               </main>

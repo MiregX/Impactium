@@ -4,6 +4,7 @@ import { Context as ContextFunc } from './components/context';
 import { Services as  ServicesFunc } from './functions/services';
 import * as ComponentsFunc from './components';
 import { HTMLAttributes } from "react";
+import { Icon } from "@impactium/icons";
 
 
 export namespace Anapod {
@@ -55,9 +56,9 @@ export namespace Anapod {
   }
 
   export interface Overall {
-    service: string;
-    icon: string;
-    value: number;
+    name: string;
+    url: string;
+    ping: number;
   }
 
   export function WS() {

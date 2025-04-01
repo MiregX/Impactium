@@ -8,6 +8,7 @@
   flex: 1;
   z-index: 1;
   transition: all 0.15s var(--transition);
+  border-radius: 12px;
 }
 .wrapper.translate {
   transform: translateX(calc(88px * 3 / 3 * -1));

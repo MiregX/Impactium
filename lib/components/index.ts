@@ -5,3 +5,4 @@ export * from './stack';
 export * from './button';
 export * from './status';
 export * from './input';
+export * from './gauge';

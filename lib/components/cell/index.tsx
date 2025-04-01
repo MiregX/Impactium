@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react';
 import s from './cell.module.css';
+import { cn } from '@impactium/utils';
 
 export namespace Cell {
   type DivProps = HTMLAttributes<HTMLDivElement>;
@@ -19,17 +20,15 @@ export namespace Cell {
   }
 }
 
-export function Cell({ className, size, accent = 'var(--gray-400)', background, ...props }: Cell.Props) {
-  const basic = 88;
-
+export function Cell({ className, size = 88, accent = 'var(--gray-400)', background, ...props }: Cell.Props) {
   const style = {
     ...props.style,
     borderColor: accent.toString(),
-    '--cell-size': size ?? basic + 'px',
-    top: props.top ? -(size ?? basic) : void 0,
-    right: props.right ? -(size ?? basic) : void 0,
-    bottom: props.bottom ? -(size ?? basic) : void 0,
-    left: props.left ? -(size ?? basic) : void 0,
+    '--cell-size': size.toString() + 'px',
+    top: props.top ? -(size) : void 0,
+    right: props.right ? -(size) : void 0,
+    bottom: props.bottom ? -(size) : void 0,
+    left: props.left ? -(size) : void 0,
     background: background?.toString(),
   }
 
@@ -38,7 +37,7 @@ export function Cell({ className, size, accent = 'var(--gray-400)', background, 
   }
 
   return (
-    <div className={`${s.cell} ${className}`} style={style} {...props} />
+    <div className={cn(s.cell, className)} style={style} {...props} />
   )
 }
 

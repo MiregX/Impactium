@@ -1,11 +1,11 @@
 'use client'
 import React, { useState, createContext, useContext, Dispatch, SetStateAction } from "react";
-import { λthrow } from '@impactium/utils';
+import { cn, λthrow } from '@impactium/utils';
 import { Anapod } from '../index';
-import s from './styles/context.module.css';
+import { Stack } from "@impactium/components";
 
 export namespace Context {
-  export interface Props {
+  export interface Props extends Stack.Props {
     children: React.ReactNode
   }
 
@@ -13,6 +13,7 @@ export namespace Context {
     logs: Anapod.Log[],
     setLogs: React.Dispatch<React.SetStateAction<Anapod.Log[]>>,
     updateOverall: () => Promise<Anapod.Overall[]>;
+    overall: Anapod.Overall[];
     focus: string | null,
     setFocus: Dispatch<SetStateAction<string | null>>;
   }
@@ -27,7 +28,7 @@ export namespace Context {
 
   export const use = () => useContext(context) ?? λthrow(UnexpectedUsageException);
 
-  export function Provider({ children }: Context.Props) {
+  export function Provider({ children, ...external_props }: Context.Props) {
     const [logs, setLogs] = useState<Anapod.Log[]>([]);
     const [overall, setOverall] = useState<Anapod.Overall[]>([]);
     const [focus, setFocus] = useState<string | null>(null);
@@ -44,15 +45,16 @@ export namespace Context {
       logs,
       setLogs,
       updateOverall,
+      overall,
       focus,
       setFocus
     }
   
     return (
       <context.Provider value={props}>
-        <div className={s.page}>
+        <Stack {...external_props}>
           {children}
-        </div>
+        </Stack>
       </context.Provider>
     );
   };

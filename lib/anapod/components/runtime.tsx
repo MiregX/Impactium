@@ -2,12 +2,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import s from './styles/runtime.module.css';
 import { Log } from './log';
-// import { Input, Tooltip } from '@impactium/components';
+// import { Input } from '@impactium/components';
 import { Anapod } from '../index';
 import { Button, Stack, Cell, Skeleton } from '@impactium/components';
 import { cn } from '@impactium/utils';
 import { Color } from '@impactium/design';
 import { MaybeArray } from '@impactium/types';
+import { Icon } from '@impactium/icons';
 
 interface Unit {
   count: number
@@ -162,16 +163,6 @@ export function Runtime({
 
   return (
     <Stack gap={12} className={cn(s.wrapper, isAnapodOpen && s.translate)} dir='column' pos='relative' {...props}>
-      <Cell top right background={color}>
-        {totalCount}
-      </Cell>
-      <Cell right bottom background={color}>
-        <Button loading={loading} img='PlayCircle' variant='ghost' onClick={runQuery} />
-      </Cell>
-      <Cell top left background={color} />
-      <Cell bottom left background={color}>
-        <Button img='ChartPie' variant='ghost' onClick={() => setIsAnapodOpen(v => !v)} />
-      </Cell>
       <Stack gap={16} style={{ width: '100%' }}>
         <Button variant='outline' img='SettingsSliders' />
         {/* <Input value={filter} onChange={changeInputFilterHandler} img='Search' placeholder={`${totalCount} logs total found...`} /> */}
@@ -210,16 +201,6 @@ function WebSocketStatus({ ws }: WebSocketStatusProps) {
   const color = new Color(getDotColorByWebSocketStatus());
 
   return (
-    null
-    // <Tooltip.Provider>
-    //   <Tooltip.Frame>
-    //     <Tooltip.Trigger>
-    //       <Icon name='Status' fromGeist color={color.toString()} />
-    //     </Tooltip.Trigger>
-    //     <Tooltip.Content>
-    //       <p>WebSocket Status</p>
-    //     </Tooltip.Content>
-    //   </Tooltip.Frame>
-    // </Tooltip.Provider>
+    <Icon name='Status' fromGeist color={color.toString()} />
   )
 }

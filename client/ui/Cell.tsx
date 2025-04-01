@@ -28,7 +28,7 @@ export function Cell({ className, size, accent = new DesignSystem.Color('gray-40
   const style = {
     ...props.style,
     borderColor: accent.toString(),
-    '--cell-size': size ?? basic + 'px',
+    '--cell-size': `${(size ?? basic)}px`,
     top: props.top ? -(size ?? basic) : void 0,
     right: props.right ? -(size ?? basic) : void 0,
     bottom: props.bottom ? -(size ?? basic) : void 0,

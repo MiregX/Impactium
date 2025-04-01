@@ -1,1 +1,0 @@
-export type TournamentState = 'Upcoming' | 'Ongoing' | 'Finished'
