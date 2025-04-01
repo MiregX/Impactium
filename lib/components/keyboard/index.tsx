@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes } from 'react';
 
 export namespace Keyboard {
   export interface Props extends HTMLAttributes<HTMLSpanElement> {

@@ -47,7 +47,7 @@ export interface RequestOptions {
   useNumericHost?: boolean
   toast?: string | boolean
   setLoading?: SetState<boolean>
-  query?: Record<string, string | number | boolean> | string | URLSearchParams
+  query?: Record<string, string | number | boolean>
   body?: Record<string, any> | RequestInit['body']
   deassign?: boolean
 }
@@ -172,7 +172,7 @@ export function parseApiOptions<T>(
 export function getServer() {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
   ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
-  : "http://localhost"
+  : 'http://localhost'
 }
 
 export function soft<T>(value: T, func?: SetState<T>) {

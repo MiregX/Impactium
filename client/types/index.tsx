@@ -1,5 +1,3 @@
-export type Children = Readonly<{
+export type Parent = Readonly<{
   children: React.ReactNode
 }>
-
-export type LoginMethod = 'discord' | 'steam' | 'telegram' | 'google'

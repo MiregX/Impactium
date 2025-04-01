@@ -1,21 +1,19 @@
-"use client"
+'use client'
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import s from './styles/Header.module.css';
-import { Button } from '@impactium/components';
-import { useUser } from '@/context/User.context';
-import { UserComponent } from './User';
-import { useLanguage } from '@/context/Language.context';
+import { Button, Stack } from '@impactium/components';
+import { User } from '@/context/User.context';
+import { Language } from '@/context/Language.context';
 import { LoginBanner } from '@/banners/login/Login.banner';
-import { useApplication } from '@/context/Application.context';
-import { LanguageChooser } from '@/banners/language/LanguageChooser';
+import { Application } from '@/context/Application.context';
 import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons/dist';
 
 export function Header() {
-  const { user } = useUser();
-  const { lang } = useLanguage();
-  const { spawnBanner, application } = useApplication();
+  const { user } = User.use();
+  const { lang } = Language.use();
+  const { spawnBanner } = Application.use();
   const [hidden, setHidden] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -32,12 +30,12 @@ export function Header() {
         <h1>Impactium</h1>
       </Link>
       {user?.uid ? (
-        <UserComponent />
+        <User.Component />
       ) : (
-        <div className={s.wrapper}>
+        <Stack jc='flex-end'>
           <Button rounded variant='secondary' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
-          <Button rounded img='Globe' variant='secondary' onClick={() => spawnBanner(<LanguageChooser />)} />
-        </div>
+          <Button rounded img='Globe' variant='secondary' onClick={() => spawnBanner(<Language.Chooser />)} />
+        </Stack>
       )}
     </header>
   );

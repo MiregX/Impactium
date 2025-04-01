@@ -1,13 +1,13 @@
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
-import { useLanguage } from '@/context/Language.context';
+import { Language } from '@/context/Language.context';
 import { Tournament } from '@/dto/Tournament';
 import { useState, useEffect } from 'react';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 import { Button } from '@impactium/components';
 
 export function DeleteTournaments() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const [tournaments, setTournaments] = useState<Tournament[] | null>(null);
   
   const reloadTournaments = () => api<Tournament[]>('/tournament/get', setTournaments)

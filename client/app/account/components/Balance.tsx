@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { cn } from "@impactium/utils";
 
 export function Balance() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const { user } = useUser<UserRequiredContext>();
 
   const button = <Button variant='default' onClick={() => toast(lang.error.Forbidden, {

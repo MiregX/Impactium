@@ -1,7 +1,7 @@
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
 import { Avatar } from '@/ui/Avatar';
-import { useLanguage } from '@/context/Language.context';
+import { Language } from '@/context/Language.context';
 import { Button } from '@impactium/components';
 import { Skeleton } from '@impactium/components';
 import { useState, useEffect } from 'react';
@@ -9,7 +9,7 @@ import { Team } from '@/dto/Team.dto';
 import { Combination, CombinationSkeleton } from '@/ui/Combitation';
 
 export function DeleteTeams() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const [teams, setTeams] = useState<Team[] | null>(null);
   
   const reloadTeams = () => api<Team[]>('/team/get', setTeams)

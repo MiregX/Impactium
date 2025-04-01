@@ -1,18 +1,11 @@
 .combination {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap);
-}
-.group {
-  flex: 1;
-  display: flex;
   height: 32px;
-  justify-content: space-evenly;
-  flex-direction: column;
-  max-width: 100%;
-  overflow: hidden;
 }
-.group p {
+.combination > div {
+  overflow: hidden;
+  max-width: 100%;
+}
+.combination p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

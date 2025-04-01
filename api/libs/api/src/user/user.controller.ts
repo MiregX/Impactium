@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, ForbiddenException, forwardRef, Get, Inject, NotFoundException, Param, Patch, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, NotFoundException, Param, Patch, Query, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@api/main/auth/addon/auth.guard';
 import { Id } from './addon/id.decorator';
@@ -12,7 +12,6 @@ import { Response } from 'express';
 import { λCookie, cookieSettings, λParam, λCache } from '@impactium/pattern';
 import { λthrow } from '@impactium/utils';
 import { AdminGuard } from '../auth/addon/admin.guard';
-import { Logger } from '../application/addon/logger.service';
 import { AuthService } from '../auth/auth.service';
 import { Cache } from '../application/addon/cache.decorator';
 import { RedisService } from '../redis/redis.service';
@@ -62,12 +61,6 @@ export class UserController {
     return Authorization;
   }
 
-  @Get('inventory')
-  @UseGuards(AuthGuard)
-  getInventory(@Id() uid: λParam.Id) {
-    return this.userService.inventory(uid);
-  }
-
   @Patch('edit')
   @UseGuards(AuthGuard)
   @ApiResponseSuccess(UserEntity)
@@ -89,22 +82,5 @@ export class UserController {
   @UseGuards(AuthGuard)
   isAdmin(@Id() uid: λParam.Id) {
     return uid === 'system'; 
-  }
-
-  @Get('admin')
-  async bypassAdmin(
-    @Res({ passthrough: true }) res: Response,
-    @Query('key') keypass: string
-  ) {
-    if (!keypass) {
-      Logger.warn('Someone is requested /user/admin', UserController.name);
-      λthrow(BadRequestException)
-    };
-
-    const token = await this.userService.admin(keypass);
-
-    res.cookie(λCookie.Authorization, token, cookieSettings)
-
-    return token;
   }
 }

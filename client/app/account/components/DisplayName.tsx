@@ -10,7 +10,7 @@ import { User } from "@/dto/User.dto";
 import { Input } from "@/ui/Input";
 
 export function DisplayName() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const { user, assignUser } = useUser<UserRequiredContext>();
   const [ displayName, setDisplayName ] = useState<string>(user.displayName);
   const [ loading, setLoading ] = useState<boolean>(false);

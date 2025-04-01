@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "isolatedModules": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
@@ -18,16 +23,23 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@impactium/*": ["../lib/*"]
-    },
+      "@/*": [
+        "./*"
+      ],
+      "@impactium/*": [
+        "../lib/*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "**/*.d.ts"
-, "../lib/components/status/index.tsx"  ],
-  "exclude": ["node_modules"]
+    "**/*.d.ts",
+    "../lib/components/status/index.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

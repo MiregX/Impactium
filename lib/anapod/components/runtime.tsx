@@ -72,14 +72,6 @@ export function Runtime({
     Anapod.Fetch({ filter }).then(insertLogs);
   }
 
-  const changeInputFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-
-    setFilter(value);
-  }
-
-  const color = new Color('soft-black').toString();
-
   const statusHoverHandler = async (path: string) => {
     const amount = counts.get(path);
 
@@ -176,7 +168,7 @@ export function Runtime({
         <p>Message</p>
       </Stack>
       <Stack dir='column' gap={0} className={s.content} onScroll={contentScrollHandler}>
-        {logs.map((log, index) => <Skeleton delay={-4} height='unset' width='unset' show={index < loadingLogs}><Log onMouseEnter={() => statusHoverHandler(log.path)} log={log} /></Skeleton>)}
+        {logs.map((log, index) => <Skeleton key={index} delay={-4} height='unset' width='unset' show={index < loadingLogs}><Log onMouseEnter={() => statusHoverHandler(log.path)} log={log} /></Skeleton>)}
       </Stack>
     </Stack>
   )

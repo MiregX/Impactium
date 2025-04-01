@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language.context'
+import { Language } from '@/context/Language.context'
 import s from './styles/Footer.module.css'
 import Link from 'next/link'
 import { Button, Stack } from '@impactium/components';
@@ -7,7 +7,7 @@ import { Icon } from '@impactium/icons';
 import { Color } from '@impactium/design';
 
 export function Footer() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
 
   const Operational = () => 
     <Stack className={s.operational}>

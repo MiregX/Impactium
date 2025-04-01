@@ -1,18 +1,18 @@
 'use client'
-import { useLanguage } from '@/context/Language.context';
+import { Language } from '@/context/Language.context';
 import { Card } from '@/ui/Card';
 import s from '../Admin.module.css';
 import { Combination } from '@/ui/Combitation';
 import { User, UserEntity } from '@/dto/User.dto';
 import { ChangeEvent, useState } from 'react';
-import { useUser } from '@/context/User.context';
+import { User } from '@/context/User.context';
 import { Input } from '@/ui/Input';
 import { Button } from '@impactium/components';
 import { useRouter } from 'next/navigation';
 
 export function Impersonate() {
-  const { lang } = useLanguage();
-  const { refreshUser } = useUser();
+  const { lang } = Language.use();
+  const { refreshUser } = User.use();
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);

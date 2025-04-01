@@ -13,23 +13,18 @@ enum LoginType {
   discord
   telegram
   steam
+  native
 }
 
 model User {
   uid           String       @id @default(cuid())
-  register      DateTime     @default(now())
+  registered    DateTime   @default(now())
   email         String?      @unique
   avatar        String?
   displayName   String?
   // Юзернейм: <Без @>
   username      String?      @unique
-  verified      Boolean      @default(false)
   logins        Login[]
-  teams         Team[]
-  inventory     Item[]
-  participate   TeamMember[]
-  tournaments   Tournament[]
-  transactions  Transaction[]
 }
 
 model Login {
@@ -40,153 +35,4 @@ model Login {
   on          DateTime  @default(now())
   avatar      String?
   displayName String?
-}
-
-model Item {
-  id          String    @id @default(uuid())
-  uid         String
-  user        User      @relation(fields: [uid], references: [uid])
-  imprint     String
-  amount      Int
-  item        Blueprint @relation(fields: [imprint], references: [imprint])
-}
-
-model Blueprint {
-  imprint       String    @unique
-  rare          Rare
-  category      Category
-  inventories   Item[]
-}
-
-enum Category {
-  Resourse
-  Scroll
-  Spellbook
-  Book
-  Ingot
-  Crystal
-}
-
-enum Rare {
-  Common
-  Uncommon
-  Rare
-  Epic
-  Legendary
-  Ancient
-  Divine
-}
-
-model Team {
-  indent        String       @id @unique
-  logo          String?
-  title         String?
-  description   String?
-  ownerId       String
-  registered    DateTime     @default(now())
-  owner         User         @relation(fields: [ownerId], references: [uid])
-  joinable      Joinable     @default(Invites)
-  tournaments   Tournament[]
-  members       TeamMember[]
-  invites       TeamInvite[]
-}
-
-model TeamMember {
-  id            String        @id @default(cuid())
-  uid           String
-  user          User          @relation(fields: [uid], references: [uid])
-  indent        String
-  team          Team          @relation(fields: [indent], references: [indent])
-  role          Role?
-}
-
-enum Role {
-  Carry
-  Mid
-  Offlane
-  SemiSupport
-  FullSupport
-  Rotation
-  Coach
-}
-
-enum Joinable {
-  Free
-  Invites
-  Closed
-}
-
-model Tournament {
-  banner              String
-  title               String
-  start               DateTime
-  end                 DateTime
-  description         Json
-  code                String        @id @unique
-  rules               Json
-  ownerId             String
-  owner               User          @relation(fields: [ownerId], references: [uid])
-  teams               Team[]
-  live                String?
-  prize               Int           @default(0)
-  createdAt           DateTime      @default(now())
-  iterations          Iteration[]
-  has_lower_bracket   Boolean       @default(false)
-}
-
-model Iteration {
-  is_lower_bracket    Boolean
-  tournament          Tournament      @relation(fields: [tid], references: [code])
-  startsAt            DateTime
-  battles             Battle[]
-  best_of             Int             @default(1)
-  tid                 String
-  id                  String          @id @default(uuid())
-  n                   Int
-}
-
-model Battle {
-  id                        String          @id @default(uuid())
-  iteration                 Iteration       @relation(fields: [iid], references: [id])
-  iid                       String
-  slot1                     String
-  slot2                     String?
-  is_slot_one_winner        Boolean?
-  games                     Game[]
-  createdAt                 DateTime        @default(now())
-}
-
-model Game {
-  id            String          @id @default(uuid())
-  battle        Battle      @relation(fields: [bid], references: [id])
-  bid           String
-  n             Int
-  matchId       String?   // С доты для анализа
-  winner        String?
-}
-
-enum TransactionStatus {
-  success
-  pending
-  canceled
-  error
-}
-
-model Transaction {
-  id            String    @id @default(cuid())
-  uid           String
-  user          User      @relation(fields: [uid], references: [uid])
-  coins         Int
-  date          DateTime  @default(now())
-  status        TransactionStatus
-}
-
-model TeamInvite {
-  id            String      @id @default(cuid())
-  created       DateTime    @default(now())
-  indent        String
-  team          Team        @relation(fields: [indent], references: [indent])
-  used          Int         @default(0)
-  maxUses       Int         @default(4)
-  declines      Int         @default(0)
 }

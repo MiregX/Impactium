@@ -6,7 +6,7 @@ import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Avatar } from "@/ui/Avatar";
 
 export function PersonalAvatar() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const { user } = useUser<UserRequiredContext>();
 
   return (

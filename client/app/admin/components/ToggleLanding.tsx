@@ -5,7 +5,7 @@ import s from '../Admin.module.css';
 import { useApplication } from "@/context/Application.context";
 
 export function ToggleLanding() {
-  const { application } = useApplication();
+  const { application } = Application.use();
 
   return (
     <Card>

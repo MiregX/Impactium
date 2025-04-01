@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useApplication } from '../context/Application.context'
+import { Application } from '../context/Application.context'
 import s from './styles/Banner.module.css'
 import { cn } from '@impactium/utils'
 import { Cell, Stack, Skeleton, Button } from '@impactium/components'
@@ -31,7 +31,7 @@ export function Banner({
   side = null,
   onClose,
 }: Banner.Props) {
-  const { destroyBanner } = useApplication()
+  const { destroyBanner } = Application.use();
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const close = () => {
@@ -64,8 +64,8 @@ export function Banner({
     }
 
     return (
-      <Stack className={cn(s.side, isExpanded && s.open)} pos="absolute">
-        <Stack className={s.side_content} pos="relative">
+      <Stack className={cn(s.side, isExpanded && s.open)} pos='absolute'>
+        <Stack className={s.side_content} pos='relative'>
           {side}
         </Stack>
       </Stack>
@@ -75,21 +75,21 @@ export function Banner({
   return (
     <div className={s.wrapper}>
       <div className={cn(s.banner, s.loading, className)}>
-        <Cell key="cell-1" className={s.cell} top left>
-          {back && <Button variant="ghost" img="CornerUpLeft" onClick={back} />}
+        <Cell key='cell-1' className={s.cell} top left>
+          {back && <Button variant='ghost' img='CornerUpLeft' onClick={back} />}
         </Cell>
-        <Cell key="cell-2" className={s.cell} top right>
+        <Cell key='cell-2' className={s.cell} top right>
           {fixed ? null : (
             <Button
-              variant="ghost"
+              variant='ghost'
               onClick={close}
-              img="X"
+              img='X'
               loading={loading}
-              size="icon"
+              size='icon'
             />
           )}
         </Cell>
-        <Cell key="cell-3" className={s.cell} bottom left>
+        <Cell key='cell-3' className={s.cell} bottom left>
           {side ? (
             <Button
               img={isExpanded ? 'Eye' : 'EyeOff'}
@@ -100,15 +100,15 @@ export function Banner({
             option
           )}
         </Cell>
-        <Cell key="cell-4" className={s.cell} bottom right>
+        <Cell key='cell-4' className={s.cell} bottom right>
           {done}
         </Cell>
         {Side}
         {title && <h6>
-          {loading ? <Skeleton width="long" height={24} /> : title}
+          {loading ? <Skeleton width='long' height={24} /> : title}
           {subtitle ? loading ? <Skeleton height={24} /> : subtitle : null}
         </h6>}
-        <Stack dir="column" ai="unset" gap={16} className={s.content}>
+        <Stack dir='column' ai='unset' gap={16} className={s.content}>
           {children}
         </Stack>
       </div>

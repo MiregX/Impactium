@@ -1,16 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  reactStrictMode: false,
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.alias['@react-frontend'] = '@react-frontend';
-    }
-    return config;
-  },
-  serverRuntimeConfig: {
-    disableReactStrictModeWarnings: true,
-  },
   images: {
     loader: 'default',
     remotePatterns: [
@@ -50,8 +40,5 @@ module.exports = {
     fetches: {
       fullUrl: false,
     }
-  },
-  typescript: {
-    ignoreBuildErrors: false,
-  },
+  }
 };

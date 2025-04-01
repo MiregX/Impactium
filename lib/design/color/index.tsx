@@ -26,7 +26,7 @@ export class Color {
   }
 
   static isVar(str: string | Color): boolean {
-    return typeof str === "string" && str.startsWith("var(--") && str.endsWith(")");
+    return typeof str === 'string' && str.startsWith('var(--') && str.endsWith(')');
   }
 
   static toVar(str: string | Color): string {

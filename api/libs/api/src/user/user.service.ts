@@ -53,22 +53,4 @@ export class UserService {
       ]
     }
   });
-
-  public admin = async (keypass: string, throwable: boolean = true) => {
-    const hash = createHmac('sha256', createHash('sha256').digest()).update(keypass).digest('hex');
-
-    if (hash !== 'e639e6fda92901cfaa855bdf591fb9685ec4b3db4ebd469df579beb9fc7ee207') {
-      Logger.warn(`Someone is tried to impersonate admin account with keypass ${keypass}`, UserService.name);
-      if (throwable) λthrow(ForbiddenException);
-      return;
-    }
-
-    Logger.log(`Someone is impersonated admin account with keypass ${keypass}`, UserService.name);
-
-    return this.applicationService.createSystemAccount();
-  }
-
-  public inventory = (uid: string) => this.prisma.item.findMany({
-    where: { user: { uid } }
-  });
 }

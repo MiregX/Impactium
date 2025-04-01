@@ -2,8 +2,8 @@
 import { Card } from '@/ui/Card';
 import s from '../Account.module.css';
 import { cn } from '@impactium/utils';
-import { useLanguage } from '@/context/Language.context';
-import { useUser } from '@/context/User.context';
+import { Language } from '@/context/Language.context';
+import { User } from '@/context/User.context';
 import { UserRequiredContext } from '@/context/User.context';
 import { UserCombination } from '@/components/UserCombination';
 import { Badge } from '@/ui/Badge';
@@ -11,7 +11,7 @@ import { BadgeType } from '@/ui/Badge';
 
 export function Overview() {
   const { user } = useUser<UserRequiredContext>();
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
 
   return (
     <Card

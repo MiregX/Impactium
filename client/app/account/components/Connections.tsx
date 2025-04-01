@@ -14,8 +14,8 @@ import { cn } from "@impactium/utils";
 import { Icon } from "@impactium/icons";
 
 export function Connections() {
-  const { lang } = useLanguage();
-  const { spawnBanner } = useApplication();
+  const { lang } = Language.use();
+  const { spawnBanner } = Application.use();
   const { user, setUser } = useUser<UserRequiredContext>();
   const [fetched, setFetched] = useState<boolean>(!!user?.logins);
 

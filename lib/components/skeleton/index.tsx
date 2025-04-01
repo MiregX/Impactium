@@ -81,6 +81,6 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(({
       {...props} />
   ) : props.children as never
 );
-Skeleton.displayName = "Skeleton";
+Skeleton.displayName = 'Skeleton';
 
 export { Skeleton, skeletonVariants };

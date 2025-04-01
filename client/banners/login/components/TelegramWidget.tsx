@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Configuration } from '@impactium/config';
-import { _server } from '@/decorator/api';
 import s from '../LoginBanner.module.css';
 
 export function TelegramWidget() {
@@ -14,9 +13,9 @@ export function TelegramWidget() {
     script.setAttribute('data-size', 'large');
     script.setAttribute('data-radius', '6');
     script.setAttribute('data-request-access', 'write');
-    script.setAttribute('data-auth-url', _server() + '/api/oauth2/telegram/callback');
+    script.setAttribute('data-auth-url', 'http://localhost/api/oauth2/telegram/callback');
     document.getElementById('telegram-widget')!.appendChild(script);
   }, []);
 
-  return <div className={s.telegramWidget} id="telegram-widget" />;
+  return <div className={s.telegramWidget} id='telegram-widget' />;
 };

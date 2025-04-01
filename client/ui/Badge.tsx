@@ -1,5 +1,5 @@
 'use client'
-import { useLanguage } from '@/context/Language.context'
+import { Language } from '@/context/Language.context'
 import s from './styles/Badge.module.css'
 import { cn } from '@impactium/utils'
 import { Icon } from '@impactium/icons'
@@ -52,7 +52,7 @@ type _PredefinedBadge = {
 interface BadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'color'>, _PredefinedBadge, _CustomBadge {}
 
 export function Badge({ className, ...options }: BadgeProps) {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const map: Record<BadgeType, _CustomBadge> = {
     [BadgeType.cookies]: {
       title: 'Cookies',

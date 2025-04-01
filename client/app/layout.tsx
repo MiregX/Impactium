@@ -1,40 +1,35 @@
 import '@/decorator/api';
-import '@/decorator/useOptionStyling';
+import { Api } from '@/decorator/api';
 import React from 'react'
 import '@/public/.global.css';
-import LanguageProvider from '@/context/Language.context';
-import { ApplicationProvider } from '@/context/Application.context';
-import { UserProvider } from '@/context/User.context';
+import { Language, LanguageProvider } from '@/context/Language.context';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/Footer';
-import { User } from '@/dto/User.dto';
 export { metadata } from '@/dto/Metadata';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { Header } from '@/components/Header';
-import { Api } from '@/dto/api.dto';
 import { Toaster } from '@/ui/Toaster';
-import { Children } from '@/types';
-import { Blueprint } from '@/dto/Blueprint.dto';
+import { Parent } from '@/types';
+import { User, UserProvider } from '@/context/User.context';
+import { Application, ApplicationProvider } from '@/context/Application.context';
+import { λCookie } from '@impactium/pattern';
 
 declare global {
   var api: Api;
   var useOptionStyling: (options: Record<string, any> | undefined, base: Record<string, string>) => string;
 }
 
-export default async function RootLayout({ children }: Children) {
-  const cookie = cookies();
+export default async function RootLayout({ children }: Parent) {
+  const cookie = await cookies();
 
-  const token = cookie.get('Authorization')?.value
+  const token = cookie.get(λCookie.Authorization)?.value
 
-  const user = token ? await api<User>('/user/get', {
+  const user = token ? await api<User.Interface>('/user/get', {
     headers: {
       token
     }
-  }) : null;
-
-  const application = await api<any>('/application/info') || {};
-  const blueprints = await api<Blueprint[]>('/application/blueprints') || [];
+  }) : null;  
 
   return (
     // @ts-ignore
@@ -42,7 +37,7 @@ export default async function RootLayout({ children }: Children) {
       <body style={{ backgroundColor: '#000000' }} data-scroll-locked='0'>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user!}>
-            <ApplicationProvider application={application} blueprints={blueprints}>
+            <ApplicationProvider>
               <Header />
               <main>
                 {children}

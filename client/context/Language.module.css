@@ -1,6 +1,6 @@
 ._ {
   display: flex;
-  border: 1px solid var(--gray-alpha-400);
+  border: 1px solid var(--gray-400);
   border-radius: var(--border-s);
   background: var(--soft-black);
   flex-direction: column;

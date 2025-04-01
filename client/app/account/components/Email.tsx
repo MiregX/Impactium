@@ -6,7 +6,7 @@ import { UserRequiredContext, useUser } from "@/context/User.context";
 import { Badge, BadgeType } from "@/ui/Badge";
 
 export function Email() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const { user } = useUser<UserRequiredContext>();
 
   return (

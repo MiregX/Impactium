@@ -55,13 +55,11 @@ export function Operall() {
 
   return (
     <Stack>
-      {overall.map(o => {
-        return (
-          <Stack>
-            <Gauge value={100 - o.ping} size={32} label={o.ping + 'ms'} />
-          </Stack>
-        )
-      })}
+      {overall.map(o => (
+        <Stack key={o.name}>
+          <Gauge value={100 - o.ping} size={32} label={o.ping + 'ms'} />
+        </Stack>
+      ))}
     </Stack>
   )
     

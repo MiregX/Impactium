@@ -1,40 +1,15 @@
 'use client';
 import locale, { _Locale, Locale } from '@/public/locale';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Parent } from '@/types';
+import { Banner } from '@/ui/Banner';
+import { Button, Stack } from '@impactium/components/dist';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Cookies from 'universal-cookie';
+import s from './Language.module.css';
 
-interface Translations {
-  [key: string]:
-    | string
-    | string[]
-    | Record<string, string>
-    | any;
-}
-
-interface ILanguageContext {
-  lang: Locale;
-  setLanguage: (language: string) => void;
-  language: string;
-  refreshLanguage: () => void;
-}
-
-const LanguageContext = createContext<ILanguageContext | undefined>(undefined);
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-
-  if (!context) throw new Error();
-  
-  return context;
-};
-
-function validate(languageCode?: string) {
-  return !languageCode || !['us', 'ua', 'ru', 'it', 'pl'].includes(languageCode) ? 'us' : languageCode;
-}
-
-const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage?: string }> = ({ children, predefinedLanguage }) => {
+export function LanguageProvider({ children, predefinedLanguage }: Language.Provider.Props) {
   const cookie = new Cookies();
-  const [language, setLanguage] = useState<string>(cookie.get('_language') || validate(predefinedLanguage));
+  const [language, setLanguage] = useState<string>(cookie.get('_language') || Language.validate(predefinedLanguage));
 
   useEffect(() => cookie.set('_language', language, {
     path: '/',
@@ -45,7 +20,7 @@ const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage
 
   function getLanguagePack(languageCode: string = 'us') {
     const translations: any = {};
-    languageCode = validate(languageCode);
+    languageCode = Language.validate(languageCode);
   
     for (const key in locale) {
       const prop: any = locale[key as keyof Locale];
@@ -69,18 +44,80 @@ const LanguageProvider: React.FC<{ children: React.ReactNode, predefinedLanguage
     return translations;
   }
 
-  const props: ILanguageContext = {
-    lang: getLanguagePack(language),
+  const lang = useMemo(() => getLanguagePack(language), [language]);
+
+  const props: Language.Export = {
+    lang,
     setLanguage,
     refreshLanguage,
     language
   };
 
   return (
-    <LanguageContext.Provider value={props}>
+    <Language.Context.Provider value={props}>
       {children}
-    </LanguageContext.Provider>
+    </Language.Context.Provider>
   );
-};
+}
 
-export default LanguageProvider;
+
+export namespace Language {
+  export interface Export {
+    lang: Locale;
+    setLanguage: (language: string) => void;
+    language: string;
+    refreshLanguage: () => void;
+  }
+
+  export const Context = createContext<Language.Export | undefined>(undefined);
+
+  export const use = () => useContext<Language.Export | undefined>(Context)!;
+
+  export function validate(languageCode?: string) {
+    return !languageCode || !['us', 'ua', 'ru', 'it', 'pl'].includes(languageCode) ? 'us' : languageCode;
+  }
+
+  export namespace Provider {
+    export interface Props extends Parent {
+      predefinedLanguage?: string;
+    }  
+  }
+
+  export function Chooser() {
+    const { lang, language, setLanguage } = Language.use();
+  
+    const availableLanguages: { [key: string]: { code: string; target: string; } } = {
+      us: {
+        code: 'english',
+        target: 'English'
+      },
+      ua: {
+        code: 'ucraine',
+        target: 'Українська'
+      },
+      ru: {
+        code: 'russia',
+        target: 'Русский'
+      },
+      it: {
+        code: 'italy',
+        target: 'Italiano'
+      }
+    };  
+  
+    return (
+      <Banner title={lang.choose.language}>
+        <Stack className={s._}>
+          {Object.keys(availableLanguages).map((key: string) => (
+            <Button
+              variant={key === language ? 'glass' : 'secondary'}
+              key={key}
+              onClick={() => setLanguage(key)}>
+              {availableLanguages[key].target}
+            </Button>
+          ))}
+        </Stack>
+      </Banner>
+    );
+  };
+}

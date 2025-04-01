@@ -1,7 +1,7 @@
 'use client'
-import { Icon } from "@impactium/icons";
-import { Button } from "../button";
-import { Stack } from "../stack";
+import { Icon } from '@impactium/icons';
+import { Button } from '../button';
+import { Stack } from '../stack';
 import s from './loading.module.css';
 
 export namespace Loading {

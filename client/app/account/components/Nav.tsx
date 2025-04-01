@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Locale } from "@/public/locale";
 
 export function Nav() {
-  const { lang } = useLanguage();
+  const { lang } = Language.use();
   const [activeSection, setActiveSection] = useState('');
   const sections: (keyof Locale['account'])[] = ['avatar', 'balance', 'displayName', 'username', 'email', 'connections'];
 
