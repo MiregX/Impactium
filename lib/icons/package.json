@@ -34,7 +34,7 @@
   "homepage": "https://dev.impactium.fun/icons",
   "dependencies": {
     "class-variance-authority": "^0.7.0",
-    "lucide-react": "^0.460.0",
+    "lucide-react": "^0.487.0",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
@@ -48,7 +48,6 @@
   },
   "peerDependencies": {
     "class-variance-authority": "^0.7.0",
-    "lucide-react": "^0.460.0",
     "react": "*",
     "react-dom": "*"
   },

@@ -1,17 +1,16 @@
 'use client'
-import { useLanguage } from "@/context/Language.context";
-import { Card } from "@/ui/Card";
+import { Language } from "@/context/Language.context";
+import { Card } from "@/ui/card";
 import s from '../Account.module.css'
-import { UserRequiredContext, useUser } from "@/context/User.context";
+import { User } from "@/context/User.context";
 import { Button } from "@impactium/components";
 import { Identifier } from '@impactium/pattern'
 import { useState } from "react";
-import { User } from "@/dto/User.dto";
 import { Input } from "@/ui/Input";
 
 export function Username() {
   const { lang } = Language.use();
-  const { user, assignUser } = useUser<UserRequiredContext>();
+  const { user, assignUser } = User.use<User.RequiredExport>();
   const [username, setUsername] = useState<string>(user.username);
   const [loading, setLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(true);
@@ -21,7 +20,7 @@ export function Username() {
 
     if (!valid) return setValid(false);
 
-    api<User>(`/user/edit`, {
+    api<User.Interface>(`/user/edit`, {
       method: 'PATCH',
       toast: 'user_updated_successfully',
       body: { username },
@@ -34,23 +33,22 @@ export function Username() {
     setValid(true);
   }
 
-  const button = <Button
-    loading={loading}
-    variant={user.username !== username && valid ? 'default' : 'disabled'}
-    onClick={send}>{lang._save}</Button>;
-
   return (
-    <Card className={s.account} id='username' description={{ text: lang.account.username_description, button }}>
-      <h6>{lang.account.username}</h6>
-      <p>{lang.account.username_content}</p>
-      <div className={s.min}>
-        <div className={s.before}>impactium.fun/user/</div>
-        <Input
-          value={username}
-          onChange={handleChange}
-          valid={valid}
-        />
-      </div>
-    </Card>
+    <Card.Root className={s.account} id='username'>
+      <Card.Title>{lang.account.username}</Card.Title>
+      <Card.Content>
+        <div className={s.min}>
+          <div className={s.before}>impactium.fun/user/</div>
+          <Input
+            value={username}
+            onChange={handleChange}
+            valid={valid}
+          />
+        </div>
+      </Card.Content>
+      <Card.Description>
+        <p>{lang.account.username_content}</p>
+      </Card.Description>
+    </Card.Root>
   );
 }

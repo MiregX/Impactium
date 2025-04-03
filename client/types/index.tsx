@@ -1,3 +1,5 @@
+import { Stack } from "@impactium/components"
+
 export type Parent = Readonly<{
-  children: React.ReactNode
+  children: Stack.Props['children'];
 }>

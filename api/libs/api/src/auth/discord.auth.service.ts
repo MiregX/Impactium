@@ -16,7 +16,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
     private readonly authService: AuthService
   ) {
     if (!process.env.DISCORD_ID) throw new EnvironmentKeyNotProvided('DISCORD_ID');
-    
+
     if (!process.env.DISCORD_SECRET) throw new EnvironmentKeyNotProvided('DISCORD_SECRET');
 
     super({
@@ -47,12 +47,12 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
       .catch(_ => {
         throw ForbiddenException
       });
-    
+
     payload.uid = uuid && await this.authService.getPayload(uuid) as string;
-  
+
     return this.authService.register(payload)
   }
-  
+
 
   getUrl() {
     return this.generateAuthUrl({

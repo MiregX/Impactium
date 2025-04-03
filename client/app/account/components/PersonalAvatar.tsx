@@ -1,23 +1,30 @@
 'use client'
-import { useLanguage } from "@/context/Language.context";
-import { Card } from "@/ui/Card";
+import { Language } from "@/context/Language.context";
 import s from '../Account.module.css'
-import { UserRequiredContext, useUser } from "@/context/User.context";
+import { User } from "@/context/User.context";
 import { Avatar } from "@/ui/Avatar";
+import { Card } from "@/ui/card";
+import { Stack } from "@impactium/components";
 
 export function PersonalAvatar() {
   const { lang } = Language.use();
-  const { user } = useUser<UserRequiredContext>();
+  const { user } = User.use<User.RequiredExport>();
 
   return (
-    <Card className={s.account} id='avatar' description={lang.account.avatar_description}>
-      <h6>{lang.account.avatar}</h6>
-      <p>{lang.account.avatar_content}</p>
-      <Avatar
-        size={78}
-        src={user.avatar}
-        alt={user.displayName}
-        className={s.avatar} />
-    </Card>
+    <Card.Root className={s.account}>
+      <Card.Title>
+        {lang.account.avatar}
+      </Card.Title>
+      <Card.Content>
+        <Avatar
+          size={78}
+          src={user.avatar}
+          alt={user.displayName}
+          className={s.avatar} />
+      </Card.Content>
+      <Card.Description>
+        <p>{lang.account.avatar_content}</p>
+      </Card.Description>
+    </Card.Root>
   );
 }

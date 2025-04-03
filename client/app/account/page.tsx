@@ -1,29 +1,33 @@
-import { PersonalAvatar } from "./components/PersonalAvatar";
-import { PanelTemplate } from "@/components/PanelTempate";
-import { DisplayName } from "./components/DisplayName";
-import { Connections } from "./components/Connections";
-import { Username } from "./components/Username";
-import { Balance } from "./components/Balance";
-import { Email } from "./components/Email";
-import { Nav } from "./components/Nav";
+'use client'
+import { PersonalAvatar } from './components/PersonalAvatar';
+import { DisplayName } from './components/DisplayName';
+import { Connections } from './components/Connections';
+import { Username } from './components/Username';
+import { Email } from './components/Email';
+import { Nav } from './components/Nav';
 import s from './Account.module.css';
-import { Overview } from "./components/Overview";
+import { User } from '@/context/User.context';
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
-export default async function AccountPage() {
+export default function AccountPage() {
+  const { user } = User.use();
+
+  useEffect(() => {
+    if (!user) {
+      redirect('/');
+    }
+  }, [user]);
   return (
-    <PanelTemplate className={[s.page]} title='$_account' useAuthGuard={true}>
+    <main className={s.main}>
       <Nav />
       <div className={s.wrapper}>
-        <Overview />
-        <div className={s.group}>
-          <PersonalAvatar />
-          <Balance />
-        </div>
+        <PersonalAvatar />
         <DisplayName />
         <Username />
         <Email />
         <Connections />
       </div>
-    </PanelTemplate>
+    </main>
   );
 };

@@ -110,7 +110,7 @@ export namespace Language {
         <Stack className={s._}>
           {Object.keys(availableLanguages).map((key: string) => (
             <Button
-              variant={key === language ? 'glass' : 'secondary'}
+              variant={key === language ? 'hardline' : 'outline'}
               key={key}
               onClick={() => setLanguage(key)}>
               {availableLanguages[key].target}

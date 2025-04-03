@@ -8,7 +8,7 @@ import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
 import { JwtService } from '@nestjs/jwt';
-import { Optional, λLogger, λParam } from '@impactium/pattern';
+import { λLogger, λParam } from '@impactium/pattern';
 import { λthrow } from '@impactium/utils';
 import { Logger } from '../application/addon/logger.service';
 import { UserNotFound } from '../application/addon/error';
@@ -16,12 +16,10 @@ import { UserNotFound } from '../application/addon/error';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(forwardRef(() => UserService))
-    
     private readonly prisma: PrismaService,
     private readonly redisService: RedisService,
     private readonly jwt: JwtService,
-  ) {}
+  ) { }
 
   login = (token: Token): Payload => this.decodeJWT(token);
 
@@ -38,7 +36,7 @@ export class AuthService {
     )
     return this.signJWT({ uid: result.uid as λParam.Id });
   }
-      
+
   async getPayload<T extends string | AuthPayload = AuthPayload>(uuid?: UUID): Promise<T | null> {
     if (!uuid) return null;
 
@@ -54,7 +52,7 @@ export class AuthService {
   async setPayload(uuid: UUID, payload: AuthPayload | string) {
     await this.redisService.setex(this.getCacheFolder(uuid), 300, JSON.stringify(payload) || uuid);
   }
-  
+
   async delPayload(uuid: UUID) {
     await this.redisService.del(this.getCacheFolder(uuid));
   }
@@ -62,7 +60,7 @@ export class AuthService {
   signJWT = (payload: Payload): Token => `Bearer ${this.jwt.sign(payload, { secret: process.env.JWT_SECRET, expiresIn: '7d' })}`;
 
   decodeJWT = (token: Token): Payload => this.jwt.decode(token && token.startsWith('Bearer ') ? token.substring(7) : token) || λthrow(ForbiddenException);
-  
+
   private getCacheFolder(uuid: UUID) {
     return `${dataset.connections}:${uuid}`
   }
@@ -80,7 +78,7 @@ export class AuthService {
 
   private createUser(data: AuthPayload, email?: AuthPayload['email']): Promise<UserEntity> {
     delete data.email;
-    
+
     return this.prisma.user.create({
       data: {
         email,

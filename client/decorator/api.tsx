@@ -1,10 +1,10 @@
-import { capitalize } from '@impactium/utils'
+import { between, capitalize } from '@impactium/utils'
 import { type Callback } from '@impactium/types'
 import { toast } from 'sonner'
 import { Configuration } from '@impactium/config'
 
 interface ResponseBase<T = any> {
-  status: 'success' | 'error' | 'pending'
+  status: number
   timestamp: Date
   req_id: string
   data: T
@@ -18,13 +18,13 @@ type ResponseError = ResponseBase<{
 }>
 
 export class λ<T extends ResponseBase<any>> {
-  status: 'success' | 'error' | 'pending'
+  status: number;
   req_id: string
   timestamp: Date
   data: T['data']
 
   constructor(data?: T) {
-    this.status = data?.status || 'error'
+    this.status = data?.status ?? 500;
     this.req_id = data?.req_id || ''
     this.timestamp = data?.timestamp || new Date()
     this.data = data
@@ -35,10 +35,9 @@ export class λ<T extends ResponseBase<any>> {
       } as ResponseError['data'])
   }
 
-  isError = (): this is ResponseError => this.status === 'error'
+  isError = (): this is ResponseError => between(this.status, 400, 599);
 
-  isSuccess = (): this is λ<ResponseSuccess<T['data']>> =>
-    this.status === 'success' || this.status === 'pending'
+  isSuccess = (): this is λ<ResponseSuccess<T['data']>> => between(this.status, 200, 399);
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
@@ -165,14 +164,14 @@ export function parseApiOptions<T>(
     callback,
     query,
     path,
-    endpoint: getServer(),
+    endpoint: getServer() + '/api',
   }
 }
 
 export function getServer() {
   return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
-  ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
-  : 'http://localhost'
+    ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
+    : 'http://localhost'
 }
 
 export function soft<T>(value: T, func?: SetState<T>) {
@@ -199,11 +198,17 @@ const api: Api = async function <T>(
     },
   ).catch(() => undefined)
 
-  const res = new λ(await response?.json())
+  let res: λ<any>;
+  try {
+    res = new λ(await response?.json());
+  } catch (error) {
+    console.log(error);
+    res = new λ(undefined);
+  }
 
   const isSuccess = res.isSuccess()
 
-  const result = options.raw ? res : isSuccess ? res.data : null
+  const result = options.raw ? res : (isSuccess ? res.data : null)
 
   if (isSuccess) {
     if (typeof options.toast === 'string') {
@@ -212,7 +217,7 @@ const api: Api = async function <T>(
     if (callback) {
       await callback(result)
     }
-  } else if (options.toast !== false) {
+  } else if (options.toast !== false && typeof toast.error === 'function') {
     toast.error(
       toSeparatedCase(res.data?.__error?.name),
       {

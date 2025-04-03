@@ -1,7 +1,7 @@
-"use client"
-import React from "react"
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-import { cn } from "@impactium/utils"
+'use client'
+import React from 'react'
+import * as TooltipPrimitive from '@radix-ui/react-tooltip'
+import { cn } from '@impactium/utils'
 import s from './styles/Tooltip.module.css';
 
 const TooltipProvider = TooltipPrimitive.Provider

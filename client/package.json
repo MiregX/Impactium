@@ -10,9 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@impactium/components": "^1.1.10",
+    "@impactium/components": "^1.1.12",
     "@impactium/design": "^1.0.0",
-    "@impactium/icons": "^1.2.6",
     "@impactium/utils": "^1.0.2",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
@@ -43,8 +42,8 @@
   "devDependencies": {
     "@types/lodash": "^4.17.0",
     "@types/node": "^22.13.17",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
     "eslint-config-next": "14.2.4",
     "typescript": "^5.8.2"
   }

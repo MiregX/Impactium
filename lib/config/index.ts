@@ -8,19 +8,19 @@ export class Configuration {
 
   static _server() {
     return this.isProductionMode()
-      ? process.env.API_PRODUCTION_HOST
-      : process.env.API_SYMBOLIC_HOST
+      ? process.env.DOMAIN
+      : process.env.LOCALHOST
   }
 
   static getClientLink() {
     return this.isProductionMode()
-      ? process.env.APP_PRODUCTION_HOST
-      : process.env.APP_SYMBOLIC_HOST
+      ? process.env.DOMAIN
+      : process.env.LOCALHOST
   }
 
   static getLink() {
     return this.isProductionMode()
-      ? process.env.API_PRODUCTION_HOST
+      ? process.env.DOMAIN
       : process.env.LOCALHOST
   }
 
@@ -36,7 +36,7 @@ export class Configuration {
     return parseInt(process.env.X!);
   }
 
-  static compareBehaviour = ([ prod, dev ]: [string, string]) => Configuration.isProductionMode() ? prod : dev;
+  static compareBehaviour = ([prod, dev]: [string, string]) => Configuration.isProductionMode() ? prod : dev;
 
   static getMode() {
     return this.isProductionMode()

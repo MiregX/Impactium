@@ -1,8 +1,8 @@
-import React from "react"
-import s from './styles/Input.module.css' 
-import { cva, type VariantProps } from "class-variance-authority"; 
-import { cn } from "@impactium/utils";
-import { Icon } from "@impactium/icons";
+import React from 'react'
+import s from './styles/Input.module.css'
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@impactium/utils';
+import { Icon } from '@impactium/icons';
 
 const inputVariants = cva(s.button, {
   variants: {
@@ -16,8 +16,8 @@ const inputVariants = cva(s.button, {
     },
   },
   defaultVariants: {
-    variant: "default",
-    size: "default",
+    variant: 'default',
+    size: 'default',
   },
 });
 
@@ -54,6 +54,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
-Input.displayName = "Input"
- 
+Input.displayName = 'Input'
+
 export { Input }

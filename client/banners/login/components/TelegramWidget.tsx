@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Configuration } from '@impactium/config';
-import s from '../LoginBanner.module.css';
+import s from '../Login.module.css';
 
 export function TelegramWidget() {
   const getBotUsername = () => Configuration.compareBehaviour(['impactium_bot', 'manyshield_bot']);

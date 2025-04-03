@@ -21,9 +21,9 @@ export namespace Banner {
 export function Banner({
   children,
   back,
-  className,
   title,
   fixed,
+  className,
   option,
   loading,
   done,
@@ -31,7 +31,7 @@ export function Banner({
   side = null,
   onClose,
 }: Banner.Props) {
-  const { destroyBanner } = Application.use();
+  const { destroyBanner } = Application.use()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const close = () => {
@@ -74,7 +74,7 @@ export function Banner({
 
   return (
     <div className={s.wrapper}>
-      <div className={cn(s.banner, s.loading, className)}>
+      <div className={cn(s.banner, s.loading)}>
         <Cell key='cell-1' className={s.cell} top left>
           {back && <Button variant='ghost' img='CornerUpLeft' onClick={back} />}
         </Cell>
@@ -108,7 +108,7 @@ export function Banner({
           {loading ? <Skeleton width='long' height={24} /> : title}
           {subtitle ? loading ? <Skeleton height={24} /> : subtitle : null}
         </h6>}
-        <Stack dir='column' ai='unset' gap={16} className={s.content}>
+        <Stack dir='column' ai='unset' gap={16} className={cn(s.content, className)}>
           {children}
         </Stack>
       </div>

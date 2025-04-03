@@ -8,14 +8,12 @@ import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
 import { SocketGateway } from '../socket/socket.gateway';
 import { Token } from '../auth/addon/auth.entity';
-import { Blueprint } from '@prisma/client';
-import { HOUR, λParam, λWebSocket } from '@impactium/pattern';
+import { λParam, λWebSocket } from '@impactium/pattern';
 import { Logger } from './addon/logger.service';
 import { UserEntity } from '../user/addon/user.entity';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
-  blueprints: Blueprint[] = [];
   constructor(
     @Inject(forwardRef(() => SocketGateway))
     private readonly webSocket: SocketGateway,
@@ -23,7 +21,7 @@ export class ApplicationService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   async info(username?: UserEntity['username']): Promise<any> {
     const info = await this._getInfo()
@@ -60,13 +58,11 @@ export class ApplicationService implements OnModuleInit {
     const info = data || await this._generateInfo()
     await this.redisService.setex(dataset.info, 600, JSON.stringify(info));
     return info;
-  } 
+  }
 
-  private async _generateInfo(): Promise<any> {
-    const [users_count, teams_count, tournaments_count, isSafeMode, globalPhrase] = await Promise.all([
+  private async _generateInfo() {
+    const [users_count, teams_count, tournaments_count] = await Promise.all([
       await this.prisma.user.count(),
-      await this.prisma.team.count(),
-      await this.prisma.tournament.count(),
       await this.redisService.get(dataset.isSafeMode),
       await this.redisService.get(dataset.phrase)
     ]);
@@ -80,10 +76,8 @@ export class ApplicationService implements OnModuleInit {
         teams_count,
         tournaments_count,
       },
-      isSafeMode: parseInt(isSafeMode || '1'),
       history: [],
-      globalPhrase
-    } as any
+    }
   }
 
   async status(): Promise<StatusEntity[]> {
@@ -94,14 +88,6 @@ export class ApplicationService implements OnModuleInit {
   async sync(any: any) {
     this.webSocket.server.emit(λWebSocket.updateApplicationInfo, any);
     return any;
-  }
-
-  async getBlueprints(): Promise<Blueprint[]> {
-    if (!this.blueprints.length) {
-      this.blueprints = await this.prisma.blueprint.findMany();
-      setTimeout(() => this.blueprints = [], HOUR);
-    }
-    return this.blueprints;
   }
 
   async handle() {
@@ -132,35 +118,35 @@ export class ApplicationService implements OnModuleInit {
     return {
       ping: await this.redisService._latency(),
       info: await this.redisService.info().then(response => {
-          const lines = response.split('\r\n');
-          const result = {} as any;
-          let section: null | string = null;
-        
-          lines.forEach(line => {
-            if (line.startsWith('#')) {
-              section = line.slice(2).toLowerCase();
-              result[section] = {};
-            } else if (line) {
-              const [key, value] = line.split(':');
-              if (section) {
-                result[section][key] = value;
-              } else {
-                result[key] = value;
-              }
+        const lines = response.split('\r\n');
+        const result = {} as any;
+        let section: null | string = null;
+
+        lines.forEach(line => {
+          if (line.startsWith('#')) {
+            section = line.slice(2).toLowerCase();
+            result[section] = {};
+          } else if (line) {
+            const [key, value] = line.split(':');
+            if (section) {
+              result[section][key] = value;
+            } else {
+              result[key] = value;
             }
-          });
+          }
+        });
 
-          const { redis_version, os } = result.server;
+        const { redis_version, os } = result.server;
 
-          return {
-            type: StatusInfoEntityTypes.Memory,
-            [StatusInfoEntityTypes.Memory]: {
-              used: result.memory.used_memory_human,
-              max: '32MB'
-            },
-            version: redis_version,
-            os
-          };
+        return {
+          type: StatusInfoEntityTypes.Memory,
+          [StatusInfoEntityTypes.Memory]: {
+            used: result.memory.used_memory_human,
+            max: '32MB'
+          },
+          version: redis_version,
+          os
+        };
       })
     }
   }
@@ -173,7 +159,7 @@ export class ApplicationService implements OnModuleInit {
       info: undefined
     };
   }
-  
+
   async onModuleInit() {
     await this.createSystemAccount();
   }
@@ -189,7 +175,6 @@ export class ApplicationService implements OnModuleInit {
         username: 'system',
         avatar: 'https://cdn.impactium.fun/logo/system_avatar.jpg',
         email: 'admin@impactium.fun',
-        verified: true
       },
       update: {}
     });

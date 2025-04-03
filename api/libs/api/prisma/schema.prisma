@@ -17,14 +17,13 @@ enum LoginType {
 }
 
 model User {
-  uid           String       @id @default(cuid())
-  registered    DateTime   @default(now())
-  email         String?      @unique
-  avatar        String?
-  displayName   String?
-  // Юзернейм: <Без @>
-  username      String?      @unique
-  logins        Login[]
+  uid         String   @id @default(cuid())
+  registered  DateTime @default(now())
+  email       String?  @unique
+  avatar      String?
+  displayName String?
+  username    String?  @unique
+  logins      Login[]
 }
 
 model Login {

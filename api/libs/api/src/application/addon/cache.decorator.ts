@@ -1,5 +1,6 @@
 import { RedisService } from '@api/main/redis/redis.service';
 import { λCache } from '@impactium/pattern';
+import { Logger } from './logger.service';
 /**
  * 
  * @param folder λCache c `@impactium/pattern`
@@ -7,7 +8,7 @@ import { λCache } from '@impactium/pattern';
  */
 export function Cache(folder: λCache, ttl?: number) {
   return function (
-    _target: Object,
+    _target: unknown,
     _property: string,
     descriptor: TypedPropertyDescriptor<any>
   ) {
@@ -21,7 +22,12 @@ export function Cache(folder: λCache, ttl?: number) {
       const update = async () => {
         const data = await method.apply(this, args);
 
-        return await redis.fsetux(folder, key, data, ttl);
+        return redis ? await redis.fsetux(folder, key, data, ttl) : data;
+      }
+
+      if (!redis) {
+        Logger.error('Redis was not found in context of Cache.decorator. Add RedisService as `redis` to service that uses it', 'CacheDecorator');
+        return update();
       }
 
       return await redis.fget(folder, key) || await update();
@@ -39,7 +45,7 @@ export function Cache(folder: λCache, ttl?: number) {
  */
 export function Recache(folder: λCache) {
   return function (
-    _target: Object,
+    _target: unknown,
     _property: string,
     descriptor: TypedPropertyDescriptor<any>
   ) {

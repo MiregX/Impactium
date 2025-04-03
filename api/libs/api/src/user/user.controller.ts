@@ -23,7 +23,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly redis: RedisService,
-  ) {}
+  ) { }
 
   @Get('get')
   @UseGuards(AuthGuard)
@@ -31,13 +31,12 @@ export class UserController {
   async getUserById(
     @Id() uid: λParam.Id,
     @Query('logins') logins?: boolean,
-    @Query('teams') teams?: boolean,
   ) {
-    const userEntity = await this.userService.findById(uid, { teams, logins });
+    const userEntity = await this.userService.findById(uid, { logins });
 
     if (!userEntity) throw NotFoundException;
 
-    return UserEntity.fromPrisma(userEntity, { teams, logins });
+    return UserEntity.fromPrisma(userEntity, { logins });
   }
 
   @Get('find')
@@ -81,6 +80,6 @@ export class UserController {
   @Get('admin/is')
   @UseGuards(AuthGuard)
   isAdmin(@Id() uid: λParam.Id) {
-    return uid === 'system'; 
+    return uid === 'system';
   }
 }

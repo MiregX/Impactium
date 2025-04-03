@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
-import * as SwitchPrimitives from "@radix-ui/react-switch"
-import { cn } from "@impactium/utils"
+import * as SwitchPrimitives from '@radix-ui/react-switch'
+import { cn } from '@impactium/utils'
 import s from './styles/Switch.module.css';
 
 const Switch = React.forwardRef<

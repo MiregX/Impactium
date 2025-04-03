@@ -11,6 +11,13 @@
     },
     {
       "type": "node-terminal",
+      "name": "Stop API",
+      "request": "launch",
+      "command": "for /f \"tokens=5\" %a in ('netstat -ano ^| find \":3001\"') do taskkill /PID %a /F",
+      "cwd": "${workspaceFolder}/api",
+    },
+    {
+      "type": "node-terminal",
       "name": "Start CLIENT",
       "request": "launch",
       "command": "npm run start:debug",

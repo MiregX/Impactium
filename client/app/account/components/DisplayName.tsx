@@ -1,26 +1,25 @@
 'use client'
-import { useLanguage } from "@/context/Language.context";
-import { Card } from "@/ui/Card";
+import { Language } from "@/context/Language.context";
+import { Card } from "@/ui/card";
 import s from '../Account.module.css'
-import { UserRequiredContext, useUser } from "@/context/User.context";
+import { User } from "@/context/User.context";
 import { Button } from "@impactium/components";
 import { DisplayNameBase } from "@impactium/pattern";
 import { useState } from "react";
-import { User } from "@/dto/User.dto";
 import { Input } from "@/ui/Input";
 
 export function DisplayName() {
   const { lang } = Language.use();
-  const { user, assignUser } = useUser<UserRequiredContext>();
-  const [ displayName, setDisplayName ] = useState<string>(user.displayName);
-  const [ loading, setLoading ] = useState<boolean>(false);
-  const [ valid, setValid ] = useState<boolean>(true);
+  const { user, assignUser } = User.use<User.RequiredExport>();
+  const [displayName, setDisplayName] = useState<string>(user.displayName);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [valid, setValid] = useState<boolean>(true);
 
   const send = async () => {
     const valid = DisplayNameBase.test(displayName);
     if (!valid) return setValid(false);
 
-    api<User>(`/user/edit`, {
+    api<User.Interface>(`/user/edit`, {
       method: 'PATCH',
       toast: 'user_updated_successfully',
       body: { displayName },
@@ -39,14 +38,18 @@ export function DisplayName() {
     onClick={send}>{lang._save}</Button>
 
   return (
-    <Card className={s.account} id='displayName' description={{ text: lang.account.displayName_description, button }}>
-      <h6>{lang.account.displayName}</h6>
-      <p>{lang.account.displayName_content}</p>
-      <Input
-        value={displayName}
-        onChange={handleChange}
-        valid={valid}
-      />
-    </Card>
+    <Card.Root className={s.account} id='displayName'>
+      <Card.Title>{lang.account.displayName}</Card.Title>
+      <Card.Content>
+        <Input
+          value={displayName}
+          onChange={handleChange}
+          valid={valid}
+        />
+      </Card.Content>
+      <Card.Description>
+        <p>{lang.account.displayName_content}</p>
+      </Card.Description>
+    </Card.Root>
   );
 }

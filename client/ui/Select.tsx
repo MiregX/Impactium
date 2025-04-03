@@ -1,8 +1,8 @@
-"use client"
+'use client'
 import s from './styles/Select.module.css';
-import React from "react"
-import * as SelectPrimitive from "@radix-ui/react-select"
-import { cn } from "@impactium/utils"
+import React from 'react'
+import * as SelectPrimitive from '@radix-ui/react-select'
+import { cn } from '@impactium/utils'
 import { Icon } from '@impactium/icons';
 
 const Select = SelectPrimitive.Root
@@ -71,14 +71,14 @@ SelectScrollDownButton.displayName =
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
+>(({ className, children, position = 'popper', ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
         s.content,
-        position === "popper" &&
-          s.popper,
+        position === 'popper' &&
+        s.popper,
         className
       )}
       position={position}
@@ -88,8 +88,8 @@ const SelectContent = React.forwardRef<
       <SelectPrimitive.Viewport
         className={cn(
           s.primitive,
-          position === "popper" &&
-            s.podder
+          position === 'popper' &&
+          s.podder
         )}
       >
         {children}

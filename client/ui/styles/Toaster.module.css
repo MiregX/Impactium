@@ -1,11 +1,11 @@
-/* .toaster {} */
-
 .toast {
   background: var(--meta-black);
   color: var(--white);
-  border: 1px solid var(--geist-border);
+  border: 1px solid var(--gray-400);
   box-shadow: var(--shadow-border);
-  border-radius: var(--border-s);
+  padding: 24px;
+  gap: 20px;
+  border-radius: 6px;
 }
 
 .description {

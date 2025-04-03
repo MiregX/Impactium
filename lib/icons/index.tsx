@@ -50,7 +50,7 @@ export namespace Icon {
   }
 
   export type Name = keyof typeof icons;
-  
+
   export type Attributes = Record<string, string | Record<string, string>>;
   export type Node = [name: string, attrs: Attributes, ...childrens: Node[]];
 

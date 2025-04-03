@@ -1,8 +1,8 @@
 'use client'
-import React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import React from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
 import s from './styles/Tabs.module.css';
-import { cn } from "@impactium/utils";
+import { cn } from '@impactium/utils';
 
 const Tabs = TabsPrimitive.Root
 

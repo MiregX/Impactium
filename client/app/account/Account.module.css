@@ -1,13 +1,15 @@
-.page {
-  align-items: flex-start !important;
+.main {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
   flex-direction: row;
-  justify-content: center !important;
+  justify-content: center;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-l);
+  gap: 32px;
   flex: 1;
   max-width: 720px;
 }
@@ -37,49 +39,22 @@
   color: var(--text-white);
   background: var(--soft-black);
 }
-
-.account > div {
-  gap: 24px;
-}
-
-.account {
-  overflow: hidden;
-}
-
 .account .avatar {
-  position: absolute;
   right: 24px;
-  transition: all 0.3s var(--transition);
-  cursor: pointer;
 }
 .account .avatar:hover {
   box-shadow: 0 0 0 1px var(--white), 0 0 0 4px hsla(0, 0%, 100%, .24);
 }
-.account section {
+.connections .list {
   background: var(--black);
-  padding: 24px 16px;
-  border: 1px solid var(--gray-alpha-400);
-  border-radius: var(--border-s);
-  display: flex;
-  gap: var(--gap);
-  align-items: center;
-}
-.account .unit {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--gap);
-  width: 100%;
+  padding: 16px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--gray-400);
 }
 .group {
   display: flex;
   flex-direction: column;
   gap: var(--padding-l);
-}
-.account .unit > img {
-  height: 32px;
-  width: 32px;
-  border-radius: var(--round);
 }
 .account .unit p {
   flex: 1;
@@ -87,40 +62,8 @@
   overflow: hidden;
   line-height: 1.2;
 }
-.account .unit code {
-  font-family: var(--font-mono);
-  background: var(--soft-black);
-  padding: 8px 12px;
-  display: flex;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  gap: 8px;
-  border: 1px solid var(--gray-alpha-400);
-  border-radius: var(--border-s);
-  align-items: center;
-}
 .account .unit code img {
   height: 16px;
-}
-.balance > div {
-  flex-direction: row;
-}
-.balance .stack {
-  flex: 1;
-  display: flex;
-  gap: var(--padding);
-  flex-direction: column;
-}
-.balance_amount {
-  display: flex;
-  align-items: center;
-  font-size: var(--text-larger);
-  font-family: var(--font-mono);
-  gap: var(--gap);
-}
-.balance_amount img {
-  height: 42px;
-
 }
 .connections section {
   flex-direction: column;
@@ -149,20 +92,14 @@
     display: none;
   }
 }
-.overview > div {
-  flex-direction: row;
-}
-.badges {
-  display: flex;
-  flex: 1;
-  align-items: flex-end;
-  flex-direction: column;
-  justify-content: space-between;
-}
 .min {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+.verified {
+  right: 16px;
+  top: 16px;
 }
 .before {
   padding: 8px 12px;
@@ -188,6 +125,8 @@
 .min input {
   border-radius: 0 var(--border-s) var(--border-s) 0;
 }
-.account input:hover {
-  border: 1px solid var(--accent-8) !important;
+.login_method {
+  z-index: 0;
+  position: absolute;
+  transform: translateX(50%);
 }

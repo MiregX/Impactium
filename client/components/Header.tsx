@@ -5,10 +5,10 @@ import s from './styles/Header.module.css';
 import { Button, Stack } from '@impactium/components';
 import { User } from '@/context/User.context';
 import { Language } from '@/context/Language.context';
-import { LoginBanner } from '@/banners/login/Login.banner';
 import { Application } from '@/context/Application.context';
 import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons/dist';
+import { Login } from '@/banners/login/Login';
 
 export function Header() {
   const { user } = User.use();
@@ -33,7 +33,7 @@ export function Header() {
         <User.Component />
       ) : (
         <Stack jc='flex-end'>
-          <Button rounded variant='secondary' onClick={() => spawnBanner(<LoginBanner />)}>{lang._login}</Button>
+          <Button rounded variant='secondary' onClick={() => spawnBanner(<Login.Banner />)}>{lang._login}</Button>
           <Button rounded img='Globe' variant='secondary' onClick={() => spawnBanner(<Language.Chooser />)} />
         </Stack>
       )}

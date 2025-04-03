@@ -1,27 +1,32 @@
 'use client'
-import s from '../LoginBanner.module.css'
+import s from '../Login.module.css'
 import Link from 'next/link';
-import { Badge, BadgeType } from '@/ui/Badge';
+import { Badge } from '@impactium/components';
 import { cn } from '@impactium/utils';
 import { Button } from '@impactium/components';
 import Image from 'next/image';
 import { capitalize } from '@impactium/utils';
-import { Login } from '@/dto/Login';
+import { Configuration } from '@impactium/config';
+import { TelegramWidget } from './TelegramWidget';
+import { Login } from '../Login';
 
 interface LoginMethodProps {
-  type: Login['type'],
+  type: Login.Interface['type'],
   disabled?: boolean
 }
 
 export function LoginMethod({ type, disabled }: LoginMethodProps) {
+  if (type === 'telegram' && Configuration.isProductionMode()) {
+    return <TelegramWidget />;
+
+  }
+
   return (
     <Button asChild>
       <Link
         prefetch={false}
         href={`/api/oauth2/${type}/login`}
         className={cn(s.method, disabled && s.disabled, s[type])}>
-        <Image src={`https://cdn.impactium.fun/tech/${type}.svg`} width={20} height={20} alt='' />
-        {disabled && <Badge type={BadgeType.Soon} />}
         Login with {capitalize(type)}
       </Link>
     </Button>

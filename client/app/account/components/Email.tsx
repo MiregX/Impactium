@@ -1,23 +1,21 @@
 'use client'
-import { useLanguage } from "@/context/Language.context";
-import { Card } from "@/ui/Card";
+import { Language } from "@/context/Language.context";
+import { Card } from "@/ui/card";
 import s from '../Account.module.css'
-import { UserRequiredContext, useUser } from "@/context/User.context";
-import { Badge, BadgeType } from "@/ui/Badge";
+import { Badge, Stack } from "@impactium/components";
 
 export function Email() {
   const { lang } = Language.use();
-  const { user } = useUser<UserRequiredContext>();
 
   return (
-    <Card className={s.account} id='email' description={lang.account.email_description}>
-      <h6>{lang.account.email}</h6>
-      <p>{lang.account.email_content}</p>
-      <section>
-        {user.email
-          ? <>{user.email}<Badge type={BadgeType.verified} /><Badge type={BadgeType.primary}/></>
-          : <p>{lang.account.no_email}</p>}
-      </section>
-    </Card>
+    <Card.Root className={s.account} id='email' style={{ position: 'relative' }}>
+      <Card.Title>{lang.account.email}</Card.Title>
+      <Stack className={s.verified} pos='absolute'>
+        <Badge variant='blue' value='Verified' icon='ShieldCheck' />
+      </Stack>
+      <Card.Description>
+        <p>{lang.account.email_content}</p>
+      </Card.Description>
+    </Card.Root>
   );
 }

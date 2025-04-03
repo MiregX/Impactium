@@ -3,7 +3,6 @@ import Cookies from 'universal-cookie';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { Parent } from '@/types';
 import { λCookie } from '@impactium/pattern';
-import { Login } from '@/dto/Login';
 import { Combination as UICombination } from '@/ui/Combitation';
 import { Application } from './Application.context';
 import { Language } from './Language.context';
@@ -12,6 +11,7 @@ import { Avatar } from '@/ui/Avatar';
 import Link from 'next/link';
 import { Icon } from '@impactium/icons/dist';
 import { Separator } from '@/ui/Separator';
+import { Login } from '@/banners/login/Login';
 
 export function UserProvider({ children, prefetched }: User.Provider.Props) {
   const cookie = new Cookies();
@@ -72,16 +72,16 @@ export namespace User {
     username: string,
     avatar: string | null,
     displayName: string,
-    login: Login
-    logins?: Login[],
+    login: Login.Interface
+    logins?: Login.Interface[],
   }
   
   export class Class implements User.Interface {
     uid: string;
     registered: string;
     email?: string;
-    login: Login;
-    logins?: Login[]
+    login: Login.Interface;
+    logins?: Login.Interface[]
     // privates
     private _avatar: string | null;
     private _displayName: string;

@@ -1,10 +1,11 @@
 import { Fetch as FetchFunc } from "./functions/fetch";
 import { Count as CountFunc } from "./functions/count";
 import { Context as ContextFunc } from './components/context';
-import { Services as  ServicesFunc } from './functions/services';
+import { Services as ServicesFunc } from './functions/services';
 import * as ComponentsFunc from './components';
 import { HTMLAttributes } from "react";
 import { Icon } from "@impactium/icons";
+import { Stack } from "@impactium/components";
 
 
 export namespace Anapod {
@@ -21,7 +22,7 @@ export namespace Anapod {
 
   export const Fetch = SafetyCallFunction(FetchFunc.Fetch);
   export const Count = SafetyCallFunction(CountFunc);
-  export const Services =  SafetyCallFunction(ServicesFunc.Services);
+  export const Services = SafetyCallFunction(ServicesFunc.Services);
 
   export type Method =
     | "GET"
@@ -82,8 +83,8 @@ export namespace Anapod {
       column?: string;
       row?: string;
     }
-    
-    export const apply = (obj: HTMLAttributes<any> & Props = {}) => {
+
+    export const apply = (obj: Stack.Props & Props = {}) => {
       Object.assign(obj, {
         style: {
           ...(obj.style || {}),

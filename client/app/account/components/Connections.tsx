@@ -1,66 +1,64 @@
 'use client'
-import { useLanguage } from "@/context/Language.context";
-import { Card } from "@/ui/Card";
+import { Language } from '@/context/Language.context';
+import { Card } from '@/ui/card';
 import s from '../Account.module.css';
-import { Login } from "@/dto/Login";
-import { Button } from "@impactium/components";
-import { LoginBanner } from "@/banners/login/Login.banner";
-import { useApplication } from "@/context/Application.context";
-import { Avatar } from "@/ui/Avatar";
-import { UserRequiredContext, useUser } from "@/context/User.context";
-import { useEffect, useState } from "react";
-import { User, UserEntity } from "@/dto/User.dto";
-import { cn } from "@impactium/utils";
-import { Icon } from "@impactium/icons";
+import { Button, Stack } from '@impactium/components';
+import { Application } from '@/context/Application.context';
+import { Avatar } from '@/ui/Avatar';
+import { User } from '@/context/User.context';
+import { useEffect, useState } from 'react';
+import { cn } from '@impactium/utils';
+import { Icon } from '@impactium/icons';
+import { Login } from '@/banners/login/Login';
 
 export function Connections() {
   const { lang } = Language.use();
   const { spawnBanner } = Application.use();
-  const { user, setUser } = useUser<UserRequiredContext>();
+  const { user, setUser } = User.use<User.RequiredExport>();
   const [fetched, setFetched] = useState<boolean>(!!user?.logins);
 
-  const button = <Button
-    img='UserPlus'
-    onClick={() => spawnBanner(<LoginBanner connect={true} />)}>{lang.account.connect}</Button>
-
-    useEffect(() => {
-      (async () => {
-        if (!fetched) {
-          await api<User>('/user/get?logins=true').then(user => user && setUser(new UserEntity(user)));
-          setFetched(true);
-        }
-      })();
-    }, [user]);
+  useEffect(() => {
+    (async () => {
+      if (!fetched) {
+        await api<User.Interface>('/user/get?logins=true').then(user => user && setUser(new User.Class(user)));
+        setFetched(true);
+      }
+    })();
+  }, [user]);
 
   return (
-    <Card className={cn(s.account, s.connections)} id='connections' description={{
-      text: lang.account.connections_description,
-      button
-    }}>
-      <h6>{lang.account.connections}</h6>
-      <p>{lang.account.connections_content}</p>
-      <section>
-        {(user.logins || []).map((login: Login) => (
-          <Unit key={login.id} login={login} />
-        ))}
-      </section>
-    </Card>
+    <Card.Root className={cn(s.account, s.connections)} id='connections'>
+      <Card.Title>{lang.account.connections}</Card.Title>
+      <Card.Content>
+        <Stack ai='stretch' dir='column' className={s.list}>
+          {(user.logins || []).map(login => (
+            <Unit key={login.id} login={login} />
+          ))}
+        </Stack>
+      </Card.Content>
+      <Card.Description>
+        <p>{lang.account.connections_content}</p>
+      </Card.Description>
+    </Card.Root>
   );
-  
+
 };
 
-function Unit({ login }: { login: Login }) {
+function Unit({ login }: { login: Login.Interface }) {
   return (
-    <div className={s.unit}>
-      <img src={`https://cdn.impactium.fun/tech/${login.type}.png`} />
+    <Stack className={s.unit} pos='relative' gap={24}>
       <Avatar
         size={32}
+        style={{ zIndex: 1 }}
         src={login.avatar}
         alt={login.displayName} />
+      <Avatar
+        className={s.login_method}
+        size={32}
+        src={`https://cdn.impactium.fun/tech/${login.type}.png`}
+        alt={login.displayName} />
       <p>{login.displayName}</p>
-      <code>
-        <Icon name='Command' />{login.id}
-      </code>
-    </div>
+      <Button style={{ pointerEvents: 'none' }} variant='glass' img='Command'>{login.id}</Button>
+    </Stack>
   );
 }

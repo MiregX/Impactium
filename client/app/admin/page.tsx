@@ -1,18 +1,13 @@
 'use client'
-import { PanelTemplate } from "@/components/PanelTempate";
-import { DeleteTournaments } from "./components/DeleteTournaments";
-import { DeleteTeams } from "./components/DeleteTeams";
-import { ToggleLanding } from "./components/ToggleLanding";
-import s from './Admin.module.css';
-import { Impersonate } from "./components/Impersonate";
+import { Anapod } from "@impactium/anapod"
+import { Runtime } from "./components/runtime"
 
 export default function AdminPage() {
   return (
-    <PanelTemplate useStart className={s.page}>
-      <DeleteTournaments />
-      <DeleteTeams />
-      <ToggleLanding />
-      <Impersonate />
-    </PanelTemplate>
+    <main>
+      <Anapod.Context.Provider ai='flex-start' dir='column'>
+        <Runtime row='1 / 5' column='1 / 2' />
+      </Anapod.Context.Provider>
+    </main>
   )
 }

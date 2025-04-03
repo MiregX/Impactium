@@ -1,87 +1,47 @@
-'use client'
-import React, { useEffect, useState } from 'react';
+'use server'
+import React from 'react';
 import { Button, Stack } from '@impactium/components';
-import { SetState } from '@impactium/types';
 import s from './App.module.css';
 import { cn } from '@impactium/utils/dist';
-import { Anapod } from '@impactium/anapod';
 import { Icon } from '@impactium/icons';
-import { Gauge } from '@impactium/components';
+import Image from 'next/image';
+import dashed_arrow from '@/public/dashed_arrow.png';
+import Link from 'next/link';
 
-export namespace Main {
-  export type Stage = 'init' | 'dashboard'
-}
-
-export default function Main() {
-  const [stage, setStage] = useState<Main.Stage>('init');
-
+export default async function () {
   return (
-    <Stack pos='relative' className={s.wrapper}>
-      <Init stage={stage} setStage={setStage} />
-      <Dashboard stage={stage} setStage={setStage} />
-    </Stack>
-    
+    <main className={s.main}>
+      <Stack pos='relative' className={s.wrapper}>
+        <Stack dir='column' gap={32} style={{ height: '100%', width: '100%' }} ai='center' jc='center' pos='absolute' className={cn(s.init)}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 64, fontWeight: 600 }}>Магазин кабачковой икры</p>
+          <Stack gap={16}>
+            <Button rounded size='lg' asChild>
+              <Link href='/market/buy'>
+                <Icon size={20} name='Coins' />
+                Купить
+              </Link>
+            </Button>
+            <Button variant='secondary' rounded size='lg' asChild>
+              <Link href='/market/sell'>
+                <Icon size={20} name='CreditCard' />
+                Продать
+              </Link>
+            </Button>
+          </Stack>
+          <Stack pos='relative' className={s.admin_panel}>
+            <Button rounded size='lg' img='LogoImpactium' asChild>
+              <Link href='/admin'>
+                <Icon size={24} name='LogoImpactium' />
+                Админ панель
+              </Link>
+            </Button>
+            <Stack pos='absolute' className={s.arrow}>
+              <Image src={dashed_arrow.src} alt='' height={128} width={128} />
+              <p>Да ну нахуй</p>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Stack>
+    </main>
   );
 };
-
-function Dashboard({ stage, setStage }: Init.Props) {
-  return (
-    <Anapod.Context.Provider className={cn(s.dashboard, stage === 'dashboard' && s.active)} pos='absolute' ai='flex-start' dir='column'>
-      <Anapod.Components.Runtime row='1 / 5' column='1 / 2' />
-      <Operall />
-    </Anapod.Context.Provider>
-  )
-}
-
-export function Operall() {
-  const { overall, updateOverall } = Anapod.Context.use();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateOverall();
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, []);
-
-  const map: Record<string, Icon.Name> = {
-    'Redis': 'LogoRedis',
-    'CockroachDB Impactium': 'Database',
-    'CockroachDB Anapod': 'Database',
-    'CDN': 'AcronymCdn'
-  };
-
-  return (
-    <Stack>
-      {overall.map(o => (
-        <Stack key={o.name}>
-          <Gauge value={100 - o.ping} size={32} label={o.ping + 'ms'} />
-        </Stack>
-      ))}
-    </Stack>
-  )
-    
-}
-
-export namespace Init {
-  export interface Props {
-    setStage: SetState<Main.Stage>;
-    stage: Main.Stage;
-  }
-}
-
-function Init({ setStage, stage }: Init.Props) {
-  const goToDashboard = () => setStage('dashboard');
-
-  return (
-    <Stack dir='column' gap={32} style={{ height: '100%', width: '100%' }} ai='center' jc='center' pos='absolute' className={cn(s.init, stage !== 'init' && s.disable )}>
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 64, fontWeight: 600 }}>Магазин кабачковой икры</p>
-      <Stack gap={16}>
-        <Button onClick={goToDashboard} img='Coins' rounded size='lg'>Купить</Button>
-        <Button onClick={goToDashboard} img='CreditCard' rounded size='lg' variant='secondary'>Продать</Button>
-      </Stack>
-    </Stack>
-  )
-}
