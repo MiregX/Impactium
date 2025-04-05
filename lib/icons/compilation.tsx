@@ -6601,6 +6601,32 @@ export const LogoDiscord = create('LogoDiscord', [
     }
   ]
 ]);
+export const LogoDocker = create('LogoDocker', [
+  "svg",
+  {
+    "key": "root-svg",
+    "viewBox": "0 0 24 24",
+    "fill": "none",
+    "xmlns": "http://www.w3.org/2000/svg"
+  },
+  [
+    "path",
+    {
+      "key": "root-svg-0-path",
+      "d": "M14 10H16M13 10H11M8 10H10M5 10H7M2 10H4M5 7H7M11 4H13M11 7H13M8 7H10",
+      "stroke": "currentColor",
+      "strokeWidth": "2"
+    }
+  ],
+  [
+    "path",
+    {
+      "key": "root-svg-1-path",
+      "d": "M23 10.5C23 10.5 21.5 9.5 20 10C20 8 18 7.5 18 7.5C18 7.5 16.5 9 17.5 11.5C17 12 16.5 12 16 12H13H10H7H4H1C1 13.5 1 21 8.5 21C14 21 17.5 18 19.5 13C22.5 13 23 10.5 23 10.5Z",
+      "fill": "currentColor"
+    }
+  ]
+]);
 export const LogoEmber = create('LogoEmber', [
   "svg",
   {
@@ -14043,6 +14069,7 @@ export const icons = {
   LogoContentful,
   LogoDataDog,
   LogoDiscord,
+  LogoDocker,
   LogoEmber,
   LogoFacebook,
   LogoFacebookMessenger,

@@ -3,7 +3,7 @@ import { Language } from "@/context/Language.context";
 import { Card } from "@/ui/card";
 import s from '../Account.module.css'
 import { User } from "@/context/User.context";
-import { Button } from "@impactium/components";
+import { Button, Stack } from "@impactium/components";
 import { Identifier } from '@impactium/pattern'
 import { useState } from "react";
 import { Input } from "@/ui/Input";
@@ -37,14 +37,14 @@ export function Username() {
     <Card.Root className={s.account} id='username'>
       <Card.Title>{lang.account.username}</Card.Title>
       <Card.Content>
-        <div className={s.min}>
+        <Stack className={s.min} gap={0}>
           <div className={s.before}>impactium.fun/user/</div>
           <Input
             value={username}
             onChange={handleChange}
             valid={valid}
           />
-        </div>
+        </Stack>
       </Card.Content>
       <Card.Description>
         <p>{lang.account.username_content}</p>

@@ -27,7 +27,7 @@
   height: 40px;
   line-height: 40px;
   padding: 0 8px;
-  border-radius: var(--border-s);
+  border-radius: 6px;
   white-space: nowrap;
   font-size: var(--text-small);
   font-weight: 600;
@@ -60,70 +60,28 @@
   flex: 1;
   text-overflow: ellipsis;
   overflow: hidden;
-  line-height: 1.2;
-}
-.account .unit code img {
-  height: 16px;
-}
-.connections section {
-  flex-direction: column;
-  gap: 24px;
-}
-@media all and (max-width: 768px) {
-  .page {
-    flex-direction: column;
-    align-items: center;
-  }
-  .nav {
-    flex-direction: row;
-    top: var(--header-height);
-    z-index: 2;
-    margin-top: -20px;
-    padding: 8px;
-    width: calc(100% + 32px);
-    background-color: var(--black);
-    border-bottom: 1px solid var(--gray-alpha-400);
-  }
-  .account .unit code {
-    display: unset;
-    max-width: 40%;
-  }
-  .account .unit code img  {
-    display: none;
-  }
-}
-.min {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  font-size: 16px;
 }
 .verified {
   right: 16px;
   top: 16px;
 }
 .before {
-  padding: 8px 12px;
+  padding: 0 12px;
   height: 32px;
-  background: var(--gray16);
-  border-radius: var(--border-s) 0 0 var(--border-s);
-  border: 1px solid var(--gray-alpha-400);
+  border-radius: 6px 0 0 6px;
+  border: 1px solid var(--gray-400);
   border-right: none;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--accent-6);
+  font-size: 12px;
+  color: var(--gray-900);
+  background: var(--meta-black);
   display: flex;
   align-items: center;
   font-family: var(--font-mono);
 }
-.account input {
-  line-height: 32px;
-  background: var(--black);
-  font-weight: 500;
-  box-shadow: none !important;
-  width: 256px;
-}
 .min input {
-  border-radius: 0 var(--border-s) var(--border-s) 0;
+  border-radius: 0 6px 6px 0;
+  font-family: var(--font-mono);
 }
 .login_method {
   z-index: 0;

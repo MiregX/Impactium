@@ -67,8 +67,10 @@ const variant: Icon.Variant = "white";
 - **1.2.2**: Two icons has been merged into one ic  on `Pointer` and has been redrew.
 - **1.2.3**: Now any version of `React` is supported.
 - **1.2.4**: Now any version of `React-Dom` is supported.
-- **1.2.5**: Added `Tailwind` logo.
+- **1.2.5**: Added `LogoTailwind` icon.
 - **1.2.6**: Removed `Pointer` icon due to duplication of `GPS` icon.
+- **1.2.7**: Added error message for unknown name prop.
+- **1.2.8**: Added `LogoDocker` icon.
 
 ### TODO
 - **Suggested Improvement**: Enhance the algorithm to enable the compiler to preserve key icon settings, such as `viewBox` and `width`.

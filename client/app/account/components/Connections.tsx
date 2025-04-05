@@ -2,13 +2,12 @@
 import { Language } from '@/context/Language.context';
 import { Card } from '@/ui/card';
 import s from '../Account.module.css';
-import { Button, Stack } from '@impactium/components';
+import { Badge, Stack } from '@impactium/components';
 import { Application } from '@/context/Application.context';
 import { Avatar } from '@/ui/Avatar';
 import { User } from '@/context/User.context';
 import { useEffect, useState } from 'react';
 import { cn } from '@impactium/utils';
-import { Icon } from '@impactium/icons';
 import { Login } from '@/banners/login/Login';
 
 export function Connections() {
@@ -58,7 +57,7 @@ function Unit({ login }: { login: Login.Interface }) {
         src={`https://cdn.impactium.fun/tech/${login.type}.png`}
         alt={login.displayName} />
       <p>{login.displayName}</p>
-      <Button style={{ pointerEvents: 'none' }} variant='glass' img='Command'>{login.id}</Button>
+      <Badge variant='gray' icon='AtSign' value={login.id} />
     </Stack>
   );
 }

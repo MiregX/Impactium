@@ -29,7 +29,10 @@ export function Icon({
       ? custom_icons[name as keyof typeof custom_icons]
       : lucide_icons[name as keyof typeof lucide_icons]
 
-  if (!Component) return null;
+  if (!Component) {
+    console.error(`[ ERROR ] @impactium/icons: Icon name '${name}' was not found in list. Returned null`)
+    return null;
+  };
 
   if (!props.fill)
     props.fill = 'none';

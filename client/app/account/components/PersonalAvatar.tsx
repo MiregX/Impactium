@@ -11,7 +11,7 @@ export function PersonalAvatar() {
   const { user } = User.use<User.RequiredExport>();
 
   return (
-    <Card.Root className={s.account}>
+    <Card.Root className={s.account}  >
       <Card.Title>
         {lang.account.avatar}
       </Card.Title>
