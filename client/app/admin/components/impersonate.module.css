@@ -1,0 +1,5 @@
+.impersonate {
+  padding: 16px;
+  background-color: var(--soft-black);
+  outline: 1px solid var(--gray-400);
+}

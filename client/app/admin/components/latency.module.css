@@ -1,0 +1,60 @@
+.latency {
+  background: var(--soft-black);
+  outline: 1px solid var(--gray-400);
+  padding: 16px;
+  overflow: hidden;
+  height: 100%;
+}
+.title {
+  border-radius: 4px;
+  border: 1px solid var(--gray-400);
+  min-height: 32px;
+  background: var(--soft-black);
+  overflow: hidden;
+  padding-right: 6px;
+}
+.title > svg {
+  background: var(--meta-black);
+  padding: 8px 7.5px;
+  border-right: 1px solid var(--gray-400);
+  box-sizing: content-box;
+}
+.title p {
+  white-space: nowrap;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.gauge {
+  height: 90% !important;
+  width: 50% !important;
+  margin: auto;
+}
+.gauge_wrapper {
+  height: 100%;
+}
+.gauge_wrapper p {
+  position: absolute;
+  font-size: 1vw;
+  font-family: var(--font-mono);
+}
+.ip {
+  width: 100%;
+  flex-basis: unset !important;
+  color: var(--text-dimmed);
+}
+.ip svg {
+  flex-shrink: 0;
+}
+.ip span {
+  color: currentColor;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

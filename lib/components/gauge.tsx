@@ -3,7 +3,6 @@ import { SVGAttributes } from 'react'
 import s from './gauge.module.css';
 import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons';
-import { Stack } from './stack';
 
 export namespace Gauge {
   export interface Props extends SVGAttributes<SVGSVGElement> {
@@ -75,38 +74,35 @@ export function Gauge({ value: _value, label, size = 24, colors, className, ...p
   const hasGaps = circumference > 2 * strokeWidth;
 
   return (
-    <Stack ai='center' jc='center'>
-      <svg viewBox='0 0 100 100' strokeWidth={strokeWidth} height={size} width={size} className={cn(s.svg, className)} style={{
-        ['--stroke-percent' as never]: value,
-        ['--circle-size' as never]: '100px',
-        ['--circumference' as never]: circumference,
-        ['--percent-to-px' as never]: `${circumference / 100}px`,
-        ['--gap-percent' as never]: hasGaps ? 6 : 0,
-        ['--offset-factor' as never]: 0
-      }} {...props}>
-        <circle
-          className={s.track}
-          cx={50}
-          cy={50}
-          r={45}
-          strokeWidth={10}
-          opacity={Number(value < 90)}
-          strokeDashoffset={0}
-          fill='none'
-          style={{ stroke: getTrackColor() }}
-        />
-        <circle
-          className={s.progress}
-          cx={50}
-          cy={50}
-          r={45}
-          strokeWidth={10}
-          strokeDashoffset={0}
-          fill='none'
-          style={{ stroke: getStrokeColor() }}
-        />
-      </svg>
-      {label ? (label in Icon.icons ? <Icon size={size / 2} className={s.label} name={label as Icon.Name} color={getStrokeColor()} /> : <p className={s.label} style={{ fontSize: size / 5, color: getStrokeColor() }}>{label}</p>) : null}
-    </Stack>
+    <svg viewBox='0 0 100 100' strokeWidth={strokeWidth} height={size} width={size} className={cn(s.svg, className)} style={{
+      ['--stroke-percent' as never]: value,
+      ['--circle-size' as never]: '100px',
+      ['--circumference' as never]: circumference,
+      ['--percent-to-px' as never]: `${circumference / 100}px`,
+      ['--gap-percent' as never]: hasGaps ? 6 : 0,
+      ['--offset-factor' as never]: 0
+    }} {...props}>
+      <circle
+        className={s.track}
+        cx={50}
+        cy={50}
+        r={45}
+        strokeWidth={10}
+        opacity={Number(value < 90)}
+        strokeDashoffset={0}
+        fill='none'
+        style={{ stroke: getTrackColor() }}
+      />
+      <circle
+        className={s.progress}
+        cx={50}
+        cy={50}
+        r={45}
+        strokeWidth={10}
+        strokeDashoffset={0}
+        fill='none'
+        style={{ stroke: getStrokeColor() }}
+      />
+    </svg>
   )
 }

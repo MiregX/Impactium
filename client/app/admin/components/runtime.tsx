@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import s from './runtime.module.css';
 import { Input } from '@impactium/components';
 import { Anapod } from '@impactium/anapod';
@@ -30,12 +30,14 @@ export function Runtime({
   const [loading, setLoading] = useState<boolean>(false);
   const [isGraphLoading, setIsGraphLoading] = useState<boolean>(false);
   const [counts, setCounts] = useState<Map<string, Unit>>(new Map());
-  const [totalCount, setTotalCount] = useState<number>();
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [target, setTarget] = useState<string | null>(null);
   const [loadingLogs, setLoadingLogs] = useState<number>(0);
 
-  const changeInputFilterHandler = () => {
+  const changeInputFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
 
+    setFilter(value);
   }
 
   useEffect(() => {
@@ -61,10 +63,8 @@ export function Runtime({
   const insertLogs = (newLogs: Anapod.Log[] = []) => setLogs(logs => [...logs, ...newLogs]);
 
   useEffect(() => {
-    if (typeof totalCount !== 'number') {
-      Anapod.Count().then(setTotalCount);
-    }
-  }, [totalCount, setTotalCount]);
+    Anapod.Count().then(setTotalCount);
+  }, []);
 
   useEffect(() => {
     Anapod.Fetch().then(insertLogs);
@@ -95,12 +95,6 @@ export function Runtime({
     setIsGraphLoading(false);
   }
 
-  const contentScrollHandler = (event: React.UIEvent<HTMLDivElement>) => {
-    if (Math.round(event.currentTarget.scrollTop) >= event.currentTarget.scrollHeight - event.currentTarget.clientHeight) {
-      Anapod.Fetch({ skip: logs.length }).then(insertLogs);
-    }
-  }
-
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   const wsMessageHandler = (event: MessageEvent) => {
@@ -111,7 +105,7 @@ export function Runtime({
         newLogs = [newLogs];
       }
 
-      setTotalCount(c => (c || 0) + newLogs.length);
+      setTotalCount(c => (c ?? 0) + newLogs.length);
 
       setLoadingLogs(ll => {
         newLogs.forEach((_, i) => {
@@ -166,12 +160,12 @@ export function Runtime({
         <Button variant='outline' img='MoreHorizontal' />
       </Stack>
       <Stack className={s.description} style={{ width: '100%', marginBottom: 6 }}>
-        <p>Time</p>
+        <p>Status</p>
         <p>Host</p>
-        <p>Response</p>
-        <p>Message</p>
+        <p>Time / Type</p>
+        <p>Path</p>
       </Stack>
-      <Stack dir='column' gap={0} className={s.content} onScroll={contentScrollHandler}>
+      <Stack dir='column' gap={0} className={s.content}>
         {logs.map((log, index) => <Skeleton key={index} delay={-4} height='unset' width='unset' show={index < loadingLogs}><Log onMouseEnter={() => statusHoverHandler(log.path)} log={log} /></Skeleton>)}
       </Stack>
     </Stack>
@@ -197,7 +191,7 @@ function WebSocketStatus({ ws }: WebSocketStatusProps) {
   const color = new Color(getDotColorByWebSocketStatus());
 
   return (
-    <Stack style={{ backgroundColor: color.plus(1).toString(), height: 32, width: 32, flexShrink: '0 !important', borderRadius: 6 }} ai='center' jc='center'>
+    <Stack style={{ backgroundColor: color.plus(1).toString(), height: 32, width: 32, flexShrink: '0 !important', borderRadius: 6, minWidth: 32 }} ai='center' jc='center'>
       <Icon name='Status' fromGeist color={color.plus(8).toString()} />
     </Stack>
 

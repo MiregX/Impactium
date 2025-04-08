@@ -19,8 +19,3 @@
   transition: all 1s ease;
   transform-origin: calc(var(--circle-size) / 2) calc(var(--circle-size) / 2);
 }
-.label {
-  position: absolute;
-  font-family: var(--font-mono);
-  font-weight: 500;
-}

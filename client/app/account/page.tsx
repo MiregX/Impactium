@@ -9,6 +9,7 @@ import s from './Account.module.css';
 import { User } from '@/context/User.context';
 import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
+import { Stack } from '@impactium/components';
 
 export default function AccountPage() {
   const { user } = User.use();
@@ -18,16 +19,17 @@ export default function AccountPage() {
       redirect('/');
     }
   }, [user]);
+
   return (
     <main className={s.main}>
       <Nav />
-      <div className={s.wrapper}>
+      <Stack className={s.wrapper} gap={32} dir='column' ai='stretch'>
         <PersonalAvatar />
         <DisplayName />
         <Username />
         <Email />
         <Connections />
-      </div>
+      </Stack>
     </main>
   );
 };

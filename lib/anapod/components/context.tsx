@@ -18,7 +18,7 @@ export namespace Context {
     setFocus: Dispatch<SetStateAction<string | null>>;
   }
 
-  class UnexpectedUsageException extends Error{
+  class UnexpectedUsageException extends Error {
     constructor() {
       super('Unexpected usage of anapod. Try to add <AnapodContext /> in your page.');
     }
@@ -34,13 +34,21 @@ export namespace Context {
     const [focus, setFocus] = useState<string | null>(null);
 
     const updateOverall = async () => {
+      const init = Date.now();
+
       const overall = await Anapod.Services();
 
-      setOverall(overall);
+      overall.push({
+        name: '@impactium/anapod',
+        ping: Date.now() - init - (overall.map(o => o.ping).sort((a, b) => a - b).pop() ?? 0),
+        url: Anapod.Internal.url + '/services'
+      })
+
+      setOverall(overall.sort((a, b) => b.name.localeCompare(a.name)));
 
       return overall;
     }
-  
+
     const props: Context.Export = {
       logs,
       setLogs,
@@ -49,7 +57,7 @@ export namespace Context {
       focus,
       setFocus
     }
-  
+
     return (
       <context.Provider value={props}>
         <Stack {...external_props}>

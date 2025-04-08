@@ -8,3 +8,4 @@ export { Loading } from './loading';
 export { Skeleton } from './skeleton';
 export { Spinner } from './spinner';
 export { Stack } from './stack';
+export { Notification } from './notification';
