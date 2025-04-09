@@ -148,12 +148,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Архитектура номер 2.md",
+                "file": "Переезд.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Архитектура номер 2"
+              "title": "Переезд"
             }
           }
         ],
@@ -176,7 +176,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Файловий менеджер"
@@ -300,13 +301,13 @@
   },
   "active": "43bb20eac24a1144",
   "lastOpenFiles": [
+    "Бюджет за 550€.md",
+    "Архитектура номер 2.md",
     "Бюджет 2024-25.md",
     "Бизнес модель ГАДалкина.md",
-    "Бюджет за 550€.md",
     "Бюджет за 750€.md",
     "Libraries.md",
     "Architecture.canvas",
-    "Архитектура номер 2.md",
     "images/Combination.png",
     "Турнирные сетки.canvas",
     "Переезд.md",

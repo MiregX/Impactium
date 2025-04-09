@@ -36,7 +36,10 @@ export function Cell({ className, size = 88, accent = 'var(--gray-400)', backgro
     style.position = 'absolute';
   }
 
-  delete style.top, style.right, style.bottom, style.left;
+  delete props.top;
+  delete props.right;
+  delete props.bottom;
+  delete props.left;
 
   return (
     <div className={cn(s.cell, className)} style={style} {...props} />
