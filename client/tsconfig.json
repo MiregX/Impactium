@@ -1,5 +1,7 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,23 +23,12 @@
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@impactium/*": [
-        "../lib/*"
-      ]
-    }
+    ]
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "**/*.d.ts",
-    "../lib/components/status/status.tsx"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

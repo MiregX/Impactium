@@ -23,7 +23,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@impactium/types": "^1.0.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.5"
   }
