@@ -1,14 +1,11 @@
 'use client'
 import s from '../Login.module.css'
 import Link from 'next/link';
-import { Badge } from '@impactium/components';
 import { cn } from '@impactium/utils';
 import { Button } from '@impactium/components';
-import Image from 'next/image';
-import { capitalize } from '@impactium/utils';
-import { Configuration } from '@impactium/config';
 import { TelegramWidget } from './TelegramWidget';
 import { Login } from '../Login';
+import { capitalize } from 'lodash';
 
 interface LoginMethodProps {
   type: Login.Interface['type'],
@@ -16,7 +13,7 @@ interface LoginMethodProps {
 }
 
 export function LoginMethod({ type, disabled }: LoginMethodProps) {
-  if (type === 'telegram' && Configuration.isProductionMode()) {
+  if (type === 'telegram' && process.env.NODE_ENV === 'production') {
     return <TelegramWidget />;
 
   }

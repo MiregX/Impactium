@@ -4,23 +4,16 @@
       "type": "node-terminal",
       "name": "Start API",
       "request": "launch",
-      "command": "npm run start:debug",
+      "command": "pnpm run start:debug",
       "cwd": "${workspaceFolder}/api",
       "preLaunchTask": "start-engine",
       "postDebugTask": "stop-engine"
     },
     {
       "type": "node-terminal",
-      "name": "Stop API",
-      "request": "launch",
-      "command": "for /f \"tokens=5\" %a in ('netstat -ano ^| find \":3001\"') do taskkill /PID %a /F",
-      "cwd": "${workspaceFolder}/api",
-    },
-    {
-      "type": "node-terminal",
       "name": "Start CLIENT",
       "request": "launch",
-      "command": "npm run start:debug",
+      "command": "pnpm run start:debug",
       "cwd": "${workspaceFolder}/client",
       "envFile": "${workspaceFolder}/.env"
     },
@@ -36,7 +29,7 @@
       "type": "node-terminal",
       "name": "Start TEST",
       "request": "launch",
-      "command": "npm run test",
+      "command": "pnpm run test",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
     },
@@ -44,7 +37,7 @@
       "type": "node-terminal",
       "name": "Start SEED",
       "request": "launch",
-      "command": "npm run prisma:seed",
+      "command": "pnpm run prisma:seed",
       "cwd": "${workspaceFolder}/api",
       "envFile": "${workspaceFolder}/.env"
     },
@@ -52,7 +45,7 @@
       "type": "node-terminal",
       "name": "Build LIBRARIES",
       "request": "launch",
-      "command": "cd icons ;; npm run build ;; cd .. ;; cd components ;; npm run build ;; cd .. ;; cd design ;; npm run build ;; cd .. ;; cd types ;; npm run build ;; cd .. ;; cd utils ;; npm run build ;; cd .. ",
+      "command": "cd icons ;; pnpm run build ;; cd .. ;; cd components ;; pnpm run build ;; cd .. ;; cd design ;; pnpm run build ;; cd .. ;; cd types ;; pnpm run build ;; cd .. ;; cd utils ;; pnpm run build ;; cd .. ",
       "cwd": "${workspaceFolder}/lib",
       "envFile": "${workspaceFolder}/.env"
     },

@@ -3,7 +3,7 @@ import s from './Login.module.css'
 import { Banner as UIBanner } from '@/ui/Banner';
 import { LoginMethod } from './components/LoginMethod';
 import { Language } from '@/context/Language.context';
-import { Stack } from '@impactium/components/dist';
+import { Stack } from '@impactium/components';
 
 export namespace Login {
   export interface Interface {

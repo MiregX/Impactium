@@ -4,25 +4,24 @@ import s from './styles/Footer.module.css'
 import Link from 'next/link'
 import { Button, Stack } from '@impactium/components';
 import { Icon } from '@impactium/icons';
-import { Color } from '@impactium/design';
 
 export function Footer() {
   const { lang } = Language.use();
 
-  const Operational = () => 
+  const Operational = () =>
     <Stack className={s.operational}>
-      <Icon name='LogoImpactium' size={32} color={Color.toVar('text-dimmed')} />
+      <Icon name='LogoImpactium' size={32} color='var(--text-dimmed)' />
       <p>© {new Date(Date.now()).getFullYear()}</p>
-      <Button asChild style={{ color: Color.toVar('blue-800') }} variant='ghost'>
+      <Button asChild style={{ color: 'var(--blue-800' }} variant='ghost'>
         <Link href='/status'>
           <Icon name='Status' />
           {lang.status.ok}
         </Link>
       </Button>
-      
+
     </Stack>;
 
-  const Addictional = () => 
+  const Addictional = () =>
     <div className={s.addictional}>
       <div className={s.socials}>
         <Button variant='ghost' size='icon' asChild>

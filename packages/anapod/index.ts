@@ -3,10 +3,7 @@ import { Count as CountFunc } from "./functions/count";
 import { Context as ContextFunc } from './components/context';
 import { Services as ServicesFunc } from './functions/services';
 import * as ComponentsFunc from './components';
-import { HTMLAttributes } from "react";
-import { Icon } from "@impactium/icons";
 import { Stack } from "@impactium/components";
-
 
 export namespace Anapod {
   const SafetyCallFunction = <T extends (...args: any[]) => any>(func: T): T => {

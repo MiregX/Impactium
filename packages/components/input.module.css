@@ -32,11 +32,11 @@
   cursor: pointer;
 }
 
-.input::file {
+/* .input:file {
   border: 0;
   background-color: transparent;
   font-weight: 500;
-}
+} */
 
 .input::placeholder {
   color: var(--text-dimmed);

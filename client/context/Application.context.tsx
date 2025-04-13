@@ -1,7 +1,7 @@
 'use client'
 import '@/decorator/api';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { λError } from '@impactium/pattern';
+import { λError } from '@impactium/types';
 import { Parent } from '@/types';
 
 export function ApplicationProvider({ children }: Application.Provider.Props) {
@@ -60,6 +60,6 @@ export namespace Application {
   export const use = (): Application.Export => useContext(Application.Context)!;
 
   export namespace Provider {
-    export interface Props extends Parent {}
+    export interface Props extends Parent { }
   }
 }

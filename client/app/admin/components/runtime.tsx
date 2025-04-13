@@ -5,8 +5,6 @@ import { Input } from '@impactium/components';
 import { Anapod } from '@impactium/anapod';
 import { Button, Stack, Skeleton } from '@impactium/components';
 import { cn } from '@impactium/utils';
-import { Color } from '@impactium/design';
-import { MaybeArray } from '@impactium/types';
 import { Icon } from '@impactium/icons';
 import { Log } from './log';
 
@@ -99,7 +97,7 @@ export function Runtime({
 
   const wsMessageHandler = (event: MessageEvent) => {
     try {
-      let newLogs: MaybeArray<Anapod.Log> = JSON.parse(event.data);
+      let newLogs: Anapod.Log | Anapod.Log[] = JSON.parse(event.data);
 
       if (!Array.isArray(newLogs)) {
         newLogs = [newLogs];
@@ -188,11 +186,11 @@ function WebSocketStatus({ ws }: WebSocketStatusProps) {
     }
   }
 
-  const color = new Color(getDotColorByWebSocketStatus());
+  const color = getDotColorByWebSocketStatus();
 
   return (
-    <Stack style={{ backgroundColor: color.plus(1).toString(), height: 32, width: 32, flexShrink: '0 !important', borderRadius: 6, minWidth: 32 }} ai='center' jc='center'>
-      <Icon name='Status' fromGeist color={color.plus(8).toString()} />
+    <Stack style={{ backgroundColor: `var(--${color}-200`, height: 32, width: 32, flexShrink: '0 !important', borderRadius: 6, minWidth: 32 }} ai='center' jc='center'>
+      <Icon name='Status' fromGeist color={`var(--${color}-700`} />
     </Stack>
 
   )

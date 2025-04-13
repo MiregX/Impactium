@@ -29,8 +29,8 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.12.2",
     "@grpc/proto-loader": "^0.7.13",
-    "@impactium/types": "^1.0.0",
-    "@impactium/utils": "^1.0.1",
+    "@impactium/types": "workspace:*",
+    "@impactium/utils": "workspace:*",
     "@nest-lab/or-guard": "^2.4.1",
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.2",

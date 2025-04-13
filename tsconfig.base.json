@@ -2,11 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@impactium/icons": [
-        "packages/icons"
-      ],
-      "@impactium/components": [
-        "packages/components"
+      "@impactium/*": [
+        "packages/*"
       ]
     }
   }

@@ -1,0 +1,11 @@
+{
+  "name": "@impactium/types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "Mireg",
+  "license": "ISC",
+  "packageManager": "pnpm@10.8.0"
+}

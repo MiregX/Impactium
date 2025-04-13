@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button, Stack } from '@impactium/components';
 import s from './App.module.css';
-import { cn } from '@impactium/utils/dist';
+import { cn } from '@impactium/utils';
 import { Icon } from '@impactium/icons';
 import Image from 'next/image';
 import dashed_arrow from '@/public/dashed_arrow.png';
@@ -36,7 +36,7 @@ export default async function () {
               </Link>
             </Button>
             <Stack pos='absolute' className={s.arrow}>
-              <Image src={dashed_arrow.src} alt='' height={128} width={128} />
+              <Image src={dashed_arrow} alt='' height={128} width={128} />
               <p>Да ну нахуй</p>
             </Stack>
           </Stack>

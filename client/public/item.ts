@@ -1,4 +1,4 @@
-import { λParam } from "@impactium/pattern";
+import { λParam } from "@impactium/types";
 import { Template } from "./locale";
 
 export const item: Record<λParam.Imprint, Template> = {

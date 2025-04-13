@@ -12,8 +12,8 @@ import { Toaster } from '@/ui/Toaster';
 import { Parent } from '@/types';
 import { User, UserProvider } from '@/context/User.context';
 import { ApplicationProvider } from '@/context/Application.context';
-import { λCookie } from '@impactium/pattern';
-import { cn } from '@impactium/utils/dist';
+import { λCookie } from '@impactium/types';
+import { cn } from '@impactium/utils';
 
 const nunito = Nunito({
   preload: true,

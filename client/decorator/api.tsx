@@ -1,7 +1,8 @@
-import { between, capitalize } from '@impactium/utils'
-import { type Callback } from '@impactium/types'
+import { between } from '@impactium/utils'
+import { capitalize } from 'lodash';
 import { toast } from 'sonner'
-import { Configuration } from '@impactium/config'
+
+type Callback<T> = (data: T) => void;
 
 interface ResponseBase<T = any> {
   status: number
@@ -169,7 +170,7 @@ export function parseApiOptions<T>(
 }
 
 export function getServer() {
-  return Configuration.isProductionMode() || process.env.NODE_ENV === 'production'
+  return process.env.NODE_ENV === 'production'
     ? process.env.PRODUCTION_HOST || 'https://impactium.fun'
     : 'http://localhost'
 }

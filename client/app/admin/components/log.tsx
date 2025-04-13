@@ -1,7 +1,6 @@
 import { Icon } from '@impactium/icons';
 import s from './log.module.css';
 import { Stack } from '@impactium/components';
-import { Color } from '@impactium/design';
 import { between, cn } from '@impactium/utils';
 import { Anapod } from '@impactium/anapod';
 import { useCallback } from 'react';
@@ -59,12 +58,12 @@ export function Log({ log, ...props }: Log.Props) {
     }
   }
 
-  const Method = useCallback(() => <Status color={new Color(between(log.status, 500, 599) ? 'red-800' : 'gray-800')} value={log.method} />, [log]);
+  const Method = useCallback(() => <Status color={between(log.status, 500, 599) ? 'red-800' : 'gray-800'} value={log.method} />, [log]);
 
   return (
     <Stack noShrink flex={0} gap={12} className={cn(s.service, between(log.status, 500, 599) && s.error)} {...props}>
       <Stack>
-        <Status color={new Color(getStatusColor(log.status))} value={log.status} />
+        <Status color={getStatusColor(log.status)} value={log.status} />
         <p className={s.domain}>{parseFullUrlToDomain(log.path)}</p>
       </Stack>
       <Stack style={{ minWidth: 156 }} jc='space-between'>
@@ -72,7 +71,7 @@ export function Log({ log, ...props }: Log.Props) {
         <Timestamp value={log.timestamp} />
       </Stack>
       <Stack style={{ minWidth: 108 }}>
-        <Icon name={getIconNameByPath()} color={between(log.status, 500, 599) ? 'currentColor' : Color.toVar('text-dimmed').toString()} />
+        <Icon name={getIconNameByPath()} color={between(log.status, 500, 599) ? 'currentColor' : 'var(--text-dimmed'} />
         <TimeTook value={log.took} />
       </Stack>
       <p className={s.path}>/{parseFullUrlToPath(log.path)}</p>
@@ -129,12 +128,12 @@ function Timestamp({ value }: TimeTookProps) {
 export namespace Status {
   export interface Props {
     value: number | string;
-    color: Color
+    color: string
   }
 }
 
 export function Status({ value, color }: Status.Props) {
-  const borderColor = new Color(color).minus(4).valueOf();
+  const borderColor = `var(--${color}-300)`;
 
   return (
     <span className={s.status} style={{ borderColor, color: color.valueOf() }}>

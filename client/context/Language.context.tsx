@@ -2,7 +2,7 @@
 import locale, { _Locale, Locale } from '@/public/locale';
 import { Parent } from '@/types';
 import { Banner } from '@/ui/Banner';
-import { Button, Stack } from '@impactium/components/dist';
+import { Button, Stack } from '@impactium/components';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Cookies from 'universal-cookie';
 import s from './Language.module.css';
@@ -21,10 +21,10 @@ export function LanguageProvider({ children, predefinedLanguage }: Language.Prov
   function getLanguagePack(languageCode: string = 'us') {
     const translations: any = {};
     languageCode = Language.validate(languageCode);
-  
+
     for (const key in locale) {
       const prop: any = locale[key as keyof Locale];
-  
+
       if (Array.isArray(prop)) {
         translations[key] = prop.map((item: any) => item[languageCode]);
       } else if (typeof prop === 'string') {
@@ -80,12 +80,12 @@ export namespace Language {
   export namespace Provider {
     export interface Props extends Parent {
       predefinedLanguage?: string;
-    }  
+    }
   }
 
   export function Chooser() {
     const { lang, language, setLanguage } = Language.use();
-  
+
     const availableLanguages: { [key: string]: { code: string; target: string; } } = {
       us: {
         code: 'english',
@@ -103,8 +103,8 @@ export namespace Language {
         code: 'italy',
         target: 'Italiano'
       }
-    };  
-  
+    };
+
     return (
       <Banner title={lang.choose.language}>
         <Stack className={s._}>

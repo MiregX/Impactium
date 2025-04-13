@@ -31,7 +31,7 @@
     "@impactium/icons": "^1.1.1",
     "@impactium/types": "^1.0.0",
     "@impactium/utils": "^1.0.2",
-    "react": "^18.3.1"
+    "react": "^19.0.2"
   },
   "devDependencies": {
     "@types/react": "^19.0.2"

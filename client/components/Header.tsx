@@ -7,7 +7,7 @@ import { User } from '@/context/User.context';
 import { Language } from '@/context/Language.context';
 import { Application } from '@/context/Application.context';
 import { cn } from '@impactium/utils';
-import { Icon } from '@impactium/icons/dist';
+import { Icon } from '@impactium/icons';
 import { Login } from '@/banners/login/Login';
 
 export function Header() {

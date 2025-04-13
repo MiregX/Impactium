@@ -1,4 +1,3 @@
-import { Color } from '@impactium/design'
 import { SVGAttributes } from 'react'
 import s from './gauge.module.css';
 import { cn } from '@impactium/utils';
@@ -32,11 +31,11 @@ export function Gauge({ value: _value, label, size = 24, colors, className, ...p
   const getDefaultStrokeColor = () => {
     switch (true) {
       case value >= 66:
-        return Color.toVar('green-800')
+        return 'var(--green-800)'
       case value >= 33:
-        return Color.toVar('amber-800')
+        return 'var(--amber-800)'
       default:
-        return Color.toVar('red-800')
+        return 'var(--red-800)'
     }
   }
 

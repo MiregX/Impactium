@@ -4,7 +4,7 @@ import { Card } from "@/ui/card";
 import s from '../Account.module.css'
 import { User } from "@/context/User.context";
 import { Button, Stack } from "@impactium/components";
-import { Identifier } from '@impactium/pattern'
+import { Identifier } from '@impactium/types'
 import { useState } from "react";
 import { Input } from "@/ui/Input";
 

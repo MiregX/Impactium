@@ -2,14 +2,14 @@
 import Cookies from 'universal-cookie';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { Parent } from '@/types';
-import { λCookie } from '@impactium/pattern';
+import { λCookie } from '@impactium/types';
 import { Combination as UICombination } from '@/ui/Combitation';
 import { Application } from './Application.context';
 import { Language } from './Language.context';
 import s from './User.module.css'
 import { Avatar } from '@/ui/Avatar';
 import Link from 'next/link';
-import { Icon } from '@impactium/icons/dist';
+import { Icon } from '@impactium/icons';
 import { Separator } from '@/ui/Separator';
 import { Login } from '@/banners/login/Login';
 
@@ -75,7 +75,7 @@ export namespace User {
     login: Login.Interface
     logins?: Login.Interface[],
   }
-  
+
   export class Class implements User.Interface {
     uid: string;
     registered: string;
@@ -86,7 +86,7 @@ export namespace User {
     private _avatar: string | null;
     private _displayName: string;
     private _username: string;
-    
+
     constructor(user: User.Interface) {
       this.uid = user.uid;
       this.registered = user.registered;
@@ -97,26 +97,26 @@ export namespace User {
       this.login = user.login || (user.logins ? user.logins[0] : null);
       this.logins = user.logins;
     }
-  
+
     get avatar(): string | null {
       return this._avatar || this.login?.avatar || null;
     }
-  
+
     get displayName(): string {
       return this._displayName || this.login?.displayName;
     }
-  
+
     get username(): string {
       return this._username || this.login?.id;
     }
-  
+
     public static normalize = (user: User.Class) => ({
       ...user,
       avatar: user._avatar,
       displayName: user._displayName,
       username: user._username
     })
-  
+
     assign = (user: Partial<User.Interface>) => Object.assign(this, user);
   }
 
@@ -140,7 +140,7 @@ export namespace User {
   export namespace Provider {
     export interface Props extends Parent {
       prefetched: User.Interface | null;
-    }  
+    }
   }
 
   export namespace Combination {
@@ -153,60 +153,60 @@ export namespace User {
 
   export function Component() {
     const { user, logout } = User.use<User.RequiredExport>();
-  const { spawnBanner } = Application.use();
-  const { lang } = Language.use();
-  const [active, setActive] = useState<boolean>(false);
+    const { spawnBanner } = Application.use();
+    const { lang } = Language.use();
+    const [active, setActive] = useState<boolean>(false);
 
-  const toggle = () => {
-    setActive((active) => !active);
-  }
+    const toggle = () => {
+      setActive((active) => !active);
+    }
 
-  const handle = (func: Function) => {
-    toggle();
-    func();
-  }
+    const handle = (func: Function) => {
+      toggle();
+      func();
+    }
 
-  return (
-    <div className={`${s.user} ${active && s.active}`}>
-      <div className={s.action_lock} onClick={toggle} />
+    return (
+      <div className={`${s.user} ${active && s.active}`}>
+        <div className={s.action_lock} onClick={toggle} />
         <Avatar
           className={s.wrapper}
           size={36}
           alt={user.displayName}
           src={user.avatar}
           onClick={toggle} />
-      <nav className={s.menu}>
-        <p className={s.name}>{user.email || user.displayName}</p>
-        {user.uid === 'system' && (
-          <Link href='/admin' onClick={toggle}>
-            {lang._admin_panel}
-            <Icon name='Fingerprint' />
+        <nav className={s.menu}>
+          <p className={s.name}>{user.email || user.displayName}</p>
+          {user.uid === 'system' && (
+            <Link href='/admin' onClick={toggle}>
+              {lang._admin_panel}
+              <Icon name='Fingerprint' />
+            </Link>
+          )}
+          <Link href='/account' onClick={toggle}>
+            {lang._account}
+            <Icon name='Settings' variant='dimmed' />
           </Link>
-        )}
-        <Link href='/account' onClick={toggle}>
-          {lang._account}
-          <Icon name='Settings' variant='dimmed' />
-        </Link>
-        <Link href='/account/inventory' onClick={toggle}>
-          {lang._inventory}
-          <Icon name='PackageOpen' variant='dimmed' />
-        </Link>
-        <Separator />
-        <Link href='/account#balance' onClick={toggle}>
-          {lang.balance.top_up}
-          <span>{0}<Icon name='DollarSign' variant='dimmed' /></span>
-        </Link>
-        <button onClick={() => handle(() => spawnBanner(<Language.Chooser />))}>
-          {lang.choose.language}
-          <Icon name='Globe' variant='dimmed' />
-        </button>
-        <Separator />
-        <button onClick={() => handle(logout)}>
-          {lang.logout}
-          <Icon variant='dimmed' name='LogOut' />
-        </button>
-      </nav>
-    </div>
-  );
-}
+          <Link href='/account/inventory' onClick={toggle}>
+            {lang._inventory}
+            <Icon name='PackageOpen' variant='dimmed' />
+          </Link>
+          <Separator />
+          <Link href='/account#balance' onClick={toggle}>
+            {lang.balance.top_up}
+            <span>{0}<Icon name='DollarSign' variant='dimmed' /></span>
+          </Link>
+          <button onClick={() => handle(() => spawnBanner(<Language.Chooser />))}>
+            {lang.choose.language}
+            <Icon name='Globe' variant='dimmed' />
+          </button>
+          <Separator />
+          <button onClick={() => handle(logout)}>
+            {lang.logout}
+            <Icon variant='dimmed' name='LogOut' />
+          </button>
+        </nav>
+      </div>
+    );
+  }
 }

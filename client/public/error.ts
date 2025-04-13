@@ -1,4 +1,4 @@
-import { λError } from "@impactium/pattern"
+import { λError } from "@impactium/types"
 
 const error = {
   // Identifier
@@ -131,7 +131,7 @@ const error = {
     ua: "Неможливо створити запрошення, команда закрита для вступу",
     it: "Impossibile generare un invito, la squadra è chiusa all'adesione",
     pl: "Nie można wygenerować zaproszenia, drużyna jest zamknięta na dołączenie"
-  },  
+  },
   unallowed_file_format: {
     us: 'Only PNG, JPG, and SVG formats are allowed.',
     ru: 'Я разрешаю вам выгружать файлы только в формате PNG, JPG, SVG',
