@@ -11,6 +11,24 @@
   top: 0;
   left: 0;
 }
+.init h1,
+.init h2 {
+  font-family: var(--font-mono);
+  text-wrap-style: balance;
+  text-align: center;
+  max-width: var(--width-limit);
+}
+.init h1 {
+  font-size: 5vw;
+  font-weight: 600;
+  text-wrap-style: balance;
+  text-align: center;
+}
+.init h2 {
+  color: var(--text-dimmed);
+  font-size: 2vw;
+  padding: 0 128px;
+}
 .init p {
   transition: all 0.33s ease-in-out;
 }
@@ -19,6 +37,9 @@
 }
 .init.disable {
   pointer-events: none;
+}
+.next:hover {
+  box-shadow: var(--focus-border);
 }
 .init.disable p {
   transform: translateY(-100%);

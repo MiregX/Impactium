@@ -1,5 +1,4 @@
 'use client'
-import s from './Login.module.css'
 import { Banner as UIBanner } from '@/ui/Banner';
 import { LoginMethod } from './components/LoginMethod';
 import { Language } from '@/context/Language.context';

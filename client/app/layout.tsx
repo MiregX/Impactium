@@ -1,7 +1,7 @@
 import '@/decorator/api';
 import { Api } from '@/decorator/api';
 import React from 'react'
-import '@/public/.global.css';
+import './globals.css';
 import { LanguageProvider } from '@/context/Language.context';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/Footer';

@@ -8,11 +8,10 @@ export class RedisService
   implements OnModuleInit, OnModuleDestroy {
   constructor() {
     super(
-      parseInt(process.env.API_REDIS_PORT),
-      process.env.API_REDIS_HOST, {
+      parseInt(process.env.API_REDIS_PORT!),
+      process.env.API_REDIS_HOST!, {
       lazyConnect: true,
-    }
-    )
+    })
   }
 
   async onModuleInit() {

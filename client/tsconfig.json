@@ -9,13 +9,13 @@
     ],
     "allowJs": true,
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
     "isolatedModules": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "jsx": "preserve",
     "incremental": true,
@@ -28,6 +28,9 @@
       "@/*": [
         "./*"
       ],
+      "@impactium/*": [
+        "packages/*"
+      ]
     }
   },
   "include": [
