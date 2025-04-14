@@ -2,10 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { ApiModule } from './api.module';
 import * as cookieParser from 'cookie-parser';
-<<<<<<< Updated upstream
-=======
-import { Configuration } from './configurator';
->>>>>>> Stashed changes
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Configuration } from './configuration';
