@@ -5,34 +5,23 @@
   "compilerOptions": {
     "deleteOutDir": true
   },
+<<<<<<< Updated upstream
   "entryFile": "src/main",
+=======
+  "entryFile": "main.js",
+>>>>>>> Stashed changes
   "projects": {
     "api": {
       "type": "library",
-      "root": "libs/api",
+      "root": "api",
       "entryFile": "index",
-      "sourceRoot": "libs/api/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/api/tsconfig.lib.json"
-      }
-    },
-    "mcs": {
-      "type": "library",
-      "root": "libs/mcs",
-      "entryFile": "index",
-      "sourceRoot": "libs/mcs/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/mcs/tsconfig.lib.json"
-      }
+      "sourceRoot": "src"
     },
     "seed": {
       "type": "library",
-      "root": "libs/seed",
+      "root": "seed",
       "entryFile": "index",
-      "sourceRoot": "libs/seed/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/seed/tsconfig.lib.json"
-      }
+      "sourceRoot": "seed/src"
     }
   }
 }
