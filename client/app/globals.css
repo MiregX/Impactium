@@ -358,3 +358,13 @@ main {
   margin-top: 64px;
   padding: 16px;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: inherit;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: none;
+    background: none;
+}

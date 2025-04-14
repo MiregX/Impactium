@@ -7767,7 +7767,7 @@ export const LogoNext = create('LogoNext', [
         "r": "7.375",
         "fill": "black",
         "stroke": "#e8e8e8",
-        "strokewidth": "1.25",
+        "strokeWidth": "1.25",
         "strokeLinecap": "round",
         "strokeLinejoin": "round"
       }
@@ -7778,7 +7778,7 @@ export const LogoNext = create('LogoNext', [
         "key": "root-svg-1-g-1-path",
         "d": "M10.63 11V5",
         "stroke": "url(#paint0_linear_53_108e2vto2pfa)",
-        "strokewidth": "1.25",
+        "strokeWidth": "1.25",
         "strokeMiterlimit": "1.41421"
       }
     ],
@@ -7787,7 +7787,7 @@ export const LogoNext = create('LogoNext', [
       {
         "key": "root-svg-1-g-2-path",
         "fillRule": "evenodd",
-        "cliprule": "evenodd",
+        "clipRule": "evenodd",
         "d": "M5.995 5.00087V5H4.745V11H5.995V6.96798L12.3615 14.7076C12.712 14.4793 13.0434 14.2242 13.353 13.9453L5.99527 5.00065L5.995 5.00087Z",
         "fill": "url(#paint1_linear_53_108e2vto2pfa)"
       }

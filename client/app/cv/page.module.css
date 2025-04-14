@@ -21,3 +21,16 @@
   font-family: var(--font-mono);
   color: currentColor;
 }
+.years_indicator {
+  background-color: var(--meta-black);
+  border: 1px solid var(--gray-400);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+.dimmed {
+  color: var(--text-dimmed);
+  pointer-events: none;
+}
