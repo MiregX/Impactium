@@ -2,7 +2,7 @@ import s from './styles/Select.module.css'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { cn } from '@impactium/utils'
 import { Icon as ImpactiumIcon } from '@impactium/icons'
-import { forwardRef } from 'react'
+import { ComponentRef, forwardRef } from 'react'
 import { type ElementRef, ComponentPropsWithoutRef } from 'react'
 
 export namespace Select {
@@ -10,10 +10,12 @@ export namespace Select {
   export const Group = SelectPrimitive.Group
   export const Value = SelectPrimitive.Value
   export const Trigger = forwardRef<
-    ElementRef<typeof SelectPrimitive.Trigger>,
-    ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
-  >(({ className, children, ...props }, ref) => (
-    <SelectPrimitive.Trigger ref={ref} className={cn(s.trigger, className)} {...props}>
+    ComponentRef<typeof SelectPrimitive.Trigger>,
+    ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+      noIcon?: boolean
+    }
+  >(({ className, children, noIcon, ...props }, ref) => (
+    <SelectPrimitive.Trigger ref={ref} className={cn(s.trigger, className, noIcon && s.omit)} {...props}>
       {children}
       <Select.Icon style={{ marginLeft: 'auto' }} name='ChevronDown' />
     </SelectPrimitive.Trigger>
@@ -25,7 +27,7 @@ export namespace Select {
   )
   export namespace ScrollButton {
     export const Up = forwardRef<
-      ElementRef<typeof SelectPrimitive.ScrollUpButton>,
+      ComponentRef<typeof SelectPrimitive.ScrollUpButton>,
       ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
     >(({ className, ...props }, ref) => (
       <SelectPrimitive.ScrollUpButton
@@ -37,7 +39,7 @@ export namespace Select {
       </SelectPrimitive.ScrollUpButton>
     ))
     export const Down = forwardRef<
-      ElementRef<typeof SelectPrimitive.ScrollDownButton>,
+      ComponentRef<typeof SelectPrimitive.ScrollDownButton>,
       ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
     >(({ className, ...props }, ref) => (
       <SelectPrimitive.ScrollDownButton ref={ref} className={cn(s.scroll, s.down, className)} {...props}>
@@ -46,7 +48,7 @@ export namespace Select {
     ))
   }
   export const Content = forwardRef<
-    ElementRef<typeof SelectPrimitive.Content>,
+    ComponentRef<typeof SelectPrimitive.Content>,
     ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
   >(({ className, children, position = 'popper', ...props }, ref) => (
     <SelectPrimitive.Portal>
@@ -65,13 +67,13 @@ export namespace Select {
     </SelectPrimitive.Portal>
   ))
   export const Label = forwardRef<
-    ElementRef<typeof SelectPrimitive.Label>,
+    ComponentRef<typeof SelectPrimitive.Label>,
     ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
   >(({ className, ...props }, ref) => (
     <SelectPrimitive.Label ref={ref} className={cn(s.label, className)} {...props} />
   ))
   export const Item = forwardRef<
-    ElementRef<typeof SelectPrimitive.Item>,
+    ComponentRef<typeof SelectPrimitive.Item>,
     ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
   >(({ className, children, ...props }, ref) => (
     <SelectPrimitive.Item ref={ref} className={cn(s.item, className)} {...props}>
@@ -82,7 +84,7 @@ export namespace Select {
     </SelectPrimitive.Item>
   ))
   export const Separator = forwardRef<
-    ElementRef<typeof SelectPrimitive.Separator>,
+    ComponentRef<typeof SelectPrimitive.Separator>,
     ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
   >(({ className, ...props }, ref) => (
     <SelectPrimitive.Separator ref={ref} className={cn(s.separator, className)} {...props} />

@@ -6,7 +6,9 @@ import { LanguageProvider } from '@/context/Language.context';
 import { cookies } from 'next/headers';
 import { Footer } from '@/components/Footer';
 export { metadata } from '@/dto/Metadata';
-import { Nunito, Geist_Mono, Geist } from 'next/font/google'
+import { Nunito } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { Header } from '@/components/Header';
 import { Toaster } from '@/ui/Toaster';
 import { Parent } from '@/types';
@@ -19,18 +21,6 @@ const nunito = Nunito({
   preload: true,
   subsets: ['cyrillic', 'latin'],
   variable: '--font-nunito',
-});
-
-const sans = Geist({
-  preload: true,
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
-const mono = Geist_Mono({
-  preload: true,
-  subsets: ['latin'],
-  variable: '--font-mono',
 });
 
 declare global {
@@ -50,7 +40,7 @@ export default async function ({ children }: Parent) {
   }) : null;
 
   return (
-    <html className={cn(sans.variable, mono.className, nunito.className)}>
+    <html className={cn(nunito.variable, GeistMono.variable, GeistSans.variable)}>
       <body style={{ backgroundColor: '#000000' }} data-scroll-locked='0'>
         <LanguageProvider predefinedLanguage={cookie.get('_language')?.value}>
           <UserProvider prefetched={user!}>

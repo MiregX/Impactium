@@ -12,7 +12,6 @@ import {
   type FieldValues,
 } from "react-hook-form"
 import { Label } from "./Label";
-import { cn } from "@impactium/utils"
 
 const Form = FormProvider
 
@@ -88,13 +87,13 @@ FormItem.displayName = "FormItem"
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+>(({ style, ...props }, ref) => {
   const { error, formItemId } = useFormField()
 
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      style={{ color: error ? 'var(--red-900)' : 'inherit', ...style }}
       htmlFor={formItemId}
       {...props}
     />
@@ -127,14 +126,14 @@ FormControl.displayName = "FormControl"
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
+>(({ style, ...props }, ref) => {
   const { formDescriptionId } = useFormField()
 
   return (
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      style={{ fontSize: 11, color: 'var(--text-dimmed)', ...style }}
       {...props}
     />
   )
@@ -144,7 +143,7 @@ FormDescription.displayName = "FormDescription"
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+>(({ style, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField()
   const body = error ? String(error?.message ?? "") : children
 
@@ -156,7 +155,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      style={{ fontSize: 11, fontWeight: 500, color: 'var(--red-900)', ...style }}
       {...props}
     >
       {body}

@@ -4,4 +4,20 @@
 .main form {
   max-width: 720px;
   justify-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.noPreviousExperience {
+  min-height: 128px;
+  width: 100%;
+  color: var(--text-dimmed);
+}
+.noPreviousExperience p {
+  font-size: 18px;
+  font-family: var(--font-mono);
+  color: currentColor;
 }

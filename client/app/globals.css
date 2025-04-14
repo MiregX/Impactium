@@ -3,6 +3,8 @@
 :root {
   /* TEXT */
   --font-nunito: 'Nunito', sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans);
   --text-dimmed: #a1a1a1;
   --text-white: #e8e8e8;
   --text-medium: .875rem;

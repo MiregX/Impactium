@@ -27,9 +27,6 @@
     "paths": {
       "@/*": [
         "./*"
-      ],
-      "@impactium/*": [
-        "packages/*"
       ]
     }
   },

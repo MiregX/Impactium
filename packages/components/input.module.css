@@ -11,6 +11,11 @@
   outline-offset: var(--white);
   transition: all 0.125s var(--transition);
 }
+.input input {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
 .input:hover {
   box-shadow: var(--ring);

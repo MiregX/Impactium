@@ -4,7 +4,7 @@
   border-radius: 6px;
   border: 1px solid var(--gray-400);
   background-color: var(--soft-black);
-  padding: 24px 32px;
+  padding: 8px;
   color: var(--white);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   outline: none;

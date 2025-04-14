@@ -1,6 +1,7 @@
 import * as React from "react"
 import s from './styles/card.module.css';
 import { cn } from "@impactium/utils"
+import { Stack } from "@impactium/components";
 
 export namespace Card {
   export const Root = React.forwardRef<
@@ -20,9 +21,11 @@ export namespace Card {
 
   export const Header = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
+    Stack.Props
   >(({ className, ...props }, ref) => (
-    <div
+    <Stack
+      jc='space-between'
+      ai='flex-end'
       ref={ref}
       className={cn(s.header, className)}
       {...props}

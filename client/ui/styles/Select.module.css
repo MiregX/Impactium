@@ -28,7 +28,7 @@
   text-overflow: ellipsis;
   color: currentColor;
 }
-.trigger::before {
+.trigger:has(> svg:first-child:not(:only-child))::before {
   position: absolute;
   left: 0;
   content: '';
