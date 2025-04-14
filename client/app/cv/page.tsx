@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover"
 import { Textarea } from "@/ui/textarea"
 import { Stack } from "@impactium/components/stack"
 import { Slider } from "@/ui/slider"
+import { cn } from "@impactium/utils"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -65,43 +66,43 @@ const industries = [
   { label: "Other", value: "other" },
 ]
 
-const skillsList = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Python",
-  "Java",
-  "C#",
-  "PHP",
-  "HTML",
-  "CSS",
-  "SQL",
-  "MongoDB",
-  "PostgreSQL",
-  "AWS",
-  "Azure",
-  "Docker",
-  "Kubernetes",
-  "Git",
-  "CI/CD",
-  "Agile",
-  "Scrum",
-  "Project Management",
-  "UI/UX Design",
-  "Figma",
-  "Adobe Photoshop",
-  "Adobe Illustrator",
-  "SEO",
-  "Content Marketing",
-  "Social Media Marketing",
-  "Email Marketing",
-  "Data Analysis",
-  "Machine Learning",
-  "AI",
-  "Blockchain",
-]
+const skillsList: Record<string, Icon.Name> = {
+  "JavaScript": 'AcronymJs',
+  "TypeScript": 'AcronymTs',
+  "React": 'LogoReact',
+  "Next.js": 'LogoNext',
+  "Node.js": 'LogoNode',
+  "Python": 'LogoPython',
+  "Java": 'Coffee',
+  "C#": 'Dot',
+  "PHP": 'FaceSad',
+  "HTML": 'Code',
+  "CSS": 'Code',
+  "SQL": 'Status',
+  "MongoDB": 'Status',
+  "PostgreSQL": 'Postgres',
+  "AWS": 'Servers',
+  "Azure": 'LogoAzure',
+  "Docker": 'LogoDocker',
+  "Kubernetes": 'Servers',
+  "Git": 'LogoGithub',
+  "CI/CD": 'Status',
+  "Agile": 'Status',
+  "Scrum": 'Status',
+  "Project Management": 'Status',
+  "UI/UX Design": 'Status',
+  "Figma": 'Figma',
+  "Adobe Photoshop": 'Status',
+  "Adobe Illustrator": 'Status',
+  "SEO": 'MagnifyingGlass',
+  "Content Marketing": 'Status',
+  "Social Media Marketing": 'Status',
+  "Email Marketing": 'Status',
+  "Data Analysis": 'Status',
+  "Machine Learning": 'Cpu',
+  "AI": 'Robot',
+  "Blockchain": 'Status',
+}
 
 const achievementTemplates = [
   "Увеличил(а) продажи на X% за Y месяцев",
@@ -549,7 +550,6 @@ export default function ProfileForm() {
                 name="skills"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Навыки (с автодополнением)</FormLabel>
                     <Stack dir="column" gap={16} ai="stretch">
                       <Popover>
                         <PopoverTrigger asChild>
@@ -568,9 +568,9 @@ export default function ProfileForm() {
                             <Command.List>
                               <Command.Empty>Навык не найден.</Command.Empty>
                               <Command.Group className="max-h-64 overflow-auto">
-                                {skillsList.map((skill) => (
-                                  <Command.Item key={skill} value={skill} onSelect={() => addSkill(skill)}>
-                                    <Icon name="Check" style={{ opacity: Number(selectedSkills.includes(skill)) }} />
+                                {Object.keys(skillsList).map((skill) => (
+                                  <Command.Item key={skill} value={skill} onSelect={() => addSkill(skill)} className={cn(!selectedSkills.includes(skill) && s.dimmed)}>
+                                    <Icon name={skillsList[skill]} />
                                     {skill}
                                   </Command.Item>
                                 ))}

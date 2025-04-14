@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.9.0",
-    "@types/react": "^18.3.12",
+    "@types/react": "^19.1.1",
     "fs": "^0.0.1-security",
     "jsdom": "^25.0.1",
     "path": "^0.12.7",

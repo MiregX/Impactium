@@ -23,14 +23,14 @@ export function Icon({
   size = 16,
   ...props
 }: Icon.Props) {
-  const Component = typeof fromGeist === 'undefined'
+  const Component: React.ElementType = typeof fromGeist === 'undefined'
     ? Icon.icons[name]
     : fromGeist
       ? custom_icons[name as keyof typeof custom_icons]
-      : lucide_icons[name as keyof typeof lucide_icons]
+      : lucide_icons[name as keyof typeof lucide_icons];
 
   if (!Component) {
-    console.error(`[ ERROR ] @impactium/icons: Icon name '${name}' was not found in list. Returned null`)
+    console.error(`[ ERROR ] @impactium/icons: Icon name '${String(name)}' was not found in list. Returned null`)
     return null;
   };
 
@@ -49,7 +49,7 @@ export function Icon({
 export namespace Icon {
   export const icons = {
     ...lucide_icons,
-    ...custom_icons
+    ...custom_icons,
   }
 
   export type Name = keyof typeof icons;
