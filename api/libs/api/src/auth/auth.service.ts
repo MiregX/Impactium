@@ -8,7 +8,7 @@ import { UUID } from 'crypto';
 import { dataset } from '@api/main/redis/redis.dto';
 import { LoginEntity } from '../user/addon/login.entity';
 import { JwtService } from '@nestjs/jwt';
-import { λLogger, λParam } from '@impactium/pattern';
+import { λLogger } from '@impactium/types';
 import { λthrow } from '@impactium/utils';
 import { Logger } from '../application/addon/logger.service';
 import { UserNotFound } from '../application/addon/error';
@@ -34,7 +34,7 @@ export class AuthService {
         : await this.createUser({ id, type, avatar, displayName, on: new Date() }, email)
       )
     )
-    return this.signJWT({ uid: result.uid as λParam.Id });
+    return this.signJWT({ uid: result.uid });
   }
 
   async getPayload<T extends string | AuthPayload = AuthPayload>(uuid?: UUID): Promise<T | null> {
@@ -96,7 +96,7 @@ export class AuthService {
     }) as unknown as Promise<UserEntity>;
   }
 
-  public impersonate = async (uid: λParam.Id) => {
+  public impersonate = async (uid: string) => {
     const user = await this.prisma.user.findUnique({
       where: { uid },
       select: {

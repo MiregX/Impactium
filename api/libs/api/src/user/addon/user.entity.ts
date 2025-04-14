@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma, User } from '@prisma/client';
 import { LoginEntity } from './login.entity';
-import { λParam } from '@impactium/pattern';
 
 export class UserEntity implements User {
   @ApiProperty({ example: crypto.randomUUID(), description: 'User ID from database' })
-  uid!: λParam.Id;
+  uid!: string;
 
   @ApiProperty({ example: new Date().toISOString(), description: 'Registration date of the user' })
   registered!: Date;

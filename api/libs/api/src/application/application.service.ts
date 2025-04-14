@@ -1,25 +1,19 @@
 import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { Configuration } from '@impactium/config';
+import { Configuration } from '../../../../src/configuration';
 import { RedisService } from '@api/main/redis/redis.service';
 import { PrismaService } from '@api/main/prisma/prisma.service';
 import { StatusEntity, StatusInfoEntityTypes } from './addon/status.entity';
 import { dataset } from '../redis/redis.dto';
-import { UserService } from '@api/main/user/user.service';
 import { AuthService } from '@api/main/auth/auth.service';
-import { SocketGateway } from '../socket/socket.gateway';
 import { Token } from '../auth/addon/auth.entity';
-import { λParam, λWebSocket } from '@impactium/pattern';
 import { Logger } from './addon/logger.service';
 import { UserEntity } from '../user/addon/user.entity';
 
 @Injectable()
 export class ApplicationService implements OnModuleInit {
   constructor(
-    @Inject(forwardRef(() => SocketGateway))
-    private readonly webSocket: SocketGateway,
     private readonly redisService: RedisService,
     private readonly prisma: PrismaService,
-    private readonly userService: UserService,
     private readonly authService: AuthService,
   ) { }
 
@@ -34,21 +28,12 @@ export class ApplicationService implements OnModuleInit {
     return info;
   }
 
-  async toggleSafeMode() {
-    const toggled = await this._getIsSafeMode() ? 0 : 1;
-    await this.redisService.set(dataset.isSafeMode, toggled);
-
-    return await this.sync(await this._reloadInfo());
-  }
-
   async setGlobalPhrase(phrase?: string) {
     if (phrase) {
       await this.redisService.set(dataset.phrase, phrase);
     } else {
       await this.redisService.del(dataset.phrase);
     }
-
-    return await this.sync(await this._reloadInfo());
   }
 
 
@@ -83,11 +68,6 @@ export class ApplicationService implements OnModuleInit {
   async status(): Promise<StatusEntity[]> {
     return await this.redisService.get(dataset.status)
       .then(data => data ? JSON.parse(data) : []);
-  }
-
-  async sync(any: any) {
-    this.webSocket.server.emit(λWebSocket.updateApplicationInfo, any);
-    return any;
   }
 
   async handle() {
@@ -178,7 +158,7 @@ export class ApplicationService implements OnModuleInit {
       },
       update: {}
     });
-    const token = this.authService.signJWT({ uid: system.uid as λParam.Id });
+    const token = this.authService.signJWT({ uid: system.uid });
     Logger.verbose(token, 'λ');
     return token;
   }

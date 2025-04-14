@@ -1,19 +1,20 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthPayload, Token } from './addon/auth.entity';
-import { Configuration } from '@impactium/config';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
 import { UUID } from 'crypto';
 import { Request } from 'express'
 import { EnvironmentKeyNotProvided } from '../application/addon/error';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const SteamAuth = require('node-steam-openid');
+import { Configuration } from 'src/configuration';
 
 @Injectable()
 export class SteamAuthService extends SteamAuth implements AuthMethodService {
   constructor(private readonly authService: AuthService) {
     super(process.env.STEAM_API_KEY ? {
-      realm: Configuration._server(),
-      returnUrl: Configuration._server() + '/api/oauth2/steam/callback',
+      realm: Configuration.link(),
+      returnUrl: Configuration.link() + '/api/oauth2/steam/callback',
       apiKey: process.env.STEAM_API_KEY
     } : (() => { throw new EnvironmentKeyNotProvided('STEAM_API_KEY') })());
   }

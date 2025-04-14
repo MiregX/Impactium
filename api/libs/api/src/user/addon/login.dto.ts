@@ -1,4 +1,4 @@
-import { Optional } from "@impactium/pattern";
+import { Optional } from "@impactium/types";
 import { Prisma, $Enums } from "@prisma/client";
 
 export class CreateLoginDto implements Prisma.LoginCreateWithoutUserInput {

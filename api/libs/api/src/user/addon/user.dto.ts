@@ -1,4 +1,4 @@
-import { DisplayName, DisplayNameBase, Identifier, λError } from "@impactium/pattern";
+import { DisplayName, DisplayNameBase, Identifier, λError } from "@impactium/types";
 import { ApiProperty } from "@nestjs/swagger";
 import { $Enums, Prisma } from "@prisma/client";
 import { IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";

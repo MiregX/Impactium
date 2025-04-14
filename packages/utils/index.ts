@@ -10,7 +10,8 @@ export function toArray<K extends unknown>(unknown: K | K[]): K[] {
 };
 
 export function λthrow(Exception: new () => Error): never {
-  throw new Exception();
+  // @ts-ignore
+  throw Exception;
 }
 
 export function cn(...inputs: ClassValue[]) {

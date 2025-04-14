@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
-import { Identifier } from '@impactium/pattern'
+import { Identifier } from '@impactium/types'
 import { UsernameInvalidFormat, UsernameNotProvided } from './error';
 
 @Injectable()

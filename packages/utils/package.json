@@ -1,7 +1,7 @@
 {
   "name": "@impactium/utils",
   "version": "1.0.2",
-  "main": "dist/index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "tsc",
     "deploy": "tsc && npm publish --access public"

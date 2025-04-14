@@ -5,7 +5,6 @@ import { RedisModule } from '@api/main/redis/redis.module';
 import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
-import { SocketModule } from '../socket/socket.module';
 
 @Module({
   controllers: [ApplicationController],
@@ -14,9 +13,8 @@ import { SocketModule } from '../socket/socket.module';
     PrismaModule,
     RedisModule,
     AuthModule,
-    forwardRef(() => UserModule),
-    forwardRef(() => SocketModule)
+    forwardRef(() => UserModule)
   ],
   exports: [ApplicationService],
 })
-export class ApplicationModule {}
+export class ApplicationModule { }

@@ -1,12 +1,12 @@
 import { RedisService } from '@api/main/redis/redis.service';
-import { λCache } from '@impactium/pattern';
+import { λCache } from '@impactium/types';
 import { Logger } from './logger.service';
 /**
  * 
- * @param folder λCache c `@impactium/pattern`
+ * @param folder λCache c `@impactium/types`
  * @param ttl Число в секундах. Если есть - поставит на запись TTL. Если нет - вечная запись (использовать осторожно).
  */
-export function Cache(folder: λCache, ttl?: number) {
+export function Cache(folder: keyof typeof λCache, ttl?: number) {
   return function (
     _target: unknown,
     _property: string,
@@ -40,10 +40,10 @@ export function Cache(folder: λCache, ttl?: number) {
 
 /**
  * 
- * @param folder λCache c `@impactium/pattern`
+ * @param folder λCache c `@impactium/types`
  * @param ttl Число в секундах. Если есть - поставит на запись TTL. Если нет - вечная запись (использовать осторожно).
  */
-export function Recache(folder: λCache) {
+export function Recache(folder: keyof typeof λCache) {
   return function (
     _target: unknown,
     _property: string,

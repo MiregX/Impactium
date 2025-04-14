@@ -2,9 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { ApiModule } from './api.module';
 import * as cookieParser from 'cookie-parser';
-import { Configuration } from '@impactium/config';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Configuration } from './configuration';
 
 async function run() {
   const api = await NestFactory.create<NestExpressApplication>(
@@ -15,7 +15,7 @@ async function run() {
   api.setGlobalPrefix('api');
 
   api.enableCors({
-    origin: Configuration.getClientLink() || 'http://localhost:3001',
+    origin: Configuration.link || 'http://localhost:3001',
     credentials: true
   });
 

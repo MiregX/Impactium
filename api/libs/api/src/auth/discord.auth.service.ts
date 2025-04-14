@@ -1,12 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import DiscordOauth2 = require('discord-oauth2');
 import { AuthPayload, Token } from './addon/auth.entity';
-import { Configuration } from '@impactium/config';
 import { $Enums } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AuthMethodService } from './addon/auth.interface';
 import { UUID } from 'crypto';
 import { EnvironmentKeyNotProvided } from '../application/addon/error';
+import { Configuration } from 'src/configuration';
 
 @Injectable()
 export class DiscordAuthService extends DiscordOauth2 implements AuthMethodService {
@@ -22,7 +22,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
     super({
       clientId: process.env.DISCORD_ID,
       clientSecret: process.env.DISCORD_SECRET,
-      redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
+      redirectUri: Configuration.link + '/api/oauth2/discord/callback',
     });
   }
 
@@ -57,7 +57,7 @@ export class DiscordAuthService extends DiscordOauth2 implements AuthMethodServi
   getUrl() {
     return this.generateAuthUrl({
       scope: this.scope,
-      redirectUri: Configuration._server() + '/api/oauth2/discord/callback',
+      redirectUri: Configuration.link + '/api/oauth2/discord/callback',
     });
   }
 }

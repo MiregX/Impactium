@@ -4,15 +4,14 @@ import { AuthMethodService } from './addon/auth.interface';
 import { createHash, createHmac, UUID } from 'crypto';
 import { AuthPayload } from './addon/auth.entity';
 import { TelegramService } from '@api/mcs/telegram/telegram.service';
-import { λParam } from '@impactium/pattern';
 
 @Injectable()
 export class TelegramAuthService implements AuthMethodService {
   constructor(
     private readonly authService: AuthService,
     private readonly telegramService: TelegramService,
-  ) {}
-  
+  ) { }
+
   async getUrl(uuid?: UUID) {
     const isExist = uuid && await this.telegramService.getPayload(uuid);
     if (isExist) throw new ConflictException;
@@ -28,7 +27,7 @@ export class TelegramAuthService implements AuthMethodService {
     return this.authService.register(payload);
   }
 
-  async postCallback(uuid: UUID, uid?: λParam.Id) {
+  async postCallback(uuid: UUID, uid?: string) {
     const payload = await this.telegramService.getPayload(uuid);
 
     if (typeof payload === 'boolean') return '/';
@@ -44,7 +43,7 @@ export class TelegramAuthService implements AuthMethodService {
       .join('\n');
 
     const secretKey = createHash('sha256').update(process.env.TELEGRAM_API_KEY!).digest();
-    
+
     return hash === createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
   }
 }

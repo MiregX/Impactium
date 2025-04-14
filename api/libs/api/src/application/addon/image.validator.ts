@@ -1,6 +1,6 @@
 import { UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileExtension } from '@impactium/pattern';
+import { FileExtension } from '@impactium/types';
 import { UnallowedFileFormat } from './error';
 
 export function ImageValidator(field: string) {

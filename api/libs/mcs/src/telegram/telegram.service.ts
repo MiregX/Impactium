@@ -2,10 +2,10 @@ import { EnvironmentKeyNotProvided } from '@api/main/application/addon/error';
 import { AuthPayload } from '@api/main/auth/addon/auth.entity';
 import { dataset } from '@api/main/redis/redis.dto';
 import { RedisService } from '@api/main/redis/redis.service';
-import { Configuration } from '@impactium/config';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { LoginType } from '@prisma/client';
 import { UUID } from 'crypto';
+import { Configuration } from 'src/configuration';
 import { Markup, Telegraf } from 'telegraf';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
         return await ctx.reply('Даже не пытайся меня наебать...');
       }
 
-      const payload: AuthPayload = await ctx.getChat().then(async data => {  
+      const payload: AuthPayload = await ctx.getChat().then(async data => {
         const file = data.photo && await ctx.telegram.getFile(data.photo.small_file_id);
 
         return {
@@ -54,11 +54,11 @@ export class TelegramService extends Telegraf implements OnModuleInit, OnModuleD
 
       await this.setPayload(uuid, payload);
       ctx.reply(
-        `Готово, у тебя есть 5 минут чтобы вернуться на сайт <a href='${Configuration.getClientLink()}'>Impactium</a>`,
+        `Готово, у тебя есть 5 минут чтобы вернуться на сайт <a href='${Configuration.link}'>Impactium</a>`,
         {
           parse_mode: 'HTML',
           ...Markup.inlineKeyboard([
-            Markup.button.url('Вернуться на сайт', Configuration.isProductionMode() ? Configuration.getClientLink() : 'https://impactium.fun')
+            Markup.button.url('Вернуться на сайт', Configuration.isProductionMode() ? Configuration.link() : 'https://impactium.fun')
           ])
         }
       );

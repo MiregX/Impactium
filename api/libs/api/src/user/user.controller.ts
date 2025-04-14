@@ -9,7 +9,7 @@ import { ApiResponseSuccess } from '@api/main/application/addon/responce.success
 import { ApiResponseConflict } from '@api/main/application/addon/response.conflict.decorator';
 import { DisplayNameIsSame, UsernameIsSame } from '../application/addon/error';
 import { Response } from 'express';
-import { λCookie, cookieSettings, λParam, λCache } from '@impactium/pattern';
+import { λCookie, cookieSettings, λCache } from '@impactium/types';
 import { λthrow } from '@impactium/utils';
 import { AdminGuard } from '../auth/addon/admin.guard';
 import { AuthService } from '../auth/auth.service';
@@ -29,7 +29,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Cache(λCache.UserGet, 15)
   async getUserById(
-    @Id() uid: λParam.Id,
+    @Id() uid: string,
     @Query('logins') logins?: boolean,
   ) {
     const userEntity = await this.userService.findById(uid, { logins });
@@ -50,7 +50,7 @@ export class UserController {
   @Get('impersonate/:uid')
   @UseGuards(AdminGuard)
   async impersonate(
-    @Param('uid') uid: λParam.Id,
+    @Param('uid') uid: string,
     @Res({ passthrough: true }) response: Response
   ) {
     const Authorization = await this.authService.impersonate(uid);
@@ -66,7 +66,7 @@ export class UserController {
   @ApiResponseConflict()
   async setUsername(
     @Body() body: UpdateUserDto,
-    @Id() uid: λParam.Id
+    @Id() uid: string
   ) {
     const user = await this.userService.findById(uid);
 
@@ -79,7 +79,7 @@ export class UserController {
 
   @Get('admin/is')
   @UseGuards(AuthGuard)
-  isAdmin(@Id() uid: λParam.Id) {
+  isAdmin(@Id() uid: string) {
     return uid === 'system';
   }
 }

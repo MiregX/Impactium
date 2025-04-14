@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
-import { Configuration } from '@impactium/config';
 import { Response, Request } from 'express';
 import { SteamAuthService } from './steam.auth.service';
-import { cookieSettings, λParam } from '@impactium/pattern';
+import { cookieSettings } from '@impactium/types';
 import { Id } from '../user/addon/id.decorator';
 import { AuthService } from './auth.service';
 import { ConnectGuard } from './addon/connect.guard';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { AuthMethodController } from './addon/auth.interface';
 import { ApiTags } from '@nestjs/swagger';
+import { Configuration } from 'src/configuration';
 
 @ApiTags('Auth <Steam>')
 @Controller('steam')
@@ -16,14 +16,14 @@ export class SteamAuthController implements AuthMethodController {
   constructor(
     private readonly steamAuthService: SteamAuthService,
     private readonly authService: AuthService
-  ) {}
+  ) { }
 
   @Get('login')
   @UseGuards(ConnectGuard)
   @Redirect()
   async getUrl(
     @Res({ passthrough: true }) response: Response,
-    @Id() uid: λParam.Id | undefined,
+    @Id() uid: string | undefined,
   ) {
     const uuid = uid && crypto.randomUUID();
     if (uuid) {
@@ -46,6 +46,6 @@ export class SteamAuthController implements AuthMethodController {
     response.clearCookie('uuid')
     response.cookie('Authorization', authorization, cookieSettings);
 
-    return { url: Configuration.getClientLink() + '/account' };
+    return { url: Configuration.link + '/account' };
   }
 }

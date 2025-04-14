@@ -1,9 +1,9 @@
-import { λError } from "@impactium/pattern";
+import { λError } from "@impactium/types";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { Logger } from "./logger.service";
 
 export class Exception extends HttpException {
-  constructor(error: λError, status: HttpStatus) {
+  constructor(error: keyof typeof λError, status: HttpStatus) {
     Logger.error(error, status.toString());
     super(error, status);
   }
@@ -38,7 +38,7 @@ export class UsernameTaken extends Exception {
     super(λError.username_taken, HttpStatus.CONFLICT);
   }
 }
-export class UserNotFound extends HttpException { 
+export class UserNotFound extends HttpException {
   constructor() {
     super(λError.user_not_found, HttpStatus.NOT_FOUND);
   }
@@ -154,9 +154,11 @@ export class MultipleFilesError extends Exception {
   };
 }
 export class EnvironmentKeyNotProvided extends Error {
-  constructor(key: string) {
+  constructor(key?: string) {
     super(`Ключ ${key} не был передан в .env файле. Проверь его ещё раз`);
   }
+
+  static new = (key: string) => new EnvironmentKeyNotProvided(key) as unknown as new () => EnvironmentKeyNotProvided;
 }
 export class FTPUploadError extends Exception {
   constructor() {

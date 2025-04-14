@@ -4,7 +4,6 @@ import { UserEntity, UserSelectOptions } from './addon/user.entity';
 import { UsernameTaken, UserNotFound } from '../application/addon/error';
 import { UpdateUserDto } from './addon/user.dto';
 import { λthrow } from '@impactium/utils';
-import { λParam } from '@impactium/pattern';
 import { Logger } from '../application/addon/logger.service';
 import { ApplicationService } from '../application/application.service';
 
@@ -16,7 +15,7 @@ export class UserService {
     private readonly applicationService: ApplicationService,
   ) { }
 
-  findById(uid: λParam.Id, options: UserSelectOptions = {}): Promise<UserEntity | null> | null {
+  findById(uid: string, options: UserSelectOptions = {}): Promise<UserEntity | null> | null {
     if (typeof uid !== 'string') {
       Logger.error(`Recieved uid: ${uid} as \${${typeof uid}}`)
       return null;

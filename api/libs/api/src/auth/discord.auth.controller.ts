@@ -1,15 +1,15 @@
 import { Controller, Get, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
-import { Configuration } from '@impactium/config';
 import { DiscordAuthService } from './discord.auth.service';
 import { Id } from '@api/main/user/addon/id.decorator';
 import { ConnectGuard } from './addon/connect.guard';
 import { AuthService } from './auth.service';
 import { Cookie } from '../application/addon/cookie.decorator';
 import { UUID } from 'crypto';
-import { cookieSettings, λParam } from '@impactium/pattern';
+import { cookieSettings } from '@impactium/types';
 import { AuthMethodController } from './addon/auth.interface';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { Configuration } from 'src/configuration';
 
 @ApiTags('Auth <Discord>')
 @Controller('discord')
@@ -17,14 +17,14 @@ export class DiscordAuthController implements AuthMethodController {
   constructor(
     private readonly discordAuthService: DiscordAuthService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   @Get('login')
   @Redirect()
   @UseGuards(ConnectGuard)
   async getUrl(
     @Res({ passthrough: true }) response: Response,
-    @Id() uid: λParam.Id | undefined,
+    @Id() uid: string | undefined,
   ) {
     const uuid = uid && crypto.randomUUID();
     if (uuid) {
@@ -46,6 +46,6 @@ export class DiscordAuthController implements AuthMethodController {
     const authorization = await this.discordAuthService.callback(code, uuid);
     response.clearCookie('uuid');
     response.cookie('Authorization', authorization, cookieSettings);
-    return { url: `${Configuration.getClientLink()}${uuid ? '/account' : ''}` }
+    return { url: `${Configuration.link}${uuid ? '/account' : ''}` }
   }
 }

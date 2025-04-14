@@ -1,18 +1,17 @@
-import { λCache } from '@impactium/pattern';
+import { λCache } from '@impactium/types';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Callback, Redis } from 'ioredis';
 
 @Injectable()
 export class RedisService
   extends Redis
-  implements OnModuleInit, OnModuleDestroy
-  {
+  implements OnModuleInit, OnModuleDestroy {
   constructor() {
     super(
       parseInt(process.env.API_REDIS_PORT),
       process.env.API_REDIS_HOST, {
-        lazyConnect: true,
-      }
+      lazyConnect: true,
+    }
     )
   }
 
@@ -32,13 +31,13 @@ export class RedisService
     return parseInt((Number(end - start) / 1e6).toFixed(0));
   }
 
-  fget = async (folder: λCache, key: string, callback?: Callback<string | null>) => this.parse(await this.get(RedisService.compare(folder, key)));
+  fget = async (folder: keyof typeof λCache, key: string, callback?: Callback<string | null>) => this.parse(await this.get(RedisService.compare(folder, key)));
 
-  fset = async <T>(folder: λCache, key: string, value: T): Promise<T> => await this.set(RedisService.compare(folder, key), this.normalize(value)) && value;
+  fset = async <T>(folder: keyof typeof λCache, key: string, value: T): Promise<T> => await this.set(RedisService.compare(folder, key), this.normalize(value)) && value;
 
-  fsetex = async <T>(folder: λCache, key: string, value: T, seconds: number): Promise<T> => await this.setex(RedisService.compare(folder, key), seconds, this.normalize(value)) && value;
+  fsetex = async <T>(folder: keyof typeof λCache, key: string, value: T, seconds: number): Promise<T> => await this.setex(RedisService.compare(folder, key), seconds, this.normalize(value)) && value;
 
-  fsetux = async <T>(folder: λCache, key: string, value: T, seconds?: number): Promise<T> => seconds ? this.fsetex(folder, key, value, seconds) : this.fset(folder, key, value);
+  fsetux = async <T>(folder: keyof typeof λCache, key: string, value: T, seconds?: number): Promise<T> => seconds ? this.fsetex(folder, key, value, seconds) : this.fset(folder, key, value);
 
 
   static compare = (...args: string[]) => args.join(':');

@@ -3,7 +3,6 @@ import { PrismaModule } from '@api/main/prisma/prisma.module';
 import { UserModule } from '@api/main/user/user.module';
 import { AuthModule } from '@api/main/auth/auth.module';
 import { Module } from '@nestjs/common';
-import { SocketModule } from '../socket/socket.module';
 import { TelegramModule } from '@api/mcs/telegram/telegram.module';
 
 @Module({
@@ -12,8 +11,7 @@ import { TelegramModule } from '@api/mcs/telegram/telegram.module';
     AuthModule,
     UserModule,
     PrismaModule,
-    TelegramModule,
-    SocketModule
+    TelegramModule
   ]
 })
 export class MainModule { }
