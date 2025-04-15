@@ -663,7 +663,7 @@ export default function ProfileForm() {
                                   name='linkedin'
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>Ссылка на LinkedIn</FormLabel>
+                                      <FormLabel>Ссылка на LinkedIn компании</FormLabel>
                                       <FormControl>
                                         <Input variant='highlighted' img='Linkedin' placeholder='https://www.linkedin.com/in/...' {...field} />
                                       </FormControl>
