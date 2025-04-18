@@ -3,8 +3,8 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@impactium/utils';
 import s from './button.module.css';
-import { Loading } from './loading';
 import { Icon } from '@impactium/icons';
+import { Spinner } from './spinner';
 
 const buttonVariants = cva(s.button, {
   variants: {
@@ -38,6 +38,7 @@ export namespace Button {
     img?: Icon.Name;
     revert?: boolean;
     loading?: boolean;
+    placeholder?: string;
     rounded?: boolean;
   }
 
@@ -47,7 +48,7 @@ export namespace Button {
 }
 
 const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
-  ({ className, variant, rounded, size, img, revert, disabled, loading, asChild = false, ...props }, ref) => {
+  ({ className, variant, rounded, size, img, revert, disabled, loading, asChild = false, placeholder, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     const paddingClass = img ? (props.children ? (revert ? s.revert : s.withImage) : s.onlyImage) : null;
 
@@ -57,7 +58,7 @@ const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
       size = 'icon'
     }
 
-    const λvariant = convertButtonVariantToImageVariant(variant);
+    const color = convertButtonVariantToSpinnerColor(variant);
     const λsize = convertButtonVariantToIconSize(size);
 
     return (
@@ -66,7 +67,12 @@ const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
         ref={ref}
         {...props}>
         {asChild ? props.children : (loading
-          ? <Loading variant={λvariant} size={size} />
+          ? (
+            <>
+              <Spinner color={color} size={λsize + 4} />
+              {size !== 'icon' ? placeholder ?? 'Loading...' : null}
+            </>
+          )
           : <>
             {img && <Icon name={img} size={λsize} />}
             {children}
@@ -78,24 +84,24 @@ const Button = React.forwardRef<HTMLButtonElement, Button.Props>(
 );
 Button.displayName = 'Button';
 
-const convertButtonVariantToImageVariant = (variant: Button.Variant): Icon.Variant => ({
+const convertButtonVariantToSpinnerColor = (variant: Button.Variant): string => ({
   default: 'black',
   destructive: 'white',
-  outline: 'dimmed',
+  outline: 'var(--gray-700)',
   secondary: 'white',
-  ghost: 'dimmed',
+  ghost: 'var(--gray-700)',
   link: 'white',
-  disabled: 'dimmed',
+  disabled: 'var(--gray-700)',
   hardline: 'white',
-  glass: 'dimmed'
-} as Record<NonNullable<Button.Variant>, Icon.Variant>)[variant!] ?? 'black';
+  glass: 'var(--gray-700)'
+})[variant ?? 'default'];
 
-const convertButtonVariantToIconSize = (size: Button.Size): Icon.Size => ({
+const convertButtonVariantToIconSize = (size: Button.Size): NonNullable<Icon.Size> => ({
   default: 16,
   sm: 12,
   lg: 20,
   icon: 16,
-} as Record<NonNullable<Button.Size>, Icon.Size>)[size || 'default'];
+})[size ?? 'default'];
 
 
 export { Button, buttonVariants };

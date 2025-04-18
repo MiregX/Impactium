@@ -1,8 +1,0 @@
-.icon {
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  100% {
-    transform: rotateZ(1turn);
-  }
-}

@@ -24,7 +24,6 @@
     "**/*.tsx",
     "./global.d.ts",
     "**/*.module.css",
-    "cell.tsx"
   ],
   "exclude": [
     "node_modules",

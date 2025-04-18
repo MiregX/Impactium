@@ -6,16 +6,16 @@ import { useForm } from 'react-hook-form'
 import { Icon } from '@impactium/icons'
 import z from 'zod'
 import { Card } from '@/ui/card'
-import { Input, Button, Badge } from '@impactium/components'
+import { Stack, Input, Button, Badge } from '@impactium/components'
 import { Select } from '@/ui/Select'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/form'
 import { Command } from '@/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/popover'
 import { Textarea } from '@/ui/textarea'
-import { Stack } from '@impactium/components/stack'
 import { Slider } from '@/ui/slider'
 import { cn } from '@impactium/utils'
 import { Separator } from '@/ui/Separator'
+import { Spinner } from '@impactium/components'
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -906,6 +906,7 @@ export default function ProfileForm() {
           <Button type='submit' style={{ width: '100%' }} img='Sparkles'>
             Сгенерировать резюме
           </Button>
+          <Spinner />
         </form>
       </Form>
     </main >
